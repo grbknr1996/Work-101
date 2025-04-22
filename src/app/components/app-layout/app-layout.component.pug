@@ -1,0 +1,41 @@
+.layout-wrapper([ngClass]="{'layout-theme-dark': config.theme === 'dark'}")
+  // Loading overlay
+  .loading-overlay(*ngIf="ms.isLoading")
+    .loading-spinner
+      p-progressSpinner
+    .loading-text {{ ms.translate('loading') }}
+
+  // Header/Navbar
+  app-navbar(
+    *ngIf="config.showHeader",
+    [title]="config.appTitle",
+    [items]="config.headerItems",
+    [fixed]="config.fixedHeader",
+    
+    (toggleSidebarEvent)="toggleSidebar()"
+  )
+  
+  // Main Content Area
+  .layout-main
+    // Sidebar
+    app-sidebar(
+      *ngIf="config.showSidebar",
+      [visible]="sidebarVisible",
+      [fixed]="config.fixedSidebar",
+      [items]="config.sidebarItems"
+    )
+    
+    // Content area
+    .layout-content
+      // Breadcrumbs
+      .breadcrumbs-container(*ngIf="ms.breadcrumbs")
+        p-breadcrumb([model]="breadcrumbItems", [home]="breadcrumbHome")
+      
+      // Main content
+      .content-container
+        ng-content
+  
+  // Footer
+  footer.layout-footer(*ngIf="config.footerText")
+    .footer-content
+      p {{ config.footerText }}

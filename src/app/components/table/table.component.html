@@ -1,0 +1,123 @@
+
+<!-- table.component.pug-->
+<div class="card">
+  <p-table #dt [value]="data" [columns]="columns" [rowHover]="true" [rows]="rows" [rowsPerPageOptions]="rowsPerPageOptions" [loading]="loading" [paginator]="paginator" [globalFilterFields]="globalFilterFields" [showCurrentPageReport]="showCurrentPageReport" [currentPageReportTemplate]="currentPageReportTemplate" [resizableColumns]="resizableColumns" [reorderableColumns]="reorderableColumns" [responsive]="responsive" [lazy]="lazy" [totalRecords]="totalRecords" [scrollable]="scrollable" [scrollHeight]="scrollHeight" [dataKey]="dataKey" (onLazyLoad)="onLazyLoadEvent.emit($event)" styleClass="p-datatable-sm">
+    <ng-template pTemplate="caption">
+      <div class="flex-search-bar">
+        <button class="p-button-outlined" *ngIf="showClearButton" pButton label="Clear" icon="pi pi-filter-slash" (click)="clear(dt)"></button>
+        <div class="ml-auto">
+          <p-iconField iconPosition="left">
+            <p-inputIcon><i class="pi pi-search"></i></p-inputIcon>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search keyword">
+          </p-iconField>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th *ngFor="let col of columns" [pSortableColumn]="col.sortable ? col.field : undefined" [style.width]="col.width || 'auto'">
+          <div class="flex items-center">{{ col.header }}
+            <p-sortIcon *ngIf="col.sortable" [field]="col.field"></p-sortIcon>
+            <!-- Text Filter-->
+            <p-columnFilter *ngIf="col.filterType === 'text'" type="text" [field]="col.filterField || col.field" [display]="col.filterDisplay || 'menu'"></p-columnFilter>
+            <!-- Numeric Filter-->
+            <p-columnFilter *ngIf="col.filterType === 'numeric'" type="numeric" [field]="col.filterField || col.field" [display]="col.filterDisplay || 'menu'" [currency]="col.currency"></p-columnFilter>
+            <!-- Date Filter-->
+            <p-columnFilter *ngIf="col.filterType === 'date'" type="date" [locale]="locale" [field]="col.filterField || col.field" [display]="col.filterDisplay || 'menu'"></p-columnFilter>
+            <!-- Boolean Filter-->
+            <p-columnFilter *ngIf="col.filterType === 'boolean'" type="boolean" [field]="col.filterField || col.field" [display]="col.filterDisplay || 'menu'"></p-columnFilter>
+            <!-- Dropdown Filter-->
+            <p-columnFilter *ngIf="col.filterType === 'dropdown'" [field]="col.filterField || col.field" [matchMode]="col.filterMatchMode || 'equals'" [display]="col.filterDisplay || 'menu'">
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-dropdown [ngModel]="value" [options]="col.dropdownOptions || []" (onChange)="onFilterChange($event, filter, col.field)" placeholder="Select One" styleClass="w-full" [optionLabel]="col.optionLabel || 'label'">
+                  <ng-template *ngIf="col.customTemplate" pTemplate="item" let-option>
+                    <p-tag [value]="option.value" [severity]="col.severity ? col.severity(option.value) : undefined"></p-tag>
+                  </ng-template>
+                </p-dropdown>
+              </ng-template>
+            </p-columnFilter>
+            <!-- MultiSelect Filter-->
+            <p-columnFilter *ngIf="col.filterType === 'multiselect'" [field]="col.filterField || col.field" matchMode="in" [display]="col.filterDisplay || 'menu'" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiSelect [ngModel]="value" [options]="col.dropdownOptions || []" placeholder="Any" (onChange)="filter($event.value)" [optionLabel]="col.optionLabel || 'name'" styleClass="w-full" [panelStyle]="{ minWidth: '16rem' }">
+                  <ng-template *ngIf="col.customTemplate" pTemplate="item" let-option>
+                    <div class="flex items-center gap-2"><img *ngIf="option.image" [alt]="option.label" [src]="option.image" style="width: 32px"><span>{{ option[col.optionLabel || "name"] }}</span></div>
+                  </ng-template>
+                </p-multiSelect>
+              </ng-template>
+            </p-columnFilter>
+            <!-- Range Filter-->
+            <p-columnFilter *ngIf="col.filterType === 'range'" [field]="col.filterField || col.field" matchMode="between" [display]="col.filterDisplay || 'menu'" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-slider [ngModel]="value" [range]="true" styleClass="m-4" (onSlideEnd)="filter($event.values)"></p-slider>
+                <div class="flex items-center px-2"><span *ngIf="!value">0</span><span *ngIf="value &amp;&amp; isArray(value)">{{ value[0] }} - {{ value[1] }}</span></div>
+              </ng-template>
+            </p-columnFilter>
+          </div>
+        </th>
+        <th *ngIf="showActionsColumn" style="width: 8rem">Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData>
+      <tr>
+        <td *ngFor="let col of columns">
+          <!-- Text Display-->
+          <ng-container *ngIf="col.display === 'text' || !col.display">{{ getValue(rowData, col.field) }}</ng-container>
+          <!-- Date Display-->
+          <ng-container *ngIf="col.display === 'date'">{{ getValue(rowData, col.field) | date : (col.dateFormat || "MM/dd/yyyy") }}</ng-container>
+          <!-- Currency Display-->
+          <ng-container *ngIf="col.display === 'currency'">{{ getValue(rowData, col.field) | currency : (col.currency || "USD") : "symbol" }}</ng-container>
+          <!-- Avatar Display-->
+          <ng-container *ngIf="col.display === 'avatar'">
+            <div class="flex items-center gap-2"><img [src]="getValue(rowData, col.field)" [alt]="col.field" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;"><span *ngIf="col.showName">{{ getValue(rowData, col.nameField || "name") }}</span></div>
+          </ng-container>
+          <!-- Tag Display-->
+          <ng-container *ngIf="col.display === 'tag'">
+            <p-tag [value]="getValue(rowData, col.field)" [severity]="col.severity ? col.severity(getValue(rowData, col.field)) : &quot;success&quot;"></p-tag>
+          </ng-container>
+          <!-- Progress Display-->
+          <ng-container *ngIf="col.display === 'progress'">
+            <p-progressBar [value]="getValue(rowData, col.field)" [showValue]="false"></p-progressBar>
+          </ng-container>
+          <!-- Icon Display-->
+          <ng-container *ngIf="col.display === 'icon'"><i class="pi" [ngClass]="col.iconClass ? col.iconClass(getValue(rowData, col.field)) : &quot;&quot;"></i></ng-container>
+          <!-- Boolean Display-->
+          <ng-container *ngIf="col.display === 'boolean'">
+            <div class="text-center"><i class="pi" [ngClass]="{'text-green-500 pi-check-circle': getValue(rowData, col.field), 'text-red-500 pi-times-circle': !getValue(rowData, col.field)}"></i></div>
+          </ng-container>
+          <!-- Custom Template-->
+          <ng-container *ngIf="col.display === 'custom'">
+            <ng-container *ngTemplateOutlet="customCellTemplate; context: { $implicit: rowData, field: col.field }"></ng-container>
+          </ng-container>
+          <!-- Actions Display-->
+          <ng-container *ngIf="col.display === 'actions' &amp;&amp; col.actions">
+            <div class="flex justify-content-center">
+              <!-- Actions as dropdown-->
+              <ng-container *ngIf="col.showAsDropdown !== false">
+                <button class="p-button-rounded p-button-text p-button-plain" pButton type="button" icon="pi pi-ellipsis-v" (click)="menu.toggle($event); $event.stopPropagation()"></button>
+                <p-menu #menu [popup]="true" appendTo="body" [model]="getMenuItems(col.actions, rowData)"></p-menu>
+              </ng-container>
+              <!-- Actions as separate buttons-->
+              <ng-container *ngIf="col.showAsDropdown === false">
+                <div class="flex gap-2">
+                  <ng-container *ngFor="let action of col.actions">
+                    <button class="p-button-rounded p-button-text" *ngIf="!action.visible || action.visible(rowData)" pButton [icon]="action.icon ?? &quot;&quot;" [class]="action.severity ? &quot;p-button-&quot; + action.severity : &quot;&quot;" (click)="onActionClick(action.action, rowData); $event.stopPropagation()"></button>
+                  </ng-container>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+        </td>
+        <!-- Actions Column-->
+        <td *ngIf="showActionsColumn">
+          <ng-container *ngTemplateOutlet="actionTemplate; context: { $implicit: rowData }"></ng-container>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="100">{{ emptyMessage }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

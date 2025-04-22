@@ -1,0 +1,25 @@
+
+<div class="main0 flex column">
+  <div class="host localhost" *ngIf="ms.isLocalHost">LOCAL<br>HOST</div>
+  <div class="fullWidth">
+    <h1>{{ 'header.application.title' | translate }} <span class="capitalize" *ngIf="title!=''">- {{ title }}</span>
+      <div class="appVersion">{{ ms.appVersion }}</div>
+    </h1>
+    <p-menubar [model]="navigationItems">
+      <ng-template #item let-item>
+        <ng-container *ngIf="item.routerLink; else urlRef"><a class="p-menubar-item-link" [routerLink]="item.routerLink"><span [class]="item.icon"></span><span class="ml-2">{{ item.label }}</span></a></ng-container>
+        <ng-template #urlRef><a class="p-menubar-item-link" *ngIf="item.url"><span [class]="item.icon"></span><span class="ml-2">{{ item.label }}</span></a></ng-template>
+        <ng-template #noLink="">
+          <div class="p-menubar-item-link"><span [class]="item.icon"></span><span class="ml-2">{{ item.label }}</span><span class="pi pi-fw pi-angle-down ml-2"></span></div>
+        </ng-template>
+      </ng-template>
+      <ng-template #end="">
+        <div class="flex items-center gap-2">
+          <ng-container *ngFor="let item of navigationItemsRight"><a class="p-menubar-item-link" *ngIf="item.url" [href]="item.url" target="_blanc"><span [class]="item.icon"></span><span class="ml-2">{{ item.label }}</span></a><a class="p-menubar-item-link" *ngIf="item.routerLink" [routerLink]="item.routerLink"><span [class]="item.icon"></span><span class="ml-2">{{ item.label }}</span></a></ng-container>
+          <p-select class="w-full md:w-56" [options]="availableLangs" [(ngModel)]="ms.lang" (onChange)="onChangeLang($event)" optionLabel="label" optionValue="value" placeholder="{{ ('language.display.label.' + ms.lang) | translate}}"></p-select><a class="p-menubar-item-link" [href]=""><span class="pi pi-user"></span><span class="ml-2">(0)</span></a>
+        </div>
+      </ng-template>
+    </p-menubar>
+  </div>
+  <div class="fullWidth"></div>
+</div>

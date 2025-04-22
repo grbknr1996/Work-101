@@ -1,0 +1,408 @@
+
+
+// RESET
+/*backgroundActive = #8E6F4C
+backgroundHover = #A79365
+textGlobalColor = #52575a
+supergreen = #00D477
+lightgrey = #EDF0F1*/
+
+backgroundGlobalColor = #F8F8F6
+headerHeight = 48px
+heightWithoutHeader = "calc( 100vh - %s )" % headerHeight
+
+.heightWithoutHeader
+	height heightWithoutHeader
+
+// Global design colors
+
+greyLight		= #EDEDED // when hovering a clickable element with white background
+greyMedium		= #CBCBCB // secondary button border
+greyDim			= #808080 // all buttons text (unhovered)
+greyDark		= #1a1a1a // text color, all buttons text (hovered), button's border (active and hovered)
+
+blueLight		= #67D0F0 // primary button background
+blueMedium		= #4DC0E5 // Primary button (pressed)
+blueDim			= #5DBAD8 // primary button (hover)
+blueDark		= #53A5BE // primary button border
+
+redLight		= #FF8686 // Danger button background (including hover, same color)
+redMedium		= #F16868 // Danger button (pressed)
+redDark			= #CB6C6C // Danger button border
+
+yellowLight		= #FFDE96 // warning button background (including hover, same color)
+yellowMedium	= #F1C669 // warning button (pressed)
+yellowDark		= #CBB177 // warning button border
+
+textGlobalColor = greyDark
+backgroundHover = greyLight
+backgroundActive = blueLight
+
+
+
+*
+	margin 0
+	padding 0
+	// position relative
+
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
+ul
+	list-style none
+
+
+button
+	align-items center
+
+	&[disabled]
+		opacity 0.5
+
+	i.fa, i.fas, svg
+		margin-right 10px
+
+	user-select none
+
+iframe
+	border none
+
+small
+	display block
+	font-size small
+	*
+		font-size small
+
+.big
+	display block
+	font-size small
+	*
+		font-size small
+
+
+
+[routerlink]
+	outline none!important // Avoids blue rectangle around router links
+
+a, a:hover
+	cursor pointer
+	color inherit
+
+.breakword
+	word-break break-word // useful for elements that contains super long words (or absence of white space), it allows them to break and not overflow
+
+input
+	&[type=checkbox]
+		cursor pointer
+		transform translateY(1px)
+		&:focus
+			box-shadow none
+
+u, .underline
+	text-decoration underline
+
+
+pre
+	font-family monospace
+	font-size x-small
+	white-space pre-wrap
+
+// --- END RESET
+
+
+
+.addspaces
+	> *:not(:last-child)
+		margin-right 1ch
+
+animated()
+	transition all 0.3s cubic-bezier(0.88, 0.07, 0.18, 0.97)
+
+.animated
+	animated()
+
+.animatedSlow
+	transition all 0.7s cubic-bezier(0.88, 0.07, 0.18, 0.97)
+
+.bgTransp
+	background transparent!important
+
+.blurry
+	// Very greedy but looks good
+	-webkit-filter: blur(5px);
+	-moz-filter: blur(5px);
+	-o-filter: blur(5px);
+	-ms-filter: blur(5px);
+	filter: blur(5px);
+
+	// Not greedy but looks less good
+	//opacity 0.3!important
+
+.border
+	border blue dashed 1px
+
+	&.red
+		border red dashed 1px
+	&.green
+		border green dashed 1px
+	&.yellow
+		border yellow dashed 1px
+	&.purple
+		border purple dashed 1px
+
+button
+	&[disabled]
+		cursor not-allowed!important
+
+.capitalized, .capitalize
+	text-transform capitalize
+
+.centered
+	text-align center
+
+.cursorPointer, .pointer
+	cursor pointer
+
+.dev
+	background-color #242424!important
+	color white!important
+	padding 2px 5px!important
+	font-family 'Roboto Mono', monospace!important
+	font-size x-small!important
+	text-align left!important
+	word-break: break-all;
+	line-height initial
+
+	*
+		color white!important
+		font-size inherit!important
+		font-family 'Roboto Mono', monospace!important
+		word-break: break-all;
+
+.displayBlock, .dispBlock
+	display block
+
+.displayNone, .dispNone
+	display none
+
+// FLEX UTILITIES
+
+.flex
+	display flex // !important --> NOT !important, because then, they can't be switched to display : none
+
+.center-h, .center-all
+	justify-content center
+
+.column
+	flex-direction column
+
+.grow, .flexgrow, .flexGrow
+	flex-grow 1
+
+.inline, .center-v, .center-all
+	align-items center
+
+	&:not(.column)
+
+		> *
+			margin-top 0!important
+			margin-bottom 0!important
+
+.flex-end
+	justify-content flex-end
+
+.rowf
+	flex-direction row
+
+.space-around
+	justify-content space-around
+
+.space-between
+	justify-content space-between
+
+.stretch
+	align-items stretch
+
+.wrap
+	flex-wrap wrap
+
+.flexgrow, .flex-grow
+	flex-grow 1
+
+// END FLEX UTILITIES
+
+
+.fullscreen
+	width 100vw
+	height 100%
+	position relative
+
+.fullwidth, .fullWidth
+	width 100%
+
+.grid
+	display grid
+
+.hidden, [hidden]
+	visibility hidden!important // Unlike display:none, this keeps the volume of the element
+
+.inverted
+	-webkit-filter: invert(100%);
+
+label
+	cursor pointer
+
+.padding5
+	padding:5px
+
+.noBorder, .noborder
+	border none!important
+
+	tr,td
+		border none!important
+
+.noevents, .noEvents
+	pointer-events none
+
+.nohighlight, ui-switch
+	-webkit-tap-highlight-color: rgba(255, 255, 255, 0)
+
+.noMargin, .nomargin
+	margin 0!important
+
+.noPadding, .nopadding
+	padding 0!important
+
+.nogrow, .noGrow
+	flex-grow 0
+
+.noshrink, .noShrink
+	flex-shrink 0
+
+.noselect, .noSelect
+	user-select none
+
+.nounderline, .noUnderline
+	text-decoration: none!important
+
+.opaque
+	opacity 1!important
+
+.overlay
+	// background-color rgba(0,0,0,0.3)
+	width 200vw
+	height 200vh
+	position absolute
+	top -100vh
+	left -100vw
+	pointer-events none
+
+	&.active
+		background-color rgba(0,0,0,0.3)
+		pointer-events auto
+
+.positionInitial
+	position initial
+
+.scroller
+	display block
+	overflow-x hidden
+	overflow-y auto
+	flex-shrink 1
+	height 100%
+	max-height 100%
+
+.shadow // = Papier depth-3
+	box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+
+.showOnHover
+	opacity 0.2
+
+	&:hover
+		// visibility visible // <---- Not working???
+		opacity 1
+
+.showButtonsOnHover
+
+	// &.padding-left
+	//	 padding-left 25px // to center the text despite the invisible "edit associations" button
+
+	.buttons
+		opacity 0.2
+
+	&:hover
+		.buttons
+			opacity 1
+
+.singleLine, .nobreak, .nowrap
+	white-space: nowrap;
+
+.menu_tools
+	margin-top: 14px;
+	font-size: 14px;
+	color: #1a1a1a;
+	white-space: nowrap;
+
+	span
+		padding-left:5px; 
+
+@-webkit-keyframes spinning /* Safari and Chrome */ {
+	from {
+		-ms-transform: rotate(0deg);
+		-moz-transform: rotate(0deg);
+		-webkit-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	to {
+		-ms-transform: rotate(360deg);
+		-moz-transform: rotate(360deg);
+		-webkit-transform: rotate(360deg);
+		-o-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+	}
+	@keyframes spinning {
+	from {
+		-ms-transform: rotate(0deg);
+		-moz-transform: rotate(0deg);
+		-webkit-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	to {
+		-ms-transform: rotate(360deg);
+		-moz-transform: rotate(360deg);
+		-webkit-transform: rotate(360deg);
+		-o-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+
+.spinning
+	-webkit-animation: spinning 2s linear infinite;
+	-moz-animation: spinning 2s linear infinite;
+	-ms-animation: spinning 2s linear infinite;
+	-o-animation: spinning 2s linear infinite;
+	animation: spinning 2s linear infinite;
+
+.uppercase
+	text-transform uppercase
+
+
+.host
+	position: absolute;
+	color: #008000;
+	transform: rotate(-90deg) translate3d(0, 0, 0);
+	font-family: "impact";
+	font-size: 20px;
+	text-align: center;
+	top: 35px;
+	left -5px
+	line-height: 20px;
+
+
+.appVersion
+	font-size small
+	text-align right
+	margin-right 10px

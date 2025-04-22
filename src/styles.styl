@@ -1,0 +1,97 @@
+// Base styles from your code
+@tailwind base
+@tailwind components
+@tailwind utilities
+
+shtml, body, app-root
+  height 100vh
+  display block
+  // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+  min-height: -webkit-fill-available
+  height: calc(var(--vh, 1vh) * 100)
+
+body
+  overflow auto
+  font-size 1rem
+  margin 0 ;
+  padding 0
+  transition opacity 0.7s linear
+
+.app
+  max-width 100vw
+  margin 10px 10px 10px 10px
+  @require 'global_styl/*.styl'
+  flex-grow 1
+  width calc(100vw)
+  grid-column-start 2
+  grid-row-start 3
+  position relative
+  display grid
+  grid-template-rows unquote('[nav-bar] auto [rest] 100fr')
+
+  .capitalize
+    text-transform capitalize
+
+  .scroller
+    padding 1px 40px 15px 40px
+    display flex
+
+  h1
+    padding-bottom 10px
+
+  .landing-page-table-container
+    margin-top 10px
+
+  .geo-grid-drawing-container
+    margin-bottom 10px
+    margin-top 2px
+
+  .flagHeaderClass, .countryHeaderClass
+    text-align left
+
+  .patentHeaderClass, .designsHeaderClass, .tmHeaderClass, .giHeaderClass, .portfolioHeaderClass
+    text-align center
+
+  .countryBodyClass
+    text-align left
+    padding-left 10px
+
+  .flagClass, .patentBodyClass, .designsBodyClass, .tmBodyClass, .giBodyClass, .portfolioBodyClass
+    text-align center
+
+  .countButtonClass
+    text-align center
+    margin 0px 8px 2px 0px
+    padding 2px
+    border 1.4px solid
+    font-weight bold
+    border-radius 6px
+    color #fff
+
+    div:hover
+      margin 0px 8px 2px 0px
+      border 1px solid
+      padding 2px
+      border-width thin
+      color #0D5FA1
+      background-color lightgray
+
+  .countButtonClass-zero
+    text-align center
+    margin 0px 8px 2px 0px
+    padding 2px
+    border 1px solid
+    color #80807F
+    border-radius 6px
+
+  .primary-btn-color
+    background-color #314668
+    border-color #314668
+/////////////////////////////////////
+:root
+  h1,h2,h3,h4,h5,h6   
+    color: var(--p-heading-color);
+    font-weight: var(--p-heading-font-weight);
+    line-height: var(--p-heading-line-height);
+
+  font-family -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif

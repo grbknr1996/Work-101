@@ -1,0 +1,38 @@
+.stepper-container
+  margin: 2rem 0
+  padding: 1rem
+  background: #ffffff
+  border-radius: 8px
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
+
+  :global(.p-steps)
+    .p-steps-item
+      .p-steps-number
+        background: #0067c0
+        color: #ffffff
+        border-radius: 50%
+        width: 2rem
+        height: 2rem
+        line-height: 2rem
+        font-size: 1rem
+        font-weight: 600
+        z-index: 1
+
+      .p-steps-title
+        margin-top: 0.5rem
+        color: #495057
+        font-weight: 600
+
+      &.p-highlight
+        .p-steps-number
+          background: #0052a3
+
+      &:before
+        border-top: 2px solid #dee2e6
+        width: 100%
+        top: 1rem
+        left: -50%
+        z-index: 0
+
+      &:first-child:before
+        content: none 

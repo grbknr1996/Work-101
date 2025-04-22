@@ -1,0 +1,1435 @@
+{
+    "\ufeffbtn": {
+        "applyfilter": {
+            "label": "\u179f\u17bc\u1798\u1794\u1789\u17d2\u1785\u17bc\u179b\u179b\u17d0\u1780\u17d2\u1781\u1781\u17d0\u178e\u17d2\u178c"
+        }
+    },
+    "wipopublish": {
+        "news": {
+            "2": "continue adding more messages if needed",
+            "1": "Any system messages to be posted can be placed here"
+        }
+    },
+    "wipo": {
+        "publish": {
+            "wrong": {
+                "syntex": {
+                    "solr": {
+                        "query": {
+                            "user": {
+                                "message": "Unable to execute query. Please re enter your query."
+                            }
+                        }
+                    }
+                }
+            },
+            "user": {
+                "manual": {
+                    "label": "\u1787\u17c6\u1793\u17bd\u1799"
+                }
+            },
+            "stats": {
+                "label": "Statistics"
+            },
+            "invalid": {
+                "solr": {
+                    "query": {
+                        "user": {
+                            "message": "Unable to parse the search query. Please correct it and re enter."
+                        }
+                    }
+                }
+            },
+            "html": {
+                "link2": {
+                    "label": "Link2"
+                },
+                "link1": {
+                    "label": "Link1"
+                }
+            },
+            "about": {
+                "label": "\u17a2\u17c6\u1796\u17b8",
+                "content": "<h1>\u17a2\u17c6\u1796\u17b8\u1780\u17b6\u179a\u179f\u17d2\u179c\u17c2\u1784\u179a\u1780\u1794\u17d2\u179a\u1797\u17c1\u1791\u1780\u1798\u17d2\u1798\u179f\u17b7\u1791\u17d2\u1792\u17b7\u1794\u1789\u17d2\u1789\u17b6</h1><br><p>This software is provided by the World Intellectual Property Organization (WIPO) through its program of technical assistance to national and regional Industrial Property (IP) Offices\u1780\u1798\u17d2\u1798\u179c\u17b7\u1792\u17b8\u1793\u17c1\u17c7\u178f\u17d2\u179a\u17bc\u179c\u1794\u17b6\u1793\u1795\u17d2\u178f\u179b\u17cb\u178a\u17c4\u1799\u17a2\u1784\u17d2\u1782\u1780\u17b6\u179a\u1780\u1798\u17d2\u1798\u179f\u17b7\u1791\u17d2\u1792\u17b7\u1794\u1789\u17d2\u1789\u17b6\u1796\u17b7\u1797\u1796\u179b\u17c4\u1780 (WIPO) \u178f\u17b6\u1798\u179a\u1799\u17c8\u1780\u1798\u17d2\u1798\u179c\u17b7\u1792\u17b8\u1795\u17d2\u178f\u179b\u17cb\u1787\u17c6\u1793\u17bd\u1799\u1794\u1785\u17d2\u1785\u17c1\u1780\u1791\u17c1\u179f\u178a\u179b\u17cb\u1780\u17b6\u179a\u17b7\u1799\u17b6\u179b\u17d0\u1799\u1780\u1798\u17d2\u1798\u179f\u17b7\u1791\u17d2\u1792\u17b7\u17a7\u179f\u17d2\u179f\u17b6\u17a0\u1780\u1798\u17d2\u1798\u1780\u17d2\u1793\u17bb\u1784\u1794\u17d2\u179a\u1791\u17c1\u179f \u1793\u17b7\u1784\u1780\u17d2\u1793\u17bb\u1784\u178f\u17c6\u1794\u1793\u17cb.</p><br><p> Use of this software is subject to the terms and conditions (<a href=\"http://www.wipo.int/global_ip/en/activities/technicalassistance/termsandconditions.html\" title=\"\u1785\u17bc\u179b\u1780\u17d2\u1793\u17bb\u1784\u1794\u178e\u17d2\u178f\u17b6\u1789\">http://www.wipo.int/global_ip/en/activities/technicalassistance/termsandconditions.html</a> ) which are part of the agreement signed <br>between WIPO and each IP Office.</p> <br><p>Parts of this software are provided through the support of the Japan Funds-in-Trust for Industrial Property (for more information, see \\n <a href=\"http://www.wipo.int/cooperation/en/funds_in_trust/japan_fitip_aspac/index.html\" title=\"Follow link\">http://www.wipo.int/cooperation/en/funds_in_trust/japan_fitip_aspac/index.html</a>) <br><br></p><p>For more information on WIPO\u2019s technical assistance programs, please see<a href=\"http://www.wipo.int/global_ip/en/activities/technicalassistance/\" title=\"Follow link\"> http://www.wipo.int/global_ip/en/activities/technicalassistance/</a></p>"
+            }
+        }
+    },
+    "trend": {
+        "line": {
+            "chart": {
+                "bar": {
+                    "title": "Watch Trends",
+                    "subtitle": "Watch Trends For"
+                }
+            }
+        },
+        "donut": {
+            "chart": {
+                "bar": {
+                    "title": "Top 5 Technology Trends",
+                    "subtitle": "Top 5 Technology Trends For"
+                }
+            }
+        }
+    },
+    "tooltip": {
+        "user": {
+            "selection": {
+                "info": {
+                    "label": "All application selected by clicking the checkbox on Search Result screen will appear here."
+                }
+            },
+            "select": {
+                "label": "Add/Remove user selection"
+            },
+            "deselect": {
+                "label": "Clear user selection"
+            }
+        },
+        "tableview": {
+            "label": "Table View"
+        },
+        "showfilter": {
+            "label": "Show Filter"
+        },
+        "search": {
+            "info": {
+                "label": "Record selected with one or more criteria"
+            }
+        },
+        "phonetic": {
+            "check": "This field boost the records with exact match to have higher relevance score"
+        },
+        "minimum": {
+            "relevance": "\u1795\u17d2\u1793\u17c2\u1780\u1793\u17c1\u17c7\u178f\u17d2\u179a\u17bc\u179c\u1794\u17d2\u179a\u17be\u178a\u17be\u1798\u17d2\u1794\u17b8\u1780\u17c6\u178e\u178f\u17cb\u179b\u1791\u17d2\u1792\u1795\u179b\u1796\u17b6\u1780\u17cb\u1796\u17d0\u1793\u17d2\u1792\u178f\u17b7\u1785\u178f\u17bd\u1785"
+        },
+        "listview": {
+            "label": "List View"
+        },
+        "hidefilter": {
+            "label": "Hide Filter"
+        },
+        "gridview": {
+            "label": "Grid View"
+        },
+        "export": {
+            "label": "\u1791\u17b6\u1789\u1785\u17c1\u1789"
+        },
+        "download": {
+            "label": "\u1791\u17b6\u1789\u1799\u1780",
+            "document": {
+                "label": "Download Document"
+            },
+            "application": {
+                "xml": {
+                    "label": "Download Application XML"
+                }
+            }
+        },
+        "document": {
+            "view": {
+                "label": "\u1798\u17be\u179b\u17af\u1780\u179f\u17b6\u179a"
+            },
+            "search": {
+                "info": {
+                    "label": "Enclose your search criteria within \"\" for exact search"
+                }
+            }
+        },
+        "detail": {
+            "newtab": {
+                "label": "\u1798\u17be\u179b\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179b\u1798\u17d2\u17a2\u17b7\u178f\u1780\u17d2\u1793\u17bb\u1784\u178f\u17b6\u1794\u1790\u17d2\u1798\u17b8"
+            },
+            "label": "\u1798\u17be\u179b\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179b\u17c6\u17a2\u17b7\u178f"
+        },
+        "clearfilter": {
+            "label": "Clear Filter"
+        },
+        "check": {
+            "label": "\u1796\u17b7\u1793\u17b7\u178f\u17d2\u1799"
+        },
+        "chart": {
+            "label": "\u178f\u17b6\u179a\u17b6\u1784\u179f\u17d2\u1790\u17b7\u178f\u17b7"
+        },
+        "back": {
+            "to": {
+                "search": {
+                    "label": "\u178f\u17d2\u179a\u17a1\u1794\u17cb\u1791\u17c5\u179a\u1780\u1780\u17b6\u179a\u179f\u17d2\u179c\u17c2\u1784\u179a\u1780"
+                }
+            }
+        }
+    },
+    "time": {
+        "ms": "ms"
+    },
+    "thumbnail": {
+        "dummy": {
+            "disclaimer": "Machine generated trademark logo"
+        }
+    },
+    "table": {
+        "summary": {
+            "title": "\u1794\u1784\u17d2\u17a0\u17b6\u1789\u179b\u1791\u17d2\u1792\u1795\u179b\u1796\u17b8 ${from} \u1791\u17c5 ${to} \u1780\u17d2\u1793\u17bb\u1784\u1785\u17c6\u178e\u17c4\u1798 ${of}"
+        },
+        "no": {
+            "data": {
+                "found": "\u179a\u1780\u1798\u17b7\u1793\u1783\u17be\u1789\u17af\u1780\u179f\u17b6\u179a"
+            }
+        },
+        "document": {
+            "publications": {
+                "label": "\u1780\u17b6\u179a\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799"
+            },
+            "pct": {
+                "application": {
+                    "label": "\u1796\u17b6\u1780\u17d2\u1799\u179f\u17d2\u1793\u17be\u179f\u17bb\u17c6 PCT"
+                }
+            },
+            "name": {
+                "label": "\u1788\u17d2\u1798\u17c4\u17c7\u17af\u1780\u179f\u17b6\u179a"
+            },
+            "filing": {
+                "date": {
+                    "label": "\u1780\u17b6\u179a\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6/\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1785\u17bc\u179b\u178a\u17c6\u178e\u17b6\u1780\u17cb\u1780\u17b6\u179b"
+                }
+            },
+            "doctype": {
+                "label": "\u1794\u17d2\u179a\u1797\u17c1\u1791\u17af\u1780\u179f\u17b6\u179a"
+            },
+            "docdate": {
+                "label": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791"
+            },
+            "application": {
+                "number": {
+                    "label": "\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6/\u17a2\u17b6\u1791\u17b7\u1797\u17b6\u1796"
+                }
+            },
+            "action": {
+                "label": "\u179f\u1780\u1798\u17d2\u1798\u1797\u17b6\u1796"
+            }
+        }
+    },
+    "tab": {
+        "userselection": {
+            "label": "\u1787\u17d2\u179a\u17be\u179f\u179a\u17be\u179f\u17a2\u17d2\u1793\u1780\u1794\u17d2\u179a\u17be\u1794\u17d2\u179a\u17b6\u179f\u17cb"
+        },
+        "text": {
+            "field": {
+                "label ": " \u178f\u17b6\u179a\u17b6\u1784\u17a2\u1780\u17d2\u179f\u179a"
+            }
+        },
+        "status": {
+            "label": "\u1796\u17d2\u179a\u17b9\u178f\u17d2\u178f\u1780\u17b6\u179a\u178e\u17cd"
+        },
+        "search": {
+            "label": ""
+        },
+        "recent": {
+            "label": "\u1780\u17b6\u179a\u179f\u17d2\u179c\u17c2\u1784\u179a\u1780\u1790\u17d2\u1798\u17b8\u17d7"
+        },
+        "phoneticsearch": {
+            "label": "\u179f\u17bc\u179a\u179f\u1796\u17d2\u1791"
+        },
+        "patent": {
+            "family": {
+                "time": {
+                    "line": {
+                        "label": "Time line"
+                    }
+                },
+                "tabular": {
+                    "view": {
+                        "label": "\u1798\u17be\u179b\u1787\u17b6\u179a\u1794\u17c0\u1794\u178f\u17b6\u179a\u17b6\u1784"
+                    }
+                },
+                "label": "\u1794\u178e\u17d2\u178f\u17bb\u17c6\u1794\u17d2\u179a\u1780\u17b6\u179f\u1793\u17b8\u1799\u1794\u178f\u17d2\u179a\u178f\u1780\u17d2\u1780\u1780\u1798\u17d2\u1798",
+                "data": {
+                    "fetch": {
+                        "fail": {
+                            "message": "\u1798\u17b7\u1793\u17a2\u17b6\u1785\u1791\u17b6\u1789\u1799\u1780\u1791\u17b7\u1793\u17d2\u1793\u1793\u17d0\u1799"
+                        }
+                    }
+                }
+            }
+        },
+        "number": {
+            "field": {
+                "label ": "\u178f\u17b6\u179a\u17b6\u1784\u179b\u17c1\u1781"
+            }
+        },
+        "gazettesearch": {
+            "label": "\u1796\u17d2\u179a\u17b9\u178f\u17d2\u178f\u17b7\u1794\u178f\u17d2\u179a"
+        },
+        "documentsearch": {
+            "label": "\u17af\u1780\u179f\u17b6\u179a"
+        },
+        "doclist": {
+            "label": "\u17af\u1780\u179f\u17b6\u179a"
+        },
+        "description": {
+            "label": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u1796\u17b7\u1796\u178e\u17cc\u1793\u17b6"
+        },
+        "date": {
+            "field": {
+                "label ": " \u178f\u17b6\u179a\u17b6\u1784\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791"
+            }
+        },
+        "claim": {
+            "label": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u17a2\u17c7\u17a2\u17b6\u1784"
+        },
+        "biblio": {
+            "label": "Bibliographic"
+        },
+        "advancedsearch": {
+            "label": "\u1794\u1793\u17d2\u178f\u1791\u17c5\u1798\u17bb\u1781"
+        }
+    },
+    "section": {
+        "associateddrawing": {
+            "label": "\u1782\u17c6\u1793\u17bc\u179f\u1794\u1784\u17d2\u17a0\u17b6\u1789"
+        }
+    },
+    "search": {
+        "table": {
+            "results": {
+                "label": "Table view"
+            }
+        },
+        "sort": {
+            "type": {
+                "desc": {
+                    "tooltip": "Descending"
+                },
+                "asc": {
+                    "tooltip": "Ascending"
+                }
+            },
+            "field": {
+                "tooltip": "Select a column for sorting"
+            }
+        },
+        "page": {
+            "title": "ASEAN PATENTSCOPE"
+        },
+        "list": {
+            "results": {
+                "label": "List view"
+            }
+        },
+        "grid": {
+            "results": {
+                "label": "Grid view"
+            }
+        },
+        "export": {
+            "results": {
+                "label": "Export results"
+            }
+        },
+        "bar": {
+            "suggestive": {
+                "search": {
+                    "on": {
+                        "tooltip": "Frequent fields selection is on"
+                    },
+                    "off": {
+                        "tooltip": "All fields selection is on"
+                    },
+                    "label": "Field selection"
+                }
+            },
+            "solr": {
+                "id": {
+                    "tooltip": "Click here to remove the keyword"
+                }
+            }
+        }
+    },
+    "result": {
+        "number": {
+            "found": "\u1796\u17b6\u1780\u17d2\u1799\u179f\u17d2\u1793\u17be\u179f\u17bb\u17c6\u179a\u1780\u1783\u17be\u1789\u1780\u17d2\u1793\u17bb\u1784"
+        },
+        "count": {
+            "message": {
+                "single": "About ${count} result",
+                "plural": "About ${count} results"
+            }
+        }
+    },
+    "page": {
+        "title": {
+            "application": {
+                "label": "\u1796\u17b6\u1780\u17d2\u1799\u179f\u17d2\u1793\u17be\u179f\u17bb\u17c6"
+            }
+        }
+    },
+    "option": {
+        "stemming": {
+            "label": "stemming"
+        },
+        "phonetic": {
+            "label": "\u179f\u17bc\u179a\u179f\u1796\u17d2\u1791"
+        },
+        "fuzzy": {
+            "label": "fuzzy"
+        }
+    },
+    "module": {
+        "trademarks": {
+            "label": "\u1798\u17c9\u17b6\u1780\u179f\u1789\u17d2\u1789\u17b6"
+        },
+        "patents": {
+            "label": "\u1794\u17d2\u179a\u1780\u17b6\u179f\u1793\u17b8\u1799\u1794\u178f\u17d2\u179a\u178f\u1780\u17d2\u1780\u1780\u1798\u17d2\u1798"
+        },
+        "designs": {
+            "label": "\u1782\u17c6\u1793\u17bc\u179a\u17a7\u179f\u17d2\u179f\u17b6\u17a0\u1780\u1798\u17d2\u1798"
+        }
+    },
+    "message": {
+        "userselection": {
+            "nocriteria": "\u1782\u17d2\u1798\u17b6\u1793\u179b\u1780\u17d2\u1781\u178e\u17c8\u179c\u17b7\u1793\u17b7\u1785\u17d2\u1786\u17d0\u1799",
+            "keyword": "\u1796\u17b6\u1780\u17d2\u1799\u1782\u1793\u17d2\u179b\u17b7\u17c7",
+            "and": "\u1793\u17b7\u1784",
+            "all": "\u1791\u17b6\u17c6\u1784\u17a2\u179f\u17cb"
+        },
+        "feature": {
+            "notsupported": "Your browser does not support viewing the document.Kindly download the document instead."
+        },
+        "export": {
+            "limit": {
+                "exceeded": "Please narrow down the search results further before exporting!"
+            }
+        }
+    },
+    "menu": {
+        "trademarks": "\u1798\u17c9\u17b6\u1780\u179f\u1789\u17d2\u1789\u17b6",
+        "references": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u1799\u17c4\u1784",
+        "patents": "\u1794\u17d2\u179a\u1780\u17b6\u179f\u1793\u17b8\u1799\u1794\u178f\u17d2\u179a\u178f\u1780\u17d2\u1780\u1780\u1798\u17d2\u1798",
+        "home": "\u1791\u17c6\u1796\u17d0\u179a\u178a\u17be\u1798",
+        "edms": "EDMS",
+        "designs": "\u1782\u17c6\u1793\u17bc\u179a\u17a7\u179f\u17d2\u179f\u17b6\u17a0\u1780\u1798\u17d2\u1798"
+    },
+    "language": {
+        "display": {
+            "label": {
+                "vi": "Ti\u1ebfng Vi\u1ec7t",
+                "ms": "Bahasa Melayu",
+                "kh": "\u1797\u17b6\u179f\u17b6\u1781\u17d2\u1798\u17c2\u179a",
+                "jp": "\u65e5\u672c\u8a9e",
+                "id": "Bahasa Indonesia",
+                "fr": "Fran\u00e7ais",
+                "en": "English",
+                "ar": "\u0627\u0644\u0639\u0631\u0628\u064a\u0629"
+            }
+        }
+    },
+    "label": {
+        "showing": "\u1780\u17c6\u1796\u17bb\u1784\u1794\u1784\u17d2\u17a0\u17b6\u1789",
+        "security": {
+            "captcha": "\u178a\u17be\u1798\u17d2\u1794\u17b8\u1794\u1789\u17d2\u1787\u17b6\u1780\u17cb\u1796\u17b8\u1780\u17b6\u179a\u179f\u17d2\u1793\u17be\u179f\u17bb\u17c6 \u179f\u17bc\u1798\u1785\u17bb\u1785\u179b\u17be\u1794\u17d2\u179a\u17a2\u1794\u17cb\u178a\u17be\u1798\u17d2\u1794\u17b8\u17b2\u1799\u17be\u1784\u178a\u17b9\u1784\u1790\u17b6\u17a2\u17d2\u1793\u1780\u1787\u17b6\u1798\u1793\u17bb\u179f\u17d2\u179f"
+        },
+        "of": "\u1793\u17c3",
+        "more": "\u1794\u1793\u17d2\u1790\u17c2\u1798",
+        "less": "\u1794\u1793\u17d2\u1790\u1799"
+    },
+    "info": {
+        "version": {
+            "label": "version 1.3.0"
+        },
+        "poweredby": {
+            "label": "=\u179a\u1780\u17d2\u179f\u17b6\u179f\u17b7\u1791\u17d2\u1792\u17b7\u178a\u17c4\u1799\u17a2\u1784\u17d2\u1782\u1780\u17b6\u179a\u1780\u1798\u17d2\u1798\u179f\u17b7\u1791\u17d2\u1792\u17b7\u1794\u1789\u17d2\u1789\u17b6\u1796\u17b7\u1797\u1796\u179b\u17c4\u1780"
+        }
+    },
+    "header": {
+        "application": {
+            "title": "ASEAN PATENTSCOPE"
+        }
+    },
+    "footer": {
+        "search": {
+            "quicklink": {
+                "label": "\u179f\u17d2\u179c\u17c2\u1784\u179a\u1780"
+            },
+            "detail": {
+                "quicklink": {
+                    "label": "Basic or advanced search to <br> refine your preferences"
+                }
+            }
+        },
+        "manage": {
+            "quicklink": {
+                "label": "MANAGE"
+            },
+            "detail": {
+                "quicklink": {
+                    "label": "You can save and customize <br> your search"
+                }
+            }
+        },
+        "export": {
+            "quicklink": {
+                "label": "EXPORT"
+            },
+            "detail": {
+                "quicklink": {
+                    "label": "\u1791\u17b6\u1789\u1799\u1780\u179b\u1791\u17d2\u1792\u1795\u179b\u179a\u1794\u179f\u17cb\u17a2\u17d2\u1793\u1780\u1787\u17b6 PDF"
+                }
+            }
+        }
+    },
+    "field": {
+        "tooltip": {
+            "todate": "\u1791\u17c5\u178a\u179b\u17cb",
+            "phonetic": {
+                "min": {
+                    "relevance": "Minimum Relevance"
+                }
+            },
+            "id": "\u17a2\u1784\u17d2\u1782\u179f\u17c6\u1782\u17b6\u179b\u17cb",
+            "fromdate": "\u1785\u17b6\u1794\u17cb\u1796\u17b8",
+            "entry": {
+                "count": "Entry count"
+            },
+            "boost": {
+                "exact": {
+                    "match": "Boost Exact Match"
+                }
+            },
+            "application": {
+                "count": "Application count"
+            },
+            "VNCL": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb Vienna",
+            "VCL": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb Vienna",
+            "TITL_LG1": "Title Bilingual",
+            "TITL_EN": "\u1785\u17c6\u178e\u1784\u1787\u17be\u1784\u1787\u17b6\u1797\u17b6\u179f\u17b6\u17a2\u1784\u17cb\u1782\u17d2\u179b\u17c1\u179f",
+            "TITL": "\u1785\u17c6\u178e\u1784\u1787\u17be\u1784",
+            "STLB_ORI": "Internal Status",
+            "STLB": "Status",
+            "STDT": "Status Date",
+            "STCD": "Status Code",
+            "RPRE": "\u1791\u17b8\u179b\u17c6\u1793\u17c5\u1797\u17d2\u1793\u17b6\u1780\u17cb\u1784\u17b6\u179a\u178f\u17c6\u178e\u17b6\u1784",
+            "RPNA_LG1": "RPNA_LG1",
+            "RPNA": "\u1788\u17d2\u1798\u17c4\u17c7\u1797\u17d2\u1793\u17b6\u1780\u17cb\u1784\u17b6\u179a\u178f\u17c6\u178e\u17b6\u1784",
+            "RPCT": "\u1794\u17d2\u179a\u1791\u17c1\u179f\u1797\u17d2\u1793\u17b6\u1780\u17cb\u1784\u17b6\u179a\u178f\u17c6\u178e\u17b6\u1784",
+            "RPAD_LG1": "RPAD_LG1",
+            "RPAD": "\u17a2\u17b6\u179f\u1799\u178a\u17d2\u178b\u17b6\u1793\u1797\u17d2\u1793\u17b6\u1780\u17cb\u1784\u17b6\u179a\u178f\u17c6\u178e\u17b6\u1784",
+            "RENB": "\u1785\u17bb\u17c7\u1794\u1789\u17d2\u1787\u17b8 #",
+            "REDT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1785\u17bb\u17c7\u1794\u1789\u17d2\u1787\u17b8",
+            "PCTPBNB": "PCT Pub. #",
+            "PCTPBDT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799 PCT",
+            "PCTPBCT": "\u1794\u17d2\u179a\u1791\u17c1\u179f\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799 PCT",
+            "PCTNB": "PCT Filing #",
+            "PCTDT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799 PCT",
+            "PCNB": "\u179b\u17c1\u1781\u17a2\u17b6\u1791\u17b7\u1797\u17b6\u1796",
+            "PCDT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u17a2\u17b6\u1791\u17b7\u1797\u17b6\u1796",
+            "PCCT": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179b\u1798\u17d2\u17a2\u17b7\u178f\u17a2\u17b6\u1791\u17b7\u1797\u17b6\u1796",
+            "PBNB": "\u179b\u17c1\u1781\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799",
+            "PBKC": "\u179b\u17c1\u1781\u1780\u17bc\u178a\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799",
+            "PBDT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799",
+            "OFCO": "\u179b\u17c1\u1781\u1780\u17bc\u178a\u1780\u17b6\u179a\u17b7\u1799\u17b6\u179b\u17d0\u1799",
+            "NPEDT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1785\u17bc\u179b\u178a\u17c6\u178e\u17b6\u1780\u17cb\u1780\u17b6\u179b\u1790\u17d2\u1793\u17b6\u1780\u17cb\u1787\u17b6\u178f\u17b7",
+            "NCL": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb Nice",
+            "NCDE_LG1": "Nice Class Description Bilingual",
+            "NCDE": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u1796\u17b7\u1796\u178e\u17cc\u1793\u17b6\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb Nice",
+            "NCCL": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb Nice",
+            "MK_LG1": "Mark Name Bilingual",
+            "MKTXT": "\u1798\u17c9\u17b6\u1780",
+            "MK": "\u1798\u17c9\u17b6\u1780",
+            "MAIN_EFOLDER_REF": "Main EFolder Reference",
+            "LOGOEX": "\u1793\u17b7\u1798\u17b7\u178f\u17d2\u178f\u179f\u1789\u17d2\u1789\u17b6",
+            "LOGO": "\u1793\u17b7\u1798\u17b7\u178f\u17d2\u178f\u179f\u1789\u17d2\u1789\u17b6",
+            "LOC": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb",
+            "LCL": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb",
+            "LCDE": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb",
+            "Journal": {
+                "AFNB_ORI": "\u1796\u17b6\u1780\u17d2\u1799\u179f\u17d2\u1793\u17be\u179f\u17bb\u17c6#"
+            },
+            "JOURNAL_DESCRIPTION": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u1796\u17b7\u1796\u178e\u17cc\u1793\u17b6\u1796\u17d2\u179a\u17b9\u178f\u17d2\u178f\u17b7\u1794\u178f\u17d2\u179a",
+            "IPC_TECH_SECTOR_TXT": "\u179c\u17b7\u179f\u17d0\u1799\u1794\u1785\u17d2\u1785\u17c1\u1780\u179c\u17b7\u1791\u17d2\u1799\u17b6 IPC",
+            "IPC_TECH_FIELD_TXT": "\u1795\u17d2\u1793\u17c2\u1780\u1794\u1785\u17d2\u1785\u17c1\u1780\u179c\u17b7\u1791\u17d2\u1799\u17b6 IPC",
+            "IPC_TECH_FIELD": "\u1795\u17d2\u1793\u17c2\u1780\u1794\u1785\u17d2\u1785\u17c1\u1780\u179c\u17b7\u1791\u17d2\u1799\u17b6 IPC",
+            "IPC_ORI": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb IPC",
+            "IPC_MAIN": "IPC_MAIN",
+            "IPC": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb IPC",
+            "INRE": "Inventor Residence",
+            "INNA_LG1": "Inventor Bilingual",
+            "INNA": "\u178f\u1780\u17d2\u1780\u1780\u179a",
+            "INCT": "\u1794\u17d2\u179a\u1791\u17c1\u179f\u179a\u1794\u179f\u17cb\u178f\u1780\u17d2\u1780\u1780\u179a",
+            "INAD_LG1": "Inventor Address Bilingual",
+            "INAD": "\u17a2\u17b6\u179f\u1799\u178a\u17d2\u178b\u17b6\u1793\u178f\u1780\u17d2\u1780\u1780\u179a",
+            "GZPDT": "Gazette Publication Date",
+            "GZNB": "Gazette Number",
+            "GZDT": "Gazette Date",
+            "FILE_TYP": "\u1794\u17d2\u179a\u1797\u17c1\u1791\u17af\u1780\u179f\u17b6\u179a",
+            "FILE_ID": "File Id",
+            "EXCRDT": "EXCRDT",
+            "EFOLDER_REF": "EFolder Reference",
+            "EFOLDER_ID": "EFolder Id",
+            "EDOC_REF": "EDoc Reference",
+            "EDOC_ID": "EDoc Id",
+            "DOC_REF": "Document Reference",
+            "DOC_ID": "Document Id",
+            "DETXT": "\u1796\u17d0\u178f\u17cc\u1798\u17b6\u1793\u17a2\u17d2\u1793\u1780\u1794\u1784\u17d2\u1780\u17be\u178f\u179f\u17d2\u1793\u17b6\u178a\u17c3",
+            "DESCTXT": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u1796\u17b7\u1796\u178e\u17cc\u1793\u17b6",
+            "DERE": "DERE",
+            "DENA_LG1": "\u17a2\u17d2\u1793\u1780\u1794\u1784\u17d2\u1780\u17be\u178f\u179f\u17d2\u1793\u17b6\u178a\u17c3\u1791\u17b8\u1796\u17b8\u179a",
+            "DENA": "\u17a2\u17d2\u1793\u1780\u1794\u1784\u17d2\u1780\u17be\u178f\u179f\u17d2\u1793\u17b6\u178a\u17c3",
+            "DECT": "DECT",
+            "DECLDES": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u1796\u17b7\u1796\u178e\u17cc\u1793\u17b6",
+            "DEAD_LG1": "\u17a2\u17b6\u179f\u1799\u178a\u17d2\u178b\u17b6\u1793\u1782\u17c6\u1793\u17bc\u179a\u17a7\u179f\u17d2\u179f\u17b6\u17a0\u1780\u1798\u17d2\u1798\u1791\u17b8\u1796\u17b8\u179a",
+            "DEAD": "\u17a2\u17b6\u179f\u1799\u178a\u17d2\u178b\u17b6\u1793\u1782\u17c6\u1793\u17bc\u179a\u17a7\u179f\u17d2\u179f\u17b6\u17a0\u1780\u1798\u17d2\u1798",
+            "CPC_ORI": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb CPC",
+            "CPC_MAIN": "CPC_MAIN",
+            "CPC": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb CPC",
+            "CLTXT": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u17a2\u17c7\u17a2\u17b6\u1784",
+            "CLNB": "\u1785\u17c6\u1793\u17bd\u1793\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u17a2\u17c7\u17a2\u17b6\u1784",
+            "CLLG": "\u1797\u17b6\u179f\u17b6\u1793\u17c3\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u17a2\u17c7\u17a2\u17b6\u1784",
+            "CLDE": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u1796\u17b7\u1796\u178e\u17cc\u1793\u17b6\u1793\u17c3\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u17a2\u17c7\u17a2\u17b6\u1784",
+            "CITCL": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u17a2\u17c7\u17a2\u17b6\u1784",
+            "CITCAT": "\u1794\u17d2\u179a\u1797\u17c1\u1791\u1780\u17d2\u179a\u17bb\u1798",
+            "CINB": "\u179b\u17c1\u1781\u179f\u1798\u17d2\u179a\u1784\u17cb",
+            "CIDE": "\u179f\u1798\u17d2\u179a\u1784\u17cb\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u1796\u17b7\u1796\u178e\u17cc\u1793\u17b6",
+            "CICL": "\u179f\u1798\u17d2\u179a\u1784\u17cb\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u17a2\u17c7\u17a2\u17b6\u1784",
+            "CICA": "\u1794\u17d2\u179a\u1797\u17c1\u1791\u179f\u1798\u17d2\u179a\u1784\u17cb",
+            "CATEGORY": "\u1794\u17d2\u179a\u1797\u17c1\u1791\u1780\u17d2\u179a\u17bb\u1798",
+            "APTXT": "\u17a2\u17d2\u1793\u1780\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6",
+            "APRE": "\u1791\u17b8\u179b\u17c6\u1793\u17c5\u17a2\u17d2\u1793\u1780\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6",
+            "APPL_TYP_TXT": "\u1794\u17d2\u179a\u1797\u17c1\u1791\u1796\u17b6\u1780\u17d2\u1799\u179f\u17d2\u1793\u17be\u179f\u17bb\u17c6",
+            "APPL_TYP": "\u1794\u17d2\u179a\u1797\u17c1\u1791\u1796\u17b6\u1780\u17d2\u1799\u179f\u17d2\u1793\u17be\u179f\u17bb\u17c6",
+            "APPL_SUBTYP_TXT": "Application SubType",
+            "APPL_SUBTYP": "Application SubType",
+            "APNA_LG1": "\u17a2\u17b6\u179f\u1799\u178a\u17d2\u178b\u17b6\u1793\u17a2\u17d2\u1793\u1780\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6\u1791\u17b8\u1796\u17b8\u179a",
+            "APNA": "\u17a2\u17d2\u1793\u1780\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6",
+            "APCT": "\u1794\u17d2\u179a\u1791\u17c1\u179f\u17a2\u17d2\u1793\u1780\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6",
+            "APAD_LG1": "\u17a2\u17b6\u179f\u1799\u178a\u17d2\u178b\u17b6\u1793\u17a2\u17d2\u1793\u1780\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6\u1791\u17b8\u1796\u17b8\u179a",
+            "APAD": "\u17a2\u17b6\u179f\u1799\u178a\u17d2\u178b\u17b6\u1793\u17a2\u17d2\u1793\u1780\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6",
+            "AFNB_ORI": " \u179b\u17c1\u1781\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6\u1785\u17bb\u17c7\u1794\u1789\u17d2\u1787\u17b8",
+            "AFNB": "Filing #",
+            "AFDT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u179f\u17bb\u17c6\u1785\u17bb\u17c7\u1794\u1789\u17d2\u1787\u17b8",
+            "ABTXT": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179f\u1784\u17d2\u1781\u17c1\u1794",
+            "ABST_LG1": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179f\u1784\u17d2\u1781\u17c1\u1794\u1787\u17b6\u1797\u17b6\u179f\u17b6\u1791\u17b8\u1796\u17b8\u179a",
+            "ABST_EN": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179f\u1784\u17d2\u1781\u17c1\u1794\u1787\u17b6\u1797\u17b6\u179f\u17b6\u17a2\u1784\u17cb\u1782\u17d2\u179b\u17c1\u179f",
+            "ABST": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179f\u1784\u17d2\u1781\u17c1\u1794"
+        },
+        "search": {
+            "suggestion": {
+                "label": "\u1794\u1789\u17d2\u1785\u17bc\u179b\u1796\u17b6\u1780\u17d2\u1799\u1782\u1793\u17d2\u179b\u17b7\u17c7"
+            },
+            "concordance": {
+                "placeholder": "Enter Keyword(s) for e.g.:Optics, Medical,Surface"
+            }
+        },
+        "placeholder": {
+            "todate": "e.g. 2017.12.31",
+            "phonetic": {
+                "min": {
+                    "relevance": ""
+                }
+            },
+            "id": "e.g. CH2018000001",
+            "fromdate": "e.g. 2017.12.31",
+            "documentType": "e.g. Spec",
+            "documentParentId": "e.g. CH2018000001",
+            "documentName": "e.g. CH2018000001_spec_000001",
+            "documentContent": "e.g. This is a specification document",
+            "boost": {
+                "exact": {
+                    "match": ""
+                }
+            },
+            "VNCL": "e.g. 8.1.19",
+            "VCL": "e.g. 8.1.19",
+            "TITL_LG1": "e.g. Nestl\u00e9 KitKat",
+            "TITL_EN": "e.g. Nestl\u00e9 KitKat",
+            "TITL": "e.g. Nestl\u00e9 KitKat",
+            "STLB_ORI": "e.g. Published",
+            "STLB": "e.g. Published",
+            "STDT": "e.g. 2017.12.31",
+            "STCD": "e.g. FG",
+            "RPRE": "e.g. CH",
+            "RPNA_LG1": "e.g. Nestl\u00e9",
+            "RPNA": "e.g. Nestl\u00e9",
+            "RPCT": "e.g. CH",
+            "RPAD_LG1": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+            "RPAD": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+            "RENB": "e.g. CH2018000001",
+            "REDT": "e.g. 2017.12.31",
+            "PCTPBNB": "2018/000001",
+            "PCTPBDT": "",
+            "PCTPBCT": "e.g. CH",
+            "PCTNB": "e.g. PCT/CH2018/000001",
+            "PCTDT": "e.g. 2017.12.31",
+            "PCNB": "e.g. CH2018000001",
+            "PCDT": "e.g. 2017.12.31",
+            "PCCT": "e.g. CH",
+            "PBNB": "e.g. 2018/000001",
+            "PBKC": "",
+            "PBDT": "e.g. 2017.12.31",
+            "OFCO": "e.g. CH",
+            "NPEDT": "e.g. 2017.12.31",
+            "NCL": "e.g. 0100662",
+            "NCDE_LG1": "e.g. Chocolate for kids",
+            "NCDE": "e.g. Chocolate for kids",
+            "NCCL": "e.g. 0100662",
+            "MK_LG1": "e.g. KitKat",
+            "MKTXT": "e.g. KitKat",
+            "MK": "e.g. KitKat",
+            "LOGOEX": "",
+            "LOGO": "",
+            "LOC": "e.g. Geneva",
+            "LCL": "e.g. 26.6",
+            "LCDE": "e.g. Chocolate for kids",
+            "Journal": {
+                "AFNB_ORI": "e.g. CH2018000001"
+            },
+            "JOURNAL_DESCRIPTION": "e.g. This is a food journal",
+            "IPC_TECH_SECTOR_TXT": "e.g. Human Necessities",
+            "IPC_TECH_FIELD_TXT": "e.g. Human Necessities",
+            "IPC_TECH_FIELD": "e.g. Human Necessities",
+            "IPC_ORI": "e.g. A02H 15/04",
+            "IPC_MAIN": "",
+            "IPC": "e.g. A02H1504",
+            "INRE": "",
+            "INNA_LG1": "",
+            "INNA": "",
+            "INCT": "",
+            "INAD_LG1": "",
+            "INAD": "",
+            "GZPDT": "e.g. 2017.12.31",
+            "GZNB": "",
+            "GZDT": " e.g. 2017.12.31",
+            "FILE_TYP": "e.g. P, D, M",
+            "FILE_ID": "e.g. AP-A-2008-10",
+            "EXCRDT": "e.g. 2017.12.31",
+            "EFOLDER_REF": "e.g. 1-2018-2",
+            "EDOC_REF": "e.g. 158-2008-1",
+            "DOC_REF": "e.g. AP-AF11-2008-2",
+            "DOC_ID": "e.g. AP-A-2008-10",
+            "DETXT": "e.g. Nestl\u00e9 is the world's largest food and beverage company.",
+            "DESCTXT": "",
+            "DERE": "e.g. CH",
+            "DENA_LG1": "e.g. Nestl\u00e9",
+            "DENA": "e.g. Nestl\u00e9",
+            "DECT": "e.g. CH",
+            "DECLDES": "",
+            "DEAD_LG1": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+            "DEAD": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+            "CPC_ORI": "e.g. A02H 15/04",
+            "CPC_MAIN": "",
+            "CPC": "e.g. A02H1504",
+            "CLTXT": "",
+            "CLNB": "",
+            "CLLG": "e.g. EN",
+            "CLDE": "",
+            "CITCL": "",
+            "CITCAT": "",
+            "CINB": "",
+            "CIDE": "",
+            "CICL": "",
+            "CICA": "",
+            "CATEGORY": "",
+            "APTXT": "e.g. Nestl\u00e9",
+            "APRE": "e.g. CH",
+            "APPL_TYP_TXT": "e.g. National Application",
+            "APPL_TYP": "e.g. National Application",
+            "APPL_SUBTYP_TXT": "e.g. National Application",
+            "APPL_SUBTYP": "e.g. National Application",
+            "APNA_LG1": "e.g. Nestl\u00e9",
+            "APNA": "e.g. Nestl\u00e9",
+            "APCT": "e.g. CH",
+            "APAD_LG1": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+            "APAD": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+            "AFNB_ORI": "e.g. CH2018000001",
+            "AFNB": "e.g. CH2018000001",
+            "AFDT": "e.g. 2017.12.31",
+            "ABTXT": "e.g. This application belongs to the food category.",
+            "ABST_LG1": "e.g. This application belongs to the food category.",
+            "ABST_EN": "e.g. This application belongs to the food category.",
+            "ABST": "e.g. This application belongs to the food category."
+        },
+        "display": {
+            "years": "Year",
+            "type": "\u1794\u17d2\u179a\u1797\u17c1\u1791\u17af\u1780\u179f\u17b6\u179a",
+            "todate": "\u1791\u17c5\u1780\u17b6\u1793\u17cb",
+            "suggestion": {
+                "technical": {
+                    "field": "\u179c\u17b7\u179f\u17d0\u1799\u1794\u1785\u17d2\u1785\u17c1\u1780\u179c\u17b7\u1791\u17d2\u1799\u17b6"
+                },
+                "VCL": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb Vienna",
+                "String": "String",
+                "Number": "\u179b\u17c1\u1781",
+                "NCL": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb Nice",
+                "LCL": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb Locarno",
+                "Default": "Default",
+                "Date": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791",
+                "Classification": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb",
+                "AlphaNumeric": "AlphaNumeric"
+            },
+            "sector": {
+                "transportation": "Transportation",
+                "transport": "Transport",
+                "tools_and_machines": "Tools And Machines",
+                "textiles_and_accessories": "Textiles And Accessories",
+                "research_and_technology": "Research And Technology",
+                "packaging": "Packaging",
+                "other_sectors": "Other Sectors",
+                "other_fields": "Other Fields",
+                "non_classified": "Non Classified",
+                "mechanical_engineering": "Mechanical Engineering",
+                "leisure_and_education": "Leisure And Education",
+                "instruments": "Instruments",
+                "ict_and_audiovisual": "ICT And Audiovisual",
+                "household_equipment": "Household Equipment",
+                "health_pharma_and_cosmetics": "Health, Pharma And Cosmetics",
+                "health": "Health",
+                "furniture_and_household_goods": "Furniture And Household Goods",
+                "electricity_and_lighting": "Electricity And Lighting",
+                "electrical_engineering": "Electrical Engineering",
+                "construction": "Construction",
+                "clothing": "Clothing",
+                "chemistry": "Chemistry",
+                "chemicals": "Chemicals",
+                "business_services": "Business Services",
+                "average_others": "Average Others",
+                "agriculture": "Agriculture",
+                "agricultural_products_and_food_preparation": "Agricultural Products And Food Preparation",
+                "advertising": "Advertising"
+            },
+            "search": {
+                "criteria": "\u179b\u1780\u17d2\u1781\u178e\u17c8\u179c\u17b7\u1793\u17b7\u1785\u17d2\u1786\u17d0\u1799\u1793\u17c3\u1780\u17b6\u179a\u179f\u17d2\u179c\u17c2\u1784\u179a\u1780"
+            },
+            "score": "\u1796\u17b6\u1780\u17cb\u1796\u17d0\u1793\u17d2\u1792",
+            "phonetic": {
+                "min": {
+                    "relevance": "\u1780\u17b6\u179a\u1796\u17b6\u1780\u17cb\u1796\u17d0\u1793\u17d2\u1792\u178f\u17b7\u1785\u178f\u17bd\u1785"
+                }
+            },
+            "pct_national_phase": "\u178a\u17c6\u178e\u17b6\u1780\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb\u1787\u17b6\u178f\u17b7 PCT",
+            "parentId": "\u17a2\u1784\u17d2\u1780\u179f\u17c6\u1782\u17b6\u179b\u17cb\u1798\u17c1",
+            "journal": {
+                "detail": {
+                    "APP_REPRESENTATIVE_NAME": "Representative",
+                    "APP_REGISTRATION_NUMBER": "Registration Number",
+                    "APP_REGISTRATION_DATE": "Registration Date",
+                    "APP_REGISTERED_CLASSES_DETAIL": "Nice Classes",
+                    "APP_PUBLICATION_DATE": "Publication Date",
+                    "APP_PCT_PUBLICATION_ID": "PCT Publication Number",
+                    "APP_PCT_PUBLICATION_DATE": "PCT Publication Date",
+                    "APP_PCT_FILING_DATE": "PCT Filing Date",
+                    "APP_OWNER_NAME": "Owner",
+                    "APP_NAME": "Mark Name",
+                    "APP_LOGO_COLOURS": "Logo Colours",
+                    "APP_LOCARNO": "Locarno Classes",
+                    "APP_IPC_EDITION": "IPC Edition",
+                    "APP_INVENTOR_NAME": "Inventor",
+                    "APP_FILING_DATE": "Filing Date",
+                    "APP_FILE_NUMBER": "Application Number",
+                    "APP_EXPIRATION_DATE": "Expiry Date",
+                    "APP_EXAM_IPC": "IPC Classes",
+                    "ACTION_DATE": "Action Date"
+                }
+            },
+            "id": "\u17a2\u1784\u17d2\u1780\u179f\u17c6\u1782\u17b6\u179b\u17cb",
+            "group": "\u1780\u17d2\u179a\u17bb\u1798",
+            "fromdate": "\u1785\u17b6\u1794\u17cb\u1796\u17b8",
+            "country": {
+                "code": {
+                    "ZW": "Zimbabwe",
+                    "ZM": "Zambia",
+                    "XX": "Not Specified",
+                    "VN": "\u179c\u17c0\u178f\u178e\u17b6\u1798",
+                    "UG": "Uganda",
+                    "TZ": "Tanzania",
+                    "TP": "\u1791\u17b8\u1798\u17d0\u179a",
+                    "TN": "Tunisia",
+                    "TL": "\u1791\u17b8\u1798\u17d0\u179a",
+                    "TH": "\u1790\u17c3",
+                    "SG": "\u179f\u17b9\u1784\u17d2\u17a0\u1794\u17bc\u179a\u17b8",
+                    "SD": "Sudan",
+                    "SA": "\u179f\u17ca\u17bc\u178c\u17b8 \u17a2\u17b6\u179a\u17c9\u17b6\u1794\u17ca\u17b8",
+                    "RW": "Rwanda",
+                    "RS": "Serbia",
+                    "PH": "\u17a0\u17d2\u179c\u17b8\u179b\u17b8\u1796\u17b8\u1793",
+                    "OM": "Oman",
+                    "NA": "Namibia",
+                    "MZ": "Mozambique",
+                    "MY": "\u1798\u17c9\u17b6\u17a1\u17c1\u179f\u17ca\u17b8",
+                    "MW": "Malawi",
+                    "MM": "\u1798\u17b8\u1799\u17c9\u17b6\u1793\u17cb\u1798\u17c9\u17b6",
+                    "MD": "Moldova",
+                    "MA": "Morocco",
+                    "LA": "\u17a1\u17b6\u179c",
+                    "KH": "\u1780\u1798\u17d2\u1796\u17bb\u1787\u17b6",
+                    "KE": "Kenya",
+                    "JO": "Jordan",
+                    "IN": "India",
+                    "ID": "\u17a5\u178e\u17d2\u178c\u17bc\u1793\u17c1\u179f\u17ca\u17b8",
+                    "IC": "Saint Lucia",
+                    "GM": "Gambia",
+                    "GH": "Ghana",
+                    "ET": "Ethiopia",
+                    "EG": "Egypt",
+                    "DZ": "Algeria",
+                    "DO": "Dominican Republic",
+                    "CU": "Cuba",
+                    "CR": "Costa Rica",
+                    "CN": "China",
+                    "BY": "Belarus",
+                    "BW": "Botswana",
+                    "BU": "\u1798\u17b8\u1799\u17c9\u17b6\u1793\u17cb\u1798\u17c9\u17b6",
+                    "BN": "\u1794\u17d2\u179a\u17ca\u17bb\u1799\u178e\u17c1",
+                    "AR": "Argentina",
+                    "AP": "ARIPO",
+                    "-": "Unknown"
+                }
+            },
+            "content_type": "\u1791\u17d2\u179a\u1784\u17cb\u1791\u17d2\u179a\u17b6\u1799",
+            "content_stored": "Content Stored",
+            "content": "\u1798\u17b6\u178f\u17b7\u1780\u17b6",
+            "boost": {
+                "exact": {
+                    "match": "\u1794\u1793\u17d2\u1790\u17c2\u1798\u1780\u17b6\u179a\u178f\u17d2\u179a\u17bc\u179c\u1782\u17d2\u1793\u17b6\u17b2\u1787\u17b6\u1780\u17cb\u179b\u17b6\u1780\u17cb"
+                }
+            },
+            "application_filed": "Application Filed",
+            "all": "All",
+            "WDDT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u178a\u1780\u1785\u17c1\u1789",
+            "VNCL": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb Vienna",
+            "VCL_RANKED": "Ranked by Vienna Classes",
+            "VCL_NON_CLASSIFIED": "Non Vienna Classified",
+            "VCL_CATEGORY": "Vienna Category",
+            "VCL": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb Vienna",
+            "TXT": "\u1795\u17d2\u1793\u17c2\u1780\u1791\u17b6\u17c6\u1784\u17a2\u179f\u17cb",
+            "TITXT": "\u1785\u17c6\u1793\u1784\u1787\u17be\u1784",
+            "TITL_LG1": "Title Bilingual",
+            "TITL_EN": "\u1785\u17c6\u1793\u1784\u1787\u17be\u1784\u1787\u17b6\u1797\u17b6\u179f\u17b6\u17a2\u1784\u17cb\u1782\u17d2\u179b\u17c1\u179f",
+            "TITL": "\u1785\u17c6\u1793\u1784\u1787\u17be\u1784",
+            "TDNB": "\u1785\u17c6\u1793\u17bd\u1793\u1782\u17c6\u1793\u17bc\u179a",
+            "SYPO": "\u1791\u17b8\u178f\u17b6\u17c6\u1784\u179f\u1789\u17d2\u1789\u17b6",
+            "STLB_ORI": "Internal Status",
+            "STLB": "Status",
+            "STDTL": "Status Date List",
+            "STDT": "Status Date",
+            "STCDL": "Status Code List",
+            "STCD": "Status Code",
+            "SRDT": "\u1796\u17d2\u179a\u17b9\u178f\u17d2\u178f\u17b7\u1780\u17b6\u179a\u178e\u17cd\u1793\u17c3\u1780\u17b6\u179a\u179f\u17d2\u179c\u17c2\u1784\u179a\u1780",
+            "SPND": "\u17a2\u1784\u17d2\u1782\u179f\u17c6\u1782\u17b6\u179b\u17cb\u1782\u17c6\u179a\u17bc",
+            "SPDE": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u1796\u17b7\u1796\u178e\u17cc\u1793\u17b6\u17a2\u17c6\u1796\u17b8\u1782\u17c6\u179a\u17bc",
+            "SP": "\u1791\u17b8\u178f\u17b6\u17c6\u1784\u179f\u1789\u17d2\u1789\u17b6",
+            "SOUNDEX": "\u1798\u17b6\u1793\u179f\u1798\u17d2\u179b\u17c1\u1784",
+            "SOUND": "\u179f\u1798\u17d2\u179b\u17c1\u1784",
+            "SERIAL_F_CD": "\u179b\u17c1\u1781\u179f\u17ca\u17c1\u179a\u17b8 (F)",
+            "SELG": "Secondary Language",
+            "SEARCH_INFO": "The word searched may appear in previous version of this application",
+            "SEARCH_CRITERIA": "Search Criteria",
+            "RPTXT": "Representative Information",
+            "RPRE": "\u179b\u17c6\u1793\u17c5\u179f\u17d2\u1790\u17b6\u1793\u179a\u1794\u179f\u17cb\u1797\u17d2\u1793\u17b6\u1780\u17cb\u1784\u17b6\u179a\u178f\u17c6\u178e\u17b6\u1784",
+            "RPNA": "\u1788\u17d2\u1798\u17c4\u17c7\u179a\u1794\u179f\u17cb\u1797\u17d2\u1793\u17b6\u1780\u17cb\u1784\u17b6\u179a\u178f\u17c6\u178e\u17b6\u1784",
+            "RPCT": "\u1794\u17d2\u179a\u1791\u17c1\u179f\u179a\u1794\u179f\u17cb\u1797\u17d2\u1793\u17b6\u1780\u17cb\u1784\u17b6\u179a\u178f\u17c6\u178e\u17b6\u1784",
+            "RPAD": "\u17a2\u17b6\u179f\u1799\u178a\u17d2\u178b\u17b6\u1793\u1797\u17d2\u1793\u17b6\u1780\u17cb\u1784\u17b6\u179a\u178f\u17c6\u178e\u17b6\u1784",
+            "RENEW_SD": "Start Date",
+            "RENEW_ED": "End Date",
+            "RENEW": "Duration(s) of Renewal",
+            "RENB": "\u179b\u17c1\u1781\u1785\u17bb\u17c7\u1794\u1789\u17d2\u1787\u17b8",
+            "REIN": "\u179b\u17c1\u1781 \u1793\u17b7\u1784\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1785\u17bb\u17c7\u1794\u1789\u17d2\u1787\u17b8",
+            "REDT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1785\u17bb\u17c7\u1794\u1789\u17d2\u1787\u17b8",
+            "Query": "Solr Query",
+            "PTETXT": "\u1796\u17d2\u179a\u17b9\u178f\u17d2\u178f\u17b7\u1780\u17b6\u179a\u178e\u17cd\u1794\u17d2\u179a\u1780\u17b6\u179f\u1793\u17b8\u1799\u1794\u178f\u17d2\u179a\u178f\u1780\u17d2\u1780\u1780\u1798\u17d2\u1798",
+            "PRLG": "\u1797\u17b6\u179f\u17b6\u178a\u17c6\u1794\u17bc\u1784",
+            "PKDE": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u1796\u17b7\u1796\u178e\u17cc\u1793\u17b6\u17a2\u17c6\u1796\u17b8\u179b\u17c1\u1781\u1780\u17bc\u178a\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799",
+            "PCTXT": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179b\u1798\u17d2\u17a2\u17b7\u178f\u17a2\u17b6\u1791\u17b7\u1797\u17b6\u1796",
+            "PCTPBNB": "\u1780\u17b6\u179a\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799 PCT #",
+            "PCTPBIN": "\u1780\u17b6\u179a\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799 PCT # \u1793\u17b7\u1784\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791",
+            "PCTPBDT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799 PCT",
+            "PCTPBCT": "\u1794\u17d2\u179a\u1791\u17c1\u179f\u178a\u17c2\u179b\u1794\u17b6\u1793\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799 PCT",
+            "PCTNB": "\u1780\u17b6\u179a\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6 PCT #",
+            "PCTIN": "\u1780\u17b6\u179a\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6 PCT # \u1793\u17b7\u1784\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791",
+            "PCTDT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799 PCT",
+            "PCTCT": "\u1794\u17d2\u179a\u1791\u17c1\u179f PCT",
+            "PCNB": "\u179b\u17c1\u1781\u17a2\u17b6\u1791\u17b7\u1797\u17b6\u1796",
+            "PCDT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u17a2\u17b6\u1791\u17b7\u1797\u17b6\u1796",
+            "PCCT": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179b\u1798\u17d2\u17a2\u17b7\u178f\u17a2\u17b6\u1791\u17b7\u1797\u17b6\u1796",
+            "PBNB": "\u179b\u17c1\u1781\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799",
+            "PBLG": "\u1797\u17b6\u179f\u17b6\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799",
+            "PBKC": "\u179b\u17c1\u1781\u1780\u17bc\u178a\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799",
+            "PBIN": "\u1780\u17b6\u179a\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799 # \u1793\u17b7\u1784\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791",
+            "PBDTL": "\u1794\u1789\u17d2\u1787\u17b8\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799",
+            "PBDT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799",
+            "PBCT": "\u1794\u17d2\u179a\u1791\u17c1\u179f\u178a\u17c2\u179b\u1794\u17b6\u1793\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799",
+            "PATCITTXT": "\u179f\u1798\u17d2\u179a\u1784\u17cb\u1794\u17d2\u179a\u1780\u17b6\u179f\u1793\u17b8\u1799\u1794\u178f\u17d2\u179a\u178f\u1780\u17d2\u1780\u1780\u1798\u17d2\u1798",
+            "PATCIT": "\u1794\u17d2\u179a\u1780\u17b6\u179f\u1793\u17b8\u1799\u1794\u178f\u17d2\u179a\u178f\u1780\u17d2\u1780\u1780\u1798\u17d2\u1798",
+            "OPSDT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1785\u17b6\u1794\u17cb\u1795\u17d2\u178f\u17be\u1798\u1796\u17b6\u1780\u17d2\u1799\u1794\u17d2\u178f\u17b9\u1784",
+            "OFCO": "\u179b\u17c1\u1781\u1780\u17bc\u178a\u1780\u17b6\u179a\u17b7\u1799\u17b6\u179b\u17d0\u1799",
+            "NPLCITXT": "\u179f\u1798\u17d2\u179a\u1784\u17cb NPL",
+            "NPLCIT": "Non Patent Literature",
+            "NPEDT": "National Entry Date",
+            "NCL_NON_CLASSIFIED": "Non Nice Classified",
+            "NCL": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb Nice",
+            "NCDE_LG1": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u1796\u17b7\u1796\u178e\u17cc\u1793\u17b6\u17a2\u17c6\u1796\u17b8\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb Nice \u1791\u17b8\u1796\u17b8\u179a",
+            "NCDE": "\u1791\u17c6\u1793\u17b7\u1789 \u1793\u17b7\u1784\u179f\u17c1\u179c\u17b6\u1780\u1798\u17d2\u1798",
+            "NCCL": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb Nice",
+            "MSNB": "\u179b\u17c6\u178a\u17b6\u1794\u17cb\u1793\u17c3\u1785\u17c6\u1793\u17bd\u1793\u1798\u17c9\u17b6\u1780",
+            "MNNA": "\u179b\u1780\u17d2\u1781\u178e\u17c8\u1793\u17c3\u1798\u17c9\u17b6\u1780",
+            "MK_LG1": "\u1788\u17d2\u1798\u17c4\u17c7\u179a\u1794\u179f\u17cb\u1798\u17c9\u17b6\u1780\u1791\u17b8\u1796\u17b8",
+            "MKTXT": "\u1798\u17c9\u17b6\u1780",
+            "MKTRLT": "Mark Transliteration",
+            "MKTR": "\u1780\u17b6\u179a\u1794\u1780\u1794\u17d2\u179a\u17c2\u17a2\u17c6\u1796\u17b8\u1798\u17c9\u17b6\u1780\u179f\u1789\u17d2\u1789\u17b6",
+            "MKNSL": "\u1788\u17d2\u1798\u17c4\u17c7\u1793\u17c3\u1798\u17c9\u17b6\u1780 (\u1791\u17b8\u1796\u17b8\u179a)",
+            "MKFW": "\u1796\u17b6\u1780\u17d2\u1799\u17a2\u17c6\u1796\u17b8\u1791\u17d2\u179a\u1784\u17cb\u1791\u17d2\u179a\u17b6\u1799\u1782\u17c4\u179b",
+            "MKFT": "\u1791\u17d2\u179a\u1784\u17cb\u1791\u17d2\u179a\u17b6\u1799\u1782\u17c4\u179b",
+            "MKETXT": "\u1796\u17d2\u179a\u17b9\u178f\u17d2\u178f\u17b7\u1780\u17b6\u179a\u178e\u17cd\u17a2\u17c6\u1796\u17b8\u1798\u17c9\u17b6\u1780",
+            "MKDI": "Mark Disclaimer",
+            "MKDE": "Mark Description Detail",
+            "MKDC": "Disclaimer",
+            "MKCSD": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u17a2\u17c6\u1796\u17b8\u179f\u17d2\u1790\u17b6\u1793\u1797\u17b6\u1796\u1794\u1785\u17d2\u1785\u17bb\u1794\u17d2\u1794\u1793\u17d2\u1793",
+            "MKCLR": "\u1796\u178e\u17cc\u179a\u1794\u179f\u17cb\u1798\u17c9\u17b6\u1780",
+            "MKCLDE": "Mark Colour Description",
+            "MK": "\u1798\u17c9\u17b6\u1780\u179f\u1789\u17d2\u1789\u17b6",
+            "MD_FTYP": "\u1794\u17d2\u179a\u1797\u17c1\u1791\u1782\u17c4\u179b",
+            "LOGOEX": "\u179f\u17d2\u179b\u17b6\u1780\u179f\u1789\u17d2\u1789\u17b6",
+            "LOGO": "\u179f\u17d2\u179b\u17b6\u1780\u179f\u1789\u17d2\u1789\u17b6",
+            "LOC": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb",
+            "LIC": "License Details",
+            "LEGALDT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1792\u179a\u1798\u17b6\u1793",
+            "LCL_NON_CLASSIFIED": "Non Locarno Classified",
+            "LCL": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb",
+            "LCENB": "\u1780\u17b6\u179a\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799 Locarno",
+            "LCDE": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb",
+            "LABEL_LG_1": "\u179f\u179b\u17b6\u1780\u1794\u178f\u17d2\u179a (\u1791\u17b8\u1796\u17b8\u179a)",
+            "LABEL": "\u179f\u179b\u17b6\u1780\u1794\u178f\u17d2\u179a",
+            "Journal": {
+                "AFNB_ORI": "\u1796\u17b6\u1780\u17d2\u1799\u179f\u17d2\u1793\u17be\u179f\u17bb\u17c6#"
+            },
+            "JOURNAL_DT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1796\u17d2\u179a\u17b9\u178f\u17d2\u178f\u17b7\u1794\u178f\u17d2\u179a",
+            "JOURNAL_DESCRIPTION": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u1796\u17b7\u1796\u178e\u17cc\u1793\u17b6\u1796\u17d2\u179a\u17b9\u178f\u17d2\u178f\u17b7\u1794\u178f\u17d2\u179a",
+            "JOURNAL_CONTENT": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179b\u1798\u17d2\u17a2\u17b7\u178f",
+            "JOURNAL_CD": "\u179b\u17c1\u1781\u1780\u17bc\u178a\u1796\u17d2\u179a\u17b9\u178f\u17d2\u178f\u17b7\u1794\u178f\u17d2\u179a",
+            "IPC_TECH_SECTOR_TXT": "\u179c\u17b7\u179f\u17d0\u1799\u1794\u1785\u17d2\u1785\u17c1\u1780\u1791\u17c1\u179f IPC",
+            "IPC_TECH_SECTOR": "\u179c\u17b7\u179f\u17d0\u1799\u1794\u1785\u17d2\u1785\u17c1\u1780\u1791\u17c1\u179f",
+            "IPC_TECH_FIELD_TXT": "\u1795\u17d2\u1793\u17c2\u1780\u1794\u1785\u17d2\u1785\u17c1\u1780\u179c\u17b7\u1791\u17d2\u1799\u17b6 IPC",
+            "IPC_TECH_FIELD": "\u1795\u17d2\u1793\u17c2\u1780\u1794\u1785\u17d2\u1785\u17c1\u1780\u179c\u17b7\u1791\u17d2\u1799\u17b6 IPC",
+            "IPC_SHORT": "IPC Classes",
+            "IPC_ORIGINAL": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb IPC",
+            "IPC_ORI": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb IPC",
+            "IPC_NON_CLASSIFIED": "Non IPC Classified",
+            "IPC": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb IPC",
+            "INRE": "\u179b\u17c6\u1793\u17c5\u178a\u17d2\u178b\u17b6\u1793\u179a\u1794\u179f\u17cb\u178f\u1780\u17d2\u1780\u1780\u179a",
+            "INNA_LG1": "\u178f\u1780\u17d2\u1780\u1780\u179a\u1791\u17b8\u1796\u17b8\u179a",
+            "INNA": "\u178f\u1780\u17d2\u1780\u1780\u179a",
+            "INCT": "\u1794\u17d2\u179a\u1791\u17c1\u179f\u179a\u1794\u179f\u17cb\u178f\u1780\u17d2\u1780\u1780\u179a",
+            "INAD_LG1": "\u17a2\u17b6\u179f\u1799\u178a\u17d2\u178b\u17b6\u1793\u178f\u1780\u17d2\u1780\u1780\u179a\u1791\u17b8\u1796\u17b8\u179a",
+            "INAD": "\u17a2\u17b6\u179f\u1799\u178a\u17d2\u178b\u17b6\u1793\u178f\u1780\u17d2\u1780\u1780\u179a",
+            "Group": "\u1780\u17d2\u179a\u17bb\u1798",
+            "GZTXT": "\u1796\u17d0\u178f\u17cc\u1798\u17b6\u1793\u179b\u17b7\u1781\u17b7\u178f\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1797\u1795\u17d2\u179f\u17b6\u1799",
+            "GZPDT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1785\u17c1\u1789\u1795\u17d2\u179f\u17b6\u1799",
+            "GZNB": "\u179b\u17c1\u1781\u179b\u17b7\u1781\u17b7\u178f\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1797\u1795\u17d2\u179f\u17b6\u1799",
+            "GZDT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u179b\u17b7\u1781\u17b7\u178f\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1797\u1795\u17d2\u179f\u17b6\u1799",
+            "GRDT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1795\u17d2\u178f\u179b\u17cb",
+            "FILE_TYP": "File Type",
+            "FILE_ID": "File Id",
+            "EXDT": "Examined Date",
+            "EVNA": "Event Name",
+            "EPDT": "Expiration Date",
+            "EDOC_TYP": "\u1794\u17d2\u179a\u1797\u17c1\u1791 EDoc",
+            "EDOC_ID": "EDoc Id",
+            "EDOC_DT": "EDoc Date",
+            "EDNB": "Edition Number",
+            "DT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791",
+            "DRAWING": "\u1782\u17c6\u1793\u17bc\u179f\u1794\u1784\u17d2\u17a0\u17b6\u1789",
+            "DE_LG1": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u1796\u17b7\u1796\u178e\u17cc\u1793\u17b6\u1793\u17c3\u1782\u17c6\u1793\u17bc\u179a\u1791\u17b8\u1796\u17b8\u179a",
+            "DETXT": "\u1796\u17d0\u178f\u17cc\u1798\u17b6\u1793\u1791\u17b6\u1780\u17cb\u1791\u1784\u17a2\u17d2\u1793\u1780\u1794\u1784\u17d2\u1780\u17be\u178f\u179f\u17d2\u1793\u17b6\u178a\u17c3",
+            "DETITXT": "\u1785\u17c6\u1793\u1784\u1787\u17be\u1784",
+            "DETI": "Design Title",
+            "DETD": "Total Designs",
+            "DETAILS": "Details",
+            "DESCTXT": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u1796\u17b7\u1796\u178e\u17cc\u1793\u17b6",
+            "DEPKD": "\u179b\u1780\u17d2\u1781\u178e\u17c8\u1793\u17c3\u1782\u17c6\u1793\u17bc\u179a",
+            "DENOVELTY": "Design Novelty Statement",
+            "DENA_LG1": "\u1788\u17d2\u1798\u17c4\u17c7\u17a2\u17d2\u1793\u1780\u1794\u1784\u17d2\u1780\u17be\u178f\u179f\u17d2\u1793\u17b6\u178a\u17c3\u1791\u17b8\u1796\u17b8\u179a",
+            "DENA": "\u17a2\u17d2\u1793\u1780\u1794\u1784\u17d2\u1780\u17be\u178f\u179f\u17d2\u1793\u17b6\u178a\u17c3",
+            "DEID_LG1": "\u17a2\u1784\u17d2\u1782\u179f\u17c6\u1782\u17b6\u179b\u17cb\u1782\u17c6\u1793\u17bc\u179a\u17a7\u179f\u17d2\u179f\u17b6\u17a0\u1780\u1798\u17d2\u1798\u1791\u17b8\u1796\u17b8\u179a",
+            "DEID": "\u17a2\u1784\u17d2\u1782\u179f\u17c6\u1782\u17b6\u179b\u17cb\u1782\u17c6\u1793\u17bc\u179a",
+            "DEETXT": "\u1796\u17d2\u179a\u17b9\u178f\u17d2\u178f\u17b7\u1780\u17b6\u179a\u178e\u17cd\u1793\u17c3\u1782\u17c6\u1793\u17bc\u179a",
+            "DECSD": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1793\u17c3\u179f\u17d2\u1790\u17b6\u1793\u1797\u17b6\u1796\u1794\u1785\u17d2\u1785\u17bb\u1794\u17d2\u1794\u1793\u17d2\u1793",
+            "DECLTXT": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u17a2\u17c7\u17a2\u17b6\u1784\u1793\u17c3\u1782\u17c6\u1793\u17bc\u179a",
+            "DECLNO": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u17a2\u17c7\u17a2\u17b6\u1784",
+            "DECLDES": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u1796\u17b7\u1796\u178e\u17cc\u1793\u17b6",
+            "DECDI": "\u17a2\u1784\u17d2\u1782\u179f\u17c6\u1782\u17b6\u179b\u17cb\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179b\u1798\u17d2\u17a2\u17b7\u178f\u1793\u17c3\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u17a2\u17c7\u17a2\u17b6\u1784\u1782\u17c6\u1793\u17bc\u179a",
+            "DECD": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179b\u1798\u17d2\u17a2\u17b7\u178f\u1793\u17c3\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u17a2\u17c7\u17a2\u17b6\u1784\u1782\u17c6\u1793\u17bc\u179a",
+            "DEAD_LG1": "\u17a2\u17b6\u179f\u1799\u178a\u17d2\u178b\u17b6\u1793\u1793\u17c3\u1782\u17c6\u1793\u17bc\u179a\u1791\u17b8\u1796\u17b8\u179a",
+            "DEAD": "\u17a2\u17b6\u179f\u1799\u178a\u17d2\u178b\u17b6\u1793\u1793\u17c3\u1782\u17c6\u1793\u17bc\u179a",
+            "DE": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u1796\u17b7\u1796\u178e\u17cc\u1793\u17b6\u1793\u17c3\u1782\u17c6\u1793\u17bc\u179a",
+            "CRNA": "\u1788\u17d2\u1798\u17c4\u17c7\u17a2\u17d2\u1793\u1780\u178f\u17c6\u178e\u17b6\u1784",
+            "CRAD": "\u17a2\u17b6\u179f\u1799\u178a\u17d2\u178b\u17b6\u1793\u17a2\u17d2\u1793\u1780\u178f\u17c6\u178e\u17b6\u1784",
+            "CPC_ORI": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb CPC",
+            "CPC": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb CPC",
+            "CODE": "\u179b\u17c1\u1781\u1780\u17bc\u178a",
+            "CLTXT": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u17a2\u17c7\u17a2\u17b6\u1784",
+            "CLNB": "\u1785\u17c6\u1793\u17bd\u1793\u1793\u17c3\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u17a2\u17c7\u17a2\u17b6\u1784",
+            "CLLG": "\u1797\u17b6\u179f\u17b6\u1793\u17c3\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u17a2\u17c7\u17a2\u17b6\u1784",
+            "CLDE": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u1796\u17b7\u1796\u178e\u17cc\u1793\u17b6\u1793\u17c3\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u17a2\u17c7\u17a2\u17b6\u1784",
+            "CITXT": "\u179f\u1798\u17d2\u179a\u1784\u17cb",
+            "CITTYP": "\u1794\u17d2\u179a\u1797\u17c1\u1791\u179f\u1798\u17d2\u179a\u1784\u17cb",
+            "CITREF": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u1799\u17c4\u1784",
+            "CITDOC": "\u17af\u1780\u179f\u17b6\u179a\u179f\u1798\u17d2\u179a\u1784\u17cb",
+            "CITCL": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u17a2\u17c7\u17a2\u17b6\u1784",
+            "CITCAT": "\u1794\u17d2\u179a\u1797\u17c1\u1791\u1780\u17d2\u179a\u17bb\u1798",
+            "CINB": "\u179f\u1798\u17d2\u179a\u1784\u17cb\u179b\u17c1\u1781",
+            "CIDT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1785\u17c1\u1789\u1795\u17d2\u179f\u17b6\u1799\u178a\u17c2\u179b\u1794\u17b6\u1793\u1794\u1789\u17d2\u1787\u17b6\u1780\u17cb",
+            "CIDENB": "\u179f\u1798\u17d2\u179a\u1784\u17cb\u179b\u17c1\u1781\u179b\u17b7\u1781\u17b7\u178f",
+            "CIDE": "\u179f\u1798\u17d2\u179a\u1784\u17cb\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u1796\u17b7\u1796\u178e\u17cc\u1793\u17b6",
+            "CICT": "\u179f\u1798\u17d2\u179a\u1784\u17cb\u1794\u17d2\u179a\u1791\u17c1\u179f",
+            "CICL": "\u179f\u1798\u17d2\u179a\u1784\u17cb\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u17a2\u17c7\u17a2\u17b6\u1784",
+            "CICA": "\u1794\u17d2\u179a\u1797\u17c1\u1791\u1780\u17d2\u179a\u17bb\u1798\u179f\u1798\u17d2\u179a\u1784\u17cb",
+            "CCDT": "\u1796\u17d2\u179a\u17b9\u178f\u17d2\u178f\u17b7\u1780\u17b6\u179a\u178e\u17cd\u178a\u17c2\u179b\u1794\u17b6\u1793\u1794\u17c4\u17c7\u1794\u1784\u17cb",
+            "CATEGORY": "\u1794\u17d2\u179a\u1797\u17c1\u1791\u1780\u17d2\u179a\u17bb\u1798",
+            "CAPTURE_DT": "\u1785\u17b6\u1794\u17cb\u1799\u1780\u1791\u17b7\u1793\u17d2\u1793\u1793\u17d0\u1799",
+            "CANA": "\u17a2\u17b6\u179f\u1799\u178a\u17d2\u178b\u17b6\u1793\u17a2\u17d2\u1793\u1780\u178f\u17c6\u178e\u17b6\u1784",
+            "BASIC_CD": "\u1798\u17bc\u179b\u178a\u17d2\u178b\u17b6\u1793",
+            "Application_registered": "\u1785\u17bb\u17c7\u1794\u1789\u17d2\u1787\u17b8",
+            "Application_expired": "\u17a0\u17bd\u179f\u1780\u17b6\u179b\u1780\u17c6\u178e\u178f\u17cb",
+            "Action": "\u179f\u1780\u1798\u17d2\u1798\u1797\u17b6\u1796",
+            "APTXT": "\u17a2\u17d2\u1793\u1780\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6",
+            "APRE": "\u179b\u17c6\u1793\u17c5\u178a\u17d2\u178b\u17b6\u1793\u17a2\u17d2\u1793\u1780\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6",
+            "APPL_TYP_TXT": "\u1794\u17d2\u179a\u1797\u17c1\u1791\u1796\u17b6\u1780\u17d2\u1799\u179f\u17d2\u1793\u17be\u179f\u17bb\u17c6",
+            "APPL_TYP": "\u1794\u17d2\u179a\u1797\u17c1\u1791\u1796\u17b6\u1780\u17d2\u1799\u179f\u17d2\u1793\u17be\u179f\u17bb\u17c6",
+            "APPL_SUBTYP_TXT": "\u17a2\u1793\u17bb\u1794\u17d2\u179a\u1797\u17c1\u1791\u1796\u17b6\u1780\u17d2\u1799\u179f\u17d2\u1793\u17be\u179f\u17bb\u17c6",
+            "APPL_SUBTYP": "\u17a2\u1793\u17bb\u1794\u17d2\u179a\u1797\u17c1\u1791\u1796\u17b6\u1780\u17d2\u1799\u179f\u17d2\u1793\u17be\u179f\u17bb\u17c6",
+            "APNT": "\u179f\u1789\u17d2\u1787\u17b6\u178f\u17b7\u17a2\u17d2\u1793\u1780\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6",
+            "APNA_LG1": "\u17a2\u17d2\u1793\u1780\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6\u1791\u17b8\u1796\u17b8\u179a",
+            "APNA": "\u17a2\u17d2\u1793\u1780\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6",
+            "APCT": "\u1794\u17d2\u179a\u1791\u17c1\u179f\u17a2\u17d2\u1793\u1780\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6",
+            "APAD_LG1": "\u17a2\u17b6\u179f\u1799\u178a\u17d2\u178b\u17b6\u1793\u17a2\u17d2\u1793\u1780\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6\u1791\u17b8\u1796\u17b8\u179a",
+            "APAD": "\u17a2\u17b6\u179f\u1799\u178a\u17d2\u178b\u17b6\u1793\u17a2\u17d2\u1793\u1780\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6",
+            "ANU_YEAR": "Year",
+            "ANU_STDT": "Validity Start",
+            "ANU_PAY": "Payment",
+            "ANU_ENDT": "Validity End",
+            "ANU": "Annuity Details",
+            "AFNB_ORI": " \u179f\u17bb\u17c6\u1785\u17bb\u17c7\u1794\u1789\u17d2\u1787\u17b8\u179b\u17c1\u1781",
+            "AFNB": "\u179f\u17bb\u17c6\u1785\u17bb\u17c7\u1794\u1789\u17d2\u1787\u17b8 #",
+            "AFLG": "\u1797\u17b6\u179f\u17b6",
+            "AFIN": "\u179f\u17bb\u17c6\u1785\u17bb\u17c7\u1794\u1789\u17d2\u1787\u17b8 # \u1793\u17b7\u1784\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791",
+            "AFDT": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u179f\u17bb\u17c6\u1785\u17bb\u17c7\u1794\u1789\u17d2\u1787\u17b8",
+            "AFCT": "\u1794\u17d2\u179a\u1791\u17c1\u179f\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6\u1785\u17bb\u17c7\u1794\u1789\u17d2\u1787\u17b8)",
+            "ACTION_TYP": "\u1794\u17d2\u179a\u1797\u17c1\u1791\u179f\u1780\u1798\u17d2\u1798\u1797\u17b6\u1796",
+            "ACTION": "\u179f\u1780\u1798\u17d2\u1798\u1797\u17b6\u1796",
+            "ABTXT": "Abstract",
+            "ABST_LG1": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179f\u1784\u17d2\u1781\u17c1\u1794\u1787\u17b6\u1797\u17b6\u179f\u17b6\u1791\u17b8\u1796\u17b8\u179a",
+            "ABST_EN": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179f\u1784\u17d2\u1781\u17c1\u1794\u1787\u17b6\u1797\u17b6\u179f\u17b6\u17a2\u1784\u17cb\u1782\u17d2\u179b\u17c1\u179f",
+            "ABST": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179f\u1784\u17d2\u1781\u17c1\u1794"
+        }
+    },
+    "facet": {
+        "label": {
+            "true": "\u1794\u17b6\u1791/\u1785\u17b6\u179f",
+            "pct_national_phase": "\u178a\u17c6\u178e\u17b6\u1780\u17cb\u1780\u17b6\u179b\u1790\u17d2\u1793\u17b6\u1780\u17cb\u1787\u17b6\u178f\u17b7 PCT",
+            "false": "\u1791\u17c1",
+            "SA": "\u179f\u17ca\u17bc\u178c\u17b8\u17a2\u17b6\u179a\u17c9\u17b6\u1794\u17ca\u17b8",
+            "RL": "\u179a\u1784\u17cb\u1785\u17b6\u17c6\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179f\u1798\u17d2\u179a\u17c1\u1785\u1796\u17b8\u178f\u17bb\u179b\u17b6\u1780\u17b6\u179a",
+            "PE": "\u1793\u17c5\u1798\u17b7\u1793\u1791\u17b6\u1793\u17cb\u179f\u1798\u17d2\u179a\u17c1\u1785",
+            "MM": "\u1795\u17bb\u178f\u1780\u17b6\u179b\u1780\u17c6\u178e\u178f\u17cb",
+            "MK": "\u17a0\u17bd\u179f\u1780\u17b6\u179b\u1780\u17c6\u178e\u178f\u17cb",
+            "MG": "\u1798\u17c4\u1783\u17c7",
+            "MF": "\u1791\u17b6\u1789\u1798\u1780\u179c\u17b7\u1789",
+            "ME": "\u1791\u17b6\u1789\u1798\u1780\u179c\u17b7\u1789",
+            "MC": "\u1794\u17c4\u17c7\u1794\u1784\u17cb",
+            "MB": "\u1794\u17d2\u178f\u17b9\u1784\u178f\u179c\u17c9\u17b6",
+            "GA": "\u1794\u1798\u17d2\u179b\u17c2\u1784",
+            "FG": "\u1785\u17bb\u17c7\u1794\u1789\u17d2\u1787\u17b8",
+            "FC": "\u1794\u178a\u17b7\u179f\u17c1\u1792",
+            "FB": "\u1796\u1793\u17d2\u1799\u17b6\u179a",
+            "FA": "\u178a\u1780\u1785\u17c1\u1789",
+            "EM": "\u1791\u1791\u17c1",
+            "DE": "\u179b\u17bb\u1794\u1785\u17c4\u179b",
+            "CZ": "\u1787\u17c6\u1791\u17b6\u179f\u17cb",
+            "CE": "\u1794\u1789\u17d2\u1787\u17b6\u1780\u17cb\u1790\u17b6\u178f\u17d2\u179a\u17b9\u1798\u178f\u17d2\u179a\u17bc\u179c",
+            "BZ": "\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799",
+            "AZ": "\u1795\u17d2\u1793\u17c2\u1780"
+        }
+    },
+    "error": {
+        "response": {
+            "code": {
+                "message": {
+                    "500": "Unable to contact WIPO CASE system. \u1798\u17b7\u1793\u17a2\u17b6\u1785\u1791\u17b6\u1780\u17cb\u1791\u1784 WIPO CASE",
+                    "404": "Application is not yet loaded into WIPO CASE system. \u1796\u17b6\u1780\u17d2\u1799\u179f\u17d2\u1793\u17be\u179f\u17bb\u17c6\u1798\u17b7\u1793\u1791\u17b6\u1793\u17cb\u1794\u17b6\u1793\u1794\u1789\u17d2\u1785\u17bc\u179b\u1791\u17c5\u1780\u17d2\u1793\u17bb\u1784\u1794\u17d2\u179a\u1796\u17d0\u1793\u17d2\u1792 WIPO CASE \u1791\u17c1",
+                    "403": "\u17a2\u17d2\u1793\u1780\u1798\u17b7\u1793\u178f\u17d2\u179a\u17bc\u179c\u1794\u17b6\u1793\u17a2\u1793\u17bb\u1789\u17d2\u1789\u17b6\u178f\u17b2\u1794\u17d2\u179a\u17be\u179f\u17c1\u179c\u17b6\u1793\u17c1\u17c7\u1791\u17c1 \u179f\u17bc\u1798\u1791\u17b6\u1780\u17cb\u1791\u1784Admin"
+                }
+            }
+        },
+        "document": {
+            "not": {
+                "available": {
+                    "message": "\u1798\u17b7\u1793\u1798\u17b6\u1793\u17af\u1780\u179f\u17b6\u179a\u1791\u17c1"
+                }
+            }
+        }
+    },
+    "detail": {
+        "page": {
+            "tooltip": {
+                "pctpnb": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179b\u1798\u17d2\u17a2\u17b7\u178f\u1794\u1793\u17d2\u1790\u17c2\u1798\u17a2\u17c6\u1796\u17b8\u1780\u17b6\u179a\u1794\u17c4\u17c7\u1796\u17bb\u1798\u17d2\u1796\u1795\u17d2\u179f\u17b6\u1799 PCT",
+                "pctnb": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179b\u1798\u17d2\u17a2\u17b7\u178f\u1794\u1793\u17d2\u1790\u17c2\u1798\u17a2\u17c6\u1796\u17b8\u1780\u17b6\u179a\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u178f\u17b6\u1798 PCT",
+                "ow": "\u1796\u17b6\u1780\u17d2\u1799\u179f\u17d2\u1793\u17be\u179f\u17bb\u17c6\u1795\u17d2\u179f\u17c1\u1784\u1791\u17c0\u178f\u178a\u17c4\u1799\u1798\u17d2\u1785\u17b6\u179f\u17cb\u178a\u17bc\u1785\u1782\u17d2\u1793\u17b6",
+                "npe": "\u1785\u17bc\u179b\u178a\u17c6\u178e\u17b6\u1780\u17cb\u1780\u17b6\u179b\u1790\u17d2\u1793\u17b6\u1780\u17cb\u1787\u17b6\u178f\u17b7",
+                "nice": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179b\u1798\u17d2\u17a2\u17b7\u178f\u17a2\u17c6\u1796\u17b8 NICE",
+                "more": {
+                    "details": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179b\u1798\u17d2\u17a2\u17b7\u178f\u1794\u1793\u17d2\u1790\u17c2\u1798"
+                },
+                "lck": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179b\u1798\u17d2\u17a2\u17b7\u178f\u17a2\u17c6\u1796\u17b8 LOCARNO",
+                "ipc": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179b\u1798\u17d2\u17a2\u17b7\u178f\u17a2\u17c6\u1796\u17b8\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb\u1794\u17d2\u179a\u1780\u17b6\u179f\u1793\u17b8\u1799\u1794\u178f\u17d2\u179a\u178f\u1780\u17d2\u1780\u1780\u1798\u17d2\u1798\u17a2\u1793\u17d2\u178f\u179a\u1787\u17b6\u178f\u17b7",
+                "in": "\u1796\u17b6\u1780\u17d2\u1799\u179f\u17d2\u1793\u17be\u179f\u17bb\u17c6\u1795\u17d2\u179f\u17c1\u1784\u1791\u17c0\u178f\u178a\u17c4\u1799\u178f\u1780\u17d2\u1780\u1780\u179a\u178a\u17bc\u1785\u1782\u17d2\u1793\u17b6",
+                "cpc": "\u179f\u17c1\u1785\u1780\u17d2\u178f\u17b8\u179b\u1798\u17d2\u17a2\u17b7\u178f\u17a2\u17c6\u1796\u17b8 CPC",
+                "ap": "\u1796\u17b6\u1780\u17d2\u1799\u179f\u17d2\u1793\u17be\u179f\u17bb\u17c6\u1795\u17d2\u179f\u17c1\u1784\u1791\u17c0\u178f\u178a\u17c4\u1799\u17a2\u17d2\u1793\u1780\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6\u178a\u17bc\u1785\u1782\u17d2\u1793\u17b6"
+            },
+            "title": "ASEAN PATENTSCOPE",
+            "npe": {
+                "title": "\u1785\u17bc\u179b\u178a\u17c6\u178e\u17b6\u1780\u17cb\u1780\u17b6\u179b\u1790\u17d2\u1793\u17b6\u1780\u17cb\u1787\u17b6\u178f\u17b7\u1793\u17c3",
+                "table": {
+                    "header": {
+                        "npedate": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1785\u17bc\u179b\u178a\u17c6\u178e\u17b6\u1780\u17cb\u1780\u17b6\u179b\u1790\u17d2\u1793\u17b6\u1780\u17cb\u1787\u17b6\u178f\u17b7",
+                        "appno": "\u179b\u17c1\u1781\u1796\u17b6\u1780\u17d2\u1799\u179f\u17d2\u1793\u17be\u179f\u17bb\u17c6"
+                    }
+                },
+                "fail": {
+                    "message": "\u1798\u17b7\u1793\u17a2\u17b6\u1785\u1791\u17b6\u1789\u1799\u1780\u1791\u17b7\u1793\u17d2\u1793\u1793\u17d0\u1799\u178a\u17c6\u178e\u17b6\u1780\u17cb\u1780\u17b6\u179b\u1790\u17d2\u1793\u17b6\u1780\u17cb\u1787\u17b6\u178f\u17b7"
+                }
+            },
+            "no": {
+                "other": {
+                    "application": "\u179a\u1780\u1798\u17b7\u1793\u1783\u17be\u1789\u1796\u17b6\u1780\u17d2\u1799\u179f\u17d2\u1793\u17be\u179f\u17bb\u17c6\u1795\u17d2\u179f\u17c1\u1784\u1791\u17c0\u178f"
+                },
+                "application": {
+                    "found": "\u179a\u1780\u1798\u17b7\u1793\u1783\u17be\u1789\u1796\u17b6\u1780\u17d2\u1799\u179f\u17d2\u1793\u17be\u179f\u17bb\u17c6"
+                }
+            }
+        }
+    },
+    "date": {
+        "display": {
+            "week": {
+                "Wednesday": "\u1796\u17bb\u1792",
+                "Tuesday": "\u17a2\u1784\u17d2\u1782\u17b6\u179a",
+                "Thursday": "\u1796\u17d2\u179a\u17a0\u179f\u17d2\u1794\u178f\u17b7\u17cd",
+                "Sunday": "\u17a2\u17b6\u1791\u17b7\u178f\u17d2\u1799",
+                "Saturday": "\u179f\u17c5\u179a\u17b7\u17cd",
+                "Monday": "\u1785\u17d0\u1793\u17d2\u1791",
+                "Friday": "\u179f\u17bb\u1780\u17d2\u179a"
+            },
+            "options": {
+                "YEAR_DATE": "Year to Date",
+                "TODAY": "\u1790\u17d2\u1784\u17c3\u1793\u17c1\u17c7",
+                "SPECIFIC_DATE": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1787\u17b6\u1780\u17cb\u179b\u17b6\u1780\u17cb",
+                "MONTH_DATE": "\u17e6\u1781\u17c2\u1798\u17bb\u1793",
+                "DATE_RANGE": "\u1787\u17bd\u179a\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791",
+                "BEFORE": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1796\u17b8\u1798\u17bb\u1793\u1791\u17b6\u17c6\u1784\u17a2\u179f\u17cb",
+                "AFTER": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791\u1794\u1793\u17d2\u1791\u17b6\u1794\u17cb\u1791\u17b6\u17c6\u1784\u17a2\u179f\u17cb"
+            },
+            "month": {
+                "September": "\u1780\u1789\u17d2\u1789\u17b6",
+                "October": "\u178f\u17bb\u179b\u17b6",
+                "November": "\u179c\u17b7\u1785\u17d2\u1786\u17b7\u1780\u17b6",
+                "May": "\u17a7\u179f\u1797\u17b6",
+                "March": "\u1798\u17b8\u1793\u17b6",
+                "June": "\u1798\u17b7\u1790\u17bb\u1793\u17b6",
+                "July": "\u1780\u1780\u17d2\u1780\u178a\u17b6",
+                "January": "\u1798\u1780\u179a\u17b6",
+                "February": "\u1780\u17bb\u1798\u17d2\u1797\u17c8",
+                "December": "\u1792\u17d2\u1793\u17bc",
+                "August": "\u179f\u17b8\u17a0\u17b6",
+                "April": "\u1798\u17c1\u179f\u17b6"
+            }
+        }
+    },
+    "concordance": {
+        "term": {
+            "tooltip": {
+                "label": "\u1794\u1785\u17d2\u1785\u17c1\u1780\u179c\u17b7\u1791\u17d2\u1799\u17b6"
+            },
+            "placeholder": {
+                "label": ""
+            },
+            "null": {
+                "label": ""
+            },
+            "display": {
+                "label": "\u1794\u1785\u17d2\u1785\u17c1\u1780\u179c\u17b7\u1791\u17d2\u1799\u17b6"
+            }
+        }
+    },
+    "chart": {
+        "techsector": "\u179c\u17b7\u179f\u17d0\u1799\u1794\u1785\u17d2\u1785\u17c1\u1780\u179c\u17b7\u1791\u17d2\u1799\u17b6",
+        "pie": {
+            "subtitle": "\u17a2\u17d2\u1793\u1780\u17a2\u17b6\u1785\u1785\u17bb\u1785\u179b\u17be\u179c\u17b7\u179f\u17d0\u1799\u1794\u1785\u17d2\u1785\u17c1\u1780\u179c\u17b7\u1791\u17d2\u1799\u17b6\u178a\u17be\u1798\u17d2\u1794\u17b8\u1798\u17be\u179b\u1796\u17d0\u178f\u17cc\u1798\u17b6\u1793\u1787\u17b6\u1780\u17cb\u179b\u17b6\u1780\u17cb"
+        },
+        "news": {
+            "title": "\u1796\u17d0\u178f\u17cc\u1798\u17b6\u1793"
+        },
+        "industrysector": "Industry sector",
+        "geo": {
+            "title": {
+                "trademarks": "\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6\u1798\u17c9\u17b6\u1780\u178f\u17b6\u1798\u1794\u17d2\u179a\u1791\u17c1\u179f",
+                "patents": "\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6\u1794\u17d2\u179a\u1780\u17b6\u179f\u1793\u17b8\u1799\u1794\u178f\u17d2\u179a\u178f\u1780\u17d2\u1780\u1780\u1798\u17d2\u1798\u178f\u17b6\u1798\u1794\u17d2\u179a\u1791\u17c1\u179f",
+                "designs": "\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6\u1782\u17c6\u1793\u17bc\u179a\u17a7\u179f\u17d2\u179f\u17b6\u17a0\u1780\u1798\u17d2\u1798\u178f\u17b6\u1798\u1794\u17d2\u179a\u1791\u17c1\u179f",
+                "default": "\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6\u1794\u17d2\u179a\u1780\u17b6\u179f\u1793\u17b8\u1799\u1794\u178f\u17d2\u179a\u178f\u1780\u17d2\u1780\u1780\u1798\u17d2\u1798, \u1782\u17c6\u1793\u17bc\u179a\u17a7\u179f\u17d2\u179f\u17b6\u17a0\u1780\u1798\u17d2\u1798 \u1793\u17b7\u1784\u1798\u17c9\u17b6\u1780\u178f\u17b6\u1798\u1794\u17d2\u179a\u1791\u17c1\u179f"
+            },
+            "subtitle": "\u17a2\u17d2\u1793\u1780\u17a2\u17b6\u1785\u1785\u17bb\u1785\u179b\u17be\u178f\u17c6\u1794\u1793\u17cb\u1793\u17c5\u179b\u17be\u1795\u17c2\u1793\u1791\u17b8 \u17ac\u178f\u17b6\u179a\u17b6\u1784\u178a\u17be\u1798\u17d2\u1794\u17b8\u1798\u17be\u179b\u1796\u17d0\u178f\u17cc\u1798\u17b6\u1793\u1787\u17b6\u1780\u17cb\u179b\u17b6\u1780\u17cb",
+            "number": {
+                "of": {
+                    "trademarks ": " \u179b\u17c1\u1781\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6\u1798\u17c9\u17b6\u1780\u179f\u1789\u17d2\u1789\u17b6",
+                    "patents ": " \u179b\u17c1\u1781\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6\u1794\u17d2\u179a\u1780\u17b6\u179f\u1793\u17b8\u1799\u1794\u178f\u17d2\u179a\u178f\u1780\u17d2\u1780\u1780\u1798\u17d2\u1798",
+                    "designs ": " \u179b\u17c1\u1781\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6\u1782\u17c6\u1793\u17bc\u179a\u17a7\u179f\u17d2\u179f\u17b6\u17a0\u1780\u1798\u17d2\u1798"
+                }
+            },
+            "grid": {
+                "header": {
+                    "flag": "Flag",
+                    "datecoverage": "Pub. coverage",
+                    "country": "\u1794\u17d2\u179a\u1791\u17c1\u179f",
+                    "count": "\u1796\u17b6\u1780\u17d2\u1799\u179f\u17d2\u1793\u17be\u179f\u17bb\u17c6"
+                }
+            }
+        },
+        "common": {
+            "top": {
+                "applicant": "Top applicant"
+            },
+            "percentage": "Percentage",
+            "number": {
+                "of": {
+                    "applicants": "Total number of applications"
+                }
+            },
+            "header": {
+                "trends": "Top 5 Trends",
+                "technology": {
+                    "sector": {
+                        "trend": "Technology Sector Trends",
+                        "filing": "Technology Sector Filing"
+                    }
+                },
+                "country": "Top 10 Countries",
+                "applicants": "Top 10 Applicants"
+            }
+        },
+        "bar": {
+            "topfive": {
+                "total": "Total number of applications in this sector: ${count}",
+                "sector": "Top five sectors in ${country}",
+                "country": "Top five countries in ${sector}",
+                "back": "Back"
+            },
+            "tm": {
+                "title": "Trademarks filing by Industry sector",
+                "subtitle": "You can click on a industry sector to visualize specific information"
+            },
+            "title": "\u1794\u17d2\u179a\u1780\u17b6\u179f\u1793\u17b8\u1799\u1794\u178f\u17d2\u179a\u178f\u1780\u17d2\u1780\u1780\u1798\u17d2\u1798\u178a\u17b6\u1780\u17cb\u1796\u17b6\u1780\u17d2\u1799\u179f\u17bb\u17c6\u178f\u17b6\u1798\u179c\u17b7\u179f\u17d0\u1799\u1794\u1785\u17d2\u1785\u17c1\u1780\u179c\u17b7\u1791\u17d2\u1799\u17b6",
+            "subtitle": "\u17a2\u17d2\u1793\u1780\u17a2\u17b6\u1785\u1785\u17bb\u1785\u179b\u17be\u179c\u17b7\u179f\u17d0\u1799\u1794\u1785\u17d2\u1785\u17c1\u1780\u179c\u17b7\u1791\u17d2\u1799\u17b6\u178a\u17be\u1798\u17d2\u1794\u17b8\u1798\u17be\u179b\u1796\u17d0\u178f\u17cc\u1798\u17b6\u1793\u1787\u17b6\u1780\u17cb\u179b\u17b6\u1780\u17cb",
+            "design": {
+                "title": "Designs filing by Industry sector",
+                "subtitle": "You can click on a industry sector to visualize specific information"
+            }
+        }
+    },
+    "category": {
+        "patent": {
+            "label": "\u1794\u17d2\u179a\u1780\u17b6\u179f\u1793\u17b8\u1799\u1794\u178f\u17d2\u179a\u178f\u1780\u17d2\u1780\u1780\u1798\u17d2\u1798"
+        },
+        "other": {
+            "label": "Miscellaneous"
+        },
+        "numbers": {
+            "label": "\u179b\u17c1\u1781"
+        },
+        "names": {
+            "label": "\u1788\u17d2\u1798\u17c4\u17c7"
+        },
+        "mark": {
+            "label": "\u1798\u17c9\u17b6\u1780"
+        },
+        "folder": {
+            "label": "Folder"
+        },
+        "files": {
+            "label": "Files"
+        },
+        "document": {
+            "label": "Document"
+        },
+        "design": {
+            "label": "\u1782\u17c6\u1793\u17bc\u179a\u17a7\u179f\u17d2\u179f\u17b6\u17a0\u1780\u1798\u17d2\u1798"
+        },
+        "dates": {
+            "label": "\u1780\u17b6\u179b\u1794\u179a\u17b7\u1785\u17d2\u1786\u17c1\u1791"
+        },
+        "country": {
+            "label": "\u1794\u17d2\u179a\u1791\u17c1\u179f"
+        },
+        "countries": {
+            "label": "Countries"
+        },
+        "classification": {
+            "label": "\u1785\u17c6\u178e\u17b6\u178f\u17cb\u1790\u17d2\u1793\u17b6\u1780\u17cb"
+        }
+    },
+    "btn": {
+        "togglefields": {
+            "label": "+/- \u1794\u1793\u17d2\u1790\u17c2\u1798\u17ac\u1794\u1793\u17d2\u1790\u1799"
+        },
+        "search": {
+            "reset": {
+                "label": "\u1780\u17c6\u178e\u178f\u17cb\u17a1\u17be\u1784\u179c\u17b7\u1789"
+            },
+            "label": "\u179f\u17d2\u179c\u17c2\u1784\u179a\u1780"
+        },
+        "hide": {
+            "veiwer": "Hide Viewer"
+        },
+        "filter": {
+            "label": "\u179b\u17d0\u1780\u17d2\u1781\u1781\u17d0\u178e\u17d2\u178c"
+        },
+        "clearSelection": {
+            "label": "\u179b\u17bb\u1794\u1785\u17c4\u179b\u1787\u1798\u17d2\u179a\u17be\u179f"
+        },
+        "captcha": {
+            "label": "\u1794\u1793\u17d2\u1791\u17b6\u1794\u17cb"
+        },
+        "applyfilter": {
+            "label": "Apply Filter"
+        },
+        "Cancel": {
+            "label": "\u1794\u17c4\u17c7\u1794\u1784\u17cb"
+        },
+        "Apply": {
+            "label": "\u1794\u1789\u17d2\u1785\u17bc\u179b"
+        }
+    },
+    "application": {
+        "country": {
+            "chart": {
+                "bar": {
+                    "subtitle": "You can click on a country to visualize specific information"
+                }
+            }
+        }
+    },
+    "applicant": {
+        "chart": {
+            "bar": {
+                "title": "Top 10 Applicant",
+                "subtitle": "You can click on a applicant to visualize specific information"
+            }
+        }
+    },
+    "#home": {
+        "search": {
+            "title": {
+                "label": "INTELLECTUAL PROPERTY ORGANIZATION SEARCH SYSTEM"
+            },
+            "subtitle": {
+                "label": "\u17a2\u17d2\u179c\u17b8\u178a\u17c2\u179b\u17a2\u17d2\u1793\u1780\u178f\u17d2\u179a\u17bc\u179c\u178a\u17b9\u1784\u17a2\u17c6\u1796\u17b8\u1794\u17d2\u179a\u1780\u17b6\u179f\u1793\u17b8\u1799\u1794\u178f\u17d2\u179a\u178f\u1780\u17d2\u1780\u1780\u1798\u17d2\u1798 \u1798\u17c9\u17b6\u1780\u179f\u1789\u17d2\u1789\u17b6 \u1793\u17b7\u1784\u1782\u17c6\u1793\u17bc\u179a\u17a7\u179f\u17d2\u179f\u17b6\u17a0\u1780\u1798\u17d2\u1798\u1793\u17c5\u1780\u17d2\u1793\u17bb\u1784\u178f\u17c6\u1794\u1793\u17cb\u179a\u1794\u179f\u17cb\u17a2\u17d2\u1793\u1780"
+            }
+        }
+    }
+}

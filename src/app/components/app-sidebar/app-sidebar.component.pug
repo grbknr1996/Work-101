@@ -1,0 +1,41 @@
+.sidebar-container([ngClass]="{'sidebar-fixed': fixed, 'sidebar-visible': visible, 'sidebar-hidden': !visible, 'sidebar-compact': compactMode && !isMobile, 'sidebar-mobile': isMobile}",
+  [style]="{'margin-top':'64px','height':'100%','position':'fixed'}"
+)
+  .sidebar-menu
+    ul.menu-list
+      ng-container(*ngFor="let item of menuItems")
+        li.menu-item(
+          [ngClass]="{'menu-item-active': item.expanded, 'has-submenu': item.items && item.items.length}"
+        )
+          a.menu-link(
+            [routerLink]="item.routerLink", 
+            [routerLinkActive]="item.routerLink ? 'active-route' : ''",
+            (click)="item.items && item.items.length ? toggleMenuItem(item) : closeSidebarOnMobile()"
+          )
+            i.menu-icon([ngClass]="item.icon")
+            span.menu-label(*ngIf="!compactMode || isMobile") {{ getTranslatedLabel(item.label) }}
+            span.menu-badge(*ngIf="(!compactMode || isMobile) && item.badge") {{ item.badge }}
+            i.submenu-icon.pi.pi-chevron-down(*ngIf="(!compactMode || isMobile) && item.items && item.items.length", [ngClass]="{'submenu-expanded': item.expanded}")
+          
+          // Submenu items
+          .submenu(*ngIf="item.items && item.items.length && item.expanded && (!compactMode || isMobile)")
+            ul.submenu-list
+              li.submenu-item(*ngFor="let subItem of item.items")
+                a.submenu-link(
+                  [routerLink]="subItem.routerLink", 
+                  [routerLinkActive]="subItem.routerLink ? 'active-route' : ''",
+                  (click)="closeSidebarOnMobile()"
+                )
+                  i.submenu-icon([ngClass]="subItem.icon")
+                  span.submenu-label {{ getTranslatedLabel(subItem.label) }}
+                  span.submenu-badge(*ngIf="subItem.badge") {{ subItem.badge }}
+
+  // Compact mode hover submenu container - shows when hovering items in compact mode
+  .compact-hover-menu(*ngIf="compactMode && !isMobile")
+    // Content populated via JavaScript on hover
+
+  // Footer toggle for mobile
+  .sidebar-footer(*ngIf="isMobile")
+    button.p-button.p-button-text((click)="sidebarMenuService.toggleSidebarVisibility()")
+      i.pi.pi-times
+      span {{ ms.translate('close') }}

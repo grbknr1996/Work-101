@@ -1,0 +1,1536 @@
+{
+    "\ufeffapplication": {
+        "country": {
+            "chart": {
+                "bar": {
+                    "title": "Top 10 Applicant countries"
+                }
+            }
+        }
+    },
+    "wipopublish": {
+        "news": {
+            "2": "Ti\u1ebfp t\u1ee5c th\u00eam nhi\u1ec1u tin nh\u1eafn h\u01a1n n\u1ebfu c\u1ea7n.",
+            "1": "B\u1ea5t k\u1ef3 th\u00f4ng b\u00e1o h\u1ec7 th\u1ed1ng n\u00e0o \u0111\u01b0\u1ee3c \u0111\u0103ng \u0111\u1ec1u c\u00f3 th\u1ec3 \u0111\u1eb7t \u0111\u01b0\u1ee3c \u1edf \u0111\u00e2y."
+        }
+    },
+    "wipo": {
+        "publish": {
+            "wrong": {
+                "syntex": {
+                    "solr": {
+                        "query": {
+                            "user": {
+                                "message": "Kh\u00f4ng th\u1ec3 th\u1ef1c hi\u1ec7n c\u00e2u truy v\u1ea5n. \u0110\u1ec1 ngh\u1ecb nh\u1eadp l\u1ea1i."
+                            }
+                        }
+                    }
+                }
+            },
+            "user": {
+                "manual": {
+                    "label": "Tr\u1ee3 gi\u00fap"
+                }
+            },
+            "stats": {
+                "label": "Statistics"
+            },
+            "invalid": {
+                "solr": {
+                    "query": {
+                        "user": {
+                            "message": "Kh\u00f4ng th\u1ec3 th\u1ef1c hi\u1ec7n c\u00e2u truy v\u1ea5n. \u0110\u1ec1 ngh\u1ecb nh\u1eadp l\u1ea1i"
+                        }
+                    }
+                }
+            },
+            "html": {
+                "link2": {
+                    "label": "Link2"
+                },
+                "link1": {
+                    "label": "Link1"
+                }
+            },
+            "about": {
+                "label": "Gi\u1edbi thi\u1ec7u",
+                "content": "<h1>About ASEAN PATENTSCOPE</h1><br><p>D\u1ef1 \u00e1n ASEAN PATENTSCOPE \u0111\u01b0\u1ee3c kh\u1edfi x\u01b0\u1edbng b\u1edfi  ASEAN Patent Examination Co-operation (ASPEC) Task Force n\u0103m 2012 v\u00e0 \u0111\u01b0\u1ee3c ASEAN Working Group on IP Cooperation (AWGIPC) x\u00e1c nh\u1eadn v\u00e0o n\u0103m 2015 sau khi quy\u1ebft \u0111\u1ecbnh n\u1ec1n t\u1ea3ng k\u1ef9 thu\u1eadt l\u00e0 c\u1ee7a WIPO Publish \u0111\u1ec3 t\u1ef1 \u0111\u1ed9ng tr\u00edch xu\u1ea5t d\u1eef li\u1ec7u, khai th\u00e1c d\u1eef li\u1ec7u v\u00e0 truy v\u1ea5n trong c\u00e1c v\u0103n ph\u00f2ng SHTT c\u1ee7a c\u00e1c n\u01b0\u1edbc ASEAN. Indonesia \u0111\u00f3ng g\u00f3p l\u1edbn v\u1edbi t\u01b0 c\u00e1ch d\u1eabn \u0111\u1ea7u d\u1ef1 \u00e1n v\u00e0 l\u01b0u tr\u1eef c\u01a1 s\u1edf d\u1eef li\u1ec7u s\u00e1ng ch\u1ebf trong khu v\u1ef1c ASEAN</p><br/><p>ASEAN PATENTSCOPE cung c\u1ea5p 1 n\u1ec1n t\u1ea3ng tr\u1ef1c tuy\u1ebfn t\u1eadp trung cho vi\u1ec7c ph\u1ed5 bi\u1ebfn th\u00f4ng tin b\u1eb1ng s\u00e1ng ch\u1ebf cho t\u1ea5t c\u1ea3 10 qu\u1ed1c gia ASEAN v\u00e0 t\u1ea1o \u0111i\u1ec1u ki\u1ec7n cho c\u00e1c v\u0103n ph\u00f2ng SHTT ASEAN chia s\u1ebb d\u1eef li\u1ec7u b\u1eb1ng s\u00e1ng ch\u1ebf v\u1edbi c\u00e1c h\u1ec7 th\u1ed1ng SHTT tr\u00ean to\u00e0n c\u1ea7u, ch\u1eb3ng h\u1ea1n nh\u01b0 WIPO CASE cho c\u00e1c x\u00e9t nghi\u1ec7m vi\u00ean s\u00e1ng ch\u1ebf, WIPO Patentscope v\u00e0 IP5 Global Dosier System cho c\u00f4ng ch\u00fang. Ng\u01b0\u1eddi d\u00f9ng trong khu v\u1ef1c c\u00f3 quy\u1ec1n truy c\u1eadp v\u00e0o d\u1eef li\u1ec7u c\u1ee7a t\u1ea5t c\u1ea3 c\u00e1c n\u01b0\u1edbc ASEAN, nhi\u1ec1u ng\u01b0\u1eddi trong s\u1ed1 h\u1ecd l\u1ea7n \u0111\u1ea7u ti\u00ean v\u00e0 c\u00f3 th\u1ec3 truy c\u1eadp m\u1ed9t ngu\u1ed3n th\u00f4ng tin k\u1ef9 thu\u1eadt to\u00e0n di\u1ec7n v\u00e0 ph\u1ee9c t\u1ea1p trong khu v\u1ef1c. C\u1ed5ng th\u00f4ng tin  ASEAN PATENTSCOPE c\u00f3 m\u1ed9t s\u1ed1 t\u00ednh n\u0103ng \u0111\u00e1ng ch\u00fa \u00fd \u0111\u1ec3 h\u1ed7 tr\u1ee3 ng\u01b0\u1eddi d\u00f9ng, bao g\u1ed3m t\u00ecm ki\u1ebfm d\u1eef li\u1ec7u th\u01b0 m\u1ee5c, xem th\u00f4ng tin h\u1ed3 s\u01a1 b\u1eb1ng s\u00e1ng ch\u1ebf \u0111\u00e3 c\u00f4ng b\u1ed1, ch\u1ee5p k\u1ebft qu\u1ea3 t\u00ecm ki\u1ebfm trong c\u00e1c b\u00e1o c\u00e1o c\u00f3 th\u1ec3 t\u00f9y ch\u1ec9nh v\u00e0 d\u1ecbch sang ng\u00f4n ng\u1eef qu\u1ed1c gia.</p><br/><p> H\u1ec7 th\u1ed1ng \u0111\u01b0\u1ee3c x\u00e2y d\u1ef1ng trong khu\u00f4n kh\u1ed5 c\u1ee7a d\u1ef1 \u00e1n n\u00e0y l\u00e0 hi\u1ec7n \u0111\u1ea1i, hi\u1ec7u qu\u1ea3 v\u00e0 \u0111\u00f3ng g\u00f3p \u0111\u00e1ng k\u1ec3 v\u00e0o vi\u1ec7c truy c\u1eadp th\u00f4ng tin s\u00e1ng ch\u1ebf trong khu v\u1ef1c ASEAN ng\u00e0y c\u00e0ng t\u0103ng b\u1edfi ng\u01b0\u1eddi d\u00f9ng c\u1ee7a h\u1ec7 th\u1ed1ng SHTT ASEAN v\u00e0 ng\u01b0\u1eddi d\u00f9ng c\u1ee7a c\u1ed9ng \u0111\u1ed3ng SHTT th\u1ebf gi\u1edbi </p><br/><p>H\u1ec7 th\u1ed1ng \u0111\u01b0\u1ee3c cung c\u1ea5p b\u1edfi V\u0103n ph\u00f2ng SHTT Th\u1ebf gi\u1edbi  World Intellectual Property Organization (WIPO) th\u00f4ng qua ch\u01b0\u01a1ng tr\u00ecnh h\u1ed7 tr\u1ee3 k\u1ef9 thu\u1eadt cho c\u00e1c v\u0103n ph\u00f2ng SHTT qu\u1ed1c gia v\u00e0 khu v\u1ef1c. C\u00e1c b\u1ed9 ph\u1eadn c\u1ee7a h\u1ec7 th\u1ed1ng \u0111\u01b0\u1ee3c cung c\u1ea5p th\u00f4ng qua s\u1ef1 h\u1ed7 tr\u1ee3 c\u1ee7a Qu\u1ef9 \u0111\u1ea7u t\u01b0 Nh\u1eadt B\u1ea3n cho SHTT (\u0111\u1ec3 th\u00eam th\u00f4ng tin, truy c\u1eadp <br/><a href=\"http://www.wipo.int/cooperation/en/funds_in_trust/japan_fitip_aspac/index.html\">http://www.wipo.int/cooperation/en/funds_in_trust/japan_fitip_aspac/index.html</a>)</p><br/><p>For more information on WIPO\u2019s technical assistance programs, please see <br/><a href=\"http://www.wipo.int/global_ip/en/activities/technicalassistance/\">http://www.wipo.int/global_ip/en/activities/technicalassistance/</a></p>"
+            }
+        }
+    },
+    "trend": {
+        "line": {
+            "chart": {
+                "bar": {
+                    "title": "Watch Trends",
+                    "subtitle": "Watch Trends For"
+                }
+            }
+        },
+        "donut": {
+            "chart": {
+                "bar": {
+                    "title": "Top 5 Technology Trends",
+                    "subtitle": "Top 5 Technology Trends For"
+                }
+            }
+        }
+    },
+    "trademarks": {
+        "field": {
+            "display": {
+                "TITL": "T\u1ed5ng"
+            }
+        }
+    },
+    "tooltip": {
+        "user": {
+            "selection": {
+                "info": {
+                    "label": "T\u1ea5t c\u1ea3 c\u00e1c \u0111\u01a1n \u0111\u01b0\u1ee3c ch\u1ecdn b\u1edfi nh\u1ea5p chu\u1ed9t v\u00e0o \u00f4 ch\u1ecdn tr\u00ean m\u00e0m h\u00ecnh k\u1ebft qu\u1ea3 truy v\u1ea5n s\u1ebd \u0111\u01b0\u1ee3c hi\u1ec3n th\u1ecb \u1edf \u0111\u00e2y."
+                }
+            },
+            "select": {
+                "label": "Th\u00eam/lo\u1ea1i b\u1ecf l\u1ef1a ch\u1ecdn ng\u01b0\u1eddi d\u00f9ng"
+            },
+            "deselect": {
+                "label": "X\u00f3a b\u1ecf l\u1ef1a ch\u1ecdn ng\u01b0\u1eddi d\u00f9ng"
+            }
+        },
+        "tableview": {
+            "label": "Hi\u1ec3n th\u1ecb d\u1ea1ng b\u1ea3ng"
+        },
+        "showfilter": {
+            "label": "Hi\u1ec3n th\u1ecb l\u1ecdc"
+        },
+        "search": {
+            "info": {
+                "label": "Record selected with one or more criteria"
+            }
+        },
+        "phonetic": {
+            "check": "Tr\u01b0\u1eddng n\u00e0y \u0111\u1ec3 t\u0103ng b\u1ea3n ghi v\u1edbi s\u1ef1 ch\u00ednh x\u00e1c cao"
+        },
+        "minimum": {
+            "relevance": "Tr\u01b0\u1eddng n\u00e0y \u0111\u01b0\u1ee3c s\u1eed d\u1ee5ng \u0111\u1ec3 gi\u1edbi h\u1ea1n k\u1ebft qu\u1ea3"
+        },
+        "listview": {
+            "label": "List View"
+        },
+        "hidefilter": {
+            "label": "\u1ea8n l\u1ecdc"
+        },
+        "gridview": {
+            "label": "Hi\u1ec3n th\u1ecb d\u1ea1ng l\u01b0\u1edbi"
+        },
+        "export": {
+            "label": "Tr\u00edch xu\u1ea5t"
+        },
+        "download": {
+            "label": "Download",
+            "document": {
+                "label": "Download Document"
+            },
+            "application": {
+                "xml": {
+                    "label": "Download Application XML"
+                }
+            }
+        },
+        "document": {
+            "view": {
+                "label": "Hi\u1ec3n th\u1ecb t\u00e0i li\u1ec7u"
+            },
+            "search": {
+                "info": {
+                    "label": "Enclose your search criteria within \"\" for exact search"
+                }
+            }
+        },
+        "detail": {
+            "newtab": {
+                "label": "Hi\u1ec3n th\u1ecb chi ti\u1ebft d\u1ea1ng b\u1ea3ng m\u1edbi"
+            },
+            "label": "Hi\u1ec3n th\u1ecb chi ti\u1ebft"
+        },
+        "clearfilter": {
+            "label": "X\u00f3a b\u1ecf l\u1ecdc"
+        },
+        "check": {
+            "label": "Ki\u1ec3m tra"
+        },
+        "chart": {
+            "label": "\u0110\u1ed3 th\u1ecb"
+        },
+        "back": {
+            "to": {
+                "search": {
+                    "label": "Quay tr\u1edf l\u1ea1i truy v\u1ea5n"
+                }
+            }
+        }
+    },
+    "time": {
+        "ms": "ms"
+    },
+    "thumbnail": {
+        "dummy": {
+            "disclaimer": "Machine generated trademark logo"
+        }
+    },
+    "table": {
+        "summary": {
+            "title": "Showing ${from} to ${to} of ${of}"
+        },
+        "no": {
+            "data": {
+                "found": "Kh\u00f4ng t\u00ecm th\u1ea5y b\u1ea3n ghi"
+            }
+        },
+        "document": {
+            "publications": {
+                "label": "C\u00f4ng b\u1ed1"
+            },
+            "pct": {
+                "application": {
+                    "label": "\u0110\u01a1n PCT"
+                }
+            },
+            "name": {
+                "label": "T\u00ean t\u00e0i li\u1ec7u"
+            },
+            "filing": {
+                "date": {
+                    "label": "Ng\u00e0y n\u1ed9p \u0111\u01a1n"
+                }
+            },
+            "doctype": {
+                "label": "Lo\u1ea1i t\u00e0i li\u1ec7u"
+            },
+            "docdate": {
+                "label": "Ng\u00e0y"
+            },
+            "application": {
+                "number": {
+                    "label": "S\u1ed1 \u0111\u01a1n n\u1ed9p/\u01afu ti\u00ean"
+                }
+            },
+            "action": {
+                "label": "H\u00e0nh \u0111\u1ed9ng"
+            }
+        }
+    },
+    "tab": {
+        "userselection": {
+            "label": "L\u1ef1a ch\u1ecdn ng\u01b0\u1eddi d\u00f9ng"
+        },
+        "text": {
+            "field": {
+                "label ": " Tr\u01b0\u1eddng text"
+            }
+        },
+        "status": {
+            "label": "Tr\u1ea1ng th\u00e1i"
+        },
+        "search": {
+            "label": ""
+        },
+        "recent": {
+            "label": "Truy v\u1ea5n g\u1ea7n \u0111\u00e2y"
+        },
+        "phoneticsearch": {
+            "label": "ng\u1eef \u00e2m"
+        },
+        "patent": {
+            "family": {
+                "time": {
+                    "line": {
+                        "label": "Time line"
+                    }
+                },
+                "tabular": {
+                    "view": {
+                        "label": "Hi\u1ec3n th\u1ecb d\u1ea1ng b\u1ea3ng"
+                    }
+                },
+                "label": "\u0110\u01a1n s\u00e1ng ch\u1ebf \u0111\u1ed3ng d\u1ea1n",
+                "data": {
+                    "fetch": {
+                        "fail": {
+                            "message": "Kh\u00f4ng th\u1ec3 nh\u1eadp d\u1eef li\u1ec7u"
+                        }
+                    }
+                }
+            }
+        },
+        "number": {
+            "field": {
+                "label ": " Tr\u01b0\u1eddng s\u1ed1"
+            }
+        },
+        "gazettesearch": {
+            "label": "Truy v\u1ea5n nh\u1eadt k\u00fd"
+        },
+        "documentsearch": {
+            "label": "Truy v\u1ea5n t\u00e0i li\u1ec7u"
+        },
+        "doclist": {
+            "label": "Danh s\u00e1ch t\u00e0i li\u1ec7u"
+        },
+        "description": {
+            "label": "B\u1ea3n m\u00f4 t\u1ea3"
+        },
+        "date": {
+            "field": {
+                "label ": " Tr\u01b0\u1eddng ng\u00e0y"
+            }
+        },
+        "claim": {
+            "label": "Y\u00eau c\u1ea7u b\u1ea3o h\u1ed9"
+        },
+        "biblio": {
+            "label": "D\u1eef li\u1ec7u th\u01b0 m\u1ee5c"
+        },
+        "advancedsearch": {
+            "label": "Truy v\u1ea5n n\u00e2ng cao"
+        }
+    },
+    "section": {
+        "associateddrawing": {
+            "label": "H\u00ecnh v\u1ebd"
+        }
+    },
+    "search": {
+        "table": {
+            "results": {
+                "label": "Table view"
+            }
+        },
+        "sort": {
+            "type": {
+                "desc": {
+                    "tooltip": "Descending"
+                },
+                "asc": {
+                    "tooltip": "Ascending"
+                }
+            },
+            "field": {
+                "tooltip": "Select a column for sorting"
+            }
+        },
+        "page": {
+            "title": "ASEAN PATENTSCOPE"
+        },
+        "list": {
+            "results": {
+                "label": "List view"
+            }
+        },
+        "grid": {
+            "results": {
+                "label": "Grid view"
+            }
+        },
+        "export": {
+            "results": {
+                "label": "Export results"
+            }
+        },
+        "bar": {
+            "suggestive": {
+                "search": {
+                    "on": {
+                        "tooltip": "Frequent fields selection is on"
+                    },
+                    "off": {
+                        "tooltip": "All fields selection is on"
+                    },
+                    "label": "Field selection"
+                }
+            },
+            "solr": {
+                "id": {
+                    "tooltip": "Click here to remove the keyword"
+                }
+            }
+        }
+    },
+    "result": {
+        "number": {
+            "found": "S\u1ed1 \u0111\u01a1n t\u00ecm th\u1ea5y"
+        },
+        "count": {
+            "message": {
+                "single": "About ${count} result",
+                "plural": "About ${count} results"
+            }
+        }
+    },
+    "page": {
+        "title": {
+            "application": {
+                "label": "\u0110\u01a1n n\u1ed9p"
+            }
+        }
+    },
+    "option": {
+        "stemming": {
+            "label": "stemming"
+        },
+        "phonetic": {
+            "label": "ng\u1eef \u00e2m"
+        },
+        "fuzzy": {
+            "label": "m\u1edd"
+        }
+    },
+    "module": {
+        "trademarks": {
+            "label": "Nh\u00e3n hi\u1ec7u"
+        },
+        "patents": {
+            "label": "S\u00e1ng ch\u1ebf"
+        },
+        "designs": {
+            "label": "Ki\u1ec3u d\u00e1ng"
+        }
+    },
+    "message": {
+        "userselection": {
+            "nocriteria": "No Criteria",
+            "keyword": "Keyword",
+            "and": "AND",
+            "all": "All"
+        },
+        "feature": {
+            "notsupported": "Tr\u00ecnh duy\u1ec7t c\u1ee7a b\u1ea1n kh\u00f4ng h\u1ed7 tr\u1ee3 xem t\u00e0i li\u1ec7u. Thay v\u00e0o \u0111\u00f3, h\u00e3y t\u1ea3i xu\u1ed1ng t\u00e0i li\u1ec7u."
+        },
+        "export": {
+            "limit": {
+                "exceeded": "Please narrow down the search results further before exporting!"
+            }
+        }
+    },
+    "menu": {
+        "trademarks": "Nh\u00e3n hi\u1ec7u",
+        "references": "Tham kh\u1ea3o",
+        "patents": "S\u00e1ng ch\u1ebf",
+        "home": "Home",
+        "edms": "EDMS",
+        "designs": "Ki\u1ec3u d\u00e1ng"
+    },
+    "language": {
+        "display": {
+            "label": {
+                "vi": "Ti\u1ebfng Vi\u1ec7t",
+                "ms": "Bahasa Melayu",
+                "kh": "\u1797\u17b6\u179f\u17b6\u1781\u17d2\u1798\u17c2\u179a",
+                "jp": "\u65e5\u672c\u8a9e",
+                "id": "Bahasa Indonesia",
+                "fr": "Fran\u00e7ais",
+                "en": "English",
+                "ar": "\u0627\u0644\u0639\u0631\u0628\u064a\u0629"
+            }
+        }
+    },
+    "label": {
+        "showing": "Showing",
+        "security": {
+            "captcha": "To confirm your request, please check the box to let us know you are human."
+        },
+        "of": "of",
+        "more": "More",
+        "less": "Less"
+    },
+    "info": {
+        "version": {
+            "label": "version 1.3.0"
+        },
+        "poweredby": {
+            "label": "powered by WIPO"
+        }
+    },
+    "header": {
+        "application": {
+            "title": "ASEAN PATENTSCOPE"
+        }
+    },
+    "gazette": {
+        "journal": {
+            "to": {
+                "display": {
+                    "label": "\u0111\u1ebfn"
+                }
+            },
+            "id": {
+                "display": {
+                    "label": "M\u00f4 t\u1ea3 nh\u1eadt k\u00fd"
+                }
+            },
+            "from": {
+                "display": {
+                    "label": "Ng\u00e0y nh\u1eadt k\u00fd"
+                }
+            },
+            "category": {
+                "display": {
+                    "label": "Lo\u1ea1i"
+                }
+            }
+        },
+        "application": {
+            "display": {
+                "label": "S\u1ed1 \u0111\u01a1n #"
+            }
+        },
+        "action": {
+            "type": {
+                "display": {
+                    "label": "Lo\u1ea1i h\u00e0nh \u0111\u1ed9ng"
+                }
+            }
+        }
+    },
+    "footer": {
+        "search": {
+            "quicklink": {
+                "label": "SEARCH"
+            },
+            "detail": {
+                "quicklink": {
+                    "label": "Basic or advanced search to <br> refine your preferences"
+                }
+            }
+        },
+        "manage": {
+            "quicklink": {
+                "label": "MANAGE"
+            },
+            "detail": {
+                "quicklink": {
+                    "label": "You can save and customize <br> your search"
+                }
+            }
+        },
+        "export": {
+            "quicklink": {
+                "label": "EXPORT"
+            },
+            "detail": {
+                "quicklink": {
+                    "label": "Export your search in PDF"
+                }
+            }
+        }
+    },
+    "field": {
+        "tooltip": {
+            "todate": "T\u1edbi",
+            "phonetic": {
+                "min": {
+                    "relevance": "Minimum Relevance"
+                }
+            },
+            "id": "\u0110\u1ecbnh danh",
+            "fromdate": "T\u1eeb",
+            "entry": {
+                "count": "Entry count"
+            },
+            "boost": {
+                "exact": {
+                    "match": "Boost Exact Match"
+                }
+            },
+            "application": {
+                "count": "Application count"
+            },
+            "VNCL": "Ph\u00e2n lo\u1ea1i Vienna",
+            "VCL": "Ph\u00e2n lo\u1ea1i Vienna",
+            "TITL_LG1": "T\u00ean song ng\u1eef",
+            "TITL_EN": "T\u00ean ti\u1ebfng anh",
+            "TITL": "T\u00ean",
+            "STLB_ORI": "Tr\u1ea1ng th\u00e1i qu\u1ed1c t\u1ebf",
+            "STLB": "Tr\u1ea1ng th\u00e1i",
+            "STDT": "Ng\u00e0y tr\u1ea1ng th\u00e1i",
+            "STCD": "M\u00e3 tr\u1ea1ng th\u00e1i",
+            "RPRE": "N\u01a1i c\u01b0 tr\u00fa c\u1ee7a \u0111\u1ea1i di\u1ec7n",
+            "RPNA_LG1": "RPNA_LG1",
+            "RPNA": "T\u00ean \u0111\u1ea1i di\u1ec7n",
+            "RPCT": "M\u00e3 \u0111\u1ea1i di\u1ec7n",
+            "RPAD_LG1": "RPAD_LG1",
+            "RPAD": "\u0110\u1ecba ch\u1ec9 \u0111\u1ea1i di\u1ec7n",
+            "RENB": "S\u1ed1 v\u0103n b\u1eb1ng",
+            "REDT": "Ng\u00e0y c\u1ea5p b\u1eb1ng",
+            "PCTPBNB": "S\u1ed1 c\u00f4ng b\u1ed1 PCT",
+            "PCTPBDT": "Ng\u00e0y c\u00f4ng b\u1ed1 \u0111\u01a1n PCT",
+            "PCTPBCT": "N\u01b0\u1edbc c\u00f4ng b\u1ed1 \u0111\u01a1n PCT",
+            "PCTNB": "S\u1ed1 \u0111\u01a1n PCT",
+            "PCTDT": "Ng\u00e0y c\u00f4ng b\u1ed1 \u0111\u01a1n PCT",
+            "PCNB": "S\u1ed1 \u0111\u01a1n \u01b0u ti\u00ean",
+            "PCDT": "Ng\u00e0y \u01b0u ti\u00ean",
+            "PCCT": "Chi ti\u1ebft v\u1ec1 \u0111\u01a1n \u01b0u ti\u00ean",
+            "PBNB": "S\u1ed1 c\u00f4ng b\u1ed1",
+            "PBKC": "M\u00e3 lo\u1ea1i c\u00f4ng b\u1ed1",
+            "PBDT": "Ng\u00e0y c\u00f4ng b\u1ed1",
+            "OFCO": "M\u00e3 v\u0103n ph\u00f2ng SHTT",
+            "NPEDT": "Ng\u00e0y n\u1ed9p \u0111\u01a1n qu\u1ed1c gia",
+            "NCL": "Nice Classes",
+            "NCDE_LG1": "M\u00f4 t\u1ea3 ph\u00e2n lo\u1ea1i Nice song ng\u1eef",
+            "NCDE": "M\u00f4 t\u1ea3 ph\u00e2n lo\u1ea1i Nice",
+            "NCCL": "Nice Classes",
+            "MK_LG1": "T\u00ean nh\u00e3n song ng\u1eef",
+            "MKTXT": "Mark",
+            "MK": "Mark",
+            "MAIN_EFOLDER_REF": "Main EFolder Reference",
+            "LOGOEX": "Logo",
+            "LOGO": "Logo",
+            "LOC": "Ph\u00e2n lo\u1ea1i",
+            "LCL": "Ph\u00e2n lo\u1ea1i",
+            "LCDE": "Ph\u00e2n lo\u1ea1i",
+            "Journal": {
+                "AFNB_ORI": "S\u1ed1 \u0111\u01a1n"
+            },
+            "JOURNAL_DESCRIPTION": "M\u00f4 t\u1ea3 nh\u1eadt k\u00fd",
+            "IPC_TECH_SECTOR_TXT": "Ng\u00e0nh c\u00f4ng ngh\u1ec7 IPC",
+            "IPC_TECH_FIELD_TXT": "L\u0129nh v\u1ef1c c\u00f4ng ngh\u1ec7 IPC",
+            "IPC_TECH_FIELD": "L\u0129nh v\u1ef1c c\u00f4ng ngh\u1ec7 IPC",
+            "IPC_ORI": "Ph\u00e2n lo\u1ea1i IPC",
+            "IPC_MAIN": "IPC_MAIN",
+            "IPC": "IPC Classes",
+            "INRE": "N\u01a1i c\u01b0 tr\u00fa c\u1ee7a ng\u01b0\u1eddi s\u00e1ng ch\u1ebf",
+            "INNA_LG1": "Ng\u01b0\u1eddi s\u00e1ng ch\u1ebf song ng\u1eef",
+            "INNA": "Ng\u01b0\u1eddi s\u00e1ng ch\u1ebf",
+            "INCT": "N\u01b0\u1edbc c\u1ee7a ng\u01b0\u1eddi s\u00e1ng ch\u1ebf",
+            "INAD_LG1": "\u0110\u1ecba ch\u1ec9 ng\u01b0\u1eddi s\u00e1ng ch\u1ebf song ng\u1eef",
+            "INAD": "\u0110\u1ecba ch\u1ec9 ng\u01b0\u1eddi s\u00e1ng ch\u1ebf",
+            "GZPDT": "S\u1ed1 quy\u1ec3n c\u00f4ng b\u1ed1",
+            "GZNB": "S\u1ed1 quy\u1ec3n c\u00f4ng b\u1ed1",
+            "GZDT": "Ng\u00e0y quy\u1ec3n c\u00f4ng b\u1ed1",
+            "FILE_TYP": "Lo\u1ea1i t\u1eadp tin",
+            "FILE_ID": "M\u00e3 t\u1eadp tin",
+            "EXCRDT": "EXCRDT",
+            "EFOLDER_REF": "Th\u01b0 m\u1ee5c t\u00e0i li\u00eau",
+            "EFOLDER_ID": "M\u00e3 th\u01b0 m\u1ee5c \u0111i\u1ec7n t\u1eed",
+            "EDOC_REF": "T\u00e0i li\u1ec7u \u0111i\u1ec7n t\u1eed tham kh\u1ea3o",
+            "EDOC_ID": "M\u00e3 t\u00e0i li\u1ec7u \u0111i\u1ec7n t\u1eed",
+            "DOC_REF": "T\u00e0i li\u1ec7u tham kh\u1ea3o",
+            "DOC_ID": "M\u00e3 t\u00e0i li\u1ec7u",
+            "DETXT": "Th\u00f4ng tin v\u1ec1 nh\u00e0 thi\u1ebft k\u1ebf ki\u1ec3u d\u00e1ng",
+            "DESCTXT": "M\u00f4 t\u1ea3",
+            "DERE": "DERE",
+            "DENA_LG1": "Nh\u00e0 thi\u1ebft k\u1ebf ki\u1ec3u d\u00e1ng song ng\u1eef",
+            "DENA": "Nh\u00e0 thi\u1ebft k\u1ebf ki\u1ec3u d\u00e1ng",
+            "DECT": "DECT",
+            "DECLDES": "M\u00f4 t\u1ea3",
+            "DEAD_LG1": "\u0110\u1ecba ch\u1ec9 c\u1ee7a nh\u00e0 thi\u1ebft k\u1ebf ki\u1ec3u d\u00e1ng song ng\u1eef",
+            "DEAD": "\u0110\u1ecba ch\u1ec9 c\u1ee7a nh\u00e0 thi\u1ebft k\u1ebf ki\u1ec3u d\u00e1ng",
+            "CPC_ORI": "CPC Classes",
+            "CPC_MAIN": "CPC_MAIN",
+            "CPC": "CPC Classes",
+            "CLTXT": "Y\u00eau c\u1ea7u b\u1ea3o h\u1ed9",
+            "CLNB": "S\u1ed1 y\u00eau c\u1ea7u b\u1ea3o h\u1ed9",
+            "CLLG": "Ng\u00f4n ng\u1eef c\u1ee7a y\u00eau c\u1ea7u b\u1ea3o h\u1ed9",
+            "CLDE": "Y\u00eau c\u1ea7u b\u1ea3o h\u1ed9",
+            "CITCL": "Y\u00eau c\u1ea7u b\u1ea3o h\u1ed9",
+            "CITCAT": "Th\u01b0 m\u1ee5c",
+            "CINB": "S\u1ed1 t\u00e0i li\u1ec7u tr\u00edch d\u1eabn",
+            "CIDE": "M\u00f4 t\u1ea3 tr\u00edch d\u1eabn",
+            "CICL": "Y\u00eau c\u1ea7u tr\u00edch d\u1eabn",
+            "CICA": "Th\u01b0 m\u1ee5c t\u00e0i li\u1ec7u tr\u00edch d\u1eabn",
+            "CATEGORY": "Th\u01b0 m\u1ee5c",
+            "APTXT": "Ng\u01b0\u1eddi n\u1ed9p \u0111\u01a1n",
+            "APRE": "N\u01a1i c\u01b0 tr\u00fa c\u1ee7a ng\u01b0\u1eddi n\u1ed9p \u0111\u01a1n",
+            "APPL_TYP_TXT": "Lo\u1ea1i ng\u01b0\u1eddi n\u1ed9p \u0111\u01a1n",
+            "APPL_TYP": "Lo\u1ea1i ng\u01b0\u1eddi n\u1ed9p \u0111\u01a1n",
+            "APPL_SUBTYP_TXT": "Lo\u1ea1i ng\u01b0\u1eddi n\u1ed9p \u0111\u01a1n",
+            "APPL_SUBTYP": "Lo\u1ea1i ng\u01b0\u1eddi n\u1ed9p \u0111\u01a1n",
+            "APNA_LG1": "Ng\u01b0\u1eddi n\u1ed9p \u0111\u01a1n song ng\u1eef",
+            "APNA": "Ng\u01b0\u1eddi n\u1ed9p \u0111\u01a1n",
+            "APCT": "N\u01b0\u1edbc c\u1ee7a ng\u01b0\u1eddi n\u1ed9p \u0111\u01a1n",
+            "APAD_LG1": "\u0110\u1ecba ch\u1ec9 ng\u01b0\u1eddi n\u1ed9p \u0111\u01a1n song ng\u1eef",
+            "APAD": "\u0110\u1ecba ch\u1ec9 ng\u01b0\u1eddi n\u1ed9p \u0111\u01a1n",
+            "AFNB_ORI": "S\u1ed1 \u0111\u01a1n g\u1ed1c",
+            "AFNB": "S\u1ed1 \u0111\u01a1n n\u1ed9p",
+            "AFDT": "Ng\u00e0y n\u1ed9p \u0111\u01a1n",
+            "ABTXT": "T\u00f3m t\u1eaft",
+            "ABST_LG1": "T\u00f3m t\u1eaft song ng\u1eef",
+            "ABST_EN": "T\u00f3m t\u1eaft b\u1eb1ng ti\u1ebfng anh",
+            "ABST": "T\u00f3m t\u1eaft"
+        },
+        "search": {
+            "suggestion": {
+                "label": "Enter Keyword(s) and/or click Search for Patents listing"
+            },
+            "concordance": {
+                "placeholder": "Enter Keyword(s) for e.g.:Optics, Medical,Surface"
+            }
+        },
+        "placeholder": {
+            "todate": "e.g. 2017.12.31",
+            "phonetic": {
+                "min": {
+                    "relevance": ""
+                }
+            },
+            "id": "e.g. CH2018000001",
+            "fromdate": "e.g. 2017.12.31",
+            "documentType": "e.g. Spec",
+            "documentParentId": "e.g. CH2018000001",
+            "documentName": "e.g. CH2018000001_spec_000001",
+            "documentContent": "e.g. This is a specification document",
+            "boost": {
+                "exact": {
+                    "match": ""
+                }
+            },
+            "VNCL": "e.g. 8.1.19",
+            "VCL": "e.g. 8.1.19",
+            "TITL_LG1": "e.g. Nestl\u00e9 KitKat",
+            "TITL_EN": "e.g. Nestl\u00e9 KitKat",
+            "TITL": "e.g. Nestl\u00e9 KitKat",
+            "STLB_ORI": "e.g. Published",
+            "STLB": "e.g. Published",
+            "STDT": "e.g. 2017.12.31",
+            "STCD": "e.g. FG",
+            "RPRE": "e.g. CH",
+            "RPNA_LG1": "e.g. Nestl\u00e9",
+            "RPNA": "e.g. Nestl\u00e9",
+            "RPCT": "e.g. CH",
+            "RPAD_LG1": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+            "RPAD": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+            "RENB": "e.g. CH2018000001",
+            "REDT": "e.g. 2017.12.31",
+            "PCTPBNB": "2018/000001",
+            "PCTPBDT": "",
+            "PCTPBCT": "e.g. CH",
+            "PCTNB": "e.g. PCT/CH2018/000001",
+            "PCTDT": "e.g. 2017.12.31",
+            "PCNB": "e.g. CH2018000001",
+            "PCDT": "e.g. 2017.12.31",
+            "PCCT": "e.g. CH",
+            "PBNB": "e.g. 2018/000001",
+            "PBKC": "",
+            "PBDT": "e.g. 2017.12.31",
+            "OFCO": "e.g. CH",
+            "NPEDT": "e.g. 2017.12.31",
+            "NCL": "e.g. 0100662",
+            "NCDE_LG1": "e.g. Chocolate for kids",
+            "NCDE": "e.g. Chocolate for kids",
+            "NCCL": "e.g. 0100662",
+            "MK_LG1": "e.g. KitKat",
+            "MKTXT": "e.g. KitKat",
+            "MK": "e.g. KitKat",
+            "LOGOEX": "",
+            "LOGO": "",
+            "LOC": "e.g. Geneva",
+            "LCL": "e.g. 26.6",
+            "LCDE": "e.g. Chocolate for kids",
+            "Journal": {
+                "AFNB_ORI": "e.g. CH2018000001"
+            },
+            "JOURNAL_DESCRIPTION": "e.g. This is a food journal",
+            "IPC_TECH_SECTOR_TXT": "e.g. Human Necessities",
+            "IPC_TECH_FIELD_TXT": "e.g. Human Necessities",
+            "IPC_TECH_FIELD": "e.g. Human Necessities",
+            "IPC_ORI": "e.g. A02H 15/04",
+            "IPC_MAIN": "",
+            "IPC": "e.g. A02H1504",
+            "INRE": "",
+            "INNA_LG1": "",
+            "INNA": "",
+            "INCT": "",
+            "INAD_LG1": "",
+            "INAD": "",
+            "GZPDT": "e.g. 2017.12.31",
+            "GZNB": "",
+            "GZDT": " e.g. 2017.12.31",
+            "FILE_TYP": "e.g. P, D, M",
+            "FILE_ID": "e.g. AP-A-2008-10",
+            "EXCRDT": "e.g. 2017.12.31",
+            "EFOLDER_REF": "e.g. 1-2018-2",
+            "EDOC_REF": "e.g. 158-2008-1",
+            "DOC_REF": "e.g. AP-AF11-2008-2",
+            "DOC_ID": "e.g. AP-A-2008-10",
+            "DETXT": "e.g. Nestl\u00e9 is the world's largest food and beverage company.",
+            "DESCTXT": "",
+            "DERE": "e.g. CH",
+            "DENA_LG1": "e.g. Nestl\u00e9",
+            "DENA": "e.g. Nestl\u00e9",
+            "DECT": "e.g. CH",
+            "DECLDES": "",
+            "DEAD_LG1": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+            "DEAD": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+            "CPC_ORI": "e.g. A02H 15/04",
+            "CPC_MAIN": "",
+            "CPC": "e.g. A02H1504",
+            "CLTXT": "",
+            "CLNB": "",
+            "CLLG": "e.g. EN",
+            "CLDE": "",
+            "CITCL": "",
+            "CITCAT": "",
+            "CINB": "",
+            "CIDE": "",
+            "CICL": "",
+            "CICA": "",
+            "CATEGORY": "",
+            "APTXT": "e.g. Nestl\u00e9",
+            "APRE": "e.g. CH",
+            "APPL_TYP_TXT": "e.g. National Application",
+            "APPL_TYP": "e.g. National Application",
+            "APPL_SUBTYP_TXT": "e.g. National Application",
+            "APPL_SUBTYP": "e.g. National Application",
+            "APNA_LG1": "e.g. Nestl\u00e9",
+            "APNA": "e.g. Nestl\u00e9",
+            "APCT": "e.g. CH",
+            "APAD_LG1": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+            "APAD": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+            "AFNB_ORI": "e.g. CH2018000001",
+            "AFNB": "e.g. CH2018000001",
+            "AFDT": "e.g. 2017.12.31",
+            "ABTXT": "e.g. This application belongs to the food category.",
+            "ABST_LG1": "e.g. This application belongs to the food category.",
+            "ABST_EN": "e.g. This application belongs to the food category.",
+            "ABST": "e.g. This application belongs to the food category."
+        },
+        "display": {
+            "years": "Year",
+            "type": "Lo\u1ea1i t\u00e0i li\u1ec7u",
+            "todate": "to",
+            "suggestion": {
+                "technical": {
+                    "field": "L\u0129nh v\u1ef1c c\u00f4ng ngh\u1ec7"
+                },
+                "VCL": "Ph\u00e2n lo\u1ea1i Vienna",
+                "String": "Chu\u1ed7i",
+                "Number": "S\u1ed1",
+                "NCL": "Ph\u00e2n lo\u1ea1i Nice",
+                "LCL": "Ph\u00e2n lo\u1ea1i Locarno",
+                "Default": "M\u1eb7c \u0111\u1ecbnh",
+                "Date": "Ng\u00e0y",
+                "Classification": "Ph\u00e2n lo\u1ea1i",
+                "AlphaNumeric": "AlphaNumeric"
+            },
+            "sector": {
+                "transportation": "Transportation",
+                "transport": "Transport",
+                "tools_and_machines": "Tools And Machines",
+                "textiles_and_accessories": "Textiles And Accessories",
+                "research_and_technology": "Research And Technology",
+                "packaging": "Packaging",
+                "other_sectors": "Other Sectors",
+                "other_fields": "Other Fields",
+                "non_classified": "Non Classified",
+                "mechanical_engineering": "Mechanical Engineering",
+                "leisure_and_education": "Leisure And Education",
+                "instruments": "Instruments",
+                "ict_and_audiovisual": "ICT And Audiovisual",
+                "household_equipment": "Household Equipment",
+                "health_pharma_and_cosmetics": "Health, Pharma And Cosmetics",
+                "health": "Health",
+                "furniture_and_household_goods": "Furniture And Household Goods",
+                "electricity_and_lighting": "Electricity And Lighting",
+                "electrical_engineering": "Electrical Engineering",
+                "construction": "Construction",
+                "clothing": "Clothing",
+                "chemistry": "Chemistry",
+                "chemicals": "Chemicals",
+                "business_services": "Business Services",
+                "average_others": "Average Others",
+                "agriculture": "Agriculture",
+                "agricultural_products_and_food_preparation": "Agricultural Products And Food Preparation",
+                "advertising": "Advertising"
+            },
+            "search": {
+                "criteria": "truy v\u1ea5n"
+            },
+            "score": "S\u1ef1 li\u00ean quan",
+            "phonetic": {
+                "min": {
+                    "relevance": "S\u1ef1 li\u00ean quan nh\u1ecf nh\u1ea5t"
+                }
+            },
+            "pct_national_phase": "Pha qu\u1ed1c gia \u0111\u01a1n PCT",
+            "parentId": "\u0110\u1ecbnh dang s\u00e1ng ch\u1ebf",
+            "journal": {
+                "detail": {
+                    "APP_REPRESENTATIVE_NAME": "Representative",
+                    "APP_REGISTRATION_NUMBER": "Registration Number",
+                    "APP_REGISTRATION_DATE": "Registration Date",
+                    "APP_REGISTERED_CLASSES_DETAIL": "Nice Classes",
+                    "APP_PUBLICATION_DATE": "Publication Date",
+                    "APP_PCT_PUBLICATION_ID": "PCT Publication Number",
+                    "APP_PCT_PUBLICATION_DATE": "PCT Publication Date",
+                    "APP_PCT_FILING_DATE": "PCT Filing Date",
+                    "APP_OWNER_NAME": "Owner",
+                    "APP_NAME": "Mark Name",
+                    "APP_LOGO_COLOURS": "Logo Colours",
+                    "APP_LOCARNO": "Locarno Classes",
+                    "APP_IPC_EDITION": "IPC Edition",
+                    "APP_INVENTOR_NAME": "Inventor",
+                    "APP_FILING_DATE": "Filing Date",
+                    "APP_FILE_NUMBER": "Application Number",
+                    "APP_EXPIRATION_DATE": "Expiry Date",
+                    "APP_EXAM_IPC": "IPC Classes",
+                    "ACTION_DATE": "Action Date"
+                }
+            },
+            "id": "\u0110\u1ecbnh dang",
+            "group": "Nh\u00f3m",
+            "fromdate": "T\u1eeb ng\u00e0y",
+            "country": {
+                "code": {
+                    "ZW": "Zimbabwe",
+                    "ZM": "Zambia",
+                    "XX": "Not Specified",
+                    "VN": "Vietnam",
+                    "UG": "Uganda",
+                    "TZ": "Tanzania",
+                    "TP": "Timor-Leste",
+                    "TN": "Tunisia",
+                    "TL": "Timor-Leste",
+                    "TH": "Thailand",
+                    "SG": "Singapore",
+                    "SD": "Sudan",
+                    "SA": "Saudi Arabia",
+                    "RW": "Rwanda",
+                    "RS": "Serbia",
+                    "PH": "Philippines",
+                    "OM": "Oman",
+                    "NA": "Namibia",
+                    "MZ": "Mozambique",
+                    "MY": "Malaysia",
+                    "MW": "Malawi",
+                    "MM": "Myanmar",
+                    "MD": "Moldova",
+                    "MA": "Morocco",
+                    "LA": "Laos",
+                    "KH": "Cambodia",
+                    "KE": "Kenya",
+                    "JO": "Jordan",
+                    "IN": "India",
+                    "ID": "Indonesia",
+                    "IC": "Saint Lucia",
+                    "GM": "Gambia",
+                    "GH": "Ghana",
+                    "ET": "Ethiopia",
+                    "EG": "Egypt",
+                    "DZ": "Algeria",
+                    "DO": "Dominican Republic",
+                    "CU": "Cuba",
+                    "CR": "Costa Rica",
+                    "CN": "China",
+                    "BY": "Belarus",
+                    "BW": "Botswana",
+                    "BU": "Bulgaria",
+                    "BN": "Brunei",
+                    "AR": "Argentina",
+                    "AP": "ARIPO",
+                    "-": "Unknown"
+                }
+            },
+            "content_type": "\u0110\u1ecbnh d\u1ea1ng",
+            "content_stored": "N\u1ed9i dung",
+            "content": "N\u1ed9i dung",
+            "boost": {
+                "exact": {
+                    "match": "Boost Exact Match"
+                }
+            },
+            "application_filed": "Application Filed",
+            "all": "All",
+            "WDDT": "Ng\u00e0y r\u00fat \u0111\u01a1n",
+            "VNCL": "Ph\u00e2n lo\u1ea1i Vienna",
+            "VCL_RANKED": "Ranked by Vienna Classes",
+            "VCL_NON_CLASSIFIED": "Non Vienna Classified",
+            "VCL_CATEGORY": "Vienna Category",
+            "VCL": "Ph\u00e2n lo\u1ea1i Vienna",
+            "TXT": "C\u00e1c tr\u01b0\u1eddng",
+            "TITXT": "T\u00ean",
+            "TITL_LG1": "T\u00ean song ng\u1eef",
+            "TITL_EN": "T\u00ean ti\u1ebfng anh",
+            "TITL": "T\u00ean",
+            "TDNB": "T\u1ed5ng ki\u1ec3u d\u00e1ng",
+            "SYPO": "V\u1ecb tr\u00ed bi\u1ec3u t\u01b0\u1ee3ng",
+            "STLB_ORI": "Tr\u1ea1ng th\u00e1i qu\u1ed1c t\u1ebf",
+            "STLB": "Tr\u1ea1ng th\u00e1i",
+            "STDTL": "Danh s\u00e1ch ng\u00e0y tr\u1ea1ng th\u00e1i",
+            "STDT": "Ng\u00e0y tr\u1ea1ng th\u00e1i",
+            "STCDL": "Danh s\u00e1ch m\u00e3 tr\u1ea1ng th\u00e1i",
+            "STCD": "M\u00e3 tr\u1ea1ng th\u00e1i",
+            "SRDT": "S\u1ef1 ki\u1ec7n m\u1eabu v\u1eadt",
+            "SPND": "\u0110\u1ecbnh danh m\u1eabu v\u1eadt",
+            "SPDE": "M\u00f4 t\u1ea3 m\u1eabu v\u1eadt",
+            "SP": "V\u1ecb tr\u00ed bi\u1ec3u t\u01b0\u1ee3ng",
+            "SOUNDEX": "\u00c2m thanh t\u1ed3n t\u1ea1i",
+            "SOUND": "\u00c2m thanh",
+            "SERIAL_F_CD": "Serial (F)",
+            "SELG": "Ng\u00f4n ng\u1eef th\u1ee9 hai",
+            "SEARCH_INFO": "The word searched may appear in previous version of this application",
+            "SEARCH_CRITERIA": "Search Criteria",
+            "RPTXT": "Th\u00f4ng tin v\u1ec1 \u0111\u1ea1i di\u1ec7n",
+            "RPRE": "N\u01a1i c\u01b0 tr\u00fa \u0111\u1ea1i di\u1ec7n",
+            "RPNA_LG1": "Representative Name Bilingual",
+            "RPNA": "T\u00ean \u0111\u1ea1i di\u1ec7n",
+            "RPCT": "N\u01b0\u1edbc \u0111\u1ea1i di\u1ec7n",
+            "RPAD_LG1": "Representative Address Bilingual",
+            "RPAD": "\u0110\u1ecba ch\u1ec9 \u0111\u1ea1i di\u1ec7n",
+            "RENEW_SD": "Start Date",
+            "RENEW_ED": "End Date",
+            "RENEW": "Duration(s) of Renewal",
+            "RENB_ORI": "Original Registration Number",
+            "RENB": "S\u1ed1 b\u1eb1ng",
+            "REIN": "S\u1ed1 v\u00e0 ng\u00e0y c\u1ea5p b\u1eb1ng",
+            "REDT": "Ng\u00e0y c\u1ea5p b\u1eb1ng",
+            "Query": "Solr Query",
+            "PTETXT": "S\u1ef1 ki\u1ec7n s\u00e1ng ch\u1ebf",
+            "PRLG": "Ng\u00f4n ng\u1eef ch\u00ednh",
+            "PKDE": "M\u00f4 t\u1ea3 m\u00e3 lo\u1ea1i c\u00f4ng b\u1ed1",
+            "PCTXT": "Chi ti\u1ebft \u01b0u ti\u00ean",
+            "PCTPBNB": "S\u1ed1 c\u00f4ng b\u1ed1 PCT",
+            "PCTPBIN": "S\u1ed1 v\u00e0 ng\u00e0y c\u00f4ng b\u1ed1 PCT",
+            "PCTPBDT": "Ng\u00e0y c\u00f4ng b\u1ed1 PCT",
+            "PCTPBCT": "N\u01b0\u1edbc c\u00f4ng b\u1ed1 PCT",
+            "PCTNB": "S\u1ed1 \u0111\u01a1n PCT",
+            "PCTIN": "S\u1ed1 \u0111\u01a1n v\u00e0 ng\u00e0y n\u1ed9p \u0111\u01a1n PCT",
+            "PCTDT": "Ng\u00e0y c\u00f4ng b\u1ed1 PCT",
+            "PCTCT": "N\u01b0\u1edbc c\u1ee7a \u0111\u01a1n PCT",
+            "PCNB": "S\u1ed1 \u01b0u ti\u00ean",
+            "PCDT": "Ng\u00e0y \u01b0u ti\u00ean",
+            "PCCT": "Chi ti\u1ebft v\u1ec1 \u01b0u ti\u00ean",
+            "PBNB": "S\u1ed1 c\u00f4ng b\u1ed1",
+            "PBLG": "Ng\u00f4n ng\u1eef c\u00f4ng b\u1ed1",
+            "PBKC": "M\u00e3 lo\u1ea1i c\u00f4ng b\u1ed1",
+            "PBIN": "S\u1ed1 v\u00e0 ng\u00e0y c\u00f4ng b\u1ed1",
+            "PBDTL": "Danh s\u00e1ch ng\u00e0y c\u00f4ng b\u1ed1",
+            "PBDT": "Ng\u00e0y c\u00f4ng b\u1ed1",
+            "PBCT": "N\u01b0\u1edbc c\u00f4ng b\u1ed1",
+            "PATCITTXT": "\u0110\u1ed1i ch\u1ee9ng s\u00e1ng ch\u1ebf",
+            "PATCIT": "S\u00e1ng ch\u1ebf",
+            "OPSDT": "Ng\u00e0y ph\u1ea3n \u0111\u1ed1i",
+            "OFCO": "M\u00e3 v\u0103n ph\u00f2ng IP",
+            "NPLCITXT": "\u0110\u1ed1i ch\u1ee9ng NPL",
+            "NPLCIT": "Non Patent Literature",
+            "NPEDT": "Ng\u00e0y n\u1ed9p \u0111\u01a1n",
+            "NCL_RANKED": "Ranked by Nice Classes",
+            "NCL_NON_CLASSIFIED": "Non Nice Classified",
+            "NCL_INDUSTRY_SECTOR": "Nice Industry Sector",
+            "NCL": "Ph\u00e2n lo\u1ea1i Nice",
+            "NCDE_LG1": "M\u00f4 t\u1ea3 Ph\u00e2n lo\u1ea1i Nice song ng\u1eef",
+            "NCDE": "M\u00f4 t\u1ea3 Ph\u00e2n lo\u1ea1i Nice",
+            "NCCL": "Ph\u00e2n lo\u1ea1i Nice",
+            "MSNB": "T\u1ed5ng c\u00e1c lo\u1ea1i nh\u00e3n hi\u1ec7u",
+            "MNNA": "Nh\u00e3n hi\u1ec7u t\u1ef1 nhi\u00ean",
+            "MK_LG1": "T\u00ean nh\u00e3n hi\u1ec7u song ng\u1eef",
+            "MKTXT": "Nh\u00e3n hi\u1ec7u",
+            "MKTRLT": "Mark Transliteration",
+            "MKTR": "Nh\u00e3n hi\u1ec7u d\u1ecbch",
+            "MKNSL": "T\u00ean nh\u00e3n",
+            "MKFW": "Nh\u00e3n hi\u1ec7u qu\u1ed1c t\u1ebf",
+            "MKFT": "\u0110\u1eb7c \u0111i\u1ec3m nh\u00e3n hi\u1ec7u",
+            "MKETXT": "S\u1ef1 ki\u1ec7n Nh\u00e3n hi\u1ec7u",
+            "MKDI": "T\u1eeb ch\u1ed1i nh\u00e3n hi\u1ec7u",
+            "MKDE": "Chi ti\u1ebft m\u00f4 t\u1ea3 Nh\u00e3n hi\u1ec7u",
+            "MKDC": "T\u1eeb ch\u1ed1i",
+            "MKCSD": "Ng\u00e0y tr\u1ea1ng th\u00e1i hi\u1ec7n t\u1ea1i",
+            "MKCLR": "Nh\u00e3n hi\u1ec7u m\u00e0u",
+            "MKCLDE": "M\u00f4 t\u1ea3 m\u00e0u nh\u00e3n hi\u1ec7u",
+            "MK": "Nh\u00e3n hi\u1ec7u",
+            "MD_FTYP": "Lo\u1ea1i ch\u00ednh",
+            "MAIN_EFOLDER_REF": "Th\u01b0 m\u1ee5c t\u00e0i li\u1ec7u \u0111i\u1ec7n t\u1eed tham kh\u1ea3o ch\u00ednh",
+            "LOGO_INID": "(540) Logo",
+            "LOGOEX": "Logo",
+            "LOGO": "Logo",
+            "LOC": "Ph\u00e2n lo\u1ea1i",
+            "LIC": "License Details",
+            "LEGALDT": "Ng\u00e0y ph\u00e1p l\u00fd",
+            "LCL_NON_CLASSIFIED": "Non Locarno Classified",
+            "LCL_INDUSTRY_SECTOR": "Locarno Industry Sector",
+            "LCL": "Ph\u00e2n lo\u1ea1i",
+            "LCENB": "Phi\u00ean b\u1ea3n Locarno",
+            "LCDE": "Ph\u00e2n lo\u1ea1i",
+            "LABEL_LG_1": "Nh\u00e3n song ng\u1eef",
+            "LABEL": "Nh\u00e3n",
+            "Journal": {
+                "AFNB_ORI": "S\u1ed1 \u0111\u01a1n n\u1ed9p"
+            },
+            "JOURNAL_DT": "Ng\u00e0y nh\u1eadt k\u00fd",
+            "JOURNAL_DESCRIPTION": "M\u00f4 t\u1ea3 nh\u1eadt k\u00fd",
+            "JOURNAL_CONTENT": "Chi ti\u1ebft",
+            "JOURNAL_CD": "M\u00e3 nh\u1eadt k\u00fd",
+            "IPC_TECH_SECTOR_TXT": "Ng\u00e0nh c\u00f4ng ngh\u1ec7 c\u1ee7a ph\u00e2n lo\u1ea1i IPC",
+            "IPC_TECH_SECTOR": "Ng\u00e0nh c\u00f4ng ngh\u1ec7",
+            "IPC_TECH_FIELD_TXT": "L\u0129nh v\u1ef1c c\u00f4ng ngh\u1ec7 c\u1ee7a ph\u00e2n lo\u1ea1i IPC",
+            "IPC_TECH_FIELD": "L\u0129nh v\u1ef1c c\u00f4ng ngh\u1ec7 c\u1ee7a ph\u00e2n lo\u1ea1i IPC",
+            "IPC_SHORT": "IPC Classes",
+            "IPC_ORIGINAL": "Ph\u00e2n lo\u1ea1i IPC",
+            "IPC_ORI": "Ph\u00e2n lo\u1ea1i IPC",
+            "IPC_NON_CLASSIFIED": "Non IPC Classified",
+            "IPC": "Ph\u00e2n lo\u1ea1i IPC",
+            "INRE": "N\u01a1i c\u01b0 tr\u00fa c\u1ee7a nh\u00e0 s\u00e1ng ch\u1ebf",
+            "INNA_LG1": "Nh\u00e0 s\u00e1ng ch\u1ebf song ng\u1eef",
+            "INNA": "Nh\u00e0 s\u00e1ng ch\u1ebf",
+            "INCT": "N\u01b0\u1edbc c\u1ee7a nh\u00e0 s\u00e1ng ch\u1ebf",
+            "INAD_LG1": "\u0110\u1ecba ch\u1ec9 c\u1ee7a nh\u00e0 s\u00e1ng ch\u1ebf song ng\u1eef",
+            "INAD": "\u0110\u1ecba ch\u1ec9 c\u1ee7a nh\u00e0 s\u00e1ng ch\u1ebf",
+            "Group": "Nh\u00f3m",
+            "GZTXT": "Th\u00f4ng tin c\u00f4ng b\u1ed1",
+            "GZPDT": "Ng\u00e0y c\u1ee7a quy\u1ec3n c\u00f4ng b\u1ed1",
+            "GZNB": "S\u1ed1 c\u00f4ng b\u1ed1",
+            "GZDT": "Ng\u00e0y c\u00f4ng b\u1ed1",
+            "GRDT": "Ng\u00e0y c\u1ea5p b\u1eb1ng",
+            "FILE_TYP": "Lo\u1ea1i tr\u01b0\u1eddng",
+            "FILE_ID": "M\u00e3 tr\u01b0\u1eddng",
+            "EXDT": "Ng\u00e0y x\u00e9t nghi\u1ec7m",
+            "EVNA": "T\u00ean s\u1ef1 ki\u1ec7n",
+            "EPDT": "Ng\u00e0y h\u1ebft h\u1ea1n",
+            "EFOLDER_REF": "Th\u01b0 m\u1ee5c \u0111i\u1ec7n t\u1eed tham kh\u1ea3o",
+            "EFOLDER_ID": "M\u00e3 th\u01b0 m\u1ee5c \u0111i\u1ec7n t\u1eed",
+            "EDOC_TYP": "Lo\u1ea1i t\u00e0i li\u1ec7u \u0111i\u1ec7n t\u1eed",
+            "EDOC_REF": "T\u00e0i li\u1ec7u \u0111i\u1ec7n t\u1eed tham kh\u1ea3o",
+            "EDOC_ID": "M\u00e3 t\u00e0i li\u1ec7u \u0111i\u1ec7n t\u1eed",
+            "EDOC_DT": "Ng\u00e0y c\u1ee7a t\u00e0i li\u1ec7u \u0111i\u1ec7n t\u1eeb",
+            "EDNB": "S\u1ed1 phi\u00ean b\u1ea3n",
+            "DT": "Ng\u00e0y",
+            "DRAWING": "B\u1ea3n v\u1ebd",
+            "DOC_REF": "T\u00e0i li\u1ec7u tham kh\u1ea3o",
+            "DOC_ID": "M\u00e3 t\u00e0i li\u1ec7u",
+            "DE_LG1": "M\u00f4 t\u1ea3 Ki\u1ec3u d\u00e1ng song ng\u1eef",
+            "DETXT": "Th\u00f4ng tin v\u1ec1 nh\u00e0 thi\u1ebft k\u1ebf ki\u1ec3u d\u00e1ng",
+            "DETITXT": "T\u00ean",
+            "DETI": "T\u00ean ki\u1ec3u d\u00e1ng",
+            "DETD": "T\u1ed1ng s\u1ed1 ki\u1ec3u d\u00e1ng",
+            "DETAILS": "Details",
+            "DESCTXT": "M\u00f4 t\u1ea3",
+            "DERE": "Design Residence",
+            "DEPKD": "Ki\u1ec3u d\u00e1ng thi\u00ean nhi\u00ean",
+            "DENOVELTY": "Design Novelty Statement",
+            "DENA_LG1": "T\u00ean Nh\u00e0 thi\u1ebft k\u1ebf song ng\u1eef",
+            "DENA": "Nh\u00e0 thi\u1ebft k\u1ebf ki\u1ec3u d\u00e1ng",
+            "DEID_LG1": "\u0110\u1ecbnh danh Ki\u1ec3u d\u00e1ng song ng\u1eef",
+            "DEID": "\u0110\u1ecbnh danh Ki\u1ec3u d\u00e1ng",
+            "DEETXT": "S\u1ef1 ki\u1ec7n Ki\u1ec3u d\u00e1ng",
+            "DECT": "Design Country",
+            "DECSD": "Ng\u00e0y tr\u1ea1ng th\u00e1i hi\u1ec7n t\u1ea1i",
+            "DECLTXT": "Y\u00eau c\u1ea7u b\u1ea3o h\u1ed9 Ki\u1ec3u d\u00e1ng",
+            "DECLNO": "Y\u00eau c\u1ea7u b\u1ea3o h\u1ed9",
+            "DECLDES": "M\u00f4 t\u1ea3",
+            "DECDI": "\u0110\u1ecbnh danh chi ti\u1ebft Y\u00eau c\u1ea7u b\u1ea3o h\u1ed9 Ki\u1ec3u d\u00e1ng",
+            "DECD": "Chi ti\u1ebft Y\u00eau c\u1ea7u b\u1ea3o h\u1ed9 Ki\u1ec3u d\u00e1ng",
+            "DEAD_LG1": "\u0110\u1ecba ch\u1ec9 ki\u1ec3u d\u00e1ng song ng\u1eef",
+            "DEAD": "\u0110\u1ecba ch\u1ec9 Ki\u1ec3u d\u00e1ng",
+            "DE": "M\u00f4 t\u1ea3 Ki\u1ec3u d\u00e1ng",
+            "CRNA": "T\u00ean ng\u01b0\u1eddi nh\u1eadn th\u01b0",
+            "CRAD": "\u0110\u1ecba ch\u1ec9 nh\u1eadn th\u01b0",
+            "CPC_ORI": "Ph\u00e2n lo\u1ea1i CPC",
+            "CPC": "Ph\u00e2n lo\u1ea1i CPC",
+            "CODE": "M\u00e3",
+            "CLTXT": "C\u00e1c y\u00eau c\u1ea7u b\u1ea3o h\u1ed9",
+            "CLNB": "S\u1ed1 y\u00eau c\u00e0u b\u1ea3o h\u1ed9",
+            "CLLG": "Ng\u00f4n ng\u1eef c\u1ee7a Y\u00eau c\u1ea7u b\u1ea3o h\u1ed9",
+            "CLDE": "M\u00f4 t\u1ea3 y\u00eau c\u1ea7u b\u1ea3o h\u1ed9",
+            "CITXT": "C\u00e1c \u0111\u1ed1i ch\u1ee9ng",
+            "CITTYP": "Lo\u1ea1i \u0111\u1ed1i ch\u1ee9ng",
+            "CITREF": "Tham kh\u1ea3o",
+            "CITDOC": "T\u00e0i li\u1ec7u \u0111\u1ed1i ch\u1ee9ng",
+            "CITCL": "Y\u00eau c\u1ea7u b\u1ea3o h\u1ed9",
+            "CITCAT": "Danh m\u1ee5c",
+            "CINB": "S\u1ed1 \u0111\u1ed1i ch\u1ee9ng",
+            "CIDT": "Ng\u00e0y c\u1ea5p b\u1eb1ng",
+            "CIDENB": "S\u1ed1 t\u00e0i li\u1ec7u \u0111\u1ed1i ch\u1ee9ng",
+            "CIDE": "M\u00f4 t\u1ea3 \u0111\u1ed1i ch\u1ee9ng",
+            "CICT": "N\u01b0\u1edbc c\u1ee7a \u0111\u1ed1i ch\u1ee9ng",
+            "CICL": "Y\u00eau c\u1ea7u \u0111\u1ed1i ch\u1ee9ng",
+            "CICA": "Danh m\u1ee5c tr\u00edch d\u1eabn",
+            "CCDT": "S\u1ef1 ki\u1ec7n h\u1ee7y",
+            "CATEGORY": "Danh m\u1ee5c",
+            "CAPTURE_DT": "Ng\u00e0y ch\u1ee5p",
+            "CANA": "\u0110\u1ecba ch\u1ec9 nh\u1eadn th\u01b0",
+            "BASIC_CD": "C\u01a1 b\u1ea3n",
+            "Application_registered": "C\u1ea5p b\u1eb1ng",
+            "Application_expired": "H\u1ebft h\u1ea1n",
+            "Action": "Ho\u1ea1t \u0111\u1ed9ng",
+            "APTXT": "Ng\u01b0\u1eddi n\u1ed9p \u0111\u01a1n",
+            "APRE": "N\u01a1i c\u01b0 tr\u00fa c\u1ee7a ng\u01b0\u1eddi n\u1ed9p \u0111\u01a1n",
+            "APPL_TYP_TXT": "Lo\u1ea1i \u0111\u01a1n",
+            "APPL_TYP": "Lo\u1ea1i ng\u01b0\u1eddi n\u1ed9p \u0111\u01a1n",
+            "APPL_SUBTYP_TXT": "Lo\u1ea1i \u0111\u01a1n",
+            "APPL_SUBTYP": "Lo\u1ea1i \u0111\u01a1n",
+            "APNT": "Qu\u1ed1c t\u1ecbch ng\u01b0\u1eddi n\u1ed9p \u0111\u01a1n",
+            "APNA_LG1": "Ng\u01b0\u1eddi n\u1ed9p \u0111\u01a1n Song ng\u1eef",
+            "APNA": "Ng\u01b0\u1eddi n\u1ed9p \u0111\u01a1n",
+            "APCT": "N\u01b0\u1edbc ng\u01b0\u1eddi n\u1ed9p \u0111\u01a1n",
+            "APAD_LG1": "\u0110\u1ecba ch\u1ec9 ng\u01b0\u1eddi n\u1ed9p \u0111\u01a1n Song ng\u1eef",
+            "APAD": "\u0110\u1ecba ch\u1ec9 ng\u01b0\u1eddi n\u1ed9p \u0111\u01a1n",
+            "ANU_YEAR": "Year",
+            "ANU_STDT": "Validity Start",
+            "ANU_PAY": "Payment",
+            "ANU_ENDT": "Validity End",
+            "ANU": "Annuity Details",
+            "AFNB_ORI": "S\u1ed1 \u0111\u01a1n",
+            "AFNB": "S\u1ed1 \u0111\u01a1n",
+            "AFLG": "Ng\u00f4n ng\u1eef n\u1ed9p \u0111\u01a1n",
+            "AFIN": "S\u1ed1 \u0111\u01a1n v\u00e0 ng\u00e0y n\u1ed9pFiling",
+            "AFDT": "Ng\u00e0y n\u1ed9p \u0111\u01a1n",
+            "AFCT": "Qu\u1ed1c gia n\u1ed9p \u0111\u01a1n",
+            "ACTION_TYP": "Lo\u1ea1i ho\u1ea1t \u0111\u1ed9ng",
+            "ACTION": "Ho\u1ea1t \u0111\u1ed9ng",
+            "ABTXT": "T\u00f3m t\u1eaft",
+            "ABST_LG1": "T\u00f3m t\u1eaft song ng\u1eef",
+            "ABST_EN": "T\u00f3m t\u1eaft Ti\u1ebfng anh",
+            "ABST": "Abstract"
+        }
+    },
+    "facet": {
+        "label": {
+            "true": "\u0110\u00fang",
+            "status": {
+                "RL": "Awaiting Court Action",
+                "PE": "pending",
+                "MM": "Lapsed",
+                "MK": "Expired",
+                "MG": "Invalidated",
+                "MF": "Revoked",
+                "ME": "Revoked",
+                "MC": "Cancelled",
+                "MB": "Appealed",
+                "GA": "Converted",
+                "FG": "Registered",
+                "FC": "Rejected",
+                "FB": "Suspended",
+                "FA": "Withdrawn",
+                "EM": "empty",
+                "DE": "deleted",
+                "CZ": "Opposed",
+                "CE": "certified",
+                "BZ": "Published",
+                "AZ": "Filed"
+            },
+            "pct_national_phase": "PCT National Phase",
+            "header": {
+                "filter": {
+                    "by": "Filter by :"
+                }
+            },
+            "false": "Kh\u00f4ng",
+            "VN": "Vietnam",
+            "TP": "Timor-Leste",
+            "TL": "Timor-Leste",
+            "TH": "Thailand",
+            "SG": "Singapore",
+            "SA": "\u1ea2 r\u1eadp",
+            "RL": "Ch\u1edd quy\u1ebft \u0111\u1ecbnh c\u1ee7a T\u00f2a",
+            "PH": "Philippines",
+            "PE": "\u0110ang ch\u1edd",
+            "MY": "Malaysia",
+            "MM": "Myanmar",
+            "MK": "\u0110\u00e3 h\u1ebft h\u1ea1n",
+            "MG": "V\u00f4 hi\u1ec7u",
+            "MF": "B\u1ecb thu h\u1ed3i",
+            "ME": "B\u1ecb thu h\u1ed3i",
+            "MC": "\u0110\u00e3 h\u1ee7y",
+            "MB": "Khi\u1ebfu n\u1ea1i",
+            "LA": "Laos",
+            "KH": "Cambodia",
+            "ID": "Indonesia",
+            "GA": "Chuy\u1ec3n \u0111\u1ed5i",
+            "FG": "C\u1ea5p b\u1eb1ng",
+            "FC": "B\u1ecb lo\u1ea1i b\u1ecf",
+            "FB": "B\u1ecb \u0111\u00ecnh ch\u1ec9",
+            "FA": "R\u00fat \u0111\u01a1n",
+            "EM": "Tr\u1ed1ng",
+            "DE": "X\u00f3a b\u1ecf",
+            "CZ": "Ph\u1ea3n \u0111\u1ed1i",
+            "CE": "\u0110\u00e3 c\u1ea5p b\u1eb1ng",
+            "BZ": "\u0110\u00e3 c\u00f4ng b\u1ed1",
+            "BU": "Myanmar",
+            "BN": "Brunei",
+            "AZ": "C\u00e1c m\u1ee5c"
+        }
+    },
+    "error": {
+        "response": {
+            "code": {
+                "message": {
+                    "500": "Unable to contact WIPO CASE system.",
+                    "404": "Application is not yet loaded into WIPO CASE system.",
+                    "403": "You are not authorized to use this service please contact to administrator."
+                }
+            }
+        },
+        "document": {
+            "not": {
+                "available": {
+                    "message": "No document available"
+                }
+            }
+        }
+    },
+    "detail": {
+        "page": {
+            "tooltip": {
+                "pctpnb": "C\u00f4ng b\u1ed1 PCT chi ti\u1ebft",
+                "pctnb": "\u0110\u01a1n PCT chi ti\u1ebft",
+                "ow": "C\u00e1c \u0111\u01a1n kh\u00e1c c\u00f9ng ch\u1ee7 b\u1eb1ng",
+                "npe": "V\u00e0o pha qu\u1ed1c gia",
+                "nice": "NICE",
+                "more": {
+                    "details": "C\u00e1c chi ti\u1ebft kh\u00e1c"
+                },
+                "lck": "LOCARNO",
+                "ipc": "Ph\u00e2n nh\u00f3m IPC",
+                "in": "C\u00e1c \u0111\u01a1n c\u00f9ng ng\u01b0\u1eddi ph\u00e1t minh",
+                "cpc": "CPC",
+                "ap": "C\u00e1c \u0111\u01a1n kh\u00e1c c\u00f9ng ng\u01b0\u1eddi n\u1ed9p \u0111\u01a1n"
+            },
+            "title": "ASEAN PATENTSCOPE",
+            "npe": {
+                "title": "Pha qu\u1ed1c  gia c\u1ee7a",
+                "table": {
+                    "header": {
+                        "npedate": "Ng\u00e0y n\u1ed9p \u0111\u01a1n qu\u1ed1c gia",
+                        "appno": "S\u1ed1 \u0111\u01a1n"
+                    }
+                },
+                "fail": {
+                    "message": "Kh\u00f4ng th\u1ec3 nh\u1eadp d\u1eef li\u1ec7u trong giai \u0111o\u1ea1n qu\u1ed1c gia"
+                }
+            },
+            "no": {
+                "other": {
+                    "application": "Kh\u00f4ng t\u00ecm th\u1ea5y"
+                },
+                "application": {
+                    "found": "Kh\u00f4ng t\u00ecm th\u1ea5y \u0111\u01a1n"
+                }
+            }
+        }
+    },
+    "date": {
+        "display": {
+            "week": {
+                "Wednesday": "We",
+                "Tuesday": "Tu",
+                "Thursday": "Th",
+                "Sunday": "Su",
+                "Saturday": "Sa",
+                "Monday": "Mo",
+                "Friday": "Fr"
+            },
+            "options": {
+                "YEAR_DATE": "H\u00e0ng n\u0103m",
+                "TODAY": "H\u00f4m nay",
+                "SPECIFIC_DATE": "Ng\u00e0y \u0111\u1eb7c bi\u1ec7t",
+                "MONTH_DATE": "6 th\u00e1ng tr\u01b0\u1edbc",
+                "DATE_RANGE": "Kho\u1ea3ng ng\u00e0y",
+                "BEFORE": "T\u1ea5t c\u1ea3 nh\u1eefng ng\u00e0y tr\u01b0\u1edbc",
+                "AFTER": "All Dates After"
+            },
+            "month": {
+                "September": "Th\u00e1ng Ch\u00edn",
+                "October": "Th\u00e1ng M\u01b0\u1eddi",
+                "November": "Th\u00e1ng M\u01b0\u1eddi M\u1ed9t",
+                "May": "Th\u00e1ng N\u0103m",
+                "March": "Th\u00e1ng Ba",
+                "June": "Th\u00e1ng S\u00e1u",
+                "July": "Th\u00e1ng B\u1ea3y",
+                "January": "Th\u00e1ng Gi\u00eang",
+                "February": "Th\u00e1ng Hai",
+                "December": "Th\u00e1ng M\u01b0\u1eddi Hai",
+                "August": "Th\u00e1ng T\u00e1m",
+                "April": "Th\u00e1ng T\u01b0"
+            }
+        }
+    },
+    "concordance": {
+        "term": {
+            "tooltip": {
+                "label": "Technology"
+            },
+            "placeholder": {
+                "label": ""
+            },
+            "null": {
+                "label": "Ch\u1ecdn m\u1ed9t"
+            },
+            "display": {
+                "label": "C\u00f4ng ngh\u1ec7"
+            }
+        }
+    },
+    "chart": {
+        "techsector": "L\u0129nh v\u1ef1c k\u1ef9 thu\u1eadt",
+        "pie": {
+            "subtitle": "B\u1ea1n c\u00f3 th\u1ec3 nh\u1ea5p chu\u1ed9t v\u00e0o l\u0129nh v\u1ef1c c\u00f4ng ngh\u1ec7 \u0111\u1ec3 tr\u1ef1c quan h\u00f3a th\u00f4ng tin c\u1ee5 th\u1ec3"
+        },
+        "news": {
+            "title": "Tin t\u1ee9c"
+        },
+        "industrysector": "Industry sector",
+        "geo": {
+            "title": {
+                "trademarks": "\u0110\u01a1n Nh\u00e3n hi\u1ec7u n\u1ed9p theo n\u01b0\u1edbc",
+                "patents": "\u0110\u01a1n s\u00e1ng ch\u1ebf c\u1ee7a c\u00e1c n\u01b0\u1edbc ASEAN",
+                "designs": "\u0110\u01a1n ki\u1ec3u d\u00e1ng theo n\u01b0\u1edbc",
+                "default": "\u0110\u01a0N S\u00c1NG CH\u1ebe N\u1ed8P THEO N\u01af\u1edaC"
+            },
+            "subtitle": "Nh\u1ea5p chu\u1ed9t v\u00e0o b\u1ea3n \u0111\u1ed3 c\u00e1c n\u01b0\u1edbc \u0111\u1ec3 xem s\u1ed1 l\u01b0\u1ee3ng \u0111\u01a1n S\u00e1ng ch\u1ebf c\u1ee7a t\u1eebng n\u01b0\u1edbc",
+            "number": {
+                "of": {
+                    "trademarks ": " S\u1ed1 l\u01b0\u1ee3ng \u0111\u01a1n Nh\u00e3n hi\u1ec7u",
+                    "patents ": " S\u1ed1 l\u01b0\u1ee3ng \u0111\u01a1n S\u00e1ng ch\u1ebf",
+                    "designs ": " S\u1ed1 l\u01b0\u1ee3ng \u0111\u01a1n Ki\u1ec3u d\u00e1ng"
+                }
+            },
+            "grid": {
+                "header": {
+                    "flag": "Flag",
+                    "datecoverage": "C\u00f4ng b\u1ed1",
+                    "country": "N\u01b0\u1edbc",
+                    "count": "\u0110\u01a1n n\u1ed9p"
+                }
+            }
+        },
+        "common": {
+            "top": {
+                "applicant": "Top applicant"
+            },
+            "percentage": "Percentage",
+            "number": {
+                "of": {
+                    "applicants": "Total number of applications"
+                }
+            },
+            "header": {
+                "trends": "Top 5 Trends",
+                "technology": {
+                    "sector": {
+                        "trend": "Technology Sector Trends",
+                        "filing": "Technology Sector Filing"
+                    }
+                },
+                "country": "Top 10 Countries",
+                "applicants": "Top 10 Applicants"
+            }
+        },
+        "bar": {
+            "topfive": {
+                "total": "Total number of applications in this sector: ${count}",
+                "sector": "Top five sectors in ${country}",
+                "country": "Top five countries in ${sector}",
+                "back": "Back"
+            },
+            "tm": {
+                "title": "Trademarks filing by Industry sector",
+                "subtitle": "You can click on a industry sector to visualize specific information"
+            },
+            "title": "\u0110\u01a1n S\u00e1ng ch\u1ebf n\u1ed9p theo n\u01b0\u1edbc",
+            "subtitle": "Nh\u1ea5p chu\u1ed9t v\u00e0o thanh trong bi\u1ec3u \u0111\u1ed3 \u0111\u1ec3 xem S\u1ed1 l\u01b0\u1ee3ng \u0111\u01a1n S\u00e1ng ch\u1ebf trong t\u1eebng l\u0129nh v\u1ef1c k\u1ef9 thu\u1eadt",
+            "design": {
+                "title": "Designs filing by Industry sector",
+                "subtitle": "You can click on a industry sector to visualize specific information"
+            }
+        }
+    },
+    "category": {
+        "patent": {
+            "label": "Patents"
+        },
+        "other": {
+            "label": "Miscellaneous"
+        },
+        "numbers": {
+            "label": "Numbers"
+        },
+        "names": {
+            "label": "Names"
+        },
+        "mark": {
+            "label": "Marks"
+        },
+        "folder": {
+            "label": "Folder"
+        },
+        "files": {
+            "label": "Files"
+        },
+        "document": {
+            "label": "Document"
+        },
+        "design": {
+            "label": "Designs"
+        },
+        "dates": {
+            "label": "Dates"
+        },
+        "country": {
+            "label": "Country"
+        },
+        "countries": {
+            "label": "Countries"
+        },
+        "classification": {
+            "label": "Classification"
+        }
+    },
+    "btn": {
+        "togglefields": {
+            "label": "+/- C\u00e1c tr\u01b0\u1eddng"
+        },
+        "search": {
+            "reset": {
+                "label": "Kh\u00f4i ph\u1ee5c"
+            },
+            "label": "Truy v\u1ea5n"
+        },
+        "hide": {
+            "veiwer": "\u1ea8n"
+        },
+        "filter": {
+            "label": "L\u1ecdc"
+        },
+        "clearSelection": {
+            "label": "X\u00f3a b\u1ecf"
+        },
+        "captcha": {
+            "label": "Ti\u1ebfp theo"
+        },
+        "applyfilter": {
+            "label": "L\u1ecdc truy v\u1ea5n"
+        },
+        "Cancel": {
+            "label": "Lo\u1ea1i b\u1ecf"
+        },
+        "Apply": {
+            "label": "Truy v\u1ea5n"
+        }
+    },
+    "application": {
+        "country": {
+            "chart": {
+                "bar": {
+                    "subtitle": "You can click on a country to visualize specific information"
+                }
+            }
+        }
+    },
+    "applicant": {
+        "chart": {
+            "bar": {
+                "title": "Top 10 Applicant",
+                "subtitle": "You can click on a applicant to visualize specific information"
+            }
+        }
+    },
+    "#home": {
+        "search": {
+            "title": {
+                "label": "INTELLECTUAL PROPERTY ORGANIZATION SEARCH SYSTEM"
+            },
+            "subtitle": {
+                "label": "All you need to know about patents, trademarks and designs in your region"
+            }
+        }
+    }
+}

@@ -1,0 +1,36 @@
+// app.component.pug
+// Use the layout component with our configuration
+app-layout([config]="layoutConfig")
+  .container
+    app-breadcrumbs(
+      [items]="breadcrumbItems"
+      )
+    h1 Users Management
+    app-table(
+      [columns]="tableColumns",
+      [data]="tableData",
+      [loading]="loading",
+      [globalFilterFields]="['name', 'email', 'status']",
+      [showCurrentPageReport]="true",
+      [rows]="10",
+      [paginator]="true",
+      [resizableColumns]="true",
+      [showActionsColumn]="false",
+      (actionClick)="handleAction($event)"
+    )
+    h1 user-input
+   
+    app-table(
+        [columns]="tableColumns",
+        [data]="tableData",
+        [loading]="loading",
+        [globalFilterFields]="['name', 'email', 'status']",
+        [showCurrentPageReport]="true",
+        [rows]="10",
+        [paginator]="true",
+        [resizableColumns]="true",
+        [showActionsColumn]="false",
+        (actionClick)="handleAction($event)"
+      )
+  router-outlet
+

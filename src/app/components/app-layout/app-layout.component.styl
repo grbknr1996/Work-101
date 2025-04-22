@@ -1,0 +1,148 @@
+// Variables
+$sidebar-width = 240px
+$sidebar-compact-width = 64px
+$navbar-height = 64px
+$light-bg = #f8f9fa
+$dark-bg = #1e1e1e
+$light-border = #e9ecef
+$dark-border = rgba(255, 255, 255, 0.1)
+$light-text = #495057
+$dark-text = rgba(255, 255, 255, 0.9)
+$transition-duration = 0.3s
+
+// Layout Wrapper
+.layout-wrapper
+  width 100%
+  display: flex
+  flex-direction: column
+  min-height: 100vh
+  background-color: $light-bg
+  color: $light-text
+  position: relative
+  
+  &.layout-theme-dark
+    background-color: $dark-bg
+    color: $dark-text
+
+// Loading Overlay
+.loading-overlay
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  background-color: rgba(0, 0, 0, 0.5)
+  z-index: 9999
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  
+  .loading-spinner
+    margin-bottom: 1rem
+  
+  .loading-text
+    color: white
+    font-size: 1.2rem
+
+// Main Content Area
+.layout-main
+  display: flex
+  flex: 1
+  position: relative
+  transition: margin-left $transition-duration ease-in-out
+  
+  &.with-sidebar 
+    @media (max-width: 800px)
+      margin-left: 0
+  
+  &.no-sidebar
+    margin-left: 0
+
+// Content Area
+.layout-content
+  flex 1
+  overflow-x hidden
+  width 100%
+  transition padding $transition-duration ease-in-out
+  padding 1rem
+  margin-left 3rem
+  margin-top 3rem
+  
+  @media screen and (max-width: 450px)
+    padding 0
+    margin-left 0
+  
+ 
+    
+
+// Content Container
+.content-container
+  background-color: white
+  border-radius: 4px
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1)
+  padding: 1.5rem
+  min-height: calc(100vh - 160px) // Subtract navbar + footer + margins
+  
+  @media (max-width: 800px)
+    padding: 1rem
+    min-height: calc(100vh - 140px)
+  
+  .layout-theme-dark &
+    background-color: rgba(255, 255, 255, 0.05)
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2)
+
+// Footer
+.layout-footer
+  padding: 1rem 1.5rem
+  background-color: white
+  border-top: 1px solid $light-border
+  margin-top: 2rem
+  
+  .layout-theme-dark &
+    background-color: $dark-bg
+    border-color: $dark-border
+  
+  .footer-content
+    display: flex
+    justify-content: center
+    
+    p
+      margin: 0
+      text-align: center
+      color: $light-text
+      
+      .layout-theme-dark &
+        color: $dark-text
+
+// Override PrimeNG p-sidebar styles to match our design
+:host ::ng-deep .p-sidebar
+  .p-sidebar-header
+    padding: 1rem
+    border-bottom: 1px solid $light-border
+    
+    .p-sidebar-close
+      width: 2rem
+      height: 2rem
+      border-radius: 50%
+      
+      &:hover
+        background-color: rgba(0, 0, 0, 0.05)
+  
+  .p-sidebar-content
+    padding: 0
+    
+    app-sidebar
+      position: fixed
+      top: $navbar-height
+      left: 0
+      height: 100vh
+      width: $sidebar-width
+      background-color: $light-bg
+      z-index: 1000
+      transition: transform 0.3s ease-in-out
+
+      @media (max-width: 800px)
+        transform: translateX(-100%)
+        &.visible
+          transform: translateX(0)

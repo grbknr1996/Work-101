@@ -1,0 +1,270 @@
+// table.component.pug
+.card
+  p-table(
+    #dt,
+    [value]='data',
+    [columns]='columns',
+    [rowHover]='true',
+    [rows]='rows',
+    [rowsPerPageOptions]='rowsPerPageOptions',
+    [loading]='loading',
+    [paginator]='paginator',
+    [globalFilterFields]='globalFilterFields',
+    [showCurrentPageReport]='showCurrentPageReport',
+    [currentPageReportTemplate]='currentPageReportTemplate',
+    [resizableColumns]='resizableColumns',
+    [reorderableColumns]='reorderableColumns',
+    [responsive]='responsive',
+    [lazy]='lazy',
+    [totalRecords]='totalRecords',
+    [scrollable]='scrollable',
+    [scrollHeight]='scrollHeight',
+    [dataKey]='dataKey',
+    (onLazyLoad)='onLazyLoadEvent.emit($event)',
+    styleClass='p-datatable-sm'
+  )
+    ng-template(pTemplate='caption')
+      .flex-search-bar
+        button.p-button-outlined(
+          *ngIf='showClearButton',
+          pButton,
+          label='Clear',
+          icon='pi pi-filter-slash',
+          (click)='clear(dt)'
+        )
+        .ml-auto
+          p-iconField(iconPosition='left')
+            p-inputIcon
+              i.pi.pi-search
+            input(
+              pInputText,
+              type='text',
+              (input)="dt.filterGlobal($event.target.value, 'contains')",
+              placeholder='Search keyword'
+            )
+    
+    ng-template(pTemplate='header')
+      tr
+        th(
+          *ngFor='let col of columns',
+          [pSortableColumn]='col.sortable ? col.field : undefined',
+          [style.width]="col.width || 'auto'"
+        )
+          .flex.items-center
+            | {{ col.header }}
+            p-sortIcon(*ngIf='col.sortable', [field]='col.field')
+            
+            // Text Filter
+            p-columnFilter(
+              *ngIf="col.filterType === 'text'",
+              type='text',
+              [field]='col.filterField || col.field',
+              [display]="col.filterDisplay || 'menu'"
+            )
+            
+            // Numeric Filter
+            p-columnFilter(
+              *ngIf="col.filterType === 'numeric'",
+              type='numeric',
+              [field]='col.filterField || col.field',
+              [display]="col.filterDisplay || 'menu'",
+              [currency]='col.currency'
+            )
+            
+            // Date Filter
+            p-columnFilter(
+              *ngIf="col.filterType === 'date'",
+              type='date',
+              [locale]='locale',
+              [field]='col.filterField || col.field',
+              [display]="col.filterDisplay || 'menu'"
+            )
+            
+            // Boolean Filter
+            p-columnFilter(
+              *ngIf="col.filterType === 'boolean'",
+              type='boolean',
+              [field]='col.filterField || col.field',
+              [display]="col.filterDisplay || 'menu'"
+            )
+            
+            // Dropdown Filter
+            p-columnFilter(
+              *ngIf="col.filterType === 'dropdown'",
+              [field]='col.filterField || col.field',
+              [matchMode]="col.filterMatchMode || 'equals'",
+              [display]="col.filterDisplay || 'menu'"
+            )
+              ng-template(pTemplate='filter', let-value, let-filter='filterCallback')
+                p-dropdown(
+                  [ngModel]='value',
+                  [options]='col.dropdownOptions || []',
+                  (onChange)='onFilterChange($event, filter, col.field)',
+                  placeholder='Select One',
+                  styleClass='w-full',
+                  [optionLabel]="col.optionLabel || 'label'"
+                )
+                  ng-template(
+                    *ngIf='col.customTemplate',
+                    pTemplate='item',
+                    let-option
+                  )
+                    p-tag(
+                      [value]='option.value',
+                      [severity]='col.severity ? col.severity(option.value) : undefined'
+                    )
+            
+            // MultiSelect Filter
+            p-columnFilter(
+              *ngIf="col.filterType === 'multiselect'",
+              [field]='col.filterField || col.field',
+              matchMode='in',
+              [display]="col.filterDisplay || 'menu'",
+              [showMatchModes]='false',
+              [showOperator]='false',
+              [showAddButton]='false'
+            )
+              ng-template(pTemplate='filter', let-value, let-filter='filterCallback')
+                p-multiSelect(
+                  [ngModel]='value',
+                  [options]='col.dropdownOptions || []',
+                  placeholder='Any',
+                  (onChange)='filter($event.value)',
+                  [optionLabel]="col.optionLabel || 'name'",
+                  styleClass='w-full',
+                  [panelStyle]="{ minWidth: '16rem' }"
+                )
+                  ng-template(
+                    *ngIf='col.customTemplate',
+                    pTemplate='item',
+                    let-option
+                  )
+                    .flex.items-center.gap-2
+                      img(
+                        *ngIf='option.image',
+                        [alt]='option.label',
+                        [src]='option.image',
+                        style='width: 32px'
+                      )
+                      span {{ option[col.optionLabel || "name"] }}
+            
+            // Range Filter
+            p-columnFilter(
+              *ngIf="col.filterType === 'range'",
+              [field]='col.filterField || col.field',
+              matchMode='between',
+              [display]="col.filterDisplay || 'menu'",
+              [showMatchModes]='false',
+              [showOperator]='false',
+              [showAddButton]='false'
+            )
+              ng-template(pTemplate='filter', let-value, let-filter='filterCallback')
+                p-slider(
+                  [ngModel]='value',
+                  [range]='true',
+                  styleClass='m-4',
+                  (onSlideEnd)='filter($event.values)'
+                )
+                .flex.items-center.px-2
+                  span(*ngIf='!value') 0
+                  span(*ngIf='value && isArray(value)') {{ value[0] }} - {{ value[1] }}
+        
+        th(*ngIf='showActionsColumn', style='width: 8rem') Actions
+    
+    ng-template(pTemplate='body', let-rowData)
+      tr
+        td(*ngFor='let col of columns')
+          // Text Display
+          ng-container(*ngIf="col.display === 'text' || !col.display")
+            | {{ getValue(rowData, col.field) }}
+          
+          // Date Display
+          ng-container(*ngIf="col.display === 'date'")
+            | {{ getValue(rowData, col.field) | date : (col.dateFormat || "MM/dd/yyyy") }}
+          
+          // Currency Display
+          ng-container(*ngIf="col.display === 'currency'")
+            | {{ getValue(rowData, col.field) | currency : (col.currency || "USD") : "symbol" }}
+          
+          // Avatar Display
+          ng-container(*ngIf="col.display === 'avatar'")
+            .flex.items-center.gap-2
+              img(
+                [src]='getValue(rowData, col.field)',
+                [alt]='col.field',
+                style='width: 32px; height: 32px; border-radius: 50%; object-fit: cover;'
+              )
+              span(*ngIf='col.showName') {{ getValue(rowData, col.nameField || "name") }}
+          
+          // Tag Display
+          ng-container(*ngIf="col.display === 'tag'")
+            p-tag(
+              [value]='getValue(rowData, col.field)',
+              [severity]='col.severity ? col.severity(getValue(rowData, col.field)) : "success"'
+            )
+          
+          // Progress Display
+          ng-container(*ngIf="col.display === 'progress'")
+            p-progressBar(
+              [value]='getValue(rowData, col.field)',
+              [showValue]='false'
+            )
+          
+          // Icon Display
+          ng-container(*ngIf="col.display === 'icon'")
+            i.pi(
+              [ngClass]='col.iconClass ? col.iconClass(getValue(rowData, col.field)) : ""'
+            )
+          
+          // Boolean Display
+          ng-container(*ngIf="col.display === 'boolean'")
+            .text-center
+              i.pi(
+                [ngClass]="{'text-green-500 pi-check-circle': getValue(rowData, col.field), 'text-red-500 pi-times-circle': !getValue(rowData, col.field)}"
+              )
+          
+          // Custom Template
+          ng-container(*ngIf="col.display === 'custom'")
+            ng-container(
+              *ngTemplateOutlet='customCellTemplate; context: { $implicit: rowData, field: col.field }'
+            )
+          
+          // Actions Display
+          ng-container(*ngIf="col.display === 'actions' && col.actions")
+            .flex.justify-content-center
+              // Actions as dropdown
+              ng-container(*ngIf='col.showAsDropdown !== false')
+                button.p-button-rounded.p-button-text.p-button-plain(
+                  pButton,
+                  type='button',
+                  icon='pi pi-ellipsis-v',
+                  (click)='menu.toggle($event); $event.stopPropagation()'
+                )
+                p-menu(
+                  #menu,
+                  [popup]='true',
+                  appendTo='body',
+                  [model]='getMenuItems(col.actions, rowData)'
+                )
+              
+              // Actions as separate buttons
+              ng-container(*ngIf='col.showAsDropdown === false')
+                .flex.gap-2
+                  ng-container(*ngFor='let action of col.actions')
+                    button.p-button-rounded.p-button-text(
+                      *ngIf='!action.visible || action.visible(rowData)',
+                      pButton,
+                      [icon]='action.icon ?? ""',
+                      [class]='action.severity ? "p-button-" + action.severity : ""',
+                      (click)='onActionClick(action.action, rowData); $event.stopPropagation()'
+                    )
+        
+        // Actions Column
+        td(*ngIf='showActionsColumn')
+          ng-container(
+            *ngTemplateOutlet='actionTemplate; context: { $implicit: rowData }'
+          )
+    
+    ng-template(pTemplate='emptymessage')
+      tr
+        td(colspan='100') {{ emptyMessage }}

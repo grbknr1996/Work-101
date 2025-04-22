@@ -1,0 +1,13 @@
+
+<!-- app.component.pug-->
+<!-- Use the layout component with our configuration-->
+<app-layout [config]="layoutConfig">
+  <div class="container">
+    <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
+    <h1>Users Management</h1>
+    <app-table [columns]="tableColumns" [data]="tableData" [loading]="loading" [globalFilterFields]="['name', 'email', 'status']" [showCurrentPageReport]="true" [rows]="10" [paginator]="true" [resizableColumns]="true" [showActionsColumn]="false" (actionClick)="handleAction($event)"></app-table>
+    <h1>user-input</h1>
+    <app-table [columns]="tableColumns" [data]="tableData" [loading]="loading" [globalFilterFields]="['name', 'email', 'status']" [showCurrentPageReport]="true" [rows]="10" [paginator]="true" [resizableColumns]="true" [showActionsColumn]="false" (actionClick)="handleAction($event)"></app-table>
+  </div>
+  <router-outlet></router-outlet>
+</app-layout>

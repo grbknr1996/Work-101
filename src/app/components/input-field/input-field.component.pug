@@ -1,0 +1,41 @@
+.form-field-container([ngClass]="styleClass")
+  // Simple label structure that matches your original
+  label.form-label([for]="inputId", [ngClass]="labelClass", *ngIf="label")
+    | {{ label }}
+    span.text-danger(*ngIf="required") *
+  
+  .p-inputgroup
+    span.p-inputgroup-addon(*ngIf="prefixIcon")
+      i.pi([ngClass]="prefixIcon")
+    
+    input.p-inputtext(
+      pInputText,
+      [type]="type",
+      [id]="inputId",
+      [placeholder]="placeholder",
+      [ngClass]="[inputClass, {'ng-invalid ng-dirty': showErrors}]",
+      [disabled]="isDisabled",
+      [readonly]="readonly",
+      [attr.maxlength]="maxLength",
+      [attr.autocomplete]="autocomplete",
+      [attr.aria-required]="required",
+      [attr.aria-invalid]="showErrors",
+      [value]="value",
+      (input)="onInputChange($event)",
+      (blur)="onBlur()",
+      (focus)="onFocus()"
+    )
+    
+    span.p-inputgroup-addon(*ngIf="suffixIcon")
+      i.pi([ngClass]="suffixIcon")
+    
+    span.p-inputgroup-addon.clear-icon(*ngIf="showClearButton && value", (click)="clearInput($event)")
+      i.pi.pi-times
+  
+  .d-flex.justify-content-between.mt-1
+    small.text-danger(*ngIf="showErrors") {{ errorMessage }}
+    small.text-muted.ms-auto(*ngIf="showCounter && maxLength")
+      | {{ currentCharCount }}/{{ maxLength }}
+  
+  small.form-text.text-muted.d-block.mt-1(*ngIf="helpText && !showErrors")
+    | {{ helpText }}

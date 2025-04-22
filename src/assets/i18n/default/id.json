@@ -1,0 +1,1512 @@
+{
+    "wipopublish": {
+        "news": {
+            "2": "terus tambahkan lebih banyak pesan jika diperlukan",
+            "1": "Setiap pesan sistem yang akan diposting dapat ditempatkan di sini"
+        }
+    },
+    "wipo": {
+        "publish": {
+            "wrong": {
+                "syntex": {
+                    "solr": {
+                        "query": {
+                            "user": {
+                                "message": "Tidak dapat mengeksekusi query. Silakan masukkan kembali pertanyaan Anda."
+                            }
+                        }
+                    }
+                }
+            },
+            "user": {
+                "manual": {
+                    "label": "Bantuan"
+                }
+            },
+            "invalid": {
+                "solr": {
+                    "query": {
+                        "user": {
+                            "message": "Tidak dapat mengurai kueri penelusuran. Harap perbaiki dan masukkan kembali."
+                        }
+                    }
+                }
+            },
+            "html": {
+                "link2": {
+                    "label": "Link2"
+                },
+                "link1": {
+                    "label": "Link1"
+                }
+            },
+            "about": {
+                "label": "Tentang",
+                "content": "<h1>Tentang WIPO Publish</h1><br><p>Perangkat lunak ini disediakan oleh the World Intellectual Property Organization (WIPO) melalui program bantuan teknis untuk kantor Kekayaan Intelektual (KI) baik nasional maupun regional.</p><br><p> Penggunaan perangkat lunak ini tunduk pada syarat dan ketentuan (<a href=\"http://www.wipo.int/global_ip/en/activities/technicalassistance/termsandconditions.html\" title=\"Ikuti tautan\">http://www.wipo.int/global_ip/en/activities/technicalassistance/termsandconditions.html</a>) yang merupakan bagian dari perjanjian antara WIPO dan setiap Kantor KI.</p> <br><p>Bagian Perangkat lunak ini disediakan melalui dukungan Japan Funds-in-Trust untuk kekayaan intelektual (untuk informasi lebih lanjut, silahkan lihat tautan \\n <a href=\"http://www.wipo.int/cooperation/en/funds_in_trust/japan_fitip_aspac/index.html\" title=\"Ikuti tautan\">http://www.wipo.int/cooperation/en/funds_in_trust/japan_fitip_aspac/index.html</a>) <br><br></p><p>Untuk informasi lebih lanjut tentang program bantuan teknis WIPO, silahkan merujuk pada tautan <a href=\"http://www.wipo.int/global_ip/en/activities/technicalassistance/\" title=\"Ikuti tautan\"> http://www.wipo.int/global_ip/en/activities/technicalassistance/</a></p>"
+            }
+        }
+    },
+    "trend": {
+        "line": {
+            "chart": {
+                "bar": {
+                    "title": "Watch Trends",
+                    "subtitle": "Watch Trends For"
+                }
+            }
+        },
+        "donut": {
+            "chart": {
+                "bar": {
+                    "title": "Top 5 Technology Trends",
+                    "subtitle": "Top 5 Technology Trends For"
+                }
+            }
+        }
+    },
+    "trademarks": {
+        "field": {
+            "display": {
+                "TITL": "Ringkasan"
+            }
+        }
+    },
+    "tooltip": {
+        "user": {
+            "selection": {
+                "info": {
+                    "label": "All application selected by clicking the checkbox on Search Result screen will appear here."
+                }
+            },
+            "select": {
+                "label": "Tambah / Hapus pilihan pengguna"
+            },
+            "deselect": {
+                "label": "Hapus pilihan pengguna"
+            }
+        },
+        "tableview": {
+            "label": "Tabel"
+        },
+        "showfilter": {
+            "label": "Tampilkan Filter"
+        },
+        "search": {
+            "info": {
+                "label": "Rekam dipilih dengan satu atau lebih kriteria"
+            }
+        },
+        "phonetic": {
+            "check": "This field boost the records with exact match to have higher relevance score"
+        },
+        "minimum": {
+            "relevance": "This field is used to limit results setting the minimum relevance"
+        },
+        "listview": {
+            "label": "Tabular"
+        },
+        "hidefilter": {
+            "label": "Sembunyikan Filter"
+        },
+        "gridview": {
+            "label": "Grid"
+        },
+        "export": {
+            "label": "Ekspor"
+        },
+        "download": {
+            "label": "Unduh",
+            "document": {
+                "label": "Download Document"
+            },
+            "application": {
+                "xml": {
+                    "label": "Download Application XML"
+                }
+            }
+        },
+        "document": {
+            "view": {
+                "label": "Lihat Dokumen"
+            },
+            "search": {
+                "info": {
+                    "label": "Sertakan kriteria pencarian Anda dalam \"\" untuk pencarian yang tepat"
+                }
+            }
+        },
+        "detail": {
+            "label": "Rincian"
+        },
+        "clearfilter": {
+            "label": "Hapus Filter"
+        },
+        "check": {
+            "label": "Tandai"
+        },
+        "chart": {
+            "label": "Grafik"
+        }
+    },
+    "time": {
+        "ms": "ms"
+    },
+    "thumbnail": {
+        "dummy": {
+            "disclaimer": "Machine generated trademark logo"
+        }
+    },
+    "table": {
+        "summary": {
+            "title": "Tampilkan ${from} sampai ${to} dari ${of}"
+        },
+        "no": {
+            "data": {
+                "found": "Tidak ada catatan yang ditemukan"
+            }
+        },
+        "document": {
+            "publications": {
+                "label": "Publikasi"
+            },
+            "pct": {
+                "application": {
+                    "label": "Permohonan PCT"
+                }
+            },
+            "name": {
+                "label": "nama dokumen"
+            },
+            "filing": {
+                "date": {
+                    "label": "Tanggal Penerimaan"
+                }
+            },
+            "doctype": {
+                "label": "Jenis Dokumen"
+            },
+            "docdate": {
+                "label": "Tanggal"
+            },
+            "application": {
+                "number": {
+                    "label": "Aplikasi/Prioritas"
+                }
+            },
+            "action": {
+                "label": "Aksi"
+            }
+        }
+    },
+    "tab": {
+        "userselection": {
+            "label": "User Selection"
+        },
+        "text": {
+            "field": {
+                "label ": " Tab Kata"
+            }
+        },
+        "status": {
+            "label": "Status"
+        },
+        "search": {
+            "label": ""
+        },
+        "recent": {
+            "label": "Pencarian Terbaru"
+        },
+        "phoneticsearch": {
+            "label": "Similarity"
+        },
+        "patent": {
+            "family": {
+                "time": {
+                    "line": {
+                        "label": "Garis waktu"
+                    }
+                },
+                "tabular": {
+                    "view": {
+                        "label": "Tampilan tabular"
+                    }
+                },
+                "label": "Keterkaitan Paten",
+                "data": {
+                    "fetch": {
+                        "fail": {
+                            "message": "Tidak dapat mengambil data"
+                        }
+                    }
+                }
+            }
+        },
+        "number": {
+            "field": {
+                "label ": " Tab Nomor"
+            }
+        },
+        "gazettesearch": {
+            "label": "Penelusuran Berita Resmi"
+        },
+        "documentsearch": {
+            "label": "Pencarian Dokumen"
+        },
+        "doclist": {
+            "label": "Daftar Dokumen"
+        },
+        "description": {
+            "label": "Description"
+        },
+        "date": {
+            "field": {
+                "label ": " Tab Tanggal"
+            }
+        },
+        "claim": {
+            "label": "Claims"
+        },
+        "biblio": {
+            "label": "Bibliografi"
+        },
+        "advancedsearch": {
+            "label": "Penelusuran Lanjutan"
+        }
+    },
+    "section": {
+        "associateddrawing": {
+            "label": "Gambar"
+        }
+    },
+    "search": {
+        "table": {
+            "results": {
+                "label": "Table view"
+            }
+        },
+        "sort": {
+            "type": {
+                "desc": {
+                    "tooltip": "Descending"
+                },
+                "asc": {
+                    "tooltip": "Ascending"
+                }
+            },
+            "field": {
+                "tooltip": "Select a column for sorting"
+            }
+        },
+        "page": {
+            "title": "ASEAN PATENTSCOPE"
+        },
+        "list": {
+            "results": {
+                "label": "List view"
+            }
+        },
+        "grid": {
+            "results": {
+                "label": "Grid view"
+            }
+        },
+        "export": {
+            "results": {
+                "label": "Export results"
+            }
+        },
+        "bar": {
+            "suggestive": {
+                "search": {
+                    "on": {
+                        "tooltip": "Frequent fields selection is on"
+                    },
+                    "off": {
+                        "tooltip": "All fields selection is on"
+                    },
+                    "label": "Field selection"
+                }
+            },
+            "solr": {
+                "id": {
+                    "tooltip": "Click here to remove the keyword"
+                }
+            }
+        }
+    },
+    "result": {
+        "number": {
+            "found": "aplikasi yang ditemukan di"
+        },
+        "count": {
+            "message": {
+                "single": "About ${count} result",
+                "plural": "About ${count} results"
+            }
+        }
+    },
+    "page": {
+        "title": {
+            "application": {
+                "label": "Permohonan"
+            }
+        }
+    },
+    "option": {
+        "stemming": {
+            "label": "Stemming"
+        },
+        "phonetic": {
+            "label": "Fonetik"
+        },
+        "fuzzy": {
+            "label": "Fuzzy"
+        }
+    },
+    "module": {
+        "trademarks": {
+            "label": "Merek"
+        },
+        "patents": {
+            "label": "Patent"
+        },
+        "designs": {
+            "label": "Desain Industri"
+        }
+    },
+    "message": {
+        "userselection": {
+            "nocriteria": "Tanpa Kriteria",
+            "keyword": "Kata kunci",
+            "and": "DAN",
+            "all": "Semua"
+        },
+        "feature": {
+            "notsupported": "Browser Anda tidak mendukung tampilan dokumen. Silakan unduh dokumennya."
+        },
+        "export": {
+            "limit": {
+                "exceeded": "Silahkan persempit kriteria penelusuran!"
+            }
+        }
+    },
+    "menu": {
+        "trademarks": "Merek",
+        "references": "Referensi",
+        "patents": "Patent",
+        "home": "Beranda",
+        "edms": "EDMS",
+        "designs": "Desain Industri"
+    },
+    "language": {
+        "display": {
+            "label": {
+                "vi": "Ti\u1ebfng Vi\u1ec7t",
+                "ms": "Bahasa Melayu",
+                "kh": "\u1797\u17b6\u179f\u17b6\u1781\u17d2\u1798\u17c2\u179a",
+                "jp": "\u65e5\u672c\u8a9e",
+                "id": "Bahasa Indonesia",
+                "fr": "Fran\u00e7ais",
+                "en": "English",
+                "ar": "\u0627\u0644\u0639\u0631\u0628\u064a\u0629"
+            }
+        }
+    },
+    "label": {
+        "showing": "Showing",
+        "security": {
+            "captcha": "Untuk mengkonfirmasi permintaan Anda, mohon centang kotaknya untuk memberi tahu kami bahwa Anda adalah manusia."
+        },
+        "of": "of",
+        "more": "More",
+        "less": "Less"
+    },
+    "info": {
+        "version": {
+            "label": "version 1.2.0"
+        },
+        "poweredby": {
+            "label": "Didukung oleh WIPO"
+        }
+    },
+    "header": {
+        "application": {
+            "title": "ASEAN PATENTSCOPE"
+        }
+    },
+    "gazette": {
+        "journal": {
+            "to": {
+                "display": {
+                    "label": "untuk"
+                }
+            },
+            "id": {
+                "display": {
+                    "label": "Deskripsi Jurnal"
+                }
+            },
+            "from": {
+                "display": {
+                    "label": "Tanggal Jurnal"
+                }
+            },
+            "category": {
+                "display": {
+                    "label": "Kategori"
+                }
+            }
+        },
+        "application": {
+            "display": {
+                "label": "Aplikasi #"
+            }
+        },
+        "action": {
+            "type": {
+                "display": {
+                    "label": "tipe aksi"
+                }
+            }
+        }
+    },
+    "footer": {
+        "search": {
+            "quicklink": {
+                "label": "SEARCH"
+            },
+            "detail": {
+                "quicklink": {
+                    "label": "Basic or advanced search to <br> refine your preferences"
+                }
+            }
+        },
+        "manage": {
+            "quicklink": {
+                "label": "MANAGE"
+            },
+            "detail": {
+                "quicklink": {
+                    "label": "You can save and customize <br> your search"
+                }
+            }
+        },
+        "export": {
+            "quicklink": {
+                "label": "EXPORT"
+            },
+            "detail": {
+                "quicklink": {
+                    "label": "Export your search in PDF"
+                }
+            }
+        }
+    },
+    "field": {
+        "tooltip": {
+            "todate": "To",
+            "phonetic": {
+                "min": {
+                    "relevance": "Minimum Relevance"
+                }
+            },
+            "id": "Identifier",
+            "fromdate": "From",
+            "entry": {
+                "count": "Entry count"
+            },
+            "boost": {
+                "exact": {
+                    "match": "Boost Exact Match"
+                }
+            },
+            "application": {
+                "count": "Application count"
+            },
+            "VNCL": "Vienna Classes",
+            "VCL": "Vienna Classes",
+            "TITL_LG1": "Title Bilingual",
+            "TITL_EN": "Title English",
+            "TITL": "Title",
+            "STLB_ORI": "Internal Status",
+            "STLB": "Status",
+            "STDT": "Status Date",
+            "STCD": "Status Code",
+            "RPRE": "Representative Residence",
+            "RPNA_LG1": "Representative Name Bilingual",
+            "RPNA": "Representative Name",
+            "RPCT": "Representative Country",
+            "RPAD_LG1": "Representative Address Bilingual",
+            "RPAD": "Representative Address",
+            "RENB": "Registration Number",
+            "REDT": "Registration Date",
+            "PCTPBNB": "PCT Publication Number",
+            "PCTPBDT": "PCT Pub. Date",
+            "PCTPBCT": "PCT Publication Country",
+            "PCTNB": "PCT Filing Number",
+            "PCTDT": "PCT Publication date",
+            "PCNB": "Priority Number",
+            "PCDT": "Priority Date",
+            "PCCT": "Priority Details",
+            "PBNB": "Publication Number",
+            "PBKC": "Pub. Kind Code",
+            "PBDT": "Publication Date",
+            "OFCO": "Office Code",
+            "NPEDT": "National Entry Date",
+            "NCL": "Nice Classes",
+            "NCDE_LG1": "Nice Class Description Bilingual",
+            "NCDE": "Nice Class Description",
+            "NCCL": "Nice Classes",
+            "MK_LG1": "Mark Name Bilingual",
+            "MKTXT": "Mark",
+            "MK": "Mark",
+            "MAIN_EFOLDER_REF": "Main EFolder Reference",
+            "LOGOEX": "Logo",
+            "LOGO": "Logo",
+            "LOC": "Classification",
+            "LCL": "Classification",
+            "LCDE": "Classification",
+            "Journal": {
+                "AFNB_ORI": "Application Number"
+            },
+            "JOURNAL_DESCRIPTION": "Journal Description",
+            "IPC_TECH_SECTOR_TXT": "IPC Technology Sector",
+            "IPC_TECH_FIELD_TXT": "IPC Technology Field",
+            "IPC_TECH_FIELD": "IPC Technology Field",
+            "IPC_ORI": "IPC Classes",
+            "IPC_MAIN": "IPC_MAIN",
+            "IPC": "IPC Classes",
+            "INRE": "Inventor Residence",
+            "INNA_LG1": "Inventor Bilingual",
+            "INNA": "Inventor",
+            "INCT": "Inventor Country",
+            "INAD_LG1": "Inventor Address Bilingual",
+            "INAD": "Inventor Address",
+            "GZPDT": "Gazette Publication Date",
+            "GZNB": "Gazette Number",
+            "GZDT": "Gazette Date",
+            "FILE_TYP": "File Type",
+            "FILE_ID": "File Id",
+            "EXCRDT": "EXCRDT",
+            "EFOLDER_REF": "EFolder Reference",
+            "EFOLDER_ID": "EFolder Id",
+            "EDOC_REF": "EDoc Reference",
+            "EDOC_ID": "EDoc Id",
+            "DOC_REF": "Document Reference",
+            "DOC_ID": "Document Id",
+            "DETXT": "Designer Information",
+            "DESCTXT": "Description",
+            "DERE": "Design Residence",
+            "DENA_LG1": "Designer Name Bilingual",
+            "DENA": "Designer",
+            "DECT": "Design Country",
+            "DECLDES": "Description",
+            "DEAD_LG1": "Design Address Bilingual",
+            "DEAD": "Design Address",
+            "CPC_ORI": "CPC Classes",
+            "CPC_MAIN": "CPC_MAIN",
+            "CPC": "CPC Classes",
+            "CLTXT": "Claims",
+            "CLNB": "Claim Number",
+            "CLLG": "Claim Language",
+            "CLDE": "Claim Description",
+            "CITCL": "Claims",
+            "CITCAT": "Category",
+            "CINB": "Citation Number",
+            "CIDE": "Citation Description",
+            "CICL": "Citation Claim",
+            "CICA": "Citation Category",
+            "CATEGORY": "Category",
+            "APTXT": "Applicant",
+            "APRE": "Applicant Residence",
+            "APPL_TYP_TXT": "Application Type",
+            "APPL_TYP": "Application Type",
+            "APPL_SUBTYP_TXT": "Application SubType",
+            "APPL_SUBTYP": "Application SubType",
+            "APNA_LG1": "Applicant Bilingual",
+            "APNA": "Applicant",
+            "APCT": "Applicant Country",
+            "APAD_LG1": "Applicant Address Bilingual",
+            "APAD": "Applicant Address",
+            "AFNB_ORI": "Original Filing Number",
+            "AFNB": "Filing Number",
+            "AFDT": "Filing Date",
+            "ABTXT": "Abstract",
+            "ABST_LG1": "Abstract Bilingual",
+            "ABST_EN": "Abstract English",
+            "ABST": "Abstract"
+        },
+        "search": {
+            "suggestion": {
+                "label": "Enter Keyword(s)"
+            },
+            "concordance": {
+                "placeholder": "Masukan Kata Kunci Cth.:Optik, Medical, Surface"
+            }
+        },
+        "placeholder": {
+            "todate": "e.g. 2017.12.31",
+            "phonetic": {
+                "min": {
+                    "relevance": ""
+                }
+            },
+            "id": "e.g. CH2018000001",
+            "fromdate": "e.g. 2017.12.31",
+            "documentType": "e.g. Spec",
+            "documentParentId": "e.g. CH2018000001",
+            "documentName": "e.g. CH2018000001_spec_000001",
+            "documentContent": "e.g. This is a specification document",
+            "boost": {
+                "exact": {
+                    "match": ""
+                }
+            },
+            "VNCL": "e.g. 8.1.19",
+            "VCL": "e.g. 8.1.19",
+            "TITL_LG1": "e.g. Nestl\u00e9 KitKat",
+            "TITL_EN": "e.g. Nestl\u00e9 KitKat",
+            "TITL": "e.g. Nestl\u00e9 KitKat",
+            "STLB_ORI": "e.g. Published",
+            "STLB": "e.g. Published",
+            "STDT": "e.g. 2017.12.31",
+            "STCD": "e.g. FG",
+            "RPRE": "e.g. CH",
+            "RPNA_LG1": "e.g. Nestl\u00e9",
+            "RPNA": "e.g. Nestl\u00e9",
+            "RPCT": "e.g. CH",
+            "RPAD_LG1": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+            "RPAD": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+            "RENB": "e.g. CH2018000001",
+            "REDT": "e.g. 2017.12.31",
+            "PCTPBNB": "2018/000001",
+            "PCTPBDT": "",
+            "PCTPBCT": "e.g. CH",
+            "PCTNB": "e.g. PCT/CH2018/000001",
+            "PCTDT": "e.g. 2017.12.31",
+            "PCNB": "e.g. CH2018000001",
+            "PCDT": "e.g. 2017.12.31",
+            "PCCT": "e.g. CH",
+            "PBNB": "e.g. 2018/000001",
+            "PBKC": "",
+            "PBDT": "e.g. 2017.12.31",
+            "OFCO": "e.g. CH",
+            "NPEDT": "e.g. 2017.12.31",
+            "NCL": "e.g. 0100662",
+            "NCDE_LG1": "e.g. Chocolate for kids",
+            "NCDE": "e.g. Chocolate for kids",
+            "NCCL": "e.g. 0100662",
+            "MK_LG1": "e.g. KitKat",
+            "MKTXT": "e.g. KitKat",
+            "MK": "e.g. KitKat",
+            "LOGOEX": "",
+            "LOGO": "",
+            "LOC": "e.g. Geneva",
+            "LCL": "e.g. 26.6",
+            "LCDE": "e.g. Chocolate for kids",
+            "Journal": {
+                "AFNB_ORI": "e.g. CH2018000001"
+            },
+            "JOURNAL_DESCRIPTION": "e.g. This is a food journal",
+            "IPC_TECH_SECTOR_TXT": "e.g. Human Necessities",
+            "IPC_TECH_FIELD_TXT": "e.g. Human Necessities",
+            "IPC_TECH_FIELD": "e.g. Human Necessities",
+            "IPC_ORI": "e.g. A02H 15/04",
+            "IPC_MAIN": "",
+            "IPC": "e.g. A02H1504",
+            "INRE": "",
+            "INNA_LG1": "",
+            "INNA": "",
+            "INCT": "",
+            "INAD_LG1": "",
+            "INAD": "",
+            "GZPDT": "e.g. 2017.12.31",
+            "GZNB": "",
+            "GZDT": " e.g. 2017.12.31",
+            "FILE_TYP": "e.g. P, D, M",
+            "FILE_ID": "e.g. AP-A-2008-10",
+            "EXCRDT": "e.g. 2017.12.31",
+            "EFOLDER_REF": "e.g. 1-2018-2",
+            "EDOC_REF": "e.g. 158-2008-1",
+            "DOC_REF": "e.g. AP-AF11-2008-2",
+            "DOC_ID": "e.g. AP-A-2008-10",
+            "DETXT": "e.g. Nestl\u00e9 is the world's largest food and beverage company.",
+            "DESCTXT": "",
+            "DERE": "e.g. CH",
+            "DENA_LG1": "e.g. Nestl\u00e9",
+            "DENA": "e.g. Nestl\u00e9",
+            "DECT": "e.g. CH",
+            "DECLDES": "",
+            "DEAD_LG1": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+            "DEAD": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+            "CPC_ORI": "e.g. A02H 15/04",
+            "CPC_MAIN": "",
+            "CPC": "e.g. A02H1504",
+            "CLTXT": "",
+            "CLNB": "",
+            "CLLG": "e.g. EN",
+            "CLDE": "",
+            "CITCL": "",
+            "CITCAT": "",
+            "CINB": "",
+            "CIDE": "",
+            "CICL": "",
+            "CICA": "",
+            "CATEGORY": "",
+            "APTXT": "e.g. Nestl\u00e9",
+            "APRE": "e.g. CH",
+            "APPL_TYP_TXT": "e.g. National Application",
+            "APPL_TYP": "e.g. National Application",
+            "APPL_SUBTYP_TXT": "e.g. National Application",
+            "APPL_SUBTYP": "e.g. National Application",
+            "APNA_LG1": "e.g. Nestl\u00e9",
+            "APNA": "e.g. Nestl\u00e9",
+            "APCT": "e.g. CH",
+            "APAD_LG1": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+            "APAD": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+            "AFNB_ORI": "e.g. CH2018000001",
+            "AFNB": "e.g. CH2018000001",
+            "AFDT": "e.g. 2017.12.31",
+            "ABTXT": "e.g. This application belongs to the food category.",
+            "ABST_LG1": "e.g. This application belongs to the food category.",
+            "ABST_EN": "e.g. This application belongs to the food category.",
+            "ABST": "e.g. This application belongs to the food category."
+        },
+        "display": {
+            "years": "Year",
+            "type": "Jenis",
+            "todate": "To",
+            "suggestion": {
+                "technical": {
+                    "field": "Technology Field"
+                },
+                "VCL": "Vienna Class",
+                "String": "String",
+                "Number": "Number",
+                "NCL": "Nice Class",
+                "LCL": "Locarno Class",
+                "Default": "Default",
+                "Date": "Date",
+                "Classification": "Classification",
+                "AlphaNumeric": "AlphaNumeric"
+            },
+            "sector": {
+                "transportation": "Transportation",
+                "transport": "Transport",
+                "tools_and_machines": "Tools And Machines",
+                "textiles_and_accessories": "Textiles And Accessories",
+                "research_and_technology": "Research And Technology",
+                "packaging": "Packaging",
+                "other_sectors": "Other Sectors",
+                "other_fields": "Other Fields",
+                "non_classified": "Non Classified",
+                "mechanical_engineering": "Mechanical Engineering",
+                "leisure_and_education": "Leisure And Education",
+                "instruments": "Instruments",
+                "ict_and_audiovisual": "ICT And Audiovisual",
+                "household_equipment": "Household Equipment",
+                "health_pharma_and_cosmetics": "Health, Pharma And Cosmetics",
+                "health": "Health",
+                "furniture_and_household_goods": "Furniture And Household Goods",
+                "electricity_and_lighting": "Electricity And Lighting",
+                "electrical_engineering": "Electrical Engineering",
+                "construction": "Construction",
+                "clothing": "Clothing",
+                "chemistry": "Chemistry",
+                "chemicals": "Chemicals",
+                "business_services": "Business Services",
+                "average_others": "Average Others",
+                "agriculture": "Agriculture",
+                "agricultural_products_and_food_preparation": "Agricultural Products And Food Preparation",
+                "advertising": "Advertising"
+            },
+            "search": {
+                "criteria": "Kriteria pencarian"
+            },
+            "score": "Relevansi",
+            "phonetic": {
+                "min": {
+                    "relevance": "Minimum Relevance"
+                }
+            },
+            "pct_national_phase": "Fase Nasional PCT",
+            "parentId": "Pengenal",
+            "journal": {
+                "detail": {
+                    "APP_REPRESENTATIVE_NAME": "Representative",
+                    "APP_REGISTRATION_NUMBER": "Registration Number",
+                    "APP_REGISTRATION_DATE": "Registration Date",
+                    "APP_REGISTERED_CLASSES_DETAIL": "Nice Classes",
+                    "APP_PUBLICATION_DATE": "Publication Date",
+                    "APP_PCT_PUBLICATION_ID": "PCT Publication Number",
+                    "APP_PCT_PUBLICATION_DATE": "PCT Publication Date",
+                    "APP_PCT_FILING_DATE": "PCT Filing Date",
+                    "APP_OWNER_NAME": "Owner",
+                    "APP_NAME": "Mark Name",
+                    "APP_LOGO_COLOURS": "Logo Colours",
+                    "APP_LOCARNO": "Locarno Classes",
+                    "APP_IPC_EDITION": "IPC Edition",
+                    "APP_INVENTOR_NAME": "Inventor",
+                    "APP_FILING_DATE": "Filing Date",
+                    "APP_FILE_NUMBER": "Application Number",
+                    "APP_EXPIRATION_DATE": "Expiry Date",
+                    "APP_EXAM_IPC": "IPC Classes",
+                    "ACTION_DATE": "Action Date"
+                }
+            },
+            "id": "Pengenal",
+            "group": "Grup",
+            "fromdate": "From",
+            "country": {
+                "code": {
+                    "ZW": "Zimbabwe",
+                    "ZM": "Zambia",
+                    "XX": "Not Specified",
+                    "VN": "Vietnam",
+                    "UG": "Uganda",
+                    "TZ": "Tanzania",
+                    "TP": "Timor-Leste",
+                    "TN": "Tunisia",
+                    "TL": "Timor-Leste",
+                    "TH": "Thailand",
+                    "SG": "Singapura",
+                    "SD": "Sudan",
+                    "SA": "Saudi Arabia",
+                    "RW": "Rwanda",
+                    "RS": "Serbia",
+                    "PH": "Philippines",
+                    "OM": "Oman",
+                    "NA": "Namibia",
+                    "MZ": "Mozambique",
+                    "MY": "Malaysia",
+                    "MW": "Malawi",
+                    "MM": "Myanmar",
+                    "MD": "Moldova",
+                    "MA": "Morocco",
+                    "LA": "Laos",
+                    "KH": "Kamboja",
+                    "KE": "Kenya",
+                    "JO": "Jordan",
+                    "IN": "India",
+                    "ID": "Indonesia",
+                    "IC": "Saint Lucia",
+                    "GM": "Gambia",
+                    "GH": "Ghana",
+                    "ET": "Ethiopia",
+                    "EG": "Egypt",
+                    "DZ": "Algeria",
+                    "DO": "Dominican Republic",
+                    "CU": "Cuba",
+                    "CR": "Costa Rica",
+                    "CN": "China",
+                    "BY": "Belarus",
+                    "BW": "Botswana",
+                    "BU": "Myanmar",
+                    "BN": "Brunei",
+                    "AR": "Argentina",
+                    "AP": "ARIPO",
+                    "-": "Unknown"
+                }
+            },
+            "content_type": "Jenis Konten",
+            "content_stored": "Konten",
+            "content": "Konten",
+            "boost": {
+                "exact": {
+                    "match": "Boost Exact Match"
+                }
+            },
+            "application_filed": "Application Filed",
+            "all": "All",
+            "WDDT": "Tanggal Penarikan",
+            "VNCL": "Kelas Vienna",
+            "VCL_RANKED": "Ranked by Vienna Classes",
+            "VCL_NON_CLASSIFIED": "Non Vienna Classified",
+            "VCL_CATEGORY": "Vienna Category",
+            "VCL": "Kelas Vienna",
+            "TXT": "Semua bidang",
+            "TITXT": "Judul",
+            "TITL_LG1": "Judul (en)",
+            "TITL_EN": "Judul bahasa Inggris",
+            "TITL": "Judul",
+            "TDNB": "Jumlah Desain",
+            "SYPO": "Posisi",
+            "STLB_ORI": "Status Internal",
+            "STLB": "Status",
+            "STDTL": "Daftar Tanggal",
+            "STDT": "Tanggal",
+            "STCDL": "Daftar",
+            "STCD": "Status",
+            "SRDT": "Sejarah Penelusuran",
+            "SPND": "Pengenal Spesimen",
+            "SPDE": "Deskripsi Spesimen",
+            "SP": "Posisi",
+            "SOUNDEX": "Suara",
+            "SOUND": "Suara",
+            "SERIAL_F_CD": "Serial (F)",
+            "SELG": "Bahasa (en)",
+            "SEARCH_INFO": "The word searched may appear in previous version of this application",
+            "SEARCH_CRITERIA": "Kriteria pencarian",
+            "RPTXT": "Informasi",
+            "RPRE": "Representative Residence",
+            "RPNA": "Nama Konsultan",
+            "RPCT": "Negara",
+            "RPAD": "Alamat Konsultan",
+            "RENEW_SD": "Start Date",
+            "RENEW_ED": "End Date",
+            "RENEW": "Duration(s) of Renewal",
+            "RENB_ORI": "Original Registration Number",
+            "RENB": "Nomor Paten",
+            "REIN": "Nomor dan Tanggal Paten",
+            "REDT": "Tanggal Diberi",
+            "Query": "Solr Query",
+            "PTETXT": "Kronologi",
+            "PRLG": "Bahasa",
+            "PKDE": "Deskripsi Kind Kode",
+            "PCTXT": "Nomor Prioritas",
+            "PCTPBNB": "Nomor Publikasi Internasional",
+            "PCTPBIN": "Negara & Tanggal Publikasi Internasional",
+            "PCTPBDT": "Tanggal Publikasi Internasional",
+            "PCTPBCT": "Negara",
+            "PCTNB": "Nomor Internasional",
+            "PCTIN": "No. Permohonan & Tanggal Internasional",
+            "PCTDT": "Tanggal Publikasi PCT",
+            "PCTCT": "Negara PCT",
+            "PCNB": "Nomor Prioritas",
+            "PCDT": "Tanggal Prioritas",
+            "PCCT": "Prioritas",
+            "PBNB": "Nomor Publikasi",
+            "PBLG": "Bahasa",
+            "PBKC": "Kode",
+            "PBIN": "Nomor dan Tanggal Publikasi",
+            "PBDTL": "Daftar Publikasi",
+            "PBDT": "Tanggal",
+            "PBCT": "Negara",
+            "PATCITTXT": "Kutipan Paten",
+            "PATCIT": "Paten",
+            "OPSDT": "Tanggal Mulai Oposisi",
+            "OFCO": "Kode Negara",
+            "NPLCITXT": "Kutipan Bukan Literatur Paten",
+            "NPLCIT": "Bukan Literatur Paten",
+            "NPEDT": "Tanggal Penerimaan Lokal",
+            "NCL_RANKED": "Ranked by Nice Classes",
+            "NCL_NON_CLASSIFIED": "Non Nice Classified",
+            "NCL_INDUSTRY_SECTOR": "Nice Industry Sector",
+            "NCL": "Kelas Nice",
+            "NCDE_LG1": "Deskripsi Kelas Nice (en)",
+            "NCDE": "Deskripsi Kelas Nice",
+            "NCCL": "Kelas Nice",
+            "MSNB": "Jumlah Merek",
+            "MNNA": "Merek",
+            "MK_LG1": "Merek (en)",
+            "MKTXT": "Deskripsi",
+            "MKTRLT": "Mark Transliteration",
+            "MKTR": "Translasi",
+            "MKNSL": "Merek (end)",
+            "MKFW": "Merek Kata",
+            "MKFT": "Fitur Merek",
+            "MKETXT": "Kronologi",
+            "MKDI": "Disclaimer",
+            "MKDE": "Rincian Merek",
+            "MKDC": "Disclaimer",
+            "MKCSD": "Status",
+            "MKCLR": "Warna Merek",
+            "MKCLDE": "Deskripsi Warna Merek",
+            "MK": "Merek",
+            "MD_FTYP": "Jenis",
+            "MAIN_EFOLDER_REF": "Main EFolder Reference",
+            "LOGO_INID": "(540) Logo",
+            "LOGOEX": "Logo",
+            "LOGO": "Logo",
+            "LOC": "Klasifikasi",
+            "LIC": "License Details",
+            "LEGALDT": "Tanggal Disahkan",
+            "LCL_NON_CLASSIFIED": "Non Locarno Classified",
+            "LCL_INDUSTRY_SECTOR": "Locarno Industry Sector",
+            "LCL": "Klasifikasi",
+            "LCENB": "Edisi Locarno",
+            "LCDE": "Klasifikasi",
+            "LABEL_LG_1": "Label (en)",
+            "LABEL": "Label",
+            "Journal": {
+                "AFNB_ORI": "Application Number"
+            },
+            "JOURNAL_DT": "Tanggal Jurnal",
+            "JOURNAL_DESCRIPTION": "Deskripsi Jurnal",
+            "JOURNAL_CONTENT": "Detail",
+            "JOURNAL_CD": "Kode Jurnal",
+            "IPC_TECH_SECTOR_TXT": "Sektor Teknologi IPC",
+            "IPC_TECH_SECTOR": "Technology sector",
+            "IPC_TECH_FIELD_TXT": "Bidang Teknologi IPC",
+            "IPC_TECH_FIELD": "Bidang Teknologi IPC",
+            "IPC_SHORT": "IPC Classes",
+            "IPC_ORIGINAL": "Kelas IPC",
+            "IPC_ORI": "Kelas IPC",
+            "IPC_NON_CLASSIFIED": "Non IPC Classified",
+            "IPC": "Kelas IPC",
+            "INRE": "Alamat Penemu",
+            "INNA_LG1": "Penemu (en)",
+            "INNA": "Penemu",
+            "INCT": "Negara Penemu",
+            "INAD_LG1": "Alamat Penemu (en)",
+            "INAD": "Alamat Penemu",
+            "Group": "Grup",
+            "GZTXT": "Informasi",
+            "GZPDT": "Tanggal Publikasi",
+            "GZNB": "Nomor Berita Resmi",
+            "GZDT": "Tanggal Berita Resmi",
+            "GRDT": "Tanggal Diberi",
+            "FILE_TYP": "Jenis Permohonan",
+            "FILE_ID": "File Id",
+            "EXDT": "Tanggal Pemeriksaan",
+            "EVNA": "Event Name",
+            "EPDT": "Tanggal Kadaluarsa",
+            "EFOLDER_REF": "EFolder Reference",
+            "EFOLDER_ID": "EFolder Id",
+            "EDOC_TYP": "Jenis e-Dokumen",
+            "EDOC_REF": "EDoc Reference",
+            "EDOC_ID": "EDoc Id",
+            "EDOC_DT": "Tanggal e-Dokumen",
+            "EDNB": "Nomor Edisi",
+            "DT": "Tanggal",
+            "DRAWING": "Gambar",
+            "DOC_REF": "Document Reference",
+            "DOC_ID": "Document Id",
+            "DE_LG1": "Deskripsi Desain Industri (en)",
+            "DETXT": "Informasi Pendesain",
+            "DETITXT": "Judul Desain",
+            "DETI": "Judul Desain",
+            "DETD": "Total",
+            "DETAILS": "Details",
+            "DESCTXT": "Deskripsi",
+            "DERE": "Design Residence",
+            "DEPKD": "Desain Alami",
+            "DENOVELTY": "Design Novelty Statement",
+            "DENA_LG1": "Pendesain (en)",
+            "DENA": "Pendesain",
+            "DEID_LG1": "Pengenal Desain (en)",
+            "DEID": "Pengenal Desain",
+            "DEETXT": "Deskripsi",
+            "DECT": "Design Country",
+            "DECSD": "Tanggal Status",
+            "DECLTXT": "Klaim Desain",
+            "DECLNO": "Klaim",
+            "DECLDES": "Deskripsi",
+            "DECDI": "Indentifikasi Rincian Klaim",
+            "DECD": "Rincian Klaim",
+            "DEAD_LG1": "Alamat (en)",
+            "DEAD": "Alamat",
+            "DE": "Deskripsi Desain Industri",
+            "CRNA": "Nama Korespondensi",
+            "CRAD": "Alamat Korespondensi",
+            "CPC_ORI": "Kelas BPK",
+            "CPC": "Kelas BPK",
+            "CODE": "K",
+            "CLTXT": "Klaim",
+            "CLNB": "Nomor",
+            "CLLG": "Bahasa",
+            "CLDE": "Deskripsi Klaim",
+            "CITXT": "Kutipan",
+            "CITTYP": "Jenis Kutipan",
+            "CITREF": "Referensi",
+            "CITDOC": "Dokumen Kutipan",
+            "CITCL": "Klaim",
+            "CITCAT": "Kategori",
+            "CINB": "Nomor",
+            "CIDT": "Tanggal Sertifikat",
+            "CIDENB": "Nomor Dokumen",
+            "CIDE": "Deskripsi",
+            "CICT": "Negara",
+            "CICL": "Klaim",
+            "CICA": "Kategori Kutipan",
+            "CCDT": "Pembatalan Kegiatan",
+            "CATEGORY": "Kategori",
+            "CAPTURE_DT": "Tanggal Pengisian",
+            "CANA": "Alamat Korespondensi",
+            "BASIC_CD": "Dasar",
+            "Application_registered": "Didaftar",
+            "Application_expired": "Kadaluarsa",
+            "Action": "Tindakan",
+            "APTXT": "Pemohon",
+            "APRE": "Alamat Pemohon",
+            "APPL_TYP_TXT": "Jenis Permohonan",
+            "APPL_TYP": "Jenis Permohonan",
+            "APPL_SUBTYP_TXT": "Sub Jenis Permohonan",
+            "APPL_SUBTYP": "Sub Jenis Permohonan",
+            "APNT": "Kebangsaan Pemohon",
+            "APNA_LG1": "Pemohon (en)",
+            "APNA": "Pemohon",
+            "APCT": "Negara Pemohon",
+            "APAD_LG1": "Alamat Pemohon (en)",
+            "APAD": "Alamat Pemohon",
+            "ANU_YEAR": "Year",
+            "ANU_STDT": "Validity Start",
+            "ANU_PAY": "Payment",
+            "ANU_ENDT": "Validity End",
+            "ANU": "Annuity Details",
+            "AFNB_ORI": "Nomor Permohonan",
+            "AFNB": "Nomor Permohonan #",
+            "AFLG": "Bahasa",
+            "AFIN": "Nomor Permohonan # dan Tanggal",
+            "AFDT": "Tanggal Penerimaan",
+            "AFCT": "Negara Asal",
+            "ACTION_TYP": "tipe aksi",
+            "ACTION": "ACTION",
+            "ABTXT": "Abstrak",
+            "ABST_LG1": "Abstrak (en)",
+            "ABST_EN": "Bahasa Inggris Abstrak",
+            "ABST": "Abstrak"
+        }
+    },
+    "facet": {
+        "label": {
+            "true": "Ya",
+            "status": {
+                "RL": "Awaiting Court Action",
+                "PE": "pending",
+                "MM": "Lapsed",
+                "MK": "Expired",
+                "MG": "Invalidated",
+                "MF": "Revoked",
+                "ME": "Revoked",
+                "MC": "Cancelled",
+                "MB": "Appealed",
+                "GA": "Converted",
+                "FG": "Registered",
+                "FC": "Rejected",
+                "FB": "Suspended",
+                "FA": "Withdrawn",
+                "EM": "empty",
+                "DE": "deleted",
+                "CZ": "Opposed",
+                "CE": "certified",
+                "BZ": "Published",
+                "AZ": "Filed"
+            },
+            "pct_national_phase": "Fase Nasional PCT",
+            "header": {
+                "filter": {
+                    "by": "Filter by :"
+                }
+            },
+            "false": "Tidak",
+            "VN": "Vietnam",
+            "TP": "Timor-Leste",
+            "TL": "Timor-Leste",
+            "TH": "Thailand",
+            "SG": "Singapura",
+            "SA": "Arab Saudi",
+            "RL": "Menunggu Putusan Pengadilan",
+            "PH": "Filipina",
+            "PE": "Ditunda",
+            "MY": "Malaysia",
+            "MM": "Myanmar",
+            "MK": "Kadaluarsa",
+            "MG": "Dibatalkan",
+            "MF": "Dicabut",
+            "ME": "Dicabut",
+            "MC": "Dibatalkan",
+            "MB": "Banding",
+            "LA": "Laos",
+            "KH": "Kamboja",
+            "ID": "Indonesia",
+            "GA": "Dikonversi",
+            "FG": "Didaftar",
+            "FC": "Ditolak",
+            "FB": "Ditangguhkan",
+            "FA": "Ditarik Kembali",
+            "EM": "Kosong",
+            "DE": "Dihapus",
+            "CZ": "Oposisi",
+            "CE": "Didaftar",
+            "BZ": "Publikasi",
+            "BU": "Myanmar",
+            "BN": "Brunei",
+            "AZ": "Permohonan"
+        }
+    },
+    "error": {
+        "response": {
+            "code": {
+                "message": {
+                    "500": "Unable to contact WIPO CASE system.",
+                    "404": "Application is not yet loaded into WIPO CASE system.",
+                    "403": "You are not authorized to use this service please contact to administrator."
+                }
+            }
+        },
+        "document": {
+            "not": {
+                "available": {
+                    "message": "No document available"
+                }
+            }
+        }
+    },
+    "detail": {
+        "page": {
+            "tooltip": {
+                "pctpnb": "PCT publikasi lebih detail",
+                "pctnb": "PCT mengisi lebih banyak detail",
+                "ow": "Aplikasi lain oleh pemilik yang sama",
+                "npe": "Entri fase nasional",
+                "nice": "Detail NICE",
+                "more": {
+                    "details": "Keterangan lebih lanjut"
+                },
+                "lck": "Detail LOCARNO",
+                "ipc": "Detail klasifikasi IPC",
+                "in": "Aplikasi lain oleh penemu yang sama",
+                "cpc": "Perincian BPK",
+                "ap": "Aplikasi lain oleh pemohon yang sama"
+            },
+            "title": "ASEAN PATENTSCOPE",
+            "npe": {
+                "title": "Entri fase nasional dari",
+                "table": {
+                    "header": {
+                        "npedate": "Tanggal masuk tahap nasional",
+                        "appno": "Nomor aplikasi"
+                    }
+                },
+                "fail": {
+                    "message": "Tidak dapat mengambil data entri fase nasional."
+                }
+            },
+            "no": {
+                "other": {
+                    "application": "Tidak ada aplikasi lain yang ditemukan."
+                },
+                "application": {
+                    "found": "Aplikasi tidak ditemukan."
+                }
+            }
+        }
+    },
+    "date": {
+        "display": {
+            "week": {
+                "Wednesday": "We",
+                "Tuesday": "Tu",
+                "Thursday": "Th",
+                "Sunday": "Su",
+                "Saturday": "Sa",
+                "Monday": "Mo",
+                "Friday": "Fr"
+            },
+            "options": {
+                "YEAR_DATE": "Year to Date",
+                "TODAY": "Today",
+                "SPECIFIC_DATE": "Specific Date",
+                "MONTH_DATE": "Last 6 Months",
+                "DATE_RANGE": "Date Range",
+                "BEFORE": "All Dates Before",
+                "AFTER": "All Dates After"
+            },
+            "month": {
+                "September": "September",
+                "October": "October",
+                "November": "November",
+                "May": "May",
+                "March": "March",
+                "June": "June",
+                "July": "July",
+                "January": "January",
+                "February": "February",
+                "December": "December",
+                "August": "August",
+                "April": "April"
+            }
+        }
+    },
+    "concordance": {
+        "term": {
+            "tooltip": {
+                "label": "Technology"
+            },
+            "placeholder": {
+                "label": ""
+            },
+            "null": {
+                "label": "Pilih satu"
+            },
+            "display": {
+                "label": "Bidang Teknologi"
+            }
+        }
+    },
+    "chart": {
+        "techsector": "Sektor teknologi",
+        "pie": {
+            "subtitle": "You can click on a technology sector to visualize specific information"
+        },
+        "news": {
+            "title": "Berita Terbaru"
+        },
+        "industrysector": "Industry sector",
+        "geo": {
+            "title": {
+                "patents": "Permohonan Paten Berdasarkan Negara",
+                "designs": "Permohonan Desain Industri Berdasarkan Negara",
+                "default": "PATENTS, DESIGNS AND TRADEMARKS FILING BY COUNTRY"
+            },
+            "subtitle": "You can click a region on the map or table to visualize specific information",
+            "number": {
+                "of": {
+                    "trademarks ": " Jumlah Merek",
+                    "patents ": " Jumlah Paten",
+                    "designs ": " Jumlah Desain Industri"
+                }
+            },
+            "grid": {
+                "header": {
+                    "flag": "#",
+                    "datecoverage": "Periode Publikasi",
+                    "country": "Negara",
+                    "count": "Permohonan"
+                }
+            }
+        },
+        "common": {
+            "top": {
+                "applicant": "Top applicant"
+            },
+            "percentage": "Percentage",
+            "number": {
+                "of": {
+                    "applicants": "Total number of applications"
+                }
+            },
+            "header": {
+                "trends": "Top 5 Trends",
+                "technology": {
+                    "sector": {
+                        "trend": "Technology Sector Trends",
+                        "filing": "Technology Sector Filing"
+                    }
+                },
+                "country": "Top 10 Countries",
+                "applicants": "Top 10 Applicants"
+            }
+        },
+        "bar": {
+            "topfive": {
+                "total": "Total number of applications in this sector: ${count}",
+                "sector": "Top five sectors in ${country}",
+                "country": "Top five countries in ${sector}",
+                "back": "Back"
+            },
+            "tm": {
+                "title": "Trademarks filing by Industry sector",
+                "subtitle": "You can click on a industry sector to visualize specific information"
+            },
+            "title": "Permohonan Paten Berdasarkan Bidang Teknologi",
+            "subtitle": "You can click on a technology sector to visualize specific information",
+            "design": {
+                "title": "Designs filing by Industry sector",
+                "subtitle": "You can click on a industry sector to visualize specific information"
+            }
+        }
+    },
+    "category": {
+        "patent": {
+            "label": "Patents"
+        },
+        "other": {
+            "label": "Miscellaneous"
+        },
+        "numbers": {
+            "label": "Numbers"
+        },
+        "names": {
+            "label": "Names"
+        },
+        "mark": {
+            "label": "Marks"
+        },
+        "folder": {
+            "label": "Folder"
+        },
+        "files": {
+            "label": "Files"
+        },
+        "document": {
+            "label": "Document"
+        },
+        "design": {
+            "label": "Designs"
+        },
+        "dates": {
+            "label": "Dates"
+        },
+        "country": {
+            "label": "Country"
+        },
+        "countries": {
+            "label": "Countries"
+        },
+        "classification": {
+            "label": "Classification"
+        }
+    },
+    "btn": {
+        "togglefields": {
+            "label": "+/- Kolom"
+        },
+        "search": {
+            "reset": {
+                "label": "Reset"
+            },
+            "label": "Telusuri"
+        },
+        "hide": {
+            "veiwer": "Sembunyikan Penampil"
+        },
+        "filter": {
+            "label": "Filter"
+        },
+        "clearSelection": {
+            "label": "Hapus Pilihan"
+        },
+        "captcha": {
+            "label": "Berikutnya"
+        },
+        "applyfilter": {
+            "label": "Terapkan Filter"
+        },
+        "Cancel": {
+            "label": "Cancel"
+        },
+        "Apply": {
+            "label": "Apply"
+        }
+    },
+    "application": {
+        "country": {
+            "chart": {
+                "bar": {
+                    "title": "Top 10 Applicant countries",
+                    "subtitle": "You can click on a country to visualize specific information"
+                }
+            }
+        }
+    },
+    "applicant": {
+        "chart": {
+            "bar": {
+                "title": "Top 10 Applicant",
+                "subtitle": "You can click on a applicant to visualize specific information"
+            }
+        }
+    },
+    "#home": {
+        "search": {
+            "title": {
+                "label": "INTELLECTUAL PROPERTY ORGANIZATION SEARCH SYSTEM"
+            },
+            "subtitle": {
+                "label": "All you need to know about patents, trademarks and designs in your region"
+            }
+        }
+    }
+}

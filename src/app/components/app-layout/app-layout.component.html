@@ -1,0 +1,34 @@
+
+<div class="layout-wrapper" [ngClass]="{'layout-theme-dark': config.theme === 'dark'}">
+  <!-- Loading overlay-->
+  <div class="loading-overlay" *ngIf="ms.isLoading">
+    <div class="loading-spinner">
+      <p-progressSpinner></p-progressSpinner>
+    </div>
+    <div class="loading-text">{{ ms.translate('loading') }}</div>
+  </div>
+  <!-- Header/Navbar-->
+  <app-navbar *ngIf="config.showHeader" [title]="config.appTitle" [items]="config.headerItems" [fixed]="config.fixedHeader" (toggleSidebarEvent)="toggleSidebar()"></app-navbar>
+  <!-- Main Content Area-->
+  <div class="layout-main">
+    <!-- Sidebar-->
+    <app-sidebar *ngIf="config.showSidebar" [visible]="sidebarVisible" [fixed]="config.fixedSidebar" [items]="config.sidebarItems"></app-sidebar>
+    <!-- Content area-->
+    <div class="layout-content">
+      <!-- Breadcrumbs-->
+      <div class="breadcrumbs-container" *ngIf="ms.breadcrumbs">
+        <p-breadcrumb [model]="breadcrumbItems" [home]="breadcrumbHome"></p-breadcrumb>
+      </div>
+      <!-- Main content-->
+      <div class="content-container">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+  <!-- Footer-->
+  <footer class="layout-footer" *ngIf="config.footerText">
+    <div class="footer-content">
+      <p>{{ config.footerText }}</p>
+    </div>
+  </footer>
+</div>
