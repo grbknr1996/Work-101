@@ -1,1472 +1,1477 @@
 {
-    "wipopublish": {
-        "news": {
-            "2": "continue d'ajouter plus de messages si besoin",
-            "1": "Tous les messages syst\u00e8me \u00e0 poster peuvent \u00eatre plac\u00e9s ici"
+  "home": {
+    "link": {
+      "label": "Accueil"
+    }
+  },
+  "wipopublish": {
+    "news": {
+      "2": "continue d'ajouter plus de messages si besoin",
+      "1": "Tous les messages syst\u00e8me \u00e0 poster peuvent \u00eatre plac\u00e9s ici"
+    }
+  },
+  "wipo": {
+    "publish": {
+      "wrong": {
+        "syntex": {
+          "solr": {
+            "query": {
+              "user": {
+                "message": "Impossible d'ex\u00e9cuter la requ\u00eate. Veuillez saisir votre requ\u00eate."
+              }
+            }
+          }
         }
-    },
-    "wipo": {
-        "publish": {
-            "wrong": {
-                "syntex": {
-                    "solr": {
-                        "query": {
-                            "user": {
-                                "message": "Impossible d'ex\u00e9cuter la requ\u00eate. Veuillez saisir votre requ\u00eate."
-                            }
-                        }
-                    }
-                }
-            },
+      },
+      "user": {
+        "manual": {
+          "label": "Aide"
+        }
+      },
+      "stats": {
+        "label": "Statistiques"
+      },
+      "invalid": {
+        "solr": {
+          "query": {
             "user": {
-                "manual": {
-                    "label": "Aide"
-                }
-            },
-            "stats": {
-                "label": "Statistiques"
-            },
-            "invalid": {
-                "solr": {
-                    "query": {
-                        "user": {
-                            "message": "Impossible d'analyser la requ\u00eate de recherche. Veuillez l'effacer et l'entrer."
-                        }
-                    }
-                }
-            },
-            "html": {
-                "link2": {
-                    "label": "Link2"
-                },
-                "link1": {
-                    "label": "Link1"
-                }
-            },
-            "about": {
-                "label": "\u00e0 propos",
-                "content": "<h1>A propos de ASEAN PATENTSCOPE</h1><br><p>Ce logiciel est fourni par l'Organisation mondiale de la propri\u00e9t\u00e9 intellectuelle (OMPI) par son programme d'assistance technique aux offices nationaux et r\u00e9gionaux de la propri\u00e9t\u00e9 industrielle.</p><br><p> L'utilisation de ce logiciel est soumise aux termes et conditions (<a href=\"http://www.wipo.int/global_ip/en/activities/technicalassistance/termsandconditions.html\" title=\"Follow link\">http://www.wipo.int/global_ip/en/activities/technicalassistance/termsandconditions.html</a> ) Qui font partie de l'accord sign\u00e9 <br>Entre l'OMPI et chaque bureau de la propri\u00e9t\u00e9 intellectuelle.</p> <br><p>Certaines parties de ce logiciel sont fournies par le soutien de Japan Funds-in-Trust for Industrial Property (pour plus d'informations, Consulter \\n <a href=\"http://www.wipo.int/cooperation/en/funds_in_trust/japan_fitip_aspac/index.html\" title=\"Follow link\">http://www.wipo.int/cooperation/en/funds_in_trust/japan_fitip_aspac/index.html</a>) <br><br></p><p>Pour plus d'informations sur les programmes d'assistance technique de l'OMPI, consulter<a href=\"http://www.wipo.int/global_ip/en/activities/technicalassistance/\" title=\"Follow link\"> http://www.wipo.int/global_ip/en/activities/technicalassistance/</a></p>"
+              "message": "Impossible d'analyser la requ\u00eate de recherche. Veuillez l'effacer et l'entrer."
             }
+          }
         }
-    },
-    "trend": {
-        "line": {
-            "chart": {
-                "bar": {
-                    "title": "Tendances de surveillance",
-                    "subtitle": "Observez les tendances pour"
-                }
-            }
+      },
+      "html": {
+        "link2": {
+          "label": "Link2"
         },
-        "donut": {
-            "chart": {
-                "bar": {
-                    "title": "Top 5 des tendances technologiques",
-                    "subtitle": "Top 5 des tendances technologiques pour"
-                }
-            }
+        "link1": {
+          "label": "Link1"
         }
-    },
-    "tooltip": {
-        "user": {
-            "selection": {
-                "info": {
-                    "label": "Toutes les applications s\u00e9lectionn\u00e9es en cliquant sur la case \u00e0 cocher de l'\u00e9cran R\u00e9sultat de la recherche appara\u00eetront ici."
-                }
-            },
-            "select": {
-                "label": "S\u00e9lectionner"
-            },
-            "deselect": {
-                "label": "supprimer"
-            }
-        },
-        "tableview": {
-            "label": "Affichage tableau"
-        },
-        "showfilter": {
-            "label": "Montrer le filtre"
-        },
-        "search": {
-            "info": {
-                "label": "Enregistrement s\u00e9lectionn\u00e9 avec un ou plusieurs crit\u00e8res"
-            }
-        },
-        "phonetic": {
-            "check": {
-                "info ": " Information"
-            },
-            "check ": " Ce champ augmente les enregistrements avec une correspondance exacte pour avoir un score de pertinence plus \u00e9lev\u00e9"
-        },
-        "minimum": {
-            "relevance ": " Ce champ sert \u00e0 limiter les r\u00e9sultats en d\u00e9finissant la pertinence minimale"
-        },
-        "listview": {
-            "label": "Affichage Liste"
-        },
-        "hidefilter": {
-            "label": "Cacher le filtre"
-        },
-        "gridview": {
-            "label": "Vue en grille"
-        },
-        "export": {
-            "label": "Exporter"
-        },
-        "download": {
-            "label": "T\u00e9l\u00e9charger",
-            "document": {
-                "label": "T\u00e9l\u00e9charger le document"
-            },
-            "application": {
-                "xml": {
-                    "label": "T\u00e9l\u00e9charger l'application XML"
-                }
-            }
-        },
-        "document": {
-            "view": {
-                "label": "Afficher le document"
-            },
-            "search": {
-                "info": {
-                    "label": "Ajoutez vos crit\u00e8res de recherche dans \"\" pour une recherche exacte"
-                }
-            }
-        },
-        "detail": {
-            "newtab": {
-                "label": "Afficher les d\u00e9tails dans un nouvel onglet"
-            },
-            "label": "Montrer d\u00e9tails"
-        },
-        "clearfilter": {
-            "label": "Effacer le filtre"
-        },
-        "check": {
-            "label": "Check"
-        },
-        "chart": {
-            "label": "Chart"
-        },
-        "back": {
-            "to": {
-                "search": {
-                    "label": "Retour \u00e0 la recherche"
-                }
-            }
+      },
+      "about": {
+        "label": "\u00e0 propos",
+        "content": "<h1>A propos de ASEAN PATENTSCOPE</h1><br><p>Ce logiciel est fourni par l'Organisation mondiale de la propri\u00e9t\u00e9 intellectuelle (OMPI) par son programme d'assistance technique aux offices nationaux et r\u00e9gionaux de la propri\u00e9t\u00e9 industrielle.</p><br><p> L'utilisation de ce logiciel est soumise aux termes et conditions (<a href=\"http://www.wipo.int/global_ip/en/activities/technicalassistance/termsandconditions.html\" title=\"Follow link\">http://www.wipo.int/global_ip/en/activities/technicalassistance/termsandconditions.html</a> ) Qui font partie de l'accord sign\u00e9 <br>Entre l'OMPI et chaque bureau de la propri\u00e9t\u00e9 intellectuelle.</p> <br><p>Certaines parties de ce logiciel sont fournies par le soutien de Japan Funds-in-Trust for Industrial Property (pour plus d'informations, Consulter \\n <a href=\"http://www.wipo.int/cooperation/en/funds_in_trust/japan_fitip_aspac/index.html\" title=\"Follow link\">http://www.wipo.int/cooperation/en/funds_in_trust/japan_fitip_aspac/index.html</a>) <br><br></p><p>Pour plus d'informations sur les programmes d'assistance technique de l'OMPI, consulter<a href=\"http://www.wipo.int/global_ip/en/activities/technicalassistance/\" title=\"Follow link\"> http://www.wipo.int/global_ip/en/activities/technicalassistance/</a></p>"
+      }
+    }
+  },
+  "trend": {
+    "line": {
+      "chart": {
+        "bar": {
+          "title": "Tendances de surveillance",
+          "subtitle": "Observez les tendances pour"
         }
+      }
     },
-    "time": {
-        "ms": "ms"
-    },
-    "thumbnail": {
-        "dummy": {
-            "disclaimer": "Logo de marque g\u00e9n\u00e9r\u00e9 par machine"
+    "donut": {
+      "chart": {
+        "bar": {
+          "title": "Top 5 des tendances technologiques",
+          "subtitle": "Top 5 des tendances technologiques pour"
         }
-    },
-    "table": {
-        "summary": {
-            "title": "Affichage ${from} - ${to} de ${of} r\u00e9sultats"
-        },
-        "no": {
-            "data": {
-                "found": "Aucun enregistrement trouv\u00e9"
-            }
-        },
-        "document": {
-            "publications": {
-                "label": "Publications"
-            },
-            "pct": {
-                "application": {
-                    "label": "Demande PCT"
-                }
-            },
-            "name": {
-                "label": "Nom du document"
-            },
-            "filing": {
-                "date": {
-                    "label": "Date d'entr\u00e9e en phase nationale"
-                }
-            },
-            "doctype": {
-                "label": "Type de document"
-            },
-            "docdate": {
-                "label": "Date"
-            },
-            "application": {
-                "number": {
-                    "label": "Application/Priority"
-                }
-            },
-            "action": {
-                "label": "Action"
-            }
+      }
+    }
+  },
+  "tooltip": {
+    "user": {
+      "selection": {
+        "info": {
+          "label": "Toutes les applications s\u00e9lectionn\u00e9es en cliquant sur la case \u00e0 cocher de l'\u00e9cran R\u00e9sultat de la recherche appara\u00eetront ici."
         }
+      },
+      "select": {
+        "label": "S\u00e9lectionner"
+      },
+      "deselect": {
+        "label": "supprimer"
+      }
     },
-    "tab": {
-        "userselection": {
-            "label": "Votre s\u00e9l\u00e9ction"
-        },
-        "text": {
-            "field": {
-                "label ": " Champs de texte"
-            }
-        },
-        "status": {
-            "label": "un \u00e9v\u00e9nement"
-        },
-        "search": {
-            "label": ""
-        },
-        "recent": {
-            "label": "Recherche R\u00e9cente"
-        },
-        "phoneticsearch": {
-            "label": "Similarit\u00e9"
-        },
-        "patent": {
-            "family": {
-                "label": "Famille de brevet"
-            }
-        },
-        "number": {
-            "field": {
-                "label ": " Champs de num\u00e9ros"
-            }
-        },
-        "gazettesearch": {
-            "label": "Journal"
-        },
-        "documentsearch": {
-            "label": "Document"
-        },
-        "doclist": {
-            "label": "Document"
-        },
-        "description": {
-            "label": "La description"
-        },
-        "date": {
-            "field": {
-                "label ": " Champs de dates"
-            }
-        },
-        "claim": {
-            "label": "Revendications"
-        },
-        "biblio": {
-            "label": "Donn\u00e9es bibliographique"
-        },
-        "advancedsearch": {
-            "label": "Avanc\u00e9e"
-        }
+    "tableview": {
+      "label": "Affichage tableau"
     },
-    "section": {
-        "associateddrawing": {
-            "label": "Drawings"
-        }
+    "showfilter": {
+      "label": "Montrer le filtre"
     },
     "search": {
-        "table": {
-            "results": {
-                "label": "Vue de la table"
-            }
-        },
-        "sort": {
-            "type": {
-                "desc": {
-                    "tooltip": "Descendant"
-                },
-                "asc": {
-                    "tooltip": "Ascendant"
-                }
-            },
-            "field": {
-                "tooltip": "S\u00e9lectionnez une colonne pour le tri"
-            }
-        },
-        "page": {
-            "title": "ASEAN PATENTSCOPE"
-        },
-        "list": {
-            "results": {
-                "label": "Vue de la liste"
-            }
-        },
-        "grid": {
-            "results": {
-                "label": "Vue de la grille"
-            }
-        },
-        "export": {
-            "results": {
-                "label": "Exporter les r\u00e9sultats"
-            }
-        },
-        "bar": {
-            "suggestive": {
-                "search": {
-                    "on": {
-                        "tooltip": "La s\u00e9lection des champs fr\u00e9quents est activ\u00e9e"
-                    },
-                    "off": {
-                        "tooltip": "Tous les champs sont s\u00e9lectionn\u00e9s"
-                    },
-                    "label": "S\u00e9lection du champ"
-                }
-            },
-            "solr": {
-                "id": {
-                    "tooltip": "Cliquez ici pour supprimer le mot cl\u00e9"
-                }
-            }
+      "info": {
+        "label": "Enregistrement s\u00e9lectionn\u00e9 avec un ou plusieurs crit\u00e8res"
+      }
+    },
+    "phonetic": {
+      "check": {
+        "info ": " Information"
+      },
+      "check ": " Ce champ augmente les enregistrements avec une correspondance exacte pour avoir un score de pertinence plus \u00e9lev\u00e9"
+    },
+    "minimum": {
+      "relevance ": " Ce champ sert \u00e0 limiter les r\u00e9sultats en d\u00e9finissant la pertinence minimale"
+    },
+    "listview": {
+      "label": "Affichage Liste"
+    },
+    "hidefilter": {
+      "label": "Cacher le filtre"
+    },
+    "gridview": {
+      "label": "Vue en grille"
+    },
+    "export": {
+      "label": "Exporter"
+    },
+    "download": {
+      "label": "T\u00e9l\u00e9charger",
+      "document": {
+        "label": "T\u00e9l\u00e9charger le document"
+      },
+      "application": {
+        "xml": {
+          "label": "T\u00e9l\u00e9charger l'application XML"
         }
+      }
     },
-    "result": {
-        "number": {
-            "found": "Les applications trouv\u00e9es dans"
-        },
-        "count": {
-            "message": {
-                "single": "Environ ${count} r\u00e9sultat",
-                "plural": "Environ ${count} r\u00e9sultat"
-            }
+    "document": {
+      "view": {
+        "label": "Afficher le document"
+      },
+      "search": {
+        "info": {
+          "label": "Ajoutez vos crit\u00e8res de recherche dans \"\" pour une recherche exacte"
         }
-    },
-    "page": {
-        "title": {
-            "application": {
-                "label": "Application"
-            }
-        }
-    },
-    "option": {
-        "stemming": {
-            "label": "stemming"
-        },
-        "phonetic": {
-            "label": "phon\u00e9tique"
-        },
-        "fuzzy": {
-            "label": "fuzzy"
-        }
-    },
-    "module": {
-        "trademarks": {
-            "label": "Marques"
-        },
-        "patents": {
-            "label": "Brevets"
-        },
-        "designs": {
-            "label": "Mod\u00e8les"
-        }
-    },
-    "message": {
-        "userselection": {
-            "nocriteria": "Aucun crit\u00e8re",
-            "keyword": "Mot-cl\u00e9",
-            "and": "ET",
-            "all": "Tout"
-        },
-        "feature": {
-            "notsupported": "Votre navigateur ne supporte pas l'affichage du document. T\ufffdl\ufffdchargez le document \ufffd la place."
-        },
-        "export": {
-            "limit": {
-                "exceeded": "Please narrow down the search results further before exporting!"
-            }
-        }
-    },
-    "menu": {
-        "trademarks": "Marques",
-        "references": "References",
-        "patents": "Brevets",
-        "home": "Accueil",
-        "edms": "EDMS",
-        "designs": "Md\u00e8les"
-    },
-    "language": {
-        "display": {
-            "label": {
-                "vi": "Ti\u1ebfng Vi\u1ec7t",
-                "ms": "Bahasa Melayu",
-                "kh": "\u1797\u17b6\u179f\u17b6\u1781\u17d2\u1798\u17c2\u179a",
-                "jp": "\u65e5\u672c\u8a9e",
-                "id": "Bahasa Indonesia",
-                "fr": "Fran\u00e7ais",
-                "en": "English",
-                "ar": "\u0627\u0644\u0639\u0631\u0628\u064a\u0629"
-            }
-        }
-    },
-    "label": {
-        "showing": "Montrant",
-        "security": {
-            "captcha": "Pour confirmer votre demande, cochez la case pour nous faire savoir que vous \u00eates humain."
-        },
-        "of": "de",
-        "more": "Plus",
-        "less": "Moins"
-    },
-    "info": {
-        "version": {
-            "label": "version 1.0.2"
-        },
-        "poweredby": {
-            "label": "powered by WIPO"
-        }
-    },
-    "header": {
-        "application": {
-            "title": "ASEAN PATENTSCOPE"
-        }
-    },
-    "footer": {
-        "search": {
-            "quicklink": {
-                "label": "CHERCHER"
-            },
-            "detail": {
-                "quicklink": {
-                    "label": "Recherche de base ou avanc\u00e9e vers <br> affiner vos pr\u00e9f\u00e9rences"
-                }
-            }
-        },
-        "manage": {
-            "quicklink": {
-                "label": "G\u00c9RER"
-            },
-            "detail": {
-                "quicklink": {
-                    "label": "Vous pouvez enregistrer et personnaliser <br> votre recherche"
-                }
-            }
-        },
-        "export": {
-            "quicklink": {
-                "label": "EXPORTATION"
-            },
-            "detail": {
-                "quicklink": {
-                    "label": "Exportez votre recherche en PDF"
-                }
-            }
-        }
-    },
-    "field": {
-        "tooltip": {
-            "todate": "\u00c0",
-            "phonetic": {
-                "min": {
-                    "relevance": "Pertinence minimale"
-                }
-            },
-            "id": "Identifier",
-            "fromdate": "De",
-            "entry": {
-                "count": "Nombre d'entr\u00e9es"
-            },
-            "boost": {
-                "exact": {
-                    "match": "Boost Exact Match"
-                }
-            },
-            "application": {
-                "count": "Nombre d'applications"
-            },
-            "VNCL": "Classes de vienne",
-            "VCL": "Classes de vienne",
-            "TITL_LG1": "intituler (2\u00e8me langue)",
-            "TITL_EN": "Titre anglais",
-            "TITL": "intituler",
-            "STLB_ORI": "Internal Status Label",
-            "STLB": "Satut",
-            "STDT": "Date",
-            "STCD": "Code de statut",
-            "RPRE": "R\u00e9sidence du repr\u00e9sentant",
-            "RPNA_LG1": "Nom du repr\u00e9sentant (2\u00e8me langue)",
-            "RPNA": "Nom du repr\u00e9sentant",
-            "RPCT": "Pays du repr\u00e9sentant",
-            "RPAD_LG1": "Adresse du repr\u00e9sentant (2\u00e8me langue)",
-            "RPAD": "Adresse du repr\u00e9sentant",
-            "RENB": "Num\u00e9ro d'enregistrement",
-            "REDT": "Date d'enregistrement",
-            "PCTPBNB": "PCT Num\u00e9ro de publication",
-            "PCTPBDT": "PCT Date de publication",
-            "PCTPBCT": "PCT Pays de publication",
-            "PCTNB": "PCT Num\u00e9ro de d\u00e9p\u00f4t",
-            "PCTDT": "PCT Date de publication",
-            "PCNB": "Num\u00e9ro de priorit\u00e9",
-            "PCDT": "Date de priorit\u00e9",
-            "PCCT": "D\u00e9tails de priorit\u00e9",
-            "PBNB": "Num\u00e9ro de publication",
-            "PBKC": "Type de publication",
-            "PBDT": "Date de publication",
-            "OFCO": "field.tooltip.OFCO=Code de l'office",
-            "NPEDT": "Date d'entr\u00e9e en phase Nationale",
-            "NCL": "Classes de nice",
-            "NCDE_LG1": "Description de la classe de nice (2\u00e8me langue)",
-            "NCDE": "Description de la classe de nice",
-            "NCCL": "Classes de nice",
-            "MK_LG1": "Nom de la marque (2\u00e8me Langue)",
-            "MKTXT": "Marque Events",
-            "MK": "Marque",
-            "MAIN_EFOLDER_REF": "Main EFolder Reference",
-            "LOGOEX": "Logo",
-            "LOGO": "Logo",
-            "LOC": "Classification",
-            "LCL": "Classification",
-            "LCDE": "Classification",
-            "Journal": {
-                "AFNB_ORI": "Num\u00e9ro de demande"
-            },
-            "JOURNAL_DESCRIPTION": "Description du journal",
-            "IPC_TECH_SECTOR_TXT": "Secteur de la technologie IP",
-            "IPC_TECH_FIELD_TXT": "Champ de la technologie IPC",
-            "IPC_TECH_FIELD": "Champ de la technologie IPC",
-            "IPC_ORI": "CIB",
-            "IPC_MAIN": "IPC_MAIN",
-            "IPC": "CIB",
-            "INRE": "R\u00e9sidence de l'inventeur",
-            "INNA_LG1": "Inventeur (2\u00e8me langue)",
-            "INNA": "Inventeur",
-            "INCT": "Pays de l'inventeur",
-            "INAD_LG1": "Adresse de l'inventeur (2\u00e8me langue)",
-            "INAD": "Adresse de l'inventeur",
-            "GZPDT": "Date de publication de la gazette",
-            "GZNB": "Num\u00e9ro de la gazette",
-            "GZDT": "Date de la gazette",
-            "FILE_TYP": "Type de la demande",
-            "FILE_ID": "File Id",
-            "EXCRDT": "EXCRDT",
-            "EFOLDER_REF": "EFolder Reference",
-            "EFOLDER_ID": "EFolder Id",
-            "EDOC_REF": "EDoc Reference",
-            "EDOC_ID": "EDoc Id",
-            "DOC_REF": "Document Reference",
-            "DOC_ID": "Document Id",
-            "DETXT": "Information",
-            "DESCTXT": "Description",
-            "DERE": "R\u00e9sidence de design",
-            "DENA_LG1": "Designer traduit",
-            "DENA": "Designer",
-            "DECT": "Pays du design",
-            "DECLDES": "Description",
-            "DEAD_LG1": "Design Address Bilingual",
-            "DEAD": "Design Address",
-            "CPC_ORI": "Cours CPC",
-            "CPC_MAIN": "CPC_MAIN",
-            "CPC": "Cours CPC",
-            "CLTXT": "Revendications",
-            "CLNB": "Num\u00e9ro de la revendication",
-            "CLLG": "Langue de la revendication",
-            "CLDE": "D\u00e9scription des revendications",
-            "CITCL": "Requ\u00eates",
-            "CITCAT": "Categorie",
-            "CINB": "Num\u00e9ro de la citation",
-            "CIDE": "Description de la Citation",
-            "CICL": "Requ\u00eate de la Citation",
-            "CICA": "Cat\u00e9gorie de la Citation",
-            "CATEGORY": "Categorie",
-            "APTXT": "D\u00e9posant",
-            "APRE": "R\u00e9sidence du d\u00e9posant",
-            "APPL_TYP_TXT": "Type de la demande",
-            "APPL_TYP": "Type de la demande",
-            "APPL_SUBTYP_TXT": "Sous-type de la demande",
-            "APPL_SUBTYP": "Sous-type de la demande",
-            "APNA_LG1": "D\u00e9posant (2\u00e8me langue)",
-            "APNA": "D\u00e9posant",
-            "APCT": "Pays du d\u00e9posant",
-            "APAD_LG1": "Addresse du d\u00e9posant (2\u00e8me langue)",
-            "APAD": "Addresse du d\u00e9posant",
-            "AFNB_ORI": "Num\u00e9ro d\u00e9pot original",
-            "AFNB": "Num\u00e9ro de d\u00e9pot",
-            "AFDT": "Date de d\u00e9pot",
-            "ABTXT": "Abr\u00e9g\u00e9",
-            "ABST_LG1": "Abr\u00e9g\u00e9 (2\u00e8me langue)",
-            "ABST_EN": "R\u00e9sum\u00e9 anglais",
-            "ABST": "Abr\u00e9g\u00e9"
-        },
-        "search": {
-            "suggestion": {
-                "label": "Entrer les mots cl\u00e9s"
-            },
-            "concordance": {
-                "placeholder": "Entrez le mot-cl\u00e9 pour:Optics, Medical,Surface"
-            }
-        },
-        "placeholder": {
-            "todate": "e.g. 2017.12.31",
-            "phonetic": {
-                "min": {
-                    "relevance": ""
-                }
-            },
-            "id": "e.g. CH2018000001",
-            "fromdate": "e.g. 2017.12.31",
-            "documentType": "e.g. Spec",
-            "documentParentId": "e.g. CH2018000001",
-            "documentName": "e.g. CH2018000001_spec_000001",
-            "documentContent": "e.g. This is a specification document",
-            "boost": {
-                "exact": {
-                    "match": ""
-                }
-            },
-            "VNCL": "e.g. 8.1.19",
-            "VCL": "e.g. 8.1.19",
-            "TITL_LG1": "e.g. Nestl\u00e9 KitKat",
-            "TITL_EN": "e.g. Nestl\u00e9 KitKat",
-            "TITL": "e.g. Nestl\u00e9 KitKat",
-            "STLB_ORI": "e.g. Published",
-            "STLB": "e.g. Published",
-            "STDT": "e.g. 2017.12.31",
-            "STCD": "e.g. FG",
-            "RPRE": "e.g. CH",
-            "RPNA_LG1": "e.g. Nestl\u00e9",
-            "RPNA": "e.g. Nestl\u00e9",
-            "RPCT": "e.g. CH",
-            "RPAD_LG1": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
-            "RPAD": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
-            "RENB": "e.g. CH2018000001",
-            "REDT": "e.g. 2017.12.31",
-            "PCTPBNB": "2018/000001",
-            "PCTPBDT": "",
-            "PCTPBCT": "e.g. CH",
-            "PCTNB": "e.g. PCT/CH2018/000001",
-            "PCTDT": "e.g. 2017.12.31",
-            "PCNB": "e.g. CH2018000001",
-            "PCDT": "e.g. 2017.12.31",
-            "PCCT": "e.g. CH",
-            "PBNB": "e.g. 2018/000001",
-            "PBKC": "",
-            "PBDT": "e.g. 2017.12.31",
-            "OFCO": "e.g. CH",
-            "NPEDT": "e.g. 2017.12.31",
-            "NCL": "e.g. 0100662",
-            "NCDE_LG1": "e.g. Chocolate for kids",
-            "NCDE": "e.g. Chocolate for kids",
-            "NCCL": "e.g. 0100662",
-            "MK_LG1": "e.g. KitKat",
-            "MKTXT": "e.g. KitKat",
-            "MK": "e.g. KitKat",
-            "LOGOEX": "",
-            "LOGO": "",
-            "LOC": "e.g. Geneva",
-            "LCL": "e.g. 26.6",
-            "LCDE": "e.g. Chocolate for kids",
-            "Journal": {
-                "AFNB_ORI": "e.g. CH2018000001"
-            },
-            "JOURNAL_DESCRIPTION": "e.g. This is a food journal",
-            "IPC_TECH_SECTOR_TXT": "e.g. Human Necessities",
-            "IPC_TECH_FIELD_TXT": "e.g. Human Necessities",
-            "IPC_TECH_FIELD": "e.g. Human Necessities",
-            "IPC_ORI": "e.g. A02H 15/04",
-            "IPC_MAIN": "",
-            "IPC": "e.g. A02H1504",
-            "INRE": "",
-            "INNA_LG1": "",
-            "INNA": "",
-            "INCT": "",
-            "INAD_LG1": "",
-            "INAD": "",
-            "GZPDT": "e.g. 2017.12.31",
-            "GZNB": "",
-            "GZDT": "e.g. 2017.12.31",
-            "FILE_TYP": "e.g. P, D, M",
-            "FILE_ID": "e.g. AP-A-2008-10",
-            "EXCRDT": "e.g. 2017.12.31",
-            "EFOLDER_REF": "e.g. 1-2018-2",
-            "EDOC_REF": "e.g. 158-2008-1",
-            "DOC_REF": "e.g. AP-AF11-2008-2",
-            "DOC_ID": "e.g. AP-A-2008-10",
-            "DETXT": "e.g. Nestl\u00e9 is the world's largest food and beverage company.",
-            "DESCTXT": "",
-            "DERE": "e.g. CH",
-            "DENA_LG1": "e.g. Nestl\u00e9",
-            "DENA": "e.g. Nestl\u00e9",
-            "DECT": "e.g. CH",
-            "DECLDES": "",
-            "DEAD_LG1": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
-            "DEAD": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
-            "CPC_ORI": "e.g. A02H 15/04",
-            "CPC_MAIN": "",
-            "CPC": "e.g. A02H1504",
-            "CLTXT": "",
-            "CLNB": "",
-            "CLLG": "e.g. EN",
-            "CLDE": "",
-            "CITCL": "",
-            "CITCAT": "",
-            "CINB": "",
-            "CIDE": "",
-            "CICL": "",
-            "CICA": "",
-            "CATEGORY": "",
-            "APTXT": "e.g. Nestl\u00e9",
-            "APRE": "e.g. CH",
-            "APPL_TYP_TXT": "e.g. National Application",
-            "APPL_TYP": "e.g. National Application",
-            "APPL_SUBTYP_TXT": "e.g. National Application",
-            "APPL_SUBTYP": "e.g. National Application",
-            "APNA_LG1": "e.g. Nestl\u00e9",
-            "APNA": "e.g. Nestl\u00e9",
-            "APCT": "e.g. CH",
-            "APAD_LG1": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
-            "APAD": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
-            "AFNB_ORI": "e.g. CH2018000001",
-            "AFNB": "e.g. CH2018000001",
-            "AFDT": "e.g. 2017.12.31",
-            "ABTXT": "e.g. This application belongs to the food category.",
-            "ABST_LG1": "e.g. This application belongs to the food category.",
-            "ABST_EN": "e.g. This application belongs to the food category.",
-            "ABST": "e.g. This application belongs to the food category."
-        },
-        "display": {
-            "years": "Ann\u00e9e",
-            "type": "Type de document",
-            "todate": "\u00c0",
-            "suggestion": {
-                "technical": {
-                    "field": "Champ de technologie"
-                },
-                "suggested_field_text": "S\u00e9lectionnez le ou les champs sugg\u00e9r\u00e9s",
-                "VCL": "Classe VIENNA",
-                "String": "Cha\u00eene",
-                "Number": "Nombre",
-                "NCL": "Classe NICE",
-                "LCL": "Classe LOCARNO",
-                "Default": "D\u00e9faut",
-                "Date": "Rendez-vous amoureux",
-                "Classification": "Classification",
-                "AlphaNumeric": "AlphaNum\u00e9rique"
-            },
-            "sector": {
-                "transportation": "le transport",
-                "transport": "Transport",
-                "tools_and_machines": "Outils Et Machines",
-                "textiles_and_accessories": "Textiles Et Accessoires",
-                "research_and_technology": "Recherche et technologie",
-                "packaging": "le conditionnement",
-                "other_sectors": "Autres secteurs",
-                "other_fields": "Autres domaines",
-                "non_classified": "Non class\u00e9",
-                "mechanical_engineering": "Ing\u00e9nierie m\u00e9canique",
-                "leisure_and_education": "Loisirs et \u00e9ducation",
-                "instruments": "Instruments",
-                "ict_and_audiovisual": "ICT et audiovisuel",
-                "household_equipment": "\u00c9quipement m\u00e9nager",
-                "health_pharma_and_cosmetics": "Sant\u00e9, Pharma Et Cosm\u00e9tiques",
-                "health": "Sant\u00e9",
-                "furniture_and_household_goods": "Meubles et articles m\u00e9nagers",
-                "electricity_and_lighting": "\u00c9lectricit\u00e9 et \u00e9clairage",
-                "electrical_engineering": "Ing\u00e9nierie \u00e9lectrique",
-                "construction": "Construction",
-                "clothing": "V\u00eatements",
-                "chemistry": "Chimie",
-                "chemicals": "Produits chimiques",
-                "business_services": "Les services aux entreprises",
-                "average_others": "Moyenne Autres",
-                "agriculture": "Agriculture",
-                "agricultural_products_and_food_preparation": "Produits agricoles et pr\u00e9paration des aliments",
-                "advertising": "La publicit\u00e9"
-            },
-            "search": {
-                "criteria": "Crit\u00e8res de recherche"
-            },
-            "score": "Pertinence",
-            "phonetic": {
-                "min": {
-                    "relevance": "Pertinence minimale"
-                }
-            },
-            "pct_national_phase": "PCT Phase Nationale",
-            "parentId": "Parent Identifier",
-            "journal": {
-                "detail": {
-                    "APP_REPRESENTATIVE_NAME": "Nom du repr\u00e9sentant",
-                    "APP_REGISTRATION_NUMBER": "Num\u00e9ro d'enregistrement",
-                    "APP_REGISTRATION_DATE": "Date d'enregistrement",
-                    "APP_REGISTERED_CLASSES_DETAIL": "Classes de nice",
-                    "APP_PUBLICATION_DATE": "Date de publication",
-                    "APP_PCT_PUBLICATION_ID": "PCT Num\u00e9ro de publication",
-                    "APP_PCT_PUBLICATION_DATE": "PCT Date de publication",
-                    "APP_PCT_FILING_DATE": "PCT Date de publication",
-                    "APP_OWNER_NAME": "Propri\u00e9taire",
-                    "APP_NAME": "Marque",
-                    "APP_LOGO_COLOURS": "Couleurs du logo",
-                    "APP_LOCARNO": "Classes de locarno",
-                    "APP_IPC_EDITION": "\u00c9dition IPC",
-                    "APP_INVENTOR_NAME": "Inventeur",
-                    "APP_FILING_DATE": "Date de d\u00e9pot",
-                    "APP_FILE_NUMBER": "Num\u00e9ro de d\u00e9pot",
-                    "APP_EXPIRATION_DATE": "Date d'expiration",
-                    "APP_EXAM_IPC": "Classes de IPC",
-                    "ACTION_DATE": "Date d'action"
-                }
-            },
-            "id": "Identifier",
-            "group": "Groupe",
-            "fromdate": "De",
-            "country": {
-                "code": {
-                    "ZW": "Zimbabwe",
-                    "ZM": "Zambie",
-                    "XX": "Not Specified",
-                    "VN": "Vietnam",
-                    "UG": "Ouganda",
-                    "TZ": "Tanzanie",
-                    "TP": "Timor-Leste",
-                    "TN": "Tunisie",
-                    "TL": "Timor-Leste",
-                    "TH": "Tha\u00eflande",
-                    "SG": "Singapour",
-                    "SD": "Soudan",
-                    "SA": "Arabie Saoudite",
-                    "RW": "Rwanda",
-                    "RS": "Serbie",
-                    "PH": "Philippines",
-                    "OM": "Oman",
-                    "NA": "Namibie",
-                    "MZ": "Mozambique",
-                    "MY": "Malaisie",
-                    "MW": "Malawi",
-                    "MM": "Myanmar",
-                    "MD": "Moldavie",
-                    "MA": "Maroc",
-                    "LA": "Laos",
-                    "KH": "Cambodge",
-                    "KE": "Kenya",
-                    "JO": "Jordanie",
-                    "IN": "Inde",
-                    "ID": "Indon\u00e9sie",
-                    "IC": "Sainte-Lucie",
-                    "GM": "Gambie",
-                    "GH": "Ghana",
-                    "ET": "Ethiopie",
-                    "EG": "Egypte",
-                    "DZ": "Alg\u00e9rie",
-                    "DO": "R\u00e9publique dominicaine",
-                    "CU": "Cuba",
-                    "CR": "Costa Rica",
-                    "CN": "China",
-                    "BY": "Bi\u00e9lorusse",
-                    "BW": "Botswana",
-                    "BU": "Bulgarie",
-                    "BN": "Brunei",
-                    "AR": "Argentine",
-                    "AP": "ARIPO",
-                    "-": "Unknown"
-                }
-            },
-            "content_type": "Format",
-            "content_stored": "Content Stored",
-            "content": "Contenu",
-            "boost": {
-                "exact": {
-                    "match": "Boost Exact Match"
-                }
-            },
-            "application_filed": "Demande d\u00e9pos\u00e9e",
-            "all": "Tout",
-            "WDDT": "Date de retrait",
-            "VNCL": "Classes de vienne",
-            "VCL_RANKED": "Class\u00e9 par classes de Vienne",
-            "VCL_NON_CLASSIFIED": "Non Vienne class\u00e9",
-            "VCL_CATEGORY": "Vienne Cat\u00e9gorie",
-            "VCL": "Classes de vienne",
-            "TXT": "Tous les champs",
-            "TITXT": "intituler",
-            "TITL_LG1": "intituler (2\u00e8me langue)",
-            "TITL_EN": "Titre anglais",
-            "TITL": "intituler",
-            "TDNB": "Total Design",
-            "SYPO": "Position du symbole",
-            "STLB_ORI": "Internal Status Label",
-            "STLB": "Satut",
-            "STDTL": "Date (Liste)",
-            "STDT": "Date",
-            "STCDL": "Code de statut (liste)",
-            "STCD": "Code de statut",
-            "SRDT": "Searched Event",
-            "SPND": "Specimen Identifier",
-            "SPDE": "Specimen Description",
-            "SP": "Position du symbole",
-            "SOUNDEX": "Sound Exists",
-            "SOUND": "Sound",
-            "SERIAL_F_CD": "Serial (F)",
-            "SELG": "Deuxi\u00e8me Langue",
-            "SEARCH_INFO": "Le mot recherch\u00e9 peut appara\u00eetre dans les versions pr\u00e9c\u00e9dentes de cette application",
-            "SEARCH_CRITERIA": "Crit\u00e8res de recherche",
-            "RPTXT": "Informations du repr\u00e9sentant",
-            "RPRE": "R\u00e9sidence du repr\u00e9sentant",
-            "RPNA_LG1": "Nom du repr\u00e9sentant (2\u00e8me langue)",
-            "RPNA": "Nom du repr\u00e9sentant",
-            "RPCT": "Pays du repr\u00e9sentant",
-            "RPAD_LG1": "Adresse du repr\u00e9sentant (2\u00e8me langue)",
-            "RPAD": "Adresse du repr\u00e9sentant",
-            "RENEW_SD": "Start Date",
-            "RENEW_ED": "End Date",
-            "RENEW": "Duration(s) of Renewal",
-            "RENB_ORI": "Num\u00e9ro d'enregistrement original",
-            "RENB": "Num\u00e9ro d'enregistrement",
-            "REIN": "Num\u00e9ro et date d'enregistrement",
-            "REDT": "Date d'enregistrement",
-            "Query": "Solr Query",
-            "PTETXT": "Patent Events",
-            "PRLG": "Langue",
-            "PKDE": "Publication Kind Code Description",
-            "PCTXT": "D\u00e9tails de la priorit\u00e9",
-            "PCTPBNB": "PCT Num\u00e9ro de publication",
-            "PCTPBIN": "PCT Num\u00e9ro et date de publication",
-            "PCTPBDT": "PCT Date de publication",
-            "PCTPBCT": "PCT Pays de publication",
-            "PCTNB": "PCT Num\u00e9ro de d\u00e9p\u00f4t",
-            "PCTIN": "PCT Num\u00e9ro et date de d\u00e9po\u00f4t",
-            "PCTDT": "PCT Date de publication",
-            "PCTCT": "PCT Pays",
-            "PCNB": "Num\u00e9ro de priorit\u00e9",
-            "PCDT": "Date de priorit\u00e9",
-            "PCCT": "D\u00e9tails de priorit\u00e9",
-            "PBNB": "Num\u00e9ro de publication",
-            "PBLG": "Langue de publication",
-            "PBKC": "Type de publication",
-            "PBIN": "Num\u00e9ro et date de publication",
-            "PBDTL": "Date de publication (liste)",
-            "PBDT": "Date de publication",
-            "PBCT": "Pays de publication",
-            "PATCITTXT": "Citation du brevet",
-            "PATCIT": "Brevets",
-            "OPSDT": "Date du d\u00e9but d'opposition",
-            "OFCO": "Code de l'office",
-            "NPLCITXT": "Citations de la Litt\u00e9rature Non Brevet",
-            "NPLCIT": "Litt\u00e9rature Non Brevet",
-            "NPEDT": "Date d'entr\u00e9e en phase Nationale",
-            "NCL_RANKED": "Class\u00e9 par Nice Classes",
-            "NCL_NON_CLASSIFIED": "Non Nice class\u00e9",
-            "NCL_INDUSTRY_SECTOR": "Secteur Industrie de nice",
-            "NCL": "Classes de nice",
-            "NCDE_LG1": "Description de la classe de nice (2\u00e8me langue)",
-            "NCDE": "Description de la classe de nice",
-            "NCCL": "Classes de nice",
-            "MSNB": "Total Mark Series",
-            "MNNA": "Nature de la marque",
-            "MK_LG1": "Nom de la marque (2\u00e8me Langue)",
-            "MKTXT": "Marque",
-            "MKTRLT": "Mark Transliteration",
-            "MKTR": "Traduction de la marque",
-            "MKNSL": "Nom de la marque (2\u00e8me Langue)",
-            "MKFW": "Mark Feature",
-            "MKFT": "Caract\u00e9ristiques de la marque",
-            "MKETXT": "Mark Events",
-            "MKDI": "Mark Disclaimer",
-            "MKDE": "Mark Description Detail",
-            "MKDC": "Disclaimer",
-            "MKCSD": "Date de l'\u00e9tat actuel",
-            "MKCLR": "Couleur de la marque",
-            "MKCLDE": "Description de la couleur de la marque",
-            "MK": "Marque",
-            "MD_FTYP": "Type",
-            "MAIN_EFOLDER_REF": "Main EFolder Reference",
-            "LOGO_INID": "(540) Logo",
-            "LOGOEX": "Logo",
-            "LOGO": "Logo",
-            "LOC": "Classification",
-            "LIC": "License Details",
-            "LEGALDT": "Legal Date",
-            "LCL_NON_CLASSIFIED": "Non classifi\u00e9 de Locarno",
-            "LCL_INDUSTRY_SECTOR": "Secteur Industrie de Locarno",
-            "LCL": "Classes de locarno",
-            "LCENB": "Edition de Locarno",
-            "LCDE": "Classification",
-            "LABEL_LG_1": "Label (Bilingual)",
-            "LABEL": "Label",
-            "Journal": {
-                "AFNB_ORI": "Num\u00e9ro de demande"
-            },
-            "JOURNAL_DT": "Journal Date",
-            "JOURNAL_DESCRIPTION": "Description du journal",
-            "JOURNAL_CONTENT": "D\u00e9tails",
-            "JOURNAL_CD": "Code journal",
-            "IPC_TECH_SECTOR_TXT": "Secteur de la technologie IP",
-            "IPC_TECH_SECTOR": "Secteur technologique",
-            "IPC_TECH_FIELD_TXT": "Champ de la technologie IPC",
-            "IPC_TECH_FIELD": "Champ de la technologie IPC",
-            "IPC_SHORT": "CIB",
-            "IPC_ORIGINAL": "CIB",
-            "IPC_ORI": "CIB",
-            "IPC_NON_CLASSIFIED": "Non class\u00e9 IPC",
-            "IPC": "CIB",
-            "INRE": "R\u00e9sidence de l'inventeur",
-            "INNA_LG1": "Inventeur (2\u00e8me langue)",
-            "INNA": "Inventeur",
-            "INCT": "Pays de l'inventeur",
-            "INAD_LG1": "Adresse de l'inventeur (2\u00e8me langue)",
-            "INAD": "Adresse de l'inventeur",
-            "Group": "Groupe",
-            "GZTXT": "Information de la gazette",
-            "GZPDT": "Date de publication de la gazette",
-            "GZNB": "Num\u00e9ro de la gazette",
-            "GZDT": "Date de la gazette",
-            "GRDT": "Date de d\u00e9livrance",
-            "FILE_TYP": "Type de la demande",
-            "FILE_ID": "File Id",
-            "EXDT": "Date d'examen",
-            "EVNA": "Nom de l'\u00e9v\u00e9nement",
-            "EPDT": "Date d'expiration",
-            "EFOLDER_REF": "EFolder Reference",
-            "EFOLDER_ID": "EFolder Id",
-            "EDOC_TYP": "EDoc Type",
-            "EDOC_REF": "EDoc Reference",
-            "EDOC_ID": "EDoc Id",
-            "EDOC_DT": "EDoc Date",
-            "EDNB": "Num\u00e9ro d'Edition",
-            "DT": "Date",
-            "DRAWING": "Dessins",
-            "DOC_REF": "Document Reference",
-            "DOC_ID": "Document Id",
-            "DE_LG1": "Description (2\u00e8me langue)",
-            "DETXT": "Information",
-            "DETITXT": "Titre",
-            "DETI": "Titre",
-            "DETD": "Total Designs",
-            "DETAILS": "D\u00e9tails",
-            "DESCTXT": "Description",
-            "DERE": "R\u00e9sidence de design",
-            "DEPKD": "Nature",
-            "DENOVELTY": "Design Novelty Statement",
-            "DENA_LG1": "Designer traduit",
-            "DENA": "Designer",
-            "DEID_LG1": "Identifiant (2\u00e8me langue)",
-            "DEID": "Identifiant",
-            "DEETXT": "Dessin industriel",
-            "DECT": "Pays du design",
-            "DECSD": "Date status courante",
-            "DECLTXT": "Requ\u00eates",
-            "DECLNO": "Requ\u00eate",
-            "DECLDES": "Description",
-            "DECDI": "Requ\u00eate d\u00e9tail identifiant",
-            "DECD": "Requ\u00eate d\u00e9tail",
-            "DEAD_LG1": "Design Address Bilingual",
-            "DEAD": "Design Address",
-            "DE": "Description du dessin industriel",
-            "CRNA": "Nom de Correspondance",
-            "CRAD": "Addresse de correspondance",
-            "CPC_ORI": "Cours CPC",
-            "CPC": "Cours CPC",
-            "CODE": "Code",
-            "CLTXT": "Revendications",
-            "CLNB": "Num\u00e9ro de la revendication",
-            "CLLG": "Langue de la revendication",
-            "CLDE": "D\u00e9scription des revendications",
-            "CITXT": "Citations",
-            "CITTYP": "Type de Citation",
-            "CITREF": "R\u00e9f\u00e9rences",
-            "CITDOC": "Documents cit\u00e9s",
-            "CITCL": "Requ\u00eates",
-            "CITCAT": "Categorie",
-            "CINB": "Num\u00e9ro de la citation",
-            "CIDT": "Date de certification",
-            "CIDENB": "Num\u00e9ro de Doc. de la Citation",
-            "CIDE": "Description de la Citation",
-            "CICT": "Pays de citation",
-            "CICL": "Requ\u00eate de la Citation",
-            "CICA": "Cat\u00e9gorie de la Citation",
-            "CCDT": "Annulation",
-            "CATEGORY": "Categorie",
-            "CAPTURE_DT": "Date de saisie",
-            "CANA": "Addresse de correspondance",
-            "BASIC_CD": "Basique",
-            "Application_registered": "Enregistr\u00e9",
-            "Application_expired": "Expir\u00e9",
-            "Action": "Action",
-            "APTXT": "D\u00e9posant",
-            "APRE": "R\u00e9sidence du d\u00e9posant",
-            "APPL_TYP_TXT": "Type de la demande",
-            "APPL_TYP": "Type de la demande",
-            "APPL_SUBTYP_TXT": "Sous-type de la demande",
-            "APPL_SUBTYP": "Sous-type de la demande",
-            "APNT": "Nationalit\u00e9 du d\u00e9posant",
-            "APNA_LG1": "D\u00e9posant (2\u00e8me langue)",
-            "APNA": "D\u00e9posant",
-            "APCT": "Pays du d\u00e9posant",
-            "APAD_LG1": "Addresse du d\u00e9posant (2\u00e8me langue)",
-            "APAD": "Addresse du d\u00e9posant",
-            "ANU_YEAR": "Year",
-            "ANU_STDT": "Validity Start",
-            "ANU_PAY": "Payment",
-            "ANU_ENDT": "Validity End",
-            "ANU": "Annuity Details",
-            "AFNB_ORI": "Num\u00e9ro d\u00e9pot original",
-            "AFNB": "Num\u00e9ro de d\u00e9pot",
-            "AFLG": "Langue de d\u00e9pot",
-            "AFIN": "Num\u00e9ro et date de d\u00e9pot",
-            "AFDT": "Date de d\u00e9pot",
-            "AFCT": "Pays de d\u00e9pot",
-            "ACTION_TYP": "type d'action",
-            "ACTION": "ACTION",
-            "ABTXT": "Abr\u00e9g\u00e9",
-            "ABST_LG1": "Abr\u00e9g\u00e9 (2\u00e8me langue)",
-            "ABST_EN": "R\u00e9sum\u00e9 anglais",
-            "ABST": "Abr\u00e9g\u00e9"
-        }
-    },
-    "facet": {
-        "label": {
-            "true": "Oui",
-            "status": {
-                "RL": "En attente d'une action de la Cour",
-                "PE": "En attente",
-                "MM": "P\u00e9rim\u00e9",
-                "MK": "Expir\u00e9",
-                "MG": "Invalid\u00e9",
-                "MF": "R\u00e9voqu\u00e9",
-                "ME": "R\u00e9voqu\u00e9",
-                "MC": "Annul\u00e9",
-                "MB": "En appel",
-                "GA": "Convertit",
-                "FG": "Enregistr\u00e9",
-                "FC": "Rejet\u00e9",
-                "FB": "Suspendu",
-                "FA": "Retir\u00e9",
-                "EM": "Vide",
-                "DE": "Supprim\u00e9",
-                "CZ": "Oppos\u00e9",
-                "CE": "Certifi\u00e9",
-                "BZ": "Publi\u00e9",
-                "AZ": "D\u00e9pos\u00e9"
-            },
-            "pct_national_phase": "PCT Phase Nationale",
-            "header": {
-                "filter": {
-                    "by": "Filtrer par :"
-                }
-            },
-            "false": "Non",
-            "SA": "Arabie Saoudite"
-        }
-    },
-    "error": {
-        "response": {
-            "code": {
-                "message": {
-                    "500": "Impossible de contacter le syst\u00e8me WIPO CASE.",
-                    "404": "L'application n'est pas encore charg\u00e9e dans le syst\u00e8me WIPO CASE.",
-                    "403": "Vous n'\u00eates pas autoris\u00e9 \u00e0 utiliser ce service, veuillez contacter l'administrateur."
-                }
-            }
-        },
-        "document": {
-            "not": {
-                "available": {
-                    "message": "Aucun document disponible"
-                }
-            }
-        }
+      }
     },
     "detail": {
-        "page": {
-            "tooltip": {
-                "npe": "Entr\u00e9es de la phase nationale",
-                "more": {
-                    "details": "Plus de d\u00e9tails"
-                }
-            },
-            "title": "ASEAN PATENTSCOPE",
-            "npe": {
-                "title": "Entr\u00e9es en phase nationale de",
-                "table": {
-                    "header": {
-                        "npedate": "Date d'entr\u00e9e en phase nationale",
-                        "appno": "Num\u00e9ro d'application"
-                    }
-                },
-                "fail": {
-                    "message": "Impossible de r\u00e9cup\u00e9rer les donn\u00e9es nationales d'entr\u00e9e de phase."
-                }
-            },
-            "no": {
-                "other": {
-                    "application": "Aucune autre application n'a \u00e9t\u00e9 trouv\u00e9e."
-                },
-                "application": {
-                    "found": "Application non trouv\u00e9e."
-                }
-            }
-        }
+      "newtab": {
+        "label": "Afficher les d\u00e9tails dans un nouvel onglet"
+      },
+      "label": "Montrer d\u00e9tails"
     },
-    "date": {
-        "display": {
-            "week": {
-                "Wednesday": "Me",
-                "Tuesday": "Ma",
-                "Thursday": "Je",
-                "Sunday": "di",
-                "Saturday": "sa",
-                "Monday": "Lu",
-                "Friday": "Ve"
-            },
-            "options": {
-                "YEAR_DATE": "Year to Date",
-                "TODAY": "Aujourd'hui",
-                "SPECIFIC_DATE": "Date sp\u00e9cifique",
-                "MONTH_DATE": "6 derniers mois",
-                "DATE_RANGE": "Plage de dates",
-                "BEFORE": "Toutes les dates avant",
-                "AFTER": "Toutes les dates apr\u00e8s"
-            },
-            "month": {
-                "September": "Septembre",
-                "October": "Octobre",
-                "November": "Novembre",
-                "May": "Mai",
-                "March": "Mars",
-                "June": "Juin",
-                "July": "Juillet",
-                "January": "Janvier",
-                "February": "F\u00e9vrier",
-                "December": "d\u00e9cembre",
-                "August": "Ao\u00fbt",
-                "April": "Avril"
-            }
-        }
+    "clearfilter": {
+      "label": "Effacer le filtre"
     },
-    "concordance": {
-        "term": {
-            "tooltip": {
-                "label": "La technologie"
-            },
-            "placeholder": {
-                "label": ""
-            },
-            "null": {
-                "label": ""
-            },
-            "display": {
-                "label": "La technologie"
-            }
-        }
+    "check": {
+      "label": "Check"
     },
     "chart": {
-        "techsector": "Secteur de la technologie",
-        "pie": {
-            "subtitle ": " Vous pouvez cliquer sur un secteur technologique pour visualiser des informations sp\u00e9cifiques"
-        },
-        "news": {
-            "title": "Nouvelles"
-        },
-        "industrysector": "Secteur de l'industrie",
-        "geo": {
-            "title": {
-                "trademarks ": " MARQUES D\u00c9POS\u00c9ES PAR PAYS",
-                "patents ": " D\u00c9P\u00d4T DE BREVETS PAR PAYS",
-                "designs ": " CONCEVOIR LE DOSSIER PAR PAYS",
-                "default ": " BREVETS, DESSINS ET MARQUES D\u00c9POSANT PAR PAYS"
-            },
-            "subtitle ": " Vous pouvez cliquer sur une r\u00e9gion de la carte ou du tableau pour visualiser des informations sp\u00e9cifiques",
-            "number": {
-                "of": {
-                    "trademarks ": " Nombre de marques",
-                    "patents ": " Nombre de brevets",
-                    "designs ": " Nombre de mod\u00e8les"
-                }
-            },
-            "grid": {
-                "header": {
-                    "flag": "Drapeau",
-                    "datecoverage ": " Publication couverture",
-                    "country": "Pays",
-                    "count": "Dossiers"
-                }
-            }
-        },
-        "common": {
-            "top": {
-                "applicant": "Meilleur candidat"
-            },
-            "percentage": "Pourcentage",
-            "number": {
-                "of": {
-                    "applicants": "Nombre total de candidatures"
-                }
-            },
-            "header": {
-                "trends": "Top 5 des tendances",
-                "technology": {
-                    "sector": {
-                        "trend": "Tendances du secteur technologique",
-                        "filing": "D\u00e9p\u00f4t du secteur technologique"
-                    }
-                },
-                "country": "Top 10 des pays",
-                "applicants": "Les 10 meilleurs candidats"
-            }
-        },
-        "bar": {
-            "topfive": {
-                "total": "Nombre total de demandes dans ce secteur: ${count}",
-                "sector": "Les cinq premiers secteurs dans ${country}",
-                "country": "Cinq principaux pays dans ${sector}",
-                "back": "Retour"
-            },
-            "tm": {
-                "title": "D\u00e9p\u00f4t de marques par secteur industriel",
-                "subtitle": "Vous pouvez cliquer sur un secteur industriel pour visualiser des informations sp\u00e9cifiques"
-            },
-            "title": "D\u00e9p\u00f4t de brevets par secteur technologique",
-            "subtitle ": " Vous pouvez cliquer sur un secteur technologique pour visualiser des informations sp\u00e9cifiques",
-            "design": {
-                "title": "Designs classant par secteur industriel",
-                "subtitle": "Vous pouvez cliquer sur un secteur industriel pour visualiser des informations sp\u00e9cifiques"
-            }
-        }
+      "label": "Chart"
     },
-    "category": {
-        "patent": {
-            "label": "Brevets"
-        },
-        "other": {
-            "label": "vari\u00e9"
-        },
-        "numbers": {
-            "label": "Nombres"
-        },
-        "names": {
-            "label": "Des noms"
-        },
-        "mark": {
-            "label": "Marques"
-        },
-        "folder": {
-            "label": "Dossier"
-        },
-        "files": {
-            "label": "Des dossiers"
-        },
-        "document": {
-            "label": "Document"
-        },
-        "design": {
-            "label": "dessins"
-        },
-        "dates": {
-            "label": "la date"
-        },
-        "country": {
-            "label": "Pays"
-        },
-        "countries": {
-            "label": "Des pays"
-        },
-        "classification": {
-            "label": "la classification"
-        }
-    },
-    "btn": {
-        "togglefields": {
-            "label": "+/- Champs"
-        },
+    "back": {
+      "to": {
         "search": {
-            "reset": {
-                "label": "Initialiser"
-            },
-            "label": "Chercher"
-        },
-        "hide": {
-            "veiwer": "Hide Viewer"
-        },
-        "filter": {
-            "label": "filtre"
-        },
-        "clearSelection": {
-            "label": "Effacer la s\u00e9lection"
-        },
-        "captcha": {
-            "label": "Suivant"
-        },
-        "applyfilter": {
-            "label": "Filtrer"
-        },
-        "Cancel": {
-            "label": "Annuler"
-        },
-        "Apply": {
-            "label": "Appliquer"
+          "label": "Retour \u00e0 la recherche"
         }
-    },
-    "application": {
-        "country": {
-            "chart": {
-                "bar": {
-                    "title": "10 principaux pays candidats",
-                    "subtitle": "Vous pouvez cliquer sur un pays pour visualiser des informations sp\u00e9cifiques"
-                }
-            }
-        }
-    },
-    "applicant": {
-        "chart": {
-            "bar": {
-                "title": "Top 10 des candidats",
-                "subtitle": "Vous pouvez cliquer sur un demandeur pour visualiser des informations sp\u00e9cifiques."
-            }
-        }
-    },
-    "Tab": {
-        "patent": {
-            "family": {
-                "time": {
-                    "line": {
-                        "label ": " Ligne de temps"
-                    }
-                },
-                "tabular": {
-                    "view": {
-                        "label ": " Vue tabulaire"
-                    }
-                },
-                "data": {
-                    "fetch": {
-                        "fail": {
-                            "message ": " Impossible de r\u00e9cup\u00e9rer des donn\u00e9es"
-                        }
-                    }
-                }
-            }
-        }
-    },
-    "Detail": {
-        "page": {
-            "tooltip": {
-                "pctpnb ": " publication PCT plus de d\u00e9tails",
-                "pctnb ": " d\u00e9p\u00f4t PCT plus de d\u00e9tails",
-                "ow ": " Autres applications du m\u00eame propri\u00e9taire",
-                "nice ": " NICE details",
-                "lck ": " LOCARNO details",
-                "ipc": {
-                    "scope ": " PCT plus de d\u00e9tails"
-                },
-                "ipc ": " D\u00e9tails de la classification IPC",
-                "in ": " Autres applications du m\u00eame inventeur",
-                "cpc ": " D\u00e9tails du CPC",
-                "ap ": " Autres applications du m\u00eame candidat"
-            }
-        }
-    },
-    "#home": {
-        "search": {
-            "title": {
-                "label": "SYST\u00c8ME DE RECHERCHE DE L'ORGANISATION DE PROPRI\u00c9T\u00c9 INTELLECTUELLE"
-            },
-            "subtitle": {
-                "label": "Tout ce que vous devez savoir sur les brevets, les marques d\u00e9pos\u00e9es et les mod\u00e8les dans votre r\u00e9gion"
-            }
-        }
+      }
     }
+  },
+  "time": {
+    "ms": "ms"
+  },
+  "thumbnail": {
+    "dummy": {
+      "disclaimer": "Logo de marque g\u00e9n\u00e9r\u00e9 par machine"
+    }
+  },
+  "table": {
+    "summary": {
+      "title": "Affichage ${from} - ${to} de ${of} r\u00e9sultats"
+    },
+    "no": {
+      "data": {
+        "found": "Aucun enregistrement trouv\u00e9"
+      }
+    },
+    "document": {
+      "publications": {
+        "label": "Publications"
+      },
+      "pct": {
+        "application": {
+          "label": "Demande PCT"
+        }
+      },
+      "name": {
+        "label": "Nom du document"
+      },
+      "filing": {
+        "date": {
+          "label": "Date d'entr\u00e9e en phase nationale"
+        }
+      },
+      "doctype": {
+        "label": "Type de document"
+      },
+      "docdate": {
+        "label": "Date"
+      },
+      "application": {
+        "number": {
+          "label": "Application/Priority"
+        }
+      },
+      "action": {
+        "label": "Action"
+      }
+    }
+  },
+  "tab": {
+    "userselection": {
+      "label": "Votre s\u00e9l\u00e9ction"
+    },
+    "text": {
+      "field": {
+        "label ": " Champs de texte"
+      }
+    },
+    "status": {
+      "label": "un \u00e9v\u00e9nement"
+    },
+    "search": {
+      "label": ""
+    },
+    "recent": {
+      "label": "Recherche R\u00e9cente"
+    },
+    "phoneticsearch": {
+      "label": "Similarit\u00e9"
+    },
+    "patent": {
+      "family": {
+        "label": "Famille de brevet"
+      }
+    },
+    "number": {
+      "field": {
+        "label ": " Champs de num\u00e9ros"
+      }
+    },
+    "gazettesearch": {
+      "label": "Journal"
+    },
+    "documentsearch": {
+      "label": "Document"
+    },
+    "doclist": {
+      "label": "Document"
+    },
+    "description": {
+      "label": "La description"
+    },
+    "date": {
+      "field": {
+        "label ": " Champs de dates"
+      }
+    },
+    "claim": {
+      "label": "Revendications"
+    },
+    "biblio": {
+      "label": "Donn\u00e9es bibliographique"
+    },
+    "advancedsearch": {
+      "label": "Avanc\u00e9e"
+    }
+  },
+  "section": {
+    "associateddrawing": {
+      "label": "Drawings"
+    }
+  },
+  "search": {
+    "table": {
+      "results": {
+        "label": "Vue de la table"
+      }
+    },
+    "sort": {
+      "type": {
+        "desc": {
+          "tooltip": "Descendant"
+        },
+        "asc": {
+          "tooltip": "Ascendant"
+        }
+      },
+      "field": {
+        "tooltip": "S\u00e9lectionnez une colonne pour le tri"
+      }
+    },
+    "page": {
+      "title": "ASEAN PATENTSCOPE"
+    },
+    "list": {
+      "results": {
+        "label": "Vue de la liste"
+      }
+    },
+    "grid": {
+      "results": {
+        "label": "Vue de la grille"
+      }
+    },
+    "export": {
+      "results": {
+        "label": "Exporter les r\u00e9sultats"
+      }
+    },
+    "bar": {
+      "suggestive": {
+        "search": {
+          "on": {
+            "tooltip": "La s\u00e9lection des champs fr\u00e9quents est activ\u00e9e"
+          },
+          "off": {
+            "tooltip": "Tous les champs sont s\u00e9lectionn\u00e9s"
+          },
+          "label": "S\u00e9lection du champ"
+        }
+      },
+      "solr": {
+        "id": {
+          "tooltip": "Cliquez ici pour supprimer le mot cl\u00e9"
+        }
+      }
+    }
+  },
+  "result": {
+    "number": {
+      "found": "Les applications trouv\u00e9es dans"
+    },
+    "count": {
+      "message": {
+        "single": "Environ ${count} r\u00e9sultat",
+        "plural": "Environ ${count} r\u00e9sultat"
+      }
+    }
+  },
+  "page": {
+    "title": {
+      "application": {
+        "label": "Application"
+      }
+    }
+  },
+  "option": {
+    "stemming": {
+      "label": "stemming"
+    },
+    "phonetic": {
+      "label": "phon\u00e9tique"
+    },
+    "fuzzy": {
+      "label": "fuzzy"
+    }
+  },
+  "module": {
+    "trademarks": {
+      "label": "Marques"
+    },
+    "patents": {
+      "label": "Brevets"
+    },
+    "designs": {
+      "label": "Mod\u00e8les"
+    }
+  },
+  "message": {
+    "userselection": {
+      "nocriteria": "Aucun crit\u00e8re",
+      "keyword": "Mot-cl\u00e9",
+      "and": "ET",
+      "all": "Tout"
+    },
+    "feature": {
+      "notsupported": "Votre navigateur ne supporte pas l'affichage du document. T\ufffdl\ufffdchargez le document \ufffd la place."
+    },
+    "export": {
+      "limit": {
+        "exceeded": "Please narrow down the search results further before exporting!"
+      }
+    }
+  },
+  "menu": {
+    "trademarks": "Marques",
+    "references": "References",
+    "patents": "Brevets",
+    "home": "Accueil",
+    "edms": "EDMS",
+    "designs": "Md\u00e8les"
+  },
+  "language": {
+    "display": {
+      "label": {
+        "vi": "Ti\u1ebfng Vi\u1ec7t",
+        "ms": "Bahasa Melayu",
+        "kh": "\u1797\u17b6\u179f\u17b6\u1781\u17d2\u1798\u17c2\u179a",
+        "jp": "\u65e5\u672c\u8a9e",
+        "id": "Bahasa Indonesia",
+        "fr": "Fran\u00e7ais",
+        "en": "English",
+        "ar": "\u0627\u0644\u0639\u0631\u0628\u064a\u0629"
+      }
+    }
+  },
+  "label": {
+    "showing": "Montrant",
+    "security": {
+      "captcha": "Pour confirmer votre demande, cochez la case pour nous faire savoir que vous \u00eates humain."
+    },
+    "of": "de",
+    "more": "Plus",
+    "less": "Moins"
+  },
+  "info": {
+    "version": {
+      "label": "version 1.0.2"
+    },
+    "poweredby": {
+      "label": "powered by WIPO"
+    }
+  },
+  "header": {
+    "application": {
+      "title": "ASEAN PATENTSCOPE"
+    }
+  },
+  "footer": {
+    "search": {
+      "quicklink": {
+        "label": "CHERCHER"
+      },
+      "detail": {
+        "quicklink": {
+          "label": "Recherche de base ou avanc\u00e9e vers <br> affiner vos pr\u00e9f\u00e9rences"
+        }
+      }
+    },
+    "manage": {
+      "quicklink": {
+        "label": "G\u00c9RER"
+      },
+      "detail": {
+        "quicklink": {
+          "label": "Vous pouvez enregistrer et personnaliser <br> votre recherche"
+        }
+      }
+    },
+    "export": {
+      "quicklink": {
+        "label": "EXPORTATION"
+      },
+      "detail": {
+        "quicklink": {
+          "label": "Exportez votre recherche en PDF"
+        }
+      }
+    }
+  },
+  "field": {
+    "tooltip": {
+      "todate": "\u00c0",
+      "phonetic": {
+        "min": {
+          "relevance": "Pertinence minimale"
+        }
+      },
+      "id": "Identifier",
+      "fromdate": "De",
+      "entry": {
+        "count": "Nombre d'entr\u00e9es"
+      },
+      "boost": {
+        "exact": {
+          "match": "Boost Exact Match"
+        }
+      },
+      "application": {
+        "count": "Nombre d'applications"
+      },
+      "VNCL": "Classes de vienne",
+      "VCL": "Classes de vienne",
+      "TITL_LG1": "intituler (2\u00e8me langue)",
+      "TITL_EN": "Titre anglais",
+      "TITL": "intituler",
+      "STLB_ORI": "Internal Status Label",
+      "STLB": "Satut",
+      "STDT": "Date",
+      "STCD": "Code de statut",
+      "RPRE": "R\u00e9sidence du repr\u00e9sentant",
+      "RPNA_LG1": "Nom du repr\u00e9sentant (2\u00e8me langue)",
+      "RPNA": "Nom du repr\u00e9sentant",
+      "RPCT": "Pays du repr\u00e9sentant",
+      "RPAD_LG1": "Adresse du repr\u00e9sentant (2\u00e8me langue)",
+      "RPAD": "Adresse du repr\u00e9sentant",
+      "RENB": "Num\u00e9ro d'enregistrement",
+      "REDT": "Date d'enregistrement",
+      "PCTPBNB": "PCT Num\u00e9ro de publication",
+      "PCTPBDT": "PCT Date de publication",
+      "PCTPBCT": "PCT Pays de publication",
+      "PCTNB": "PCT Num\u00e9ro de d\u00e9p\u00f4t",
+      "PCTDT": "PCT Date de publication",
+      "PCNB": "Num\u00e9ro de priorit\u00e9",
+      "PCDT": "Date de priorit\u00e9",
+      "PCCT": "D\u00e9tails de priorit\u00e9",
+      "PBNB": "Num\u00e9ro de publication",
+      "PBKC": "Type de publication",
+      "PBDT": "Date de publication",
+      "OFCO": "field.tooltip.OFCO=Code de l'office",
+      "NPEDT": "Date d'entr\u00e9e en phase Nationale",
+      "NCL": "Classes de nice",
+      "NCDE_LG1": "Description de la classe de nice (2\u00e8me langue)",
+      "NCDE": "Description de la classe de nice",
+      "NCCL": "Classes de nice",
+      "MK_LG1": "Nom de la marque (2\u00e8me Langue)",
+      "MKTXT": "Marque Events",
+      "MK": "Marque",
+      "MAIN_EFOLDER_REF": "Main EFolder Reference",
+      "LOGOEX": "Logo",
+      "LOGO": "Logo",
+      "LOC": "Classification",
+      "LCL": "Classification",
+      "LCDE": "Classification",
+      "Journal": {
+        "AFNB_ORI": "Num\u00e9ro de demande"
+      },
+      "JOURNAL_DESCRIPTION": "Description du journal",
+      "IPC_TECH_SECTOR_TXT": "Secteur de la technologie IP",
+      "IPC_TECH_FIELD_TXT": "Champ de la technologie IPC",
+      "IPC_TECH_FIELD": "Champ de la technologie IPC",
+      "IPC_ORI": "CIB",
+      "IPC_MAIN": "IPC_MAIN",
+      "IPC": "CIB",
+      "INRE": "R\u00e9sidence de l'inventeur",
+      "INNA_LG1": "Inventeur (2\u00e8me langue)",
+      "INNA": "Inventeur",
+      "INCT": "Pays de l'inventeur",
+      "INAD_LG1": "Adresse de l'inventeur (2\u00e8me langue)",
+      "INAD": "Adresse de l'inventeur",
+      "GZPDT": "Date de publication de la gazette",
+      "GZNB": "Num\u00e9ro de la gazette",
+      "GZDT": "Date de la gazette",
+      "FILE_TYP": "Type de la demande",
+      "FILE_ID": "File Id",
+      "EXCRDT": "EXCRDT",
+      "EFOLDER_REF": "EFolder Reference",
+      "EFOLDER_ID": "EFolder Id",
+      "EDOC_REF": "EDoc Reference",
+      "EDOC_ID": "EDoc Id",
+      "DOC_REF": "Document Reference",
+      "DOC_ID": "Document Id",
+      "DETXT": "Information",
+      "DESCTXT": "Description",
+      "DERE": "R\u00e9sidence de design",
+      "DENA_LG1": "Designer traduit",
+      "DENA": "Designer",
+      "DECT": "Pays du design",
+      "DECLDES": "Description",
+      "DEAD_LG1": "Design Address Bilingual",
+      "DEAD": "Design Address",
+      "CPC_ORI": "Cours CPC",
+      "CPC_MAIN": "CPC_MAIN",
+      "CPC": "Cours CPC",
+      "CLTXT": "Revendications",
+      "CLNB": "Num\u00e9ro de la revendication",
+      "CLLG": "Langue de la revendication",
+      "CLDE": "D\u00e9scription des revendications",
+      "CITCL": "Requ\u00eates",
+      "CITCAT": "Categorie",
+      "CINB": "Num\u00e9ro de la citation",
+      "CIDE": "Description de la Citation",
+      "CICL": "Requ\u00eate de la Citation",
+      "CICA": "Cat\u00e9gorie de la Citation",
+      "CATEGORY": "Categorie",
+      "APTXT": "D\u00e9posant",
+      "APRE": "R\u00e9sidence du d\u00e9posant",
+      "APPL_TYP_TXT": "Type de la demande",
+      "APPL_TYP": "Type de la demande",
+      "APPL_SUBTYP_TXT": "Sous-type de la demande",
+      "APPL_SUBTYP": "Sous-type de la demande",
+      "APNA_LG1": "D\u00e9posant (2\u00e8me langue)",
+      "APNA": "D\u00e9posant",
+      "APCT": "Pays du d\u00e9posant",
+      "APAD_LG1": "Addresse du d\u00e9posant (2\u00e8me langue)",
+      "APAD": "Addresse du d\u00e9posant",
+      "AFNB_ORI": "Num\u00e9ro d\u00e9pot original",
+      "AFNB": "Num\u00e9ro de d\u00e9pot",
+      "AFDT": "Date de d\u00e9pot",
+      "ABTXT": "Abr\u00e9g\u00e9",
+      "ABST_LG1": "Abr\u00e9g\u00e9 (2\u00e8me langue)",
+      "ABST_EN": "R\u00e9sum\u00e9 anglais",
+      "ABST": "Abr\u00e9g\u00e9"
+    },
+    "search": {
+      "suggestion": {
+        "label": "Entrer les mots cl\u00e9s"
+      },
+      "concordance": {
+        "placeholder": "Entrez le mot-cl\u00e9 pour:Optics, Medical,Surface"
+      }
+    },
+    "placeholder": {
+      "todate": "e.g. 2017.12.31",
+      "phonetic": {
+        "min": {
+          "relevance": ""
+        }
+      },
+      "id": "e.g. CH2018000001",
+      "fromdate": "e.g. 2017.12.31",
+      "documentType": "e.g. Spec",
+      "documentParentId": "e.g. CH2018000001",
+      "documentName": "e.g. CH2018000001_spec_000001",
+      "documentContent": "e.g. This is a specification document",
+      "boost": {
+        "exact": {
+          "match": ""
+        }
+      },
+      "VNCL": "e.g. 8.1.19",
+      "VCL": "e.g. 8.1.19",
+      "TITL_LG1": "e.g. Nestl\u00e9 KitKat",
+      "TITL_EN": "e.g. Nestl\u00e9 KitKat",
+      "TITL": "e.g. Nestl\u00e9 KitKat",
+      "STLB_ORI": "e.g. Published",
+      "STLB": "e.g. Published",
+      "STDT": "e.g. 2017.12.31",
+      "STCD": "e.g. FG",
+      "RPRE": "e.g. CH",
+      "RPNA_LG1": "e.g. Nestl\u00e9",
+      "RPNA": "e.g. Nestl\u00e9",
+      "RPCT": "e.g. CH",
+      "RPAD_LG1": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+      "RPAD": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+      "RENB": "e.g. CH2018000001",
+      "REDT": "e.g. 2017.12.31",
+      "PCTPBNB": "2018/000001",
+      "PCTPBDT": "",
+      "PCTPBCT": "e.g. CH",
+      "PCTNB": "e.g. PCT/CH2018/000001",
+      "PCTDT": "e.g. 2017.12.31",
+      "PCNB": "e.g. CH2018000001",
+      "PCDT": "e.g. 2017.12.31",
+      "PCCT": "e.g. CH",
+      "PBNB": "e.g. 2018/000001",
+      "PBKC": "",
+      "PBDT": "e.g. 2017.12.31",
+      "OFCO": "e.g. CH",
+      "NPEDT": "e.g. 2017.12.31",
+      "NCL": "e.g. 0100662",
+      "NCDE_LG1": "e.g. Chocolate for kids",
+      "NCDE": "e.g. Chocolate for kids",
+      "NCCL": "e.g. 0100662",
+      "MK_LG1": "e.g. KitKat",
+      "MKTXT": "e.g. KitKat",
+      "MK": "e.g. KitKat",
+      "LOGOEX": "",
+      "LOGO": "",
+      "LOC": "e.g. Geneva",
+      "LCL": "e.g. 26.6",
+      "LCDE": "e.g. Chocolate for kids",
+      "Journal": {
+        "AFNB_ORI": "e.g. CH2018000001"
+      },
+      "JOURNAL_DESCRIPTION": "e.g. This is a food journal",
+      "IPC_TECH_SECTOR_TXT": "e.g. Human Necessities",
+      "IPC_TECH_FIELD_TXT": "e.g. Human Necessities",
+      "IPC_TECH_FIELD": "e.g. Human Necessities",
+      "IPC_ORI": "e.g. A02H 15/04",
+      "IPC_MAIN": "",
+      "IPC": "e.g. A02H1504",
+      "INRE": "",
+      "INNA_LG1": "",
+      "INNA": "",
+      "INCT": "",
+      "INAD_LG1": "",
+      "INAD": "",
+      "GZPDT": "e.g. 2017.12.31",
+      "GZNB": "",
+      "GZDT": "e.g. 2017.12.31",
+      "FILE_TYP": "e.g. P, D, M",
+      "FILE_ID": "e.g. AP-A-2008-10",
+      "EXCRDT": "e.g. 2017.12.31",
+      "EFOLDER_REF": "e.g. 1-2018-2",
+      "EDOC_REF": "e.g. 158-2008-1",
+      "DOC_REF": "e.g. AP-AF11-2008-2",
+      "DOC_ID": "e.g. AP-A-2008-10",
+      "DETXT": "e.g. Nestl\u00e9 is the world's largest food and beverage company.",
+      "DESCTXT": "",
+      "DERE": "e.g. CH",
+      "DENA_LG1": "e.g. Nestl\u00e9",
+      "DENA": "e.g. Nestl\u00e9",
+      "DECT": "e.g. CH",
+      "DECLDES": "",
+      "DEAD_LG1": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+      "DEAD": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+      "CPC_ORI": "e.g. A02H 15/04",
+      "CPC_MAIN": "",
+      "CPC": "e.g. A02H1504",
+      "CLTXT": "",
+      "CLNB": "",
+      "CLLG": "e.g. EN",
+      "CLDE": "",
+      "CITCL": "",
+      "CITCAT": "",
+      "CINB": "",
+      "CIDE": "",
+      "CICL": "",
+      "CICA": "",
+      "CATEGORY": "",
+      "APTXT": "e.g. Nestl\u00e9",
+      "APRE": "e.g. CH",
+      "APPL_TYP_TXT": "e.g. National Application",
+      "APPL_TYP": "e.g. National Application",
+      "APPL_SUBTYP_TXT": "e.g. National Application",
+      "APPL_SUBTYP": "e.g. National Application",
+      "APNA_LG1": "e.g. Nestl\u00e9",
+      "APNA": "e.g. Nestl\u00e9",
+      "APCT": "e.g. CH",
+      "APAD_LG1": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+      "APAD": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+      "AFNB_ORI": "e.g. CH2018000001",
+      "AFNB": "e.g. CH2018000001",
+      "AFDT": "e.g. 2017.12.31",
+      "ABTXT": "e.g. This application belongs to the food category.",
+      "ABST_LG1": "e.g. This application belongs to the food category.",
+      "ABST_EN": "e.g. This application belongs to the food category.",
+      "ABST": "e.g. This application belongs to the food category."
+    },
+    "display": {
+      "years": "Ann\u00e9e",
+      "type": "Type de document",
+      "todate": "\u00c0",
+      "suggestion": {
+        "technical": {
+          "field": "Champ de technologie"
+        },
+        "suggested_field_text": "S\u00e9lectionnez le ou les champs sugg\u00e9r\u00e9s",
+        "VCL": "Classe VIENNA",
+        "String": "Cha\u00eene",
+        "Number": "Nombre",
+        "NCL": "Classe NICE",
+        "LCL": "Classe LOCARNO",
+        "Default": "D\u00e9faut",
+        "Date": "Rendez-vous amoureux",
+        "Classification": "Classification",
+        "AlphaNumeric": "AlphaNum\u00e9rique"
+      },
+      "sector": {
+        "transportation": "le transport",
+        "transport": "Transport",
+        "tools_and_machines": "Outils Et Machines",
+        "textiles_and_accessories": "Textiles Et Accessoires",
+        "research_and_technology": "Recherche et technologie",
+        "packaging": "le conditionnement",
+        "other_sectors": "Autres secteurs",
+        "other_fields": "Autres domaines",
+        "non_classified": "Non class\u00e9",
+        "mechanical_engineering": "Ing\u00e9nierie m\u00e9canique",
+        "leisure_and_education": "Loisirs et \u00e9ducation",
+        "instruments": "Instruments",
+        "ict_and_audiovisual": "ICT et audiovisuel",
+        "household_equipment": "\u00c9quipement m\u00e9nager",
+        "health_pharma_and_cosmetics": "Sant\u00e9, Pharma Et Cosm\u00e9tiques",
+        "health": "Sant\u00e9",
+        "furniture_and_household_goods": "Meubles et articles m\u00e9nagers",
+        "electricity_and_lighting": "\u00c9lectricit\u00e9 et \u00e9clairage",
+        "electrical_engineering": "Ing\u00e9nierie \u00e9lectrique",
+        "construction": "Construction",
+        "clothing": "V\u00eatements",
+        "chemistry": "Chimie",
+        "chemicals": "Produits chimiques",
+        "business_services": "Les services aux entreprises",
+        "average_others": "Moyenne Autres",
+        "agriculture": "Agriculture",
+        "agricultural_products_and_food_preparation": "Produits agricoles et pr\u00e9paration des aliments",
+        "advertising": "La publicit\u00e9"
+      },
+      "search": {
+        "criteria": "Crit\u00e8res de recherche"
+      },
+      "score": "Pertinence",
+      "phonetic": {
+        "min": {
+          "relevance": "Pertinence minimale"
+        }
+      },
+      "pct_national_phase": "PCT Phase Nationale",
+      "parentId": "Parent Identifier",
+      "journal": {
+        "detail": {
+          "APP_REPRESENTATIVE_NAME": "Nom du repr\u00e9sentant",
+          "APP_REGISTRATION_NUMBER": "Num\u00e9ro d'enregistrement",
+          "APP_REGISTRATION_DATE": "Date d'enregistrement",
+          "APP_REGISTERED_CLASSES_DETAIL": "Classes de nice",
+          "APP_PUBLICATION_DATE": "Date de publication",
+          "APP_PCT_PUBLICATION_ID": "PCT Num\u00e9ro de publication",
+          "APP_PCT_PUBLICATION_DATE": "PCT Date de publication",
+          "APP_PCT_FILING_DATE": "PCT Date de publication",
+          "APP_OWNER_NAME": "Propri\u00e9taire",
+          "APP_NAME": "Marque",
+          "APP_LOGO_COLOURS": "Couleurs du logo",
+          "APP_LOCARNO": "Classes de locarno",
+          "APP_IPC_EDITION": "\u00c9dition IPC",
+          "APP_INVENTOR_NAME": "Inventeur",
+          "APP_FILING_DATE": "Date de d\u00e9pot",
+          "APP_FILE_NUMBER": "Num\u00e9ro de d\u00e9pot",
+          "APP_EXPIRATION_DATE": "Date d'expiration",
+          "APP_EXAM_IPC": "Classes de IPC",
+          "ACTION_DATE": "Date d'action"
+        }
+      },
+      "id": "Identifier",
+      "group": "Groupe",
+      "fromdate": "De",
+      "country": {
+        "code": {
+          "ZW": "Zimbabwe",
+          "ZM": "Zambie",
+          "XX": "Not Specified",
+          "VN": "Vietnam",
+          "UG": "Ouganda",
+          "TZ": "Tanzanie",
+          "TP": "Timor-Leste",
+          "TN": "Tunisie",
+          "TL": "Timor-Leste",
+          "TH": "Tha\u00eflande",
+          "SG": "Singapour",
+          "SD": "Soudan",
+          "SA": "Arabie Saoudite",
+          "RW": "Rwanda",
+          "RS": "Serbie",
+          "PH": "Philippines",
+          "OM": "Oman",
+          "NA": "Namibie",
+          "MZ": "Mozambique",
+          "MY": "Malaisie",
+          "MW": "Malawi",
+          "MM": "Myanmar",
+          "MD": "Moldavie",
+          "MA": "Maroc",
+          "LA": "Laos",
+          "KH": "Cambodge",
+          "KE": "Kenya",
+          "JO": "Jordanie",
+          "IN": "Inde",
+          "ID": "Indon\u00e9sie",
+          "IC": "Sainte-Lucie",
+          "GM": "Gambie",
+          "GH": "Ghana",
+          "ET": "Ethiopie",
+          "EG": "Egypte",
+          "DZ": "Alg\u00e9rie",
+          "DO": "R\u00e9publique dominicaine",
+          "CU": "Cuba",
+          "CR": "Costa Rica",
+          "CN": "China",
+          "BY": "Bi\u00e9lorusse",
+          "BW": "Botswana",
+          "BU": "Bulgarie",
+          "BN": "Brunei",
+          "AR": "Argentine",
+          "AP": "ARIPO",
+          "-": "Unknown"
+        }
+      },
+      "content_type": "Format",
+      "content_stored": "Content Stored",
+      "content": "Contenu",
+      "boost": {
+        "exact": {
+          "match": "Boost Exact Match"
+        }
+      },
+      "application_filed": "Demande d\u00e9pos\u00e9e",
+      "all": "Tout",
+      "WDDT": "Date de retrait",
+      "VNCL": "Classes de vienne",
+      "VCL_RANKED": "Class\u00e9 par classes de Vienne",
+      "VCL_NON_CLASSIFIED": "Non Vienne class\u00e9",
+      "VCL_CATEGORY": "Vienne Cat\u00e9gorie",
+      "VCL": "Classes de vienne",
+      "TXT": "Tous les champs",
+      "TITXT": "intituler",
+      "TITL_LG1": "intituler (2\u00e8me langue)",
+      "TITL_EN": "Titre anglais",
+      "TITL": "intituler",
+      "TDNB": "Total Design",
+      "SYPO": "Position du symbole",
+      "STLB_ORI": "Internal Status Label",
+      "STLB": "Satut",
+      "STDTL": "Date (Liste)",
+      "STDT": "Date",
+      "STCDL": "Code de statut (liste)",
+      "STCD": "Code de statut",
+      "SRDT": "Searched Event",
+      "SPND": "Specimen Identifier",
+      "SPDE": "Specimen Description",
+      "SP": "Position du symbole",
+      "SOUNDEX": "Sound Exists",
+      "SOUND": "Sound",
+      "SERIAL_F_CD": "Serial (F)",
+      "SELG": "Deuxi\u00e8me Langue",
+      "SEARCH_INFO": "Le mot recherch\u00e9 peut appara\u00eetre dans les versions pr\u00e9c\u00e9dentes de cette application",
+      "SEARCH_CRITERIA": "Crit\u00e8res de recherche",
+      "RPTXT": "Informations du repr\u00e9sentant",
+      "RPRE": "R\u00e9sidence du repr\u00e9sentant",
+      "RPNA_LG1": "Nom du repr\u00e9sentant (2\u00e8me langue)",
+      "RPNA": "Nom du repr\u00e9sentant",
+      "RPCT": "Pays du repr\u00e9sentant",
+      "RPAD_LG1": "Adresse du repr\u00e9sentant (2\u00e8me langue)",
+      "RPAD": "Adresse du repr\u00e9sentant",
+      "RENEW_SD": "Start Date",
+      "RENEW_ED": "End Date",
+      "RENEW": "Duration(s) of Renewal",
+      "RENB_ORI": "Num\u00e9ro d'enregistrement original",
+      "RENB": "Num\u00e9ro d'enregistrement",
+      "REIN": "Num\u00e9ro et date d'enregistrement",
+      "REDT": "Date d'enregistrement",
+      "Query": "Solr Query",
+      "PTETXT": "Patent Events",
+      "PRLG": "Langue",
+      "PKDE": "Publication Kind Code Description",
+      "PCTXT": "D\u00e9tails de la priorit\u00e9",
+      "PCTPBNB": "PCT Num\u00e9ro de publication",
+      "PCTPBIN": "PCT Num\u00e9ro et date de publication",
+      "PCTPBDT": "PCT Date de publication",
+      "PCTPBCT": "PCT Pays de publication",
+      "PCTNB": "PCT Num\u00e9ro de d\u00e9p\u00f4t",
+      "PCTIN": "PCT Num\u00e9ro et date de d\u00e9po\u00f4t",
+      "PCTDT": "PCT Date de publication",
+      "PCTCT": "PCT Pays",
+      "PCNB": "Num\u00e9ro de priorit\u00e9",
+      "PCDT": "Date de priorit\u00e9",
+      "PCCT": "D\u00e9tails de priorit\u00e9",
+      "PBNB": "Num\u00e9ro de publication",
+      "PBLG": "Langue de publication",
+      "PBKC": "Type de publication",
+      "PBIN": "Num\u00e9ro et date de publication",
+      "PBDTL": "Date de publication (liste)",
+      "PBDT": "Date de publication",
+      "PBCT": "Pays de publication",
+      "PATCITTXT": "Citation du brevet",
+      "PATCIT": "Brevets",
+      "OPSDT": "Date du d\u00e9but d'opposition",
+      "OFCO": "Code de l'office",
+      "NPLCITXT": "Citations de la Litt\u00e9rature Non Brevet",
+      "NPLCIT": "Litt\u00e9rature Non Brevet",
+      "NPEDT": "Date d'entr\u00e9e en phase Nationale",
+      "NCL_RANKED": "Class\u00e9 par Nice Classes",
+      "NCL_NON_CLASSIFIED": "Non Nice class\u00e9",
+      "NCL_INDUSTRY_SECTOR": "Secteur Industrie de nice",
+      "NCL": "Classes de nice",
+      "NCDE_LG1": "Description de la classe de nice (2\u00e8me langue)",
+      "NCDE": "Description de la classe de nice",
+      "NCCL": "Classes de nice",
+      "MSNB": "Total Mark Series",
+      "MNNA": "Nature de la marque",
+      "MK_LG1": "Nom de la marque (2\u00e8me Langue)",
+      "MKTXT": "Marque",
+      "MKTRLT": "Mark Transliteration",
+      "MKTR": "Traduction de la marque",
+      "MKNSL": "Nom de la marque (2\u00e8me Langue)",
+      "MKFW": "Mark Feature",
+      "MKFT": "Caract\u00e9ristiques de la marque",
+      "MKETXT": "Mark Events",
+      "MKDI": "Mark Disclaimer",
+      "MKDE": "Mark Description Detail",
+      "MKDC": "Disclaimer",
+      "MKCSD": "Date de l'\u00e9tat actuel",
+      "MKCLR": "Couleur de la marque",
+      "MKCLDE": "Description de la couleur de la marque",
+      "MK": "Marque",
+      "MD_FTYP": "Type",
+      "MAIN_EFOLDER_REF": "Main EFolder Reference",
+      "LOGO_INID": "(540) Logo",
+      "LOGOEX": "Logo",
+      "LOGO": "Logo",
+      "LOC": "Classification",
+      "LIC": "License Details",
+      "LEGALDT": "Legal Date",
+      "LCL_NON_CLASSIFIED": "Non classifi\u00e9 de Locarno",
+      "LCL_INDUSTRY_SECTOR": "Secteur Industrie de Locarno",
+      "LCL": "Classes de locarno",
+      "LCENB": "Edition de Locarno",
+      "LCDE": "Classification",
+      "LABEL_LG_1": "Label (Bilingual)",
+      "LABEL": "Label",
+      "Journal": {
+        "AFNB_ORI": "Num\u00e9ro de demande"
+      },
+      "JOURNAL_DT": "Journal Date",
+      "JOURNAL_DESCRIPTION": "Description du journal",
+      "JOURNAL_CONTENT": "D\u00e9tails",
+      "JOURNAL_CD": "Code journal",
+      "IPC_TECH_SECTOR_TXT": "Secteur de la technologie IP",
+      "IPC_TECH_SECTOR": "Secteur technologique",
+      "IPC_TECH_FIELD_TXT": "Champ de la technologie IPC",
+      "IPC_TECH_FIELD": "Champ de la technologie IPC",
+      "IPC_SHORT": "CIB",
+      "IPC_ORIGINAL": "CIB",
+      "IPC_ORI": "CIB",
+      "IPC_NON_CLASSIFIED": "Non class\u00e9 IPC",
+      "IPC": "CIB",
+      "INRE": "R\u00e9sidence de l'inventeur",
+      "INNA_LG1": "Inventeur (2\u00e8me langue)",
+      "INNA": "Inventeur",
+      "INCT": "Pays de l'inventeur",
+      "INAD_LG1": "Adresse de l'inventeur (2\u00e8me langue)",
+      "INAD": "Adresse de l'inventeur",
+      "Group": "Groupe",
+      "GZTXT": "Information de la gazette",
+      "GZPDT": "Date de publication de la gazette",
+      "GZNB": "Num\u00e9ro de la gazette",
+      "GZDT": "Date de la gazette",
+      "GRDT": "Date de d\u00e9livrance",
+      "FILE_TYP": "Type de la demande",
+      "FILE_ID": "File Id",
+      "EXDT": "Date d'examen",
+      "EVNA": "Nom de l'\u00e9v\u00e9nement",
+      "EPDT": "Date d'expiration",
+      "EFOLDER_REF": "EFolder Reference",
+      "EFOLDER_ID": "EFolder Id",
+      "EDOC_TYP": "EDoc Type",
+      "EDOC_REF": "EDoc Reference",
+      "EDOC_ID": "EDoc Id",
+      "EDOC_DT": "EDoc Date",
+      "EDNB": "Num\u00e9ro d'Edition",
+      "DT": "Date",
+      "DRAWING": "Dessins",
+      "DOC_REF": "Document Reference",
+      "DOC_ID": "Document Id",
+      "DE_LG1": "Description (2\u00e8me langue)",
+      "DETXT": "Information",
+      "DETITXT": "Titre",
+      "DETI": "Titre",
+      "DETD": "Total Designs",
+      "DETAILS": "D\u00e9tails",
+      "DESCTXT": "Description",
+      "DERE": "R\u00e9sidence de design",
+      "DEPKD": "Nature",
+      "DENOVELTY": "Design Novelty Statement",
+      "DENA_LG1": "Designer traduit",
+      "DENA": "Designer",
+      "DEID_LG1": "Identifiant (2\u00e8me langue)",
+      "DEID": "Identifiant",
+      "DEETXT": "Dessin industriel",
+      "DECT": "Pays du design",
+      "DECSD": "Date status courante",
+      "DECLTXT": "Requ\u00eates",
+      "DECLNO": "Requ\u00eate",
+      "DECLDES": "Description",
+      "DECDI": "Requ\u00eate d\u00e9tail identifiant",
+      "DECD": "Requ\u00eate d\u00e9tail",
+      "DEAD_LG1": "Design Address Bilingual",
+      "DEAD": "Design Address",
+      "DE": "Description du dessin industriel",
+      "CRNA": "Nom de Correspondance",
+      "CRAD": "Addresse de correspondance",
+      "CPC_ORI": "Cours CPC",
+      "CPC": "Cours CPC",
+      "CODE": "Code",
+      "CLTXT": "Revendications",
+      "CLNB": "Num\u00e9ro de la revendication",
+      "CLLG": "Langue de la revendication",
+      "CLDE": "D\u00e9scription des revendications",
+      "CITXT": "Citations",
+      "CITTYP": "Type de Citation",
+      "CITREF": "R\u00e9f\u00e9rences",
+      "CITDOC": "Documents cit\u00e9s",
+      "CITCL": "Requ\u00eates",
+      "CITCAT": "Categorie",
+      "CINB": "Num\u00e9ro de la citation",
+      "CIDT": "Date de certification",
+      "CIDENB": "Num\u00e9ro de Doc. de la Citation",
+      "CIDE": "Description de la Citation",
+      "CICT": "Pays de citation",
+      "CICL": "Requ\u00eate de la Citation",
+      "CICA": "Cat\u00e9gorie de la Citation",
+      "CCDT": "Annulation",
+      "CATEGORY": "Categorie",
+      "CAPTURE_DT": "Date de saisie",
+      "CANA": "Addresse de correspondance",
+      "BASIC_CD": "Basique",
+      "Application_registered": "Enregistr\u00e9",
+      "Application_expired": "Expir\u00e9",
+      "Action": "Action",
+      "APTXT": "D\u00e9posant",
+      "APRE": "R\u00e9sidence du d\u00e9posant",
+      "APPL_TYP_TXT": "Type de la demande",
+      "APPL_TYP": "Type de la demande",
+      "APPL_SUBTYP_TXT": "Sous-type de la demande",
+      "APPL_SUBTYP": "Sous-type de la demande",
+      "APNT": "Nationalit\u00e9 du d\u00e9posant",
+      "APNA_LG1": "D\u00e9posant (2\u00e8me langue)",
+      "APNA": "D\u00e9posant",
+      "APCT": "Pays du d\u00e9posant",
+      "APAD_LG1": "Addresse du d\u00e9posant (2\u00e8me langue)",
+      "APAD": "Addresse du d\u00e9posant",
+      "ANU_YEAR": "Year",
+      "ANU_STDT": "Validity Start",
+      "ANU_PAY": "Payment",
+      "ANU_ENDT": "Validity End",
+      "ANU": "Annuity Details",
+      "AFNB_ORI": "Num\u00e9ro d\u00e9pot original",
+      "AFNB": "Num\u00e9ro de d\u00e9pot",
+      "AFLG": "Langue de d\u00e9pot",
+      "AFIN": "Num\u00e9ro et date de d\u00e9pot",
+      "AFDT": "Date de d\u00e9pot",
+      "AFCT": "Pays de d\u00e9pot",
+      "ACTION_TYP": "type d'action",
+      "ACTION": "ACTION",
+      "ABTXT": "Abr\u00e9g\u00e9",
+      "ABST_LG1": "Abr\u00e9g\u00e9 (2\u00e8me langue)",
+      "ABST_EN": "R\u00e9sum\u00e9 anglais",
+      "ABST": "Abr\u00e9g\u00e9"
+    }
+  },
+  "facet": {
+    "label": {
+      "true": "Oui",
+      "status": {
+        "RL": "En attente d'une action de la Cour",
+        "PE": "En attente",
+        "MM": "P\u00e9rim\u00e9",
+        "MK": "Expir\u00e9",
+        "MG": "Invalid\u00e9",
+        "MF": "R\u00e9voqu\u00e9",
+        "ME": "R\u00e9voqu\u00e9",
+        "MC": "Annul\u00e9",
+        "MB": "En appel",
+        "GA": "Convertit",
+        "FG": "Enregistr\u00e9",
+        "FC": "Rejet\u00e9",
+        "FB": "Suspendu",
+        "FA": "Retir\u00e9",
+        "EM": "Vide",
+        "DE": "Supprim\u00e9",
+        "CZ": "Oppos\u00e9",
+        "CE": "Certifi\u00e9",
+        "BZ": "Publi\u00e9",
+        "AZ": "D\u00e9pos\u00e9"
+      },
+      "pct_national_phase": "PCT Phase Nationale",
+      "header": {
+        "filter": {
+          "by": "Filtrer par :"
+        }
+      },
+      "false": "Non",
+      "SA": "Arabie Saoudite"
+    }
+  },
+  "error": {
+    "response": {
+      "code": {
+        "message": {
+          "500": "Impossible de contacter le syst\u00e8me WIPO CASE.",
+          "404": "L'application n'est pas encore charg\u00e9e dans le syst\u00e8me WIPO CASE.",
+          "403": "Vous n'\u00eates pas autoris\u00e9 \u00e0 utiliser ce service, veuillez contacter l'administrateur."
+        }
+      }
+    },
+    "document": {
+      "not": {
+        "available": {
+          "message": "Aucun document disponible"
+        }
+      }
+    }
+  },
+  "detail": {
+    "page": {
+      "tooltip": {
+        "npe": "Entr\u00e9es de la phase nationale",
+        "more": {
+          "details": "Plus de d\u00e9tails"
+        }
+      },
+      "title": "ASEAN PATENTSCOPE",
+      "npe": {
+        "title": "Entr\u00e9es en phase nationale de",
+        "table": {
+          "header": {
+            "npedate": "Date d'entr\u00e9e en phase nationale",
+            "appno": "Num\u00e9ro d'application"
+          }
+        },
+        "fail": {
+          "message": "Impossible de r\u00e9cup\u00e9rer les donn\u00e9es nationales d'entr\u00e9e de phase."
+        }
+      },
+      "no": {
+        "other": {
+          "application": "Aucune autre application n'a \u00e9t\u00e9 trouv\u00e9e."
+        },
+        "application": {
+          "found": "Application non trouv\u00e9e."
+        }
+      }
+    }
+  },
+  "date": {
+    "display": {
+      "week": {
+        "Wednesday": "Me",
+        "Tuesday": "Ma",
+        "Thursday": "Je",
+        "Sunday": "di",
+        "Saturday": "sa",
+        "Monday": "Lu",
+        "Friday": "Ve"
+      },
+      "options": {
+        "YEAR_DATE": "Year to Date",
+        "TODAY": "Aujourd'hui",
+        "SPECIFIC_DATE": "Date sp\u00e9cifique",
+        "MONTH_DATE": "6 derniers mois",
+        "DATE_RANGE": "Plage de dates",
+        "BEFORE": "Toutes les dates avant",
+        "AFTER": "Toutes les dates apr\u00e8s"
+      },
+      "month": {
+        "September": "Septembre",
+        "October": "Octobre",
+        "November": "Novembre",
+        "May": "Mai",
+        "March": "Mars",
+        "June": "Juin",
+        "July": "Juillet",
+        "January": "Janvier",
+        "February": "F\u00e9vrier",
+        "December": "d\u00e9cembre",
+        "August": "Ao\u00fbt",
+        "April": "Avril"
+      }
+    }
+  },
+  "concordance": {
+    "term": {
+      "tooltip": {
+        "label": "La technologie"
+      },
+      "placeholder": {
+        "label": ""
+      },
+      "null": {
+        "label": ""
+      },
+      "display": {
+        "label": "La technologie"
+      }
+    }
+  },
+  "chart": {
+    "techsector": "Secteur de la technologie",
+    "pie": {
+      "subtitle ": " Vous pouvez cliquer sur un secteur technologique pour visualiser des informations sp\u00e9cifiques"
+    },
+    "news": {
+      "title": "Nouvelles"
+    },
+    "industrysector": "Secteur de l'industrie",
+    "geo": {
+      "title": {
+        "trademarks ": " MARQUES D\u00c9POS\u00c9ES PAR PAYS",
+        "patents ": " D\u00c9P\u00d4T DE BREVETS PAR PAYS",
+        "designs ": " CONCEVOIR LE DOSSIER PAR PAYS",
+        "default ": " BREVETS, DESSINS ET MARQUES D\u00c9POSANT PAR PAYS"
+      },
+      "subtitle ": " Vous pouvez cliquer sur une r\u00e9gion de la carte ou du tableau pour visualiser des informations sp\u00e9cifiques",
+      "number": {
+        "of": {
+          "trademarks ": " Nombre de marques",
+          "patents ": " Nombre de brevets",
+          "designs ": " Nombre de mod\u00e8les"
+        }
+      },
+      "grid": {
+        "header": {
+          "flag": "Drapeau",
+          "datecoverage ": " Publication couverture",
+          "country": "Pays",
+          "count": "Dossiers"
+        }
+      }
+    },
+    "common": {
+      "top": {
+        "applicant": "Meilleur candidat"
+      },
+      "percentage": "Pourcentage",
+      "number": {
+        "of": {
+          "applicants": "Nombre total de candidatures"
+        }
+      },
+      "header": {
+        "trends": "Top 5 des tendances",
+        "technology": {
+          "sector": {
+            "trend": "Tendances du secteur technologique",
+            "filing": "D\u00e9p\u00f4t du secteur technologique"
+          }
+        },
+        "country": "Top 10 des pays",
+        "applicants": "Les 10 meilleurs candidats"
+      }
+    },
+    "bar": {
+      "topfive": {
+        "total": "Nombre total de demandes dans ce secteur: ${count}",
+        "sector": "Les cinq premiers secteurs dans ${country}",
+        "country": "Cinq principaux pays dans ${sector}",
+        "back": "Retour"
+      },
+      "tm": {
+        "title": "D\u00e9p\u00f4t de marques par secteur industriel",
+        "subtitle": "Vous pouvez cliquer sur un secteur industriel pour visualiser des informations sp\u00e9cifiques"
+      },
+      "title": "D\u00e9p\u00f4t de brevets par secteur technologique",
+      "subtitle ": " Vous pouvez cliquer sur un secteur technologique pour visualiser des informations sp\u00e9cifiques",
+      "design": {
+        "title": "Designs classant par secteur industriel",
+        "subtitle": "Vous pouvez cliquer sur un secteur industriel pour visualiser des informations sp\u00e9cifiques"
+      }
+    }
+  },
+  "category": {
+    "patent": {
+      "label": "Brevets"
+    },
+    "other": {
+      "label": "vari\u00e9"
+    },
+    "numbers": {
+      "label": "Nombres"
+    },
+    "names": {
+      "label": "Des noms"
+    },
+    "mark": {
+      "label": "Marques"
+    },
+    "folder": {
+      "label": "Dossier"
+    },
+    "files": {
+      "label": "Des dossiers"
+    },
+    "document": {
+      "label": "Document"
+    },
+    "design": {
+      "label": "dessins"
+    },
+    "dates": {
+      "label": "la date"
+    },
+    "country": {
+      "label": "Pays"
+    },
+    "countries": {
+      "label": "Des pays"
+    },
+    "classification": {
+      "label": "la classification"
+    }
+  },
+  "btn": {
+    "togglefields": {
+      "label": "+/- Champs"
+    },
+    "search": {
+      "reset": {
+        "label": "Initialiser"
+      },
+      "label": "Chercher"
+    },
+    "hide": {
+      "veiwer": "Hide Viewer"
+    },
+    "filter": {
+      "label": "filtre"
+    },
+    "clearSelection": {
+      "label": "Effacer la s\u00e9lection"
+    },
+    "captcha": {
+      "label": "Suivant"
+    },
+    "applyfilter": {
+      "label": "Filtrer"
+    },
+    "Cancel": {
+      "label": "Annuler"
+    },
+    "Apply": {
+      "label": "Appliquer"
+    }
+  },
+  "application": {
+    "country": {
+      "chart": {
+        "bar": {
+          "title": "10 principaux pays candidats",
+          "subtitle": "Vous pouvez cliquer sur un pays pour visualiser des informations sp\u00e9cifiques"
+        }
+      }
+    }
+  },
+  "applicant": {
+    "chart": {
+      "bar": {
+        "title": "Top 10 des candidats",
+        "subtitle": "Vous pouvez cliquer sur un demandeur pour visualiser des informations sp\u00e9cifiques."
+      }
+    }
+  },
+  "Tab": {
+    "patent": {
+      "family": {
+        "time": {
+          "line": {
+            "label ": " Ligne de temps"
+          }
+        },
+        "tabular": {
+          "view": {
+            "label ": " Vue tabulaire"
+          }
+        },
+        "data": {
+          "fetch": {
+            "fail": {
+              "message ": " Impossible de r\u00e9cup\u00e9rer des donn\u00e9es"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Detail": {
+    "page": {
+      "tooltip": {
+        "pctpnb ": " publication PCT plus de d\u00e9tails",
+        "pctnb ": " d\u00e9p\u00f4t PCT plus de d\u00e9tails",
+        "ow ": " Autres applications du m\u00eame propri\u00e9taire",
+        "nice ": " NICE details",
+        "lck ": " LOCARNO details",
+        "ipc": {
+          "scope ": " PCT plus de d\u00e9tails"
+        },
+        "ipc ": " D\u00e9tails de la classification IPC",
+        "in ": " Autres applications du m\u00eame inventeur",
+        "cpc ": " D\u00e9tails du CPC",
+        "ap ": " Autres applications du m\u00eame candidat"
+      }
+    }
+  },
+  "#home": {
+    "search": {
+      "title": {
+        "label": "SYST\u00c8ME DE RECHERCHE DE L'ORGANISATION DE PROPRI\u00c9T\u00c9 INTELLECTUELLE"
+      },
+      "subtitle": {
+        "label": "Tout ce que vous devez savoir sur les brevets, les marques d\u00e9pos\u00e9es et les mod\u00e8les dans votre r\u00e9gion"
+      }
+    }
+  }
 }

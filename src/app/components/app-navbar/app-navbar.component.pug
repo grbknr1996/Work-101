@@ -11,7 +11,6 @@ p-menubar([style]="{'position': 'fixed','z-index':1000,'width':'100%'}", [model]
       a.navbar-brand(href="#")
         img.navbar-logo(*ngIf="logo", [src]="logo", alt="Logo")
         span.navbar-title {{ title }}
-
   ng-template(pTemplate="end")
     .navbar-end
       //- Language Selector
@@ -32,7 +31,6 @@ p-menubar([style]="{'position': 'fixed','z-index':1000,'width':'100%'}", [model]
               span {{getLangLabel(selectedLanguage)}}
           ng-template(let-language, pTemplate="item")
             span {{language.label}}
-      
       //- Notifications
       .notification-container.mx-3
         button(
@@ -48,7 +46,6 @@ p-menubar([style]="{'position': 'fixed','z-index':1000,'width':'100%'}", [model]
           severity="danger",
           styleClass="notification-badge"
         )
-      
       //- User Profile
       .user-profile
         button(
@@ -58,10 +55,9 @@ p-menubar([style]="{'position': 'fixed','z-index':1000,'width':'100%'}", [model]
           (click)="userMenu.toggle($event)"
         )
           .flex.align-items-center
-            span.user-avatar J
-            span.user-name {{userName}}
+            span.user-avatar {{ userInitial || '?' }}
+            span.user-name {{ userName || 'Guest' }}
             span.pi.pi-angle-down.ml-2.user-dropdown-icon
-      
       //- Mobile menu toggle button (only visible on mobile)
       button.mobile-menu-toggle(
         pButton,
@@ -71,50 +67,46 @@ p-menubar([style]="{'position': 'fixed','z-index':1000,'width':'100%'}", [model]
         class="p-button-text p-button-rounded",
         (click)="mobileMenu.toggle($event)"
       )
-
-//- Notification Panel
-p-overlayPanel(
-  #notificationPanel,
-  [showCloseIcon]="true",
-  [style]="{width: '350px'}",
-  appendTo="body"
-)
-  .notification-header.p-3.flex.justify-content-between.align-items-center
-    h3.m-0 {{ ms.translate('notifications') }}
-    button(
-      pButton,
-      type="button",
-      [label]="ms.translate('markAllAsRead')",
-      class="p-button-text p-button-sm",
-      (click)="markAllNotificationsAsRead()"
+    //- Notification Panel
+    p-overlayPanel(
+      #notificationPanel,
+      [showCloseIcon]="true",
+      [style]="{width: '350px'}",
+      appendTo="body"
     )
-  .notification-list.p-3
-    p-menu([model]="notificationItems", [styleClass]="'w-full border-none'")
-
-//- User Menu
-p-menu(
-  #userMenu,
-  [model]="userMenuItems",
-  [popup]="true",
-  appendTo="body"
-)
-
-//- Mobile Menu Panel
-p-overlayPanel(
-  #mobileMenu,
-  [style]="{width: '90vw', maxWidth: '300px'}",
-  appendTo="body",
-  [showCloseIcon]="true",
-  styleClass="mobile-menu"
-)
-  .mobile-menu-header
-    span {{ ms.translate('mobileMenu') }}
-  .mobile-menu-content
-    //- Add key menu items for mobile
-    div.mobile-menu-item(
-      *ngFor="let item of items",
-      (click)="onMobileMenuItemClick(item)"
+      .notification-header.p-3.flex.justify-content-between.align-items-center
+        h3.m-0 {{ ms.translate('notifications') }}
+        button(
+          pButton,
+          type="button",
+          [label]="ms.translate('markAllAsRead')",
+          class="p-button-text p-button-sm",
+          (click)="markAllNotificationsAsRead()"
+        )
+      .notification-list.p-3
+        p-menu([model]="notificationItems", [styleClass]="'w-full border-none'")
+    //- User Menu
+    p-menu(
+      #userMenu,
+      [model]="userMenuItems",
+      [popup]="true",
+      appendTo="body"
     )
-      span.pi.mobile-menu-icon([ngClass]="item.icon")
-      span {{item.label}}
-
+    //- Mobile Menu Panel
+    p-overlayPanel(
+      #mobileMenu,
+      [style]="{width: '90vw', maxWidth: '300px'}",
+      appendTo="body",
+      [showCloseIcon]="true",
+      styleClass="mobile-menu"
+    )
+      .mobile-menu-header
+        span {{ ms.translate('mobileMenu') }}
+      .mobile-menu-content
+        //- Add key menu items for mobile
+        div.mobile-menu-item(
+          *ngFor="let item of mobileMenuItems",
+          (click)="onMobileMenuItemClick(item)"
+        )
+          span.pi.mobile-menu-icon([ngClass]="item.icon")
+          span {{item.label}}

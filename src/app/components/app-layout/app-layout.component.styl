@@ -19,10 +19,6 @@ $transition-duration = 0.3s
   background-color: $light-bg
   color: $light-text
   position: relative
-  
-  &.layout-theme-dark
-    background-color: $dark-bg
-    color: $dark-text
 
 // Loading Overlay
 .loading-overlay
@@ -87,10 +83,7 @@ $transition-duration = 0.3s
   @media (max-width: 800px)
     padding: 1rem
     min-height: calc(100vh - 140px)
-  
-  .layout-theme-dark &
-    background-color: rgba(255, 255, 255, 0.05)
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2)
+
 
 // Footer
 .layout-footer
@@ -98,11 +91,7 @@ $transition-duration = 0.3s
   background-color: white
   border-top: 1px solid $light-border
   margin-top: 2rem
-  
-  .layout-theme-dark &
-    background-color: $dark-bg
-    border-color: $dark-border
-  
+    
   .footer-content
     display: flex
     justify-content: center
@@ -111,9 +100,7 @@ $transition-duration = 0.3s
       margin: 0
       text-align: center
       color: $light-text
-      
-      .layout-theme-dark &
-        color: $dark-text
+
 
 // Override PrimeNG p-sidebar styles to match our design
 :host ::ng-deep .p-sidebar

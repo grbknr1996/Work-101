@@ -2,40 +2,40 @@
 	MechanicsService is the lowest level service there is. Because it is injected in every other component and service, it must not import anything else than Angular core stuf (this would create a dependency loop).
 */
 
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
-import { ActivatedRoute, Router } from "@angular/router";
-import { TranslateService, TranslationChangeEvent } from "@ngx-translate/core";
-import { configuration, environment } from "../../environments/environment";
-import packagejson from "../../../package.json";
+import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService, TranslationChangeEvent } from '@ngx-translate/core';
+import { configuration, environment } from '../../environments/environment';
+import packagejson from '../../../package.json';
 
-import { HttpErrorResponse } from "@angular/common/http";
-import { instanceType, resizeImage } from "../utils";
-import { map, take } from "rxjs";
-import { AnySoaRecord } from "dns";
+import { HttpErrorResponse } from '@angular/common/http';
+import { instanceType, resizeImage } from '../utils';
+import { map, take } from 'rxjs';
+import { AnySoaRecord } from 'dns';
 
 const localesMapping = {
   // for Intl.DateTimeFormat and language switching
-  ar: "ar-LB",
-  de: "de-DE",
-  en: "en-US",
-  es: "es-ES",
-  fr: "fr-FR",
-  id: "id-ID",
-  jp: "ja-JP",
-  ko: "ko-KR",
-  kh: "km-KH",
-  ms: "en-MS",
-  pt: "pt-PT",
-  ro: "ro-RO",
-  ru: "ru-RU",
-  vi: "vi-VN",
-  zh: "zh-CN",
+  ar: 'ar-LB',
+  de: 'de-DE',
+  en: 'en-US',
+  es: 'es-ES',
+  fr: 'fr-FR',
+  id: 'id-ID',
+  jp: 'ja-JP',
+  ko: 'ko-KR',
+  kh: 'km-KH',
+  ms: 'en-MS',
+  pt: 'pt-PT',
+  ro: 'ro-RO',
+  ru: 'ru-RU',
+  vi: 'vi-VN',
+  zh: 'zh-CN',
 };
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class MechanicsService {
   // General variables
@@ -46,11 +46,11 @@ export class MechanicsService {
   public breadcrumbs: boolean = true;
   public appVersion: string = `v${packagejson.version}`;
 
-  public isLocalHost: boolean = environment.env.toLowerCase() === "localhost";
+  public isLocalHost: boolean = environment.env.toLowerCase() === 'localhost';
   public isBeta: boolean = false;
-  public isAwsProd: boolean = environment.env.toLowerCase() === "awsprod";
-  public isAwsAcc: boolean = environment.env.toLowerCase() === "awsacc";
-  public isAwsDev: boolean = environment.env.toLowerCase() === "awsdev";
+  public isAwsProd: boolean = environment.env.toLowerCase() === 'awsprod';
+  public isAwsAcc: boolean = environment.env.toLowerCase() === 'awsacc';
+  public isAwsDev: boolean = environment.env.toLowerCase() === 'awsdev';
 
   public endpoint: string = null;
   private searchErrorTimeout = null;
@@ -63,11 +63,11 @@ export class MechanicsService {
   public defaultTranslation;
 
   public dateFormatterHuman;
-  public dateFormatterISO = new Intl.DateTimeFormat("en-CA", {
+  public dateFormatterISO = new Intl.DateTimeFormat('en-CA', {
     // "2022-02-01"
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
   });
 
   public numberFormatter;
@@ -80,8 +80,8 @@ export class MechanicsService {
       this.range[field] = [start, end];
     },
 
-    reset: function (field: string = "*"): void {
-      if (field !== "*") delete this.range[field];
+    reset: function (field: string = '*'): void {
+      if (field !== '*') delete this.range[field];
       else this.range = {};
     },
 
@@ -100,8 +100,8 @@ export class MechanicsService {
   async downloadBase64ImageFromUrl(imageUrl) {
     return this.http
       .get(imageUrl, {
-        observe: "body",
-        responseType: "arraybuffer",
+        observe: 'body',
+        responseType: 'arraybuffer',
       })
       .pipe(
         take(1),
@@ -109,7 +109,7 @@ export class MechanicsService {
           btoa(
             Array.from(new Uint8Array(arrayBuffer))
               .map((b) => String.fromCharCode(b))
-              .join("")
+              .join('')
           )
         )
       )
@@ -117,18 +117,18 @@ export class MechanicsService {
   }
 
   async getBase64ImageFromUrl(imageUrl: string): Promise<string> {
-    let base64 = "";
+    let base64 = '';
     try {
       base64 = (await this.downloadBase64ImageFromUrl(imageUrl)) as string;
-      if (base64.startsWith("data:binary")) {
-        base64 = base64.split(",")[1];
+      if (base64.startsWith('data:binary')) {
+        base64 = base64.split(',')[1];
       }
-      if (!base64.startsWith("data:image")) {
+      if (!base64.startsWith('data:image')) {
         base64 = `data:image/jpeg;base64,` + base64;
       }
     } catch (e) {
       base64 =
-        "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
+        'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
     }
     return base64;
   }
@@ -142,9 +142,9 @@ export class MechanicsService {
     const l: string = `MS constructor - `;
 
     this.environment = environment;
-    this.environment.env = (environment.env || "").toLowerCase();
+    this.environment.env = (environment.env || '').toLowerCase();
 
-    this.isBeta = (localStorage.getItem(`beta`) || "") != "";
+    this.isBeta = (localStorage.getItem(`beta`) || '') != '';
 
     this.ts.setDefaultLang(configuration[instanceType()].defaultLanguage);
     this.detectEndpoint();
@@ -162,7 +162,7 @@ export class MechanicsService {
 
   _rename_for_special_collection(root: any, needle: string, replace: string) {
     for (let key in root) {
-      if (typeof root[key] == "string") {
+      if (typeof root[key] == 'string') {
         if (root[key].includes(needle)) {
           root[key] = root[key].replace(needle, replace);
         }
@@ -187,10 +187,10 @@ export class MechanicsService {
       locale, // If this was in utils.ts, the locale won't update after init. For the locale to be dynamic, this needs to be in a service
       {
         // "November 27, 2019"
-        timeZone: "Europe/London", // 2023-02-15 problems with Seattle users who see dates the day before, attempting to force Europe timezone
-        year: "numeric",
-        month: "long",
-        day: "numeric",
+        timeZone: 'Europe/London', // 2023-02-15 problems with Seattle users who see dates the day before, attempting to force Europe timezone
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
       }
     );
   }
@@ -212,7 +212,7 @@ export class MechanicsService {
 
     // console.log(`${l}ActivatedRoute.url subscription : trying to detect endpoint from window.location.pathname='${window.location.pathname}'`);
 
-    if (window.location.pathname === "/") {
+    if (window.location.pathname === '/') {
       // console.log(`${l}'this.endpoint' is "/", the page is probably still loading. Skipping for now`);
       return [];
     }
@@ -220,7 +220,7 @@ export class MechanicsService {
     const errMsg: string = `${l}Could not work out the endpoint from URL : '${window.location.pathname}'. Expecting '/:lang/:endpoint'`;
 
     try {
-      this.endpoint = window.location.pathname.split("/")[2];
+      this.endpoint = window.location.pathname.split('/')[2];
       // console.log(`${l}Found endpoint : '${this.endpoint}'`);
     } catch (err) {
       console.error(errMsg);
@@ -235,7 +235,7 @@ export class MechanicsService {
 
   makeRoute({
     path = this.endpoint,
-    subpath = "",
+    subpath = '',
     caller,
   }: {
     path?: string;
@@ -246,7 +246,7 @@ export class MechanicsService {
 
     // console.log(`${l}caller='${caller}'`)
 
-    let parts: string[] = ["", this.lang];
+    let parts: string[] = ['', this.lang];
 
     parts.push(path);
 
@@ -254,7 +254,7 @@ export class MechanicsService {
       parts.push(subpath);
     }
 
-    const route = parts.join("/");
+    const route = parts.join('/');
 
     // console.log(`${l}route = '${route}'`)
 
@@ -306,7 +306,7 @@ export class MechanicsService {
     let routeLang;
 
     try {
-      routeLang = window.location.pathname.split("/")[1]; // Apparently, activatedRoute.snapshot and stuff aren't yet accessible (a service constructor is quite low-level) so I'm using window.location :P
+      routeLang = window.location.pathname.split('/')[1]; // Apparently, activatedRoute.snapshot and stuff aren't yet accessible (a service constructor is quite low-level) so I'm using window.location :P
       routeLang = routeLang.toLowerCase();
       // console.log(`${l}Found lang from URL : ${routeLang}`);
     } catch (err) {
@@ -321,7 +321,7 @@ export class MechanicsService {
     } else if (!this.availableLangs.includes(lang)) {
       console.warn(`Language not supported '${lang}'! Falling back to 'en'`);
       lang = configuration[instanceType()].defaultLanguage;
-      this.router.navigate([lang, "datacoverage"]);
+      this.router.navigate([lang, 'datacoverage']);
     }
 
     // console.log(`${l}using lang = ` + lang);
@@ -338,7 +338,7 @@ export class MechanicsService {
 
     // console.log(`\n\n${l}formatting : ${dateString}`)
 
-    if (!dateString) return "";
+    if (!dateString) return '';
 
     // Dates can be "2010-03-02T23:59:59Z" or "1608940799000"
 
@@ -357,7 +357,7 @@ export class MechanicsService {
 				I'm removing the T23:59:59Z part. Without any hour nor timezone indication, the day should never be wrong
 			*/
 
-      dateShort = dateString.split("T")[0];
+      dateShort = dateString.split('T')[0];
 
       // console.log(`${l}dateShort='${dateShort}'`)
 
@@ -372,12 +372,12 @@ export class MechanicsService {
       return toReturn;
     } catch (err) {
       // console.log(`${l}Caught error formatting date '${dateString}' : `, err.message || err)
-      return "";
+      return '';
     }
   }
 
   dateToIso(dateString: string): string {
-    if (!dateString) return "";
+    if (!dateString) return '';
 
     // Dates can be "2010-03-02T23:59:59Z" or "1608940799000"
 
@@ -402,13 +402,13 @@ export class MechanicsService {
 		*/
 
     if (!this.translations) {
-      return "⧗";
+      return '⧗';
     }
 
     // multilevel support for translation json: level1.level2.level3.level...
     let translation: any = this.translations,
       deafult: any = this.defaultTranslation,
-      split = word.split(".");
+      split = word.split('.');
     try {
       split.forEach((key) => {
         if (translation) {
@@ -449,6 +449,6 @@ export class MechanicsService {
       await new Promise((r) => setTimeout(r, 100));
     }
 
-    return "ok";
+    return 'ok';
   }
 }

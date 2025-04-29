@@ -1,6 +1,5 @@
 
-<div class="layout-wrapper" [ngClass]="{'layout-theme-dark': config.theme === 'dark'}">
-  <!-- Loading overlay-->
+<div class="layout-wrapper">
   <div class="loading-overlay" *ngIf="ms.isLoading">
     <div class="loading-spinner">
       <p-progressSpinner></p-progressSpinner>
@@ -8,7 +7,7 @@
     <div class="loading-text">{{ ms.translate('loading') }}</div>
   </div>
   <!-- Header/Navbar-->
-  <app-navbar *ngIf="config.showHeader" [title]="config.appTitle" [items]="config.headerItems" [fixed]="config.fixedHeader" (toggleSidebarEvent)="toggleSidebar()"></app-navbar>
+  <app-navbar *ngIf="config.showHeader" [title]="config.appTitle" [items]="config.headerItems" [fixed]="config.fixedHeader" (toggleSidebarEvent)="toggleSidebar($event)"></app-navbar>
   <!-- Main Content Area-->
   <div class="layout-main">
     <!-- Sidebar-->

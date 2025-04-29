@@ -41,7 +41,7 @@ $transition-duration = 0.3s
       margin-right: 0.75rem
 
     .navbar-title
-      font-size: 1.25rem
+      font-size: 0.8rem
       font-weight: 600
       color: $primary-font-color
 
@@ -176,7 +176,9 @@ $transition-duration = 0.3s
     &.fixed-navbar
       left: $sidebar-compact-width
       width: "calc(100% - %s)" % $sidebar-compact-width
-
+.app-navbar .p-menubar .p-component .p-menubar-mobile
+    display: flex !important
+    flex-direction: column !important
 :host-context(.no-sidebar:not(.sidebar-mobile))
   .app-navbar
     margin-left: 0
@@ -187,4 +189,5 @@ $transition-duration = 0.3s
       width: 100%
 .p-menubar
     padding 0 !important
+
 

@@ -1,0 +1,16 @@
+<app-layout>
+  <app-breadcrumbs></app-breadcrumbs>
+
+  <div class="widgets-grid">
+    <div class="widget-wrapper" *ngFor="let widget of widgets">
+      <app-widget
+        [icon]="widget.icon"
+        [title]="widget.title"
+        [items]="widget.items"
+        [showBadge]="widget.showBadge"
+        [badge]="widget.badge"
+        [hoverEffect]="'shadow'"
+      ></app-widget>
+    </div>
+  </div>
+</app-layout>

@@ -1,5 +1,4 @@
-.layout-wrapper([ngClass]="{'layout-theme-dark': config.theme === 'dark'}")
-  // Loading overlay
+.layout-wrapper
   .loading-overlay(*ngIf="ms.isLoading")
     .loading-spinner
       p-progressSpinner
@@ -12,7 +11,7 @@
     [items]="config.headerItems",
     [fixed]="config.fixedHeader",
     
-    (toggleSidebarEvent)="toggleSidebar()"
+    (toggleSidebarEvent)="toggleSidebar($event)"
   )
   
   // Main Content Area

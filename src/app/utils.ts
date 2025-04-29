@@ -1,219 +1,234 @@
-
 declare const CryptoJS: any;
-const orig_key = "8?)i_~Nk6qv0IX;2";
+const orig_key = '8?)i_~Nk6qv0IX;2';
 
-let l = `utils() - `
+let l = `utils() - `;
 
-import path from "path";
-import ObjectID from "bson-objectid"
-import { environment } from "src/environments/environment";
+import path from 'path';
+import ObjectID from 'bson-objectid';
+import { environment } from 'src/environments/environment';
 
-export const instanceType = ():string => {
-	const paths = window.location.href.split('/')
-	const domain = paths[2]
-	const first_path = paths[3] || ''
-	for( let s of environment.installedInstances){
-		if ((domain +'/'+ first_path).includes(s)){
-			return s
-		}
-	}
-	return 'asean'
-	return 'default'
-}
+export const instanceType = (): string => {
+  // Get the current URL
+  const currentUrl = window.location.pathname;
 
+  // Split the path into segments
+  const pathSegments = currentUrl.split('/');
 
-export const setPrevEnpoint = (v:string):void=> {
-	sessionStorage.setItem(`prev_enpoint`, v)
-}
+  // URL structure is /:officeCode/:langCode/...
+  // Office code is at position 1 if it exists
+  if (pathSegments.length >= 2 && pathSegments[1]) {
+    const possibleOffice = pathSegments[1];
 
-export const prevEndpoint = ():string => {
-	return sessionStorage.getItem(`prev_enpoint`)
-}
+    // Check if the first path segment is a valid office code
+    if (environment.installedInstances.includes(possibleOffice)) {
+      return possibleOffice;
+    }
+  }
 
-export const deduplicateStringArray = (input: string[]): string[] => input.filter((item, pos, self) => self.indexOf(item) === pos);
+  // Default to 'default' if no match found
+  return 'default';
+};
+
+export const setPrevEnpoint = (v: string): void => {
+  sessionStorage.setItem(`prev_enpoint`, v);
+};
+
+export const prevEndpoint = (): string => {
+  return sessionStorage.getItem(`prev_enpoint`);
+};
+
+export const deduplicateStringArray = (input: string[]): string[] =>
+  input.filter((item, pos, self) => self.indexOf(item) === pos);
 
 export const decrypt = (crypted: any): any => {
+  const l = `decrypt() - `;
 
-	const l = `decrypt() - `
+  if (typeof crypted !== 'string') {
+    // console.log(`${l}Data to decrypt = `, crypted)
+    // console.log(`${l} - Data to decrypt is not a string, skipping`)
+    return crypted;
+  }
 
-	if (typeof (crypted) !== "string") {
-		// console.log(`${l}Data to decrypt = `, crypted)
-		// console.log(`${l} - Data to decrypt is not a string, skipping`)
-		return crypted
-	}
+  // On Localhost, the data may not be encrypted, but the ResponseType is still "string", so we'll get a stringified JSON anyway. I need to simply parse it, without decryption
 
-	// On Localhost, the data may not be encrypted, but the ResponseType is still "string", so we'll get a stringified JSON anyway. I need to simply parse it, without decryption
+  let decrypted;
 
-	let decrypted;
+  try {
+    decrypted = JSON.parse(crypted);
+    console.log(decrypted);
+    return decrypted;
+  } catch (err) {
+    // console.log(`${l}Could not parse response directly as JSON, attempting to decrypt it.`)
+  }
 
-	try {
-		decrypted = JSON.parse(crypted);
-		console.log(decrypted)
-		return decrypted;
-	} catch (err) {
-		// console.log(`${l}Could not parse response directly as JSON, attempting to decrypt it.`)
-	}
+  // console.time(`${l}decryption took`)
 
-	// console.time(`${l}decryption took`)
+  let originalStringified: string;
 
-	let originalStringified: string;
+  try {
+    let key = CryptoJS.enc.Utf8.parse(
+      orig_key + (localStorage.getItem(`hashSearches`) || '')
+    );
+    const bytes: any = CryptoJS.AES.decrypt(crypted, key, {
+      mode: CryptoJS.mode.ECB,
+    });
 
-	try {
-		let key = CryptoJS.enc.Utf8.parse(orig_key + (localStorage.getItem(`hashSearches`) || "" ))
-		const bytes: any = CryptoJS.AES.decrypt(crypted, key, {mode:CryptoJS.mode.ECB});
+    originalStringified = bytes.toString(CryptoJS.enc.Utf8);
 
-		originalStringified = bytes.toString(CryptoJS.enc.Utf8);
+    // console.log(`${l}originalStringified=`, originalStringified)
 
-		// console.log(`${l}originalStringified=`, originalStringified)
+    decrypted = JSON.parse(originalStringified);
+  } catch (err) {
+    // console.log(`${l}Could not JSON.parse decrypted content. Probably not an object. Sending back decrypted string as is.`)
+  }
 
-		decrypted = JSON.parse(originalStringified);
+  // console.timeEnd(`${l}decryption took`)
 
-	} catch (err) {
-		// console.log(`${l}Could not JSON.parse decrypted content. Probably not an object. Sending back decrypted string as is.`)
-	}
+  return decrypted || originalStringified;
+};
 
-	// console.timeEnd(`${l}decryption took`)
+export const deepClone = (obj, maxArrayLength = Infinity) => {
+  // https://stackoverflow.com/questions/728360/how-do-i-correctly-clone-a-javascript-object
 
-	return decrypted || originalStringified
-}
+  const l = `utils.deepClone() - `;
+  // console.log(`${l}deepcloning : `, obj)
 
-export const deepClone = (obj, maxArrayLength = Infinity) => { // https://stackoverflow.com/questions/728360/how-do-i-correctly-clone-a-javascript-object
+  if (typeof structuredClone !== 'undefined') {
+    return structuredClone(obj); // Native JS method, available in Node 17+
+  }
 
-	const l = `utils.deepClone() - `
-	// console.log(`${l}deepcloning : `, obj)
+  let copy;
+  // console.log(`Deepcloning (reduce ${reduce})`);
 
-	if(typeof(structuredClone)!=="undefined"){
-		return structuredClone(obj) // Native JS method, available in Node 17+
-	}
+  // Handle strings
+  if (typeof obj === 'string') {
+    return '' + obj;
+  }
 
-	let copy;
-	// console.log(`Deepcloning (reduce ${reduce})`);
+  // Handle the 3 simple types, and null or undefined
+  if (!obj || `object` != typeof obj) {
+    // console.log(`${l}passed object is not an object! typeof(obj)='${typeof(obj)}'`)
 
-	// Handle strings
-	if (typeof (obj) === "string") {
-		return "" + obj;
-	}
+    return obj;
+  }
 
-	// Handle the 3 simple types, and null or undefined
-	if (!obj || (`object` != typeof obj)) {
+  // Handle Date
+  if (obj instanceof Date) {
+    copy = new Date();
+    copy.setTime(obj.getTime());
+    return copy;
+  }
 
-		// console.log(`${l}passed object is not an object! typeof(obj)='${typeof(obj)}'`)
+  // Handle Array
+  if (obj instanceof Array) {
+    copy = [];
 
-		return obj;
-	}
+    const maxElems: number = Math.min(maxArrayLength, obj.length);
 
-	// Handle Date
-	if (obj instanceof Date) {
-		copy = new Date();
-		copy.setTime(obj.getTime());
-		return copy;
-	}
+    for (let i = 0; i < maxElems; i++) {
+      copy[i] = deepClone(obj[i], maxArrayLength);
+    }
 
-	// Handle Array
-	if (obj instanceof Array) {
-		copy = [];
+    if (maxArrayLength && obj.length > maxElems)
+      copy.push(`(${obj.length - maxElems} more elements)`);
 
-		const maxElems: number = Math.min(maxArrayLength, obj.length)
+    return copy;
+  }
 
-		for (let i = 0; i < maxElems; i++) {
-			copy[i] = deepClone(obj[i], maxArrayLength);
-		}
+  // Handle Object
+  if (obj instanceof Object) {
+    copy = {};
+    const totalKeysCount = Object.keys(obj).length;
+    const maxKeys: number = Math.min(maxArrayLength, totalKeysCount);
+    let keysCount: number = 0;
 
-		if (maxArrayLength && obj.length > maxElems) copy.push(`(${obj.length - maxElems} more elements)`);
+    for (let attr in obj) {
+      if (obj.hasOwnProperty(attr))
+        copy[attr] = deepClone(obj[attr], maxArrayLength);
+      keysCount++;
+      if (maxArrayLength && keysCount > maxKeys) break;
+    }
 
-		return copy;
-	}
+    if (maxArrayLength && totalKeysCount > maxKeys)
+      copy['(Unshown keys)'] = totalKeysCount - maxKeys;
 
-	// Handle Object
-	if (obj instanceof Object) {
-		copy = {};
-		const totalKeysCount = Object.keys(obj).length
-		const maxKeys: number = Math.min(maxArrayLength, totalKeysCount)
-		let keysCount: number = 0;
+    return copy;
+  }
 
-		for (let attr in obj) {
-			if (obj.hasOwnProperty(attr)) copy[attr] = deepClone(obj[attr], maxArrayLength);
-			keysCount++;
-			if (maxArrayLength && keysCount > maxKeys) break;
-		}
+  throw new Error(`Unable to copy obj! Its type isn't supported.`);
+};
 
-		if (maxArrayLength && totalKeysCount > maxKeys) copy["(Unshown keys)"] = totalKeysCount - maxKeys
+export const generateId = (): string =>
+  ObjectID().toHexString().substring(20, 24); // The beginning of the 24 characters don't change. Only the last letter is incremented. I'm only keeping the last few characters so as to have shorter _id in the AdvancedSearch tree.
 
-		return copy;
-	}
-
-	throw new Error(`Unable to copy obj! Its type isn't supported.`);
-
-}
-
-export const generateId = (): string => ObjectID().toHexString().substring(20, 24); // The beginning of the 24 characters don't change. Only the last letter is incremented. I'm only keeping the last few characters so as to have shorter _id in the AdvancedSearch tree.
-
-export const getImageDimensions = (src: string): Promise<{ w: number, h: number }> => {
-	return new Promise((resolved, rejected) => {
-		const i = new Image()
-		i.onload = () => {
-			resolved({ w: i.width, h: i.height })
-		};
-		i.onerror = rejected;
-		i.onabort = rejected;
-		i.src = src; // can be a URL or base64
-	})
-}
+export const getImageDimensions = (
+  src: string
+): Promise<{ w: number; h: number }> => {
+  return new Promise((resolved, rejected) => {
+    const i = new Image();
+    i.onload = () => {
+      resolved({ w: i.width, h: i.height });
+    };
+    i.onerror = rejected;
+    i.onabort = rejected;
+    i.src = src; // can be a URL or base64
+  });
+};
 
 const resizeCanvas = document.createElement('canvas');
 
-export const resizeImage = async (image: HTMLImageElement | string, maxSideLength: number = Infinity): Promise<string> => {
+export const resizeImage = async (
+  image: HTMLImageElement | string,
+  maxSideLength: number = Infinity
+): Promise<string> => {
+  const l = `utils resizeImage() - `;
 
-	const l = `utils resizeImage() - `
-
-	/*
+  /*
 		Accepts an HTMLImageElement or base64 as input
 		Returns base64
 
 		Resizing is optional, you can pass an HTMLImageElement and it will simply return its base64 without resizing
 	*/
 
-	if (typeof (image) === "string") { // Converting Base64 into HTMLImageElement
+  if (typeof image === 'string') {
+    // Converting Base64 into HTMLImageElement
 
-		const base64Input = "" + image;
+    const base64Input = '' + image;
 
-		image = <HTMLImageElement>new Image();
+    image = <HTMLImageElement>new Image();
 
-		await new Promise((resolve, reject) => {
-			image = image as HTMLImageElement;
-			image.onload = resolve;
-			image.src = base64Input;
-		})
-	}
+    await new Promise((resolve, reject) => {
+      image = image as HTMLImageElement;
+      image.onload = resolve;
+      image.src = base64Input;
+    });
+  }
 
-	if ((image.height > maxSideLength) || (image.width > maxSideLength)) {
+  if (image.height > maxSideLength || image.width > maxSideLength) {
+    // Image is too big, it needs to be resized down
 
-		// Image is too big, it needs to be resized down
+    resizeCanvas.width = resizeCanvas.height = 0 + maxSideLength;
 
-		resizeCanvas.width = resizeCanvas.height = 0 + maxSideLength;
+    // set size proportional to image
+    if (image.width > image.height) {
+      resizeCanvas.height = resizeCanvas.width * (image.height / image.width);
+    } else {
+      resizeCanvas.width = resizeCanvas.height * (image.height / image.width);
+    }
+  } else {
+    // I don't want to enlarge the image. If the image is smaller than the maximum set dimension, then I reduce the resizeCanvas to match the image.
+    resizeCanvas.height = image.height;
+    resizeCanvas.width = image.width;
+  }
 
-		// set size proportional to image
-		if (image.width > image.height) {
-			;
-			resizeCanvas.height = resizeCanvas.width * (image.height / image.width)
-		} else {
-			resizeCanvas.width = resizeCanvas.height * (image.height / image.width);
-		}
+  // console.log(`\nresizeCanvas dimensions for resize : width = ${resizeCanvas.width}, height=${resizeCanvas.height}`);
 
-	} else {
-		// I don't want to enlarge the image. If the image is smaller than the maximum set dimension, then I reduce the resizeCanvas to match the image.
-		resizeCanvas.height = image.height;
-		resizeCanvas.width = image.width;
-	}
+  const ctx = resizeCanvas.getContext('2d', { willReadFrequently: true });
+  ctx.drawImage(image, 0, 0, resizeCanvas.width, resizeCanvas.height);
 
-	// console.log(`\nresizeCanvas dimensions for resize : width = ${resizeCanvas.width}, height=${resizeCanvas.height}`);
+  const resizedBase64: string = resizeCanvas.toDataURL('image/png');
 
-	const ctx = resizeCanvas.getContext('2d', { willReadFrequently: true });
-	ctx.drawImage(image, 0, 0, resizeCanvas.width, resizeCanvas.height);
+  // console.log(`${l} Resized Base64 length = `, resizedBase64.length)
 
-	const resizedBase64: string = resizeCanvas.toDataURL('image/png')
-
-	// console.log(`${l} Resized Base64 length = `, resizedBase64.length)
-
-	return resizedBase64
-}
+  return resizedBase64;
+};

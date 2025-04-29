@@ -25,7 +25,7 @@ export const configuration = {
     order: ["patents", "designs", "trademarks", "gidatabase", "portfolios"],
     availableLangs: ["ar", "en", "fr", "id", "jp", "kh", "ms", "vi"],
     defaultLanguage: "en",
-    defaultLandingModule: "about",
+    defaultLandingModule: "dashboard",
   },
   asean: {
     name: "ASEAN",
@@ -42,6 +42,6 @@ export const configuration = {
     order: ["patents", "designs", "trademarks", "gidatabase", "portfolios"],
     availableLangs: ["ar", "en", "fr", "id", "jp", "kh", "ms", "vi"],
     defaultLanguage: "fr",
-    defaultLandingModule: "about",
+    defaultLandingModule: "dashboard",
   },
 };

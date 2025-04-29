@@ -1,1728 +1,1879 @@
 {
-    "wipopublish": {
-        "news": {
-            "2": "continue adding more messages if needed",
-            "1": "Any system messages to be posted can be placed here"
+  "wipopublish": {
+    "news": {
+      "2": "continue adding more messages if needed",
+      "1": "Any system messages to be posted can be placed here"
+    }
+  },
+  "wipo": {
+    "publish": {
+      "wrong": {
+        "syntex": {
+          "solr": {
+            "query": {
+              "user": {
+                "message": "Unable to execute query. Please re enter your query."
+              }
+            }
+          }
         }
-    },
-    "wipo": {
-        "publish": {
-            "wrong": {
-                "syntex": {
-                    "solr": {
-                        "query": {
-                            "user": {
-                                "message": "Unable to execute query. Please re enter your query."
-                            }
-                        }
-                    }
-                }
-            },
+      },
+      "user": {
+        "manual": {
+          "label": "Help"
+        }
+      },
+      "stats": {
+        "label": "Statistics"
+      },
+      "invalid": {
+        "solr": {
+          "query": {
             "user": {
-                "manual": {
-                    "label": "Help"
-                }
-            },
-            "stats": {
-                "label": "Statistics"
-            },
-            "invalid": {
-                "solr": {
-                    "query": {
-                        "user": {
-                            "message": "Unable to parse the search query. Please correct it and re enter."
-                        }
-                    }
-                }
-            },
-            "html": {
-                "link2": {
-                    "label": "Link2"
-                },
-                "link1": {
-                    "label": "Link1"
-                }
-            },
-            "about": {
-                "label": "About",
-                "content": "<h1>About ASEAN PATENTSCOPE</h1><br><p>The ASEAN PATENTSCOPE project was initiated by the ASEAN Patent Examination Co-operation (ASPEC) Task Force in 2012 and endorsed by ASEAN Working Group on IP Cooperation (AWGIPC) in 2015 after the adoption of the WIPO Publish technical platform to automate the data extraction, data dissemination and searching among all ASEAN IP offices.  Indonesia has contributed extensively towards leading the project and hosting the regional patent database</p><br/><p>ASEAN PATENTSCOPE provides a centralized regional online platform for dissemination of patent information for all 10 ASEAN countries and facilitates the ASEAN IP Offices to share patent data with international global IP systems, such as WIPO CASE for patent examiners, WIPO PatentScope and IP5 Global Dossier Systems for public users.  The users in the region have access to patent collections from all ASEAN member states, many of them for the first time, and can access a comprehensive and complex technological information resource in the region.  The ASEAN PATENTSCOPE  portal has several notable features to assist users, including bibliographic data search, view of published patent dossier information, capturing search results in a customizable report and translations into national languages.</p><br/><p>The system that was developed in the framework of this project is modern and effective and should make a substantial contribution to the increasing access to the ASEAN regional patent information by the users of ASEAN IP systems and by the international IP community. </p><br/><p>The system is provided by the World Intellectual Property Organization (WIPO) through its  program of technical assistance to national and regional Industrial Property (IP) Offices. Parts of the system development are provided through the support of the Japan Funds-in-Trust for Industrial Property (for more information, see <br/><a href=\"http://www.wipo.int/cooperation/en/funds_in_trust/japan_fitip_aspac/index.html\">http://www.wipo.int/cooperation/en/funds_in_trust/japan_fitip_aspac/index.html</a>)</p><br/><p>For more information on WIPO\u2019s technical assistance programs, please see <br/><a href=\"http://www.wipo.int/global_ip/en/activities/technicalassistance/\">http://www.wipo.int/global_ip/en/activities/technicalassistance/</a></p>"
+              "message": "Unable to parse the search query. Please correct it and re enter."
             }
+          }
         }
-    },
-    "trend": {
-        "line": {
-            "chart": {
-                "bar": {
-                    "title": "Watch Trends",
-                    "subtitle": "Watch Trends For"
-                }
-            }
+      },
+      "html": {
+        "link2": {
+          "label": "Link2"
         },
-        "donut": {
-            "chart": {
-                "bar": {
-                    "title": "Top 5 Technology Trends",
-                    "subtitle": "Trends For"
-                }
-            }
+        "link1": {
+          "label": "Link1"
         }
-    },
-    "trademarks": {
-        "field": {
-            "display": {
-                "TITL": "Summary"
-            }
+      },
+      "about": {
+        "label": "About",
+        "content": "<h1>About ASEAN PATENTSCOPE</h1><br><p>The ASEAN PATENTSCOPE project was initiated by the ASEAN Patent Examination Co-operation (ASPEC) Task Force in 2012 and endorsed by ASEAN Working Group on IP Cooperation (AWGIPC) in 2015 after the adoption of the WIPO Publish technical platform to automate the data extraction, data dissemination and searching among all ASEAN IP offices.  Indonesia has contributed extensively towards leading the project and hosting the regional patent database</p><br/><p>ASEAN PATENTSCOPE provides a centralized regional online platform for dissemination of patent information for all 10 ASEAN countries and facilitates the ASEAN IP Offices to share patent data with international global IP systems, such as WIPO CASE for patent examiners, WIPO PatentScope and IP5 Global Dossier Systems for public users.  The users in the region have access to patent collections from all ASEAN member states, many of them for the first time, and can access a comprehensive and complex technological information resource in the region.  The ASEAN PATENTSCOPE  portal has several notable features to assist users, including bibliographic data search, view of published patent dossier information, capturing search results in a customizable report and translations into national languages.</p><br/><p>The system that was developed in the framework of this project is modern and effective and should make a substantial contribution to the increasing access to the ASEAN regional patent information by the users of ASEAN IP systems and by the international IP community. </p><br/><p>The system is provided by the World Intellectual Property Organization (WIPO) through its  program of technical assistance to national and regional Industrial Property (IP) Offices. Parts of the system development are provided through the support of the Japan Funds-in-Trust for Industrial Property (for more information, see <br/><a href=\"http://www.wipo.int/cooperation/en/funds_in_trust/japan_fitip_aspac/index.html\">http://www.wipo.int/cooperation/en/funds_in_trust/japan_fitip_aspac/index.html</a>)</p><br/><p>For more information on WIPO\u2019s technical assistance programs, please see <br/><a href=\"http://www.wipo.int/global_ip/en/activities/technicalassistance/\">http://www.wipo.int/global_ip/en/activities/technicalassistance/</a></p>"
+      }
+    }
+  },
+  "trend": {
+    "line": {
+      "chart": {
+        "bar": {
+          "title": "Watch Trends",
+          "subtitle": "Watch Trends For"
         }
+      }
     },
-    "tooltip": {
-        "user": {
-            "selection": {
-                "info": {
-                    "label": "All application selected by clicking the checkbox on Search Result screen will appear here."
-                }
-            },
-            "select": {
-                "label": "Add/Remove user selection"
-            },
-            "deselect": {
-                "label": "Clear user selection"
-            }
-        },
-        "tableview": {
-            "label": "Table View"
-        },
-        "showfilter": {
-            "label": "Show Filter"
-        },
-        "search": {
-            "info": {
-                "label": "Record selected with one or more criteria"
-            }
-        },
-        "phonetic": {
-            "check": "This field boost the records with exact match to have higher relevance score"
-        },
-        "minimum": {
-            "relevance": "This field is used to limit results setting the minimum relevance"
-        },
-        "listview": {
-            "label": "List View"
-        },
-        "hidefilter": {
-            "label": "Hide Filter"
-        },
-        "gridview": {
-            "label": "Grid View"
-        },
-        "export": {
-            "label": "Export"
-        },
-        "download": {
-            "label": "Download",
-            "document": {
-                "label": "Download Document"
-            },
-            "application": {
-                "xml": {
-                    "label": "Download Application XML"
-                }
-            }
-        },
-        "document": {
-            "view": {
-                "label": "View Document"
-            },
-            "search": {
-                "info": {
-                    "label": "Enclose your search criteria within \"\" for exact search"
-                }
-            }
-        },
-        "detail": {
-            "newtab": {
-                "label": "View Details in new tab"
-            },
-            "label": "View Details"
-        },
-        "clearfilter": {
-            "label": "Clear Filter"
-        },
-        "check": {
-            "label": "Check"
-        },
-        "chart": {
-            "label": "Chart"
-        },
-        "back": {
-            "to": {
-                "search": {
-                    "label": "Back to Search"
-                }
-            }
+    "donut": {
+      "chart": {
+        "bar": {
+          "title": "Top 5 Technology Trends",
+          "subtitle": "Trends For"
         }
-    },
-    "time": {
-        "ms": "ms"
-    },
-    "thumbnail": {
-        "dummy": {
-            "disclaimer": "Machine generated trademark logo"
+      }
+    }
+  },
+  "trademarks": {
+    "field": {
+      "display": {
+        "TITL": "Summary"
+      }
+    }
+  },
+  "tooltip": {
+    "user": {
+      "selection": {
+        "info": {
+          "label": "All application selected by clicking the checkbox on Search Result screen will appear here."
         }
+      },
+      "select": {
+        "label": "Add/Remove user selection"
+      },
+      "deselect": {
+        "label": "Clear user selection"
+      }
     },
-    "table": {
-        "summary": {
-            "title": "Showing ${from} to ${to} of ${of}"
-        },
-        "no": {
-            "data": {
-                "found": "No records found"
-            }
-        },
-        "document": {
-            "publications": {
-                "label": "Publications"
-            },
-            "pct": {
-                "application": {
-                    "label": "PCT Application"
-                }
-            },
-            "name": {
-                "label": "Document Name"
-            },
-            "filing": {
-                "date": {
-                    "label": "Filing/National Entry Date"
-                }
-            },
-            "doctype": {
-                "label": "Document Type"
-            },
-            "docdate": {
-                "label": "Date"
-            },
-            "application": {
-                "number": {
-                    "label": "Application/Priority"
-                }
-            },
-            "action": {
-                "label": "Action"
-            }
-        }
+    "tableview": {
+      "label": "Table View"
     },
-    "tab": {
-        "userselection": {
-            "label": "User Selection"
-        },
-        "text": {
-            "field": {
-                "label ": " Text Fields"
-            }
-        },
-        "status": {
-            "label": "Status"
-        },
-        "search": {
-            "label": "Search"
-        },
-        "recent": {
-            "label": "Recent Search"
-        },
-        "phoneticsearch": {
-            "label": "Phonetic"
-        },
-        "patent": {
-            "family": {
-                "time": {
-                    "line": {
-                        "label": "Time line"
-                    }
-                },
-                "tabular": {
-                    "view": {
-                        "label": "Tabular view"
-                    }
-                },
-                "label": "Patent Family",
-                "data": {
-                    "fetch": {
-                        "fail": {
-                            "message": "Unable to fetch data"
-                        }
-                    }
-                }
-            }
-        },
-        "number": {
-            "field": {
-                "label ": " Number Fields"
-            }
-        },
-        "gazettesearch": {
-            "label": "Journal Search"
-        },
-        "documentsearch": {
-            "label": "Document Search"
-        },
-        "doclist": {
-            "label": "Document List"
-        },
-        "description": {
-            "label": "Description"
-        },
-        "date": {
-            "field": {
-                "label ": " Date Fields"
-            }
-        },
-        "claim": {
-            "label": "Claims"
-        },
-        "biblio": {
-            "label": "Bibliographic"
-        },
-        "advancedsearch": {
-            "label": "Advanced Search"
-        }
-    },
-    "section": {
-        "associateddrawing": {
-            "label": "Drawings"
-        }
+    "showfilter": {
+      "label": "Show Filter"
     },
     "search": {
-        "table": {
-            "results": {
-                "label": "Table view"
-            }
-        },
-        "sort": {
-            "type": {
-                "desc": {
-                    "tooltip": "Descending"
-                },
-                "asc": {
-                    "tooltip": "Ascending"
-                }
-            },
-            "field": {
-                "tooltip": "Select a column for sorting"
-            }
-        },
-        "page": {
-            "title": "IP REGISTER"
-        },
-        "list": {
-            "results": {
-                "label": "List view"
-            }
-        },
-        "grid": {
-            "results": {
-                "label": "Grid view"
-            }
-        },
-        "export": {
-            "results": {
-                "label": "Export results"
-            }
-        },
-        "bar": {
-            "suggestive": {
-                "search": {
-                    "on": {
-                        "tooltip": "Frequent fields selection is on"
-                    },
-                    "off": {
-                        "tooltip": "All fields selection is on"
-                    },
-                    "label": "Field selection"
-                }
-            },
-            "solr": {
-                "id": {
-                    "tooltip": "Click here to remove the keyword"
-                }
-            }
+      "info": {
+        "label": "Record selected with one or more criteria"
+      }
+    },
+    "phonetic": {
+      "check": "This field boost the records with exact match to have higher relevance score"
+    },
+    "minimum": {
+      "relevance": "This field is used to limit results setting the minimum relevance"
+    },
+    "listview": {
+      "label": "List View"
+    },
+    "hidefilter": {
+      "label": "Hide Filter"
+    },
+    "gridview": {
+      "label": "Grid View"
+    },
+    "export": {
+      "label": "Export"
+    },
+    "download": {
+      "label": "Download",
+      "document": {
+        "label": "Download Document"
+      },
+      "application": {
+        "xml": {
+          "label": "Download Application XML"
         }
+      }
     },
-    "result": {
-        "number": {
-            "found": "applications found in"
-        },
-        "count": {
-            "message": {
-                "single": "About ${count} result",
-                "plural": "About ${count} results"
-            }
+    "document": {
+      "view": {
+        "label": "View Document"
+      },
+      "search": {
+        "info": {
+          "label": "Enclose your search criteria within \"\" for exact search"
         }
-    },
-    "page": {
-        "title": {
-            "application": {
-                "label": "Application"
-            }
-        }
-    },
-    "option": {
-        "stemming": {
-            "label": "stemming"
-        },
-        "phonetic": {
-            "label": "phonetic"
-        },
-        "fuzzy": {
-            "label": "fuzzy"
-        }
-    },
-    "module": {
-        "trademarks": {
-            "label": "Trademarks"
-        },
-        "patents": {
-            "label": "Patents"
-        },
-        "designs": {
-            "label": "Designs"
-        },
-        "gidatabase": {
-            "label": "GI Database"
-        },
-        "portfolios": {
-            "label": "Portfolios"
-        }
-    },
-    "message": {
-        "userselection": {
-            "nocriteria": "No Criteria",
-            "keyword": "Keyword",
-            "and": "AND",
-            "all": "All"
-        },
-        "feature": {
-            "notsupported": "Your browser does not support viewing the document.Kindly download the document instead."
-        },
-        "export": {
-            "limit": {
-                "exceeded": "Please narrow down the search results further before exporting!"
-            }
-        }
-    },
-    "menu": {
-        "trademarks": "Trademarks",
-        "references": "References",
-        "patents": "Patents",
-        "home": "Home",
-        "edms": "EDMS",
-        "designs": "Designs",
-        "gidatabase": "GI Database",
-        "portfolios": "Portfolios"
-    },
-    "language": {
-        "display": {
-            "label": {
-                "vi": "Ti\u1ebfng Vi\u1ec7t",
-                "ms": "Bahasa Melayu",
-                "kh": "\u1797\u17b6\u179f\u17b6\u1781\u17d2\u1798\u17c2\u179a",
-                "jp": "\u65e5\u672c\u8a9e",
-                "id": "Bahasa Indonesia",
-                "fr": "Fran\u00e7ais",
-                "en": "English",
-                "ar": "\u0627\u0644\u0639\u0631\u0628\u064a\u0629"
-            }
-        }
-    },
-    "label": {
-        "showing": "Showing",
-        "security": {
-            "captcha": "To confirm your request, please check the box to let us know you are human."
-        },
-        "of": "of",
-        "more": "More",
-        "less": "Less"
-    },
-    "info": {
-        "version": {
-            "label": "version 1.3.0"
-        },
-        "poweredby": {
-            "label": "powered by WIPO"
-        }
-    },
-    "home": {
-        "link": {
-            "label": "Data Coverage"
-        }
-    },
-    "header": {
-        "application": {
-            "title": "IP REGISTER"
-        }
-    },
-    "gazette": {
-        "journal": {
-            "to": {
-                "display": {
-                    "label": "to"
-                }
-            },
-            "id": {
-                "display": {
-                    "label": "Journal Description"
-                }
-            },
-            "from": {
-                "display": {
-                    "label": "Journal Date"
-                }
-            },
-            "category": {
-                "display": {
-                    "label": "Category"
-                }
-            }
-        },
-        "application": {
-            "display": {
-                "label": "Application #"
-            }
-        },
-        "action": {
-            "type": {
-                "display": {
-                    "label": "Action Type"
-                }
-            }
-        }
-    },
-    "footer": {
-        "search": {
-            "quicklink": {
-                "label": "SEARCH"
-            },
-            "detail": {
-                "quicklink": {
-                    "label": "Basic or advanced search to <br> refine your preferences"
-                }
-            }
-        },
-        "manage": {
-            "quicklink": {
-                "label": "MANAGE"
-            },
-            "detail": {
-                "quicklink": {
-                    "label": "You can save and customize <br> your search"
-                }
-            }
-        },
-        "export": {
-            "quicklink": {
-                "label": "EXPORT"
-            },
-            "detail": {
-                "quicklink": {
-                    "label": "Export your search in PDF"
-                }
-            }
-        }
-    },
-    "field": {
-        "tooltip": {
-            "todate": "To",
-            "phonetic": {
-                "min": {
-                    "relevance": "Minimum Relevance"
-                }
-            },
-            "id": "Identifier",
-            "fromdate": "From",
-            "entry": {
-                "count": "Entry count"
-            },
-            "boost": {
-                "exact": {
-                    "match": "Boost Exact Match"
-                }
-            },
-            "application": {
-                "count": "Application count"
-            },
-            "VNCL": "Vienna Classes",
-            "VCL": "Vienna Classes",
-            "TITL_LG1": "Title Bilingual",
-            "TITL_EN": "Title English",
-            "TITL": "Title",
-            "STLB_ORI": "Internal Status",
-            "STLB": "Status",
-            "STDT": "Status Date",
-            "STCD": "Status Code",
-            "RPRE": "Representative Residence",
-            "RPNA_LG1": "Representative Name Bilingual",
-            "RPNA": "Representative Name",
-            "RPCT": "Representative Country",
-            "RPAD_LG1": "Representative Address Bilingual",
-            "RPAD": "Representative Address",
-            "RENB": "Registration Number",
-            "REDT": "Registration Date",
-            "PCTPBNB": "PCT Publication Number",
-            "PCTPBDT": "PCT Pub. Date",
-            "PCTPBCT": "PCT Publication Country",
-            "PCTNB": "PCT Filing Number",
-            "PCTDT": "PCT Publication date",
-            "PCNB": "Priority Number",
-            "PCDT": "Priority Date",
-            "PCCT": "Priority Details",
-            "PBNB": "Publication Number",
-            "PBKC": "Pub. Kind Code",
-            "PBDT": "Publication Date",
-            "OFCO": "Office Code",
-            "NPEDT": "National Entry Date",
-            "NCL": "Nice Classes",
-            "NCDE_LG1": "Nice Class Description Bilingual",
-            "NCDE": "Nice Class Description",
-            "NCCL": "Nice Classes",
-            "MK_LG1": "Mark Name Bilingual",
-            "MKTXT": "Mark",
-            "MK": "Mark",
-            "MAIN_EFOLDER_REF": "Main EFolder Reference",
-            "LOGOEX": "Logo",
-            "LOGO": "Logo",
-            "LOC": "Classification",
-            "LCL": "Classification",
-            "LCDE": "Classification",
-            "Journal": {
-                "AFNB_ORI": "Application Number"
-            },
-            "JOURNAL_DESCRIPTION": "Journal Description",
-            "IPC_TECH_SECTOR_TXT": "IPC Technology Sector",
-            "IPC_TECH_FIELD_TXT": "IPC Technology Field",
-            "IPC_TECH_FIELD": "IPC Technology Field",
-            "IPC_ORI": "IPC Classes",
-            "IPC_MAIN": "IPC_MAIN",
-            "IPC_LBL": "IPC Classes",
-            "IPC": "IPC Classes",
-            "INRE": "Inventor Residence",
-            "INNA_LG1": "Inventor Bilingual",
-            "INNA": "Inventor",
-            "INCT": "Inventor Country",
-            "INAD_LG1": "Inventor Address Bilingual",
-            "INAD": "Inventor Address",
-            "GZPDT": "Gazette Publication Date",
-            "GZNB": "Gazette Number",
-            "GZDT": "Gazette Date",
-            "FILE_TYP": "File Type",
-            "FILE_ID": "File Id",
-            "EXCRDT": "EXCRDT",
-            "EFOLDER_REF": "EFolder Reference",
-            "EFOLDER_ID": "EFolder Id",
-            "EDOC_REF": "EDoc Reference",
-            "EDOC_ID": "EDoc Id",
-            "DOC_REF": "Document Reference",
-            "DOC_ID": "Document Id",
-            "DETXT": "Designer Information",
-            "DESCTXT": "Description",
-            "DERE": "Design Residence",
-            "DENA_LG1": "Designer Name Bilingual",
-            "DENA": "Designer",
-            "DECT": "Design Country",
-            "DECLDES": "Description",
-            "DEAD_LG1": "Design Address Bilingual",
-            "DEAD": "Design Address",
-            "CPC_ORI": "CPC Classes",
-            "CPC_MAIN": "CPC_MAIN",
-            "CPC_LBL": "CPC Classes",
-            "CPC": "CPC Classes",
-            "CLTXT": "Claims",
-            "CLNB": "Claim Number",
-            "CLLG": "Claim Language",
-            "CLDE": "Claim Description",
-            "CITCL": "Claims",
-            "CITCAT": "Category",
-            "CINB": "Citation Number",
-            "CIDE": "Citation Description",
-            "CICL": "Citation Claim",
-            "CICA": "Citation Category",
-            "CATEGORY": "Category",
-            "APTXT": "Applicant",
-            "APRE": "Applicant Residence",
-            "APPL_TYP_TXT": "Application Type",
-            "APPL_TYP": "Application Type",
-            "APPL_SUBTYP_TXT": "Application SubType",
-            "APPL_SUBTYP": "Application SubType",
-            "APNA_LG1": "Applicant Bilingual",
-            "APNA": "Applicant",
-            "APCT": "Applicant Country",
-            "APAD_LG1": "Applicant Address Bilingual",
-            "APAD": "Applicant Address",
-            "AFNB_ORI": "Original Filing Number",
-            "AFNB": "Filing Number",
-            "AFDT": "Filing Date",
-            "ABTXT": "Abstract",
-            "ABST_LG1": "Abstract Bilingual",
-            "ABST_EN": "Abstract English",
-            "ABST": "Abstract"
-        },
-        "search": {
-            "suggestion": {
-                "label": "Enter Keyword(s) and/or click Search for Patents listing"
-            },
-            "concordance": {
-                "placeholder": "Enter Keyword(s) for e.g.:Optics, Medical,Surface"
-            }
-        },
-        "placeholder": {
-            "todate": "e.g. 2017.12.31",
-            "phonetic": {
-                "min": {
-                    "relevance": ""
-                }
-            },
-            "id": "e.g. CH2018000001",
-            "fromdate": "e.g. 2017.12.31",
-            "documentType": "e.g. Spec",
-            "documentParentId": "e.g. CH2018000001",
-            "documentName": "e.g. CH2018000001_spec_000001",
-            "documentContent": "e.g. This is a specification document",
-            "boost": {
-                "exact": {
-                    "match": ""
-                }
-            },
-            "VNCL": "e.g. 8.1.19",
-            "VCL": "e.g. 8.1.19",
-            "TITL_LG1": "e.g. Nestl\u00e9 KitKat",
-            "TITL_EN": "e.g. Nestl\u00e9 KitKat",
-            "TITL": "e.g. Nestl\u00e9 KitKat",
-            "STLB_ORI": "e.g. Published",
-            "STLB": "e.g. Published",
-            "STDT": "e.g. 2017.12.31",
-            "STCD": "e.g. FG",
-            "RPRE": "e.g. CH",
-            "RPNA_LG1": "e.g. Nestl\u00e9",
-            "RPNA": "e.g. Nestl\u00e9",
-            "RPCT": "e.g. CH",
-            "RPAD_LG1": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
-            "RPAD": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
-            "RENB": "e.g. CH2018000001",
-            "REDT": "e.g. 2017.12.31",
-            "PCTPBNB": "2018/000001",
-            "PCTPBDT": "",
-            "PCTPBCT": "e.g. CH",
-            "PCTNB": "e.g. PCT/CH2018/000001",
-            "PCTDT": "e.g. 2017.12.31",
-            "PCNB": "e.g. CH2018000001",
-            "PCDT": "e.g. 2017.12.31",
-            "PCCT": "e.g. CH",
-            "PBNB": "e.g. 2018/000001",
-            "PBKC": "",
-            "PBDT": "e.g. 2017.12.31",
-            "OFCO": "e.g. CH",
-            "NPEDT": "e.g. 2017.12.31",
-            "NCL": "e.g. 0100662",
-            "NCDE_LG1": "e.g. Chocolate for kids",
-            "NCDE": "e.g. Chocolate for kids",
-            "NCCL": "e.g. 0100662",
-            "MK_LG1": "e.g. KitKat",
-            "MKTXT": "e.g. KitKat",
-            "MK": "e.g. KitKat",
-            "LOGOEX": "",
-            "LOGO": "",
-            "LOC": "e.g. Geneva",
-            "LCL": "e.g. 26.6",
-            "LCDE": "e.g. Chocolate for kids",
-            "Journal": {
-                "AFNB_ORI": "e.g. CH2018000001"
-            },
-            "JOURNAL_DESCRIPTION": "e.g. This is a food journal",
-            "IPC_TECH_SECTOR_TXT": "e.g. Human Necessities",
-            "IPC_TECH_FIELD_TXT": "e.g. Human Necessities",
-            "IPC_TECH_FIELD": "e.g. Human Necessities",
-            "IPC_ORI": "e.g. A02H 15/04",
-            "IPC_MAIN": "",
-            "IPC": "e.g. A02H1504",
-            "INRE": "",
-            "INNA_LG1": "",
-            "INNA": "",
-            "INCT": "",
-            "INAD_LG1": "",
-            "INAD": "",
-            "GZPDT": "e.g. 2017.12.31",
-            "GZNB": "",
-            "GZDT": " e.g. 2017.12.31",
-            "FILE_TYP": "e.g. P, D, M",
-            "FILE_ID": "e.g. AP-A-2008-10",
-            "EXCRDT": "e.g. 2017.12.31",
-            "EFOLDER_REF": "e.g. 1-2018-2",
-            "EDOC_REF": "e.g. 158-2008-1",
-            "DOC_REF": "e.g. AP-AF11-2008-2",
-            "DOC_ID": "e.g. AP-A-2008-10",
-            "DETXT": "e.g. Nestl\u00e9 is the world's largest food and beverage company.",
-            "DESCTXT": "",
-            "DERE": "e.g. CH",
-            "DENA_LG1": "e.g. Nestl\u00e9",
-            "DENA": "e.g. Nestl\u00e9",
-            "DECT": "e.g. CH",
-            "DECLDES": "",
-            "DEAD_LG1": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
-            "DEAD": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
-            "CPC_ORI": "e.g. A02H 15/04",
-            "CPC_MAIN": "",
-            "CPC": "e.g. A02H1504",
-            "CLTXT": "",
-            "CLNB": "",
-            "CLLG": "e.g. EN",
-            "CLDE": "",
-            "CITCL": "",
-            "CITCAT": "",
-            "CINB": "",
-            "CIDE": "",
-            "CICL": "",
-            "CICA": "",
-            "CATEGORY": "",
-            "APTXT": "e.g. Nestl\u00e9",
-            "APRE": "e.g. CH",
-            "APPL_TYP_TXT": "e.g. National Application",
-            "APPL_TYP": "e.g. National Application",
-            "APPL_SUBTYP_TXT": "e.g. National Application",
-            "APPL_SUBTYP": "e.g. National Application",
-            "APNA_LG1": "e.g. Nestl\u00e9",
-            "APNA": "e.g. Nestl\u00e9",
-            "APCT": "e.g. CH",
-            "APAD_LG1": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
-            "APAD": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
-            "AFNB_ORI": "e.g. CH2018000001",
-            "AFNB": "e.g. CH2018000001",
-            "AFDT": "e.g. 2017.12.31",
-            "ABTXT": "e.g. This application belongs to the food category.",
-            "ABST_LG1": "e.g. This application belongs to the food category.",
-            "ABST_EN": "e.g. This application belongs to the food category.",
-            "ABST": "e.g. This application belongs to the food category."
-        },
-        "display": {
-            "years": "Year",
-            "type": "Document Type",
-            "todate": "To",
-            "suggestion": {
-                "technical": {
-                    "field": "Technology Field"
-                },
-                "suggested_field_text": "Select the suggested field(s)",
-                "VCL": "Vienna Class",
-                "String": "String",
-                "Number": "Number",
-                "NCL": "Nice Class",
-                "LCL": "Locarno Class",
-                "Default": "Default",
-                "Date": "Date",
-                "Classification": "Classification",
-                "AlphaNumeric": "AlphaNumeric"
-            },
-            "sector": {
-                "transportation": "Transportation",
-                "transport": "Transport",
-                "tools_and_machines": "Tools And Machines",
-                "textiles_and_accessories": "Textiles And Accessories",
-                "research_and_technology": "Research And Technology",
-                "packaging": "Packaging",
-                "other_sectors": "Other Sectors",
-                "other_fields": "Other Fields",
-                "non_classified": "Non Classified",
-                "mechanical_engineering": "Mechanical Engineering",
-                "leisure_and_education": "Leisure And Education",
-                "instruments": "Instruments",
-                "ict_and_audiovisual": "ICT And Audiovisual",
-                "household_equipments": "Household Equipment",
-                "health_pharma_and_cosmetics": "Health, Pharma And Cosmetics",
-                "health": "Health",
-                "furniture_and_household_goods": "Furniture And Household Goods",
-                "electricity_and_lighting": "Electricity And Lighting",
-                "electrical_engineering": "Electrical Engineering",
-                "construction": "Construction",
-                "clothing": "Clothing",
-                "chemistry": "Chemistry",
-                "chemicals": "Chemicals",
-                "business_service": "Business Services",
-                "average_others": "Average Others",
-                "agriculture": "Agriculture",
-                "agricultural_products_and_food_preparation": "Agricultural Products And Food Preparation",
-                "advertising": "Advertising"
-            },
-            "search": {
-                "criteria": "Search Criteria"
-            },
-            "score": "Relevance",
-            "phonetic": {
-                "min": {
-                    "relevance": "Minimum Relevance"
-                }
-            },
-            "pct_national_phase": "PCT National Phase",
-            "parentId": "Parent Identifier",
-            "journal": {
-                "detail": {
-                    "APP_REPRESENTATIVE_NAME": "Representative",
-                    "APP_REGISTRATION_NUMBER": "Registration Number",
-                    "APP_REGISTRATION_DATE": "Registration Date",
-                    "APP_REGISTERED_CLASSES_DETAIL": "Nice Classes",
-                    "APP_PUBLICATION_DATE": "Publication Date",
-                    "APP_PCT_PUBLICATION_ID": "PCT Publication Number",
-                    "APP_PCT_PUBLICATION_DATE": "PCT Publication Date",
-                    "APP_PCT_FILING_DATE": "PCT Filing Date",
-                    "APP_OWNER_NAME": "Owner",
-                    "APP_NAME": "Mark Name",
-                    "APP_LOGO_COLOURS": "Logo Colours",
-                    "APP_LOCARNO": "Locarno Classes",
-                    "APP_IPC_EDITION": "IPC Edition",
-                    "APP_INVENTOR_NAME": "Inventor",
-                    "APP_FILING_DATE": "Filing Date",
-                    "APP_FILE_NUMBER": "Application Number",
-                    "APP_EXPIRATION_DATE": "Expiry Date",
-                    "APP_EXAM_IPC": "IPC Classes",
-                    "ACTION_DATE": "Action Date"
-                }
-            },
-            "id": "Identifier",
-            "group": "Group",
-            "fromdate": "From",
-            "country": {
-                "code": {
-                    "ZW": "Zimbabwe",
-                    "ZM": "Zambia",
-                    "XX": "Not Specified",
-                    "VN": "Vietnam",
-                    "UG": "Uganda",
-                    "TZ": "Tanzania",
-                    "TP": "Timor-Leste",
-                    "TN": "Tunisia",
-                    "TL": "Timor-Leste",
-                    "TH": "Thailand",
-                    "SG": "Singapore",
-                    "SD": "Sudan",
-                    "SA": "Saudi Arabia",
-                    "RW": "Rwanda",
-                    "RS": "Serbia",
-                    "PH": "Philippines",
-                    "OM": "Oman",
-                    "NA": "Namibia",
-                    "MZ": "Mozambique",
-                    "MY": "Malaysia",
-                    "MW": "Malawi",
-                    "MM": "Myanmar",
-                    "MD": "Moldova",
-                    "MA": "Morocco",
-                    "LA": "Laos",
-                    "KH": "Cambodia",
-                    "KE": "Kenya",
-                    "JO": "Jordan",
-                    "IN": "India",
-                    "ID": "Indonesia",
-                    "IC": "Saint Lucia",
-                    "GM": "Gambia",
-                    "GH": "Ghana",
-                    "ET": "Ethiopia",
-                    "EG": "Egypt",
-                    "DZ": "Algeria",
-                    "DO": "Dominican Republic",
-                    "CU": "Cuba",
-                    "CR": "Costa Rica",
-                    "CN": "China",
-                    "BY": "Belarus",
-                    "BW": "Botswana",
-                    "BU": "Bulgaria",
-                    "BN": "Brunei",
-                    "AR": "Argentina",
-                    "AP": "ARIPO"
-                }
-            },
-            "content_type": "Format",
-            "content_stored": "Content Stored",
-            "content": "Content",
-            "boost": {
-                "exact": {
-                    "match": "Boost Exact Match"
-                }
-            },
-            "application_filed": "Application Filed",
-            "all": "All",
-            "WDDT": "Withdrawn Date",
-            "VNCL": "Vienna Classes",
-            "VCL_RANKED": "Ranked by Vienna Classes",
-            "VCL_NON_CLASSIFIED": "Non Vienna Classified",
-            "VCL_CATEGORY": "Vienna Category",
-            "VCL": "Vienna Classes",
-            "TXT": "All fields",
-            "TITXT": "Title",
-            "TITL_LG1": "Title Bilingual",
-            "TITL_EN": "Title English",
-            "TITL": "Title",
-            "TDNB": "Total Design",
-            "SYPO": "Symbol Position",
-            "STLB_ORI": "Internal Status",
-            "STLB_LBL": "Status",
-            "STLB": "Status",
-            "STDTL": "Status Date List",
-            "STDT": "Status Date",
-            "STCDL": "Status Code List",
-            "STCD": "Status Code",
-            "SRDT": "Searched Event",
-            "SPND": "Specimen Identifier",
-            "SPDE": "Specimen Description",
-            "SP": "Symbol Position",
-            "SOUNDEX": "Sound Exists",
-            "SOUND": "Sound",
-            "SERIAL_F_CD": "Serial (F)",
-            "SELG": "Secondary Language",
-            "SEARCH_INFO": "The word searched may appear in previous version of this application",
-            "SEARCH_CRITERIA": "Search Criteria",
-            "RPTXT": "Representative Information",
-            "RPRE": "Representative Residence",
-            "RPNA_LG1": "Representative Name Bilingual",
-            "RPNA_LBL": "Representative",
-            "RPNA": "Representative",
-            "RPCT": "Representative Country",
-            "RPAD_LG1": "Representative Address Bilingual",
-            "RPAD": "Representative Address",
-            "RENEW_SD": "Start Date",
-            "RENEW_ED": "End Date",
-            "RENEW": "Duration(s) of Renewal",
-            "RENB_ORI": "Original Registration Number",
-            "RENB": "Registration Number",
-            "REIN": "Registration Number and Date",
-            "REDT": "Registration Date",
-            "Query": "Solr Query",
-            "PTETXT": "Patent Events",
-            "PRLG": "Primary Language",
-            "PKDE": "Publication Number Kind Code Description",
-            "PCTXT": "Priority Details",
-            "PCTPBNB": "PCT Publication Number",
-            "PCTPBIN": "PCT Publication Number and Date",
-            "PCTPBDT": "PCT Publication Date",
-            "PCTPBCT": "PCT Publication Country",
-            "PCTNB": "PCT Filing Number",
-            "PCTIN": "PCT Filing Number and Date",
-            "PCTDT": "PCT Publication Date",
-            "PCTCT": "PCT Country",
-            "PCNB": "Priority Number",
-            "PCDT": "Priority Date",
-            "PCCT": "Priority Details",
-            "PBNB": "Publication Number",
-            "PBLG": "Publication Lnaguage",
-            "PBKC": "Publication Kind Code",
-            "PBIN": "Publication Number and Date",
-            "PBDTL": "Publication Date List",
-            "PBDT": "Publication Date",
-            "PBCT": "Publication Country",
-            "PATCITTXT": "Patent Citation",
-            "PATCIT": "Patent",
-            "OPSDT": "Opposition Start Date",
-            "OFCO": "Office Code",
-            "NPLCITXT": "NPL Citations",
-            "NPLCIT": "Non Patent Literature",
-            "NPEDT_LBL": "National Entry Date",
-            "NPEDT": "National Entry Date",
-            "NCL_RANKED": "Ranked by Nice Classes",
-            "NCL_NON_CLASSIFIED": "Non Nice Classified",
-            "NCL_INDUSTRY_SECTOR": "Nice Industry Sector",
-            "NCL": "Nice Classes",
-            "NCDE_LG1": "Nice Class Description Bilingual",
-            "NCDE": "Nice Class Description",
-            "NCCL": "Nice Classes",
-            "MSNB": "Total Mark Series",
-            "MNNA": "Mark Nature",
-            "MK_LG1": "Mark Name Bilingual",
-            "MKTXT": "Mark",
-            "MKTRLT": "Mark Transliteration",
-            "MKTR": "Mark Translation",
-            "MKNSL": "Mark Name (Secondary Language)",
-            "MKFW": "Mark Feature",
-            "MKFT": "Mark Feature",
-            "MKETXT": "Mark Events",
-            "MKDI": "Mark Disclaimer",
-            "MKDE": "Mark Description Detail",
-            "MKDC": "Disclaimer",
-            "MKCSD": "Current Status Date",
-            "MKCLR": "Mark Color",
-            "MKCLDE": "Mark Colour Description",
-            "MK": "Mark",
-            "MD_FTYP": "Main type",
-            "MAIN_EFOLDER_REF": "Main EFolder Reference",
-            "LOGO_INID": "(540) Logo",
-            "LOGOEX": "Logo",
-            "LOGO": "Logo",
-            "LOC": "Classification",
-            "LIC": "License Details",
-            "LEGALDT": "Legal Date",
-            "LCL_NON_CLASSIFIED": "Non Locarno Classified",
-            "LCL_INDUSTRY_SECTOR": "Locarno Industry Sector",
-            "LCL": "Classification",
-            "LCENB": "Locarno Edition",
-            "LCDE": "Classification",
-            "LABEL_LG_1": "Label (Bilingual)",
-            "LABEL": "Label",
-            "Journal": {
-                "AFNB_ORI": "Application Number"
-            },
-            "JOURNAL_DT": "Journal Date",
-            "JOURNAL_DESCRIPTION": "Journal Description",
-            "JOURNAL_CONTENT": "Details",
-            "JOURNAL_CD": "Journal Code",
-            "IPC_TECH_SECTOR_TXT": "IPC Technology Sector",
-            "IPC_TECH_SECTOR": "Technology sector",
-            "IPC_TECH_FIELD_TXT": "IPC Technology Field",
-            "IPC_TECH_FIELD": "IPC Technology Field",
-            "IPC_SHORT": "IPC Classes",
-            "IPC_ORIGINAL": "IPC Class",
-            "IPC_ORI": "IPC Classes",
-            "IPC_NON_CLASSIFIED": "Non IPC Classified",
-            "IPC": "IPC Classes",
-            "INRE": "Inventor Residence",
-            "INNA_LG1": "Inventor Bilingual",
-            "INNA_LBL": "Inventor",
-            "INNA": "Inventor",
-            "INCT": "Inventor Country",
-            "INAD_LG1": "Inventor Address Bilingual",
-            "INAD": "Inventor Address",
-            "Group": "Group",
-            "GZTXT": "Gazette Information",
-            "GZPDT": "Gazette Publication Date",
-            "GZNB": "Gazette Number",
-            "GZDT": "Gazette Date",
-            "GRDT": "Granted Date",
-            "FILE_TYP": "File Type",
-            "FILE_ID": "File Id",
-            "FAMILYVIEW": "Patent Family",
-            "EXDT": "Examined Date",
-            "EVNA": "Event Name",
-            "EPDT_LBL": "Expiration Date",
-            "EPDT": "Expiration Date",
-            "EFOLDER_REF": "EFolder Reference",
-            "EFOLDER_ID": "EFolder Id",
-            "EDOC_TYP": "EDoc Type",
-            "EDOC_REF": "EDoc Reference",
-            "EDOC_ID": "EDoc Id",
-            "EDOC_DT": "EDoc Date",
-            "EDNB": "Edition Number",
-            "DT": "Date",
-            "DRAWING": "Drawing",
-            "DOC_REF": "Document Reference",
-            "DOC_ID": "Document Id",
-            "DE_LG1": "Design Description Bilingual",
-            "DETXT": "Designer Information",
-            "DETITXT": "Title",
-            "DETI": "Design Title",
-            "DETD": "Total Designs",
-            "DETAILS": "Details",
-            "DESCTXT": "Description",
-            "DERE": "Design Residence",
-            "DEPKD": "Design Nature",
-            "DENOVELTY": "Design Novelty Statement",
-            "DENA_LG1": "Designer Name Bilingual",
-            "DENA_LBL": "Designer",
-            "DENA": "Designer",
-            "DEID_LG1": "Design Identifier Bilingual",
-            "DEID": "Design Identifier",
-            "DEETXT": "Design Events",
-            "DECT": "Design Country",
-            "DECSD": "Current Status Date",
-            "DECLTXT": "Design Claims",
-            "DECLNO": "Claim",
-            "DECLDES": "Description",
-            "DECDI": "Design Claim Detail Identifier",
-            "DECD": "Design Claim Detail",
-            "DEAD_LG1": "Design Address Bilingual",
-            "DEAD": "Design Address",
-            "DE": "Design Description",
-            "CRNA": "Correspondence Name",
-            "CRAD": "Correspondence Address",
-            "CPC_ORI": "CPC Classes",
-            "CPC": "CPC Classes",
-            "CODE": "Code",
-            "CLTXT": "Claims",
-            "CLNB": "Claim Number",
-            "CLLG": "Claim Language",
-            "CLDE": "Claim Description",
-            "CITXT": "Citations",
-            "CITTYP": "Citation Type",
-            "CITREF": "References",
-            "CITDOC": "Cited Documents",
-            "CITCL": "Claims",
-            "CITCAT": "Category",
-            "CINB": "Citation Number",
-            "CIDT": "Certificate Issue Date",
-            "CIDENB": "Citation Doc Number",
-            "CIDE": "Citation Description",
-            "CICT": "Citation Country",
-            "CICL": "Citation Claim",
-            "CICA": "Citation Category",
-            "CCDT": "Cancelled Event",
-            "CATEGORY": "Category",
-            "CAPTURE_DT": "Capture Date",
-            "CANA": "Correspondence Address",
-            "BASIC_CD": "Basic",
-            "Application_registered": "Registered",
-            "Application_expired": "Expired",
-            "Action": "Action",
-            "APTXT": "Applicant",
-            "APRE": "Applicant Residence",
-            "APPL_TYP_TXT": "Application Type",
-            "APPL_TYP": "Application Type",
-            "APPL_SUBTYP_TXT": "Application SubType",
-            "APPL_SUBTYP": "Application SubType",
-            "APNT": "Applicant Nationality",
-            "APNA_LG1": "Applicant Bilingual",
-            "APNA_LBL": "Applicant",
-            "APNA": "Applicant",
-            "APCT": "Applicant Country",
-            "APAD_LG1": "Applicant Address Bilingual",
-            "APAD": "Applicant Address",
-            "ANU_YEAR": "Year",
-            "ANU_STDT": "Validity Start",
-            "ANU_PAY": "Payment",
-            "ANU_ENDT": "Validity End",
-            "ANU": "Annuity Details",
-            "AFNB_ORI": "Original Filing Number",
-            "AFNB": "Filing Number",
-            "AFLG": "Filing Language",
-            "AFIN": "Filing Number and Date",
-            "AFDT": "Filing Date",
-            "AFCT": "Filing Country",
-            "ACTION_TYP": "Action Type",
-            "ACTION": "ACTION",
-            "ABTXT": "Abstract",
-            "ABST_LG1": "Abstract Bilingual",
-            "ABST_EN": "Abstract English",
-            "ABST": "Abstract"
-        }
-    },
-    "facet": {
-        "label": {
-            "true": "Yes",
-            "status": {
-                "WP": "Pending",
-                "WI": "Inactive",
-                "WA": "Active",
-                "RL": "Awaiting Court Action",
-                "PE": "pending",
-                "PCT": "PCT National Phase",
-                "MM": "Lapsed",
-                "MK": "Expired",
-                "MG": "Invalidated",
-                "MF": "Revoked",
-                "ME": "Revoked",
-                "MC": "Cancelled",
-                "MB": "Appealed",
-                "GA": "Converted",
-                "FG": "Registered",
-                "FC": "Rejected",
-                "FB": "Suspended",
-                "FA": "Withdrawn",
-                "EZ": "Examined",
-                "EM": "empty",
-                "DE": "deleted",
-                "CZ": "Opposed",
-                "CE": "certified",
-                "BZ": "Published",
-                "AZ": "Filed",
-                "AE": "Reinstated"
-            },
-            "pct_national_phase": "PCT National Phase",
-            "header": {
-                "filter": {
-                    "by": "Filter by :"
-                }
-            },
-            "false": "No",
-            "ZZ": "Zimbabwe",
-            "ZW": "Zambia",
-            "ZA": "South Africa",
-            "XX": "Not Specified",
-            "VU": "Vanuatu",
-            "VN": "Vietnam",
-            "VI": "U.S. Virgin Islands",
-            "VG": "British Virgin Islands",
-            "VE": "Venezuela",
-            "VC": "Saint Vincent and the Grenadine",
-            "VA": "Vatican City",
-            "UZ": "Uzbekistan",
-            "UY": "Uruguay",
-            "US": "United States",
-            "UM": "United States Minor Outlying Islands",
-            "UK": "United Kingdom",
-            "UG": "Uganda",
-            "UA": "Ukraine",
-            "TZ": "Tanzania",
-            "TW": "Taiwan",
-            "TT": "Trinidad and Tobago",
-            "TR": "Turkey",
-            "TP": "Timor-Leste",
-            "TN": "Tunisia",
-            "TM": "Turkmenistan",
-            "TL": "Timor-Leste",
-            "TJ": "Tajikistan",
-            "TH": "Thailand",
-            "TD": "Chad",
-            "TC": "Turks and Caicos Islands",
-            "SZ": "Eswatini",
-            "SY": "Syria",
-            "SV": "El Salvador",
-            "SU": "Soviet Union",
-            "ST": "Sao Tome and Principe",
-            "SM": "San Marino",
-            "SK": "Slovakia",
-            "SI": "Slovenia",
-            "SG": "Singapore",
-            "SE": "Sweden",
-            "SC": "Seychelles",
-            "SA": "Saudi Arabia",
-            "RU": "Russian Federation",
-            "RS": "Serbia",
-            "RO": "Romania",
-            "QA": "Qatar",
-            "PT": "Portugal",
-            "PR": "Puerto Rico",
-            "PL": "Poland",
-            "PK": "Pakistan",
-            "PH": "Philippines",
-            "PG": "Papua New Guinea",
-            "PE": "Peru",
-            "PA": "Panama",
-            "OM": "Oman",
-            "NZ": "New Zealand",
-            "NP": "Nepal",
-            "NO": "Norway",
-            "NL": "Netherlands",
-            "NG": "Nigeria",
-            "NE": "Niger",
-            "NC": "New Caledonia",
-            "MY": "Malaysia",
-            "MX": "Mexico",
-            "MW": "Malawi",
-            "MU": "Mauritius",
-            "MT": "Malta",
-            "MR": "Mauritania",
-            "MO": "Macau",
-            "MM": "Myanmar",
-            "ML": "Mali",
-            "MH": "Marshall Islands",
-            "MG": "Madagascar",
-            "ME": "Montenegro",
-            "MD": "Republic of Moldova",
-            "MC": "Monaco",
-            "MA": "Morocco",
-            "LV": "Latvia",
-            "LU": "Luxembourg",
-            "LT": "Lithuania",
-            "LR": "Liberia",
-            "LK": "Sri Lanka",
-            "LI": "Liechtenstein",
-            "LB": "Lebanon",
-            "LA": "Laos",
-            "KZ": "Kazakhstan",
-            "KY": "Cayman Islands",
-            "KW": "Kuwait",
-            "KR": "South Korea",
-            "KP": "North Korea",
-            "KN": "Saint Kitts and Nevis",
-            "KI": "Kiribati",
-            "KH": "Cambodia",
-            "KE": "Kenya",
-            "JP": "Japan",
-            "JO": "Jordan",
-            "JM": "Jamaica",
-            "JE": "Jersey",
-            "IT": "Italy",
-            "IS": "Iceland",
-            "IR": "Iran",
-            "IQ": "Iraq",
-            "IN": "India",
-            "IM": "Isle of Man",
-            "IL": "Israel",
-            "IE": "Ireland",
-            "ID": "Indonesia",
-            "HU": "Hungary",
-            "HR": "Croatia",
-            "HN": "Honduras",
-            "HK": "Hong Kong",
-            "GU": "Guam",
-            "GT": "Guatemala",
-            "GS": "GS",
-            "GR": "Greece",
-            "GQ": "GQ",
-            "GM": "The Gambia",
-            "GL": "Greenland",
-            "GI": "Gibraltar",
-            "GH": "Ghana",
-            "GG": "Guernsey",
-            "GF": "French Guiana",
-            "GE": "Georgia",
-            "GD": "Grenada",
-            "GB": "United Kingdom",
-            "GA": "Georgia",
-            "FR": "France",
-            "FM": "Federated States of Micronesia",
-            "FJ": "Fiji",
-            "FI": "Finland",
-            "ES": "Spain",
-            "EP": "European Patent Office",
-            "EG": "Egypt",
-            "EE": "Estonia",
-            "EC": "Ecuador",
-            "DZ": "Algeria",
-            "DT": "DT",
-            "DO": "Dominican Republic",
-            "DM": "Dominica",
-            "DK": "Denmark",
-            "DJ": "Djibouti",
-            "DE": "Germany",
-            "DD": "German Democratic Republic",
-            "CZ": "Czech Republi",
-            "CY": "Cyprus",
-            "CX": "Christmas Island",
-            "CW": "Curacao",
-            "CU": "Cuba",
-            "CS": "Czechoslovakia",
-            "CR": "Costa Rica",
-            "CO": "Colombia",
-            "CN": "China",
-            "CM": "Cameroon",
-            "CL": "Chile",
-            "CK": "Cook Islands",
-            "CI": "Ivory Coast",
-            "CH": "Switzerland",
-            "CF": "Central African Republic",
-            "CA": "Canada",
-            "BZ": "Belize",
-            "BY": "Belarus",
-            "BW": "Botswana",
-            "BV": "BV",
-            "BU": "Myanmar",
-            "BS": "The Bahamas",
-            "BR": "Brazil",
-            "BO": "Bolivia",
-            "BN": "Brunei",
-            "BM": "Bermuda",
-            "BJ": "Benin",
-            "BI": "Burundi",
-            "BH": "Bahrain",
-            "BG": "Bulgaria",
-            "BE": "Belgium",
-            "BD": "Bangladesh",
-            "BB": "Barbados",
-            "BA": "Bosnia and Herzegovina",
-            "AZ": "Azerbaijan",
-            "AW": "Aruba",
-            "AU": "Australia",
-            "AT": "Austria",
-            "AS": "United States",
-            "AR": "Argentina",
-            "AP1": "AP1",
-            "AO": "Angola",
-            "AN": "Netherlands Antilles",
-            "AM": "Armenia",
-            "AL": "Albania",
-            "AG": "Antigua and Barbuda",
-            "AF": "Afganistan",
-            "AE": "United Arab Emirates",
-            "AD": "Andorra"
-        }
-    },
-    "error": {
-        "response": {
-            "code": {
-                "message": {
-                    "500": "Unable to contact WIPO CASE system.",
-                    "404": "Application is not yet loaded into WIPO CASE system.",
-                    "403": "You are not authorized to use this service please contact to administrator."
-                }
-            }
-        },
-        "document": {
-            "not": {
-                "available": {
-                    "message": "No document available"
-                }
-            }
-        }
+      }
     },
     "detail": {
-        "page": {
-            "tooltip": {
-                "pctpnb": "PCT publication more details",
-                "pctnb": "PCT filing more details",
-                "ow": "Other applications by same owner",
-                "npe": "National phase entries",
-                "nice": "NICE details",
-                "more": {
-                    "details": "More details"
-                },
-                "lck": "LOCARNO details",
-                "ipc": "IPC classification details",
-                "in": "Other applications by same inventor",
-                "family": "Patent Family",
-                "cpc": "CPC details",
-                "ap": "Other applications by same applicant"
-            },
-            "title": "IP REGISTER",
-            "npe": {
-                "title": "National phase entries of",
-                "table": {
-                    "header": {
-                        "npedate": "National phase entry date",
-                        "appno": "Application number"
-                    }
-                },
-                "fail": {
-                    "message": "Unable to fetch national phase entry data."
-                }
-            },
-            "no": {
-                "other": {
-                    "application": "No other application found."
-                },
-                "application": {
-                    "found": "Application not found."
-                }
-            }
-        }
+      "newtab": {
+        "label": "View Details in new tab"
+      },
+      "label": "View Details"
     },
-    "date": {
-        "display": {
-            "week": {
-                "Wednesday": "We",
-                "Tuesday": "Tu",
-                "Thursday": "Th",
-                "Sunday": "Su",
-                "Saturday": "Sa",
-                "Monday": "Mo",
-                "Friday": "Fr"
-            },
-            "options": {
-                "YEAR_DATE": "Year to Date",
-                "TODAY": "Today",
-                "SPECIFIC_DATE": "Specific Date",
-                "MONTH_DATE": "Last 6 Months",
-                "DATE_RANGE": "Date Range",
-                "BEFORE": "All Dates Before",
-                "AFTER": "All Dates After"
-            },
-            "month": {
-                "September": "September",
-                "October": "October",
-                "November": "November",
-                "May": "May",
-                "March": "March",
-                "June": "June",
-                "July": "July",
-                "January": "January",
-                "February": "February",
-                "December": "December",
-                "August": "August",
-                "April": "April"
-            }
-        }
+    "clearfilter": {
+      "label": "Clear Filter"
     },
-    "concordance": {
-        "term": {
-            "tooltip": {
-                "label": "Technology"
-            },
-            "placeholder": {
-                "label": ""
-            },
-            "null": {
-                "label": "Choose One"
-            },
-            "display": {
-                "label": "Technology"
-            }
-        }
+    "check": {
+      "label": "Check"
     },
     "chart": {
-        "total": {
-            "display": "Total Applications: ${total}. Applications in ${country}: ${count}."
-        },
-        "techsector": "Technology sector",
-        "previous": {
-            "button": "<- Previous Chart"
-        },
-        "pie": {
-            "subtitle": "You can click on a technology sector to visualize specific information"
-        },
-        "news": {
-            "title": "News"
-        },
-        "industrysector": "Industry sector",
-        "geo": {
-            "title": {
-                "trademarks": "TRADEMARK FILING BY COUNTRY",
-                "patents": "PATENT FILING BY COUNTRY",
-                "designs": "DESIGN FILING BY COUNTRY",
-                "default": "PATENTS FILING BY COUNTRY"
-            },
-            "subtitle": "Click on country maps or names to see Patents applications filed at each country.",
-            "number": {
-                "of": {
-                    "trademarks ": " Number Of Trademarks",
-                    "patents ": " Number Of Patents",
-                    "designs ": " Number Of Designs"
-                }
-            },
-            "grid": {
-                "header": {
-                    "flag": "Flag",
-                    "datecoverage": "Publication coverage",
-                    "country": "Country",
-                    "count": "Applications"
-                }
-            }
-        },
-        "common": {
-            "top": {
-                "applicant": "Top applicant"
-            },
-            "percentage": "Percentage",
-            "number": {
-                "of": {
-                    "applicants": "Total number of applications"
-                }
-            },
-            "header": {
-                "trends": "Top 5 Trends",
-                "technology": {
-                    "sector": {
-                        "trend": "Technology Sector Trends",
-                        "filing": "Technology Sector Filing"
-                    }
-                },
-                "country": "Top 10 Applicant Countries",
-                "applicants": "Top 10 Applicants"
-            }
-        },
-        "bar": {
-            "topfive": {
-                "total": "Total number of applications in this sector: ${count}",
-                "sector": "Top five sectors in ${country}",
-                "country": "Top five countries in ${sector}",
-                "back": "Back"
-            },
-            "tm": {
-                "title": "Trademark Filing by Industry Sector",
-                "subtitle": "You can click on a industry sector to visualize specific information"
-            },
-            "title": "Patent Filing by Technology Sector",
-            "subtitle": "Click bars in the chart to see Patents applications in each technology sector.",
-            "design": {
-                "title": "Design Filing by Industry Sector",
-                "subtitle": "You can click on a industry sector to visualize specific information"
-            }
-        }
+      "label": "Chart"
     },
-    "category": {
-        "patent": {
-            "label": "Patents"
-        },
-        "other": {
-            "label": "Miscellaneous"
-        },
-        "numbers": {
-            "label": "Numbers"
-        },
-        "names": {
-            "label": "Names"
-        },
-        "mark": {
-            "label": "Marks"
-        },
-        "folder": {
-            "label": "Folder"
-        },
-        "files": {
-            "label": "Files"
-        },
-        "document": {
-            "label": "Document"
-        },
-        "design": {
-            "label": "Designs"
-        },
-        "dates": {
-            "label": "Dates"
-        },
-        "country": {
-            "label": "Country"
-        },
-        "countries": {
-            "label": "Countries"
-        },
-        "classification": {
-            "label": "Classification"
-        }
-    },
-    "btn": {
-        "togglefields": {
-            "label": "+/- Fields"
-        },
+    "back": {
+      "to": {
         "search": {
-            "reset": {
-                "label": "Reset"
-            },
-            "label": "Search"
-        },
-        "hide": {
-            "veiwer": "Hide Viewer"
-        },
-        "filter": {
-            "label": "Filter"
-        },
-        "clearSelection": {
-            "label": "Clear Selection"
-        },
-        "captcha": {
-            "label": "Next"
-        },
-        "applyfilter": {
-            "label": "Apply Filter"
-        },
-        "Cancel": {
-            "label": "Cancel"
-        },
-        "Apply": {
-            "label": "Apply"
+          "label": "Back to Search"
         }
+      }
+    }
+  },
+  "time": {
+    "ms": "ms"
+  },
+  "thumbnail": {
+    "dummy": {
+      "disclaimer": "Machine generated trademark logo"
+    }
+  },
+  "table": {
+    "summary": {
+      "title": "Showing ${from} to ${to} of ${of}"
+    },
+    "no": {
+      "data": {
+        "found": "No records found"
+      }
+    },
+    "document": {
+      "publications": {
+        "label": "Publications"
+      },
+      "pct": {
+        "application": {
+          "label": "PCT Application"
+        }
+      },
+      "name": {
+        "label": "Document Name"
+      },
+      "filing": {
+        "date": {
+          "label": "Filing/National Entry Date"
+        }
+      },
+      "doctype": {
+        "label": "Document Type"
+      },
+      "docdate": {
+        "label": "Date"
+      },
+      "application": {
+        "number": {
+          "label": "Application/Priority"
+        }
+      },
+      "action": {
+        "label": "Action"
+      }
+    }
+  },
+  "tab": {
+    "userselection": {
+      "label": "User Selection"
+    },
+    "text": {
+      "field": {
+        "label ": " Text Fields"
+      }
+    },
+    "status": {
+      "label": "Status"
+    },
+    "search": {
+      "label": "Search"
+    },
+    "recent": {
+      "label": "Recent Search"
+    },
+    "phoneticsearch": {
+      "label": "Phonetic"
+    },
+    "patent": {
+      "family": {
+        "time": {
+          "line": {
+            "label": "Time line"
+          }
+        },
+        "tabular": {
+          "view": {
+            "label": "Tabular view"
+          }
+        },
+        "label": "Patent Family",
+        "data": {
+          "fetch": {
+            "fail": {
+              "message": "Unable to fetch data"
+            }
+          }
+        }
+      }
+    },
+    "number": {
+      "field": {
+        "label ": " Number Fields"
+      }
+    },
+    "gazettesearch": {
+      "label": "Journal Search"
+    },
+    "documentsearch": {
+      "label": "Document Search"
+    },
+    "doclist": {
+      "label": "Document List"
+    },
+    "description": {
+      "label": "Description"
+    },
+    "date": {
+      "field": {
+        "label ": " Date Fields"
+      }
+    },
+    "claim": {
+      "label": "Claims"
+    },
+    "biblio": {
+      "label": "Bibliographic"
+    },
+    "advancedsearch": {
+      "label": "Advanced Search"
+    }
+  },
+  "section": {
+    "associateddrawing": {
+      "label": "Drawings"
+    }
+  },
+  "search": {
+    "table": {
+      "results": {
+        "label": "Table view"
+      }
+    },
+    "sort": {
+      "type": {
+        "desc": {
+          "tooltip": "Descending"
+        },
+        "asc": {
+          "tooltip": "Ascending"
+        }
+      },
+      "field": {
+        "tooltip": "Select a column for sorting"
+      }
+    },
+    "page": {
+      "title": "IP REGISTER"
+    },
+    "list": {
+      "results": {
+        "label": "List view"
+      }
+    },
+    "grid": {
+      "results": {
+        "label": "Grid view"
+      }
+    },
+    "export": {
+      "results": {
+        "label": "Export results"
+      }
+    },
+    "bar": {
+      "suggestive": {
+        "search": {
+          "on": {
+            "tooltip": "Frequent fields selection is on"
+          },
+          "off": {
+            "tooltip": "All fields selection is on"
+          },
+          "label": "Field selection"
+        }
+      },
+      "solr": {
+        "id": {
+          "tooltip": "Click here to remove the keyword"
+        }
+      }
+    }
+  },
+  "result": {
+    "number": {
+      "found": "applications found in"
+    },
+    "count": {
+      "message": {
+        "single": "About ${count} result",
+        "plural": "About ${count} results"
+      }
+    }
+  },
+  "page": {
+    "title": {
+      "application": {
+        "label": "Application"
+      }
+    }
+  },
+  "option": {
+    "stemming": {
+      "label": "stemming"
+    },
+    "phonetic": {
+      "label": "phonetic"
+    },
+    "fuzzy": {
+      "label": "fuzzy"
+    }
+  },
+  "module": {
+    "trademarks": {
+      "label": "Trademarks"
+    },
+    "patents": {
+      "label": "Patents"
+    },
+    "designs": {
+      "label": "Designs"
+    },
+    "gidatabase": {
+      "label": "GI Database"
+    },
+    "portfolios": {
+      "label": "Portfolios"
+    }
+  },
+  "message": {
+    "userselection": {
+      "nocriteria": "No Criteria",
+      "keyword": "Keyword",
+      "and": "AND",
+      "all": "All"
+    },
+    "feature": {
+      "notsupported": "Your browser does not support viewing the document.Kindly download the document instead."
+    },
+    "export": {
+      "limit": {
+        "exceeded": "Please narrow down the search results further before exporting!"
+      }
+    }
+  },
+  "menu": {
+    "trademarks": "Trademarks",
+    "references": "References",
+    "patents": "Patents",
+    "home": "Home",
+    "edms": "EDMS",
+    "designs": "Designs",
+    "gidatabase": "GI Database",
+    "portfolios": "Portfolios"
+  },
+  "language": {
+    "display": {
+      "label": {
+        "vi": "Ti\u1ebfng Vi\u1ec7t",
+        "ms": "Bahasa Melayu",
+        "kh": "\u1797\u17b6\u179f\u17b6\u1781\u17d2\u1798\u17c2\u179a",
+        "jp": "\u65e5\u672c\u8a9e",
+        "id": "Bahasa Indonesia",
+        "fr": "Fran\u00e7ais",
+        "en": "English",
+        "ar": "\u0627\u0644\u0639\u0631\u0628\u064a\u0629"
+      }
+    }
+  },
+  "label": {
+    "showing": "Showing",
+    "security": {
+      "captcha": "To confirm your request, please check the box to let us know you are human."
+    },
+    "of": "of",
+    "more": "More",
+    "less": "Less"
+  },
+  "info": {
+    "version": {
+      "label": "version 1.3.0"
+    },
+    "poweredby": {
+      "label": "powered by WIPO"
+    }
+  },
+  "home": {
+    "link": {
+      "label": "Data Coverage"
+    }
+  },
+  "header": {
+    "application": {
+      "title": "IP REGISTER"
+    }
+  },
+  "gazette": {
+    "journal": {
+      "to": {
+        "display": {
+          "label": "to"
+        }
+      },
+      "id": {
+        "display": {
+          "label": "Journal Description"
+        }
+      },
+      "from": {
+        "display": {
+          "label": "Journal Date"
+        }
+      },
+      "category": {
+        "display": {
+          "label": "Category"
+        }
+      }
     },
     "application": {
-        "country": {
-            "chart": {
-                "bar": {
-                    "title": "Top 10 Applicant Countries",
-                    "subtitle": "You can click on a country to visualize specific information"
-                }
-            }
-        }
+      "display": {
+        "label": "Application #"
+      }
     },
-    "applicant": {
-        "chart": {
-            "bar": {
-                "title": "Top 10 Applicants",
-                "subtitle": "You can click on a applicant to visualize specific information"
-            }
-        }
-    },
-    "#home": {
-        "search": {
-            "title": {
-                "label": "INTELLECTUAL PROPERTY ORGANIZATION SEARCH SYSTEM"
-            },
-            "subtitle": {
-                "label": "All you need to know about patents, trademarks and designs in your region"
-            }
-        }
-    },
-    "#field": {
+    "action": {
+      "type": {
         "display": {
-            "RPNA": "Representative Name"
+          "label": "Action Type"
         }
+      }
     }
+  },
+  "footer": {
+    "search": {
+      "quicklink": {
+        "label": "SEARCH"
+      },
+      "detail": {
+        "quicklink": {
+          "label": "Basic or advanced search to <br> refine your preferences"
+        }
+      }
+    },
+    "manage": {
+      "quicklink": {
+        "label": "MANAGE"
+      },
+      "detail": {
+        "quicklink": {
+          "label": "You can save and customize <br> your search"
+        }
+      }
+    },
+    "export": {
+      "quicklink": {
+        "label": "EXPORT"
+      },
+      "detail": {
+        "quicklink": {
+          "label": "Export your search in PDF"
+        }
+      }
+    }
+  },
+  "field": {
+    "tooltip": {
+      "todate": "To",
+      "phonetic": {
+        "min": {
+          "relevance": "Minimum Relevance"
+        }
+      },
+      "id": "Identifier",
+      "fromdate": "From",
+      "entry": {
+        "count": "Entry count"
+      },
+      "boost": {
+        "exact": {
+          "match": "Boost Exact Match"
+        }
+      },
+      "application": {
+        "count": "Application count"
+      },
+      "VNCL": "Vienna Classes",
+      "VCL": "Vienna Classes",
+      "TITL_LG1": "Title Bilingual",
+      "TITL_EN": "Title English",
+      "TITL": "Title",
+      "STLB_ORI": "Internal Status",
+      "STLB": "Status",
+      "STDT": "Status Date",
+      "STCD": "Status Code",
+      "RPRE": "Representative Residence",
+      "RPNA_LG1": "Representative Name Bilingual",
+      "RPNA": "Representative Name",
+      "RPCT": "Representative Country",
+      "RPAD_LG1": "Representative Address Bilingual",
+      "RPAD": "Representative Address",
+      "RENB": "Registration Number",
+      "REDT": "Registration Date",
+      "PCTPBNB": "PCT Publication Number",
+      "PCTPBDT": "PCT Pub. Date",
+      "PCTPBCT": "PCT Publication Country",
+      "PCTNB": "PCT Filing Number",
+      "PCTDT": "PCT Publication date",
+      "PCNB": "Priority Number",
+      "PCDT": "Priority Date",
+      "PCCT": "Priority Details",
+      "PBNB": "Publication Number",
+      "PBKC": "Pub. Kind Code",
+      "PBDT": "Publication Date",
+      "OFCO": "Office Code",
+      "NPEDT": "National Entry Date",
+      "NCL": "Nice Classes",
+      "NCDE_LG1": "Nice Class Description Bilingual",
+      "NCDE": "Nice Class Description",
+      "NCCL": "Nice Classes",
+      "MK_LG1": "Mark Name Bilingual",
+      "MKTXT": "Mark",
+      "MK": "Mark",
+      "MAIN_EFOLDER_REF": "Main EFolder Reference",
+      "LOGOEX": "Logo",
+      "LOGO": "Logo",
+      "LOC": "Classification",
+      "LCL": "Classification",
+      "LCDE": "Classification",
+      "Journal": {
+        "AFNB_ORI": "Application Number"
+      },
+      "JOURNAL_DESCRIPTION": "Journal Description",
+      "IPC_TECH_SECTOR_TXT": "IPC Technology Sector",
+      "IPC_TECH_FIELD_TXT": "IPC Technology Field",
+      "IPC_TECH_FIELD": "IPC Technology Field",
+      "IPC_ORI": "IPC Classes",
+      "IPC_MAIN": "IPC_MAIN",
+      "IPC_LBL": "IPC Classes",
+      "IPC": "IPC Classes",
+      "INRE": "Inventor Residence",
+      "INNA_LG1": "Inventor Bilingual",
+      "INNA": "Inventor",
+      "INCT": "Inventor Country",
+      "INAD_LG1": "Inventor Address Bilingual",
+      "INAD": "Inventor Address",
+      "GZPDT": "Gazette Publication Date",
+      "GZNB": "Gazette Number",
+      "GZDT": "Gazette Date",
+      "FILE_TYP": "File Type",
+      "FILE_ID": "File Id",
+      "EXCRDT": "EXCRDT",
+      "EFOLDER_REF": "EFolder Reference",
+      "EFOLDER_ID": "EFolder Id",
+      "EDOC_REF": "EDoc Reference",
+      "EDOC_ID": "EDoc Id",
+      "DOC_REF": "Document Reference",
+      "DOC_ID": "Document Id",
+      "DETXT": "Designer Information",
+      "DESCTXT": "Description",
+      "DERE": "Design Residence",
+      "DENA_LG1": "Designer Name Bilingual",
+      "DENA": "Designer",
+      "DECT": "Design Country",
+      "DECLDES": "Description",
+      "DEAD_LG1": "Design Address Bilingual",
+      "DEAD": "Design Address",
+      "CPC_ORI": "CPC Classes",
+      "CPC_MAIN": "CPC_MAIN",
+      "CPC_LBL": "CPC Classes",
+      "CPC": "CPC Classes",
+      "CLTXT": "Claims",
+      "CLNB": "Claim Number",
+      "CLLG": "Claim Language",
+      "CLDE": "Claim Description",
+      "CITCL": "Claims",
+      "CITCAT": "Category",
+      "CINB": "Citation Number",
+      "CIDE": "Citation Description",
+      "CICL": "Citation Claim",
+      "CICA": "Citation Category",
+      "CATEGORY": "Category",
+      "APTXT": "Applicant",
+      "APRE": "Applicant Residence",
+      "APPL_TYP_TXT": "Application Type",
+      "APPL_TYP": "Application Type",
+      "APPL_SUBTYP_TXT": "Application SubType",
+      "APPL_SUBTYP": "Application SubType",
+      "APNA_LG1": "Applicant Bilingual",
+      "APNA": "Applicant",
+      "APCT": "Applicant Country",
+      "APAD_LG1": "Applicant Address Bilingual",
+      "APAD": "Applicant Address",
+      "AFNB_ORI": "Original Filing Number",
+      "AFNB": "Filing Number",
+      "AFDT": "Filing Date",
+      "ABTXT": "Abstract",
+      "ABST_LG1": "Abstract Bilingual",
+      "ABST_EN": "Abstract English",
+      "ABST": "Abstract"
+    },
+    "search": {
+      "suggestion": {
+        "label": "Enter Keyword(s) and/or click Search for Patents listing"
+      },
+      "concordance": {
+        "placeholder": "Enter Keyword(s) for e.g.:Optics, Medical,Surface"
+      }
+    },
+    "placeholder": {
+      "todate": "e.g. 2017.12.31",
+      "phonetic": {
+        "min": {
+          "relevance": ""
+        }
+      },
+      "id": "e.g. CH2018000001",
+      "fromdate": "e.g. 2017.12.31",
+      "documentType": "e.g. Spec",
+      "documentParentId": "e.g. CH2018000001",
+      "documentName": "e.g. CH2018000001_spec_000001",
+      "documentContent": "e.g. This is a specification document",
+      "boost": {
+        "exact": {
+          "match": ""
+        }
+      },
+      "VNCL": "e.g. 8.1.19",
+      "VCL": "e.g. 8.1.19",
+      "TITL_LG1": "e.g. Nestl\u00e9 KitKat",
+      "TITL_EN": "e.g. Nestl\u00e9 KitKat",
+      "TITL": "e.g. Nestl\u00e9 KitKat",
+      "STLB_ORI": "e.g. Published",
+      "STLB": "e.g. Published",
+      "STDT": "e.g. 2017.12.31",
+      "STCD": "e.g. FG",
+      "RPRE": "e.g. CH",
+      "RPNA_LG1": "e.g. Nestl\u00e9",
+      "RPNA": "e.g. Nestl\u00e9",
+      "RPCT": "e.g. CH",
+      "RPAD_LG1": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+      "RPAD": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+      "RENB": "e.g. CH2018000001",
+      "REDT": "e.g. 2017.12.31",
+      "PCTPBNB": "2018/000001",
+      "PCTPBDT": "",
+      "PCTPBCT": "e.g. CH",
+      "PCTNB": "e.g. PCT/CH2018/000001",
+      "PCTDT": "e.g. 2017.12.31",
+      "PCNB": "e.g. CH2018000001",
+      "PCDT": "e.g. 2017.12.31",
+      "PCCT": "e.g. CH",
+      "PBNB": "e.g. 2018/000001",
+      "PBKC": "",
+      "PBDT": "e.g. 2017.12.31",
+      "OFCO": "e.g. CH",
+      "NPEDT": "e.g. 2017.12.31",
+      "NCL": "e.g. 0100662",
+      "NCDE_LG1": "e.g. Chocolate for kids",
+      "NCDE": "e.g. Chocolate for kids",
+      "NCCL": "e.g. 0100662",
+      "MK_LG1": "e.g. KitKat",
+      "MKTXT": "e.g. KitKat",
+      "MK": "e.g. KitKat",
+      "LOGOEX": "",
+      "LOGO": "",
+      "LOC": "e.g. Geneva",
+      "LCL": "e.g. 26.6",
+      "LCDE": "e.g. Chocolate for kids",
+      "Journal": {
+        "AFNB_ORI": "e.g. CH2018000001"
+      },
+      "JOURNAL_DESCRIPTION": "e.g. This is a food journal",
+      "IPC_TECH_SECTOR_TXT": "e.g. Human Necessities",
+      "IPC_TECH_FIELD_TXT": "e.g. Human Necessities",
+      "IPC_TECH_FIELD": "e.g. Human Necessities",
+      "IPC_ORI": "e.g. A02H 15/04",
+      "IPC_MAIN": "",
+      "IPC": "e.g. A02H1504",
+      "INRE": "",
+      "INNA_LG1": "",
+      "INNA": "",
+      "INCT": "",
+      "INAD_LG1": "",
+      "INAD": "",
+      "GZPDT": "e.g. 2017.12.31",
+      "GZNB": "",
+      "GZDT": " e.g. 2017.12.31",
+      "FILE_TYP": "e.g. P, D, M",
+      "FILE_ID": "e.g. AP-A-2008-10",
+      "EXCRDT": "e.g. 2017.12.31",
+      "EFOLDER_REF": "e.g. 1-2018-2",
+      "EDOC_REF": "e.g. 158-2008-1",
+      "DOC_REF": "e.g. AP-AF11-2008-2",
+      "DOC_ID": "e.g. AP-A-2008-10",
+      "DETXT": "e.g. Nestl\u00e9 is the world's largest food and beverage company.",
+      "DESCTXT": "",
+      "DERE": "e.g. CH",
+      "DENA_LG1": "e.g. Nestl\u00e9",
+      "DENA": "e.g. Nestl\u00e9",
+      "DECT": "e.g. CH",
+      "DECLDES": "",
+      "DEAD_LG1": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+      "DEAD": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+      "CPC_ORI": "e.g. A02H 15/04",
+      "CPC_MAIN": "",
+      "CPC": "e.g. A02H1504",
+      "CLTXT": "",
+      "CLNB": "",
+      "CLLG": "e.g. EN",
+      "CLDE": "",
+      "CITCL": "",
+      "CITCAT": "",
+      "CINB": "",
+      "CIDE": "",
+      "CICL": "",
+      "CICA": "",
+      "CATEGORY": "",
+      "APTXT": "e.g. Nestl\u00e9",
+      "APRE": "e.g. CH",
+      "APPL_TYP_TXT": "e.g. National Application",
+      "APPL_TYP": "e.g. National Application",
+      "APPL_SUBTYP_TXT": "e.g. National Application",
+      "APPL_SUBTYP": "e.g. National Application",
+      "APNA_LG1": "e.g. Nestl\u00e9",
+      "APNA": "e.g. Nestl\u00e9",
+      "APCT": "e.g. CH",
+      "APAD_LG1": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+      "APAD": "e.g. WIPO, 34, chemin des ColombettesCH-1211 Geneva 20, Switzerland.",
+      "AFNB_ORI": "e.g. CH2018000001",
+      "AFNB": "e.g. CH2018000001",
+      "AFDT": "e.g. 2017.12.31",
+      "ABTXT": "e.g. This application belongs to the food category.",
+      "ABST_LG1": "e.g. This application belongs to the food category.",
+      "ABST_EN": "e.g. This application belongs to the food category.",
+      "ABST": "e.g. This application belongs to the food category."
+    },
+    "display": {
+      "years": "Year",
+      "type": "Document Type",
+      "todate": "To",
+      "suggestion": {
+        "technical": {
+          "field": "Technology Field"
+        },
+        "suggested_field_text": "Select the suggested field(s)",
+        "VCL": "Vienna Class",
+        "String": "String",
+        "Number": "Number",
+        "NCL": "Nice Class",
+        "LCL": "Locarno Class",
+        "Default": "Default",
+        "Date": "Date",
+        "Classification": "Classification",
+        "AlphaNumeric": "AlphaNumeric"
+      },
+      "sector": {
+        "transportation": "Transportation",
+        "transport": "Transport",
+        "tools_and_machines": "Tools And Machines",
+        "textiles_and_accessories": "Textiles And Accessories",
+        "research_and_technology": "Research And Technology",
+        "packaging": "Packaging",
+        "other_sectors": "Other Sectors",
+        "other_fields": "Other Fields",
+        "non_classified": "Non Classified",
+        "mechanical_engineering": "Mechanical Engineering",
+        "leisure_and_education": "Leisure And Education",
+        "instruments": "Instruments",
+        "ict_and_audiovisual": "ICT And Audiovisual",
+        "household_equipments": "Household Equipment",
+        "health_pharma_and_cosmetics": "Health, Pharma And Cosmetics",
+        "health": "Health",
+        "furniture_and_household_goods": "Furniture And Household Goods",
+        "electricity_and_lighting": "Electricity And Lighting",
+        "electrical_engineering": "Electrical Engineering",
+        "construction": "Construction",
+        "clothing": "Clothing",
+        "chemistry": "Chemistry",
+        "chemicals": "Chemicals",
+        "business_service": "Business Services",
+        "average_others": "Average Others",
+        "agriculture": "Agriculture",
+        "agricultural_products_and_food_preparation": "Agricultural Products And Food Preparation",
+        "advertising": "Advertising"
+      },
+      "search": {
+        "criteria": "Search Criteria"
+      },
+      "score": "Relevance",
+      "phonetic": {
+        "min": {
+          "relevance": "Minimum Relevance"
+        }
+      },
+      "pct_national_phase": "PCT National Phase",
+      "parentId": "Parent Identifier",
+      "journal": {
+        "detail": {
+          "APP_REPRESENTATIVE_NAME": "Representative",
+          "APP_REGISTRATION_NUMBER": "Registration Number",
+          "APP_REGISTRATION_DATE": "Registration Date",
+          "APP_REGISTERED_CLASSES_DETAIL": "Nice Classes",
+          "APP_PUBLICATION_DATE": "Publication Date",
+          "APP_PCT_PUBLICATION_ID": "PCT Publication Number",
+          "APP_PCT_PUBLICATION_DATE": "PCT Publication Date",
+          "APP_PCT_FILING_DATE": "PCT Filing Date",
+          "APP_OWNER_NAME": "Owner",
+          "APP_NAME": "Mark Name",
+          "APP_LOGO_COLOURS": "Logo Colours",
+          "APP_LOCARNO": "Locarno Classes",
+          "APP_IPC_EDITION": "IPC Edition",
+          "APP_INVENTOR_NAME": "Inventor",
+          "APP_FILING_DATE": "Filing Date",
+          "APP_FILE_NUMBER": "Application Number",
+          "APP_EXPIRATION_DATE": "Expiry Date",
+          "APP_EXAM_IPC": "IPC Classes",
+          "ACTION_DATE": "Action Date"
+        }
+      },
+      "id": "Identifier",
+      "group": "Group",
+      "fromdate": "From",
+      "country": {
+        "code": {
+          "ZW": "Zimbabwe",
+          "ZM": "Zambia",
+          "XX": "Not Specified",
+          "VN": "Vietnam",
+          "UG": "Uganda",
+          "TZ": "Tanzania",
+          "TP": "Timor-Leste",
+          "TN": "Tunisia",
+          "TL": "Timor-Leste",
+          "TH": "Thailand",
+          "SG": "Singapore",
+          "SD": "Sudan",
+          "SA": "Saudi Arabia",
+          "RW": "Rwanda",
+          "RS": "Serbia",
+          "PH": "Philippines",
+          "OM": "Oman",
+          "NA": "Namibia",
+          "MZ": "Mozambique",
+          "MY": "Malaysia",
+          "MW": "Malawi",
+          "MM": "Myanmar",
+          "MD": "Moldova",
+          "MA": "Morocco",
+          "LA": "Laos",
+          "KH": "Cambodia",
+          "KE": "Kenya",
+          "JO": "Jordan",
+          "IN": "India",
+          "ID": "Indonesia",
+          "IC": "Saint Lucia",
+          "GM": "Gambia",
+          "GH": "Ghana",
+          "ET": "Ethiopia",
+          "EG": "Egypt",
+          "DZ": "Algeria",
+          "DO": "Dominican Republic",
+          "CU": "Cuba",
+          "CR": "Costa Rica",
+          "CN": "China",
+          "BY": "Belarus",
+          "BW": "Botswana",
+          "BU": "Bulgaria",
+          "BN": "Brunei",
+          "AR": "Argentina",
+          "AP": "ARIPO"
+        }
+      },
+      "content_type": "Format",
+      "content_stored": "Content Stored",
+      "content": "Content",
+      "boost": {
+        "exact": {
+          "match": "Boost Exact Match"
+        }
+      },
+      "application_filed": "Application Filed",
+      "all": "All",
+      "WDDT": "Withdrawn Date",
+      "VNCL": "Vienna Classes",
+      "VCL_RANKED": "Ranked by Vienna Classes",
+      "VCL_NON_CLASSIFIED": "Non Vienna Classified",
+      "VCL_CATEGORY": "Vienna Category",
+      "VCL": "Vienna Classes",
+      "TXT": "All fields",
+      "TITXT": "Title",
+      "TITL_LG1": "Title Bilingual",
+      "TITL_EN": "Title English",
+      "TITL": "Title",
+      "TDNB": "Total Design",
+      "SYPO": "Symbol Position",
+      "STLB_ORI": "Internal Status",
+      "STLB_LBL": "Status",
+      "STLB": "Status",
+      "STDTL": "Status Date List",
+      "STDT": "Status Date",
+      "STCDL": "Status Code List",
+      "STCD": "Status Code",
+      "SRDT": "Searched Event",
+      "SPND": "Specimen Identifier",
+      "SPDE": "Specimen Description",
+      "SP": "Symbol Position",
+      "SOUNDEX": "Sound Exists",
+      "SOUND": "Sound",
+      "SERIAL_F_CD": "Serial (F)",
+      "SELG": "Secondary Language",
+      "SEARCH_INFO": "The word searched may appear in previous version of this application",
+      "SEARCH_CRITERIA": "Search Criteria",
+      "RPTXT": "Representative Information",
+      "RPRE": "Representative Residence",
+      "RPNA_LG1": "Representative Name Bilingual",
+      "RPNA_LBL": "Representative",
+      "RPNA": "Representative",
+      "RPCT": "Representative Country",
+      "RPAD_LG1": "Representative Address Bilingual",
+      "RPAD": "Representative Address",
+      "RENEW_SD": "Start Date",
+      "RENEW_ED": "End Date",
+      "RENEW": "Duration(s) of Renewal",
+      "RENB_ORI": "Original Registration Number",
+      "RENB": "Registration Number",
+      "REIN": "Registration Number and Date",
+      "REDT": "Registration Date",
+      "Query": "Solr Query",
+      "PTETXT": "Patent Events",
+      "PRLG": "Primary Language",
+      "PKDE": "Publication Number Kind Code Description",
+      "PCTXT": "Priority Details",
+      "PCTPBNB": "PCT Publication Number",
+      "PCTPBIN": "PCT Publication Number and Date",
+      "PCTPBDT": "PCT Publication Date",
+      "PCTPBCT": "PCT Publication Country",
+      "PCTNB": "PCT Filing Number",
+      "PCTIN": "PCT Filing Number and Date",
+      "PCTDT": "PCT Publication Date",
+      "PCTCT": "PCT Country",
+      "PCNB": "Priority Number",
+      "PCDT": "Priority Date",
+      "PCCT": "Priority Details",
+      "PBNB": "Publication Number",
+      "PBLG": "Publication Lnaguage",
+      "PBKC": "Publication Kind Code",
+      "PBIN": "Publication Number and Date",
+      "PBDTL": "Publication Date List",
+      "PBDT": "Publication Date",
+      "PBCT": "Publication Country",
+      "PATCITTXT": "Patent Citation",
+      "PATCIT": "Patent",
+      "OPSDT": "Opposition Start Date",
+      "OFCO": "Office Code",
+      "NPLCITXT": "NPL Citations",
+      "NPLCIT": "Non Patent Literature",
+      "NPEDT_LBL": "National Entry Date",
+      "NPEDT": "National Entry Date",
+      "NCL_RANKED": "Ranked by Nice Classes",
+      "NCL_NON_CLASSIFIED": "Non Nice Classified",
+      "NCL_INDUSTRY_SECTOR": "Nice Industry Sector",
+      "NCL": "Nice Classes",
+      "NCDE_LG1": "Nice Class Description Bilingual",
+      "NCDE": "Nice Class Description",
+      "NCCL": "Nice Classes",
+      "MSNB": "Total Mark Series",
+      "MNNA": "Mark Nature",
+      "MK_LG1": "Mark Name Bilingual",
+      "MKTXT": "Mark",
+      "MKTRLT": "Mark Transliteration",
+      "MKTR": "Mark Translation",
+      "MKNSL": "Mark Name (Secondary Language)",
+      "MKFW": "Mark Feature",
+      "MKFT": "Mark Feature",
+      "MKETXT": "Mark Events",
+      "MKDI": "Mark Disclaimer",
+      "MKDE": "Mark Description Detail",
+      "MKDC": "Disclaimer",
+      "MKCSD": "Current Status Date",
+      "MKCLR": "Mark Color",
+      "MKCLDE": "Mark Colour Description",
+      "MK": "Mark",
+      "MD_FTYP": "Main type",
+      "MAIN_EFOLDER_REF": "Main EFolder Reference",
+      "LOGO_INID": "(540) Logo",
+      "LOGOEX": "Logo",
+      "LOGO": "Logo",
+      "LOC": "Classification",
+      "LIC": "License Details",
+      "LEGALDT": "Legal Date",
+      "LCL_NON_CLASSIFIED": "Non Locarno Classified",
+      "LCL_INDUSTRY_SECTOR": "Locarno Industry Sector",
+      "LCL": "Classification",
+      "LCENB": "Locarno Edition",
+      "LCDE": "Classification",
+      "LABEL_LG_1": "Label (Bilingual)",
+      "LABEL": "Label",
+      "Journal": {
+        "AFNB_ORI": "Application Number"
+      },
+      "JOURNAL_DT": "Journal Date",
+      "JOURNAL_DESCRIPTION": "Journal Description",
+      "JOURNAL_CONTENT": "Details",
+      "JOURNAL_CD": "Journal Code",
+      "IPC_TECH_SECTOR_TXT": "IPC Technology Sector",
+      "IPC_TECH_SECTOR": "Technology sector",
+      "IPC_TECH_FIELD_TXT": "IPC Technology Field",
+      "IPC_TECH_FIELD": "IPC Technology Field",
+      "IPC_SHORT": "IPC Classes",
+      "IPC_ORIGINAL": "IPC Class",
+      "IPC_ORI": "IPC Classes",
+      "IPC_NON_CLASSIFIED": "Non IPC Classified",
+      "IPC": "IPC Classes",
+      "INRE": "Inventor Residence",
+      "INNA_LG1": "Inventor Bilingual",
+      "INNA_LBL": "Inventor",
+      "INNA": "Inventor",
+      "INCT": "Inventor Country",
+      "INAD_LG1": "Inventor Address Bilingual",
+      "INAD": "Inventor Address",
+      "Group": "Group",
+      "GZTXT": "Gazette Information",
+      "GZPDT": "Gazette Publication Date",
+      "GZNB": "Gazette Number",
+      "GZDT": "Gazette Date",
+      "GRDT": "Granted Date",
+      "FILE_TYP": "File Type",
+      "FILE_ID": "File Id",
+      "FAMILYVIEW": "Patent Family",
+      "EXDT": "Examined Date",
+      "EVNA": "Event Name",
+      "EPDT_LBL": "Expiration Date",
+      "EPDT": "Expiration Date",
+      "EFOLDER_REF": "EFolder Reference",
+      "EFOLDER_ID": "EFolder Id",
+      "EDOC_TYP": "EDoc Type",
+      "EDOC_REF": "EDoc Reference",
+      "EDOC_ID": "EDoc Id",
+      "EDOC_DT": "EDoc Date",
+      "EDNB": "Edition Number",
+      "DT": "Date",
+      "DRAWING": "Drawing",
+      "DOC_REF": "Document Reference",
+      "DOC_ID": "Document Id",
+      "DE_LG1": "Design Description Bilingual",
+      "DETXT": "Designer Information",
+      "DETITXT": "Title",
+      "DETI": "Design Title",
+      "DETD": "Total Designs",
+      "DETAILS": "Details",
+      "DESCTXT": "Description",
+      "DERE": "Design Residence",
+      "DEPKD": "Design Nature",
+      "DENOVELTY": "Design Novelty Statement",
+      "DENA_LG1": "Designer Name Bilingual",
+      "DENA_LBL": "Designer",
+      "DENA": "Designer",
+      "DEID_LG1": "Design Identifier Bilingual",
+      "DEID": "Design Identifier",
+      "DEETXT": "Design Events",
+      "DECT": "Design Country",
+      "DECSD": "Current Status Date",
+      "DECLTXT": "Design Claims",
+      "DECLNO": "Claim",
+      "DECLDES": "Description",
+      "DECDI": "Design Claim Detail Identifier",
+      "DECD": "Design Claim Detail",
+      "DEAD_LG1": "Design Address Bilingual",
+      "DEAD": "Design Address",
+      "DE": "Design Description",
+      "CRNA": "Correspondence Name",
+      "CRAD": "Correspondence Address",
+      "CPC_ORI": "CPC Classes",
+      "CPC": "CPC Classes",
+      "CODE": "Code",
+      "CLTXT": "Claims",
+      "CLNB": "Claim Number",
+      "CLLG": "Claim Language",
+      "CLDE": "Claim Description",
+      "CITXT": "Citations",
+      "CITTYP": "Citation Type",
+      "CITREF": "References",
+      "CITDOC": "Cited Documents",
+      "CITCL": "Claims",
+      "CITCAT": "Category",
+      "CINB": "Citation Number",
+      "CIDT": "Certificate Issue Date",
+      "CIDENB": "Citation Doc Number",
+      "CIDE": "Citation Description",
+      "CICT": "Citation Country",
+      "CICL": "Citation Claim",
+      "CICA": "Citation Category",
+      "CCDT": "Cancelled Event",
+      "CATEGORY": "Category",
+      "CAPTURE_DT": "Capture Date",
+      "CANA": "Correspondence Address",
+      "BASIC_CD": "Basic",
+      "Application_registered": "Registered",
+      "Application_expired": "Expired",
+      "Action": "Action",
+      "APTXT": "Applicant",
+      "APRE": "Applicant Residence",
+      "APPL_TYP_TXT": "Application Type",
+      "APPL_TYP": "Application Type",
+      "APPL_SUBTYP_TXT": "Application SubType",
+      "APPL_SUBTYP": "Application SubType",
+      "APNT": "Applicant Nationality",
+      "APNA_LG1": "Applicant Bilingual",
+      "APNA_LBL": "Applicant",
+      "APNA": "Applicant",
+      "APCT": "Applicant Country",
+      "APAD_LG1": "Applicant Address Bilingual",
+      "APAD": "Applicant Address",
+      "ANU_YEAR": "Year",
+      "ANU_STDT": "Validity Start",
+      "ANU_PAY": "Payment",
+      "ANU_ENDT": "Validity End",
+      "ANU": "Annuity Details",
+      "AFNB_ORI": "Original Filing Number",
+      "AFNB": "Filing Number",
+      "AFLG": "Filing Language",
+      "AFIN": "Filing Number and Date",
+      "AFDT": "Filing Date",
+      "AFCT": "Filing Country",
+      "ACTION_TYP": "Action Type",
+      "ACTION": "ACTION",
+      "ABTXT": "Abstract",
+      "ABST_LG1": "Abstract Bilingual",
+      "ABST_EN": "Abstract English",
+      "ABST": "Abstract"
+    }
+  },
+  "facet": {
+    "label": {
+      "true": "Yes",
+      "status": {
+        "WP": "Pending",
+        "WI": "Inactive",
+        "WA": "Active",
+        "RL": "Awaiting Court Action",
+        "PE": "pending",
+        "PCT": "PCT National Phase",
+        "MM": "Lapsed",
+        "MK": "Expired",
+        "MG": "Invalidated",
+        "MF": "Revoked",
+        "ME": "Revoked",
+        "MC": "Cancelled",
+        "MB": "Appealed",
+        "GA": "Converted",
+        "FG": "Registered",
+        "FC": "Rejected",
+        "FB": "Suspended",
+        "FA": "Withdrawn",
+        "EZ": "Examined",
+        "EM": "empty",
+        "DE": "deleted",
+        "CZ": "Opposed",
+        "CE": "certified",
+        "BZ": "Published",
+        "AZ": "Filed",
+        "AE": "Reinstated"
+      },
+      "pct_national_phase": "PCT National Phase",
+      "header": {
+        "filter": {
+          "by": "Filter by :"
+        }
+      },
+      "false": "No",
+      "ZZ": "Zimbabwe",
+      "ZW": "Zambia",
+      "ZA": "South Africa",
+      "XX": "Not Specified",
+      "VU": "Vanuatu",
+      "VN": "Vietnam",
+      "VI": "U.S. Virgin Islands",
+      "VG": "British Virgin Islands",
+      "VE": "Venezuela",
+      "VC": "Saint Vincent and the Grenadine",
+      "VA": "Vatican City",
+      "UZ": "Uzbekistan",
+      "UY": "Uruguay",
+      "US": "United States",
+      "UM": "United States Minor Outlying Islands",
+      "UK": "United Kingdom",
+      "UG": "Uganda",
+      "UA": "Ukraine",
+      "TZ": "Tanzania",
+      "TW": "Taiwan",
+      "TT": "Trinidad and Tobago",
+      "TR": "Turkey",
+      "TP": "Timor-Leste",
+      "TN": "Tunisia",
+      "TM": "Turkmenistan",
+      "TL": "Timor-Leste",
+      "TJ": "Tajikistan",
+      "TH": "Thailand",
+      "TD": "Chad",
+      "TC": "Turks and Caicos Islands",
+      "SZ": "Eswatini",
+      "SY": "Syria",
+      "SV": "El Salvador",
+      "SU": "Soviet Union",
+      "ST": "Sao Tome and Principe",
+      "SM": "San Marino",
+      "SK": "Slovakia",
+      "SI": "Slovenia",
+      "SG": "Singapore",
+      "SE": "Sweden",
+      "SC": "Seychelles",
+      "SA": "Saudi Arabia",
+      "RU": "Russian Federation",
+      "RS": "Serbia",
+      "RO": "Romania",
+      "QA": "Qatar",
+      "PT": "Portugal",
+      "PR": "Puerto Rico",
+      "PL": "Poland",
+      "PK": "Pakistan",
+      "PH": "Philippines",
+      "PG": "Papua New Guinea",
+      "PE": "Peru",
+      "PA": "Panama",
+      "OM": "Oman",
+      "NZ": "New Zealand",
+      "NP": "Nepal",
+      "NO": "Norway",
+      "NL": "Netherlands",
+      "NG": "Nigeria",
+      "NE": "Niger",
+      "NC": "New Caledonia",
+      "MY": "Malaysia",
+      "MX": "Mexico",
+      "MW": "Malawi",
+      "MU": "Mauritius",
+      "MT": "Malta",
+      "MR": "Mauritania",
+      "MO": "Macau",
+      "MM": "Myanmar",
+      "ML": "Mali",
+      "MH": "Marshall Islands",
+      "MG": "Madagascar",
+      "ME": "Montenegro",
+      "MD": "Republic of Moldova",
+      "MC": "Monaco",
+      "MA": "Morocco",
+      "LV": "Latvia",
+      "LU": "Luxembourg",
+      "LT": "Lithuania",
+      "LR": "Liberia",
+      "LK": "Sri Lanka",
+      "LI": "Liechtenstein",
+      "LB": "Lebanon",
+      "LA": "Laos",
+      "KZ": "Kazakhstan",
+      "KY": "Cayman Islands",
+      "KW": "Kuwait",
+      "KR": "South Korea",
+      "KP": "North Korea",
+      "KN": "Saint Kitts and Nevis",
+      "KI": "Kiribati",
+      "KH": "Cambodia",
+      "KE": "Kenya",
+      "JP": "Japan",
+      "JO": "Jordan",
+      "JM": "Jamaica",
+      "JE": "Jersey",
+      "IT": "Italy",
+      "IS": "Iceland",
+      "IR": "Iran",
+      "IQ": "Iraq",
+      "IN": "India",
+      "IM": "Isle of Man",
+      "IL": "Israel",
+      "IE": "Ireland",
+      "ID": "Indonesia",
+      "HU": "Hungary",
+      "HR": "Croatia",
+      "HN": "Honduras",
+      "HK": "Hong Kong",
+      "GU": "Guam",
+      "GT": "Guatemala",
+      "GS": "GS",
+      "GR": "Greece",
+      "GQ": "GQ",
+      "GM": "The Gambia",
+      "GL": "Greenland",
+      "GI": "Gibraltar",
+      "GH": "Ghana",
+      "GG": "Guernsey",
+      "GF": "French Guiana",
+      "GE": "Georgia",
+      "GD": "Grenada",
+      "GB": "United Kingdom",
+      "GA": "Georgia",
+      "FR": "France",
+      "FM": "Federated States of Micronesia",
+      "FJ": "Fiji",
+      "FI": "Finland",
+      "ES": "Spain",
+      "EP": "European Patent Office",
+      "EG": "Egypt",
+      "EE": "Estonia",
+      "EC": "Ecuador",
+      "DZ": "Algeria",
+      "DT": "DT",
+      "DO": "Dominican Republic",
+      "DM": "Dominica",
+      "DK": "Denmark",
+      "DJ": "Djibouti",
+      "DE": "Germany",
+      "DD": "German Democratic Republic",
+      "CZ": "Czech Republi",
+      "CY": "Cyprus",
+      "CX": "Christmas Island",
+      "CW": "Curacao",
+      "CU": "Cuba",
+      "CS": "Czechoslovakia",
+      "CR": "Costa Rica",
+      "CO": "Colombia",
+      "CN": "China",
+      "CM": "Cameroon",
+      "CL": "Chile",
+      "CK": "Cook Islands",
+      "CI": "Ivory Coast",
+      "CH": "Switzerland",
+      "CF": "Central African Republic",
+      "CA": "Canada",
+      "BZ": "Belize",
+      "BY": "Belarus",
+      "BW": "Botswana",
+      "BV": "BV",
+      "BU": "Myanmar",
+      "BS": "The Bahamas",
+      "BR": "Brazil",
+      "BO": "Bolivia",
+      "BN": "Brunei",
+      "BM": "Bermuda",
+      "BJ": "Benin",
+      "BI": "Burundi",
+      "BH": "Bahrain",
+      "BG": "Bulgaria",
+      "BE": "Belgium",
+      "BD": "Bangladesh",
+      "BB": "Barbados",
+      "BA": "Bosnia and Herzegovina",
+      "AZ": "Azerbaijan",
+      "AW": "Aruba",
+      "AU": "Australia",
+      "AT": "Austria",
+      "AS": "United States",
+      "AR": "Argentina",
+      "AP1": "AP1",
+      "AO": "Angola",
+      "AN": "Netherlands Antilles",
+      "AM": "Armenia",
+      "AL": "Albania",
+      "AG": "Antigua and Barbuda",
+      "AF": "Afganistan",
+      "AE": "United Arab Emirates",
+      "AD": "Andorra"
+    }
+  },
+  "error": {
+    "response": {
+      "code": {
+        "message": {
+          "500": "Unable to contact WIPO CASE system.",
+          "404": "Application is not yet loaded into WIPO CASE system.",
+          "403": "You are not authorized to use this service please contact to administrator."
+        }
+      }
+    },
+    "document": {
+      "not": {
+        "available": {
+          "message": "No document available"
+        }
+      }
+    }
+  },
+  "detail": {
+    "page": {
+      "tooltip": {
+        "pctpnb": "PCT publication more details",
+        "pctnb": "PCT filing more details",
+        "ow": "Other applications by same owner",
+        "npe": "National phase entries",
+        "nice": "NICE details",
+        "more": {
+          "details": "More details"
+        },
+        "lck": "LOCARNO details",
+        "ipc": "IPC classification details",
+        "in": "Other applications by same inventor",
+        "family": "Patent Family",
+        "cpc": "CPC details",
+        "ap": "Other applications by same applicant"
+      },
+      "title": "IP REGISTER",
+      "npe": {
+        "title": "National phase entries of",
+        "table": {
+          "header": {
+            "npedate": "National phase entry date",
+            "appno": "Application number"
+          }
+        },
+        "fail": {
+          "message": "Unable to fetch national phase entry data."
+        }
+      },
+      "no": {
+        "other": {
+          "application": "No other application found."
+        },
+        "application": {
+          "found": "Application not found."
+        }
+      }
+    }
+  },
+  "date": {
+    "display": {
+      "week": {
+        "Wednesday": "We",
+        "Tuesday": "Tu",
+        "Thursday": "Th",
+        "Sunday": "Su",
+        "Saturday": "Sa",
+        "Monday": "Mo",
+        "Friday": "Fr"
+      },
+      "options": {
+        "YEAR_DATE": "Year to Date",
+        "TODAY": "Today",
+        "SPECIFIC_DATE": "Specific Date",
+        "MONTH_DATE": "Last 6 Months",
+        "DATE_RANGE": "Date Range",
+        "BEFORE": "All Dates Before",
+        "AFTER": "All Dates After"
+      },
+      "month": {
+        "September": "September",
+        "October": "October",
+        "November": "November",
+        "May": "May",
+        "March": "March",
+        "June": "June",
+        "July": "July",
+        "January": "January",
+        "February": "February",
+        "December": "December",
+        "August": "August",
+        "April": "April"
+      }
+    }
+  },
+  "concordance": {
+    "term": {
+      "tooltip": {
+        "label": "Technology"
+      },
+      "placeholder": {
+        "label": ""
+      },
+      "null": {
+        "label": "Choose One"
+      },
+      "display": {
+        "label": "Technology"
+      }
+    }
+  },
+  "chart": {
+    "total": {
+      "display": "Total Applications: ${total}. Applications in ${country}: ${count}."
+    },
+    "techsector": "Technology sector",
+    "previous": {
+      "button": "<- Previous Chart"
+    },
+    "pie": {
+      "subtitle": "You can click on a technology sector to visualize specific information"
+    },
+    "news": {
+      "title": "News"
+    },
+    "industrysector": "Industry sector",
+    "geo": {
+      "title": {
+        "trademarks": "TRADEMARK FILING BY COUNTRY",
+        "patents": "PATENT FILING BY COUNTRY",
+        "designs": "DESIGN FILING BY COUNTRY",
+        "default": "PATENTS FILING BY COUNTRY"
+      },
+      "subtitle": "Click on country maps or names to see Patents applications filed at each country.",
+      "number": {
+        "of": {
+          "trademarks ": " Number Of Trademarks",
+          "patents ": " Number Of Patents",
+          "designs ": " Number Of Designs"
+        }
+      },
+      "grid": {
+        "header": {
+          "flag": "Flag",
+          "datecoverage": "Publication coverage",
+          "country": "Country",
+          "count": "Applications"
+        }
+      }
+    },
+    "common": {
+      "top": {
+        "applicant": "Top applicant"
+      },
+      "percentage": "Percentage",
+      "number": {
+        "of": {
+          "applicants": "Total number of applications"
+        }
+      },
+      "header": {
+        "trends": "Top 5 Trends",
+        "technology": {
+          "sector": {
+            "trend": "Technology Sector Trends",
+            "filing": "Technology Sector Filing"
+          }
+        },
+        "country": "Top 10 Applicant Countries",
+        "applicants": "Top 10 Applicants"
+      }
+    },
+    "bar": {
+      "topfive": {
+        "total": "Total number of applications in this sector: ${count}",
+        "sector": "Top five sectors in ${country}",
+        "country": "Top five countries in ${sector}",
+        "back": "Back"
+      },
+      "tm": {
+        "title": "Trademark Filing by Industry Sector",
+        "subtitle": "You can click on a industry sector to visualize specific information"
+      },
+      "title": "Patent Filing by Technology Sector",
+      "subtitle": "Click bars in the chart to see Patents applications in each technology sector.",
+      "design": {
+        "title": "Design Filing by Industry Sector",
+        "subtitle": "You can click on a industry sector to visualize specific information"
+      }
+    }
+  },
+  "category": {
+    "patent": {
+      "label": "Patents"
+    },
+    "other": {
+      "label": "Miscellaneous"
+    },
+    "numbers": {
+      "label": "Numbers"
+    },
+    "names": {
+      "label": "Names"
+    },
+    "mark": {
+      "label": "Marks"
+    },
+    "folder": {
+      "label": "Folder"
+    },
+    "files": {
+      "label": "Files"
+    },
+    "document": {
+      "label": "Document"
+    },
+    "design": {
+      "label": "Designs"
+    },
+    "dates": {
+      "label": "Dates"
+    },
+    "country": {
+      "label": "Country"
+    },
+    "countries": {
+      "label": "Countries"
+    },
+    "classification": {
+      "label": "Classification"
+    }
+  },
+  "btn": {
+    "togglefields": {
+      "label": "+/- Fields"
+    },
+    "search": {
+      "reset": {
+        "label": "Reset"
+      },
+      "label": "Search"
+    },
+    "hide": {
+      "veiwer": "Hide Viewer"
+    },
+    "filter": {
+      "label": "Filter"
+    },
+    "clearSelection": {
+      "label": "Clear Selection"
+    },
+    "captcha": {
+      "label": "Next"
+    },
+    "applyfilter": {
+      "label": "Apply Filter"
+    },
+    "Cancel": {
+      "label": "Cancel"
+    },
+    "Apply": {
+      "label": "Apply"
+    }
+  },
+  "application": {
+    "country": {
+      "chart": {
+        "bar": {
+          "title": "Top 10 Applicant Countries",
+          "subtitle": "You can click on a country to visualize specific information"
+        }
+      }
+    }
+  },
+  "applicant": {
+    "chart": {
+      "bar": {
+        "title": "Top 10 Applicants",
+        "subtitle": "You can click on a applicant to visualize specific information"
+      }
+    }
+  },
+  "#home": {
+    "search": {
+      "title": {
+        "label": "INTELLECTUAL PROPERTY ORGANIZATION SEARCH SYSTEM"
+      },
+      "subtitle": {
+        "label": "All you need to know about patents, trademarks and designs in your region"
+      }
+    }
+  },
+  "#field": {
+    "display": {
+      "RPNA": "Representative Name"
+    }
+  },
+  "auth": {
+    "signIn": {
+      "title": "Sign In",
+      "email": "Email",
+      "password": "Password",
+      "forgotPassword": "Forgot Password?",
+      "signUp": "Don't have an account? Sign Up",
+      "submit": "Sign In",
+      "errors": {
+        "required": "This field is required",
+        "email": "Please enter a valid email",
+        "invalidCredentials": "Invalid email or password"
+      }
+    },
+    "signUp": {
+      "title": "Sign Up",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "name": "Full Name",
+      "submit": "Sign Up",
+      "signIn": "Already have an account? Sign In",
+      "errors": {
+        "required": "This field is required",
+        "email": "Please enter a valid email",
+        "passwordMismatch": "Passwords do not match",
+        "passwordMinLength": "Password must be at least 8 characters",
+        "passwordPattern": "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+      }
+    },
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "email": "Email",
+      "submit": "Reset Password",
+      "backToSignIn": "Back to Sign In",
+      "success": "Password reset instructions have been sent to your email",
+      "errors": {
+        "required": "This field is required",
+        "email": "Please enter a valid email",
+        "userNotFound": "No account found with this email"
+      }
+    },
+    "confirmSignUp": {
+      "title": "Confirm Sign Up",
+      "code": "Confirmation Code",
+      "submit": "Confirm",
+      "resendCode": "Resend Code",
+      "errors": {
+        "required": "This field is required",
+        "invalidCode": "Invalid confirmation code",
+        "codeExpired": "Confirmation code has expired"
+      }
+    }
+  },
+  "navigation": {
+    "sidebar": {
+      "dashboard": {
+        "label": "Dashboard",
+        "icon": "pi pi-home"
+      },
+      "applications": {
+        "label": "Applications",
+        "icon": "pi pi-file",
+        "new": "New Application",
+        "search": "Search Applications"
+      },
+      "patents": {
+        "label": "Patents",
+        "icon": "pi pi-file",
+        "search": "Search Patents",
+        "reports": "Patent Reports"
+      },
+      "trademarks": {
+        "label": "Trademarks",
+        "icon": "pi pi-tag",
+        "search": "Search Trademarks",
+        "reports": "Trademark Reports"
+      },
+      "designs": {
+        "label": "Designs",
+        "icon": "pi pi-palette",
+        "search": "Search Designs",
+        "reports": "Design Reports"
+      },
+      "settings": {
+        "label": "Settings",
+        "icon": "pi pi-cog"
+      }
+    },
+    "header": {
+      "home": {
+        "label": "Home",
+        "icon": "pi pi-home"
+      },
+      "patents": {
+        "label": "Patents",
+        "icon": "pi pi-file"
+      },
+      "trademarks": {
+        "label": "Trademarks",
+        "icon": "pi pi-tag"
+      },
+      "designs": {
+        "label": "Designs",
+        "icon": "pi pi-palette"
+      }
+    },
+    "widgets": {
+      "userManagement": {
+        "title": "User Management",
+        "users": "Users",
+        "units": "Units",
+        "groups": "Groups"
+      },
+      "dataSharing": {
+        "title": "Data Sharing",
+        "configuration": "Configuration",
+        "dashboard": "Data Sharing Dashboard"
+      }
+    },
+    "favorites": {
+      "title": "Favorites",
+      "users": "Users",
+      "units": "Units",
+      "groups": "Groups",
+      "configuration": "Configuration",
+      "dataSharing": "Data Sharing"
+    },
+    "navbar": {
+      "profile": {
+        "label": "Profile",
+        "icon": "pi pi-user"
+      },
+      "notifications": {
+        "label": "Notifications",
+        "icon": "pi pi-bell"
+      },
+      "messages": {
+        "label": "Messages",
+        "icon": "pi pi-envelope"
+      },
+      "settings": {
+        "label": "Settings",
+        "icon": "pi pi-cog"
+      },
+      "logout": {
+        "label": "Logout",
+        "icon": "pi pi-sign-out"
+      }
+    }
+  }
 }

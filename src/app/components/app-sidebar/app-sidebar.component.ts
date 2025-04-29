@@ -5,29 +5,30 @@ import {
   OnDestroy,
   Output,
   EventEmitter,
-} from "@angular/core";
+} from '@angular/core';
 import {
   SidebarMenuService,
   MenuItem,
-} from "../../_services/sidebar-menu.service";
-import { MechanicsService } from "../../_services/mechanics.service";
-import { Subscription } from "rxjs";
-import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
-import { CommonModule } from "@angular/common";
-import { DividerModule } from "primeng/divider";
+} from '../../_services/sidebar-menu.service';
+import { MechanicsService } from '../../_services/mechanics.service';
+import { Subscription } from 'rxjs';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { CommonModule } from '@angular/common';
+import { DividerModule } from 'primeng/divider';
+import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  selector: "app-sidebar",
-  templateUrl: "./app-sidebar.component.html",
-  styleUrls: ["./app-sidebar.component.css"],
+  selector: 'app-sidebar',
+  templateUrl: './app-sidebar.component.html',
+  styleUrls: ['./app-sidebar.component.css'],
   standalone: true,
-  imports: [CommonModule, DividerModule],
+  imports: [CommonModule, DividerModule, RouterModule, TranslateModule],
 })
 export class AppSidebarComponent implements OnInit, OnDestroy {
   @Input() visible: boolean = true;
   @Input() fixed: boolean = true;
   @Input() items: MenuItem[] = [];
-
   // Output event to notify parent when compact mode is toggled internally
   @Output() compactModeChange = new EventEmitter<boolean>();
 
@@ -46,7 +47,8 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
     // Subscribe to menu items changes
     const menuSubscription = this.sidebarMenuService.sidebarItems$.subscribe(
       (items) => {
-        this.menuItems = items;
+        // Pre-translate all menu items and their children
+        this.menuItems = this.preTranslateMenuItems(items);
       }
     );
     this.subscriptions.push(menuSubscription);
@@ -82,6 +84,22 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
     this.subscriptions.push(visibilitySubscription);
   }
 
+  // New method to pre-translate menu items and their children
+  preTranslateMenuItems(items: MenuItem[]): MenuItem[] {
+    return items.map((item) => {
+      const translatedItem = {
+        ...item,
+        displayLabel: this.ms.translate(item.label),
+      };
+
+      if (item.items && item.items.length > 0) {
+        translatedItem.items = this.preTranslateMenuItems(item.items);
+      }
+
+      return translatedItem;
+    });
+  }
+
   ngOnDestroy(): void {
     // Clean up subscriptions
     this.subscriptions.forEach((sub) => sub.unsubscribe());
@@ -99,10 +117,5 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
     if (this.isMobile) {
       this.sidebarMenuService.setSidebarVisibility(false);
     }
-  }
-
-  // Get translated label for menu items
-  getTranslatedLabel(label: string): string {
-    return this.ms.translate(label);
   }
 }

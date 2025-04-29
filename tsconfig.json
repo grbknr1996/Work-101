@@ -27,5 +27,7 @@
   },
   "angularCompilerOptions": {
     "enableTemplateTypeChecker": true
-  }
+  },
+  "include": ["src/**/*.ts", "src/**/*.pug"],
+  "exclude": ["node_modules", "dist"]
 }

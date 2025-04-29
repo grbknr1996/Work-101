@@ -1,14 +1,12 @@
 /// <reference types="@angular/localize" />
 
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
+import { Amplify } from "@aws-amplify/core";
+import awsconfig from "./aws-exports";
+import { AppModule } from "./app/app.module";
 
-import { AppModule } from './app/app.module';
-import { environment } from './environments/environment';
+Amplify.configure(awsconfig);
 
-if (['awsProd', 'awsAcc'].includes(environment.env.toLowerCase())) {
-	enableProdMode();
-}
-
-platformBrowserDynamic().bootstrapModule(AppModule)
-	.catch(err => console.error(err));
+platformBrowserDynamic()
+  .bootstrapModule(AppModule)
+  .catch((err) => console.error(err));
