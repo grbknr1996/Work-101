@@ -6,7 +6,8 @@ p-menubar([style]="{'position': 'fixed','z-index':1000,'width':'100%'}", [model]
         type="button",
         icon="pi pi-bars",
         (click)="toggleSidebar()",
-        class="p-button-text p-button-rounded"
+        class="p-button-text p-button-rounded",
+        *ngIf="showSidebar"
       )
       a.navbar-brand(href="#")
         img.navbar-logo(*ngIf="logo", [src]="logo", alt="Logo")
@@ -23,12 +24,13 @@ p-menubar([style]="{'position': 'fixed','z-index':1000,'width':'100%'}", [model]
           optionValue="value",
           [style]="{'min-width': '8rem'}",
           styleClass="language-selector",
-          appendTo="body"
+          appendTo="body",
+          [placeholder]="getLangLabel(selectedLanguage)"
         )
           ng-template(pTemplate="selectedItem")
             .flex.align-items-center
               span.pi.pi-globe.mr-2
-              span {{getLangLabel(selectedLanguage)}}
+              span {{ getLangLabel(selectedLanguage) }}
           ng-template(let-language, pTemplate="item")
             span {{language.label}}
       //- Notifications
@@ -55,7 +57,7 @@ p-menubar([style]="{'position': 'fixed','z-index':1000,'width':'100%'}", [model]
           (click)="userMenu.toggle($event)"
         )
           .flex.align-items-center
-            span.user-avatar {{ userInitial || '?' }}
+            span.user-avatar {{ userInitial || 'G' }}
             span.user-name {{ userName || 'Guest' }}
             span.pi.pi-angle-down.ml-2.user-dropdown-icon
       //- Mobile menu toggle button (only visible on mobile)

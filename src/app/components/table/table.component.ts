@@ -87,7 +87,6 @@ export interface Action {
 @Component({
   selector: "app-table",
   templateUrl: "./table.component.html",
-  styleUrls: ["./table.component.css"],
   imports: [
     TableModule,
     DataViewModule,

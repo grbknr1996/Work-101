@@ -1,16 +1,13 @@
-<app-layout>
-  <app-breadcrumbs></app-breadcrumbs>
 
+<app-layout [config]="layoutConfig">
+  <app-breadcrumbs></app-breadcrumbs>
+  <div class="dashboard-heading">
+    <h1 class="dashboard-title">WELCOME TO WIPO IP OFFICE SUITE</h1>
+    <h2 class="dashboard-subtitle">WIPO IP ADMINISTRATION SYSTEM</h2>
+  </div>
   <div class="widgets-grid">
     <div class="widget-wrapper" *ngFor="let widget of widgets">
-      <app-widget
-        [icon]="widget.icon"
-        [title]="widget.title"
-        [items]="widget.items"
-        [showBadge]="widget.showBadge"
-        [badge]="widget.badge"
-        [hoverEffect]="'shadow'"
-      ></app-widget>
+      <app-widget [icon]="widget.icon" [title]="widget.title" [items]="widget.items" [showBadge]="widget.showBadge" [badge]="widget.badge" [hoverEffect]="'shadow'"></app-widget>
     </div>
   </div>
 </app-layout>

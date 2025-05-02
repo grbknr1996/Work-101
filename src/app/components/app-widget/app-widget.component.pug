@@ -1,0 +1,19 @@
+div(class="widget-container")
+  div(class="widget-header")
+    div(class="widget-title-row")
+      i(class="pi " + icon + " widget-icon")
+      span(class="widget-title") {{title}}
+      span(class="widget-badge", *ngIf="showBadge") {{badge}}
+  
+  div(class="widget-content p-3")
+    ul(class="widget-item-list p-0 m-0 list-none")
+      li(class="widget-item mb-2", *ngFor="let item of items")
+        a(
+          class="widget-item-link flex align-items-center p-2 border-round hover:surface-hover transition-colors duration-200",
+          [routerLink]="item.link",
+          (click)="logLink(item.link)"
+        )
+          i(class="pi pi-angle-right mr-2 text-primary text-sm")
+          span(class="text-color text-sm") {{item.label}}
+
+//- Content section

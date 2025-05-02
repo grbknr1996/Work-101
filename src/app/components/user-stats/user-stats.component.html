@@ -1,0 +1,8 @@
+
+<div class="user-stats-container">
+  <div class="user-stat-card" *ngFor="let stat of userStats" [class.selected]="selectedStat === stat.label" (click)="selectStat(stat.label)">
+    <div class="stat-header"><span class="stat-label" [style.color]="stat.color">{{ stat.label }}</span><i [class]="stat.icon" [style.color]="stat.color"></i></div>
+    <div class="stat-content"><span class="stat-count" [style.color]="stat.color">{{ stat.count }}</span><span class="stat-change"><i [class]="stat.percentChange &gt;= 0 ? 'pi pi-arrow-up' : 'pi pi-arrow-down'" [style.color]="stat.percentChange &gt;= 0 ? '#16a34a' : '#dc2626'"></i><span [style.color]="stat.percentChange &gt;= 0 ? '#16a34a' : '#dc2626'">{{ stat.percentChange }}%</span></span></div>
+    <div class="stat-period">Since {{ stat.period }}</div>
+  </div>
+</div>

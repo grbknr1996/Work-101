@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "wipopublish-webapp-frontend": {
+    "ipas-webapp-frontend": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,12 +17,13 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/wipopublish-webapp-frontend",
+            "outputPath": "dist/ipas-webapp-frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": ["zone.js", "@angular/localize/init"],
             "tsConfig": "tsconfig.app.json",
             "aot": true,
+            "sourceMap": true,
             "assets": [
               "src/favicon.ico",
               "src/assets",
@@ -139,7 +140,7 @@
             "devQuick": {
               "optimization": false,
               "outputHashing": "none",
-              "sourceMap": false,
+              "sourceMap": true,
               "namedChunks": true,
               "aot": true,
               "extractLicenses": false,
@@ -151,7 +152,7 @@
             "local-angularProdBuild": {
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": true,
               "namedChunks": true,
               "extractLicenses": true,
               "vendorChunk": false,
@@ -174,33 +175,33 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "buildTarget": "wipopublish-webapp-frontend:build"
+            "buildTarget": "ipas-webapp-frontend:build"
           },
           "configurations": {
             "awsdev": {
-              "buildTarget": "wipopublish-webapp-frontend:build:awsdev"
+              "buildTarget": "ipas-webapp-frontend:build:awsdev"
             },
             "awsacc": {
-              "buildTarget": "wipopublish-webapp-frontend:build:awsacc"
+              "buildTarget": "ipas-webapp-frontend:build:awsacc"
             },
             "awsprod": {
-              "buildTarget": "wipopublish-webapp-frontend:build:awsprod"
+              "buildTarget": "ipas-webapp-frontend:build:awsprod"
             },
             "disasterrecovery": {
-              "buildTarget": "wipopublish-webapp-frontend:build:disasterrecovery"
+              "buildTarget": "ipas-webapp-frontend:build:disasterrecovery"
             },
             "devQuick": {
-              "buildTarget": "wipopublish-webapp-frontend:build:devQuick"
+              "buildTarget": "ipas-webapp-frontend:build:devQuick"
             },
             "local-angularProdBuild": {
-              "buildTarget": "wipopublish-webapp-frontend:build:local-angularProdBuild"
+              "buildTarget": "ipas-webapp-frontend:build:local-angularProdBuild"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "wipopublish-webapp-frontend:build"
+            "buildTarget": "ipas-webapp-frontend:build"
           }
         }
       }

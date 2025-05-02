@@ -1,11 +1,8 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-  selector: 'app-force-change-password',
+  selector: "app-force-change-password",
   imports: [],
-  templateUrl: './force-change-password.component.html',
-  styleUrl: './force-change-password.component.css'
+  templateUrl: "./force-change-password.component.html",
 })
-export class ForceChangePasswordComponent {
-
-}
+export class ForceChangePasswordComponent {}

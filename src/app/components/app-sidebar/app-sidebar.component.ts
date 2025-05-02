@@ -5,23 +5,22 @@ import {
   OnDestroy,
   Output,
   EventEmitter,
-} from '@angular/core';
+} from "@angular/core";
 import {
   SidebarMenuService,
   MenuItem,
-} from '../../_services/sidebar-menu.service';
-import { MechanicsService } from '../../_services/mechanics.service';
-import { Subscription } from 'rxjs';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { CommonModule } from '@angular/common';
-import { DividerModule } from 'primeng/divider';
-import { RouterModule } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+} from "../../_services/sidebar-menu.service";
+import { MechanicsService } from "../../_services/mechanics.service";
+import { Subscription } from "rxjs";
+import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
+import { CommonModule } from "@angular/common";
+import { DividerModule } from "primeng/divider";
+import { RouterModule } from "@angular/router";
+import { TranslateModule } from "@ngx-translate/core";
 
 @Component({
-  selector: 'app-sidebar',
-  templateUrl: './app-sidebar.component.html',
-  styleUrls: ['./app-sidebar.component.css'],
+  selector: "app-sidebar",
+  templateUrl: "./app-sidebar.component.html",
   standalone: true,
   imports: [CommonModule, DividerModule, RouterModule, TranslateModule],
 })

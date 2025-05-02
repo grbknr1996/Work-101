@@ -3,7 +3,6 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { providePrimeNG } from "primeng/config";
-import Material from "@primeng/themes/material";
 
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
@@ -86,7 +85,6 @@ import { BreadcrumbsComponent } from "./components/breadcrumbs/breadcrumbs.compo
 
 const WipoThemePreset = definePreset(Aura, {
   primitive: {
-    // Adding font family
     fontFamily: '"Montserrat", "Segoe UI", Roboto, Arial, sans-serif',
     fontSize: "14px",
   },
@@ -104,11 +102,9 @@ const WipoThemePreset = definePreset(Aura, {
       900: "#00154e",
       950: "#000a32",
     },
-
     text: {
       fontWeight: "400",
       lineHeight: "1.5",
-      // You can add more typography settings here
     },
     heading: {
       fontWeight: "600",

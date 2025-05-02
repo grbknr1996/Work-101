@@ -1,2 +1,271 @@
 body 
-    background-color: green
+    //background-color: green
+
+// ASEAN Office Specific Styles
+.asean
+  // Color Variables
+  $asean-primary = #0066B3  // ASEAN Blue
+  $asean-secondary = #FFB81C  // ASEAN Gold
+  $asean-accent = #E31837  // ASEAN Red
+  $asean-text = #333333
+  $asean-light = #F5F5F5
+  $asean-hover = rgba(0, 102, 179, 0.1)
+
+  // PrimeNG Theme Overrides
+  :root
+    --p-primary-color: $asean-primary !important
+    --p-primary-color-text: #ffffff !important
+    --p-primary-50: lighten($asean-primary, 45%) !important
+    --p-primary-100: lighten($asean-primary, 40%) !important
+    --p-primary-200: lighten($asean-primary, 30%) !important
+    --p-primary-300: lighten($asean-primary, 20%) !important
+    --p-primary-400: lighten($asean-primary, 10%) !important
+    --p-primary-500: $asean-primary !important
+    --p-primary-600: darken($asean-primary, 10%) !important
+    --p-primary-700: darken($asean-primary, 20%) !important
+    --p-primary-800: darken($asean-primary, 30%) !important
+    --p-primary-900: darken($asean-primary, 40%) !important
+
+    // Surface Colors
+    --p-surface-a: #ffffff !important
+    --p-surface-b: #f8f9fa !important
+    --p-surface-c: #e9ecef !important
+    --p-surface-d: #dee2e6 !important
+    --p-surface-e: #ffffff !important
+    --p-surface-f: #ffffff !important
+
+    // Text Colors
+    --p-text-color: $asean-text !important
+    --p-text-color-secondary: #6c757d !important
+    --p-primary-text-color: #ffffff !important
+    --p-secondary-text-color: #6c757d !important
+
+    // Component Specific Colors
+    --p-border-radius: 4px
+    --p-input-border-color: #ced4da
+    --p-input-hover-border-color: $asean-primary
+    --p-focus-ring-color: rgba(0, 102, 179, 0.2)
+    --p-highlight-bg: rgba(0, 102, 179, 0.1)
+    --p-highlight-text-color: $asean-primary
+
+    // Menu Specific Colors
+    --p-menuitem-text-color: #ffffff !important
+    --p-menuitem-hover-bg: rgba(255, 255, 255, 0.1) !important
+    --p-menuitem-active-bg: rgba(255, 255, 255, 0.2) !important
+    --p-submenu-bg: #ffffff !important
+    --p-submenu-text-color: #495057 !important
+    --p-submenu-hover-bg: $asean-hover !important
+    --p-menu-separator: #e9ecef !important
+
+  // Header and Navigation
+  .app-navbar
+    background-color: var(--p-primary-500) !important
+    box-shadow: 0 2px 10px rgba(0, 102, 179, 0.2) !important
+    
+    .navbar-title
+      color: var(--p-primary-text-color) !important
+      font-weight: 600 !important
+      text-transform: uppercase !important
+      letter-spacing: 1px !important
+
+  // Sidebar
+  .sidebar-container
+    background-color: var(--p-surface-b) !important
+    border-right: 1px solid var(--p-surface-c) !important
+    
+    .menu-item
+      &.menu-item-active
+        > .menu-link
+          background-color: var(--p-highlight-bg) !important
+          color: var(--p-primary-500) !important
+          
+          &::before
+            background-color: var(--p-primary-500) !important
+
+  // Buttons
+  .p-button
+    &.p-button-primary
+      background-color: var(--p-primary-500) !important
+      border-color: var(--p-primary-500) !important
+      
+      &:hover
+        background-color: var(--p-primary-600) !important
+        border-color: var(--p-primary-600) !important
+
+  // Cards and Containers
+  .widget-container
+    border: 1px solid var(--p-surface-c) !important
+    background-color: var(--p-surface-a) !important
+    box-shadow: 0 2px 4px rgba(0, 102, 179, 0.05)
+    
+    .widget-title
+      color: var(--p-primary-500) !important
+      font-weight: 600 !important
+
+  // Tables
+  .p-datatable
+    .p-datatable-thead > tr > th
+      background-color: var(--p-surface-b) !important
+      color: var(--p-text-color) !important
+      font-weight: 600 !important
+      border-bottom: 2px solid var(--p-primary-500) !important
+
+  // Dashboard Specific
+  .dashboard-heading
+    background-color: var(--p-primary-500) !important
+    color: var(--p-primary-text-color) !important
+    
+    .dashboard-title
+      color: var(--p-primary-text-color) !important
+      font-weight: 600 !important
+      text-transform: uppercase !important
+      letter-spacing: 1px !important
+    
+    .dashboard-subtitle
+      color: rgba(255, 255, 255, 0.9) !important
+
+  // User Stats
+  .user-stat-card
+    border: 1px solid var(--p-surface-c) !important
+    
+    &.selected
+      border: 2px solid var(--p-primary-500) !important
+      box-shadow: 0 0 0 1px var(--p-primary-500) !important
+
+  // Form Elements
+  .p-inputtext:focus
+    border-color: var(--p-primary-500) !important
+    box-shadow: 0 0 0 0.2rem var(--p-focus-ring-color) !important
+
+  // Badges and Tags
+  .p-tag
+    &.p-tag-success
+      background-color: var(--p-primary-500) !important
+      color: var(--p-primary-text-color) !important
+
+  // Footer
+  .layout-footer
+    background-color: var(--p-surface-b) !important
+    border-top: 1px solid var(--p-surface-c) !important
+    
+    p
+      color: var(--p-text-color) !important
+
+  // PrimeNG Specific Components
+  .p-menubar
+    background-color: var(--p-primary-500) !important
+    border: none !important
+    padding: 0.5rem !important
+    
+    .p-menubar-root-list
+      > .p-menuitem
+        > .p-menuitem-link
+          padding: 0.75rem 1rem !important
+          color: var(--p-menuitem-text-color) !important
+          border-radius: var(--p-border-radius) !important
+          transition: background-color 0.2s !important
+          margin: 0 0.25rem !important
+          
+          .p-menuitem-text
+            color: var(--p-menuitem-text-color) !important
+          
+          .p-menuitem-icon
+            color: var(--p-menuitem-text-color) !important
+          
+          .p-submenu-icon
+            color: var(--p-menuitem-text-color) !important
+          
+          &:not(.p-disabled):hover
+            background-color: var(--p-menuitem-hover-bg) !important
+          
+          &.p-menuitem-active
+            background-color: var(--p-menuitem-active-bg) !important
+
+        // Submenu Styling
+        .p-submenu-list
+          background-color: var(--p-submenu-bg) !important
+          border: 1px solid var(--p-surface-c) !important
+          border-radius: var(--p-border-radius) !important
+          box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1) !important
+          
+          .p-menuitem
+            margin: 0 !important
+            
+            .p-menuitem-link
+              padding: 0.75rem 1rem !important
+              color: var(--p-submenu-text-color) !important
+              transition: background-color 0.2s !important
+              
+              .p-menuitem-text
+                color: var(--p-submenu-text-color) !important
+              
+              .p-menuitem-icon
+                color: var(--p-submenu-text-color) !important
+              
+              &:not(.p-disabled):hover
+                background-color: var(--p-submenu-hover-bg) !important
+                
+                .p-menuitem-text,
+                .p-menuitem-icon
+                  color: var(--p-primary-500) !important
+
+  // Sidebar Menu Enhancement
+  .sidebar-container
+    .menu-list
+      .menu-item
+        .menu-link
+          padding: 0.75rem 1.25rem !important
+          color: var(--p-text-color) !important
+          transition: background-color 0.2s, color 0.2s !important
+          border-radius: 0 !important
+          
+          &:hover
+            background-color: var(--p-submenu-hover-bg) !important
+            color: var(--p-primary-500) !important
+            
+            .menu-icon
+              color: var(--p-primary-500) !important
+          
+          &.active-route
+            background-color: var(--p-highlight-bg) !important
+            color: var(--p-primary-500) !important
+            border-left: 3px solid var(--p-primary-500) !important
+            
+            .menu-icon
+              color: var(--p-primary-500) !important
+
+        .submenu
+          .submenu-item
+            .submenu-link
+              padding: 0.75rem 1.75rem !important
+              color: var(--p-text-color) !important
+              transition: background-color 0.2s, color 0.2s !important
+              
+              &:hover
+                background-color: var(--p-submenu-hover-bg) !important
+                color: var(--p-primary-500) !important
+              
+              &.active-route
+                background-color: var(--p-highlight-bg) !important
+                color: var(--p-primary-500) !important
+
+  .p-card
+    background-color: var(--p-surface-a) !important
+    border: 1px solid var(--p-surface-c) !important
+    box-shadow: 0 2px 4px rgba(0, 102, 179, 0.05) !important
+    
+    .p-card-header
+      background-color: var(--p-surface-b) !important
+      border-bottom: 1px solid var(--p-surface-c) !important
+    
+    .p-card-title
+      color var(--p-primary-500)
+      font-weight 600
+
+  .p-dialog
+    .p-dialog-header
+      background-color var(--p-primary-500)
+      color var(--p-primary-text-color)
+      
+      .p-dialog-title
+        font-weight 600

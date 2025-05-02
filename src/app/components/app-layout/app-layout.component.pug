@@ -1,40 +1,35 @@
-.layout-wrapper
-  .loading-overlay(*ngIf="ms.isLoading")
-    .loading-spinner
+div.layout-wrapper
+  div.loading-overlay(*ngIf="ms.isLoading")
+    div.loading-spinner
       p-progressSpinner
-    .loading-text {{ ms.translate('loading') }}
-
+    div.loading-text {{ ms.translate("loading") }}
+  
   // Header/Navbar
-  app-navbar(
-    *ngIf="config.showHeader",
-    [title]="config.appTitle",
-    [items]="config.headerItems",
-    [fixed]="config.fixedHeader",
-    
-    (toggleSidebarEvent)="toggleSidebar($event)"
-  )
+  app-navbar(*ngIf="config.showHeader", 
+    [title]="config.appTitle", 
+    [items]="config.headerItems", 
+    [fixed]="config.fixedHeader", 
+    [showSidebar]="config.showSidebar", 
+    (toggleSidebarEvent)="toggleSidebar($event)")
   
   // Main Content Area
-  .layout-main
+  div.layout-main
     // Sidebar
-    app-sidebar(
-      *ngIf="config.showSidebar",
-      [visible]="sidebarVisible",
-      [fixed]="config.fixedSidebar",
-      [items]="config.sidebarItems"
-    )
+    app-sidebar(*ngIf="config.showSidebar", 
+      [visible]="sidebarVisible", 
+      [fixed]="config.fixedSidebar", 
+      [items]="config.sidebarItems")
     
     // Content area
-    .layout-content
+    div.layout-content([ngStyle]="{ 'margin-left': sidebarVisible ? '3rem' : '0','margin':'3rem' }")
       // Breadcrumbs
-      .breadcrumbs-container(*ngIf="ms.breadcrumbs")
-        p-breadcrumb([model]="breadcrumbItems", [home]="breadcrumbHome")
-      
-      // Main content
-      .content-container
+      div.breadcrumbs-container(*ngIf="ms.breadcrumbs")
+        p-breadcrumb(
+          [model]="breadcrumbItems", 
+          [home]="breadcrumbHome")    
         ng-content
   
   // Footer
   footer.layout-footer(*ngIf="config.footerText")
-    .footer-content
+    div.footer-content
       p {{ config.footerText }}

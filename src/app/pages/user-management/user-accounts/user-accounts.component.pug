@@ -1,0 +1,18 @@
+app-layout([config]="layoutConfig")
+  app-breadcrumbs([items]="breadcrumbItems")
+  .user-accounts-header
+    h1 User Accounts
+    button.create-user-btn(pButton, type="button", (click)="onCreateUser()") Create User
+  app-user-stats([totalUsers]="totalUsers",
+    [activeUsers]="activeUsers",
+    [inactiveUsers]="inactiveUsers",
+    [unconfirmedUsers]="unconfirmedUsers",
+    [totalUsersPercentChange]="39",
+    [activeUsersPercentChange]="40",
+    [inactiveUsersPercentChange]="41",
+    [unconfirmedUsersPercentChange]="42",
+    [totalUsersPeriod]="'56'",
+    [activeUsersPeriod]="'30'",
+    [inactiveUsersPeriod]="'30'",
+    [unconfirmedUsersPeriod]="'30'")
+  app-table([columns]="tableColumns", [data]="tableData") 

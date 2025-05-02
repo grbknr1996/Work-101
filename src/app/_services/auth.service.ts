@@ -1,8 +1,8 @@
-import { Injectable, inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, from, throwError, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
-import { Amplify } from 'aws-amplify';
+import { Injectable, inject } from "@angular/core";
+import { Router } from "@angular/router";
+import { BehaviorSubject, Observable, from, throwError, of } from "rxjs";
+import { catchError, map, tap } from "rxjs/operators";
+import { Amplify } from "aws-amplify";
 import {
   signIn,
   signOut,
@@ -15,8 +15,8 @@ import {
   fetchUserAttributes,
   fetchAuthSession,
   autoSignIn,
-} from 'aws-amplify/auth';
-import { Hub } from 'aws-amplify/utils';
+} from "aws-amplify/auth";
+import { Hub } from "aws-amplify/utils";
 
 export interface User {
   id: string;
@@ -34,7 +34,7 @@ export interface AuthState {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class AuthService {
   private router = inject(Router);
@@ -50,10 +50,10 @@ export class AuthService {
 
   private tempUser: any = null; // Store user during challenges
   cognito = {
-    REGION: 'eu-central-1',
-    USER_POOL_ID: 'eu-central-1_aIn5Yy5c5',
-    APP_CLIENT_ID: '18802rkfc7k4ch4c99ssp5muop',
-    IDENTITY_POOL_ID: 'eu-central-1:99b4da9d-4e5a-403f-b2c6-25bee3215dbb',
+    REGION: "eu-central-1",
+    USER_POOL_ID: "eu-central-1_aIn5Yy5c5",
+    APP_CLIENT_ID: "18802rkfc7k4ch4c99ssp5muop",
+    IDENTITY_POOL_ID: "eu-central-1:99b4da9d-4e5a-403f-b2c6-25bee3215dbb",
   };
   constructor() {
     // Configure Amplify with Gen 2 structure
@@ -72,15 +72,15 @@ export class AuthService {
     });
 
     // Listen for auth events
-    Hub.listen('auth', ({ payload: { event, data } }: any) => {
+    Hub.listen("auth", ({ payload: { event, data } }: any) => {
       switch (event) {
-        case 'signedIn':
+        case "signedIn":
           this.checkAuthStatus();
           break;
-        case 'signedOut':
+        case "signedOut":
           this.clearAuth();
           break;
-        case 'tokenRefresh':
+        case "tokenRefresh":
           this.checkAuthStatus();
           break;
       }
@@ -102,10 +102,10 @@ export class AuthService {
 
   private formatUserAttributes(attributes: any): User {
     return {
-      id: attributes.sub || '',
-      email: attributes.email || '',
-      name: attributes.name || attributes.email || '',
-      role: attributes['custom:role'] || 'user',
+      id: attributes.sub || "",
+      email: attributes.email || "",
+      name: attributes.name || attributes.email || "",
+      role: attributes["custom:role"] || "user",
     };
   }
 
@@ -121,7 +121,7 @@ export class AuthService {
 
         try {
           const currentUser = await getCurrentUser();
-          console.log('Current user:', currentUser);
+          console.log("Current user:", currentUser);
           const userAttributes = await fetchUserAttributes();
           const formattedUser = this.formatUserAttributes(userAttributes);
 
@@ -132,10 +132,10 @@ export class AuthService {
             error: null,
             attributes: userAttributes,
           });
-          console.log('User attributes:', userAttributes);
+          console.log("User attributes:", userAttributes);
           return true;
         } catch (error) {
-          console.error('Error fetching user attributes:', error);
+          console.error("Error fetching user attributes:", error);
           this.clearAuth();
           return false;
         }
@@ -167,24 +167,25 @@ export class AuthService {
       map((response) => {
         if (
           response.nextStep?.signInStep ===
-          'CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED'
+          "CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED"
         ) {
           // Store user for force change password flow
           this.tempUser = response;
-          this.router.navigate(['/force-change-password']);
+          this.router.navigate(["/force-change-password"]);
           return {
-            challengeName: 'NEW_PASSWORD_REQUIRED',
+            challengeName: "NEW_PASSWORD_REQUIRED",
             ...response.nextStep,
           };
         }
 
         if (response.isSignedIn) {
-          console.log('here');
+          console.log("User signed in successfully");
+
           this.checkAuthStatus().subscribe();
         } else if (response.nextStep) {
           // Handle other potential next steps (MFA, etc.)
           console.log(
-            'Additional authentication step required:',
+            "Additional authentication step required:",
             response.nextStep
           );
         }
@@ -192,7 +193,7 @@ export class AuthService {
         return response;
       }),
       catchError((error) => {
-        this.setError(error.message || 'Login failed');
+        this.setError(error.message || "Login failed");
         this.setLoading(false);
         return throwError(() => error);
       }),
@@ -220,11 +221,11 @@ export class AuthService {
       tap((response) => {
         // Listen for auto sign in completion
         if (response.isSignUpComplete) {
-          const listener = Hub.listen('auth', ({ payload }: any) => {
-            if (payload.event === 'autoSignIn') {
+          const listener = Hub.listen("auth", ({ payload }: any) => {
+            if (payload.event === "autoSignIn") {
               this.checkAuthStatus().subscribe();
               listener(); // Remove listener after receiving event
-            } else if (payload.event === 'autoSignIn_failure') {
+            } else if (payload.event === "autoSignIn_failure") {
               // Auto sign-in failed - user will need to sign in manually
               listener(); // Remove listener after receiving event
             }
@@ -232,7 +233,7 @@ export class AuthService {
         }
       }),
       catchError((error) => {
-        this.setError(error.message || 'Registration failed');
+        this.setError(error.message || "Registration failed");
         this.setLoading(false);
         return throwError(() => error);
       }),
@@ -251,7 +252,7 @@ export class AuthService {
       })
     ).pipe(
       catchError((error) => {
-        this.setError(error.message || 'Confirmation failed');
+        this.setError(error.message || "Confirmation failed");
         this.setLoading(false);
         return throwError(() => error);
       }),
@@ -265,7 +266,7 @@ export class AuthService {
 
     return from(resetPassword({ username: email })).pipe(
       catchError((error) => {
-        this.setError(error.message || 'Password reset request failed');
+        this.setError(error.message || "Password reset request failed");
         this.setLoading(false);
         return throwError(() => error);
       }),
@@ -289,7 +290,7 @@ export class AuthService {
       })
     ).pipe(
       catchError((error) => {
-        this.setError(error.message || 'Password reset confirmation failed');
+        this.setError(error.message || "Password reset confirmation failed");
         this.setLoading(false);
         return throwError(() => error);
       }),
@@ -300,7 +301,7 @@ export class AuthService {
   completeNewPassword(newPassword: string): Observable<any> {
     if (!this.tempUser) {
       return throwError(
-        () => new Error('No temporary user found for password change')
+        () => new Error("No temporary user found for password change")
       );
     }
 
@@ -312,12 +313,12 @@ export class AuthService {
         if (result.isSignedIn) {
           this.tempUser = null;
           this.checkAuthStatus().subscribe();
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(["/dashboard"]);
         }
         return result;
       }),
       catchError((error) => {
-        this.setError(error.message || 'Password change failed');
+        this.setError(error.message || "Password change failed");
         this.setLoading(false);
         return throwError(() => error);
       }),
@@ -331,10 +332,10 @@ export class AuthService {
     return from(signOut()).pipe(
       tap(() => {
         this.clearAuth();
-        this.router.navigate(['/login']);
+        this.router.navigate(["/login"]);
       }),
       catchError((error) => {
-        this.setError(error.message || 'Logout failed');
+        this.setError(error.message || "Logout failed");
         this.setLoading(false);
         return throwError(() => error);
       }),

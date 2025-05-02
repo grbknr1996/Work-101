@@ -1,52 +1,29 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { AuthService } from '../../_services/auth.service';
-import { configuration } from 'src/environments/environment';
-import { instanceType } from '../../utils';
+// src/app/components/default-redirect/default-redirect.component.ts
+import { Component, OnInit } from "@angular/core";
+import { Router, ActivatedRoute } from "@angular/router";
+import { AuthService } from "../../_services/auth.service";
+import { MechanicsService } from "../../_services/mechanics.service";
 
 @Component({
-  selector: 'app-default-redirect',
-  template: '<div>Redirecting...</div>', // Simple template while redirecting
-  standalone: true,
+  selector: "app-default-redirect",
+  template: "",
 })
 export class DefaultRedirectComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private ms: MechanicsService
   ) {}
 
   ngOnInit() {
-    // Get the office code from the route if available
-    this.route.params.subscribe((params) => {
-      // Extract the office code from params, default to 'default' if not present
-      const officeCode = params['officeCode'] || 'default';
+    const officeCode = this.route.snapshot.params["officeCode"] || "default";
+    const langCode = this.route.snapshot.params["langCode"] || "en";
 
-      // Get the default language for this office from configuration
-      const defaultLang = configuration[officeCode]?.defaultLanguage || 'en';
+    // Set the language
+    this.ms.switchLang(langCode);
 
-      // Get the default landing module for this office
-      const defaultLandingModule =
-        configuration[officeCode]?.defaultLandingModule || 'dashboard';
-
-      // Check authentication status
-      this.authService.checkAuthStatus().subscribe({
-        next: (isAuthenticated) => {
-          if (isAuthenticated) {
-            // User is authenticated, redirect to the default landing module
-            this.router.navigate([
-              `/${officeCode}/${defaultLang}/${defaultLandingModule}`,
-            ]);
-          } else {
-            // User is not authenticated, redirect to sign-in
-            this.router.navigate([`/${officeCode}/${defaultLang}/sign-in`]);
-          }
-        },
-        error: () => {
-          // Error checking auth, redirect to sign-in to be safe
-          this.router.navigate([`/${officeCode}/${defaultLang}/sign-in`]);
-        },
-      });
-    });
+    // Navigate to the appropriate route
+    this.router.navigate([`/${officeCode}/${langCode}/dashboard`]);
   }
 }

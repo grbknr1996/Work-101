@@ -21,6 +21,9 @@ import { ColumnDefinition } from "./components/table/table.component";
   templateUrl: "./app.component.html",
   encapsulation: ViewEncapsulation.None,
   standalone: false,
+  host: {
+    "[class]": "ms.getCurrentOffice()",
+  },
 })
 export class AppComponent implements OnInit {
   public environment = environment;

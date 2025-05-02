@@ -206,4 +206,31 @@ export class SidebarMenuService {
 
     return false;
   }
+
+  generateUserManagementMenu(currentPath: string): MenuItem[] {
+    // Example: highlight or expand menu based on currentPath
+    return [
+      {
+        id: "dashboard",
+        label: "Home",
+        icon: "pi pi-home",
+        routerLink: "/dashboard",
+      },
+      {
+        id: "user-management",
+        label: "User Management",
+        icon: "pi pi-users",
+        expanded: currentPath.includes("user-management"),
+        items: [
+          {
+            id: "user-accounts",
+            label: "User Accounts",
+            icon: "pi pi-user",
+            routerLink: "/user-management/user-accounts",
+            styleClass: currentPath.includes("user-accounts") ? "active" : "",
+          },
+        ],
+      },
+    ];
+  }
 }

@@ -1,0 +1,15 @@
+app-layout([config]="layoutConfig")
+  app-breadcrumbs
+  .dashboard-heading
+    h1.dashboard-title WELCOME TO WIPO IP OFFICE SUITE
+    h2.dashboard-subtitle WIPO IP ADMINISTRATION SYSTEM
+  div.widgets-grid
+    div.widget-wrapper(*ngFor="let widget of widgets")
+      app-widget(
+        [icon]="widget.icon",
+        [title]="widget.title",
+        [items]="widget.items",
+        [showBadge]="widget.showBadge",
+        [badge]="widget.badge",
+        [hoverEffect]="'shadow'"
+      )

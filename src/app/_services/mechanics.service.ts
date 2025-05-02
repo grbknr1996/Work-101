@@ -2,40 +2,40 @@
 	MechanicsService is the lowest level service there is. Because it is injected in every other component and service, it must not import anything else than Angular core stuf (this would create a dependency loop).
 */
 
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 
-import { ActivatedRoute, Router } from '@angular/router';
-import { TranslateService, TranslationChangeEvent } from '@ngx-translate/core';
-import { configuration, environment } from '../../environments/environment';
-import packagejson from '../../../package.json';
+import { ActivatedRoute, Router } from "@angular/router";
+import { TranslateService, TranslationChangeEvent } from "@ngx-translate/core";
+import { configuration, environment } from "../../environments/environment";
+import packagejson from "../../../package.json";
 
-import { HttpErrorResponse } from '@angular/common/http';
-import { instanceType, resizeImage } from '../utils';
-import { map, take } from 'rxjs';
-import { AnySoaRecord } from 'dns';
+import { HttpErrorResponse } from "@angular/common/http";
+import { instanceType, resizeImage } from "../utils";
+import { BehaviorSubject, Observable, firstValueFrom, map, take } from "rxjs";
+import { AnySoaRecord } from "dns";
 
 const localesMapping = {
   // for Intl.DateTimeFormat and language switching
-  ar: 'ar-LB',
-  de: 'de-DE',
-  en: 'en-US',
-  es: 'es-ES',
-  fr: 'fr-FR',
-  id: 'id-ID',
-  jp: 'ja-JP',
-  ko: 'ko-KR',
-  kh: 'km-KH',
-  ms: 'en-MS',
-  pt: 'pt-PT',
-  ro: 'ro-RO',
-  ru: 'ru-RU',
-  vi: 'vi-VN',
-  zh: 'zh-CN',
+  ar: "ar-LB",
+  de: "de-DE",
+  en: "en-US",
+  es: "es-ES",
+  fr: "fr-FR",
+  id: "id-ID",
+  jp: "ja-JP",
+  ko: "ko-KR",
+  kh: "km-KH",
+  ms: "en-MS",
+  pt: "pt-PT",
+  ro: "ro-RO",
+  ru: "ru-RU",
+  vi: "vi-VN",
+  zh: "zh-CN",
 };
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class MechanicsService {
   // General variables
@@ -46,11 +46,11 @@ export class MechanicsService {
   public breadcrumbs: boolean = true;
   public appVersion: string = `v${packagejson.version}`;
 
-  public isLocalHost: boolean = environment.env.toLowerCase() === 'localhost';
+  public isLocalHost: boolean = environment.env.toLowerCase() === "localhost";
   public isBeta: boolean = false;
-  public isAwsProd: boolean = environment.env.toLowerCase() === 'awsprod';
-  public isAwsAcc: boolean = environment.env.toLowerCase() === 'awsacc';
-  public isAwsDev: boolean = environment.env.toLowerCase() === 'awsdev';
+  public isAwsProd: boolean = environment.env.toLowerCase() === "awsprod";
+  public isAwsAcc: boolean = environment.env.toLowerCase() === "awsacc";
+  public isAwsDev: boolean = environment.env.toLowerCase() === "awsdev";
 
   public endpoint: string = null;
   private searchErrorTimeout = null;
@@ -63,11 +63,11 @@ export class MechanicsService {
   public defaultTranslation;
 
   public dateFormatterHuman;
-  public dateFormatterISO = new Intl.DateTimeFormat('en-CA', {
+  public dateFormatterISO = new Intl.DateTimeFormat("en-CA", {
     // "2022-02-01"
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
   });
 
   public numberFormatter;
@@ -80,8 +80,8 @@ export class MechanicsService {
       this.range[field] = [start, end];
     },
 
-    reset: function (field: string = '*'): void {
-      if (field !== '*') delete this.range[field];
+    reset: function (field: string = "*"): void {
+      if (field !== "*") delete this.range[field];
       else this.range = {};
     },
 
@@ -89,6 +89,14 @@ export class MechanicsService {
       return (this.range[field] || []).length;
     },
   };
+
+  // Add new subjects for translation state
+  private translationsLoaded$ = new BehaviorSubject<boolean>(false);
+  private currentTranslationLoad: Promise<void> | null = null;
+
+  // Office context properties
+  private currentOfficeSubject = new BehaviorSubject<string>("default");
+  public currentOffice$ = this.currentOfficeSubject.asObservable();
 
   getLogo(): string {
     return configuration[instanceType()].logo;
@@ -100,8 +108,8 @@ export class MechanicsService {
   async downloadBase64ImageFromUrl(imageUrl) {
     return this.http
       .get(imageUrl, {
-        observe: 'body',
-        responseType: 'arraybuffer',
+        observe: "body",
+        responseType: "arraybuffer",
       })
       .pipe(
         take(1),
@@ -109,7 +117,7 @@ export class MechanicsService {
           btoa(
             Array.from(new Uint8Array(arrayBuffer))
               .map((b) => String.fromCharCode(b))
-              .join('')
+              .join("")
           )
         )
       )
@@ -117,18 +125,18 @@ export class MechanicsService {
   }
 
   async getBase64ImageFromUrl(imageUrl: string): Promise<string> {
-    let base64 = '';
+    let base64 = "";
     try {
       base64 = (await this.downloadBase64ImageFromUrl(imageUrl)) as string;
-      if (base64.startsWith('data:binary')) {
-        base64 = base64.split(',')[1];
+      if (base64.startsWith("data:binary")) {
+        base64 = base64.split(",")[1];
       }
-      if (!base64.startsWith('data:image')) {
+      if (!base64.startsWith("data:image")) {
         base64 = `data:image/jpeg;base64,` + base64;
       }
     } catch (e) {
       base64 =
-        'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+        "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
     }
     return base64;
   }
@@ -142,27 +150,43 @@ export class MechanicsService {
     const l: string = `MS constructor - `;
 
     this.environment = environment;
-    this.environment.env = (environment.env || '').toLowerCase();
+    this.environment.env = (environment.env || "").toLowerCase();
 
-    this.isBeta = (localStorage.getItem(`beta`) || '') != '';
+    this.isBeta = (localStorage.getItem(`beta`) || "") != "";
 
-    this.ts.setDefaultLang(configuration[instanceType()].defaultLanguage);
+    // Set available languages
+    this.availableLangs = configuration[instanceType()].availableLangs;
+
+    // Set default language
+    const defaultLang = configuration[instanceType()].defaultLanguage;
+    this.ts.setDefaultLang(defaultLang);
+
+    // Add languages to translate service
+    this.ts.addLangs(this.availableLangs);
+
     this.detectEndpoint();
 
-    this.switchLang(); // Initializing language immediately, so it's defined.
-    // Extracting the full translations object from Angular translate service :) Cool
+    // Subscribe to language changes
     this.ts.onLangChange.subscribe((event: TranslationChangeEvent) => {
-      // console.log(`${l}Angular TranslationChangeEvent = `, this.ts.translations);
+      console.log("Language changed:", event.lang);
       this.translations = event.translations;
-      this.defaultTranslation =
-        this.ts.translations[configuration[instanceType()].defaultLanguage];
-      // console.info(`${l}Set ms.translations = `, this.translations);
+      this.defaultTranslation = this.ts.translations[defaultLang];
+
+      // Initialize formatters with new language
+      this.initDateFormatter(localesMapping[event.lang]);
+      this.initNumberFormatter(localesMapping[event.lang]);
+
+      // Signal that translations are loaded
+      this.translationsLoaded$.next(true);
     });
+
+    // Initialize language
+    this.switchLang();
   }
 
   _rename_for_special_collection(root: any, needle: string, replace: string) {
     for (let key in root) {
-      if (typeof root[key] == 'string') {
+      if (typeof root[key] == "string") {
         if (root[key].includes(needle)) {
           root[key] = root[key].replace(needle, replace);
         }
@@ -187,10 +211,10 @@ export class MechanicsService {
       locale, // If this was in utils.ts, the locale won't update after init. For the locale to be dynamic, this needs to be in a service
       {
         // "November 27, 2019"
-        timeZone: 'Europe/London', // 2023-02-15 problems with Seattle users who see dates the day before, attempting to force Europe timezone
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
+        timeZone: "Europe/London", // 2023-02-15 problems with Seattle users who see dates the day before, attempting to force Europe timezone
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       }
     );
   }
@@ -212,7 +236,7 @@ export class MechanicsService {
 
     // console.log(`${l}ActivatedRoute.url subscription : trying to detect endpoint from window.location.pathname='${window.location.pathname}'`);
 
-    if (window.location.pathname === '/') {
+    if (window.location.pathname === "/") {
       // console.log(`${l}'this.endpoint' is "/", the page is probably still loading. Skipping for now`);
       return [];
     }
@@ -220,7 +244,7 @@ export class MechanicsService {
     const errMsg: string = `${l}Could not work out the endpoint from URL : '${window.location.pathname}'. Expecting '/:lang/:endpoint'`;
 
     try {
-      this.endpoint = window.location.pathname.split('/')[2];
+      this.endpoint = window.location.pathname.split("/")[2];
       // console.log(`${l}Found endpoint : '${this.endpoint}'`);
     } catch (err) {
       console.error(errMsg);
@@ -235,7 +259,7 @@ export class MechanicsService {
 
   makeRoute({
     path = this.endpoint,
-    subpath = '',
+    subpath = "",
     caller,
   }: {
     path?: string;
@@ -246,7 +270,7 @@ export class MechanicsService {
 
     // console.log(`${l}caller='${caller}'`)
 
-    let parts: string[] = ['', this.lang];
+    let parts: string[] = ["", this.lang];
 
     parts.push(path);
 
@@ -254,7 +278,7 @@ export class MechanicsService {
       parts.push(subpath);
     }
 
-    const route = parts.join('/');
+    const route = parts.join("/");
 
     // console.log(`${l}route = '${route}'`)
 
@@ -300,37 +324,90 @@ export class MechanicsService {
     }
   }
 
-  switchLang(lang?: string) {
+  // src/app/_services/mechanics.service.ts
+  // Replace the switchLang method with this improved version
+
+  switchLang(lang?: string): Promise<void> {
     const l: string = `ms.switchLang() - `;
 
-    let routeLang;
+    // If there's already a translation loading, wait for it
+    if (this.currentTranslationLoad) {
+      return this.currentTranslationLoad;
+    }
 
+    // Try to get language from URL first
+    let routeLang;
     try {
-      routeLang = window.location.pathname.split('/')[1]; // Apparently, activatedRoute.snapshot and stuff aren't yet accessible (a service constructor is quite low-level) so I'm using window.location :P
-      routeLang = routeLang.toLowerCase();
-      // console.log(`${l}Found lang from URL : ${routeLang}`);
+      routeLang = window.location.pathname.split("/")[2];
+      if (routeLang) {
+        routeLang = routeLang.toLowerCase();
+        console.log(`${l}Found lang from URL: ${routeLang}`);
+      }
     } catch (err) {
       console.warn(`${l}Could not parse language from URL`);
     }
 
-    lang = lang || routeLang;
+    // Priority: 1. Explicitly passed lang, 2. URL lang, 3. Default lang
+    const officeType = instanceType();
+    const defaultLang = configuration[officeType].defaultLanguage;
 
-    if (!lang) {
-      // console.log(`${l}Using default language 'en'`);
-      lang = configuration[instanceType()].defaultLanguage;
-    } else if (!this.availableLangs.includes(lang)) {
-      console.warn(`Language not supported '${lang}'! Falling back to 'en'`);
-      lang = configuration[instanceType()].defaultLanguage;
-      this.router.navigate([lang, 'datacoverage']);
+    lang = lang || routeLang || defaultLang;
+
+    // Verify language is supported
+    if (!this.availableLangs.includes(lang)) {
+      console.warn(`Language not supported '${lang}'! Falling back to default`);
+      lang = defaultLang;
     }
 
-    // console.log(`${l}using lang = ` + lang);
+    console.log(`${l}Using language: ${lang}`);
 
+    // Update the language in this service
     this.lang = lang;
 
-    this.initDateFormatter(localesMapping[lang]); // Can be undefined. Will defaut to the user's detected locale
-    this.initNumberFormatter(localesMapping[lang]);
-    this.ts.use(lang);
+    // Save the language preference in localStorage for persistence
+    localStorage.setItem("preferredLanguage", lang);
+
+    // Reset the loaded state
+    this.translationsLoaded$.next(false);
+
+    // Create and store the translation loading promise
+    this.currentTranslationLoad = new Promise<void>((resolve, reject) => {
+      this.ts.use(lang).subscribe({
+        next: () => {
+          console.log(`${l}Translations loaded for ${lang}`);
+          this.translationsLoaded$.next(true);
+          this.currentTranslationLoad = null;
+          resolve();
+        },
+        error: (err) => {
+          console.error(`${l}Error loading translations for ${lang}:`, err);
+          // Fallback to default language
+          if (lang !== defaultLang) {
+            console.log(`${l}Falling back to default language ${defaultLang}`);
+            this.ts.use(defaultLang).subscribe({
+              next: () => {
+                this.translationsLoaded$.next(true);
+                this.currentTranslationLoad = null;
+                resolve();
+              },
+              error: (fallbackErr) => {
+                console.error(
+                  `${l}Error loading fallback translations:`,
+                  fallbackErr
+                );
+                this.currentTranslationLoad = null;
+                reject(fallbackErr);
+              },
+            });
+          } else {
+            this.currentTranslationLoad = null;
+            reject(err);
+          }
+        },
+      });
+    });
+
+    return this.currentTranslationLoad;
   }
 
   dateToHuman(dateString: string): string {
@@ -338,7 +415,7 @@ export class MechanicsService {
 
     // console.log(`\n\n${l}formatting : ${dateString}`)
 
-    if (!dateString) return '';
+    if (!dateString) return "";
 
     // Dates can be "2010-03-02T23:59:59Z" or "1608940799000"
 
@@ -357,7 +434,7 @@ export class MechanicsService {
 				I'm removing the T23:59:59Z part. Without any hour nor timezone indication, the day should never be wrong
 			*/
 
-      dateShort = dateString.split('T')[0];
+      dateShort = dateString.split("T")[0];
 
       // console.log(`${l}dateShort='${dateShort}'`)
 
@@ -372,12 +449,12 @@ export class MechanicsService {
       return toReturn;
     } catch (err) {
       // console.log(`${l}Caught error formatting date '${dateString}' : `, err.message || err)
-      return '';
+      return "";
     }
   }
 
   dateToIso(dateString: string): string {
-    if (!dateString) return '';
+    if (!dateString) return "";
 
     // Dates can be "2010-03-02T23:59:59Z" or "1608940799000"
 
@@ -402,13 +479,13 @@ export class MechanicsService {
 		*/
 
     if (!this.translations) {
-      return '⧗';
+      return "⧗";
     }
 
     // multilevel support for translation json: level1.level2.level3.level...
     let translation: any = this.translations,
       deafult: any = this.defaultTranslation,
-      split = word.split('.');
+      split = word.split(".");
     try {
       split.forEach((key) => {
         if (translation) {
@@ -440,15 +517,69 @@ export class MechanicsService {
   }
 
   async waitForTranslations(): Promise<string> {
-    const l = `MS waitforTranslations()`;
+    const l = `MS waitForTranslations() - `;
 
-    // Utility that makes sure translation object is loaded and you can use ms.translate()
+    try {
+      // If translations are already loaded, return immediately
+      if (this.translationsLoaded$.value) {
+        return "ok";
+      }
 
-    while (!this.translations || !this.defaultTranslation) {
-      // console.log(`${l}Translations not yet ready...`)
-      await new Promise((r) => setTimeout(r, 100));
+      // If there's an ongoing translation load, wait for it
+      if (this.currentTranslationLoad) {
+        await this.currentTranslationLoad;
+        return "ok";
+      }
+
+      // Wait for translations to be loaded with a timeout
+      await firstValueFrom(
+        this.translationsLoaded$.pipe(
+          map((loaded) => {
+            if (!loaded) throw new Error("Translations not loaded");
+            return loaded;
+          }),
+          take(1)
+        )
+      );
+
+      return "ok";
+    } catch (error) {
+      console.error(`${l}Error waiting for translations:`, error);
+      return "error";
     }
+  }
 
-    return 'ok';
+  // Office context methods
+  getCurrentOffice(): string {
+    return this.currentOfficeSubject.value;
+  }
+
+  setCurrentOffice(officeCode: string): void {
+    if (configuration[officeCode]) {
+      this.currentOfficeSubject.next(officeCode);
+    } else {
+      console.warn(
+        `Office code '${officeCode}' not found in configuration, using default`
+      );
+      this.currentOfficeSubject.next("default");
+    }
+  }
+
+  getCurrentOfficeConfig(): any {
+    return configuration[this.getCurrentOffice()];
+  }
+
+  getDefaultLanguage(): string {
+    const officeConfig = this.getCurrentOfficeConfig();
+    return officeConfig?.defaultLanguage || "en";
+  }
+
+  getDefaultLandingModule(): string {
+    const officeConfig = this.getCurrentOfficeConfig();
+    return officeConfig?.defaultLandingModule || "dashboard";
+  }
+
+  resetOffice(): void {
+    this.currentOfficeSubject.next("default");
   }
 }

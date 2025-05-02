@@ -1,4 +1,24 @@
 {
+  "auth": {
+    "signIn": {
+      "title": "Sign In",
+      "submit": "Sign In",
+      "subtitle": "Login to your account",
+      "email": "Email",
+      "username": "Username",
+      "password": "Password",
+      "rememberMe": "Remember Me",
+      "forgotPassword": "Forgot Password",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign Up",
+      "or": "or",
+      "errors": {
+        "emailRequired": "Email is required",
+        "emailInvalid": "Invalid email",
+        "passwordRequired": "Password is required"
+      }
+    }
+  },
   "wipopublish": {
     "news": {
       "2": "continue adding more messages if needed",
@@ -452,7 +472,7 @@
   },
   "home": {
     "link": {
-      "label": "Data Coverage"
+      "label": "Home"
     }
   },
   "header": {
@@ -1723,157 +1743,6 @@
   "#field": {
     "display": {
       "RPNA": "Representative Name"
-    }
-  },
-  "auth": {
-    "signIn": {
-      "title": "Sign In",
-      "email": "Email",
-      "password": "Password",
-      "forgotPassword": "Forgot Password?",
-      "signUp": "Don't have an account? Sign Up",
-      "submit": "Sign In",
-      "errors": {
-        "required": "This field is required",
-        "email": "Please enter a valid email",
-        "invalidCredentials": "Invalid email or password"
-      }
-    },
-    "signUp": {
-      "title": "Sign Up",
-      "email": "Email",
-      "password": "Password",
-      "confirmPassword": "Confirm Password",
-      "name": "Full Name",
-      "submit": "Sign Up",
-      "signIn": "Already have an account? Sign In",
-      "errors": {
-        "required": "This field is required",
-        "email": "Please enter a valid email",
-        "passwordMismatch": "Passwords do not match",
-        "passwordMinLength": "Password must be at least 8 characters",
-        "passwordPattern": "Password must contain at least one uppercase letter, one lowercase letter, and one number"
-      }
-    },
-    "forgotPassword": {
-      "title": "Forgot Password",
-      "email": "Email",
-      "submit": "Reset Password",
-      "backToSignIn": "Back to Sign In",
-      "success": "Password reset instructions have been sent to your email",
-      "errors": {
-        "required": "This field is required",
-        "email": "Please enter a valid email",
-        "userNotFound": "No account found with this email"
-      }
-    },
-    "confirmSignUp": {
-      "title": "Confirm Sign Up",
-      "code": "Confirmation Code",
-      "submit": "Confirm",
-      "resendCode": "Resend Code",
-      "errors": {
-        "required": "This field is required",
-        "invalidCode": "Invalid confirmation code",
-        "codeExpired": "Confirmation code has expired"
-      }
-    }
-  },
-  "navigation": {
-    "sidebar": {
-      "dashboard": {
-        "label": "Dashboard",
-        "icon": "pi pi-home"
-      },
-      "applications": {
-        "label": "Applications",
-        "icon": "pi pi-file",
-        "new": "New Application",
-        "search": "Search Applications"
-      },
-      "patents": {
-        "label": "Patents",
-        "icon": "pi pi-file",
-        "search": "Search Patents",
-        "reports": "Patent Reports"
-      },
-      "trademarks": {
-        "label": "Trademarks",
-        "icon": "pi pi-tag",
-        "search": "Search Trademarks",
-        "reports": "Trademark Reports"
-      },
-      "designs": {
-        "label": "Designs",
-        "icon": "pi pi-palette",
-        "search": "Search Designs",
-        "reports": "Design Reports"
-      },
-      "settings": {
-        "label": "Settings",
-        "icon": "pi pi-cog"
-      }
-    },
-    "header": {
-      "home": {
-        "label": "Home",
-        "icon": "pi pi-home"
-      },
-      "patents": {
-        "label": "Patents",
-        "icon": "pi pi-file"
-      },
-      "trademarks": {
-        "label": "Trademarks",
-        "icon": "pi pi-tag"
-      },
-      "designs": {
-        "label": "Designs",
-        "icon": "pi pi-palette"
-      }
-    },
-    "widgets": {
-      "userManagement": {
-        "title": "User Management",
-        "users": "Users",
-        "units": "Units",
-        "groups": "Groups"
-      },
-      "dataSharing": {
-        "title": "Data Sharing",
-        "configuration": "Configuration",
-        "dashboard": "Data Sharing Dashboard"
-      }
-    },
-    "favorites": {
-      "title": "Favorites",
-      "users": "Users",
-      "units": "Units",
-      "groups": "Groups",
-      "configuration": "Configuration",
-      "dataSharing": "Data Sharing"
-    },
-    "navbar": {
-      "profile": {
-        "label": "Profile",
-        "icon": "pi pi-user"
-      },
-      "notifications": {
-        "label": "Notifications",
-        "icon": "pi pi-bell"
-      },
-      "messages": {
-        "label": "Messages",
-        "icon": "pi pi-envelope"
-      },
-      "settings": {
-        "label": "Settings",
-        "icon": "pi pi-cog"
-      },
-      "logout": {
-        "label": "Logout",
-        "icon": "pi pi-sign-out"
-      }
     }
   }
 }

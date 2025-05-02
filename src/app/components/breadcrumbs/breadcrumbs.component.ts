@@ -9,6 +9,7 @@ import {
 import { BreadcrumbModule } from "primeng/breadcrumb";
 import { MenuItem } from "primeng/api";
 import { filter } from "rxjs/operators";
+import { MechanicsService } from "src/app/_services/mechanics.service";
 
 interface BreadcrumbItem extends MenuItem {
   routerLink?: any[] | string;
@@ -18,7 +19,6 @@ interface BreadcrumbItem extends MenuItem {
 @Component({
   selector: "app-breadcrumbs",
   templateUrl: "./breadcrumbs.component.html",
-  styleUrls: ["./breadcrumbs.component.css"],
   standalone: true,
   imports: [CommonModule, BreadcrumbModule, RouterModule],
 })
@@ -30,9 +30,20 @@ export class BreadcrumbsComponent implements OnInit {
   // When true, breadcrumbs will be generated automatically from the current route
   @Input() autoGenerate: boolean = false;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    public ms: MechanicsService
+  ) {}
 
   ngOnInit(): void {
+    const officeCode =
+      this.activatedRoute.snapshot.params["officeCode"] || "default";
+    this.home = {
+      icon: "pi pi-home",
+      label: `${officeCode}`,
+      routerLink: `/${officeCode}/en/dashboard`,
+    };
     if (this.autoGenerate) {
       this.router.events
         .pipe(filter((event) => event instanceof NavigationEnd))

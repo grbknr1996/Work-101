@@ -4,22 +4,19 @@
     <div class="loading-spinner">
       <p-progressSpinner></p-progressSpinner>
     </div>
-    <div class="loading-text">{{ ms.translate('loading') }}</div>
+    <div class="loading-text">{{ ms.translate("loading") }}</div>
   </div>
   <!-- Header/Navbar-->
-  <app-navbar *ngIf="config.showHeader" [title]="config.appTitle" [items]="config.headerItems" [fixed]="config.fixedHeader" (toggleSidebarEvent)="toggleSidebar($event)"></app-navbar>
+  <app-navbar *ngIf="config.showHeader" [title]="config.appTitle" [items]="config.headerItems" [fixed]="config.fixedHeader" [showSidebar]="config.showSidebar" (toggleSidebarEvent)="toggleSidebar($event)"></app-navbar>
   <!-- Main Content Area-->
   <div class="layout-main">
     <!-- Sidebar-->
     <app-sidebar *ngIf="config.showSidebar" [visible]="sidebarVisible" [fixed]="config.fixedSidebar" [items]="config.sidebarItems"></app-sidebar>
     <!-- Content area-->
-    <div class="layout-content">
+    <div class="layout-content" [ngStyle]="{ 'margin-left': sidebarVisible ? '3rem' : '0','margin':'3rem' }">
       <!-- Breadcrumbs-->
       <div class="breadcrumbs-container" *ngIf="ms.breadcrumbs">
-        <p-breadcrumb [model]="breadcrumbItems" [home]="breadcrumbHome"></p-breadcrumb>
-      </div>
-      <!-- Main content-->
-      <div class="content-container">
+        <p-breadcrumb [model]="breadcrumbItems" [home]="breadcrumbHome">   </p-breadcrumb>
         <ng-content></ng-content>
       </div>
     </div>
