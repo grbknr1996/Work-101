@@ -268,6 +268,21 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
         command: () => this.logout(),
       },
     ];
+
+    // Add header items to mobile menu
+    this.mobileMenuItems = [];
+    if (this.items && this.items.length > 0) {
+      this.items.forEach((item) => {
+        if (!item.separator) {
+          this.mobileMenuItems.push({
+            label: this.ms.translate(item.label),
+            icon: item.icon || "",
+            routerLink: item.routerLink || "",
+            command: item.command ? () => item.command({} as any) : undefined,
+          });
+        }
+      });
+    }
   }
 
   logout() {

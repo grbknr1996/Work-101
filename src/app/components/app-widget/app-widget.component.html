@@ -1,7 +1,7 @@
 
 <div class="widget-container">
   <div class="widget-header">
-    <div class="widget-title-row"><i class="pi undefined widget-icon"></i><span class="widget-title">{{title}}</span><span class="widget-badge" *ngIf="showBadge">{{badge}}</span></div>
+    <div class="widget-title-row"><i [class]="'pi ' + icon + ' widget-icon'"> </i><span class="widget-title">{{title}}</span><span class="widget-badge" *ngIf="showBadge">{{badge}}</span></div>
   </div>
   <div class="widget-content p-3">
     <ul class="widget-item-list p-0 m-0 list-none">

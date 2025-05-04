@@ -1,5 +1,5 @@
 {
-  "name": "wipopublish-webapp-frontend",
+  "name": "ipas-webapp-frontend",
   "version": "0.0.250409",
   "scripts": {
     "i": "npm i --legacy-peer-deps --verbose",

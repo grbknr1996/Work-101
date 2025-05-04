@@ -1,7 +1,7 @@
 div(class="widget-container")
   div(class="widget-header")
     div(class="widget-title-row")
-      i(class="pi " + icon + " widget-icon")
+      i([class]="'pi ' + icon + ' widget-icon'") 
       span(class="widget-title") {{title}}
       span(class="widget-badge", *ngIf="showBadge") {{badge}}
   

@@ -12,6 +12,8 @@
   <div class="layout-main">
     <!-- Sidebar-->
     <app-sidebar *ngIf="config.showSidebar" [visible]="sidebarVisible" [fixed]="config.fixedSidebar" [items]="config.sidebarItems"></app-sidebar>
+    <!-- Sidebar overlay for mobile-->
+    <div class="sidebar-overlay" *ngIf="sidebarVisible &amp;&amp; ms.isMobileView" (click)="sidebarVisible = false"></div>
     <!-- Content area-->
     <div class="layout-content" [ngStyle]="{ 'margin-left': sidebarVisible ? '3rem' : '0','margin':'3rem' }">
       <!-- Breadcrumbs-->

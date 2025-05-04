@@ -172,6 +172,13 @@ export class MechanicsService {
       this.translations = event.translations;
       this.defaultTranslation = this.ts.translations[defaultLang];
 
+      // Set RTL direction for Arabic
+      if (event.lang === "ar") {
+        document.documentElement.dir = "rtl";
+      } else {
+        document.documentElement.dir = "ltr";
+      }
+
       // Initialize formatters with new language
       this.initDateFormatter(localesMapping[event.lang]);
       this.initNumberFormatter(localesMapping[event.lang]);

@@ -19,7 +19,8 @@ div.layout-wrapper
       [visible]="sidebarVisible", 
       [fixed]="config.fixedSidebar", 
       [items]="config.sidebarItems")
-    
+    // Sidebar overlay for mobile
+    div.sidebar-overlay(*ngIf="sidebarVisible && ms.isMobileView", (click)="sidebarVisible = false")
     // Content area
     div.layout-content([ngStyle]="{ 'margin-left': sidebarVisible ? '3rem' : '0','margin':'3rem' }")
       // Breadcrumbs
