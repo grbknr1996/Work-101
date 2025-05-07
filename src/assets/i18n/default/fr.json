@@ -4,6 +4,9 @@
       "label": "Accueil"
     }
   },
+  "user": {
+    "profile": "Profil"
+  },
   "wipopublish": {
     "news": {
       "2": "continue d'ajouter plus de messages si besoin",

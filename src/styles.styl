@@ -12,6 +12,7 @@ shtml, body, app-root
   // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
   min-height: -webkit-fill-available
   height: calc(var(--vh, 1vh) * 100)
+
   
 
 body
@@ -598,7 +599,7 @@ $transition-duration = 0.3s
   display: flex
   flex-direction: column
   position: relative
-  min-height: 100vh
+
 
 .loading-overlay
   position: fixed
@@ -634,6 +635,7 @@ $transition-duration = 0.3s
     margin-left: 0
 
 .layout-content
+  margin-top 64px !important
   flex 1
   overflow-x hidden
   width 100%
@@ -1050,9 +1052,14 @@ $transition-duration = 0.3s
   justify-content: center
   gap: 5px
   margin-top: 10px
-  
+
   a
     text-decoration: none
+.logo-container
+    display: flex
+    flex-direction: column
+    align-items: center
+  
 // ============================================
 // End of Sign In Page Styles
 // ============================================
@@ -1076,7 +1083,41 @@ $transition-duration = 0.3s
 // ============================================
 // Force Change Password Page Styles
 // ============================================
-// Add your force-change-password page styles here
+.force-change-password-container
+  display: flex
+  justify-content: center
+  align-items: center
+  min-height: 80vh
+  background: #f4f8fb
+
+.force-change-password-card
+  width: 100%
+  max-width: 400px
+  margin: 2rem auto
+  box-shadow: 0 4px 24px rgba(25, 118, 210, 0.07)
+  border-radius: 12px
+
+.form-field
+  margin-bottom: 1.5rem
+
+  label
+    display: block
+    margin-bottom: 0.5rem
+    font-weight: 500
+    color: #1976d2
+
+  input
+    width: 100%
+
+.error
+  color: #e53935
+  font-size: 0.92rem
+  margin-top: 0.25rem
+
+.form-actions
+  display: flex
+  justify-content: flex-end
+  margin-top: 1.5rem
 // ============================================
 // End of Force Change Password Page Styles
 // ============================================
@@ -1209,9 +1250,7 @@ $transition-duration = 0.3s
   max-width 100vw !important
   overflow visible !important
 
-// Prevent horizontal scroll on mobile/tablet
-body, html, .layout-wrapper, .layout-main, .layout-content
-  overflow-x hidden !important
+
 
 // Navbar tweaks for mobile
 @media screen and (max-width: 768px)
@@ -1267,3 +1306,275 @@ body, html, .layout-wrapper, .layout-main, .layout-content
 
 // ============================================
 // End Responsive Layout, Navbar, Sidebar Styles
+
+html
+  scroll-behavior: smooth
+
+// Remove any overflow-y: auto from body, .layout-wrapper, .layout-main
+body, .layout-wrapper, .layout-main
+  overflow-y: visible !important
+
+// =============================
+// Data Exchange Configuration Dashboard Page
+// =============================
+.data-exchange-config-summary-cards
+  display: flex
+  gap: 2rem
+  margin: 2rem 0 2.5rem 0
+  justify-content: flex-start
+
+.summary-card
+  background: #fff
+  border: 2px solid #eee
+  border-radius: 12px
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06)
+  padding: 2rem 2.5rem 1.5rem 2.5rem
+  min-width: 320px
+  max-width: 350px
+  flex: 1 1 0
+  display: flex
+  flex-direction: column
+  align-items: flex-start
+  transition: box-shadow 0.2s
+
+.summary-card:hover
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12)
+
+.summary-card-icon
+  font-size: 2.5rem
+  margin-bottom: 0.5rem
+
+.summary-card-title
+  font-size: 1.3rem
+  font-weight: 600
+  margin-bottom: 0.5rem
+
+.summary-card-count
+  font-size: 2.5rem
+  font-weight: 700
+  margin-bottom: 0.5rem
+
+.summary-card-description
+  font-size: 1rem
+  color: #666
+  margin-top: 0.5rem
+
+
+
+
+// =============================
+// Add Exclusion Rule Component Styles
+// =============================
+.exclusion-chip
+  display: inline-block
+  background: #e6f0fa
+  color: #1976d2
+  border-radius: 16px
+  padding: 0.08rem 0.7rem
+  font-size: 0.92rem
+  margin: 0 0.18rem 0.18rem 0
+  font-weight: 400
+  letter-spacing: 0.01em
+.add-exclusion-rule
+  max-width: 900px
+  margin: 2.5rem auto
+  background: #fff
+  border-radius: 14px
+  box-shadow: 0 4px 24px rgba(25, 118, 210, 0.07)
+  padding: 2.5rem 2.5rem 2rem 2.5rem
+  position: relative
+
+  h2
+    font-size: 1.7rem
+    font-weight: 700
+    margin-bottom: 1.2rem
+    color: #1565c0
+    letter-spacing: 0.01em
+    text-align: left
+
+  .p-steps
+    margin-bottom: 2.5rem
+    .p-steps-item .p-menuitem-link
+      padding: 1.1rem 1.5rem
+      border-radius: 8px
+      font-size: 1.08rem
+      font-weight: 500
+      color: #1976d2
+      background: #f4f8fb
+      transition: background 0.2s
+    .p-steps-item.p-highlight .p-menuitem-link
+      background: #1976d2
+      color: #fff
+      box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08)
+    .p-steps-title
+      font-size: 1.08rem
+      font-weight: 500
+      margin-top: 0.5rem
+
+  .p-formgrid
+    margin-bottom: 1.5rem
+    label
+      display: block
+      margin-bottom: 0.5rem
+      color: #333
+      font-weight: 500
+    .p-dropdown, .p-multiselect
+      width: 100%
+
+  .p-message
+    margin-top: 0.5rem
+
+  .p-tabview
+    margin: 1.5rem 0
+    .p-tabview-panels
+      padding: 1.5rem 0
+    .p-checkbox
+      margin-right: 0.5rem
+    .p-text-secondary
+      color: #666
+      font-size: 0.97rem
+
+  .p-accordion
+    .p-accordion-tab
+      margin-bottom: 1rem
+      .p-accordion-header a
+        padding: 1rem
+        font-weight: 500
+      .p-accordion-content
+        padding: 1rem
+
+  .p-card
+    background: #f8f9fa
+    border: 1px solid #e9ecef
+    border-radius: 8px
+    padding: 1.5rem
+    margin-bottom: 1.5rem
+
+  .p-datatable-table
+    width: 100%
+    border-collapse: collapse
+    margin-bottom: 1.5rem
+    th, td
+      padding: 1rem
+      text-align: left
+      border-bottom: 1px solid #e9ecef
+    th
+      background: #f8f9fa
+      font-weight: 600
+      color: #495057
+
+  .p-d-flex
+    display: flex
+    justify-content: space-between
+    align-items: center
+    gap: 1.5rem
+
+  .p-mt-2
+    margin-top: 1rem
+  .p-mt-3
+    margin-top: 1.5rem
+  .p-mt-4
+    margin-top: 2rem
+  .p-mb-2
+    margin-bottom: 1rem
+  .p-mb-3
+    margin-bottom: 1.5rem
+  .p-ml-2
+    margin-left: 1rem
+  .p-ml-4
+    margin-left: 2rem
+  .p-jc-between
+    justify-content: space-between
+
+  .exclusion-chip
+    display: inline-block
+    background: #e6f0fa
+    color: #1976d2
+    border-radius: 16px
+    padding: 0.08rem 0.7rem
+    font-size: 0.92rem
+    margin: 0 0.18rem 0.18rem 0
+    font-weight: 400
+    letter-spacing: 0.01em
+
+  @media (max-width: 900px)
+    padding: 1.2rem 0.5rem
+    max-width: 100vw
+    .p-formgrid > .p-col-6
+      flex: 1 1 100%
+      max-width: 100%
+      margin-bottom: 1rem
+    .p-d-flex
+      flex-direction: column
+      gap: 1rem
+    .p-tabview-panels
+      padding: 0.5rem 0
+
+// =============================
+// Distribution Exclusion Rules Table Styles
+// =============================
+.exclusion-rules-header
+  display: flex
+  align-items: center
+  justify-content: space-between
+  margin: 2rem 0 1.5rem 0
+
+.exclusion-rules-header h2
+  font-size: 1.5rem
+  font-weight: 600
+  margin: 0
+
+.add-rule-btn
+  background: #1976d2
+  color: #fff
+  border: none
+  border-radius: 6px
+  padding: 0.5rem 1.25rem
+  font-size: 1rem
+  font-weight: 500
+  cursor: pointer
+  display: flex
+  align-items: center
+  gap: 0.5rem
+  transition: background 0.2s
+
+.add-rule-btn:hover
+  background: #125ea2
+
+.exclusion-rules-table-wrapper
+  background: #fff
+  border-radius: 12px
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem
+  margin-bottom: 2rem
+
+.exclusion-rules-table
+  width: 100%
+  border-collapse: separate
+  border-spacing: 0
+
+.exclusion-rules-table th,
+.exclusion-rules-table td
+  padding: 1rem 1rem
+  text-align: left
+  font-size: 1rem
+
+.exclusion-rules-table th
+  background: #f8fafd
+  font-weight: 600
+  color: #1976d2
+  border-bottom: 2px solid #1976d2
+
+.exclusion-rules-table tr
+  border-bottom: 1px solid #e9ecef
+
+.delete-rule-btn
+  background: none
+  border: none
+  color: #e53935
+  font-size: 1.5rem
+  cursor: pointer
+  transition: color 0.2s
+
+.delete-rule-btn:hover
+  color: #b71c1c

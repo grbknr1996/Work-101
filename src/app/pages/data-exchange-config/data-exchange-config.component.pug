@@ -1,0 +1,14 @@
+app-layout([config]="layoutConfig")
+  .data-exchange-config-summary-cards
+    .summary-card(*ngFor="let card of summaryCards", [ngStyle]="{ borderColor: card.color }", (click)="onSummaryCardClick(card)", [style.cursor]="card.title === 'Distribution Exclusion Rules' ? 'pointer' : 'default'")
+      .summary-card-icon([ngStyle]="{ color: card.color }")
+        i([class]="card.icon")
+      .summary-card-title([ngStyle]="{ color: card.color }") {{ card.title }}
+      .summary-card-count([ngStyle]="{ color: card.color }") {{ card.count }}
+      .summary-card-description {{ card.description }}
+  
+  app-distribution-exclusion-rules(*ngIf="showExclusionRules")
+  
+  .data-exchange-config-heading(*ngIf="!showExclusionRules")
+    h1 Data Exchange Configuration
+    p This is the Data Exchange Configuration page. Add your configuration UI here.

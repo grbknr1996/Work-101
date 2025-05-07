@@ -1,0 +1,197 @@
+.add-exclusion-rule
+  h2 Add Distribution Exclusion Rule
+  p-steps.p-mb-4(
+    [model]="steps"
+    [(activeIndex)]="step"
+    [readonly]="true"
+  )
+
+  // Step 1: Select Source & Categories
+  div(*ngIf="step === 0")
+    form([formGroup]="form1")
+      .p-grid.p-formgrid
+        .p-col-6
+          label Originating Office
+          p-dropdown(
+            [options]="offices"
+            formControlName="office"
+            placeholder="Select Office"
+          )
+        .p-col-6
+          label Recipient System
+          p-dropdown(
+            [options]="systems"
+            formControlName="system"
+            placeholder="Select System"
+          )
+      .p-mt-3
+        label IP Category Types
+        p-multiSelect(
+          [options]="ipCategories"
+          formControlName="categories"
+          defaultLabel="Select IP Categories"
+          display="chip"
+        )
+        p-message(
+          *ngIf="form1.value.categories.length"
+          severity="success"
+          text="You have selected {{ form1.value.categories.length }} IP categories. Each category can have its own specific exclusion rules."
+        )
+      .p-mt-4.p-d-flex.p-jc-between
+        button.p-button-secondary(
+          pButton
+          type="button"
+          label="Cancel"
+          (click)="close.emit()"
+        )
+        button(
+          pButton
+          type="button"
+          label="Next"
+          (click)="nextStep()"
+          [disabled]="!form1.valid"
+        )
+
+  // Step 2: Configure Status Exclusions
+  div(*ngIf="step === 1")
+    p-tabView
+      p-tabPanel(
+        *ngFor="let cat of selectedCategories"
+        [header]="getCategoryLabel(cat)"
+      )
+        .p-mb-3
+          b Status Exclusions for {{ getCategoryLabel(cat) }}
+        .p-grid
+          .p-col-6
+            p-checkbox(
+              [(ngModel)]="statusExclusions[cat].unpublished"
+              binary="true"
+              inputId="unpublished-{{ cat }}"
+            )
+            label.p-ml-2(for="unpublished-{{ cat }}") Exclude Unpublished Applications
+            .p-ml-4.p-mt-1.p-text-secondary
+              | Unpublished
+              | {{ getCategoryLabel(cat) }} applications will not be shared.
+          .p-col-6
+            p-checkbox(
+              [(ngModel)]="statusExclusions[cat].unregistered"
+              binary="true"
+              inputId="unregistered-{{ cat }}"
+            )
+            label.p-ml-2(for="unregistered-{{ cat }}") Exclude Unregistered Rights
+            .p-ml-4.p-mt-1.p-text-secondary
+              | Ungranted/unregistered
+              | {{ getCategoryLabel(cat) }} rights will not be shared.
+    .p-mt-4.p-d-flex.p-jc-between
+      button.p-button-secondary(
+        pButton
+        type="button"
+        label="Back"
+        (click)="prevStep()"
+      )
+      button(
+        pButton
+        type="button"
+        label="Next"
+        (click)="nextStep()"
+      )
+
+  // Step 3: Configure Category-Specific Exclusions
+  div(*ngIf="step === 2")
+    p-tabView
+      p-tabPanel(
+        *ngFor="let cat of selectedCategories"
+        [header]="getCategoryLabel(cat)"
+      )
+        .p-mb-3
+          b Configure Exclusion Rules for {{ getCategoryLabel(cat) }}
+        p-accordion
+          p-accordionTab(header="Application Types to Exclude")
+            .p-text-secondary
+              | (Demo section for application types)
+          p-accordionTab(header="Event Code Exclusions")
+            .p-mb-2
+              | Select event codes to exclude from data sharing for
+              | {{ getCategoryLabel(cat) }}.
+            .p-grid
+              .p-col-6(
+                *ngFor="let event of eventCodes; let i = index"
+              )
+                p-checkbox(
+                  [(ngModel)]="eventExclusions[cat]"
+                  [value]="event.code"
+                  [binary]="false"
+                  inputId="event-{{ cat }}-{{ event.code }}"
+                )
+                label.p-ml-2(for="event-{{ cat }}-{{ event.code }}") {{ event.code }}: {{ event.label }}
+          p-accordionTab(header="Document Exclusions")
+            p-checkbox(
+              [(ngModel)]="enableDocumentExclusions[cat]"
+              binary="true"
+              inputId="enable-doc-{{ cat }}"
+            )
+            label.p-ml-2(for="enable-doc-{{ cat }}") Enable Document Exclusions
+            div(*ngIf="enableDocumentExclusions[cat]").p-mt-2
+              label Select Document Types to Exclude
+              p-multiSelect(
+                [options]="documentTypes"
+                [(ngModel)]="documentExclusions[cat]"
+                defaultLabel="Select Document Types"
+                display="chip"
+              )
+    .p-mt-4.p-d-flex.p-jc-between
+      button.p-button-secondary(
+        pButton
+        type="button"
+        label="Back"
+        (click)="prevStep()"
+      )
+      button(
+        pButton
+        type="button"
+        label="Next"
+        (click)="nextStep()"
+      )
+
+  // Step 4: Review Configuration
+  div(*ngIf="step === 3")
+    .p-card.p-mb-3
+      .p-grid
+        .p-col-6
+          b Originating Office:
+          br
+          | {{ getOfficeLabel(form1.value.office) }}
+        .p-col-6
+          b Recipient System:
+          br
+          | {{ getSystemLabel(form1.value.system) }}
+        .p-col-12.p-mt-2
+          b IP Category Types:
+          span.exclusion-chip(*ngFor="let cat of selectedCategories") {{ getCategoryLabel(cat) }}
+    table.p-datatable-table.p-mb-3
+      thead
+        tr
+          th IP Category
+          th Unpublished Apps
+          th Unregistered Rights
+          th Events Excluded
+          th Documents Excluded
+      tbody
+        tr(*ngFor="let cat of selectedCategories")
+          td {{ getCategoryLabel(cat) }}
+          td {{ statusExclusions[cat]?.unpublished ? "Yes" : "No" }}
+          td {{ statusExclusions[cat]?.unregistered ? "Yes" : "No" }}
+          td {{ eventExclusions[cat]?.length || 0 }}
+          td {{ enableDocumentExclusions[cat] ? documentExclusions[cat]?.length || 0 : 0 }}
+    .p-mt-4.p-d-flex.p-jc-between
+      button.p-button-secondary(
+        pButton
+        type="button"
+        label="Back"
+        (click)="prevStep()"
+      )
+      button.p-button-success(
+        pButton
+        type="button"
+        label="Add Rule"
+      )

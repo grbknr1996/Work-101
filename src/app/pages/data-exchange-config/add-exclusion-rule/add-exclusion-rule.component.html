@@ -1,0 +1,254 @@
+<div class="add-exclusion-rule">
+  <h2>Add Distribution Exclusion Rule</h2>
+  <p-steps
+    [model]="steps"
+    [(activeIndex)]="step"
+    class="p-mb-4"
+    [readonly]="true"
+  ></p-steps>
+
+  <!-- Step 1: Select Source & Categories -->
+  <div *ngIf="step === 0">
+    <form [formGroup]="form1">
+      <div class="p-grid p-formgrid">
+        <div class="p-col-6">
+          <label>Originating Office</label>
+          <p-dropdown
+            [options]="offices"
+            formControlName="office"
+            placeholder="Select Office"
+          ></p-dropdown>
+        </div>
+        <div class="p-col-6">
+          <label>Recipient System</label>
+          <p-dropdown
+            [options]="systems"
+            formControlName="system"
+            placeholder="Select System"
+          ></p-dropdown>
+        </div>
+      </div>
+      <div class="p-mt-3">
+        <label>IP Category Types</label>
+        <p-multiSelect
+          [options]="ipCategories"
+          formControlName="categories"
+          defaultLabel="Select IP Categories"
+          display="chip"
+        ></p-multiSelect>
+        <p-message
+          *ngIf="form1.value.categories.length"
+          severity="success"
+          text="You have selected {{
+            form1.value.categories.length
+          }} IP categories. Each category can have its own specific exclusion rules."
+        ></p-message>
+      </div>
+      <div class="p-mt-4 p-d-flex p-jc-between">
+        <button
+          pButton
+          type="button"
+          label="Cancel"
+          class="p-button-secondary"
+          (click)="close.emit()"
+        ></button>
+        <button
+          pButton
+          type="button"
+          label="Next"
+          (click)="nextStep()"
+          [disabled]="!form1.valid"
+        ></button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Step 2: Configure Status Exclusions -->
+  <div *ngIf="step === 1">
+    <p-tabView>
+      <p-tabPanel
+        *ngFor="let cat of selectedCategories"
+        [header]="getCategoryLabel(cat)"
+      >
+        <div class="p-mb-3">
+          <b>Status Exclusions for {{ getCategoryLabel(cat) }}</b>
+        </div>
+        <div class="p-grid">
+          <div class="p-col-6">
+            <p-checkbox
+              [(ngModel)]="statusExclusions[cat].unpublished"
+              binary="true"
+              inputId="unpublished-{{ cat }}"
+            ></p-checkbox>
+            <label for="unpublished-{{ cat }}" class="p-ml-2"
+              >Exclude Unpublished Applications</label
+            >
+            <div class="p-ml-4 p-mt-1 p-text-secondary">
+              Unpublished
+              {{ getCategoryLabel(cat) }} applications will not be shared.
+            </div>
+          </div>
+          <div class="p-col-6">
+            <p-checkbox
+              [(ngModel)]="statusExclusions[cat].unregistered"
+              binary="true"
+              inputId="unregistered-{{ cat }}"
+            ></p-checkbox>
+            <label for="unregistered-{{ cat }}" class="p-ml-2"
+              >Exclude Unregistered Rights</label
+            >
+            <div class="p-ml-4 p-mt-1 p-text-secondary">
+              Ungranted/unregistered
+              {{ getCategoryLabel(cat) }} rights will not be shared.
+            </div>
+          </div>
+        </div>
+      </p-tabPanel>
+    </p-tabView>
+    <div class="p-mt-4 p-d-flex p-jc-between">
+      <button
+        pButton
+        type="button"
+        label="Back"
+        class="p-button-secondary"
+        (click)="prevStep()"
+      ></button>
+      <button pButton type="button" label="Next" (click)="nextStep()"></button>
+    </div>
+  </div>
+
+  <!-- Step 3: Configure Category-Specific Exclusions -->
+  <div *ngIf="step === 2">
+    <p-tabView>
+      <p-tabPanel
+        *ngFor="let cat of selectedCategories"
+        [header]="getCategoryLabel(cat)"
+      >
+        <div class="p-mb-3">
+          <b>Configure Exclusion Rules for {{ getCategoryLabel(cat) }}</b>
+        </div>
+        <p-accordion>
+          <p-accordionTab header="Application Types to Exclude">
+            <div class="p-text-secondary">
+              (Demo section for application types)
+            </div>
+          </p-accordionTab>
+          <p-accordionTab header="Event Code Exclusions">
+            <div class="p-mb-2">
+              Select event codes to exclude from data sharing for
+              {{ getCategoryLabel(cat) }}.
+            </div>
+            <div class="p-grid">
+              <div
+                class="p-col-6"
+                *ngFor="let event of eventCodes; let i = index"
+              >
+                <p-checkbox
+                  [(ngModel)]="eventExclusions[cat]"
+                  [value]="event.code"
+                  [binary]="false"
+                  inputId="event-{{ cat }}-{{ event.code }}"
+                ></p-checkbox>
+                <label for="event-{{ cat }}-{{ event.code }}" class="p-ml-2"
+                  >{{ event.code }}: {{ event.label }}</label
+                >
+              </div>
+            </div>
+          </p-accordionTab>
+          <p-accordionTab header="Document Exclusions">
+            <p-checkbox
+              [(ngModel)]="enableDocumentExclusions[cat]"
+              binary="true"
+              inputId="enable-doc-{{ cat }}"
+            ></p-checkbox>
+            <label for="enable-doc-{{ cat }}" class="p-ml-2"
+              >Enable Document Exclusions</label
+            >
+            <div *ngIf="enableDocumentExclusions[cat]" class="p-mt-2">
+              <label>Select Document Types to Exclude</label>
+              <p-multiSelect
+                [options]="documentTypes"
+                [(ngModel)]="documentExclusions[cat]"
+                defaultLabel="Select Document Types"
+                display="chip"
+              ></p-multiSelect>
+            </div>
+          </p-accordionTab>
+        </p-accordion>
+      </p-tabPanel>
+    </p-tabView>
+    <div class="p-mt-4 p-d-flex p-jc-between">
+      <button
+        pButton
+        type="button"
+        label="Back"
+        class="p-button-secondary"
+        (click)="prevStep()"
+      ></button>
+      <button pButton type="button" label="Next" (click)="nextStep()"></button>
+    </div>
+  </div>
+
+  <!-- Step 4: Review Configuration -->
+  <div *ngIf="step === 3">
+    <div class="p-card p-mb-3">
+      <div class="p-grid">
+        <div class="p-col-6">
+          <b>Originating Office:</b><br />{{
+            getOfficeLabel(form1.value.office)
+          }}
+        </div>
+        <div class="p-col-6">
+          <b>Recipient System:</b><br />{{ getSystemLabel(form1.value.system) }}
+        </div>
+        <div class="p-col-12 p-mt-2">
+          <b>IP Category Types:</b>
+          <span *ngFor="let cat of selectedCategories" class="exclusion-chip">{{
+            getCategoryLabel(cat)
+          }}</span>
+        </div>
+      </div>
+    </div>
+    <table class="p-datatable-table p-mb-3">
+      <thead>
+        <tr>
+          <th>IP Category</th>
+          <th>Unpublished Apps</th>
+          <th>Unregistered Rights</th>
+          <th>Events Excluded</th>
+          <th>Documents Excluded</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cat of selectedCategories">
+          <td>{{ getCategoryLabel(cat) }}</td>
+          <td>{{ statusExclusions[cat]?.unpublished ? "Yes" : "No" }}</td>
+          <td>{{ statusExclusions[cat]?.unregistered ? "Yes" : "No" }}</td>
+          <td>{{ eventExclusions[cat]?.length || 0 }}</td>
+          <td>
+            {{
+              enableDocumentExclusions[cat]
+                ? documentExclusions[cat]?.length || 0
+                : 0
+            }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="p-mt-4 p-d-flex p-jc-between">
+      <button
+        pButton
+        type="button"
+        label="Back"
+        class="p-button-secondary"
+        (click)="prevStep()"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="Add Rule"
+        class="p-button-success"
+      ></button>
+    </div>
+  </div>
+</div>

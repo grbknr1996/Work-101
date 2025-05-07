@@ -1,0 +1,15 @@
+
+<div class="exclusion-rules-header">
+  <h2>Distribution Exclusion Rules</h2>
+  <button class="add-rule-btn" type="button" (click)="showAddRuleForm = true"><i class="pi pi-plus"></i> Add Rule</button>
+</div>
+<app-add-exclusion-rule *ngIf="showAddRuleForm" (close)="showAddRuleForm = false"></app-add-exclusion-rule>
+<ng-template #customCell let-row let-field="field">
+  <ng-container [ngSwitch]="field">
+    <ng-container *ngSwitchCase="'ipCategoryTypes'"><span class="exclusion-chip" *ngFor="let cat of row.ipCategoryTypes">{{ cat }}</span></ng-container>
+    <ng-container *ngSwitchCase="'applicationStatus'"><span class="exclusion-chip" *ngFor="let status of row.applicationStatus">{{ status }}</span></ng-container>
+    <ng-container *ngSwitchCase="'excludedEventCodes'"><span class="exclusion-chip" *ngIf="row.excludedEventCodes !== 'None'">{{ row.excludedEventCodes }}</span><span *ngIf="row.excludedEventCodes === 'None'">None</span></ng-container>
+    <ng-container *ngSwitchCase="'excludedDocuments'"><span class="exclusion-chip" *ngIf="row.excludedDocuments !== 'Disabled'">{{ row.excludedDocuments }}</span><span *ngIf="row.excludedDocuments === 'Disabled'">Disabled</span></ng-container>
+  </ng-container>
+</ng-template>
+<app-table [columns]="columns" [data]="data" [rows]="10" [paginator]="false" (actionClick)="onActionClick($event)" [customCellTemplate]="customCell"></app-table>

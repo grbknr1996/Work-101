@@ -1,0 +1,32 @@
+.exclusion-rules-header
+  h2 Distribution Exclusion Rules
+  button.add-rule-btn(type="button", (click)="showAddRuleForm = true")
+    i.pi.pi-plus
+    |  Add Rule
+
+app-add-exclusion-rule(
+  *ngIf="showAddRuleForm",
+  (close)="showAddRuleForm = false"
+)
+
+ng-template(#customCell, let-row, let-field="field")
+  ng-container([ngSwitch]="field")
+    ng-container(*ngSwitchCase="'ipCategoryTypes'")
+      span.exclusion-chip(*ngFor="let cat of row.ipCategoryTypes") {{ cat }}
+    ng-container(*ngSwitchCase="'applicationStatus'")
+      span.exclusion-chip(*ngFor="let status of row.applicationStatus") {{ status }}
+    ng-container(*ngSwitchCase="'excludedEventCodes'")
+      span.exclusion-chip(*ngIf="row.excludedEventCodes !== 'None'") {{ row.excludedEventCodes }}
+      span(*ngIf="row.excludedEventCodes === 'None'") None
+    ng-container(*ngSwitchCase="'excludedDocuments'")
+      span.exclusion-chip(*ngIf="row.excludedDocuments !== 'Disabled'") {{ row.excludedDocuments }}
+      span(*ngIf="row.excludedDocuments === 'Disabled'") Disabled
+
+app-table(
+  [columns]="columns",
+  [data]="data",
+  [rows]="10",
+  [paginator]="false",
+  (actionClick)="onActionClick($event)",
+  [customCellTemplate]="customCell"
+)

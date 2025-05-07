@@ -26,7 +26,7 @@ export class UserAccountsComponent implements OnInit {
     showSidebar: true,
     headerItems: [],
     sidebarItems: [],
-    footerText: "",
+    footerText: "WIPO",
     fixedHeader: true,
     fixedSidebar: true,
     sidebarCollapsed: false,
@@ -46,7 +46,20 @@ export class UserAccountsComponent implements OnInit {
     { field: "username", header: "Username" },
     { field: "imageUrl", header: "Avatar", display: "avatar" },
     { field: "email", header: "Email" },
-    { field: "status", header: "Status" },
+    {
+      field: "status",
+      header: "Status",
+      display: "tag",
+      severity: (value) => {
+        if (value === "Active") {
+          return "success";
+        } else if (value === "Inactive") {
+          return "danger";
+        } else {
+          return "warning";
+        }
+      },
+    },
     { field: "createdOn", header: "Created On" },
     { field: "updatedOn", header: "Updated On" },
   ];

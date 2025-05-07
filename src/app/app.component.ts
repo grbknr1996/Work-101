@@ -281,7 +281,9 @@ export class AppComponent implements OnInit {
   }
 
   private makeRouterLink(path: string): string {
-    return `/${this.ms.lang}/${path}`;
+    // Get the current language from the mechanics service
+    const currentLang = this.ms.lang || this.ms.getDefaultLanguage();
+    return `/${currentLang}/${path}`;
   }
 
   private getIconForModule(module: string): string {

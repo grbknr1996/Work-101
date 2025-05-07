@@ -80,6 +80,11 @@ const routes: Routes = [
     pathMatch: "full",
   },
   {
+    path: ":officeCode/:langCode/user-management",
+    redirectTo: ":officeCode/:langCode/user-management/user-accounts",
+    pathMatch: "full",
+  },
+  {
     path: ":officeCode/:langCode/user-management/user-accounts",
     loadChildren: () =>
       import("./pages/user-management/user-accounts/user-accounts.module").then(
@@ -88,12 +93,20 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: ":officeCode/:langCode/configuration/data-exchange/dashboard",
+    loadChildren: () =>
+      import("./pages/data-exchange-config/data-exchange-config.module").then(
+        (m) => m.DataExchangeConfigModule
+      ),
+  },
+  {
     path: ":officeCode/:langCode/notfound",
     loadChildren: () =>
       import("./pages/page-notfound/page-notfound.module").then(
         (m) => m.PageNotfoundModule
       ),
   },
+
   {
     path: "**",
     redirectTo: "default/en/notfound",

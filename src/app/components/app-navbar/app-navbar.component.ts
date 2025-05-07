@@ -250,7 +250,7 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
   private initializeMenuItems(): void {
     this.userMenuItems = [
       {
-        label: this.ms.translate("profile"),
+        label: this.ms.translate("user.profile"),
         icon: "pi pi-user",
         routerLink: "/profile",
       },

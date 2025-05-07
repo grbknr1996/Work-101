@@ -72,7 +72,11 @@ export class SignInComponent {
     // Set the language
     this.ms.switchLang(this.langCode);
   }
-
+  ngOnInit() {
+    this.officeCode = this.route.snapshot.params["officeCode"] || "default";
+    this.ms.setCurrentOffice(this.officeCode);
+    this.ms.switchLang(this.langCode);
+  }
   get email() {
     return this.signInForm.get("email");
   }

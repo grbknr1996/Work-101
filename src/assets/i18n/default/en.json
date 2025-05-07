@@ -19,6 +19,9 @@
       }
     }
   },
+  "user": {
+    "profile": "Profile"
+  },
   "wipopublish": {
     "news": {
       "2": "continue adding more messages if needed",

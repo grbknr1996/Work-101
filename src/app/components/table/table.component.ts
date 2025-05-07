@@ -88,10 +88,10 @@ export interface Action {
   selector: "app-table",
   templateUrl: "./table.component.html",
   imports: [
+    CommonModule,
     TableModule,
     DataViewModule,
     ButtonModule,
-    CommonModule,
     DropdownModule,
     MenuModule,
     TagModule,

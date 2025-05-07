@@ -63,98 +63,83 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Traverse up to root to get officeCode and langCode
-    let parent = this.route;
-    while (parent.parent) {
-      parent = parent.parent;
-    }
-    parent.params.subscribe((params) => {
-      const officeCode = params["officeCode"] || "default";
-      const langCode = params["langCode"] || "en";
-
-      this.widgets = [
-        {
-          icon: "pi-check-square",
-          title: "Pending Tasks",
-          items: [
-            { label: "Pending Requests", link: "/requests" },
-            { label: "Physical Deliveries", link: "/deliveries" },
-            { label: "Process Groups", link: "/groups" },
-          ],
-        },
-        {
-          icon: "pi-inbox",
-          title: "New Reception",
-          items: [
-            { label: "Pending Reception", link: "/reception" },
-            { label: "Dashboard", link: "/dashboard" },
-            { label: "Configurations", link: "/configs" },
-            { label: "Filing Review", link: "/filing-review" },
-          ],
-        },
-        {
-          icon: "pi-heart",
-          title: "Health Check",
-          items: [
-            { label: "Job Scheduler", link: "/scheduler" },
-            { label: "User Management", link: "/users" },
-          ],
-        },
-        {
-          icon: "pi-id-card",
-          title: "Register View",
-          items: [
-            { label: "Stakeholders", link: "/stakeholders" },
-            { label: "Email Register", link: "/email-register" },
-          ],
-        },
-        {
-          icon: "pi-file-edit",
-          title: "Pending Publication",
-          showBadge: true,
-          badge: "3",
-          items: [{ label: "Notifications", link: "/notifications" }],
-        },
-        {
-          icon: "pi-credit-card",
-          title: "Transactions",
-          items: [
-            { label: "Bank Details", link: "/bank-details" },
-            { label: "Payment Status", link: "/payment-status" },
-          ],
-        },
-        {
-          icon: "pi-cog",
-          title: "System Configuration",
-          items: [
-            { label: "Fee Configuration", link: "/fee-config" },
-            { label: "Mailmerge Configuration", link: "/mailmerge" },
-            { label: "Custom Content", link: "/custom-content" },
-          ],
-        },
-        {
-          icon: "pi-chart-line",
-          title: "Annuities",
-          items: [
-            { label: "Renewals", link: "/renewals" },
-            { label: "Performance", link: "/performance" },
-            { label: "Statistics", link: "/statistics" },
-          ],
-        },
-        {
-          icon: "pi-users",
-          title: "User Management",
-          items: [
-            {
-              label: "User Accounts",
-              link: `/${officeCode}/${langCode}/user-management/user-accounts`,
-            },
-            { label: "Roles & Permissions", link: "/roles" },
-            { label: "Access Control", link: "/access-control" },
-            { label: "Activity Logs", link: "/activity-logs" },
-          ],
-        },
-      ];
-    });
+    const officeCode = this.route.snapshot.params.officeCode || "default";
+    const langCode = this.route.snapshot.params["langCode"] || "en";
+    console.log("office code:::", officeCode, langCode);
+    this.widgets = [
+      {
+        icon: "pi-check-square",
+        title: "Pending Tasks",
+        items: [
+          { label: "Pending Requests", link: "/requests" },
+          { label: "Physical Deliveries", link: "/deliveries" },
+          { label: "Process Groups", link: "/groups" },
+        ],
+      },
+      {
+        icon: "pi-inbox",
+        title: "New Reception",
+        items: [
+          { label: "Pending Reception", link: "/reception" },
+          { label: "Dashboard", link: "/dashboard" },
+          { label: "Configurations", link: "/configs" },
+          { label: "Filing Review", link: "/filing-review" },
+        ],
+      },
+      {
+        icon: "pi-id-card",
+        title: "Register View",
+        items: [
+          { label: "Stakeholders", link: "/stakeholders" },
+          { label: "Email Register", link: "/email-register" },
+        ],
+      },
+      {
+        icon: "pi-file-edit",
+        title: "Pending Publication",
+        showBadge: true,
+        badge: "3",
+        items: [{ label: "Notifications", link: "/notifications" }],
+      },
+      {
+        title: "Configuration",
+        icon: "pi-objects-column",
+        items: [
+          {
+            label: "Data Exchange Configuration",
+            link: `/${officeCode}/${this.ms.lang}/configuration/data-exchange/dashboard`,
+          },
+        ],
+      },
+      {
+        icon: "pi-cog",
+        title: "System Configuration",
+        items: [
+          { label: "Fee Configuration", link: "/fee-config" },
+          { label: "Mailmerge Configuration", link: "/mailmerge" },
+          { label: "Custom Content", link: "/custom-content" },
+        ],
+      },
+      {
+        icon: "pi-chart-line",
+        title: "Annuities",
+        items: [
+          { label: "Renewals", link: "/renewals" },
+          { label: "Performance", link: "/performance" },
+          { label: "Statistics", link: "/statistics" },
+        ],
+      },
+      {
+        icon: "pi-shield",
+        title: "System Administration",
+        items: [
+          {
+            icon: "pi-user",
+            label: "User Management",
+            link: `/${officeCode}/${this.ms.lang}/user-management/user-accounts`,
+          },
+        ],
+      },
+    ];
   }
 }
