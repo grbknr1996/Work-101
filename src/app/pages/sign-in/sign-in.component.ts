@@ -1,123 +1,46 @@
-import { Component } from "@angular/core";
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-} from "@angular/forms";
-import { Router, ActivatedRoute, RouterModule } from "@angular/router";
-import { MessageService } from "primeng/api";
-import { CommonModule, NgClass, NgIf } from "@angular/common";
-import { ButtonModule } from "primeng/button";
-import { InputTextModule } from "primeng/inputtext";
-import { PasswordModule } from "primeng/password";
-import { TranslateModule } from "@ngx-translate/core";
+import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { AuthService } from "../../_services/auth.service";
-import { MechanicsService } from "../../_services/mechanics.service";
-import { finalize } from "rxjs/operators";
-import { DividerModule } from "primeng/divider";
-import { MessageModule } from "primeng/message";
-import { ProgressSpinnerModule } from "primeng/progressspinner";
-import { CheckboxModule } from "primeng/checkbox";
-import { CardModule } from "primeng/card";
+import { MechanicsService } from "src/app/_services/mechanics.service";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-sign-in",
-  templateUrl: "./sign-in.component.html",
+  template: "",
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    ButtonModule,
-    NgClass,
-    NgIf,
-    InputTextModule,
-    PasswordModule,
-    TranslateModule,
-    DividerModule,
-    CardModule,
-    CheckboxModule,
-    ProgressSpinnerModule,
-    MessageModule,
-    RouterModule,
-  ],
-  providers: [MessageService],
 })
-export class SignInComponent {
-  signInForm: FormGroup;
-  submitted = false;
-  loading = false;
-  error = "";
+export class SignInComponent implements OnInit {
   officeCode: string;
   langCode: string;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private route: ActivatedRoute,
-    private messageService: MessageService,
+    private ms: MechanicsService,
     private authService: AuthService,
-    public ms: MechanicsService
-  ) {
-    this.signInForm = this.formBuilder.group({
-      email: ["", [Validators.required]],
-      password: ["", Validators.required],
-      rememberMe: [false],
-    });
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
+  ) {}
 
-    // Get office code and language code from route params
-    this.officeCode = this.route.snapshot.params["officeCode"] || "default";
-    this.langCode = this.route.snapshot.params["langCode"] || "en";
+  async ngOnInit() {
+    console.log("Sign in component initialized");
 
-    // Set the language
-    this.ms.switchLang(this.langCode);
-  }
-  ngOnInit() {
-    this.officeCode = this.route.snapshot.params["officeCode"] || "default";
-    this.ms.setCurrentOffice(this.officeCode);
-    this.ms.switchLang(this.langCode);
-  }
-  get email() {
-    return this.signInForm.get("email");
-  }
+    // Try to get office code from different possible locations in the route
+    this.officeCode =
+      this.route.snapshot.params["officeCode"] ||
+      this.route.snapshot.parent?.params["officeCode"] ||
+      "default";
 
-  get password() {
-    return this.signInForm.get("password");
-  }
+    console.log("Setting office to:", this.officeCode);
+    await this.ms.setCurrentOffice(this.officeCode);
 
-  onSubmit() {
-    if (this.signInForm.invalid) {
-      return;
-    }
+    // Get language code from route or use default from office config
+    this.langCode =
+      this.route.snapshot.params["langCode"] || this.ms.getDefaultLanguage();
 
-    this.loading = true;
-    this.error = "";
+    await this.ms.switchLang(this.langCode);
 
-    this.authService
-      .login(this.signInForm.value.email, this.signInForm.value.password)
-      .pipe(
-        finalize(() => {
-          this.loading = false;
-        })
-      )
-      .subscribe({
-        next: (response) => {
-          if (response.isSignedIn) {
-            // Navigate to the dashboard using current office and language codes
-            this.router.navigate([
-              `/${this.officeCode}/${this.langCode}/dashboard`,
-            ]);
-          }
-        },
-        error: (error) => {
-          this.error = this.ms.translate(
-            "auth.signIn.errors.invalidCredentials"
-          );
-        },
-      });
-  }
+    // Force change detection
+    this.cdr.detectChanges();
 
-  get f() {
-    return this.signInForm.controls;
+    console.log("Current office before redirect:", this.ms.getCurrentOffice());
+    this.authService.signInWithRedirect();
   }
 }

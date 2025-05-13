@@ -289,15 +289,7 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
     const currentOffice = this.ms.getCurrentOffice();
     const currentLang = this.selectedLanguage || this.ms.getDefaultLanguage();
 
-    this.auth.logout().subscribe({
-      next: () => {
-        this.ms.resetOffice();
-        this.router.navigate([`/${currentOffice}/${currentLang}/sign-in`]);
-      },
-      error: () => {
-        this.router.navigate([`/${currentOffice}/${currentLang}/sign-in`]);
-      },
-    });
+    this.auth.logout();
   }
 
   loadNotifications() {

@@ -15,8 +15,11 @@ import {
   fetchUserAttributes,
   fetchAuthSession,
   autoSignIn,
+  signInWithRedirect,
 } from "aws-amplify/auth";
 import { Hub } from "aws-amplify/utils";
+import { getCognitoConfig } from "../../aws-exports";
+import { MechanicsService } from "./mechanics.service";
 
 export interface User {
   id: string;
@@ -38,6 +41,7 @@ export interface AuthState {
 })
 export class AuthService {
   private router = inject(Router);
+  private ms = inject(MechanicsService);
   private authStateSubject = new BehaviorSubject<AuthState>({
     user: null,
     isAuthenticated: false,
@@ -49,28 +53,8 @@ export class AuthService {
   authState$ = this.authStateSubject.asObservable();
 
   private tempUser: any = null; // Store user during challenges
-  cognito = {
-    REGION: "eu-central-1",
-    USER_POOL_ID: "eu-central-1_aIn5Yy5c5",
-    APP_CLIENT_ID: "18802rkfc7k4ch4c99ssp5muop",
-    IDENTITY_POOL_ID: "eu-central-1:99b4da9d-4e5a-403f-b2c6-25bee3215dbb",
-  };
+
   constructor() {
-    // Configure Amplify with Gen 2 structure
-    Amplify.configure({
-      Auth: {
-        Cognito: {
-          userPoolId: this.cognito.USER_POOL_ID,
-          userPoolClientId: this.cognito.APP_CLIENT_ID,
-          //identityPoolId: this.cognito.IDENTITY_POOL_ID,
-
-          loginWith: {
-            email: true,
-          },
-        },
-      },
-    });
-
     // Listen for auth events
     Hub.listen("auth", ({ payload: { event, data } }: any) => {
       switch (event) {
@@ -83,12 +67,57 @@ export class AuthService {
         case "tokenRefresh":
           this.checkAuthStatus();
           break;
+        case "signInWithRedirect":
+          // Handle post-authentication redirect
+          this.checkAuthStatus().subscribe((isAuthenticated) => {
+            if (isAuthenticated) {
+              const currentOffice = this.ms.getCurrentOffice();
+              const currentLang = this.ms.lang || this.ms.getDefaultLanguage();
+              this.router.navigate([
+                `/${currentOffice}/${currentLang}/dashboard`,
+              ]);
+            }
+          });
+          break;
       }
+    });
+
+    // Subscribe to office changes and reconfigure Cognito when it changes
+    this.ms.currentOffice$.subscribe((officeCode) => {
+      this.configureAmplify(officeCode);
     });
 
     // Check auth status on init
     this.checkAuthStatus();
   }
+
+  // New method to configure Amplify based on office code
+  private configureAmplify(officeCode: string): void {
+    console.log("Configuring Amplify for office:", officeCode);
+    const cognitoConfig = getCognitoConfig(officeCode);
+    console.log("Cognito config:", cognitoConfig);
+
+    Amplify.configure({
+      Auth: {
+        Cognito: {
+          userPoolId: cognitoConfig.userPoolId,
+          userPoolClientId: cognitoConfig.clientId,
+          loginWith: {
+            oauth: {
+              domain: cognitoConfig.authority,
+              scopes: cognitoConfig.scope.split(" "),
+              redirectSignIn: [cognitoConfig.redirectUrl],
+              redirectSignOut: [cognitoConfig.postLogoutRedirectUri],
+              responseType: cognitoConfig.responseType,
+            },
+          },
+        },
+      },
+    });
+    console.log("Amplify configured with:", Amplify.getConfig());
+  }
+
+  ngOnInit() {}
 
   private setLoading(isLoading: boolean): void {
     const currentState = this.authStateSubject.value;
@@ -326,22 +355,25 @@ export class AuthService {
     );
   }
 
-  logout(): Observable<void> {
-    this.setLoading(true);
+  logout(): void {
+    // Clear local/session storage
+    localStorage.clear();
+    sessionStorage.clear();
 
-    return from(signOut()).pipe(
-      tap(() => {
-        this.clearAuth();
-        this.router.navigate(["/login"]);
-      }),
-      catchError((error) => {
-        this.setError(error.message || "Logout failed");
-        this.setLoading(false);
-        return throwError(() => error);
-      }),
-      map(() => void 0),
-      tap(() => this.setLoading(false))
-    );
+    // Get the current office code and Cognito config
+    const officeCode = this.ms.getCurrentOffice();
+    const cognitoConfig = getCognitoConfig(officeCode);
+
+    // Call Amplify signOut (will clear tokens/cookies)
+    signOut({ global: true }).then(() => {
+      // Construct the logout URL for Cognito Hosted UI
+      const baseUrl = cognitoConfig.authority.replace(/^https?:\/\//, "");
+      const clientId = cognitoConfig.clientId;
+      const logoutUri = encodeURIComponent(cognitoConfig.postLogoutRedirectUri);
+      const logoutUrl = `https://${baseUrl}/logout?client_id=${clientId}&logout_uri=${logoutUri}`;
+      console.log("Redirecting to logout URL:", logoutUrl);
+      window.location.href = logoutUrl;
+    });
   }
 
   get isAuthenticated$(): Observable<boolean> {
@@ -362,5 +394,14 @@ export class AuthService {
 
   hasTempUser(): boolean {
     return !!this.tempUser;
+  }
+
+  // Hosted UI sign-in (redirect)
+  signInWithRedirect() {
+    console.log(
+      "Amplify configured with:",
+      JSON.stringify(Amplify.getConfig())
+    );
+    signInWithRedirect();
   }
 }

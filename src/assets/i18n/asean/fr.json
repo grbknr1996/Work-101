@@ -1,0 +1,20 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Connexion",
+      "submit": "Se connecter",
+      "or": "ou",
+      "noAccount": "Vous n'avez pas de compte?",
+      "signUp": "S'inscrire"
+    }
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "welcome": "Bienvenue"
+  }
+}

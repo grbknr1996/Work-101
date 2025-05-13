@@ -16,14 +16,21 @@ export class DefaultRedirectComponent implements OnInit {
     private ms: MechanicsService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     const officeCode = this.route.snapshot.params["officeCode"] || "default";
     const langCode = this.route.snapshot.params["langCode"] || "en";
+    const queryParams = this.route.snapshot.queryParams;
 
     // Set the language
-    this.ms.switchLang(langCode);
+    await this.ms.switchLang(langCode);
 
-    // Navigate to the appropriate route
-    this.router.navigate([`/${officeCode}/${langCode}/dashboard`]);
+    // Check if this is a post-authentication redirect (has code parameter)
+    if (queryParams["code"]) {
+      // After successful authentication, redirect to dashboard
+      this.router.navigate([`/${officeCode}/${langCode}/dashboard`]);
+    } else {
+      // Normal redirect to dashboard
+      this.router.navigate([`/${officeCode}/${langCode}/dashboard`]);
+    }
   }
 }
