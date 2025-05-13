@@ -1,51 +1,34 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
-import { AuthGuard } from "./_guards/auth.guard";
-import { DefaultRedirectComponent } from "./components/default-redirect/default-redirect.component";
+import { NgModule, inject } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import { configuration } from "src/environments/environment";
+import { AuthService } from "./_services/auth.service";
+import { authGuard } from "./_guards/auth.guard";
 
 const routes: Routes = [
-  // Auth routes with office and language parameters
+  // Login route with office and language parameters - redirects to hosted UI
   {
-    path: ":officeCode/:langCode/sign-in",
+    path: ":officeCode/:langCode/login",
     loadComponent: () =>
-      import("./pages/sign-in/sign-in.component").then(
-        (m) => m.SignInComponent
-      ),
-    canActivate: [AuthGuard],
+      import("./pages/login/login.component").then((m) => m.LoginComponent),
+    resolve: {
+      auth: () => {
+        const authService = inject(AuthService);
+        authService.login();
+        return true;
+      },
+    },
   },
-  {
-    path: ":officeCode/:langCode/sign-up",
-    loadComponent: () =>
-      import("./pages/sign-up/sign-up.component").then(
-        (m) => m.SignUpComponent
-      ),
-    canActivate: [AuthGuard],
-  },
-  {
-    path: ":officeCode/:langCode/forgot-password",
-    loadComponent: () =>
-      import("./pages/forgot-password/forgot-password.component").then(
-        (m) => m.ForgotPasswordComponent
-      ),
-    canActivate: [AuthGuard],
-  },
-  {
-    path: ":officeCode/:langCode/force-change-password",
-    loadComponent: () =>
-      import(
-        "./pages/force-change-password/force-change-password.component"
-      ).then((m) => m.ForceChangePasswordComponent),
-    canActivate: [AuthGuard],
-  },
+
   // Main application routes with office and language parameters
   {
     path: ":officeCode/:langCode/dashboard",
-    loadChildren: () =>
-      import("./pages/dashboard/dashboard.module").then((m) => {
-        return m.DashboardModule;
-      }),
-    canActivate: [AuthGuard],
+    loadComponent: () =>
+      import("./pages/dashboard/dashboard.component").then(
+        (m) => m.DashboardComponent
+      ),
+    canActivate: [authGuard],
   },
+
   // Public pages
   {
     path: ":officeCode/:langCode/about",
@@ -58,70 +41,33 @@ const routes: Routes = [
   // Redirects for office/:langCode pattern
   {
     path: ":officeCode/:langCode",
-    component: DefaultRedirectComponent,
+    redirectTo: ":officeCode/:langCode/dashboard",
     pathMatch: "full",
   },
-  // Specific instance handlers - asean instance
-  {
-    path: "asean",
-    component: DefaultRedirectComponent,
-    pathMatch: "full",
-  },
+
   // General redirects for office pattern - set default language
   {
     path: ":officeCode",
-    component: DefaultRedirectComponent,
+    redirectTo: ":officeCode/en/dashboard",
     pathMatch: "full",
   },
+
   // Root redirect - set default office and language
   {
     path: "",
-    component: DefaultRedirectComponent,
+    redirectTo: "default/en/dashboard",
     pathMatch: "full",
-  },
-  {
-    path: ":officeCode/:langCode/user-management",
-    redirectTo: ":officeCode/:langCode/user-management/user-accounts",
-    pathMatch: "full",
-  },
-  {
-    path: ":officeCode/:langCode/user-management/user-accounts",
-    loadChildren: () =>
-      import("./pages/user-management/user-accounts/user-accounts.module").then(
-        (m) => m.UserAccountsModule
-      ),
-    canActivate: [AuthGuard],
-  },
-  {
-    path: ":officeCode/:langCode/configuration/data-exchange/dashboard",
-    loadChildren: () =>
-      import("./pages/data-exchange-config/data-exchange-config.module").then(
-        (m) => m.DataExchangeConfigModule
-      ),
-  },
-  {
-    path: ":officeCode/:langCode/notfound",
-    loadChildren: () =>
-      import("./pages/page-notfound/page-notfound.module").then(
-        (m) => m.PageNotfoundModule
-      ),
   },
 
+  // Catch-all route
   {
     path: "**",
-    redirectTo: "default/en/notfound",
+    redirectTo: "default/en/dashboard",
   },
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forRoot(routes, {
-      enableTracing: false,
-      initialNavigation: "enabledBlocking",
-      scrollPositionRestoration: "enabled",
-      paramsInheritanceStrategy: "always",
-    }),
-  ],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

@@ -50,6 +50,61 @@ interface MobileMenuItem {
     TranslateModule,
   ],
   templateUrl: "./app-navbar.component.html",
+  styles: [
+    `
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .navbar-left {
+        display: flex;
+        align-items: center;
+      }
+
+      .office-logo {
+        height: 40px;
+        margin-right: 1rem;
+      }
+
+      .navbar-right {
+        display: flex;
+        align-items: center;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .user-name {
+        font-weight: 500;
+      }
+
+      .user-menu {
+        padding: 1rem;
+        min-width: 250px;
+      }
+
+      .user-details {
+        margin-bottom: 1rem;
+      }
+
+      .user-details p {
+        margin: 0.5rem 0;
+      }
+
+      .menu-actions {
+        display: flex;
+        justify-content: flex-end;
+      }
+    `,
+  ],
 })
 export class AppNavbarComponent implements OnInit, OnDestroy {
   @Input() items: MenuItem[] = [];
@@ -70,6 +125,7 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
   currentUser: User | null = null;
   isMobileView: boolean = false;
   isSidebarOpen = false;
+  currentUser$;
 
   private userSubscription: Subscription | null = null;
 
@@ -77,11 +133,12 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
     public ms: MechanicsService,
     private router: Router,
     private qs: QueryParamsService,
-    private auth: AuthService
+    private authService: AuthService
   ) {
     this.checkScreenSize();
     this.logo = this.ms.getLogo();
     this.title = this.ms.getOfficeName();
+    this.currentUser$ = this.authService.currentUser$;
     window.addEventListener("resize", this.onResize.bind(this));
   }
 
@@ -131,16 +188,18 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
 
       await this.initLanguageOptions();
 
-      this.userSubscription = this.auth.currentUser$.subscribe((user) => {
-        this.currentUser = user;
-        if (user) {
-          this.userName = user.name || user.email || "User";
-          this.userInitial = this.userName.charAt(0).toUpperCase();
-        } else {
-          this.userName = "Guest";
-          this.userInitial = "G";
+      this.userSubscription = this.authService.currentUser$.subscribe(
+        (user) => {
+          this.currentUser = user;
+          if (user) {
+            this.userName = user.name || user.email || "User";
+            this.userInitial = this.userName.charAt(0).toUpperCase();
+          } else {
+            this.userName = "Guest";
+            this.userInitial = "G";
+          }
         }
-      });
+      );
 
       this.initializeMenuItems();
       this.loadNotifications();
@@ -289,15 +348,9 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
     const currentOffice = this.ms.getCurrentOffice();
     const currentLang = this.selectedLanguage || this.ms.getDefaultLanguage();
 
-    this.auth.logout().subscribe({
-      next: () => {
-        this.ms.resetOffice();
-        this.router.navigate([`/${currentOffice}/${currentLang}/sign-in`]);
-      },
-      error: () => {
-        this.router.navigate([`/${currentOffice}/${currentLang}/sign-in`]);
-      },
-    });
+    this.authService.logout();
+    this.ms.resetOffice();
+    this.router.navigate([`/${currentOffice}/${currentLang}/sign-in`]);
   }
 
   loadNotifications() {
@@ -335,6 +388,14 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
     }
     if (item.command) {
       item.command();
+    }
+  }
+
+  async onLogout() {
+    try {
+      this.authService.logout();
+    } catch (error) {
+      console.error("Logout failed:", error);
     }
   }
 }
