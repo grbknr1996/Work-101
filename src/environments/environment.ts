@@ -5,24 +5,59 @@ export const environment = {
   backendUrl: "https://api.wipopublish-webapp-dev.ipobs.dev.web1.wipo.int",
 };
 
+export interface CognitoConfig {
+  region: string;
+  userPoolId: string;
+  clientId: string;
+  authority: string;
+  redirectUrl: string;
+  postLogoutRedirectUri: string;
+  scope: string;
+  responseType: string;
+}
+
 export const configuration = {
   default: {
     name: "WIPO IPAS Central",
+    officeCode: "default",
     logo: "/assets/images/wipo-logo.png",
     availableLangs: ["ar", "en", "fr", "id", "jp", "kh", "ms", "vi"],
     defaultLanguage: "en",
     defaultLandingModule: "dashboard",
+    cognito: {
+      region: "eu-central-1",
+      userPoolId: "eu-central-1_aIn5Yy5c5",
+      clientId: "7vp4nvcrpsttatcg8lf7cds7g4",
+      authority: "auth.iims.ipobs.dev.web1.wipo.int",
+      redirectUrl: "https://localhost:4200/default/en/dashboard",
+      postLogoutRedirectUri: "https://localhost:4200",
+      scope:
+        "aws.cognito.signin.user.admin email im-api/im-access openid profile",
+      responseType: "code",
+    },
   },
   asean: {
     name: "ASEAN",
+    officeCode: "asean",
     logo: "/assets/images/asean-logo.png",
     availableLangs: ["ar", "en", "fr", "id", "jp", "kh", "ms", "vi"],
     defaultLanguage: "fr",
     defaultLandingModule: "dashboard",
-    supportedLanguages: ["en", "fr", "ar", "id", "jp", "kh", "ms", "vi"],
+    cognito: {
+      region: "eu-central-1",
+      userPoolId: "eu-central-1_aIn5Yy5c5",
+      clientId: "2i1omm37jqd6pqke1l4brv2r0a",
+      authority: "auth.iims.ipobs.dev.web1.wipo.int",
+      redirectUrl: "https://localhost:4200/asean/fr",
+      postLogoutRedirectUri: "https://localhost:4200",
+      scope:
+        "aws.cognito.signin.user.admin email im-api/im-access openid profile",
+      responseType: "code",
+    },
   },
   "kh-moc": {
     name: "KH MOC",
+    officeCode: "kh-moc",
     logo: "/assets/images/kh-moc-logo.png",
     availableLangs: ["ar", "en", "fr", "id", "jp", "kh", "ms", "vi"],
     defaultLanguage: "fr",
@@ -30,6 +65,7 @@ export const configuration = {
   },
   kh: {
     name: "KH",
+    officeCode: "kh",
     logo: "/assets/images/kh-logo.png",
     availableLangs: ["ar", "en", "fr", "id", "jp", "kh", "ms", "vi"],
     defaultLanguage: "fr",
@@ -39,6 +75,7 @@ export const configuration = {
   // Additional WIPO offices
   au: {
     name: "IP Australia",
+    officeCode: "au",
     logo: "/assets/images/au-logo.png",
     availableLangs: ["en"],
     defaultLanguage: "en",
@@ -46,6 +83,7 @@ export const configuration = {
   },
   br: {
     name: "INPI Brazil",
+    officeCode: "br",
     logo: "/assets/images/br-logo.png",
     availableLangs: ["en", "pt"],
     defaultLanguage: "pt",
@@ -53,6 +91,7 @@ export const configuration = {
   },
   ca: {
     name: "CIPO Canada",
+    officeCode: "ca",
     logo: "/assets/images/ca-logo.png",
     availableLangs: ["en", "fr"],
     defaultLanguage: "en",
@@ -65,57 +104,19 @@ export const configuration = {
     defaultLanguage: "zh",
     defaultLandingModule: "dashboard",
   },
-  ep: {
-    name: "EPO",
-    logo: "/assets/images/ep-logo.png",
-    availableLangs: ["en", "fr", "de"],
-    defaultLanguage: "en",
-    defaultLandingModule: "dashboard",
-  },
-  gb: {
-    name: "UK IPO",
-    logo: "/assets/images/gb-logo.png",
-    availableLangs: ["en"],
-    defaultLanguage: "en",
-    defaultLandingModule: "dashboard",
-  },
-  in: {
-    name: "IP India",
-    logo: "/assets/images/in-logo.png",
-    availableLangs: ["en", "hi"],
-    defaultLanguage: "en",
-    defaultLandingModule: "dashboard",
-  },
+
   jp: {
     name: "JPO Japan",
+    officeCode: "jp",
     logo: "/assets/images/jp-logo.png",
     availableLangs: ["en", "jp"],
     defaultLanguage: "jp",
     defaultLandingModule: "dashboard",
   },
-  kr: {
-    name: "KIPO Korea",
-    logo: "/assets/images/kr-logo.png",
-    availableLangs: ["en", "ko"],
-    defaultLanguage: "ko",
-    defaultLandingModule: "dashboard",
-  },
-  mx: {
-    name: "IMPI Mexico",
-    logo: "/assets/images/mx-logo.png",
-    availableLangs: ["en", "es"],
-    defaultLanguage: "es",
-    defaultLandingModule: "dashboard",
-  },
-  ph: {
-    name: "IPOPHL Philippines",
-    logo: "/assets/images/ph-logo.png",
-    availableLangs: ["en", "fil"],
-    defaultLanguage: "en",
-    defaultLandingModule: "dashboard",
-  },
+
   sg: {
     name: "IPOS Singapore",
+    officeCode: "sg",
     logo: "/assets/images/sg-logo.png",
     availableLangs: ["en", "zh", "ms", "ta"],
     defaultLanguage: "en",
@@ -123,35 +124,25 @@ export const configuration = {
   },
   th: {
     name: "DIP Thailand",
+    officeCode: "th",
     logo: "/assets/images/th-logo.png",
     availableLangs: ["en", "th"],
     defaultLanguage: "th",
     defaultLandingModule: "dashboard",
   },
-  us: {
-    name: "USPTO",
-    logo: "/assets/images/us-logo.png",
-    availableLangs: ["en"],
-    defaultLanguage: "en",
-    defaultLandingModule: "dashboard",
-  },
+
   vn: {
     name: "IP Vietnam",
+    officeCode: "vn",
     logo: "/assets/images/vn-logo.png",
     availableLangs: ["en", "vi"],
     defaultLanguage: "vi",
     defaultLandingModule: "dashboard",
   },
-  za: {
-    name: "CIPC South Africa",
-    logo: "/assets/images/za-logo.png",
-    availableLangs: ["en", "af", "zu", "xh"],
-    defaultLanguage: "en",
-    defaultLandingModule: "dashboard",
-  },
 
   sa: {
     name: "SAIP Saudi Arabia",
+    officeCode: "sa",
     logo: "/assets/images/sa-logo.png",
     availableLangs: ["en", "ar"],
     defaultLanguage: "ar",
@@ -160,6 +151,7 @@ export const configuration = {
 
   vc: {
     name: "CIPO St. Vincent & Grenadines",
+    officeCode: "vc",
     logo: "/assets/images/vc-logo.png",
     availableLangs: ["en"],
     defaultLanguage: "en",

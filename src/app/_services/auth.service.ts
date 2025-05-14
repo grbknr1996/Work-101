@@ -15,8 +15,11 @@ import {
   fetchUserAttributes,
   fetchAuthSession,
   autoSignIn,
+  signInWithRedirect,
 } from "aws-amplify/auth";
 import { Hub } from "aws-amplify/utils";
+import { configuration } from "../../environments/environment";
+import { instanceType } from "../utils";
 
 export interface User {
   id: string;
@@ -49,23 +52,37 @@ export class AuthService {
   authState$ = this.authStateSubject.asObservable();
 
   private tempUser: any = null; // Store user during challenges
-  cognito = {
-    REGION: "eu-central-1",
-    USER_POOL_ID: "eu-central-1_aIn5Yy5c5",
-    APP_CLIENT_ID: "18802rkfc7k4ch4c99ssp5muop",
-    IDENTITY_POOL_ID: "eu-central-1:99b4da9d-4e5a-403f-b2c6-25bee3215dbb",
-  };
+
   constructor() {
-    // Configure Amplify with Gen 2 structure
+    // Get the current office code from the URL
+    const officeCode = instanceType();
+    const officeConfig = configuration[officeCode];
+
+    if (!officeConfig) {
+      console.error(`No configuration found for office code: ${officeCode}`);
+      return;
+    }
+
+    // Configure Amplify with Gen 2 structure using office-specific config
     Amplify.configure({
       Auth: {
         Cognito: {
-          userPoolId: this.cognito.USER_POOL_ID,
-          userPoolClientId: this.cognito.APP_CLIENT_ID,
-          //identityPoolId: this.cognito.IDENTITY_POOL_ID,
-
+          userPoolId: officeConfig.cognito?.userPoolId,
+          userPoolClientId: officeConfig.cognito?.clientId,
           loginWith: {
-            email: true,
+            oauth: {
+              domain: officeConfig.cognito?.authority,
+              scopes: [
+                "email",
+                "openid",
+                "profile",
+                "aws.cognito.signin.user.admin",
+                "im-api/im-access",
+              ],
+              responseType: "code",
+              redirectSignIn: [officeConfig.cognito?.redirectUrl],
+              redirectSignOut: [officeConfig.cognito?.postLogoutRedirectUri],
+            },
           },
         },
       },
@@ -75,13 +92,25 @@ export class AuthService {
     Hub.listen("auth", ({ payload: { event, data } }: any) => {
       switch (event) {
         case "signedIn":
-          this.checkAuthStatus();
+          this.checkAuthStatus().subscribe(() => {
+            // After successful sign in, redirect to dashboard
+            const officeCode = instanceType();
+            const officeConfig = configuration[officeCode];
+            const langCode = officeConfig?.defaultLanguage || "en";
+            // Use setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
+            setTimeout(() => {
+              this.router.navigate([`/${officeCode}/${langCode}/dashboard`]);
+            });
+          });
           break;
         case "signedOut":
           this.clearAuth();
           break;
         case "tokenRefresh":
           this.checkAuthStatus();
+          break;
+        case "customOAuthState":
+          // Handle OAuth state if needed
           break;
       }
     });
@@ -113,39 +142,55 @@ export class AuthService {
     this.setLoading(true);
 
     return from(
-      fetchAuthSession().then(async (session: any) => {
-        if (!session.tokens) {
-          this.clearAuth();
-          return false;
-        }
-
+      (async () => {
         try {
+          const session = await fetchAuthSession();
+          if (!session.tokens) {
+            this.clearAuth();
+            return false;
+          }
+
           const currentUser = await getCurrentUser();
           console.log("Current user:", currentUser);
-          const userAttributes = await fetchUserAttributes();
-          const formattedUser = this.formatUserAttributes(userAttributes);
 
-          this.authStateSubject.next({
-            user: formattedUser,
-            isAuthenticated: true,
-            isLoading: false,
-            error: null,
-            attributes: userAttributes,
-          });
-          console.log("User attributes:", userAttributes);
-          return true;
+          try {
+            const userAttributes = await fetchUserAttributes();
+            const formattedUser = this.formatUserAttributes(userAttributes);
+
+            this.authStateSubject.next({
+              user: formattedUser,
+              isAuthenticated: true,
+              isLoading: false,
+              error: null,
+              attributes: userAttributes,
+            });
+            console.log("User attributes:", userAttributes);
+            return true;
+          } catch (error) {
+            console.error("Error fetching user attributes:", error);
+            // If we can't get attributes but have a session, still consider user authenticated
+            this.authStateSubject.next({
+              user: {
+                id: currentUser.userId,
+                email: currentUser.username,
+                name: currentUser.username,
+                role: "user",
+              },
+              isAuthenticated: true,
+              isLoading: false,
+              error: null,
+              attributes: {},
+            });
+            return true;
+          }
         } catch (error) {
-          console.error("Error fetching user attributes:", error);
+          console.error("Error checking auth status:", error);
           this.clearAuth();
           return false;
+        } finally {
+          this.setLoading(false);
         }
-      })
-    ).pipe(
-      catchError((error) => {
-        this.clearAuth();
-        return of(false);
-      }),
-      tap(() => this.setLoading(false))
+      })()
     );
   }
 
@@ -163,41 +208,22 @@ export class AuthService {
     this.setLoading(true);
     this.setError(null);
 
-    return from(signIn({ username: email, password })).pipe(
-      map((response) => {
-        if (
-          response.nextStep?.signInStep ===
-          "CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED"
-        ) {
-          // Store user for force change password flow
-          this.tempUser = response;
-          this.router.navigate(["/force-change-password"]);
-          return {
-            challengeName: "NEW_PASSWORD_REQUIRED",
-            ...response.nextStep,
-          };
-        }
+    const officeCode = instanceType();
+    const officeConfig = configuration[officeCode];
 
-        if (response.isSignedIn) {
-          console.log("User signed in successfully");
-
-          this.checkAuthStatus().subscribe();
-        } else if (response.nextStep) {
-          // Handle other potential next steps (MFA, etc.)
-          console.log(
-            "Additional authentication step required:",
-            response.nextStep
-          );
-        }
-
-        return response;
-      }),
+    return from(
+      signInWithRedirect({
+        customState: JSON.stringify({
+          officeCode,
+          langCode: officeConfig?.defaultLanguage || "en",
+        }),
+      })
+    ).pipe(
       catchError((error) => {
         this.setError(error.message || "Login failed");
         this.setLoading(false);
         return throwError(() => error);
-      }),
-      tap(() => this.setLoading(false))
+      })
     );
   }
 
