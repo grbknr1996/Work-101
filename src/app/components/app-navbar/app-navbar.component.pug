@@ -9,7 +9,7 @@ p-menubar([style]="{'position': 'fixed','z-index':1000,'width':'100%'}", [model]
         class="p-button-text p-button-rounded",
         *ngIf="showSidebar"
       )
-      a.navbar-brand(href="#")
+      a.navbar-brand([routerLink]="['/', ms.getCurrentOffice(), selectedLanguage]")
         img.navbar-logo(*ngIf="logo", [src]="logo", alt="Logo")
         span.navbar-title {{ title }}
   ng-template(pTemplate="end")

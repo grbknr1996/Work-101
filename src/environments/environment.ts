@@ -1,5 +1,5 @@
 export const environment = {
-  installedInstances: ["default", "asean", "kh", "kh-moc", "jp", "sg"],
+  installedInstances: ["default", "asean", "kh", "kh-moc", "jp", "sg", "bt"],
   env: "localhost",
   appUrl: "http://localhost:4200",
   backendUrl: "https://api.wipopublish-webapp-dev.ipobs.dev.web1.wipo.int",
@@ -43,15 +43,25 @@ export const configuration = {
     availableLangs: ["ar", "en", "fr", "id", "jp", "kh", "ms", "vi"],
     defaultLanguage: "fr",
     defaultLandingModule: "dashboard",
+    // cognito: {
+    //   region: 'eu-central-1',
+    //   userPoolId: 'eu-central-1_aIn5Yy5c5',
+    //   clientId: '2i1omm37jqd6pqke1l4brv2r0a',
+    //   authority: 'auth.iims.ipobs.dev.web1.wipo.int',
+    //   redirectUrl: 'https://localhost:4200/asean/fr',
+    //   postLogoutRedirectUri: 'https://localhost:4200',
+    //   scope:
+    //     'aws.cognito.signin.user.admin email im-api/im-access openid profile',
+    //   responseType: 'code',
+    // },
     cognito: {
       region: "eu-central-1",
-      userPoolId: "eu-central-1_aIn5Yy5c5",
-      clientId: "2i1omm37jqd6pqke1l4brv2r0a",
-      authority: "auth.iims.ipobs.dev.web1.wipo.int",
+      userPoolId: "eu-central-1_eHUXOp3ra",
+      clientId: "1dh7vob23eetq87sbeapsc8g4m",
+      authority: "eu-central-1ehuxop3ra.auth.eu-central-1.amazoncognito.com",
       redirectUrl: "https://localhost:4200/asean/fr",
       postLogoutRedirectUri: "https://localhost:4200",
-      scope:
-        "aws.cognito.signin.user.admin email im-api/im-access openid profile",
+      scope: "aws.cognito.signin.user.admin email openid profile",
       responseType: "code",
     },
   },
@@ -70,8 +80,36 @@ export const configuration = {
     availableLangs: ["ar", "en", "fr", "id", "jp", "kh", "ms", "vi"],
     defaultLanguage: "fr",
     defaultLandingModule: "dashboard",
+    cognito: {
+      region: "eu-central-1",
+      userPoolId: "eu-central-1_eHUXOp3ra",
+      clientId: "67ja72pqjths4dlltkgfglt0rr",
+      authority: "eu-central-1ehuxop3ra.auth.eu-central-1.amazoncognito.com",
+      redirectUrl: "https://localhost:4200/kh/fr",
+      postLogoutRedirectUri: "https://localhost:4200/kh/fr/logged-out",
+      scope: "aws.cognito.signin.user.admin email openid profile",
+      responseType: "code",
+    },
   },
-
+  bt: {
+    name: "Ministry of Industry,<br/> Commerce and Employment <br/> (MoICE)",
+    officeCode: "bt",
+    logo: "/assets/images/bt-logo.jpeg",
+    availableLangs: ["ar", "en", "fr", "id", "jp", "kh", "ms", "vi"],
+    defaultLanguage: "en",
+    defaultLandingModule: "dashboard",
+    cognito: {
+      region: "eu-central-1",
+      userPoolId: "eu-central-1_aIn5Yy5c5",
+      clientId: "4do4levt2p1nt7lamebp96u0gp",
+      authority: "auth.iims.ipobs.dev.web1.wipo.int",
+      redirectUrl: "https://localhost:4200/bt/en",
+      postLogoutRedirectUri: "https://localhost:4200",
+      scope:
+        "aws.cognito.signin.user.admin email im-api/im-access openid profile",
+      responseType: "code",
+    },
+  },
   // Additional WIPO offices
   au: {
     name: "IP Australia",

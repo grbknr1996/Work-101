@@ -13,4 +13,21 @@
     <h1>Data Exchange Configuration</h1>
     <p>This is the Data Exchange Configuration page. Add your configuration UI here.</p>
   </div>
+  <!-- Recipient Systems Table-->
+  <div class="recipient-systems-header" *ngIf="showRecipientSystems">
+    <h2><i class="pi pi-database" style="margin-right: 0.5rem;"></i>Recipient Systems</h2>
+    <div>
+      <button class="filter-btn" type="button"><i class="pi pi-filter" style="margin-right: 0.5rem;"></i>Filter</button>
+      <button class="add-system-btn" type="button" (click)="onAddSystemClick()"><i class="pi pi-plus" style="margin-right: 0.5rem;"></i>Add System</button>
+    </div>
+  </div>
+  <ng-template #recipientCodeCell let-row><span class="recipient-code-badge">{{ row.code }}</span></ng-template>
+  <app-table *ngIf="showRecipientSystems" [columns]="recipientSystemsColumns" [data]="recipientSystemsData" [rows]="10" [paginator]="false" (actionClick)="onRecipientSystemAction($event)" [customCellTemplate]="recipientCodeCell"></app-table>
+  <!-- Originating Offices Table-->
+  <div class="originating-offices-header" *ngIf="showOriginatingOffices">
+    <h2><i class="pi pi-building" style="margin-right: 0.5rem;"></i>Originating Offices</h2>
+    <button class="add-office-btn" type="button" (click)="onAddOfficeClick()"><i class="pi pi-plus" style="margin-right: 0.5rem;"></i>Add Office</button>
+  </div>
+  <ng-template #originatingCodeCell let-row><span class="originating-code-badge">{{ row.code }}</span></ng-template>
+  <app-table *ngIf="showOriginatingOffices" [columns]="originatingOfficesColumns" [data]="originatingOfficesData" [rows]="10" [paginator]="false" (actionClick)="onOriginatingOfficeAction($event)" [customCellTemplate]="originatingCodeCell"></app-table>
 </app-layout>

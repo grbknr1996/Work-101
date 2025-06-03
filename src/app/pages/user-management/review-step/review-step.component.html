@@ -1,0 +1,47 @@
+
+<div class="review-step">
+  <h2>Review User Information</h2>
+  <div class="review-section">
+    <h3>Basic Information</h3>
+    <div class="review-grid">
+      <div class="review-item">
+        <label>Username</label><span>{{ basicInfo?.username }}</span>
+      </div>
+      <div class="review-item">
+        <label>Email</label><span>{{ basicInfo?.email }}</span>
+      </div>
+      <div class="review-item">
+        <label>Telephone</label><span>{{ basicInfo?.telephone }}</span>
+      </div>
+      <div class="review-item">
+        <label>Client ID</label><span>{{ basicInfo?.clientId }}</span>
+      </div>
+      <div class="review-item">
+        <label>Login Alias</label><span>{{ basicInfo?.loginAlias }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="review-section">
+    <h3>Assigned Groups</h3>
+    <div class="review-groups">
+      <div class="group-chip" *ngFor="let group of assignedGroups">{{ group.name }}<span class="group-type">({{ group.type }})</span></div>
+    </div>
+  </div>
+  <div class="review-section">
+    <h3>Unit Assignment</h3>
+    <div class="review-item">
+      <label>Unit</label><span>{{ unit }}</span>
+    </div>
+  </div>
+  <div class="review-section">
+    <h3>Security Settings</h3>
+    <div class="review-grid">
+      <div class="review-item">
+        <label>Require Password Change</label><span>{{ security?.requirePasswordChange ? 'Yes' : 'No' }}</span>
+      </div>
+      <div class="review-item">
+        <label>Two-Factor Authentication</label><span>{{ security?.enableTwoFactor ? 'Enabled' : 'Disabled' }}</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -119,7 +119,8 @@ $transition-duration = 0.3s
 @media screen and (max-width: 320px)
   .p-menubar
     display: block !important
-
+.card
+  padding-bottom 10rem
 .app-navbar
   padding 0.5rem 1rem
   box-shadow 0 2px 10px $shadow-color
@@ -642,6 +643,7 @@ $transition-duration = 0.3s
   transition padding $transition-duration ease-in-out
   padding 1rem
   margin-top 3rem
+  
   
   @media screen and (max-width: 450px)
     padding 0
@@ -1313,6 +1315,7 @@ html
 // Remove any overflow-y: auto from body, .layout-wrapper, .layout-main
 body, .layout-wrapper, .layout-main
   overflow-y: visible !important
+  overflow-x: hidden !important
 
 // =============================
 // Data Exchange Configuration Dashboard Page
@@ -1578,3 +1581,437 @@ body, .layout-wrapper, .layout-main
 
 .delete-rule-btn:hover
   color: #b71c1c
+
+// =============================
+// Data Exchange Config: Originating Offices Table Styles
+// =============================
+.originating-offices-header
+  display: flex
+  justify-content: space-between
+  align-items: center
+  margin-bottom: 1rem
+
+.add-office-btn
+  background: #1976d2
+  color: #fff
+  border: none
+  border-radius: 6px
+  padding: 0.5rem 1rem
+  font-size: 1rem
+  display: flex
+  align-items: center
+
+.originating-code-badge
+  background: #e3eefc
+  color: #1976d2
+  border-radius: 1.5rem
+  padding: 0.25rem 1rem
+  font-weight: 600
+  font-size: 1rem
+  display: inline-block
+
+// =============================
+// Data Exchange Config: Recipient Systems Table Styles
+// =============================
+.recipient-systems-header
+  display: flex
+  justify-content: space-between
+  align-items: center
+  margin-bottom: 1rem
+
+.add-system-btn
+  background: #1976d2
+  color: #fff
+  border: none
+  border-radius: 6px
+  padding: 0.5rem 1rem
+  font-size: 1rem
+  display: inline-flex
+  align-items: center
+
+.filter-btn
+  margin-right: 0.5rem
+  background: #fff
+  color: #1976d2
+  border: 1px solid #1976d2
+  border-radius: 6px
+  padding: 0.5rem 1rem
+  font-size: 1rem
+  display: inline-flex
+  align-items: center
+
+.recipient-code-badge
+  background: #e3eefc
+  color: #1976d2
+  border-radius: 1.5rem
+  padding: 0.25rem 1rem
+  font-weight: 600
+  font-size: 1rem
+  display: inline-block
+
+// =========================================
+// Create/Edit User Account Component Styles
+// =========================================
+app-create-user-account
+  .create-user-container
+    padding: 2rem
+    max-width: 1200px
+    margin: 0 auto
+
+    .form-title
+      text-align: center
+      color: #1976d2
+      margin-bottom: 2rem
+      font-size: 2rem
+      font-weight: 600
+
+    .step-content
+      margin: 2rem 0
+      min-height: 400px
+
+    .step-actions
+      display: flex
+      justify-content: flex-end
+      gap: 1rem
+      margin-top: 2rem
+
+    // Unit and Security Steps
+    .unit-step,
+    .security-step
+      padding: 2rem
+      background: #fff
+      border-radius: 8px
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
+
+      h2
+        color: #1976d2
+        margin-bottom: 1.5rem
+        font-size: 1.5rem
+        font-weight: 600
+
+      .form-field
+        margin-bottom: 1.5rem
+
+        label
+          display: block
+          margin-bottom: 0.5rem
+          color: #333
+          font-weight: 500
+
+        input[type="text"]
+          width: 100%
+          padding: 0.75rem
+          border: 1px solid #ddd
+          border-radius: 4px
+          font-size: 1rem
+
+        input[type="checkbox"]
+          margin-right: 0.5rem
+
+// =========================================
+// Review Step Component Styles
+// =========================================
+app-review-step
+  .review-step
+    padding: 2rem
+    background: #fff
+    border-radius: 8px
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
+
+    h2
+      color: #1976d2
+      margin-bottom: 2rem
+      font-size: 1.5rem
+      font-weight: 600
+
+    .review-section
+      margin-bottom: 2rem
+      padding-bottom: 1.5rem
+      border-bottom: 1px solid #eee
+
+      &:last-child
+        border-bottom: none
+        margin-bottom: 0
+        padding-bottom: 0
+
+      h3
+        color: #333
+        margin-bottom: 1rem
+        font-size: 1.2rem
+        font-weight: 500
+
+    .review-grid
+      display: grid
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr))
+      gap: 1.5rem
+
+    .review-item
+      label
+        display: block
+        color: #666
+        font-size: 0.9rem
+        margin-bottom: 0.25rem
+
+      span
+        display: block
+        color: #333
+        font-weight: 500
+
+    .review-groups
+      display: flex
+      flex-wrap: wrap
+      gap: 0.5rem
+
+    .group-chip
+      background: #e3eefc
+      color: #1976d2
+      padding: 0.5rem 1rem
+      border-radius: 16px
+      font-size: 0.9rem
+      display: inline-flex
+      align-items: center
+      gap: 0.5rem
+
+      .group-type
+        color: #666
+        font-size: 0.8rem
+
+// =========================================
+// End of Review Step Component Styles
+// =========================================
+// =========================================
+// Basic Info Form Component Styles
+// =========================================
+app-basic-info-form
+  .basic-info-form
+    width 100%
+    max-width 700px
+    margin 2.5rem auto 0 auto
+    padding 2.5rem 2rem 2rem 2rem
+    background #fff
+    border-radius 18px
+    box-shadow 0 4px 24px rgba(0, 0, 0, 0.07)
+    display flex
+    flex-direction column
+    gap 2.5rem
+
+  .profile-upload-section
+    display flex
+    flex-direction column
+    align-items center
+    gap 0.5rem
+
+  .profile-upload-wrapper
+    display flex
+    justify-content center
+    align-items center
+
+  .profile-upload-label
+    cursor pointer
+    display flex
+    align-items center
+    justify-content center
+
+  .profile-picture-preview
+    width 120px
+    height 120px
+    border-radius 50%
+    object-fit cover
+    border 3px solid #1976d2
+    box-shadow 0 2px 8px rgba(25, 118, 210, 0.1)
+    transition box-shadow 0.2s
+
+  .profile-upload-label:hover .profile-picture-preview
+    box-shadow 0 4px 16px rgba(25, 118, 210, 0.18)
+
+  .profile-placeholder-icon
+    width 120px
+    height 120px
+    border-radius 50%
+    background #e3eafc
+    color #1976d2
+    font-size 3rem
+    display flex
+    align-items center
+    justify-content center
+    border 3px dashed #b6c6e3
+
+  .form-title
+    text-align center
+    font-size 1.5rem
+    color #1976d2
+    margin-bottom 0.5rem
+    font-weight 700
+    letter-spacing 0.01em
+
+  .form-fields-2col
+    display grid
+    grid-template-columns 1fr 1fr
+    gap 2.5rem 2rem
+    width 100%
+
+  .form-fields-col
+    display flex
+    flex-direction column
+    gap 1.5rem
+
+  .form-field-row
+    display flex
+    flex-direction column
+    gap 0.5rem
+    width 100%
+
+  .form-field-row label
+    font-size 1rem
+    font-weight 500
+    color #333
+    margin-bottom 0.2rem
+    display flex
+    align-items center
+    gap 0.5rem
+
+  .input-label-icon
+    color #1976d2
+    font-size 1.2rem
+
+  .form-field-row .required
+    color #d32f2f
+    font-size 1.1em
+    margin-left 0.1em
+
+  input[pInputText]
+    height 2.75rem
+    padding 0.5rem 1rem
+    border-radius 8px
+    border 1.5px solid #bdbdbd
+    font-size 1.08rem
+    background #f7fafd
+    transition border-color 0.2s, box-shadow 0.2s
+    outline none
+    box-shadow 0 1px 3px rgba(25, 118, 210, 0.04)
+
+  input[pInputText]:focus
+    border-color #1976d2
+    background #fff
+    box-shadow 0 2px 8px rgba(25, 118, 210, 0.1)
+
+  .empty-row
+    height 2.75rem
+
+  .signature-section
+    display flex
+    flex-direction column
+    gap 0.5rem
+    align-items flex-start
+    margin-top 2.5rem
+    width 100%
+
+  .signature-upload-wrapper
+    display flex
+    align-items center
+    gap 1rem
+
+  .signature-upload-label
+    cursor pointer
+    display flex
+    align-items center
+    justify-content center
+    gap 1rem
+
+  .signature-upload-icon
+    color #1976d2
+    font-size 1.5rem
+    margin-right 0.5rem
+
+  .signature-preview
+    width 120px
+    height 48px
+    object-fit contain
+    border-radius 8px
+    border 2px solid #1976d2
+    background #f7fafd
+    box-shadow 0 2px 8px rgba(25, 118, 210, 0.1)
+    transition box-shadow 0.2s
+
+  .signature-upload-label:hover .signature-preview
+    box-shadow 0 4px 16px rgba(25, 118, 210, 0.18)
+
+  .signature-placeholder-icon
+    width 120px
+    height 48px
+    border-radius 8px
+    background #e3eafc
+    color #1976d2
+    font-size 2rem
+    display flex
+    align-items center
+    justify-content center
+    border 2px dashed #b6c6e3
+
+  .form-actions
+    display flex
+    justify-content flex-end
+    gap 1.2rem
+    margin-top 2.5rem
+    width 100%
+
+  .btn-primary
+    background #1976d2
+    color #fff
+    border none
+    border-radius 8px
+    padding 0.75rem 2.2rem
+    font-size 1.08rem
+    font-weight 600
+    cursor pointer
+    box-shadow 0 2px 8px rgba(25, 118, 210, 0.08)
+    transition background 0.2s, box-shadow 0.2s
+
+  .btn-primary:hover,
+  .btn-primary:focus
+    background #1251a3
+    box-shadow 0 4px 16px rgba(25, 118, 210, 0.18)
+
+  .btn-secondary
+    background #e3eafc
+    color #1976d2
+    border none
+    border-radius 8px
+    padding 0.75rem 2.2rem
+    font-size 1.08rem
+    font-weight 600
+    cursor pointer
+    box-shadow 0 2px 8px rgba(25, 118, 210, 0.04)
+    transition background 0.2s, box-shadow 0.2s
+
+  .btn-secondary:hover,
+  .btn-secondary:focus
+    background #d0e2ff
+    box-shadow 0 4px 16px rgba(25, 118, 210, 0.1)
+
+  @media (max-width: 900px)
+    .form-fields-2col
+      grid-template-columns 1fr
+      gap 2rem 0
+
+  @media (max-width: 700px)
+    .basic-info-form
+      max-width 98vw
+      padding 1.2rem 0.5rem
+// =========================================
+// End of Basic Info Form Component Styles
+// =========================================
+
+// =========================================
+// Validation Errors Component Styles
+// =========================================
+app-validation-errors
+  .validation-errors
+    margin-top: 0.25rem
+  .error-message  
+    color: #d32f2f
+    font-size: 0.875rem
+    margin-top: 0.25rem;
+// =========================================
+// End of Validation Errors Component Styles
+// =========================================

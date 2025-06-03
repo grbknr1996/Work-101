@@ -229,6 +229,20 @@ export class SidebarMenuService {
             routerLink: "/user-management/user-accounts",
             styleClass: currentPath.includes("user-accounts") ? "active" : "",
           },
+          {
+            id: "user-groups",
+            label: "Groups",
+            icon: "pi pi-users",
+            routerLink: "/user-management/groups",
+            styleClass: currentPath.includes("groups") ? "active" : "",
+          },
+          {
+            id: "user-units",
+            label: "Units",
+            icon: "pi pi-building",
+            routerLink: "/user-management/units",
+            styleClass: currentPath.includes("units") ? "active" : "",
+          },
         ],
       },
     ];

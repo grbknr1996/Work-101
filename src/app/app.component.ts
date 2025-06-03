@@ -4,9 +4,10 @@ import {
   ViewEncapsulation,
   OnInit,
 } from "@angular/core";
-import { Router } from "@angular/router";
+import { Router, NavigationEnd } from "@angular/router";
 import { v4 as uuidv4 } from "uuid";
 import { MenuItem } from "primeng/api";
+import { filter } from "rxjs/operators";
 
 import { environment } from "../environments/environment";
 import { MechanicsService } from "./_services/mechanics.service";
@@ -22,11 +23,12 @@ import { ColumnDefinition } from "./components/table/table.component";
   encapsulation: ViewEncapsulation.None,
   standalone: false,
   host: {
-    "[class]": "ms.getCurrentOffice()",
+    "[class]": "currentOffice",
   },
 })
 export class AppComponent implements OnInit {
   public environment = environment;
+  public currentOffice: string = "default";
   public hashSearches: string = localStorage.getItem(`hashSearches`);
   public layoutConfig: LayoutConfig;
   breadcrumbItems = [
@@ -168,7 +170,13 @@ export class AppComponent implements OnInit {
     public ms: MechanicsService,
     public http: HttpClient,
     private changeDetector: ChangeDetectorRef
-  ) {}
+  ) {
+    // Initialize currentOffice from the URL path
+    const pathSegments = window.location.pathname.split("/");
+    if (pathSegments.length >= 2) {
+      this.currentOffice = pathSegments[1] || "default";
+    }
+  }
 
   async ngOnInit() {
     // Initialize the layout configuration
@@ -186,11 +194,19 @@ export class AppComponent implements OnInit {
     this.initializeColumns();
 
     console.log("load data");
-    // Load data (  simulated)
+    // Load data (simulated)
     this.loadData();
 
-    // Force change detection
-    this.changeDetector.detectChanges();
+    // Subscribe to route changes to update currentOffice
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        const pathSegments = event.urlAfterRedirects.split("/");
+        if (pathSegments.length >= 2) {
+          this.currentOffice = pathSegments[1] || "default";
+          this.changeDetector.detectChanges();
+        }
+      });
   }
 
   private async initLayoutConfig() {

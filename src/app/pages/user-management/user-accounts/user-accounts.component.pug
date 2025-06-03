@@ -11,8 +11,8 @@ app-layout([config]="layoutConfig")
     [activeUsersPercentChange]="40",
     [inactiveUsersPercentChange]="41",
     [unconfirmedUsersPercentChange]="42",
-    [totalUsersPeriod]="'56'",
+    [totalUsersPeriod]="'56 months'",
     [activeUsersPeriod]="'30'",
     [inactiveUsersPeriod]="'30'",
     [unconfirmedUsersPeriod]="'30'")
-  app-table([columns]="tableColumns", [data]="tableData") 
+  app-table([columns]="tableColumns", [data]="tableData", (actionClick)="onActionClick($event.action, $event.item)") 

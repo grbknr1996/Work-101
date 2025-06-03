@@ -62,6 +62,33 @@ export class UserAccountsComponent implements OnInit {
     },
     { field: "createdOn", header: "Created On" },
     { field: "updatedOn", header: "Updated On" },
+    {
+      field: "actions",
+      header: "Actions",
+      display: "actions",
+      actions: [
+        {
+          label: "Edit User",
+          icon: "pi pi-pencil",
+          action: "edit",
+          severity: "info",
+        },
+        {
+          label: "Deactivate User",
+          icon: "pi pi-ban",
+          action: "deactivate",
+          severity: "warning",
+          visible: (item) => item.status === "Active",
+        },
+        {
+          label: "Resend Activation Email",
+          icon: "pi pi-envelope",
+          action: "resendActivation",
+          severity: "help",
+          visible: (item) => item.status === "Unconfirmed",
+        },
+      ],
+    },
   ];
 
   tableData = tableData;
@@ -98,7 +125,39 @@ export class UserAccountsComponent implements OnInit {
   }
 
   onCreateUser() {
-    // Placeholder for create user action
-    alert("Create User clicked!");
+    // Navigate to the create user account page
+    this.router.navigate(["create-user-account"], { relativeTo: this.route });
+  }
+
+  onActionClick(action: string, item: any) {
+    console.log("Action clicked:", action, item);
+    switch (action) {
+      case "edit":
+        this.editUser(item);
+        break;
+      case "deactivate":
+        this.deactivateUser(item);
+        break;
+      case "resendActivation":
+        this.resendActivationEmail(item);
+        break;
+    }
+  }
+
+  editUser(user: any) {
+    // Navigate to the edit user account page with the user ID
+    this.router.navigate(["edit-user-account", user.id], {
+      relativeTo: this.route,
+    });
+  }
+
+  deactivateUser(user: any) {
+    // TODO: Implement deactivate user functionality
+    console.log("Deactivate user:", user);
+  }
+
+  resendActivationEmail(user: any) {
+    // TODO: Implement resend activation email functionality
+    console.log("Resend activation email to:", user);
   }
 }

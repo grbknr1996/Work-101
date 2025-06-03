@@ -5,6 +5,6 @@
     <h1>User Accounts</h1>
     <button class="create-user-btn" pButton type="button" (click)="onCreateUser()">Create User</button>
   </div>
-  <app-user-stats [totalUsers]="totalUsers" [activeUsers]="activeUsers" [inactiveUsers]="inactiveUsers" [unconfirmedUsers]="unconfirmedUsers" [totalUsersPercentChange]="39" [activeUsersPercentChange]="40" [inactiveUsersPercentChange]="41" [unconfirmedUsersPercentChange]="42" [totalUsersPeriod]="'56'" [activeUsersPeriod]="'30'" [inactiveUsersPeriod]="'30'" [unconfirmedUsersPeriod]="'30'"></app-user-stats>
-  <app-table [columns]="tableColumns" [data]="tableData"> </app-table>
+  <app-user-stats [totalUsers]="totalUsers" [activeUsers]="activeUsers" [inactiveUsers]="inactiveUsers" [unconfirmedUsers]="unconfirmedUsers" [totalUsersPercentChange]="39" [activeUsersPercentChange]="40" [inactiveUsersPercentChange]="41" [unconfirmedUsersPercentChange]="42" [totalUsersPeriod]="'56 months'" [activeUsersPeriod]="'30'" [inactiveUsersPeriod]="'30'" [unconfirmedUsersPeriod]="'30'"></app-user-stats>
+  <app-table [columns]="tableColumns" [data]="tableData" (actionClick)="onActionClick($event.action, $event.item)"> </app-table>
 </app-layout>

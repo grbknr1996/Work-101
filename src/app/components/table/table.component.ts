@@ -1,4 +1,4 @@
-// table.component.ts
+// table.component.ts - Fixed version with cached menu items
 import { CommonModule } from "@angular/common";
 import {
   Component,
@@ -9,6 +9,7 @@ import {
   Output,
   TemplateRef,
   ViewChild,
+  ChangeDetectorRef,
 } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { ConfirmationService, MenuItem, MessageService } from "primeng/api";
@@ -21,6 +22,7 @@ import { InputTextModule } from "primeng/inputtext";
 import { MenuModule } from "primeng/menu";
 import { Table, TableModule } from "primeng/table";
 import { TagModule } from "primeng/tag";
+
 export interface ColumnDefinition {
   field: string;
   header: string;
@@ -62,7 +64,6 @@ export interface ColumnDefinition {
   customTemplate?: boolean;
   actions?: Action[];
   showAsDropdown?: boolean;
-  // Add missing properties
   showName?: boolean;
   nameField?: string;
   iconClass?: (value: any) => string;
@@ -133,36 +134,41 @@ export class TableComponent implements OnInit {
 
   @Output() actionClick = new EventEmitter<{ action: string; item: any }>();
 
-  constructor() {}
+  // Cache for menu items to prevent regeneration
+  private menuItemsCache = new Map<string, MenuItem[]>();
+
+  constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     if (!this.globalFilterFields.length && this.columns.length) {
       this.globalFilterFields = this.columns.map((col) => col.field);
     }
-    console.log("h");
+    console.log("Table component initialized");
   }
 
   onFilterChange(event: any, filterCallback: Function, column: string) {
     console.log(`Filtering ${column} by:`, event?.value);
-    // You can store the current filter value in a class property if needed
-    filterCallback(event?.value.value);
+    filterCallback(event?.value?.value || event?.value);
   }
+
   isArray(value: any): boolean {
     return Array.isArray(value);
   }
+
   clear(table: Table) {
     table.clear();
+    // Clear menu cache when table is cleared
+    this.menuItemsCache.clear();
   }
 
   filterGlobal(event: Event, table?: Table) {
-    console.log("called");
+    console.log("Global filter called");
     const value = (event.target as HTMLInputElement).value;
-
     this.table.filterGlobal(value, "contains");
-    console.log(this.table);
   }
 
   onActionClick(action: string, item: any) {
+    console.log("Action clicked:", action, "Item:", item);
     this.actionClick.emit({ action, item });
   }
 
@@ -191,12 +197,53 @@ export class TableComponent implements OnInit {
 
   getMenuItems(actions: Action[] | undefined, rowData: any): MenuItem[] {
     if (!actions) return [];
-    return actions
+
+    // Create a unique key for this row and actions combination
+    const cacheKey = `${JSON.stringify(rowData[this.dataKey] || rowData)}_${
+      actions.length
+    }`;
+
+    // Check if we already have cached menu items for this row
+    if (this.menuItemsCache.has(cacheKey)) {
+      // console.log("Using cached menu items for:", rowData);
+      return this.menuItemsCache.get(cacheKey)!;
+    }
+
+    // console.log("Generating NEW menu items for:", rowData);
+
+    const menuItems = actions
       .filter((action) => !action.visible || action.visible(rowData))
-      .map((action) => ({
-        label: action.label,
-        icon: action.icon,
-        command: () => this.onActionClick(action.action, rowData),
-      }));
+      .map((action) => {
+        const menuItem: MenuItem = {
+          label: action.label,
+          icon: action.icon,
+          command: (event: any) => {
+            //  console.log("Menu command executed for:", action.action, rowData);
+            this.handleMenuCommand(action.action, rowData);
+          },
+        };
+        return menuItem;
+      });
+
+    // Cache the menu items
+    this.menuItemsCache.set(cacheKey, menuItems);
+    // console.log("Cached menu items:", menuItems);
+
+    return menuItems;
+  }
+
+  // Separate method to handle menu commands
+  private handleMenuCommand(action: string, rowData: any) {
+    // Use microtask to ensure proper execution
+    queueMicrotask(() => {
+      console.log("Executing action:", action, "for item:", rowData);
+      this.actionClick.emit({ action, item: rowData });
+      this.cdr.detectChanges();
+    });
+  }
+
+  // Method to clear cache when data changes
+  ngOnChanges() {
+    this.menuItemsCache.clear();
   }
 }

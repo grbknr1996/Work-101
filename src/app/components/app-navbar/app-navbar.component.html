@@ -2,7 +2,7 @@
 <p-menubar [style]="{'position': 'fixed','z-index':1000,'width':'100%'}" [model]="items" styleClass="app-navbar" [autoDisplay]="false">
   <ng-template pTemplate="start">
     <div class="navbar-start">
-      <button class="sidebar-toggle p-button-text p-button-rounded" pButton type="button" icon="pi pi-bars" (click)="toggleSidebar()" *ngIf="showSidebar"></button><a class="navbar-brand" href="#"><img class="navbar-logo" *ngIf="logo" [src]="logo" alt="Logo"><span class="navbar-title">{{ title }}</span></a>
+      <button class="sidebar-toggle p-button-text p-button-rounded" pButton type="button" icon="pi pi-bars" (click)="toggleSidebar()" *ngIf="showSidebar"></button><a class="navbar-brand" [routerLink]="['/', ms.getCurrentOffice(), selectedLanguage]"><img class="navbar-logo" *ngIf="logo" [src]="logo" alt="Logo"><span class="navbar-title">{{ title }}</span></a>
     </div>
   </ng-template>
   <ng-template pTemplate="end">

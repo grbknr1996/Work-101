@@ -37,6 +37,13 @@ const routes: Routes = [
       ).then((m) => m.ForceChangePasswordComponent),
     canActivate: [AuthGuard],
   },
+  {
+    path: ":officeCode/:langCode/logged-out",
+    loadComponent: () =>
+      import("./pages/auth-signout/auth-signout.component").then(
+        (m) => m.AuthSignoutComponent
+      ),
+  },
   // Main application routes with office and language parameters
   {
     path: ":officeCode/:langCode/dashboard",
@@ -79,16 +86,32 @@ const routes: Routes = [
     component: DefaultRedirectComponent,
     pathMatch: "full",
   },
+  // {
+  //   path: ":officeCode/:langCode/user-management",
+  //   redirectTo: ":officeCode/:langCode/user-management/user-accounts",
+  //   pathMatch: "full",
+  // },
+  // {
+  //   path: ":officeCode/:langCode/user-management/user-accounts/create-user-account",
+  //   loadComponent: () =>
+  //     import(
+  //       "./pages/user-management/create-user-account/create-user-account.component"
+  //     ).then((m) => m.CreateUserAccountComponent),
+  //   canActivate: [AuthGuard],
+  // },
+  // {
+  //   path: ":officeCode/:langCode/user-management/user-accounts",
+  //   loadChildren: () =>
+  //     import("./pages/user-management/user-accounts/user-accounts.module").then(
+  //       (m) => m.UserAccountsModule
+  //     ),
+  //   canActivate: [AuthGuard],
+  // },
   {
     path: ":officeCode/:langCode/user-management",
-    redirectTo: ":officeCode/:langCode/user-management/user-accounts",
-    pathMatch: "full",
-  },
-  {
-    path: ":officeCode/:langCode/user-management/user-accounts",
     loadChildren: () =>
-      import("./pages/user-management/user-accounts/user-accounts.module").then(
-        (m) => m.UserAccountsModule
+      import("./pages/user-management/user-management.module").then(
+        (m) => m.UserManagementModule
       ),
     canActivate: [AuthGuard],
   },
@@ -98,6 +121,7 @@ const routes: Routes = [
       import("./pages/data-exchange-config/data-exchange-config.module").then(
         (m) => m.DataExchangeConfigModule
       ),
+    canActivate: [AuthGuard],
   },
   {
     path: ":officeCode/:langCode/notfound",
@@ -107,10 +131,10 @@ const routes: Routes = [
       ),
   },
 
-  {
-    path: "**",
-    redirectTo: "default/en/notfound",
-  },
+  // {
+  //   path: "**",
+  //   redirectTo: "default/en/notfound",
+  // },
 ];
 
 @NgModule({

@@ -42,7 +42,7 @@
               (input)="dt.filterGlobal($event.target.value, 'contains')",
               placeholder='Search keyword'
             )
-    
+
     ng-template(pTemplate='header')
       tr
         th(
@@ -53,7 +53,7 @@
           .flex.items-center
             | {{ col.header }}
             p-sortIcon(*ngIf='col.sortable', [field]='col.field')
-            
+
             // Text Filter
             p-columnFilter(
               *ngIf="col.filterType === 'text'",
@@ -61,7 +61,7 @@
               [field]='col.filterField || col.field',
               [display]="col.filterDisplay || 'menu'"
             )
-            
+
             // Numeric Filter
             p-columnFilter(
               *ngIf="col.filterType === 'numeric'",
@@ -70,7 +70,7 @@
               [display]="col.filterDisplay || 'menu'",
               [currency]='col.currency'
             )
-            
+
             // Date Filter
             p-columnFilter(
               *ngIf="col.filterType === 'date'",
@@ -79,7 +79,7 @@
               [field]='col.filterField || col.field',
               [display]="col.filterDisplay || 'menu'"
             )
-            
+
             // Boolean Filter
             p-columnFilter(
               *ngIf="col.filterType === 'boolean'",
@@ -87,7 +87,7 @@
               [field]='col.filterField || col.field',
               [display]="col.filterDisplay || 'menu'"
             )
-            
+
             // Dropdown Filter
             p-columnFilter(
               *ngIf="col.filterType === 'dropdown'",
@@ -95,7 +95,11 @@
               [matchMode]="col.filterMatchMode || 'equals'",
               [display]="col.filterDisplay || 'menu'"
             )
-              ng-template(pTemplate='filter', let-value, let-filter='filterCallback')
+              ng-template(
+                pTemplate='filter',
+                let-value,
+                let-filter='filterCallback'
+              )
                 p-dropdown(
                   [ngModel]='value',
                   [options]='col.dropdownOptions || []',
@@ -113,7 +117,7 @@
                       [value]='option.value',
                       [severity]='col.severity ? col.severity(option.value) : undefined'
                     )
-            
+
             // MultiSelect Filter
             p-columnFilter(
               *ngIf="col.filterType === 'multiselect'",
@@ -124,7 +128,11 @@
               [showOperator]='false',
               [showAddButton]='false'
             )
-              ng-template(pTemplate='filter', let-value, let-filter='filterCallback')
+              ng-template(
+                pTemplate='filter',
+                let-value,
+                let-filter='filterCallback'
+              )
                 p-multiSelect(
                   [ngModel]='value',
                   [options]='col.dropdownOptions || []',
@@ -147,7 +155,7 @@
                         style='width: 32px'
                       )
                       span {{ option[col.optionLabel || "name"] }}
-            
+
             // Range Filter
             p-columnFilter(
               *ngIf="col.filterType === 'range'",
@@ -158,7 +166,11 @@
               [showOperator]='false',
               [showAddButton]='false'
             )
-              ng-template(pTemplate='filter', let-value, let-filter='filterCallback')
+              ng-template(
+                pTemplate='filter',
+                let-value,
+                let-filter='filterCallback'
+              )
                 p-slider(
                   [ngModel]='value',
                   [range]='true',
@@ -168,24 +180,24 @@
                 .flex.items-center.px-2
                   span(*ngIf='!value') 0
                   span(*ngIf='value && isArray(value)') {{ value[0] }} - {{ value[1] }}
-        
+
         th(*ngIf='showActionsColumn', style='width: 8rem') Actions
-    
+
     ng-template(pTemplate='body', let-rowData)
       tr
         td(*ngFor='let col of columns')
           // Text Display
           ng-container(*ngIf="col.display === 'text' || !col.display")
             | {{ getValue(rowData, col.field) }}
-          
+
           // Date Display
           ng-container(*ngIf="col.display === 'date'")
             | {{ getValue(rowData, col.field) | date : (col.dateFormat || "MM/dd/yyyy") }}
-          
+
           // Currency Display
           ng-container(*ngIf="col.display === 'currency'")
             | {{ getValue(rowData, col.field) | currency : (col.currency || "USD") : "symbol" }}
-          
+
           // Avatar Display
           ng-container(*ngIf="col.display === 'avatar'")
             .flex.items-center.gap-2
@@ -194,41 +206,42 @@
                 [alt]='col.field',
                 style='width: 32px; height: 32px; border-radius: 50%; object-fit: cover;'
               )
-              span(*ngIf='col.showName') {{ getValue(rowData, col.nameField || "name") }}
-          
+              span(*ngIf='col.showName')
+                | {{ getValue(rowData, col.nameField || "name") }}
+
           // Tag Display
           ng-container(*ngIf="col.display === 'tag'")
             p-tag(
               [value]='getValue(rowData, col.field)',
               [severity]='col.severity ? col.severity(getValue(rowData, col.field)) : "success"'
             )
-          
+
           // Progress Display
           ng-container(*ngIf="col.display === 'progress'")
             p-progressBar(
               [value]='getValue(rowData, col.field)',
               [showValue]='false'
             )
-          
+
           // Icon Display
           ng-container(*ngIf="col.display === 'icon'")
             i.pi(
               [ngClass]='col.iconClass ? col.iconClass(getValue(rowData, col.field)) : ""'
             )
-          
+
           // Boolean Display
           ng-container(*ngIf="col.display === 'boolean'")
             .text-center
               i.pi(
                 [ngClass]="{'text-green-500 pi-check-circle': getValue(rowData, col.field), 'text-red-500 pi-times-circle': !getValue(rowData, col.field)}"
               )
-          
+
           // Custom Template
           ng-container(*ngIf="col.display === 'custom'")
             ng-container(
               *ngTemplateOutlet='customCellTemplate; context: { $implicit: rowData, field: col.field }'
             )
-          
+
           // Actions Display
           ng-container(*ngIf="col.display === 'actions' && col.actions")
             .flex.justify-content-center
@@ -246,7 +259,7 @@
                   appendTo='body',
                   [model]='getMenuItems(col.actions, rowData)'
                 )
-              
+
               // Actions as separate buttons
               ng-container(*ngIf='col.showAsDropdown === false')
                 .flex.gap-2
@@ -258,13 +271,14 @@
                       [class]='action.severity ? "p-button-" + action.severity : ""',
                       (click)='onActionClick(action.action, rowData); $event.stopPropagation()'
                     )
-        
+
         // Actions Column
         td(*ngIf='showActionsColumn')
           ng-container(
             *ngTemplateOutlet='actionTemplate; context: { $implicit: rowData }'
           )
-    
-    ng-template(pTemplate='emptymessage')
+
+    // Empty message template
+    ng-template(pTemplate="emptymessage")
       tr
-        td(colspan='100') {{ emptyMessage }}
+        td(colspan="100") {{ emptyMessage }}

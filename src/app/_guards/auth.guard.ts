@@ -21,6 +21,7 @@ export class AuthGuard {
     "sign-up",
     "forgot-password",
     "force-change-password",
+    "logged-out",
   ];
 
   constructor(

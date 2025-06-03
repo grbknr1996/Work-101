@@ -1,0 +1,43 @@
+.review-step
+  h2 Review User Information
+  .review-section
+    h3 Basic Information
+    .review-grid
+      .review-item
+        label Username
+        span {{ basicInfo?.username }}
+      .review-item
+        label Email
+        span {{ basicInfo?.email }}
+      .review-item
+        label Telephone
+        span {{ basicInfo?.telephone }}
+      .review-item
+        label Client ID
+        span {{ basicInfo?.clientId }}
+      .review-item
+        label Login Alias
+        span {{ basicInfo?.loginAlias }}
+
+  .review-section
+    h3 Assigned Groups
+    .review-groups
+      .group-chip(*ngFor="let group of assignedGroups")
+        | {{ group.name }}
+        span.group-type ({{ group.type }})
+
+  .review-section
+    h3 Unit Assignment
+    .review-item
+      label Unit
+      span {{ unit }}
+
+  .review-section
+    h3 Security Settings
+    .review-grid
+      .review-item
+        label Require Password Change
+        span {{ security?.requirePasswordChange ? 'Yes' : 'No' }}
+      .review-item
+        label Two-Factor Authentication
+        span {{ security?.enableTwoFactor ? 'Enabled' : 'Disabled' }}

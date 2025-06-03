@@ -1,0 +1,10 @@
+
+<div class="validation-errors" *ngIf="control?.invalid &amp;&amp; (control?.dirty || control?.touched)">
+  <div class="error-message" *ngIf="control?.errors?.['required']">This field is required</div>
+  <div class="error-message" *ngIf="control?.errors?.['email']">Please enter a valid email address</div>
+  <div class="error-message" *ngIf="control?.errors?.['minlength']">
+    This field must be at least
+     {{ control?.errors?.['minlength'].requiredLength }} characters
+  </div>
+  <div class="error-message" *ngIf="control?.errors?.['pattern']">Please enter a valid format</div>
+</div>

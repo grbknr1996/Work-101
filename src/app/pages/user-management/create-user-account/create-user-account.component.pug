@@ -1,0 +1,87 @@
+app-layout
+  app-breadcrumbs([items]="breadcrumbItems")
+  .create-user-container
+    h1.form-title {{ isEditMode ? 'Edit User' : 'Create User' }}
+    p-steps([model]="steps", [activeIndex]="activeStep")
+    form([formGroup]="userForm")
+      .step-content
+        ng-container([ngSwitch]="activeStep")
+          //- Basic Info Step
+          app-basic-info-form(
+            *ngSwitchCase="0",
+            [formGroup]="userForm.get('basicInfo')"
+          )
+
+          //- Groups Step
+          app-group-assignment(
+            *ngSwitchCase="1",
+            [availableGroups]="availableGroups",
+            [assignedGroups]="userForm.get('assignedGroups').value",
+            (assignedGroupsChange)="onAssignedGroupsChange($event)"
+          )
+
+          //- Unit Step
+          .unit-step(*ngSwitchCase="2")
+            h2 Unit Assignment
+            .form-field
+              label(for="unit") Select Unit
+              input(
+                type="text",
+                id="unit",
+                formControlName="unit",
+                placeholder="Enter unit name"
+              )
+
+          //- Security Step
+          .security-step(
+            *ngSwitchCase="3",
+            [formGroup]="userForm.get('security')"
+          )
+            h2 Security Settings
+            .form-field
+              label
+                input(
+                  type="checkbox",
+                  formControlName="requirePasswordChange"
+                )
+                | Require password change on first login
+            .form-field
+              label
+                input(
+                  type="checkbox",
+                  formControlName="enableTwoFactor"
+                )
+                | Enable two-factor authentication
+
+          //- Review Step
+          app-review-step(
+            *ngSwitchCase="4",
+            [basicInfo]="userForm.get('basicInfo').value",
+            [assignedGroups]="userForm.get('assignedGroups').value",
+            [unit]="userForm.get('unit').value",
+            [security]="userForm.get('security').value"
+          )
+
+      .step-actions
+        button.p-button-secondary(
+          pButton,
+          type="button",
+          label="Previous",
+          (click)="prevStep()",
+          *ngIf="activeStep > 0"
+        )
+        button.p-button-primary(
+          pButton,
+          type="button",
+          label="Next",
+          (click)="nextStep()",
+          *ngIf="activeStep < steps.length - 1",
+          [disabled]="!canProceed()"
+        )
+        button.p-button-success(
+          pButton,
+          type="button",
+          [label]="isEditMode ? 'Update User' : 'Create User'",
+          (click)="saveUser()",
+          *ngIf="activeStep === steps.length - 1"
+        )

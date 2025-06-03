@@ -1,0 +1,128 @@
+form([formGroup]="formGroup")
+  .profile-upload-section
+    label.section-title Profile Picture
+    .profile-upload-wrapper
+      label.profile-upload-label(for="profilePicture")
+        img(
+          *ngIf="formGroup.get('profilePicture').value; else placeholder",
+          [src]="formGroup.get('profilePicture').value",
+          class="profile-picture-preview",
+          alt="Profile Picture Preview"
+        )
+        ng-template(#placeholder)
+          span.profile-placeholder-icon.pi.pi-user
+        input(
+          type="file",
+          id="profilePicture",
+          accept="image/*",
+          (change)="onProfilePictureChange($event)",
+          hidden
+        )
+
+  h2.form-title Basic Information
+
+  .form-fields-2col
+    .form-fields-col
+      .form-field-row
+        label(for="username")
+          i.pi.pi-user.input-label-icon
+          | Username 
+          span.required *
+        input(
+          pInputText,
+          id="username",
+          formControlName="username",
+          [ngClass]=`{
+            'ng-invalid':
+              formGroup.get('username')?.invalid &&
+              formGroup.get('username')?.touched
+          }`
+        )
+        app-validation-errors([control]="formGroup.get('username')")
+
+      .form-field-row
+        label(for="email")
+          i.pi.pi-envelope.input-label-icon
+          | Email 
+          span.required *
+        input(
+          pInputText,
+          id="email",
+          formControlName="email",
+          [ngClass]=`{
+            'ng-invalid':
+              formGroup.get('email')?.invalid &&
+              formGroup.get('email')?.touched
+          }`
+        )
+        app-validation-errors([control]="formGroup.get('email')")
+
+      .form-field-row
+        label(for="telephone")
+          i.pi.pi-phone.input-label-icon
+          | Telephone
+        input(
+          pInputText,
+          id="telephone",
+          formControlName="telephone",
+          [ngClass]=`{
+            'ng-invalid':
+              formGroup.get('telephone')?.invalid &&
+              formGroup.get('telephone')?.touched
+          }`
+        )
+        app-validation-errors([control]="formGroup.get('telephone')")
+
+    .form-fields-col
+      .form-field-row
+        label(for="clientId")
+          i.pi.pi-id-card.input-label-icon
+          | Client ID
+        input(
+          pInputText
+          id="clientId"
+          formControlName="clientId"
+          [ngClass]=`{
+            'ng-invalid':
+              formGroup.get('clientId')?.invalid &&
+              formGroup.get('clientId')?.touched
+          }`
+        )
+        app-validation-errors([control]="formGroup.get('clientId')")
+
+      .form-field-row
+        label(for="loginAlias")
+          i.pi.pi-user-edit.input-label-icon
+          | Login Alias
+        input(
+          pInputText
+          id="loginAlias"
+          formControlName="loginAlias"
+          [ngClass]=`{
+            'ng-invalid':
+              formGroup.get('loginAlias')?.invalid &&
+              formGroup.get('loginAlias')?.touched
+          }`
+        )
+        app-validation-errors([control]="formGroup.get('loginAlias')")
+
+      .form-field-row.empty-row
+
+  .signature-section
+    label.section-title Signature Upload
+    .signature-upload-wrapper
+      label.signature-upload-label(for="signatureImage")
+        span.signature-upload-icon.pi.pi-upload
+        img(
+          *ngIf="formGroup.get('signatureImage').value",
+          [src]="formGroup.get('signatureImage').value",
+          class="signature-preview",
+          alt="Signature Preview"
+        )
+        input(
+          type="file",,
+          id="signatureImage",
+          accept="image/*",
+          (change)="onSignatureChange($event)",
+          hidden
+        )

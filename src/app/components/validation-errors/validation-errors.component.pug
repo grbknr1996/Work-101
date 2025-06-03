@@ -1,0 +1,16 @@
+div(
+  *ngIf="control?.invalid && (control?.dirty || control?.touched)",
+  class="validation-errors"
+)
+  div(*ngIf="control?.errors?.['required']", class="error-message")
+    | This field is required
+  
+  div(*ngIf="control?.errors?.['email']", class="error-message")
+    | Please enter a valid email address
+  
+  div(*ngIf="control?.errors?.['minlength']", class="error-message")
+    | This field must be at least
+    |  {{ control?.errors?.['minlength'].requiredLength }} characters
+  
+  div(*ngIf="control?.errors?.['pattern']", class="error-message")
+    | Please enter a valid format

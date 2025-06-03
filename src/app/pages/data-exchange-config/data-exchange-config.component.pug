@@ -12,3 +12,47 @@ app-layout([config]="layoutConfig")
   .data-exchange-config-heading(*ngIf="!showExclusionRules")
     h1 Data Exchange Configuration
     p This is the Data Exchange Configuration page. Add your configuration UI here.
+
+  // Recipient Systems Table
+  .recipient-systems-header(*ngIf="showRecipientSystems")
+    h2
+      i.pi.pi-database(style="margin-right: 0.5rem;")
+      | Recipient Systems
+    div
+      button.filter-btn(type="button")
+        i.pi.pi-filter(style="margin-right: 0.5rem;")
+        | Filter
+      button.add-system-btn(type="button", (click)="onAddSystemClick()")
+        i.pi.pi-plus(style="margin-right: 0.5rem;")
+        | Add System
+  ng-template(#recipientCodeCell, let-row)
+    span.recipient-code-badge {{ row.code }}
+  app-table(
+    *ngIf="showRecipientSystems",
+    [columns]="recipientSystemsColumns",
+    [data]="recipientSystemsData",
+    [rows]="10",
+    [paginator]="false",
+    (actionClick)="onRecipientSystemAction($event)",
+    [customCellTemplate]="recipientCodeCell"
+  )
+
+  // Originating Offices Table
+  .originating-offices-header(*ngIf="showOriginatingOffices")
+    h2
+      i.pi.pi-building(style="margin-right: 0.5rem;")
+      | Originating Offices
+    button.add-office-btn(type="button", (click)="onAddOfficeClick()")
+      i.pi.pi-plus(style="margin-right: 0.5rem;")
+      | Add Office
+  ng-template(#originatingCodeCell, let-row)
+    span.originating-code-badge {{ row.code }}
+  app-table(
+    *ngIf="showOriginatingOffices",
+    [columns]="originatingOfficesColumns",
+    [data]="originatingOfficesData",
+    [rows]="10",
+    [paginator]="false",
+    (actionClick)="onOriginatingOfficeAction($event)",
+    [customCellTemplate]="originatingCodeCell"
+  )

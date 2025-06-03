@@ -1,0 +1,42 @@
+
+<app-layout>
+  <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
+  <div class="create-user-container">
+    <h1 class="form-title">{{ isEditMode ? 'Edit User' : 'Create User' }}</h1>
+    <p-steps [model]="steps" [activeIndex]="activeStep"></p-steps>
+    <form [formGroup]="userForm">
+      <div class="step-content">
+        <ng-container [ngSwitch]="activeStep">
+          <app-basic-info-form *ngSwitchCase="0" [formGroup]="userForm.get('basicInfo')"></app-basic-info-form>
+          <app-group-assignment *ngSwitchCase="1" [availableGroups]="availableGroups" [assignedGroups]="userForm.get('assignedGroups').value" (assignedGroupsChange)="onAssignedGroupsChange($event)"></app-group-assignment>
+          <div class="unit-step" *ngSwitchCase="2">
+            <h2>Unit Assignment</h2>
+            <div class="form-field">
+              <label for="unit">Select Unit</label>
+              <input type="text" id="unit" formControlName="unit" placeholder="Enter unit name">
+            </div>
+          </div>
+          <div class="security-step" *ngSwitchCase="3" [formGroup]="userForm.get('security')">
+            <h2>Security Settings</h2>
+            <div class="form-field">
+              <label>
+                <input type="checkbox" formControlName="requirePasswordChange">Require password change on first login
+              </label>
+            </div>
+            <div class="form-field">
+              <label>
+                <input type="checkbox" formControlName="enableTwoFactor">Enable two-factor authentication
+              </label>
+            </div>
+          </div>
+          <app-review-step *ngSwitchCase="4" [basicInfo]="userForm.get('basicInfo').value" [assignedGroups]="userForm.get('assignedGroups').value" [unit]="userForm.get('unit').value" [security]="userForm.get('security').value"></app-review-step>
+        </ng-container>
+      </div>
+      <div class="step-actions">
+        <button class="p-button-secondary" pButton type="button" label="Previous" (click)="prevStep()" *ngIf="activeStep &gt; 0"></button>
+        <button class="p-button-primary" pButton type="button" label="Next" (click)="nextStep()" *ngIf="activeStep &lt; steps.length - 1" [disabled]="!canProceed()"></button>
+        <button class="p-button-success" pButton type="button" [label]="isEditMode ? 'Update User' : 'Create User'" (click)="saveUser()" *ngIf="activeStep === steps.length - 1"></button>
+      </div>
+    </form>
+  </div>
+</app-layout>
