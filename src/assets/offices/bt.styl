@@ -1,0 +1,279 @@
+body 
+    //background-color: green
+
+// Bhutan Office Specific Styles
+.bt
+  // Color Variables
+  $bhutan-primary = #FF4E00  // Bhutan Saffron/Orange
+  $bhutan-secondary = #FFCD00  // Bhutan Yellow
+  $bhutan-accent = #003366  // Bhutan Deep Blue
+  $bhutan-text = #333333
+  $bhutan-light = #F5F5F5
+  $bhutan-hover = rgba(255, 78, 0, 0.1)
+  $bhutan-gradient = linear-gradient(90deg, #FF4E00 0%, #FF7E30 100%)
+  $bhutan-card-shadow = 0 4px 24px rgba(255, 78, 0, 0.08)
+  $bhutan-radius = 12px
+
+  // PrimeNG Theme Overrides
+  :root
+    --p-primary-color: $bhutan-primary !important
+    --p-primary-color-text: #ffffff !important
+    --p-primary-50: lighten($bhutan-primary, 45%) !important
+    --p-primary-100: lighten($bhutan-primary, 40%) !important
+    --p-primary-200: lighten($bhutan-primary, 30%) !important
+    --p-primary-300: lighten($bhutan-primary, 20%) !important
+    --p-primary-400: lighten($bhutan-primary, 10%) !important
+    --p-primary-500: $bhutan-primary !important
+    --p-primary-600: darken($bhutan-primary, 10%) !important
+    --p-primary-700: darken($bhutan-primary, 20%) !important
+    --p-primary-800: darken($bhutan-primary, 30%) !important
+    --p-primary-900: darken($bhutan-primary, 40%) !important
+    --p-surface-0: #fff !important
+    --p-surface-100: #f8f5f0 !important
+    --p-surface-200: #e9e5df !important
+    --p-surface-300: #dee2e6 !important
+    --p-surface-400: #fff !important
+    --p-surface-500: #fff !important
+    --p-text-color: $bhutan-text !important
+    --p-text-color-secondary: #6c757d !important
+    --p-primary-text-color: #fff !important
+    --p-secondary-text-color: #6c757d !important
+    --p-border-radius: 12px
+    --p-input-border-color: #ced4da
+    --p-input-hover-border-color: $bhutan-primary
+    --p-focus-ring-color: rgba(255, 78, 0, 0.2)
+    --p-highlight-bg: rgba(255, 78, 0, 0.08)
+    --p-highlight-text-color: $bhutan-primary
+    --p-menuitem-text-color: #fff !important
+    --p-menuitem-hover-bg: rgba(255,255,255,0.08) !important
+    --p-menuitem-active-bg: $bhutan-accent !important
+    --p-submenu-bg: #fff !important
+    --p-submenu-text-color: #495057 !important
+    --p-submenu-hover-bg: $bhutan-hover !important
+    --p-menu-separator: #e9ecef !important
+
+  // Header and Navigation
+  .app-navbar
+    background-color: $bhutan-gradient
+    box-shadow: 0 4px 16px rgba(255, 78, 0, 0.15) !important
+    border-radius: 0px !important
+    .navbar-title
+      color: var(--p-surface-0) !important
+      font-weight: 700 !important
+      text-transform: uppercase !important
+      letter-spacing: 1.5px !important
+      font-size: 1.1rem
+    .p-menubar-item-label
+      color: var(--p-surface-0) !important    
+    .p-button-text
+      color: var(--p-surface-0) !important
+  // Sidebar
+  .sidebar-container
+    background: #f8f5f0 !important
+    border-right: 1px solid #e9e5df !important
+    border-top-right-radius: $bhutan-radius
+    box-shadow: 2px 0 12px rgba(255, 78, 0, 0.04)
+    .menu-item
+      &.menu-item-active > .menu-link
+        background: $bhutan-hover !important
+        color: $bhutan-primary !important
+        font-weight: 600
+        &::before
+          background: $bhutan-accent !important
+      .menu-link
+        border-radius: 8px
+        margin: 2px 0
+        transition: background 0.2s, color 0.2s
+        &:hover
+          background: $bhutan-hover !important
+          color: $bhutan-accent !important
+        &.active-route
+          background: $bhutan-accent !important
+          color: #fff !important
+          border-left: 4px solid $bhutan-secondary !important
+
+  // Buttons
+  .p-button
+    &.p-button-primary
+      background: $bhutan-gradient !important
+      border: none !important
+      border-radius: 8px
+      font-weight: 600
+      letter-spacing: 0.5px
+      box-shadow: 0 2px 8px rgba(255,78,0,0.12)
+      &:hover
+        background: linear-gradient(90deg, #E64800 0%, #FF6B20 100%) !important
+        color: #fff !important
+
+  // Cards and Containers
+  .widget-container, .p-card
+    border: none !important
+    background: #fff !important
+    box-shadow: $bhutan-card-shadow !important
+    border-radius: $bhutan-radius
+    margin-bottom: 1.5rem
+    .widget-title, .p-card-title
+      color: $bhutan-primary !important
+      font-weight: 700 !important
+      font-size: 1.1rem
+      letter-spacing: 0.5px
+    .p-card-header
+      background: #f8f5f0 !important
+      border-bottom: 1px solid #e9e5df !important
+      border-top-left-radius: $bhutan-radius
+      border-top-right-radius: $bhutan-radius
+
+  // Tables
+  .p-datatable
+    .p-datatable-thead > tr > th
+      background: #f8f5f0 !important
+      color: $bhutan-primary !important
+      font-weight: 700 !important
+      border-bottom: 2px solid $bhutan-primary !important
+      font-size: 1rem
+      letter-spacing: 0.5px
+    .p-datatable-tbody > tr > td
+      background: #fff !important
+      font-size: 0.98rem
+      border-bottom: 1px solid #e9e5df !important
+
+  // Dashboard Specific
+  .dashboard-heading
+    background: $bhutan-gradient !important
+    color: #fff !important
+    border-radius: $bhutan-radius
+    box-shadow: 0 2px 12px rgba(255, 78, 0, 0.12)
+    .dashboard-title
+      color: #fff !important
+      font-weight: 700 !important
+      text-transform: uppercase !important
+      letter-spacing: 1.5px !important
+      font-size: 2rem
+    .dashboard-subtitle
+      color: #f8f5f0 !important
+      font-size: 1.1rem
+      font-weight: 400
+
+  // User Stats
+  .user-stat-card
+    border: 1px solid #e9e5df !important
+    border-radius: $bhutan-radius
+    box-shadow: 0 2px 8px rgba(255,78,0,0.06)
+    background: #fff !important
+    &.selected
+      border: 2px solid $bhutan-accent !important
+      box-shadow: 0 0 0 2px $bhutan-accent !important
+    .stat-label
+      color: $bhutan-primary
+      font-weight: 600
+    .stat-count
+      color: $bhutan-accent
+      font-size: 1.5rem
+    .stat-change
+      color: $bhutan-secondary
+      font-weight: 600
+
+  // Form Elements
+  .p-inputtext:focus
+    border-color: $bhutan-primary !important
+    box-shadow: 0 0 0 0.2rem rgba(255,78,0,0.12) !important
+    border-radius: 8px
+
+  // Badges and Tags
+  .p-tag
+    &.p-tag-success
+      background: $bhutan-accent !important
+      color: #fff !important
+      border-radius: 8px
+      font-weight: 600
+
+  // Footer
+  .layout-footer
+    background: #f8f5f0 !important
+    border-top: 1px solid #e9e5df !important
+    border-bottom-left-radius: $bhutan-radius
+    border-bottom-right-radius: $bhutan-radius
+    p
+      color: $bhutan-primary !important
+      font-weight: 600
+      letter-spacing: 0.5px
+      font-size: 1rem
+      margin: 0.5rem 0
+
+  // PrimeNG Specific Components
+  .p-menubar
+    background: $bhutan-gradient !important
+    border: none !important
+    padding: 0.5rem 1.5rem !important
+    border-radius: $bhutan-radius
+    box-shadow: 0 2px 12px rgba(255,78,0,0.12)
+    .p-menubar-root-list > .p-menuitem > .p-menuitem-link
+      padding: 0.75rem 1.25rem !important
+      color: #fff !important
+      border-radius: 8px !important
+      font-weight: 600
+      margin: 0 0.25rem !important
+      transition: background 0.2s, color 0.2s
+      .p-menuitem-text, .p-menuitem-icon, .p-submenu-icon
+        color: #fff !important
+      &:not(.p-disabled):hover
+        background: $bhutan-accent !important
+        color: #fff !important
+      &.p-menuitem-active
+        background: $bhutan-secondary !important
+        color: $bhutan-primary !important
+    .p-submenu-list
+      background: #fff !important
+      border: 1px solid #e9e5df !important
+      border-radius: 10px !important
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08) !important
+      .p-menuitem-link
+        color: $bhutan-primary !important
+        &:hover
+          background: $bhutan-hover !important
+          color: $bhutan-accent !important
+        &.p-menuitem-active
+          background: $bhutan-accent !important
+          color: #fff !important
+
+  // Sidebar Menu Enhancement
+  .sidebar-container
+    .menu-list
+      .menu-item
+        .menu-link
+          padding: 0.75rem 1.25rem !important
+          color: var(--p-text-color) !important
+          transition: background-color 0.2s, color 0.2s !important
+          border-radius: 0 !important
+          
+          &:hover
+            background-color: var(--p-submenu-hover-bg) !important
+            color: var(--p-primary-500) !important
+            
+            .menu-icon
+              color: var(--p-primary-500) !important
+          
+          &.active-route
+            background-color: var(--p-highlight-bg) !important
+            color: var(--p-primary-500) !important
+            border-left: 3px solid var(--p-primary-500) !important
+            
+            .menu-icon
+              color: var(--p-primary-500) !important
+
+        .submenu
+          .submenu-item
+            .submenu-link
+              padding: 0.75rem 1.75rem !important
+              color: var(--p-text-color) !important
+              transition: background-color 0.2s, color 0.2s !important
+              
+              &:hover
+                background-color: var(--p-submenu-hover-bg) !important
+                color: var(--p-primary-500) !important
+              
+              &.active-route
+                background-color: var(--p-highlight-bg) !important
+                color: var(--p-primary-500) !important
+  .add-office-btn
+    background: $bhutan-primary !important

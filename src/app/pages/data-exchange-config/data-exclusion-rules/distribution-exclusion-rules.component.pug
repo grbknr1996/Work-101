@@ -1,12 +1,13 @@
 .exclusion-rules-header
   h2 Distribution Exclusion Rules
-  button.add-rule-btn(type="button", (click)="showAddRuleForm = true")
+  button.add-rule-btn(type="button", (click)="addRule()")
     i.pi.pi-plus
     |  Add Rule
 
 app-add-exclusion-rule(
   *ngIf="showAddRuleForm",
-  (close)="showAddRuleForm = false"
+  [data]="data",
+  [onClose]="onFormSubmitted"
 )
 
 ng-template(#customCell, let-row, let-field="field")
@@ -24,7 +25,7 @@ ng-template(#customCell, let-row, let-field="field")
 
 app-table(
   [columns]="columns",
-  [data]="data",
+  [data]="distributionExclusionRulesData",
   [rows]="10",
   [paginator]="false",
   (actionClick)="onActionClick($event)",

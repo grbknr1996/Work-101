@@ -3,38 +3,36 @@ import {
   Component,
   ViewEncapsulation,
   OnInit,
-} from "@angular/core";
-import { Router, NavigationEnd } from "@angular/router";
-import { v4 as uuidv4 } from "uuid";
-import { MenuItem } from "primeng/api";
-import { filter } from "rxjs/operators";
+} from '@angular/core';
+import { Router } from '@angular/router';
+import { v4 as uuidv4 } from 'uuid';
+import { MenuItem } from 'primeng/api';
 
-import { environment } from "../environments/environment";
-import { MechanicsService } from "./_services/mechanics.service";
-import { HttpClient } from "@angular/common/http";
-import { instanceType } from "./utils";
-import { wipoImage } from "./_imports/wipoImage";
-import { LayoutConfig } from "./components/app-layout/app-layout.component";
-import { ColumnDefinition } from "./components/table/table.component";
+import { environment } from '../environments/environment';
+import { MechanicsService } from './_services/mechanics.service';
+import { HttpClient } from '@angular/common/http';
+import { instanceType } from './utils';
+import { wipoImage } from './_imports/wipoImage';
+import { LayoutConfig } from './components/app-layout/app-layout.component';
+import { ColumnDefinition } from './components/table/table.component';
 
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
+  selector: 'app-root',
+  templateUrl: './app.component.html',
   encapsulation: ViewEncapsulation.None,
   standalone: false,
   host: {
-    "[class]": "currentOffice",
+    '[class]': 'ms.getCurrentOffice()',
   },
 })
 export class AppComponent implements OnInit {
   public environment = environment;
-  public currentOffice: string = "default";
   public hashSearches: string = localStorage.getItem(`hashSearches`);
   public layoutConfig: LayoutConfig;
   breadcrumbItems = [
-    { label: "Categories", routerLink: "/categories" },
-    { label: "Electronics", routerLink: "/categories/electronics" },
-    { label: "Smartphones", routerLink: "/categories/electronics/smartphones" },
+    { label: 'Categories', routerLink: '/categories' },
+    { label: 'Electronics', routerLink: '/categories/electronics' },
+    { label: 'Smartphones', routerLink: '/categories/electronics/smartphones' },
   ];
   tableData: any[] = [];
 
@@ -47,67 +45,67 @@ export class AppComponent implements OnInit {
   initializeColumns() {
     this.tableColumns = [
       {
-        field: "id",
-        header: "ID",
+        field: 'id',
+        header: 'ID',
         sortable: true,
-        width: "5rem",
+        width: '5rem',
       },
       {
-        field: "name",
-        header: "Name",
+        field: 'name',
+        header: 'Name',
         sortable: true,
-        filterType: "text",
+        filterType: 'text',
       },
       {
-        field: "email",
-        header: "Email",
+        field: 'email',
+        header: 'Email',
         sortable: true,
-        filterType: "text",
+        filterType: 'text',
       },
       {
-        field: "joinDate",
-        header: "Join Date",
+        field: 'joinDate',
+        header: 'Join Date',
         sortable: true,
-        display: "date",
-        dateFormat: "MM/dd/yyyy",
-        filterType: "date",
+        display: 'date',
+        dateFormat: 'MM/dd/yyyy',
+        filterType: 'date',
       },
       {
-        field: "status",
-        header: "Status",
-        display: "tag",
-        filterType: "dropdown",
+        field: 'status',
+        header: 'Status',
+        display: 'tag',
+        filterType: 'dropdown',
         dropdownOptions: [
-          { label: "Active", value: "active" },
-          { label: "Inactive", value: "inactive" },
-          { label: "Pending", value: "pending" },
+          { label: 'Active', value: 'active' },
+          { label: 'Inactive', value: 'inactive' },
+          { label: 'Pending', value: 'pending' },
         ],
         severity: (value) => {
           switch (value) {
-            case "active":
-              return "success";
-            case "inactive":
-              return "danger";
-            case "pending":
-              return "warn";
+            case 'active':
+              return 'success';
+            case 'inactive':
+              return 'danger';
+            case 'pending':
+              return 'warn';
             default:
-              return "info";
+              return 'info';
           }
         },
       },
       {
-        field: "actions",
-        header: "Actions",
-        display: "actions",
+        field: 'actions',
+        header: 'Actions',
+        display: 'actions',
         actions: [
-          { label: "Edit", icon: "pi pi-pencil", action: "edit" },
+          { label: 'Edit', icon: 'pi pi-pencil', action: 'edit' },
           {
-            label: "Delete",
-            icon: "pi pi-trash",
-            action: "delete",
-            severity: "danger",
+            label: 'Delete',
+            icon: 'pi pi-trash',
+            action: 'delete',
+            severity: 'danger',
           },
-          { label: "View", icon: "pi pi-eye", action: "view" },
+          { label: 'View', icon: 'pi pi-eye', action: 'view' },
         ],
       },
     ];
@@ -121,24 +119,24 @@ export class AppComponent implements OnInit {
     this.tableData = [
       {
         id: 1,
-        name: "John Doe",
-        email: "john@example.com",
+        name: 'John Doe',
+        email: 'john@example.com',
         joinDate: new Date(2022, 5, 15),
-        status: "active",
+        status: 'active',
       },
       {
         id: 2,
-        name: "Jane Smith",
-        email: "jane@example.com",
+        name: 'Jane Smith',
+        email: 'jane@example.com',
         joinDate: new Date(2023, 2, 10),
-        status: "inactive",
+        status: 'inactive',
       },
       {
         id: 3,
-        name: "Bob Johnson",
-        email: "bob@example.com",
+        name: 'Bob Johnson',
+        email: 'bob@example.com',
         joinDate: new Date(2021, 8, 22),
-        status: "pending",
+        status: 'pending',
       },
       // Add more sample data as needed
     ];
@@ -150,17 +148,17 @@ export class AppComponent implements OnInit {
 
     // Handle different actions
     switch (event.action) {
-      case "edit":
+      case 'edit':
         // Open edit form/dialog
-        console.log("Editing:", event.item);
+        console.log('Editing:', event.item);
         break;
-      case "delete":
+      case 'delete':
         // Show confirmation dialog
-        console.log("Deleting:", event.item);
+        console.log('Deleting:', event.item);
         break;
-      case "view":
+      case 'view':
         // Navigate to details page
-        console.log("Viewing:", event.item);
+        console.log('Viewing:', event.item);
         break;
     }
   }
@@ -170,17 +168,11 @@ export class AppComponent implements OnInit {
     public ms: MechanicsService,
     public http: HttpClient,
     private changeDetector: ChangeDetectorRef
-  ) {
-    // Initialize currentOffice from the URL path
-    const pathSegments = window.location.pathname.split("/");
-    if (pathSegments.length >= 2) {
-      this.currentOffice = pathSegments[1] || "default";
-    }
-  }
+  ) {}
 
   async ngOnInit() {
     // Initialize the layout configuration
-    console.log("onitcalled");
+    console.log('onitcalled');
     //await this.initLayoutConfig();
 
     // Handle routing
@@ -193,20 +185,12 @@ export class AppComponent implements OnInit {
     // Initialize columns
     this.initializeColumns();
 
-    console.log("load data");
-    // Load data (simulated)
+    console.log('load data');
+    // Load data (  simulated)
     this.loadData();
 
-    // Subscribe to route changes to update currentOffice
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => {
-        const pathSegments = event.urlAfterRedirects.split("/");
-        if (pathSegments.length >= 2) {
-          this.currentOffice = pathSegments[1] || "default";
-          this.changeDetector.detectChanges();
-        }
-      });
+    // Force change detection
+    this.changeDetector.detectChanges();
   }
 
   private async initLayoutConfig() {
@@ -216,9 +200,9 @@ export class AppComponent implements OnInit {
     // Create header items
     const headerItems: MenuItem[] = [];
     headerItems.push({
-      label: this.ms.translate("home.link.label"),
-      icon: "pi pi-home",
-      routerLink: this.makeRouterLink("datacoverage"),
+      label: this.ms.translate('home.link.label'),
+      icon: 'pi pi-home',
+      routerLink: this.makeRouterLink('datacoverage'),
     });
 
     // Add menu items from configuration
@@ -237,9 +221,9 @@ export class AppComponent implements OnInit {
 
     // Add datacoverage
     sidebarItems.push({
-      label: this.ms.translate("home.link.label"),
-      icon: "pi pi-home",
-      routerLink: this.makeRouterLink("datacoverage"),
+      label: this.ms.translate('home.link.label'),
+      icon: 'pi pi-home',
+      routerLink: this.makeRouterLink('datacoverage'),
     });
 
     // Add other modules with sub-items
@@ -252,16 +236,16 @@ export class AppComponent implements OnInit {
         };
 
         // Add sub-items for main modules
-        if (["patents", "designs", "trademarks"].includes(item)) {
+        if (['patents', 'designs', 'trademarks'].includes(item)) {
           menuItem.items = [
             {
-              label: this.ms.translate("menu.search"),
-              icon: "pi pi-search",
+              label: this.ms.translate('menu.search'),
+              icon: 'pi pi-search',
               routerLink: this.makeRouterLink(`${item}/search`),
             },
             {
-              label: this.ms.translate("menu.browse"),
-              icon: "pi pi-list",
+              label: this.ms.translate('menu.browse'),
+              icon: 'pi pi-list',
               routerLink: this.makeRouterLink(`${item}/browse`),
             },
           ];
@@ -275,23 +259,23 @@ export class AppComponent implements OnInit {
 
     // Add about page
     sidebarItems.push({
-      label: this.ms.translate("wipo.publish.about.label"),
-      icon: "pi pi-info-circle",
-      routerLink: this.makeRouterLink("about"),
+      label: this.ms.translate('wipo.publish.about.label'),
+      icon: 'pi pi-info-circle',
+      routerLink: this.makeRouterLink('about'),
     });
 
     // Initialize the layout config
     this.layoutConfig = {
-      appTitle: "WIPO Central",
+      appTitle: 'WIPO Central',
       showHeader: true,
       showSidebar: false,
       headerItems: headerItems,
       sidebarItems: sidebarItems,
-      footerText: "© WIPO " + new Date().getFullYear(),
+      footerText: '© WIPO ' + new Date().getFullYear(),
       fixedHeader: true,
       fixedSidebar: true,
       sidebarCollapsed: false,
-      theme: "light",
+      theme: 'light',
       logo: wipoImage,
     };
   }
@@ -304,15 +288,15 @@ export class AppComponent implements OnInit {
 
   private getIconForModule(module: string): string {
     const iconMap = {
-      datacoverage: "pi pi-home",
-      patents: "pi pi-file",
-      designs: "pi pi-palette",
-      trademarks: "pi pi-tag",
-      gidatabase: "pi pi-globe",
-      portfolios: "pi pi-briefcase",
+      datacoverage: 'pi pi-home',
+      patents: 'pi pi-file',
+      designs: 'pi pi-palette',
+      trademarks: 'pi pi-tag',
+      gidatabase: 'pi pi-globe',
+      portfolios: 'pi pi-briefcase',
     };
 
-    return iconMap[module] || "pi pi-list";
+    return iconMap[module] || 'pi pi-list';
   }
 
   ngAfterViewChecked() {

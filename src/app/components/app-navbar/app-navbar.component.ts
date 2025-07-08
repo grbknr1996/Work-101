@@ -5,27 +5,27 @@ import {
   EventEmitter,
   OnInit,
   OnDestroy,
-} from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { RouterModule, Router } from "@angular/router";
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, Router } from '@angular/router';
 // PrimeNG imports
-import { MenubarModule } from "primeng/menubar";
-import { ButtonModule } from "primeng/button";
-import { MenuItem } from "primeng/api";
-import { DropdownModule } from "primeng/dropdown";
-import { FormsModule } from "@angular/forms";
-import { BadgeModule } from "primeng/badge";
-import { OverlayPanelModule } from "primeng/overlaypanel";
-import { MenuModule } from "primeng/menu";
-import { instanceType } from "../../utils";
-import { configuration } from "../../../environments/environment";
-import { TranslateModule } from "@ngx-translate/core";
+import { MenubarModule } from 'primeng/menubar';
+import { ButtonModule } from 'primeng/button';
+import { MenuItem } from 'primeng/api';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormsModule } from '@angular/forms';
+import { BadgeModule } from 'primeng/badge';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { MenuModule } from 'primeng/menu';
+import { instanceType } from '../../utils';
+import { configuration } from '../../../environments/environment';
+import { TranslateModule } from '@ngx-translate/core';
 
 // Services
-import { MechanicsService } from "../../_services/mechanics.service";
-import { QueryParamsService } from "src/app/_services/queryParams.service";
-import { AuthService, User } from "src/app/_services/auth.service";
-import { Subscription } from "rxjs";
+import { MechanicsService } from '../../_services/mechanics.service';
+import { QueryParamsService } from 'src/app/_services/queryParams.service';
+import { AuthService, User } from 'src/app/_services/auth.service';
+import { Subscription } from 'rxjs';
 
 interface MobileMenuItem {
   label: string;
@@ -35,7 +35,7 @@ interface MobileMenuItem {
 }
 
 @Component({
-  selector: "app-navbar",
+  selector: 'app-navbar',
   standalone: true,
   imports: [
     CommonModule,
@@ -49,7 +49,7 @@ interface MobileMenuItem {
     MenuModule,
     TranslateModule,
   ],
-  templateUrl: "./app-navbar.component.html",
+  templateUrl: './app-navbar.component.html',
 })
 export class AppNavbarComponent implements OnInit, OnDestroy {
   @Input() items: MenuItem[] = [];
@@ -57,16 +57,16 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
   @Input() showLanguageSelector: boolean = true;
   @Output() toggleSidebarEvent = new EventEmitter<boolean>();
 
-  title: string = "IPAS Central";
-  logo: string = "";
+  title: string = 'IPAS Central';
+  logo: string = '';
   selectedLanguage: string;
   languageOptions: { label: string; value: string }[] = [];
   userMenuItems: MenuItem[] = [];
   notificationItems: MenuItem[] = [];
   mobileMenuItems: MobileMenuItem[] = [];
   notificationCount: number = 2;
-  userName: string = "";
-  userInitial: string = "";
+  userName: string = '';
+  userInitial: string = '';
   currentUser: User | null = null;
   isMobileView: boolean = false;
   isSidebarOpen = false;
@@ -82,11 +82,11 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
     this.checkScreenSize();
     this.logo = this.ms.getLogo();
     this.title = this.ms.getOfficeName();
-    window.addEventListener("resize", this.onResize.bind(this));
+    window.addEventListener('resize', this.onResize.bind(this));
   }
 
   private async initializeLanguageFromUrl(): Promise<void> {
-    const pathSegments = window.location.pathname.split("/");
+    const pathSegments = window.location.pathname.split('/');
 
     if (pathSegments.length >= 3 && pathSegments[2]) {
       const urlLang = pathSegments[2];
@@ -111,7 +111,7 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     try {
-      const pathSegments = window.location.pathname.split("/");
+      const pathSegments = window.location.pathname.split('/');
       if (pathSegments.length >= 3) {
         const officeCode = pathSegments[1];
         const langCode = pathSegments[2];
@@ -134,23 +134,23 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
       this.userSubscription = this.auth.currentUser$.subscribe((user) => {
         this.currentUser = user;
         if (user) {
-          this.userName = user.name || user.email || "User";
+          this.userName = user.name || user.email || 'User';
           this.userInitial = this.userName.charAt(0).toUpperCase();
         } else {
-          this.userName = "Guest";
-          this.userInitial = "G";
+          this.userName = 'Guest';
+          this.userInitial = 'G';
         }
       });
 
       this.initializeMenuItems();
       this.loadNotifications();
     } catch (error) {
-      console.error("Error during initialization:", error);
+      console.error('Error during initialization:', error);
     }
   }
 
   ngOnDestroy() {
-    window.removeEventListener("resize", this.onResize.bind(this));
+    window.removeEventListener('resize', this.onResize.bind(this));
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
     }
@@ -166,7 +166,7 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
 
   closeMobileMenu() {
     const mobileMenuCloseButton = document.querySelector(
-      ".mobile-menu .p-overlaypanel-close"
+      '.mobile-menu .p-overlaypanel-close'
     ) as HTMLElement;
     if (mobileMenuCloseButton) {
       mobileMenuCloseButton.click();
@@ -198,10 +198,10 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
       }
     } else {
       this.languageOptions = [
-        { label: "English", value: "en" },
-        { label: "Français", value: "fr" },
+        { label: 'English', value: 'en' },
+        { label: 'Français', value: 'fr' },
       ];
-      this.selectedLanguage = "en";
+      this.selectedLanguage = 'en';
     }
   }
 
@@ -227,10 +227,10 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
       const currentOffice = this.ms.getCurrentOffice();
       await this.ms.switchLang(newLang);
 
-      const urlParts = this.router.url.split("/");
+      const urlParts = this.router.url.split('/');
       if (urlParts.length >= 3) {
         urlParts[2] = newLang;
-        const newUrl = urlParts.join("/");
+        const newUrl = urlParts.join('/');
 
         try {
           await this.router.navigateByUrl(newUrl);
@@ -243,28 +243,28 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
         window.location.href = `/${currentOffice}/${newLang}/${defaultModule}`;
       }
     } catch (error) {
-      console.error("Error changing language:", error);
+      console.error('Error changing language:', error);
     }
   }
 
   private initializeMenuItems(): void {
     this.userMenuItems = [
       {
-        label: this.ms.translate("user.profile"),
-        icon: "pi pi-user",
-        routerLink: "/profile",
+        label: this.ms.translate('user.profile'),
+        icon: 'pi pi-user',
+        routerLink: '/profile',
       },
       {
-        label: this.ms.translate("settings"),
-        icon: "pi pi-cog",
-        routerLink: "/settings",
+        label: this.ms.translate('settings'),
+        icon: 'pi pi-cog',
+        routerLink: '/settings',
       },
       {
         separator: true,
       },
       {
-        label: this.ms.translate("logout"),
-        icon: "pi pi-sign-out",
+        label: this.ms.translate('logout'),
+        icon: 'pi pi-sign-out',
         command: () => this.logout(),
       },
     ];
@@ -276,8 +276,8 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
         if (!item.separator) {
           this.mobileMenuItems.push({
             label: this.ms.translate(item.label),
-            icon: item.icon || "",
-            routerLink: item.routerLink || "",
+            icon: item.icon || '',
+            routerLink: item.routerLink || '',
             command: item.command ? () => item.command({} as any) : undefined,
           });
         }
@@ -303,16 +303,16 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
   loadNotifications() {
     this.notificationItems = [
       {
-        label: this.ms.translate("notification.new_user"),
-        icon: "pi pi-user-plus",
-        styleClass: "notification-item unread",
+        label: this.ms.translate('notification.new_user'),
+        icon: 'pi pi-user-plus',
+        styleClass: 'notification-item unread',
         escape: false,
         command: () => {},
       },
       {
-        label: this.ms.translate("notification.system_update"),
-        icon: "pi pi-info-circle",
-        styleClass: "notification-item unread",
+        label: this.ms.translate('notification.system_update'),
+        icon: 'pi pi-info-circle',
+        styleClass: 'notification-item unread',
         escape: false,
         command: () => {},
       },
@@ -322,7 +322,7 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
   markAllNotificationsAsRead() {
     this.notificationItems.forEach((item) => {
       if (item.styleClass) {
-        item.styleClass = item.styleClass.replace("unread", "").trim();
+        item.styleClass = item.styleClass.replace('unread', '').trim();
       }
     });
     this.notificationCount = 0;

@@ -1,8 +1,8 @@
 .add-exclusion-rule
   h2 Add Distribution Exclusion Rule
   p-steps.p-mb-4(
-    [model]="steps"
-    [(activeIndex)]="step"
+    [model]="steps",
+    [(activeIndex)]="step",
     [readonly]="true"
   )
 
@@ -13,42 +13,42 @@
         .p-col-6
           label Originating Office
           p-dropdown(
-            [options]="offices"
-            formControlName="office"
+            [options]="offices",
+            formControlName="office",
             placeholder="Select Office"
           )
         .p-col-6
           label Recipient System
           p-dropdown(
-            [options]="systems"
-            formControlName="system"
+            [options]="systems",
+            formControlName="system",
             placeholder="Select System"
           )
       .p-mt-3
         label IP Category Types
         p-multiSelect(
-          [options]="ipCategories"
-          formControlName="categories"
-          defaultLabel="Select IP Categories"
+          [options]="ipCategories",
+          formControlName="categories",
+          defaultLabel="Select IP Categories",
           display="chip"
         )
         p-message(
-          *ngIf="form1.value.categories.length"
-          severity="success"
+          *ngIf="form1.value.categories.length",
+          severity="success",
           text="You have selected {{ form1.value.categories.length }} IP categories. Each category can have its own specific exclusion rules."
         )
       .p-mt-4.p-d-flex.p-jc-between
         button.p-button-secondary(
-          pButton
-          type="button"
-          label="Cancel"
-          (click)="close.emit()"
+          pButton,
+          type="button",
+          label="Cancel",
+          (click)="onClose()"
         )
         button(
-          pButton
-          type="button"
-          label="Next"
-          (click)="nextStep()"
+          pButton,
+          type="button",
+          label="Next",
+          (click)="nextStep()",
           [disabled]="!form1.valid"
         )
 
@@ -56,7 +56,7 @@
   div(*ngIf="step === 1")
     p-tabView
       p-tabPanel(
-        *ngFor="let cat of selectedCategories"
+        *ngFor="let cat of selectedCategories",
         [header]="getCategoryLabel(cat)"
       )
         .p-mb-3
@@ -64,8 +64,8 @@
         .p-grid
           .p-col-6
             p-checkbox(
-              [(ngModel)]="statusExclusions[cat].unpublished"
-              binary="true"
+              [(ngModel)]="statusExclusions[cat].unpublished",
+              binary="true",
               inputId="unpublished-{{ cat }}"
             )
             label.p-ml-2(for="unpublished-{{ cat }}") Exclude Unpublished Applications
@@ -74,8 +74,8 @@
               | {{ getCategoryLabel(cat) }} applications will not be shared.
           .p-col-6
             p-checkbox(
-              [(ngModel)]="statusExclusions[cat].unregistered"
-              binary="true"
+              [(ngModel)]="statusExclusions[cat].unregistered",
+              binary="true",
               inputId="unregistered-{{ cat }}"
             )
             label.p-ml-2(for="unregistered-{{ cat }}") Exclude Unregistered Rights
@@ -84,15 +84,15 @@
               | {{ getCategoryLabel(cat) }} rights will not be shared.
     .p-mt-4.p-d-flex.p-jc-between
       button.p-button-secondary(
-        pButton
-        type="button"
-        label="Back"
+        pButton,
+        type="button",
+        label="Back",
         (click)="prevStep()"
       )
       button(
-        pButton
-        type="button"
-        label="Next"
+        pButton,
+        type="button",
+        label="Next",
         (click)="nextStep()"
       )
 
@@ -100,7 +100,7 @@
   div(*ngIf="step === 2")
     p-tabView
       p-tabPanel(
-        *ngFor="let cat of selectedCategories"
+        *ngFor="let cat of selectedCategories",
         [header]="getCategoryLabel(cat)"
       )
         .p-mb-3
@@ -118,38 +118,38 @@
                 *ngFor="let event of eventCodes; let i = index"
               )
                 p-checkbox(
-                  [(ngModel)]="eventExclusions[cat]"
-                  [value]="event.code"
-                  [binary]="false"
+                  [(ngModel)]="eventExclusions[cat]",
+                  [value]="event.code",
+                  [binary]="false",
                   inputId="event-{{ cat }}-{{ event.code }}"
                 )
                 label.p-ml-2(for="event-{{ cat }}-{{ event.code }}") {{ event.code }}: {{ event.label }}
           p-accordionTab(header="Document Exclusions")
             p-checkbox(
-              [(ngModel)]="enableDocumentExclusions[cat]"
-              binary="true"
+              [(ngModel)]="enableDocumentExclusions[cat]",
+              binary="true",
               inputId="enable-doc-{{ cat }}"
             )
             label.p-ml-2(for="enable-doc-{{ cat }}") Enable Document Exclusions
             div(*ngIf="enableDocumentExclusions[cat]").p-mt-2
               label Select Document Types to Exclude
               p-multiSelect(
-                [options]="documentTypes"
-                [(ngModel)]="documentExclusions[cat]"
-                defaultLabel="Select Document Types"
+                [options]="documentTypes",
+                [(ngModel)]="documentExclusions[cat]",
+                defaultLabel="Select Document Types",
                 display="chip"
               )
     .p-mt-4.p-d-flex.p-jc-between
       button.p-button-secondary(
-        pButton
-        type="button"
-        label="Back"
+        pButton,
+        type="button",
+        label="Back",
         (click)="prevStep()"
       )
       button(
-        pButton
-        type="button"
-        label="Next"
+        pButton,
+        type="button",
+        label="Next",
         (click)="nextStep()"
       )
 
@@ -185,13 +185,14 @@
           td {{ enableDocumentExclusions[cat] ? documentExclusions[cat]?.length || 0 : 0 }}
     .p-mt-4.p-d-flex.p-jc-between
       button.p-button-secondary(
-        pButton
-        type="button"
-        label="Back"
+        pButton,
+        type="button",
+        label="Back",
         (click)="prevStep()"
       )
       button.p-button-success(
-        pButton
-        type="button"
-        label="Add Rule"
+        pButton,
+        type="button",
+        label="Add Rule",
+        (click)="addRule()"
       )

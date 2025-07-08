@@ -1,55 +1,55 @@
 // table.component.ts - Fixed version with cached menu items
-import { CommonModule } from "@angular/common";
+import { CommonModule } from '@angular/common';
 import {
   Component,
-  ContentChild,
   EventEmitter,
   Input,
   OnInit,
   Output,
+  Signal,
   TemplateRef,
   ViewChild,
   ChangeDetectorRef,
-} from "@angular/core";
-import { FormsModule } from "@angular/forms";
-import { ConfirmationService, MenuItem, MessageService } from "primeng/api";
-import { ButtonModule } from "primeng/button";
-import { DataViewModule } from "primeng/dataview";
-import { DropdownChangeEvent, DropdownModule } from "primeng/dropdown";
-import { IconFieldModule } from "primeng/iconfield";
-import { InputIconModule } from "primeng/inputicon";
-import { InputTextModule } from "primeng/inputtext";
-import { MenuModule } from "primeng/menu";
-import { Table, TableModule } from "primeng/table";
-import { TagModule } from "primeng/tag";
+} from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MenuItem } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { DataViewModule } from 'primeng/dataview';
+import { DropdownModule } from 'primeng/dropdown';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
+import { MenuModule } from 'primeng/menu';
+import { Table, TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
 
 export interface ColumnDefinition {
   field: string;
   header: string;
   filterType?:
-    | "text"
-    | "numeric"
-    | "date"
-    | "boolean"
-    | "dropdown"
-    | "multiselect"
-    | "range"
-    | "none";
+    | 'text'
+    | 'numeric'
+    | 'date'
+    | 'boolean'
+    | 'dropdown'
+    | 'multiselect'
+    | 'range'
+    | 'none';
   filterField?: string;
   sortable?: boolean;
   width?: string;
   display?:
-    | "text"
-    | "date"
-    | "currency"
-    | "avatar"
-    | "tag"
-    | "progress"
-    | "icon"
-    | "boolean"
-    | "custom"
-    | "actions";
-  filterDisplay?: "menu" | "row";
+    | 'text'
+    | 'date'
+    | 'currency'
+    | 'avatar'
+    | 'tag'
+    | 'progress'
+    | 'icon'
+    | 'boolean'
+    | 'custom'
+    | 'actions';
+  filterDisplay?: 'menu' | 'row';
   filterMatchMode?: string;
   dateFormat?: string;
   currency?: string;
@@ -60,7 +60,7 @@ export interface ColumnDefinition {
   filterOptions?: any;
   severity?: (
     value: any
-  ) => "success" | "info" | "warn" | "danger" | "secondary" | undefined;
+  ) => 'success' | 'info' | 'warn' | 'danger' | 'secondary' | undefined;
   customTemplate?: boolean;
   actions?: Action[];
   showAsDropdown?: boolean;
@@ -74,20 +74,20 @@ export interface Action {
   icon?: string;
   action: string;
   severity?:
-    | "success"
-    | "info"
-    | "warn"
-    | "warning"
-    | "danger"
-    | "secondary"
-    | "contrast"
-    | "help";
+    | 'success'
+    | 'info'
+    | 'warn'
+    | 'warning'
+    | 'danger'
+    | 'secondary'
+    | 'contrast'
+    | 'help';
   visible?: (item: any) => boolean;
 }
 
 @Component({
-  selector: "app-table",
-  templateUrl: "./table.component.html",
+  selector: 'app-table',
+  templateUrl: './table.component.html',
   imports: [
     CommonModule,
     TableModule,
@@ -104,10 +104,10 @@ export interface Action {
   standalone: true,
 })
 export class TableComponent implements OnInit {
-  @ViewChild("dt") table!: Table;
+  @ViewChild('dt') table!: Table;
 
   @Input() columns: ColumnDefinition[] = [];
-  @Input() data: any[] = [];
+  @Input() data: Signal<any[]> | any[] = [];
   @Input() rows: number = 10;
   @Input() rowsPerPageOptions: number[] = [10, 25, 50];
   @Input() loading: boolean = false;
@@ -115,21 +115,21 @@ export class TableComponent implements OnInit {
   @Input() globalFilterFields: string[] = [];
   @Input() showCurrentPageReport: boolean = false;
   @Input() currentPageReportTemplate: string =
-    "Showing {first} to {last} of {totalRecords} entries";
+    'Showing {first} to {last} of {totalRecords} entries';
   @Input() resizableColumns: boolean = false;
   @Input() reorderableColumns: boolean = false;
   @Input() responsive: boolean = true;
   @Input() scrollable: boolean = false;
-  @Input() scrollHeight: string = "";
+  @Input() scrollHeight: string = '';
   @Input() lazy: boolean = false;
   @Input() totalRecords: number = 0;
-  @Input() dataKey: string = "id";
+  @Input() dataKey: string = 'id';
   @Input() showClearButton: boolean = true;
-  @Input() emptyMessage: string = "No records found.";
+  @Input() emptyMessage: string = 'No records found.';
   @Input() showActionsColumn: boolean = false;
   @Input() customCellTemplate: any;
   @Input() actionTemplate: any;
-  @Input() locale: string = "en";
+  @Input() locale: string = 'en';
   @Input() onLazyLoadEvent: EventEmitter<any> = new EventEmitter();
 
   @Output() actionClick = new EventEmitter<{ action: string; item: any }>();
@@ -143,11 +143,13 @@ export class TableComponent implements OnInit {
     if (!this.globalFilterFields.length && this.columns.length) {
       this.globalFilterFields = this.columns.map((col) => col.field);
     }
-    console.log("Table component initialized");
+  }
+
+  isSignal(value: any): value is Signal<any[]> {
+    return typeof value === 'function';
   }
 
   onFilterChange(event: any, filterCallback: Function, column: string) {
-    console.log(`Filtering ${column} by:`, event?.value);
     filterCallback(event?.value?.value || event?.value);
   }
 
@@ -162,13 +164,11 @@ export class TableComponent implements OnInit {
   }
 
   filterGlobal(event: Event, table?: Table) {
-    console.log("Global filter called");
     const value = (event.target as HTMLInputElement).value;
-    this.table.filterGlobal(value, "contains");
+    this.table.filterGlobal(value, 'contains');
   }
 
   onActionClick(action: string, item: any) {
-    console.log("Action clicked:", action, "Item:", item);
     this.actionClick.emit({ action, item });
   }
 
@@ -178,7 +178,7 @@ export class TableComponent implements OnInit {
     }
 
     // Handle nested properties (e.g., 'user.name')
-    const props = field.split(".");
+    const props = field.split('.');
     let value = rowData;
 
     for (const prop of props) {
@@ -205,11 +205,8 @@ export class TableComponent implements OnInit {
 
     // Check if we already have cached menu items for this row
     if (this.menuItemsCache.has(cacheKey)) {
-      // console.log("Using cached menu items for:", rowData);
       return this.menuItemsCache.get(cacheKey)!;
     }
-
-    // console.log("Generating NEW menu items for:", rowData);
 
     const menuItems = actions
       .filter((action) => !action.visible || action.visible(rowData))
@@ -218,7 +215,6 @@ export class TableComponent implements OnInit {
           label: action.label,
           icon: action.icon,
           command: (event: any) => {
-            //  console.log("Menu command executed for:", action.action, rowData);
             this.handleMenuCommand(action.action, rowData);
           },
         };
@@ -227,7 +223,6 @@ export class TableComponent implements OnInit {
 
     // Cache the menu items
     this.menuItemsCache.set(cacheKey, menuItems);
-    // console.log("Cached menu items:", menuItems);
 
     return menuItems;
   }
@@ -236,7 +231,6 @@ export class TableComponent implements OnInit {
   private handleMenuCommand(action: string, rowData: any) {
     // Use microtask to ensure proper execution
     queueMicrotask(() => {
-      console.log("Executing action:", action, "for item:", rowData);
       this.actionClick.emit({ action, item: rowData });
       this.cdr.detectChanges();
     });

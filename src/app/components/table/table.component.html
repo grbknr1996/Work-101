@@ -1,7 +1,7 @@
 
 <!-- table.component.pug-->
 <div class="card">
-  <p-table #dt [value]="data" [columns]="columns" [rowHover]="true" [rows]="rows" [rowsPerPageOptions]="rowsPerPageOptions" [loading]="loading" [paginator]="paginator" [globalFilterFields]="globalFilterFields" [showCurrentPageReport]="showCurrentPageReport" [currentPageReportTemplate]="currentPageReportTemplate" [resizableColumns]="resizableColumns" [reorderableColumns]="reorderableColumns" [responsive]="responsive" [lazy]="lazy" [totalRecords]="totalRecords" [scrollable]="scrollable" [scrollHeight]="scrollHeight" [dataKey]="dataKey" (onLazyLoad)="onLazyLoadEvent.emit($event)" styleClass="p-datatable-sm">
+  <p-table #dt [value]="isSignal(data) ? data() : data" [columns]="columns" [rowHover]="true" [rows]="rows" [rowsPerPageOptions]="rowsPerPageOptions" [loading]="loading" [paginator]="paginator" [globalFilterFields]="globalFilterFields" [showCurrentPageReport]="showCurrentPageReport" [currentPageReportTemplate]="currentPageReportTemplate" [resizableColumns]="resizableColumns" [reorderableColumns]="reorderableColumns" [responsive]="responsive" [lazy]="lazy" [totalRecords]="totalRecords" [scrollable]="scrollable" [scrollHeight]="scrollHeight" [dataKey]="dataKey" (onLazyLoad)="onLazyLoadEvent.emit($event)" styleClass="p-datatable-sm">
     <ng-template pTemplate="caption">
       <div class="flex-search-bar">
         <button class="p-button-outlined" *ngIf="showClearButton" pButton label="Clear" icon="pi pi-filter-slash" (click)="clear(dt)"></button>

@@ -93,6 +93,13 @@ body
     background-color #314668
     border-color #314668
 /////////////////////////////////////
+html
+  scroll-behavior: smooth
+
+// Remove any overflow-y: auto from body, .layout-wrapper, .layout-main
+body, .layout-wrapper, .layout-main
+  overflow-y: visible !important
+
 :root
   h1,h2,h3,h4,h5,h6   
     color: var(--p-heading-color);
@@ -116,11 +123,21 @@ $transition-duration = 0.3s
   .p-menubar-button
     display none !important
 
+.card
+  padding-bottom 10rem
+app-table
+  .p-datatable-thead > tr > th p-columnfilter
+      background-color inherit
+      border none
+app-groups
+  .p-datatable-thead > tr > th p-columnfilter
+      background-color inherit
+      border none
+  
 @media screen and (max-width: 320px)
   .p-menubar
     display: block !important
-.card
-  padding-bottom 10rem
+
 .app-navbar
   padding 0.5rem 1rem
   box-shadow 0 2px 10px $shadow-color
@@ -626,7 +643,8 @@ $transition-duration = 0.3s
   display: flex
   flex: 1
   position: relative
-  transition: margin-left $transition-duration ease-in-out
+  transition: margin-left 0.3s ease-in-out
+  min-height: calc(100vh - 64px) 
   
   &.with-sidebar 
     @media (max-width: 800px)
@@ -636,14 +654,15 @@ $transition-duration = 0.3s
     margin-left: 0
 
 .layout-content
-  margin-top 64px !important
-  flex 1
-  overflow-x hidden
-  width 100%
-  transition padding $transition-duration ease-in-out
-  padding 1rem
-  margin-top 3rem
-  
+  margin-top: 64px !important
+  flex: 1
+  overflow-x: hidden
+  width: 100%
+  transition: padding 0.3s ease-in-out
+  padding: 1rem
+  display: flex
+  flex-direction: column
+  min-height: calc(100vh - 64px) // Ensure it takes full height minus navbar
   
   @media screen and (max-width: 450px)
     padding 0
@@ -663,8 +682,10 @@ $transition-duration = 0.3s
 .layout-footer
   padding: 1rem 1.5rem
   background-color: white
-  border-top: 1px solid $light-border
-  margin-top: 2rem
+  border-top: 1px solid #e9ecef
+  margin-top: auto // This pushes footer to bottom
+  width: 100%
+  flex-shrink: 0 // Prevent footer from shrinking
     
   .footer-content
     display: flex
@@ -673,7 +694,7 @@ $transition-duration = 0.3s
     p
       margin: 0
       text-align: center
-      color: $light-text
+      color: #495057
 
 :host ::ng-deep .p-sidebar
   .p-sidebar-header
@@ -1125,30 +1146,6 @@ $transition-duration = 0.3s
 // ============================================
 
 // ============================================
-// Page Not Found Styles
-// ============================================
-// Add your page-notfound styles here
-// ============================================
-// End of Page Not Found Styles
-// ============================================
-
-// ============================================
-// Page About Styles
-// ============================================
-// Add your page-about styles here
-// ============================================
-// End of Page About Styles
-// ============================================
-
-// ============================================
-// Page Redirect Styles
-// ============================================
-// Add your page-redirect styles here
-// ============================================
-// End of Page Redirect Styles
-// ============================================
-
-// ============================================
 // Responsive Layout, Navbar, Sidebar Styles
 // ============================================
 
@@ -1309,13 +1306,6 @@ $transition-duration = 0.3s
 // ============================================
 // End Responsive Layout, Navbar, Sidebar Styles
 
-html
-  scroll-behavior: smooth
-
-// Remove any overflow-y: auto from body, .layout-wrapper, .layout-main
-body, .layout-wrapper, .layout-main
-  overflow-y: visible !important
-  overflow-x: hidden !important
 
 // =============================
 // Data Exchange Configuration Dashboard Page
@@ -1592,7 +1582,7 @@ body, .layout-wrapper, .layout-main
   margin-bottom: 1rem
 
 .add-office-btn
-  background: #1976d2
+  background: var( --p-primary-color)
   color: #fff
   border: none
   border-radius: 6px
@@ -2001,17 +1991,141 @@ app-basic-info-form
 // =========================================
 // End of Basic Info Form Component Styles
 // =========================================
+// =========================================
+// Group assignment Component Styles
+// =========================================
+app-group-assignment
+  .group-assignment-container
+    display flex
+    gap 2rem
+    justify-content center
+    align-items stretch
+    margin 2rem 0
 
+  .group-list
+    background #fff
+    border-radius 12px
+    box-shadow 0 2px 8px rgba(0, 0, 0, 0.07)
+    padding 1.5rem 1rem 1rem 1rem
+    min-width 340px
+    max-width 400px
+    flex 1 1 0
+    display flex
+    flex-direction column
+    min-height 420px
+
+  .group-list h3
+    color #1976d2
+    font-size 1.3rem
+    font-weight 600
+    margin-bottom 0.5rem
+
+  .group-list-header
+    margin-bottom 0.5rem
+    font-size 1rem
+    color #333
+
+  .group-list-body
+    flex 1 1 0
+    overflow-y auto
+    border 1px solid #e0e0e0
+    border-radius 8px
+    background #fafbfc
+    padding 0.5rem 0
+    margin-bottom 0.5rem
+
+  .group-item
+    display flex
+    align-items center
+    gap 0.7rem
+    padding 0.5rem 1rem
+    border-radius 6px
+    margin-bottom 0.3rem
+    background #fff
+    border 1px solid #e0e0e0
+    transition background 0.2s, box-shadow 0.2s
+
+  .group-item.selected
+    background #e3f2fd
+    border-color #90caf9
+
+  .group-info
+    flex 1 1 0
+    display flex
+    flex-direction column
+
+  .group-name
+    font-weight 500
+    color #222
+    font-size 1rem
+
+  .group-type
+    font-size 0.85rem
+    color #1976d2
+    font-weight 500
+    letter-spacing 0.02em
+
+  .drag-handle
+    color #bdbdbd
+    font-size 1.2rem
+    cursor grab
+    user-select none
+
+  .group-list-controls
+    display flex
+    flex-direction column
+    gap 1rem
+    justify-content center
+    align-items center
+
+  .group-list-controls.center-controls
+    display flex
+    flex-direction column
+    gap 1rem
+    justify-content center
+    align-items center
+    height 100%
+    min-width 48px
+
+  .move-btn
+    background #1976d2
+    color #fff
+    border none
+    border-radius 50%
+    width 40px
+    height 40px
+    font-size 1.5rem
+    cursor pointer
+    box-shadow 0 2px 6px rgba(25, 118, 210, 0.08)
+    transition background 0.2s, box-shadow 0.2s
+
+  .move-btn:disabled
+    background #e0e0e0
+    color #bdbdbd
+    cursor not-allowed
+
+  .pagination
+    display flex
+    align-items center
+    gap 0.5rem
+    justify-content center
+    margin-top 0.5rem
+
+  .pagination button
+    background #e3f2fd
+    border none
+    border-radius 50%
+    width 28px
+    height 28px
+    color #1976d2
+    font-size 1.1rem
+    cursor pointer
+    transition background 0.2s
+
+  .pagination button:disabled
+    background #f5f5f5
+    color #bdbdbd
+    cursor not-allowed
 // =========================================
-// Validation Errors Component Styles
-// =========================================
-app-validation-errors
-  .validation-errors
-    margin-top: 0.25rem
-  .error-message  
-    color: #d32f2f
-    font-size: 0.875rem
-    margin-top: 0.25rem;
-// =========================================
-// End of Validation Errors Component Styles
+// End of Group assignment Component Styles
 // =========================================

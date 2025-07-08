@@ -2,7 +2,7 @@
 .card
   p-table(
     #dt,
-    [value]='data',
+    [value]='isSignal(data) ? data() : data',
     [columns]='columns',
     [rowHover]='true',
     [rows]='rows',

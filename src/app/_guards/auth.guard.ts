@@ -1,27 +1,27 @@
 // src/app/_guards/auth.guard.ts
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import {
   Router,
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
-} from "@angular/router";
-import { Observable, of } from "rxjs";
-import { AuthService } from "../_services/auth.service";
-import { MechanicsService } from "../_services/mechanics.service";
-import { map, catchError, tap } from "rxjs/operators";
-import { configuration } from "src/environments/environment";
+} from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { AuthService } from '../_services/auth.service';
+import { MechanicsService } from '../_services/mechanics.service';
+import { map, catchError, tap } from 'rxjs/operators';
+import { configuration } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class AuthGuard {
   // Auth pages that should only be accessible when NOT authenticated
   private authPages = [
-    "sign-in",
-    "sign-up",
-    "forgot-password",
-    "force-change-password",
-    "logged-out",
+    'sign-in',
+    'sign-up',
+    'forgot-password',
+    'force-change-password',
+    'logged-out',
   ];
 
   constructor(
@@ -38,8 +38,8 @@ export class AuthGuard {
       map((isAuthenticated) => {
         // Determine if this is an auth page by checking the URL
         const isAuthPage = this.isAuthenticationPage(state.url);
-        const routeOfficeCode = route.params["officeCode"];
-        const routeLangCode = route.params["langCode"];
+        const routeOfficeCode = route.params['officeCode'];
+        const routeLangCode = route.params['langCode'];
 
         if (isAuthenticated) {
           // User is authenticated

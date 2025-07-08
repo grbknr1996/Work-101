@@ -8,7 +8,7 @@
       <div class="summary-card-description">{{ card.description }}</div>
     </div>
   </div>
-  <app-distribution-exclusion-rules *ngIf="showExclusionRules"></app-distribution-exclusion-rules>
+  <app-distribution-exclusion-rules *ngIf="showExclusionRules" [data]="dataExchangeData"></app-distribution-exclusion-rules>
   <div class="data-exchange-config-heading" *ngIf="!showExclusionRules">
     <h1>Data Exchange Configuration</h1>
     <p>This is the Data Exchange Configuration page. Add your configuration UI here.</p>

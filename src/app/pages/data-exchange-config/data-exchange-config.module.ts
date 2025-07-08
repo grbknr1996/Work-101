@@ -1,14 +1,14 @@
-import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { RouterModule, Routes } from "@angular/router";
-
-import { AppLayoutComponent } from "../../components/app-layout/app-layout.component";
-import { DataExchangeConfigComponent } from "./data-exchange-config.component";
-import { DistributionExclusionRulesComponent } from "./data-exclusion-rules/distribution-exclusion-rules.component";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, Routes } from '@angular/router';
+import { DataExchangeConfigComponent } from './data-exchange-config.component';
+import { DistributionExclusionRulesComponent } from './data-exclusion-rules/distribution-exclusion-rules.component';
+import { DataExchangeConfigService } from 'src/app/_services/data-exchange-config.service';
+import { provideHttpClient } from '@angular/common/http';
 
 const routes: Routes = [
   {
-    path: "",
+    path: '',
     component: DataExchangeConfigComponent,
   },
 ];
@@ -20,5 +20,9 @@ const routes: Routes = [
     DistributionExclusionRulesComponent,
   ],
   exports: [RouterModule],
+  providers: [
+    DataExchangeConfigService,
+    provideHttpClient()
+  ]
 })
 export class DataExchangeConfigModule {}

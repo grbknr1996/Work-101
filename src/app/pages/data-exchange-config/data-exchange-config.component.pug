@@ -7,7 +7,10 @@ app-layout([config]="layoutConfig")
       .summary-card-count([ngStyle]="{ color: card.color }") {{ card.count }}
       .summary-card-description {{ card.description }}
   
-  app-distribution-exclusion-rules(*ngIf="showExclusionRules")
+  app-distribution-exclusion-rules(
+    *ngIf="showExclusionRules",
+    [data]="dataExchangeData"
+  )
   
   .data-exchange-config-heading(*ngIf="!showExclusionRules")
     h1 Data Exchange Configuration

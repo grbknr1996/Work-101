@@ -1,4 +1,24 @@
 {
+  "auth": {
+    "signIn": {
+      "title": "Connexion",
+      "submit": "Connexion",
+      "subtitle": "Connectez-vous \u00e0 votre compte",
+      "email": "Email",
+      "username": "Nom d'utilisateur",
+      "password": "Mot de passe",
+      "rememberMe": "Se souvenir de moi",
+      "forgotPassword": "Mot de passe oubl\u00e9?",
+      "noAccount": "Vous n'avez pas de compte?",
+      "signUp": "S'inscrire",
+      "or": "ou",
+      "errors": {
+        "emailRequired": "Email est requis",
+        "emailInvalid": "Email non valide",
+        "passwordRequired": "Mot de passe est requis"
+      }
+    }
+  },
   "home": {
     "link": {
       "label": "Accueil"

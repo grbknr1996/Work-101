@@ -1,0 +1,82 @@
+{
+    "originatingOfficesData": [
+        {
+            "code": "US",
+            "name": "United States Patent and Trademark Office"
+        },
+        {
+            "code": "EP",
+            "name": "European Patent Office"
+        },
+        {
+            "code": "JP",
+            "name": "Japan Patent Office"
+        },
+        {
+            "code": "CN",
+            "name": "China National Intellectual Property Administration"
+        },
+        {
+            "code": "KR",
+            "name": "Korean Intellectual Property Office"
+        }
+    ],
+    "recipientSystemsData": [
+        {
+            "code": "PATENTSCOPE",
+            "name": "WIPO PATENTSCOPE",
+            "type": "Global",
+            "totalRules": 5
+        },
+        {
+            "code": "GBDB",
+            "name": "Global Brand Database",
+            "type": "Global",
+            "totalRules": 3
+        },
+        {
+            "code": "GIDB",
+            "name": "Global Design Database",
+            "type": "Global",
+            "totalRules": 2
+        },
+        {
+            "code": "GGIDB",
+            "name": "Global Geographical Indication Database",
+            "type": "Global",
+            "totalRules": 1
+        },
+        {
+            "code": "WIPO_CASE",
+            "name": "WIPO CASE",
+            "type": "Regional",
+            "totalRules": 4
+        }
+    ],
+    "distributionExclusionRulesData": [
+    {
+      "originatingOffice": "US",
+      "recipientName": "WIPO ASEAN IP Register",
+      "ipCategoryTypes": ["patent", "trademark"],
+      "applicationStatus": ["Unpublished Applications", "Unregistered Rights"],
+      "excludedEventCodes": "3 events",
+      "excludedDocuments": "2 documents"
+    },
+    {
+      "originatingOffice": "EP",
+      "recipientName": "WIPO Global databases",
+      "ipCategoryTypes": ["industrial design"],
+      "applicationStatus": ["Unregistered Rights"],
+      "excludedEventCodes": "1 events",
+      "excludedDocuments": "2 documents"
+    },
+    {
+      "originatingOffice": "JP",
+      "recipientName": "EPO Espacenet",
+      "ipCategoryTypes": ["patent"],
+      "applicationStatus": ["Unpublished Applications"],
+      "excludedEventCodes": "None",
+      "excludedDocuments": "Disabled"
+    }
+  ]
+}
