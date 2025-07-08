@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { MechanicsService } from './mechanics.service';
-import { ActivatedRoute } from '@angular/router';
+import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable } from "rxjs";
+import { MechanicsService } from "./mechanics.service";
+import { ActivatedRoute } from "@angular/router";
 
 export interface MenuItem {
   id: string;
@@ -19,7 +19,7 @@ export interface MenuItem {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class SidebarMenuService {
   private sidebarItemsSource = new BehaviorSubject<MenuItem[]>([]);
@@ -44,57 +44,53 @@ export class SidebarMenuService {
   }
 
   private getRouterLink(path: string): string {
-    // Get the office code from the current route or mechanics service
+    // Extract officeCode and langCode from the current URL if available
+    const urlParts = window.location.pathname.split("/");
     const officeCode =
-      this.route.snapshot.params['officeCode'] ||
-      this.mechanicsService.getCurrentOffice() ||
-      'default';
-
-    // Get the language code from mechanics service
-    const langCode = this.mechanicsService.lang || 'en';
-
+      urlParts[1] || this.mechanicsService.getCurrentOffice() || "default";
+    const langCode = urlParts[2] || this.mechanicsService.lang || "en";
     return `/${officeCode}/${langCode}${path}`;
   }
 
   generateUserManagementMenu(currentPath: string): MenuItem[] {
-    console.log('current path:', currentPath);
-    const lastPart = currentPath.split('/').pop();
+    console.log("current path:", currentPath);
+    const lastPart = currentPath.split("/").pop();
     console.log(lastPart);
     return [
       {
-        id: 'dashboard',
-        label: 'Home',
-        icon: 'pi pi-home',
-        routerLink: this.getRouterLink('/dashboard'),
+        id: "dashboard",
+        label: "Home",
+        icon: "pi pi-home",
+        routerLink: this.getRouterLink("/dashboard"),
       },
       {
-        id: 'user-management',
-        label: 'User Management',
-        icon: 'pi pi-users',
-        expanded: currentPath.includes('user-management'),
+        id: "user-management",
+        label: "User Management",
+        icon: "pi pi-users",
+        expanded: currentPath.includes("user-management"),
         items: [
           {
-            id: 'user-accounts',
-            label: 'User Accounts',
-            icon: 'pi pi-user',
-            routerLink: this.getRouterLink('/user-management/user-accounts'),
-            styleClass: lastPart.includes('user-accounts') ? 'active' : '',
+            id: "user-accounts",
+            label: "User Accounts",
+            icon: "pi pi-user",
+            routerLink: this.getRouterLink("/user-management/user-accounts"),
+            styleClass: lastPart.includes("user-accounts") ? "active" : "",
           },
           {
-            id: 'user-groups',
-            label: 'Groups',
-            icon: 'pi pi-users',
+            id: "user-groups",
+            label: "Groups",
+            icon: "pi pi-users",
             routerLink: this.getRouterLink(
-              '/user-management/user-accounts/groups'
+              "/user-management/user-accounts/groups"
             ),
-            styleClass: lastPart.includes('groups') ? 'active' : '',
+            styleClass: lastPart.includes("groups") ? "active" : "",
           },
           {
-            id: 'user-units',
-            label: 'Units',
-            icon: 'pi pi-building',
-            routerLink: this.getRouterLink('/user-management/units'),
-            styleClass: lastPart.includes('units') ? 'active' : '',
+            id: "user-units",
+            label: "Units",
+            icon: "pi pi-building",
+            routerLink: this.getRouterLink("/user-management/units"),
+            styleClass: lastPart.includes("units") ? "active" : "",
           },
         ],
       },
@@ -104,96 +100,96 @@ export class SidebarMenuService {
   private loadDefaultMenuItems(): void {
     const menuItems: MenuItem[] = [
       {
-        id: 'dashboard',
-        label: 'dashboard',
-        icon: 'pi pi-home',
-        routerLink: this.getRouterLink('/dashboard'),
+        id: "dashboard",
+        label: "dashboard",
+        icon: "pi pi-home",
+        routerLink: this.getRouterLink("/dashboard"),
         expanded: false,
       },
       {
-        id: 'applications',
-        label: 'applications',
-        icon: 'pi pi-file',
+        id: "applications",
+        label: "applications",
+        icon: "pi pi-file",
         expanded: false,
         items: [
           {
-            id: 'new-application',
-            label: 'newApplication',
-            icon: 'pi pi-plus',
-            routerLink: this.getRouterLink('/applications/new'),
+            id: "new-application",
+            label: "newApplication",
+            icon: "pi pi-plus",
+            routerLink: this.getRouterLink("/applications/new"),
           },
           {
-            id: 'search-applications',
-            label: 'searchApplications',
-            icon: 'pi pi-search',
-            routerLink: this.getRouterLink('/applications/search'),
+            id: "search-applications",
+            label: "searchApplications",
+            icon: "pi pi-search",
+            routerLink: this.getRouterLink("/applications/search"),
           },
         ],
       },
       {
-        id: 'trademarks',
-        label: 'trademarks',
-        icon: 'pi pi-tag',
+        id: "trademarks",
+        label: "trademarks",
+        icon: "pi pi-tag",
         expanded: false,
         items: [
           {
-            id: 'register',
-            label: 'register',
-            icon: 'pi pi-plus-circle',
-            routerLink: this.getRouterLink('/trademarks/register'),
+            id: "register",
+            label: "register",
+            icon: "pi pi-plus-circle",
+            routerLink: this.getRouterLink("/trademarks/register"),
           },
           {
-            id: 'search',
-            label: 'Search',
-            icon: 'pi pi-search',
-            routerLink: this.getRouterLink('/trademarks/search'),
+            id: "search",
+            label: "Search",
+            icon: "pi pi-search",
+            routerLink: this.getRouterLink("/trademarks/search"),
           },
         ],
       },
       {
-        id: 'patents',
-        label: 'patents',
-        icon: 'pi pi-briefcase',
+        id: "patents",
+        label: "patents",
+        icon: "pi pi-briefcase",
         expanded: false,
         items: [
           {
-            id: 'file-patent',
-            label: 'filePatent',
-            icon: 'pi pi-file',
-            routerLink: this.getRouterLink('/patents/file'),
+            id: "file-patent",
+            label: "filePatent",
+            icon: "pi pi-file",
+            routerLink: this.getRouterLink("/patents/file"),
           },
           {
-            id: 'patent-search',
-            label: 'patentSearch',
-            icon: 'pi pi-search',
-            routerLink: this.getRouterLink('/patents/search'),
+            id: "patent-search",
+            label: "patentSearch",
+            icon: "pi pi-search",
+            routerLink: this.getRouterLink("/patents/search"),
           },
         ],
       },
       {
-        id: 'reports',
-        label: 'reports',
-        icon: 'pi pi-chart-bar',
-        routerLink: this.getRouterLink('/reports'),
+        id: "reports",
+        label: "reports",
+        icon: "pi pi-chart-bar",
+        routerLink: this.getRouterLink("/reports"),
         expanded: false,
       },
       {
-        id: 'admin',
-        label: 'administration',
-        icon: 'pi pi-cog',
+        id: "admin",
+        label: "administration",
+        icon: "pi pi-cog",
         expanded: false,
         items: [
           {
-            id: 'users',
-            label: 'users',
-            icon: 'pi pi-users',
-            routerLink: this.getRouterLink('/admin/users'),
+            id: "users",
+            label: "users",
+            icon: "pi pi-users",
+            routerLink: this.getRouterLink("/admin/users"),
           },
           {
-            id: 'settings',
-            label: 'settings',
-            icon: 'pi pi-sliders-h',
-            routerLink: this.getRouterLink('/admin/settings'),
+            id: "settings",
+            label: "settings",
+            icon: "pi pi-sliders-h",
+            routerLink: this.getRouterLink("/admin/settings"),
           },
         ],
       },

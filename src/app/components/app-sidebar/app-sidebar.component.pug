@@ -10,6 +10,7 @@
           a.menu-link(
             [routerLink]="item.routerLink",
             [routerLinkActive]="item.routerLink ? 'active-route' : ''",
+            [routerLinkActiveOptions]="{ exact: true }",
             (click)="item.items && item.items.length ? toggleMenuItem(item) : closeSidebarOnMobile()"
           )
             i.menu-icon([ngClass]="item.icon")
@@ -23,7 +24,8 @@
               li.submenu-item(*ngFor="let subItem of item.items")
                 a.submenu-link(
                   [routerLink]="subItem.routerLink",
-                  [routerLinkActive]="subItem.routerLink ? 'active-route' : ''",
+                  routerLinkActive="active-route",
+                  [routerLinkActiveOptions]="{ exact: true }",
                   (click)="closeSidebarOnMobile()"
                 )
                   i.submenu-icon([ngClass]="subItem.icon")

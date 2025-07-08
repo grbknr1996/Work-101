@@ -67,9 +67,11 @@
           <ng-container *ngIf="col.display === 'date'">{{ getValue(rowData, col.field) | date : (col.dateFormat || "MM/dd/yyyy") }}</ng-container>
           <!-- Currency Display-->
           <ng-container *ngIf="col.display === 'currency'">{{ getValue(rowData, col.field) | currency : (col.currency || "USD") : "symbol" }}</ng-container>
-          <!-- Avatar Display-->
+          <!-- Avatar Display with Lazy Loading-->
           <ng-container *ngIf="col.display === 'avatar'">
-            <div class="flex items-center gap-2"><img [src]="getValue(rowData, col.field)" [alt]="col.field" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;"><span *ngIf="col.showName">{{ getValue(rowData, col.nameField || "name") }}</span></div>
+            <div class="flex items-center gap-2">
+              <app-lazy-avatar [src]="getValue(rowData, col.field)" [alt]="getValue(rowData, col.nameField || &quot;username&quot;) || &quot;User Avatar&quot;" [size]="32" [fallbackSrc]="'assets/images/no-image.png'"></app-lazy-avatar><span *ngIf="col.showName">{{ getValue(rowData, col.nameField || "name") }}</span>
+            </div>
           </ng-container>
           <!-- Tag Display-->
           <ng-container *ngIf="col.display === 'tag'">
@@ -80,14 +82,14 @@
             <p-progressBar [value]="getValue(rowData, col.field)" [showValue]="false"></p-progressBar>
           </ng-container>
           <!-- Icon Display-->
-          <ng-container *ngIf="col.display === 'icon'"><i class="pi" [ngClass]="col.iconClass ? col.iconClass(getValue(rowData, col.field)) : &quot;&quot;"></i></ng-container>
+          <ng-container *ngIf="col.display === 'icon'"><i class="pi" [ngClass]="col.iconClass ? col.iconClass(getValue(rowData, col.field)) : &quot;&quot;" style="font-size: 1.5rem"></i></ng-container>
           <!-- Boolean Display-->
           <ng-container *ngIf="col.display === 'boolean'">
             <div class="text-center"><i class="pi" [ngClass]="{'text-green-500 pi-check-circle': getValue(rowData, col.field), 'text-red-500 pi-times-circle': !getValue(rowData, col.field)}"></i></div>
           </ng-container>
           <!-- Custom Template-->
           <ng-container *ngIf="col.display === 'custom'">
-            <ng-container *ngTemplateOutlet="customCellTemplate; context: { $implicit: rowData, field: col.field }"></ng-container>
+            <ng-container *ngTemplateOutlet="customCellTemplate" [context]="{ $implicit: rowData, field: col.field }"></ng-container>
           </ng-container>
           <!-- Actions Display-->
           <ng-container *ngIf="col.display === 'actions' &amp;&amp; col.actions">
@@ -110,7 +112,7 @@
         </td>
         <!-- Actions Column-->
         <td *ngIf="showActionsColumn">
-          <ng-container *ngTemplateOutlet="actionTemplate; context: { $implicit: rowData }"></ng-container>
+          <ng-container *ngTemplateOutlet="actionTemplate" [context]="{ $implicit: rowData }"></ng-container>
         </td>
       </tr>
     </ng-template>

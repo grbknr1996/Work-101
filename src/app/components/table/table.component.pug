@@ -198,13 +198,14 @@
           ng-container(*ngIf="col.display === 'currency'")
             | {{ getValue(rowData, col.field) | currency : (col.currency || "USD") : "symbol" }}
 
-          // Avatar Display
+          // Avatar Display with Lazy Loading
           ng-container(*ngIf="col.display === 'avatar'")
             .flex.items-center.gap-2
-              img(
+              app-lazy-avatar(
                 [src]='getValue(rowData, col.field)',
-                [alt]='col.field',
-                style='width: 32px; height: 32px; border-radius: 50%; object-fit: cover;'
+                [alt]='getValue(rowData, col.nameField || "username") || "User Avatar"',
+                [size]='32',
+                [fallbackSrc]="'assets/images/no-image.png'"
               )
               span(*ngIf='col.showName')
                 | {{ getValue(rowData, col.nameField || "name") }}
@@ -226,7 +227,8 @@
           // Icon Display
           ng-container(*ngIf="col.display === 'icon'")
             i.pi(
-              [ngClass]='col.iconClass ? col.iconClass(getValue(rowData, col.field)) : ""'
+              [ngClass]='col.iconClass ? col.iconClass(getValue(rowData, col.field)) : ""',
+              style='font-size: 1.5rem'
             )
 
           // Boolean Display
@@ -239,7 +241,8 @@
           // Custom Template
           ng-container(*ngIf="col.display === 'custom'")
             ng-container(
-              *ngTemplateOutlet='customCellTemplate; context: { $implicit: rowData, field: col.field }'
+              *ngTemplateOutlet='customCellTemplate',
+              [context]='{ $implicit: rowData, field: col.field }'
             )
 
           // Actions Display
@@ -275,7 +278,8 @@
         // Actions Column
         td(*ngIf='showActionsColumn')
           ng-container(
-            *ngTemplateOutlet='actionTemplate; context: { $implicit: rowData }'
+            *ngTemplateOutlet='actionTemplate',
+            [context]='{ $implicit: rowData }'
           )
 
     // Empty message template

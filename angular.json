@@ -67,7 +67,7 @@
               "namedChunks": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": false,
+              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -95,7 +95,7 @@
               "namedChunks": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": false,
+              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -110,7 +110,7 @@
               ]
             },
             "awspreprod": {
-              "outputPath": "dist/preprod",
+              "outputPath": "dist/prd",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -123,7 +123,7 @@
               "namedChunks": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": false,
+              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -147,7 +147,19 @@
               "statsJson": false,
               "progress": false,
               "vendorChunk": true,
-              "buildOptimizer": false
+              "buildOptimizer": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "1mb",
+                  "maximumError": "2mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kb",
+                  "maximumError": "8kb"
+                }
+              ]
             },
             "local-angularProdBuild": {
               "optimization": true,
@@ -156,7 +168,7 @@
               "namedChunks": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": false,
+              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",

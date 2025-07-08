@@ -1,5 +1,5 @@
 // table.component.ts - Fixed version with cached menu items
-import { CommonModule } from '@angular/common';
+import { CommonModule } from "@angular/common";
 import {
   Component,
   EventEmitter,
@@ -10,46 +10,50 @@ import {
   TemplateRef,
   ViewChild,
   ChangeDetectorRef,
-} from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MenuItem } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
-import { DataViewModule } from 'primeng/dataview';
-import { DropdownModule } from 'primeng/dropdown';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
-import { InputTextModule } from 'primeng/inputtext';
-import { MenuModule } from 'primeng/menu';
-import { Table, TableModule } from 'primeng/table';
-import { TagModule } from 'primeng/tag';
+  ChangeDetectionStrategy,
+  OnChanges,
+  SimpleChanges,
+} from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { MenuItem } from "primeng/api";
+import { ButtonModule } from "primeng/button";
+import { DataViewModule } from "primeng/dataview";
+import { DropdownModule } from "primeng/dropdown";
+import { IconFieldModule } from "primeng/iconfield";
+import { InputIconModule } from "primeng/inputicon";
+import { InputTextModule } from "primeng/inputtext";
+import { MenuModule } from "primeng/menu";
+import { Table, TableModule } from "primeng/table";
+import { TagModule } from "primeng/tag";
+import { LazyAvatarComponent } from "../lazy-avatar/lazy-avatar.component";
 
 export interface ColumnDefinition {
   field: string;
   header: string;
   filterType?:
-    | 'text'
-    | 'numeric'
-    | 'date'
-    | 'boolean'
-    | 'dropdown'
-    | 'multiselect'
-    | 'range'
-    | 'none';
+    | "text"
+    | "numeric"
+    | "date"
+    | "boolean"
+    | "dropdown"
+    | "multiselect"
+    | "range"
+    | "none";
   filterField?: string;
   sortable?: boolean;
   width?: string;
   display?:
-    | 'text'
-    | 'date'
-    | 'currency'
-    | 'avatar'
-    | 'tag'
-    | 'progress'
-    | 'icon'
-    | 'boolean'
-    | 'custom'
-    | 'actions';
-  filterDisplay?: 'menu' | 'row';
+    | "text"
+    | "date"
+    | "currency"
+    | "avatar"
+    | "tag"
+    | "progress"
+    | "icon"
+    | "boolean"
+    | "custom"
+    | "actions";
+  filterDisplay?: "menu" | "row";
   filterMatchMode?: string;
   dateFormat?: string;
   currency?: string;
@@ -60,7 +64,7 @@ export interface ColumnDefinition {
   filterOptions?: any;
   severity?: (
     value: any
-  ) => 'success' | 'info' | 'warn' | 'danger' | 'secondary' | undefined;
+  ) => "success" | "info" | "warn" | "danger" | "secondary" | undefined;
   customTemplate?: boolean;
   actions?: Action[];
   showAsDropdown?: boolean;
@@ -74,20 +78,20 @@ export interface Action {
   icon?: string;
   action: string;
   severity?:
-    | 'success'
-    | 'info'
-    | 'warn'
-    | 'warning'
-    | 'danger'
-    | 'secondary'
-    | 'contrast'
-    | 'help';
+    | "success"
+    | "info"
+    | "warn"
+    | "warning"
+    | "danger"
+    | "secondary"
+    | "contrast"
+    | "help";
   visible?: (item: any) => boolean;
 }
 
 @Component({
-  selector: 'app-table',
-  templateUrl: './table.component.html',
+  selector: "app-table",
+  templateUrl: "./table.component.html",
   imports: [
     CommonModule,
     TableModule,
@@ -100,11 +104,13 @@ export interface Action {
     FormsModule,
     IconFieldModule,
     InputIconModule,
+    LazyAvatarComponent,
   ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TableComponent implements OnInit {
-  @ViewChild('dt') table!: Table;
+export class TableComponent implements OnInit, OnChanges {
+  @ViewChild("dt") table!: Table;
 
   @Input() columns: ColumnDefinition[] = [];
   @Input() data: Signal<any[]> | any[] = [];
@@ -115,21 +121,21 @@ export class TableComponent implements OnInit {
   @Input() globalFilterFields: string[] = [];
   @Input() showCurrentPageReport: boolean = false;
   @Input() currentPageReportTemplate: string =
-    'Showing {first} to {last} of {totalRecords} entries';
+    "Showing {first} to {last} of {totalRecords} entries";
   @Input() resizableColumns: boolean = false;
   @Input() reorderableColumns: boolean = false;
   @Input() responsive: boolean = true;
   @Input() scrollable: boolean = false;
-  @Input() scrollHeight: string = '';
+  @Input() scrollHeight: string = "";
   @Input() lazy: boolean = false;
   @Input() totalRecords: number = 0;
-  @Input() dataKey: string = 'id';
+  @Input() dataKey: string = "id";
   @Input() showClearButton: boolean = true;
-  @Input() emptyMessage: string = 'No records found.';
+  @Input() emptyMessage: string = "No records found.";
   @Input() showActionsColumn: boolean = false;
   @Input() customCellTemplate: any;
   @Input() actionTemplate: any;
-  @Input() locale: string = 'en';
+  @Input() locale: string = "en";
   @Input() onLazyLoadEvent: EventEmitter<any> = new EventEmitter();
 
   @Output() actionClick = new EventEmitter<{ action: string; item: any }>();
@@ -137,7 +143,7 @@ export class TableComponent implements OnInit {
   // Cache for menu items to prevent regeneration
   private menuItemsCache = new Map<string, MenuItem[]>();
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private changeDetector: ChangeDetectorRef) {}
 
   ngOnInit() {
     if (!this.globalFilterFields.length && this.columns.length) {
@@ -145,8 +151,15 @@ export class TableComponent implements OnInit {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes["data"]) {
+      this.menuItemsCache.clear();
+      this.changeDetector.markForCheck();
+    }
+  }
+
   isSignal(value: any): value is Signal<any[]> {
-    return typeof value === 'function';
+    return typeof value === "function";
   }
 
   onFilterChange(event: any, filterCallback: Function, column: string) {
@@ -165,7 +178,7 @@ export class TableComponent implements OnInit {
 
   filterGlobal(event: Event, table?: Table) {
     const value = (event.target as HTMLInputElement).value;
-    this.table.filterGlobal(value, 'contains');
+    this.table.filterGlobal(value, "contains");
   }
 
   onActionClick(action: string, item: any) {
@@ -178,7 +191,7 @@ export class TableComponent implements OnInit {
     }
 
     // Handle nested properties (e.g., 'user.name')
-    const props = field.split('.');
+    const props = field.split(".");
     let value = rowData;
 
     for (const prop of props) {
@@ -198,28 +211,25 @@ export class TableComponent implements OnInit {
   getMenuItems(actions: Action[] | undefined, rowData: any): MenuItem[] {
     if (!actions) return [];
 
-    // Create a unique key for this row and actions combination
-    const cacheKey = `${JSON.stringify(rowData[this.dataKey] || rowData)}_${
-      actions.length
-    }`;
+    // Create a cache key based on actions and row data
+    const cacheKey = JSON.stringify({
+      actions: actions.map((a) => ({ label: a.label, action: a.action })),
+      rowId: rowData.id || rowData.username || "unknown",
+    });
 
-    // Check if we already have cached menu items for this row
+    // Check if we have cached menu items
     if (this.menuItemsCache.has(cacheKey)) {
       return this.menuItemsCache.get(cacheKey)!;
     }
 
-    const menuItems = actions
+    // Generate menu items
+    const menuItems: MenuItem[] = actions
       .filter((action) => !action.visible || action.visible(rowData))
-      .map((action) => {
-        const menuItem: MenuItem = {
-          label: action.label,
-          icon: action.icon,
-          command: (event: any) => {
-            this.handleMenuCommand(action.action, rowData);
-          },
-        };
-        return menuItem;
-      });
+      .map((action) => ({
+        label: action.label,
+        icon: action.icon,
+        command: () => this.handleMenuCommand(action.action, rowData),
+      }));
 
     // Cache the menu items
     this.menuItemsCache.set(cacheKey, menuItems);
@@ -227,17 +237,7 @@ export class TableComponent implements OnInit {
     return menuItems;
   }
 
-  // Separate method to handle menu commands
   private handleMenuCommand(action: string, rowData: any) {
-    // Use microtask to ensure proper execution
-    queueMicrotask(() => {
-      this.actionClick.emit({ action, item: rowData });
-      this.cdr.detectChanges();
-    });
-  }
-
-  // Method to clear cache when data changes
-  ngOnChanges() {
-    this.menuItemsCache.clear();
+    this.onActionClick(action, rowData);
   }
 }
