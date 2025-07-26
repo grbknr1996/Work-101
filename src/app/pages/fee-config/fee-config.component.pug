@@ -1,0 +1,87 @@
+app-layout
+    app-breadcrumbs([items]="breadcrumbItems")
+    h1.text-xl.ml-4.mb-1.col-span-6 Online Service Request Fees
+    h6.ml-4.col-span-6 View all service fees and charges for online requests 
+    .grid.grid-cols-6.gap-4.p-2.fee-page
+        .user-stats-container.col-span-6
+            .user-stat-card(
+                *ngFor="let stat of feeStats"
+                "[class.selected]"="selectedStat === stat.label"
+                "(click)"="selectStat(stat.label)"
+            )
+                .stat-header
+                    span.stat-label("[style.color]"="stat.color") {{ stat.label }}
+                    i("[class]"="stat.icon", "[style.color]"="stat.color")
+                
+                .stat-content
+                    span.stat-count("[style.color]"="stat.color") {{ stat.count }}     
+        .user-stats-container.col-span-6
+            .user-stat-card
+                .text-xl.font-bold Fee Structure Information
+                .grid.grid-cols-6.mt-2
+                    .col-span-3
+                        .text-sm.font-semibold.mb-2 Standard Processing
+                        ul.list-disc.list-inside.text-sm.text-gray-700
+                            li Regular processing timeline
+                            li Standard service quality
+                    .col-span-3
+                        .text-sm.font-semibold.mb-2 Express Processing
+                        ul.list-disc.list-inside.text-sm.text-gray-700
+                            li Expedited processing (50% faster)
+                            li Prority handling
+                            li SMS and small notifications
+
+        p-table(
+            #dt1='',
+            [value]='customers', 
+            dataKey='id', 
+            [rows]='10', 
+            [rowsPerPageOptions]='[10, 25, 50]', 
+            [loading]='loading', 
+            [paginator]='true', 
+            [globalFilterFields]="['name', 'country.name', 'representative.name', 'category']"
+            ).col-span-6
+            ng-template(#caption='')
+                .flex
+                    p-button(
+                        label='Clear', 
+                        [outlined]='true', 
+                        icon='pi pi-filter-slash', 
+                        (click)='clear(dt1)')
+                    p-iconfield.ml-auto(iconPosition='left')
+                        p-inputicon
+                            i.pi.pi-search
+                        input(
+                            pInputText='', 
+                            type='text', 
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')", 
+                            placeholder='Search keyword')
+            ng-template(#header='')
+                tr
+                    th(style='min-width:15rem')
+                        .flex.items-center.justify-between
+                            | SERVICE NAME
+                            p-columnFilter(type='text', field='name', display='menu')
+                    th(style='min-width:10rem')
+                        .flex.items-center.justify-between
+                            | CATEGORY
+                            p-columnFilter(field='category', matchMode='equals', display='menu')
+                                ng-template(#filter='', let-value='', let-filter='filterCallback')
+                                    p-select.w-full([(ngModel)]='value', [options]='categories', (onChange)='filter($event.value)', placeholder='Select One')
+                                        ng-template(let-option='', #item='')
+                                            p-tag([value]='option.value', [severity]='getSeverity(option.value)')
+                    th(style='min-width:10rem')
+                        .flex.items-center.justify-between
+                            | Basic Fee
+            ng-template(#body='', let-customer='')
+                tr
+                    td
+                        | {{ customer.name }}
+                    td
+                        p-tag([value]='customer.category', [severity]='getSeverity(customer.category)')
+                    td
+                        | {{ customer.balance | currency: 'USD' : 'symbol' }}
+            ng-template(#emptymessage='')
+                tr
+                    td(colspan='7') No customers found.
+

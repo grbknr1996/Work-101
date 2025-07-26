@@ -4,19 +4,19 @@ import {
   ViewEncapsulation,
   OnInit,
   ChangeDetectionStrategy,
-} from "@angular/core";
-import { Router } from "@angular/router";
-import { MechanicsService } from "./_services/mechanics.service";
-import { HttpClient } from "@angular/common/http";
+} from '@angular/core';
+import { Router } from '@angular/router';
+import { MechanicsService } from './_services/mechanics.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
+  selector: 'app-root',
+  templateUrl: './app.component.html',
   encapsulation: ViewEncapsulation.None,
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    "[class]": "ms.getCurrentOffice()",
+    '[class]': 'ms.getCurrentOffice()',
   },
 })
 export class AppComponent implements OnInit {

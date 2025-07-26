@@ -1,182 +1,182 @@
 app-layout
-    app-breadcrumbs([items]="breadcrumbItems")
-    p-4
+  app-breadcrumbs([items]="breadcrumbItems")
+  .p-4
     .mb-4.flex.justify-between.items-center
-    div
-      h1.text-2xl.font-bold.text-gray-800 User Groups
-      p.text-gray-600 Manage and view all user groups in the system
-    button(
-      pButton,
-      label="Create Group",
-      icon="pi pi-plus",
-      class="p-button-primary",
-      (click)="openCreateGroupDialog()"
+      div
+        h1.text-2xl.font-bold.text-gray-800 User Groups
+        p.text-gray-600 Manage and view all user groups in the system
+      button(
+        pButton,
+        label="Create Group",
+        icon="pi pi-plus",
+        class="p-button-primary",
+        (click)="openCreateGroupDialog()"
+      )
+
+    p-table(
+      [value]="groups",
+      [loading]="loading",
+      [paginator]="true",
+      [rows]="10",
+      [showCurrentPageReport]="true",
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} groups",
+      [rowsPerPageOptions]="[10, 25, 50]",
+      [sortField]="sortField",
+      [sortOrder]="sortOrder",
+      (onSort)="onSort($event)",
+      styleClass="p-datatable-sm",
+      class="shadow-lg rounded-lg overflow-hidden",
+      [globalFilterFields]='["groupName", "groupType", "description", "isActive", "createdBy", "createdDate"]'
     )
-
-  p-table(
-    [value]="groups",
-    [loading]="loading",
-    [paginator]="true",
-    [rows]="10",
-    [showCurrentPageReport]="true",
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} groups",
-    [rowsPerPageOptions]="[10, 25, 50]",
-    [sortField]="sortField",
-    [sortOrder]="sortOrder",
-    (onSort)="onSort($event)",
-    styleClass="p-datatable-sm",
-    class="shadow-lg rounded-lg overflow-hidden",
-    [globalFilterFields]='["groupName", "groupType", "description", "isActive", "createdBy", "createdDate"]'
-  )
-    ng-template(pTemplate="caption")
-      .flex.justify-between.items-center.p-3
-        span.text-xl.font-semibold Groups
-        span.p-input-icon-left
-          i.pi.pi-search
-          input(
-            pInputText,
-            type="text",
-            (input)="onGlobalFilter($event)",
-            placeholder="Search groups...",
-            class="p-inputtext-sm"
-          )
-
-    ng-template(pTemplate="header")
-      tr
-        th.text-left(pSortableColumn="groupName")
-          | Group Name
-          p-sortIcon(field="groupName")
-          p-columnFilter(
-            type="text",
-            field="groupName",
-            display="menu"
-          )
-        th.text-left(pSortableColumn="groupType")
-          | Type
-          p-sortIcon(field="groupType")
-          p-columnFilter(
-            type="text",
-            field="groupType",
-            display="menu"
-          )
-        th.text-left(pSortableColumn="description")
-          | Description
-          p-sortIcon(field="description")
-          p-columnFilter(
-            type="text",
-            field="description",
-            display="menu"
-          )
-        th.text-left(pSortableColumn="isActive")
-          | Status
-          p-sortIcon(field="isActive")
-          p-columnFilter(
-            field="isActive",
-            matchMode="equals",
-            display="menu"
-          )
-            ng-template(
-              pTemplate="filter",
-              let-value,
-              let-filter="filterCallback"
+      ng-template(pTemplate="caption")
+        .flex.justify-between.items-center.p-3
+          span.text-xl.font-semibold Groups
+          span.p-input-icon-left
+            i.pi.pi-search
+            input(
+              pInputText,
+              type="text",
+              (input)="onGlobalFilter($event)",
+              placeholder="Search groups...",
+              class="p-inputtext-sm"
             )
-              p-dropdown(
-                [ngModel]="value",
-                [options]='[{label: "All", value: null}, {label: "Active", value: true}, {label: "Inactive", value: false}]',
-                (onChange)="filter($event.value)",
-                placeholder="Select Status",
-                [showClear]="true"
+
+      ng-template(pTemplate="header")
+        tr
+          th.text-left(pSortableColumn="groupName")
+            | Group Name
+            p-sortIcon(field="groupName")
+            p-columnFilter(
+              type="text",
+              field="groupName",
+              display="menu"
+            )
+          th.text-left(pSortableColumn="groupType")
+            | Type
+            p-sortIcon(field="groupType")
+            p-columnFilter(
+              type="text",
+              field="groupType",
+              display="menu"
+            )
+          th.text-left(pSortableColumn="description")
+            | Description
+            p-sortIcon(field="description")
+            p-columnFilter(
+              type="text",
+              field="description",
+              display="menu"
+            )
+          th.text-left(pSortableColumn="isActive")
+            | Status
+            p-sortIcon(field="isActive")
+            p-columnFilter(
+              field="isActive",
+              matchMode="equals",
+              display="menu"
+            )
+              ng-template(
+                pTemplate="filter",
+                let-value,
+                let-filter="filterCallback"
               )
-        th.text-left(pSortableColumn="createdBy")
-          | Created By
-          p-sortIcon(field="createdBy")
-          p-columnFilter(
-            type="text",
-            field="createdBy",
-            display="menu"
-          )
-        th.text-left(pSortableColumn="createdDate")
-          | Created Date
-          p-sortIcon(field="createdDate")
-          p-columnFilter(
-            type="date",
-            field="createdDate",
-            display="menu"
-          )
-        th.text-left Actions
-
-    ng-template(pTemplate="body", let-group)
-      tr
-        td {{ group.groupName }}
-        td
-          span(
-            [class]='"px-2 py-1 rounded-full text-xs " + (group.groupType === "business" ? "bg-blue-100 text-blue-800" : "bg-green-100 text-green-800")'
-          ) {{ group.groupType }}
-        td {{ group.description }}
-        td
-          span(
-            [class]='"px-2 py-1 rounded-full text-xs " + (group.isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800")'
-          ) {{ group.isActive ? "Active" : "Inactive" }}
-        td {{ group.createdBy }}
-        td {{ group.createdDate }}
-        td
-          .flex.gap-2
-            button(
-              pButton,
-              icon="pi pi-pencil",
-              class="p-button-rounded p-button-text",
-              (click)="openEditGroupDialog(group)",
-              pTooltip="Edit Group"
+                p-dropdown(
+                  [ngModel]="value",
+                  [options]='[{label: "All", value: null}, {label: "Active", value: true}, {label: "Inactive", value: false}]',
+                  (onChange)="filter($event.value)",
+                  placeholder="Select Status",
+                  [showClear]="true"
+                )
+          th.text-left(pSortableColumn="createdBy")
+            | Created By
+            p-sortIcon(field="createdBy")
+            p-columnFilter(
+              type="text",
+              field="createdBy",
+              display="menu"
             )
-            button(
-              pButton,
-              icon="pi pi-trash",
-              class="p-button-rounded p-button-danger p-button-text",
-              (click)="openDeleteGroupDialog(group)",
-              pTooltip="Delete Group"
+          th.text-left(pSortableColumn="createdDate")
+            | Created Date
+            p-sortIcon(field="createdDate")
+            p-columnFilter(
+              type="date",
+              field="createdDate",
+              display="menu"
             )
+          th.text-left Actions
 
-    ng-template(pTemplate="emptymessage")
-      tr
-        td.text-center.p-4(colspan="7")
-          .text-gray-500 No groups found
+      ng-template(pTemplate="body", let-group)
+        tr
+          td {{ group.groupName }}
+          td
+            span(
+              [class]="'px-2 py-1 rounded-full text-xs ' + (group.groupType === 'business' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800')"
+            ) {{ group.groupType }}
+          td {{ group.description }}
+          td
+            span(
+              [class]="'px-2 py-1 rounded-full text-xs ' + (group.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800')"
+            ) {{ group.isActive ? "Active" : "Inactive" }}
+          td {{ group.createdBy }}
+          td {{ group.createdDate }}
+          td
+            .flex.gap-2
+              button(
+                pButton,
+                icon="pi pi-pencil",
+                class="p-button-rounded p-button-text",
+                (click)="openEditGroupDialog(group)",
+                pTooltip="Edit Group"
+              )
+              button(
+                pButton,
+                icon="pi pi-trash",
+                class="p-button-rounded p-button-danger p-button-text",
+                (click)="openDeleteGroupDialog(group)",
+                pTooltip="Delete Group"
+              )
 
-  // Delete Group Confirmation Dialog
-  p-dialog(
-    header="Delete Group",
-    [(visible)]="deleteGroupDialog",
-    [style]='{"width": "450px"}',
-    [modal]="true"
-  )
-    .p-fluid(*ngIf="selectedGroup")
-      .mb-4
-        p.text-lg
-          | Are you sure you want to delete the group "{{ selectedGroup.groupName }}"?
-        p.text-red-600.mt-2
-          | This action cannot be undone. All members will be removed from this group.
-    ng-template(pTemplate="footer")
-      button(
-        pButton,
-        pRipple,
-        label="Cancel",
-        icon="pi pi-times",
-        class="p-button-text",
-        (click)="deleteGroupDialog = false"
-      )
-      button(
-        pButton,
-        pRipple,
-        label="Delete",
-        icon="pi pi-trash",
-        class="p-button-danger",
-        (click)="deleteGroup()"
-      )
+      ng-template(pTemplate="emptymessage")
+        tr
+          td.text-center.p-4(colspan="7")
+            .text-gray-500 No groups found
 
-  // Group Form Component
-  app-group-form(
-    *ngIf="groupFormVisible",
-    [group]="selectedGroup",
-    [(visible)]="groupFormVisible",
-    (save)="onGroupSave($event)",
-    [key]="selectedGroup ? selectedGroup.groupIdentifier : 'new'"
-  )
+    // Delete Group Confirmation Dialog
+    p-dialog(
+      header="Delete Group",
+      [(visible)]="deleteGroupDialog",
+      [style]="{width: '450px'}",
+      [modal]="true"
+    )
+      .p-fluid(*ngIf="selectedGroup")
+        .mb-4
+          p.text-lg
+            | Are you sure you want to delete the group "{{ selectedGroup.groupName }}"?
+          p.text-red-600.mt-2
+            | This action cannot be undone. All members will be removed from this group.
+      ng-template(pTemplate="footer")
+        button(
+          pButton,
+          pRipple,
+          label="Cancel",
+          icon="pi pi-times",
+          class="p-button-text",
+          (click)="deleteGroupDialog = false"
+        )
+        button(
+          pButton,
+          pRipple,
+          label="Delete",
+          icon="pi pi-trash",
+          class="p-button-danger",
+          (click)="deleteGroup()"
+        )
+
+    // Group Form Component
+    app-group-form(
+      *ngIf="groupFormVisible",
+      [group]="selectedGroup",
+      [(visible)]="groupFormVisible",
+      (save)="onGroupSave($event)",
+      [key]="selectedGroup ? selectedGroup.groupIdentifier : 'new'"
+    )

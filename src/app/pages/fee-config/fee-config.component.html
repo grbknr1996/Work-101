@@ -1,0 +1,86 @@
+
+<app-layout>
+  <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
+  <h1 class="text-xl ml-4 mb-1 col-span-6">Online Service Request Fees</h1>
+  <h6 class="ml-4 col-span-6">View all service fees and charges for online requests </h6>
+  <div class="grid grid-cols-6 gap-4 p-2 fee-page">
+    <div class="user-stats-container col-span-6">
+      <div class="user-stat-card" *ngFor="let stat of feeStats" [class.selected]="selectedStat === stat.label" (click)="selectStat(stat.label)">
+        <div class="stat-header"><span class="stat-label" [style.color]="stat.color">{{ stat.label }}</span><i [class]="stat.icon" [style.color]="stat.color"></i></div>
+        <div class="stat-content"><span class="stat-count" [style.color]="stat.color">{{ stat.count }}     </span></div>
+      </div>
+    </div>
+    <div class="user-stats-container col-span-6">
+      <div class="user-stat-card">
+        <div class="text-xl font-bold">Fee Structure Information</div>
+        <div class="grid grid-cols-6 mt-2">
+          <div class="col-span-3">
+            <div class="text-sm font-semibold mb-2">Standard Processing</div>
+            <ul class="list-disc list-inside text-sm text-gray-700">
+              <li>Regular processing timeline</li>
+              <li>Standard service quality</li>
+            </ul>
+          </div>
+          <div class="col-span-3">
+            <div class="text-sm font-semibold mb-2">Express Processing</div>
+            <ul class="list-disc list-inside text-sm text-gray-700">
+              <li>Expedited processing (50% faster)</li>
+              <li>Prority handling</li>
+              <li>SMS and small notifications</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p-table class="col-span-6" #dt1="" [value]="customers" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" [paginator]="true" [globalFilterFields]="['name', 'country.name', 'representative.name', 'category']">
+      <ng-template #caption="">
+        <div class="flex">
+          <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)"></p-button>
+          <p-iconfield class="ml-auto" iconPosition="left">
+            <p-inputicon><i class="pi pi-search"></i></p-inputicon>
+            <input pInputText="" type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search keyword">
+          </p-iconfield>
+        </div>
+      </ng-template>
+      <ng-template #header="">
+        <tr>
+          <th style="min-width:15rem">
+            <div class="flex items-center justify-between">SERVICE NAME
+              <p-columnFilter type="text" field="name" display="menu"></p-columnFilter>
+            </div>
+          </th>
+          <th style="min-width:10rem">
+            <div class="flex items-center justify-between">CATEGORY
+              <p-columnFilter field="category" matchMode="equals" display="menu">
+                <ng-template #filter="" let-value="" let-filter="filterCallback">
+                  <p-select class="w-full" [(ngModel)]="value" [options]="categories" (onChange)="filter($event.value)" placeholder="Select One">
+                    <ng-template let-option="" #item="">
+                      <p-tag [value]="option.value" [severity]="getSeverity(option.value)"></p-tag>
+                    </ng-template>
+                  </p-select>
+                </ng-template>
+              </p-columnFilter>
+            </div>
+          </th>
+          <th style="min-width:10rem">
+            <div class="flex items-center justify-between">Basic Fee</div>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template #body="" let-customer="">
+        <tr>
+          <td>{{ customer.name }}</td>
+          <td>
+            <p-tag [value]="customer.category" [severity]="getSeverity(customer.category)"></p-tag>
+          </td>
+          <td>{{ customer.balance | currency: 'USD' : 'symbol' }}</td>
+        </tr>
+      </ng-template>
+      <ng-template #emptymessage="">
+        <tr>
+          <td colspan="7">No customers found.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</app-layout>

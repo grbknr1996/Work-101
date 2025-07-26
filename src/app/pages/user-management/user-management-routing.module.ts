@@ -31,6 +31,12 @@ const routes: Routes = [
     component: GroupsComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'units',
+    loadComponent: () =>
+      import('./units/units-page.component').then((m) => m.UnitsPageComponent),
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({

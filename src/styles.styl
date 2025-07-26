@@ -1644,9 +1644,8 @@ $transition-duration = 0.3s
 // =========================================
 app-create-user-account
   .create-user-container
+    
     padding: 2rem
-    max-width: 1200px
-    margin: 0 auto
 
     .form-title
       text-align: center
@@ -2129,3 +2128,23 @@ app-group-assignment
 // =========================================
 // End of Group assignment Component Styles
 // =========================================
+
+// =============================
+// Fee System Configuration Dashboard Page
+// =============================
+
+app-fee-config
+  .fee-page
+    h1
+      font-weight: 800
+  p-table
+    :host ::ng-deep {
+      .p-progressbar {
+        height: .5rem;
+        background-color: #D8DADC;
+
+        .p-progressbar-value {
+            background-color: #607D8B;
+        }
+      }
+    }

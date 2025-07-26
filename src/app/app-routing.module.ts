@@ -107,6 +107,14 @@ const routes: Routes = [
       ),
     canActivate: [AuthGuard],
   },
+    {
+    path: ':officeCode/:langCode/system-configuration/fee-config',
+    loadChildren: () =>
+      import('./pages/fee-config/fee-config.module').then(
+        (m) => m.FeeConfigModule
+      ),
+    canActivate: [AuthGuard],
+  },
   {
     path: ':officeCode/:langCode/notfound',
     loadChildren: () =>

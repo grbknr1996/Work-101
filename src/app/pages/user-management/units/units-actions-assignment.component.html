@@ -1,0 +1,24 @@
+
+<div>
+  <div class="mb-3">
+    <input pInputText [(ngModel)]="filterText" placeholder="Search actions..." style="width: 100%;">
+  </div>
+  <div class="mb-2"><span *ngIf="selectedActions.length &gt; 0">Selected Actions:</span>
+    <p-chip class="mr-2 mb-1" *ngFor="let action of selectedActions" [label]="getActionLabel(action)" removable="true" (onRemove)="removeAction(action)"></p-chip>
+  </div>
+  <div class="mb-3 flex items-center gap-2" style="cursor:pointer; width: fit-content;" (click)="toggleAllPanels()"><i class="pi pi-sitemap" style="font-size: 1.2rem; color: #1976d2;"></i><span style="font-size: 12px; color: #8a8a8a; user-select: none; font-weight: 400;">{{ allExpanded ? "Collapse all" : "Expand all" }}</span></div>
+  <p-accordion [multiple]="expandedIndexes">
+    <p-accordionTab *ngFor="let process of filteredProcesses(); let i = index">
+      <ng-template pTemplate="header">
+        <div class="flex items-center justify-between w-100"><span style="font-weight: 500;">{{ process.processName }}</span><span class="flex items-center" style="gap: 0.25rem;">
+            <p-checkbox [binary]="true" [ngModel]="isProcessFullySelected(process)" (onChange)="toggleProcess(process, $event.checked)" inputId="select-all-{{ process.processId }}" style="width: 16px; height: 16px; cursor:pointer;"></p-checkbox>
+            <label [for]="'select-all-' + process.processId" style="cursor:pointer; font-size: 12px; color: #8a8a8a; font-weight: 400;">Select all</label></span></div>
+      </ng-template>
+      <div class="text-gray-400 p-2" *ngIf="filteredActions(process).length === 0">No actions found.</div>
+      <div class="flex items-center mb-2" *ngFor="let action of filteredActions(process)">
+        <p-checkbox [binary]="true" [ngModel]="isActionSelected(process, action)" (onChange)="toggleAction(process, action, $event.checked)" inputId="{{ process.processId }}-{{ action.actionId }}" style="margin-right: 0.5rem;"></p-checkbox>
+        <label [for]="process.processId + '-' + action.actionId" style="cursor:pointer;">{{ action.actionName }} </label>
+      </div>
+    </p-accordionTab>
+  </p-accordion>
+</div>

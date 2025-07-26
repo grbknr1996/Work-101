@@ -1,24 +1,23 @@
-import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { TableModule } from "primeng/table";
-import { ButtonModule } from "primeng/button";
-import { DialogModule } from "primeng/dialog";
-import { TooltipModule } from "primeng/tooltip";
-import { InputTextModule } from "primeng/inputtext";
-import { DropdownModule } from "primeng/dropdown";
-import { FormsModule } from "@angular/forms";
-import { GroupFormComponent } from "./group-form/group-form.component";
-import { mockGroups } from "src/assets/data";
-import { AppLayoutComponent } from "../../../components/app-layout/app-layout.component";
-import { SidebarMenuService } from "src/app/_services/sidebar-menu.service";
-import { ActivatedRoute, Router, RouterModule } from "@angular/router";
-import { MechanicsService } from "src/app/_services/mechanics.service";
-import { BreadcrumbsComponent } from "../../../components/breadcrumbs/breadcrumbs.component";
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { TooltipModule } from 'primeng/tooltip';
+import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormsModule } from '@angular/forms';
+import { GroupFormComponent } from './group-form/group-form.component';
+import { mockGroups } from 'src/assets/data';
+import { AppLayoutComponent } from '../../../components/app-layout/app-layout.component';
+import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { MechanicsService } from 'src/app/_services/mechanics.service';
+import { BreadcrumbsComponent } from '../../../components/breadcrumbs/breadcrumbs.component';
 
 @Component({
-  selector: "app-groups",
-  templateUrl: "./groups.component.html",
-  styleUrls: ["./groups.component.css"],
+  selector: 'app-groups',
+  templateUrl: './groups.component.html',
   standalone: true,
   imports: [
     CommonModule,
@@ -40,7 +39,7 @@ export class GroupsComponent implements OnInit {
   loading: boolean = true;
 
   // Sorting properties
-  sortField: string = "groupName";
+  sortField: string = 'groupName';
   sortOrder: number = 1;
 
   // Dialog visibility
@@ -66,21 +65,21 @@ export class GroupsComponent implements OnInit {
 
     this.route.params.subscribe((params) => {
       const officeCode =
-        params["officeCode"] || this.ms.getCurrentOffice() || "default";
-      console.log("officeCode:::", officeCode);
-      const langCode = params["langCode"] || "en";
+        params['officeCode'] || this.ms.getCurrentOffice() || 'default';
+      console.log('officeCode:::', officeCode);
+      const langCode = params['langCode'] || 'en';
 
       this.breadcrumbItems = [
         {
-          label: "User Management",
+          label: 'User Management',
           routerLink: `/${officeCode}/${langCode}/user-management`,
         },
         {
-          label: "User Accounts",
+          label: 'User Accounts',
           routerLink: `/${officeCode}/${langCode}/user-management/user-accounts`,
         },
         {
-          label: "Groups",
+          label: 'Groups',
           routerLink: `/${officeCode}/${langCode}/user-management/user-accounts/groups`,
         },
       ];
@@ -102,9 +101,9 @@ export class GroupsComponent implements OnInit {
 
   // Global filter
   onGlobalFilter(event: any) {
-    const table = event.target.closest("p-table");
+    const table = event.target.closest('p-table');
     if (table) {
-      table.filterGlobal((event.target as HTMLInputElement).value, "contains");
+      table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
   }
 
@@ -128,7 +127,7 @@ export class GroupsComponent implements OnInit {
 
   deleteGroup() {
     // TODO: Implement API call
-    console.log("Deleting group:", this.selectedGroup);
+    console.log('Deleting group:', this.selectedGroup);
     this.groups = this.groups.filter(
       (g) => g.groupIdentifier !== this.selectedGroup.groupIdentifier
     );

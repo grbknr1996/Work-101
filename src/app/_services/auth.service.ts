@@ -558,6 +558,7 @@ export class AuthService {
           const postLogoutUri =
             officeConfig?.cognito?.postLogoutRedirectUri ||
             window.location.origin;
+
           console.log('Post logout URI:', postLogoutUri);
 
           // Encode the logout URI
@@ -565,9 +566,8 @@ export class AuthService {
           console.log('Encoded signout URL:', signoutUrl);
 
           // Cognito configuration
-          const cognitoDomain =
-            'eu-central-1zejzfgbcl.auth.eu-central-1.amazoncognito.com';
-          const clientId = '104v3qbi1bkcorngi5rlt8l0m9';
+          const cognitoDomain = officeConfig?.cognito?.authority;
+          const clientId = officeConfig?.cognito?.clientId;
 
           // Construct the federated sign-out URL
           const federatedSignOutUrl = `https://${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${signoutUrl}`;
@@ -626,19 +626,22 @@ export class AuthService {
   }
 
   getEncodedTokens(): Observable<any> {
-    return from(fetchAuthSession()).pipe(map(session => {
-      if (session.tokens) {
-        return {
-          // These are the encoded JWT strings           
-          accessToken: session.tokens.accessToken?.toString(),
-          idToken: session.tokens.idToken?.toString(),
-          // refreshToken: session.tokens.refreshToken?.toString()
-        };
-      } return null;
-    }),
-      catchError(error => {
+    return from(fetchAuthSession()).pipe(
+      map((session) => {
+        if (session.tokens) {
+          return {
+            // These are the encoded JWT strings
+            accessToken: session.tokens.accessToken?.toString(),
+            idToken: session.tokens.idToken?.toString(),
+            // refreshToken: session.tokens.refreshToken?.toString()
+          };
+        }
+        return null;
+      }),
+      catchError((error) => {
         console.error('Error fetching encoded tokens:', error);
         return throwError(() => error);
-      }));
+      })
+    );
   }
 }

@@ -115,7 +115,10 @@ export class DashboardComponent implements OnInit {
         icon: 'pi-cog',
         title: 'System Configuration',
         items: [
-          { label: 'Fee Configuration', link: '/fee-config' },
+          { 
+            label: 'Fee Configuration', 
+            link: `/${officeCode}/${this.ms.lang}/system-configuration/fee-config` 
+          },
           { label: 'Mailmerge Configuration', link: '/mailmerge' },
           { label: 'Custom Content', link: '/custom-content' },
         ],

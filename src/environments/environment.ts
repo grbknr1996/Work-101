@@ -3,7 +3,9 @@ export const environment = {
   env: 'localhost',
   appUrl: 'http://localhost:4200',
   // backendUrl: 'https://api.wipopublish-webapp-dev.ipobs.dev.web1.wipo.int',
-  backendUrl: 'https://ipoffices.support.wipopublish-dev.ipobs.dev.web1.wipo.int'
+  backendUrl:
+    'https://ipoffices.support.wipopublish-dev.ipobs.dev.web1.wipo.int',
+  autoCompleteApi: '/data-services/',
 };
 
 export interface CognitoConfig {
@@ -31,9 +33,9 @@ export const configuration = {
       clientId: '7vp4nvcrpsttatcg8lf7cds7g4',
       authority: 'auth.iims.ipobs.dev.web1.wipo.int',
       redirectUrl: 'https://localhost:4200/default/en/dashboard',
-      postLogoutRedirectUri: 'https://localhost:4200',
+      postLogoutRedirectUri: 'https://localhost:4200/default/en/logged-out',
       scope:
-        'aws.cognito.signin.user.admin email im-api/im-access openid profile',
+        'aws.cognito.signin.user.admin email im-api/im-access openid profile wipopublish-api/data-quality-access',
       responseType: 'code',
     },
   },
@@ -44,27 +46,27 @@ export const configuration = {
     availableLangs: ['ar', 'en', 'fr', 'id', 'jp', 'kh', 'ms', 'vi'],
     defaultLanguage: 'fr',
     defaultLandingModule: 'dashboard',
-    // cognito: {
-    //   region: 'eu-central-1',
-    //   userPoolId: 'eu-central-1_aIn5Yy5c5',
-    //   clientId: '2i1omm37jqd6pqke1l4brv2r0a',
-    //   authority: 'auth.iims.ipobs.dev.web1.wipo.int',
-    //   redirectUrl: 'https://localhost:4200/asean/fr',
-    //   postLogoutRedirectUri: 'https://localhost:4200',
-    //   scope:
-    //     'aws.cognito.signin.user.admin email im-api/im-access openid profile',
-    //   responseType: 'code',
-    // },
     cognito: {
       region: 'eu-central-1',
-      userPoolId: 'eu-central-1_eHUXOp3ra',
-      clientId: '1dh7vob23eetq87sbeapsc8g4m',
-      authority: 'eu-central-1ehuxop3ra.auth.eu-central-1.amazoncognito.com',
+      userPoolId: 'eu-central-1_aIn5Yy5c5',
+      clientId: '2i1omm37jqd6pqke1l4brv2r0a',
+      authority: 'auth.iims.ipobs.dev.web1.wipo.int',
       redirectUrl: 'https://localhost:4200/asean/fr',
       postLogoutRedirectUri: 'https://localhost:4200',
-      scope: 'aws.cognito.signin.user.admin email openid profile',
+      scope:
+        'aws.cognito.signin.user.admin email im-api/im-access openid profile',
       responseType: 'code',
     },
+    // cognito: {
+    //   region: 'eu-central-1',
+    //   userPoolId: 'eu-central-1_eHUXOp3ra',
+    //   clientId: '1dh7vob23eetq87sbeapsc8g4m',
+    //   authority: 'eu-central-1ehuxop3ra.auth.eu-central-1.amazoncognito.com',
+    //   redirectUrl: 'https://localhost:4200/asean/fr',
+    //   postLogoutRedirectUri: 'https://localhost:4200',
+    //   scope: 'aws.cognito.signin.user.admin email openid profile',
+    //   responseType: 'code',
+    // },
   },
   'kh-moc': {
     name: 'KH MOC',

@@ -39,7 +39,6 @@ interface FormData {
 @Component({
   selector: 'app-group-form',
   templateUrl: './group-form.component.html',
-  styleUrls: ['./group-from.component.css'],
   standalone: true,
   imports: [
     CommonModule,

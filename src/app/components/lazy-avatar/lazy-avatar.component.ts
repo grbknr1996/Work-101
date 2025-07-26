@@ -7,11 +7,11 @@ import {
   ElementRef,
   ViewChild,
   AfterViewInit,
-} from "@angular/core";
-import { CommonModule } from "@angular/common";
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: "app-lazy-avatar",
+  selector: 'app-lazy-avatar',
   template: `
     <div
       class="avatar-container"
@@ -104,14 +104,14 @@ import { CommonModule } from "@angular/common";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LazyAvatarComponent implements OnInit, AfterViewInit {
-  @Input() src: string = "";
-  @Input() alt: string = "Avatar";
+  @Input() src: string = '';
+  @Input() alt: string = 'Avatar';
   @Input() size: number = 32;
-  @Input() fallbackSrc: string = "assets/images/no-image.png";
+  @Input() fallbackSrc: string = 'assets/images/no-image.png';
 
-  @ViewChild("avatarImg") avatarImg!: ElementRef<HTMLImageElement>;
+  @ViewChild('avatarImg') avatarImg!: ElementRef<HTMLImageElement>;
 
-  currentSrc: string = "";
+  currentSrc: string = '';
   isLoading: boolean = true;
   hasError: boolean = false;
   private observer: IntersectionObserver | null = null;
@@ -128,7 +128,7 @@ export class LazyAvatarComponent implements OnInit, AfterViewInit {
   }
 
   private setupIntersectionObserver() {
-    if ("IntersectionObserver" in window) {
+    if ('IntersectionObserver' in window) {
       this.observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
@@ -139,7 +139,7 @@ export class LazyAvatarComponent implements OnInit, AfterViewInit {
           });
         },
         {
-          rootMargin: "50px", // Start loading 50px before the image comes into view
+          rootMargin: '50px', // Start loading 50px before the image comes into view
         }
       );
 

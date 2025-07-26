@@ -7,8 +7,6 @@ import {
   OnChanges,
   SimpleChanges,
   Output,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { PrimeIcons } from "primeng/api";
@@ -27,7 +25,6 @@ interface UserStat {
   templateUrl: "./user-stats.component.html",
   standalone: true,
   imports: [CommonModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserStatsComponent implements OnInit, OnChanges {
   @Input() totalUsers: number = 0;
@@ -50,8 +47,6 @@ export class UserStatsComponent implements OnInit, OnChanges {
   selectedStat: string | null = null;
   userStats: UserStat[] = [];
 
-  constructor(private cdr: ChangeDetectorRef) {}
-
   ngOnInit(): void {
     this.initUserStats();
   }
@@ -59,7 +54,6 @@ export class UserStatsComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     // Re-initialize stats if any input changes
     this.initUserStats();
-    this.cdr.markForCheck();
   }
 
   initUserStats(): void {
@@ -102,6 +96,5 @@ export class UserStatsComponent implements OnInit, OnChanges {
   selectStat(statLabel: string): void {
     this.selectedStat = statLabel;
     this.statSelected.emit(statLabel);
-    this.cdr.markForCheck();
   }
 }

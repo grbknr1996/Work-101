@@ -1,0 +1,44 @@
+app-layout
+  app-breadcrumbs(
+    [items]="breadcrumbItems",
+    style="margin-top: 1.5rem; margin-bottom: 1rem;",
+  )
+  div(style="display: flex; flex-direction: row; height: 100%; min-height: 80vh;")
+    div.units-sidebar(
+      *ngIf="showTree",
+      style="display: flex; flex-direction: column; min-width: 320px; max-width: 350px; position: relative; height: 100%; box-sizing: border-box;",
+    )
+      div(style="padding: 1rem; border-bottom: 1px solid #e5e7eb;")
+        button(
+          pButton,
+          icon="pi pi-plus",
+          label="New Root Unit",
+          class="p-button-sm p-button-primary",
+          style="width: 100%;",
+          (click)="createNewRootUnit()",
+        )
+      div(
+        style="flex: 1; overflow-y: auto; overflow-x: hidden; width: 100%; box-sizing: border-box;",
+      )
+        app-units-tree(
+          #unitsTree,
+          [searchText]="searchText",
+          [filter]="false",
+          (nodeSelected)="onNodeSelected($event)",
+        )
+    
+    div(style="position: relative; display: flex; align-items: center;")
+      p-divider(layout="vertical")
+      button.sidebar-toggle-btn(
+        (click)="showTree = !showTree",
+        style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #fff; border: 1px solid #e5e7eb; border-radius: 50%; width: 32px; height: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 2;",
+      )
+        i.pi.pi-arrow-right-arrow-left
+    
+    div(
+      style="flex: 1; padding: 2.5rem 2rem 2rem 2.5rem; min-width: 0; align-items: center; justify-content: center;",
+    )
+      ng-container(*ngIf="selectedUnit; else noSelection")
+        app-unit-details([unit]="selectedUnit")
+      ng-template(#noSelection)
+        div(style="color: #888; font-size: 1.2rem; text-align: center;") Select a node to view details 
