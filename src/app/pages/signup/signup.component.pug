@@ -1,0 +1,113 @@
+.signup-container
+  .signup-card
+    //- Office Logo and Title
+    .signup-header
+      img.office-logo(
+        *ngIf="officeLogo",
+        [src]="officeLogo",
+        [alt]="officeName + ' Logo'"
+      )
+      h1.signup-title Create WIPO IPAS Account
+      p.signup-subtitle Welcome to WIPO IPAS Support
+      .role-indicator
+        span.role-label Role: Admin
+        i.pi.pi-user.role-icon
+
+    //- Success/Error Messages
+    .success-message(*ngIf="successMessage")
+      i.pi.pi-check-circle
+      | {{ successMessage }}
+
+    .error-message(*ngIf="errorMessage")
+      i.pi.pi-exclamation-triangle
+      | {{ errorMessage }}
+
+    //- Signup Form
+    form.signup-form([formGroup]="signupForm", (ngSubmit)="onSubmit()")
+      .form-row
+        .form-field
+          label(for="givenName") Given Name
+          input#givenName(
+            type="text",
+            pInputText,
+            formControlName="givenName",
+            placeholder="Enter your given name",
+            [class.error]="getFieldError('givenName')"
+          )
+          small.error-text(*ngIf="getFieldError('givenName')")
+            | {{ getFieldError("givenName") }}
+
+        .form-field
+          label(for="familyName") Family Name
+          input#familyName(
+            type="text",
+            pInputText,
+            formControlName="familyName",
+            placeholder="Enter your family name",
+            [class.error]="getFieldError('familyName')"
+          )
+          small.error-text(*ngIf="getFieldError('familyName')")
+            | {{ getFieldError("familyName") }}
+
+      .form-field
+        label(for="username") Username (Login ID)
+        input#username(
+          type="text",
+          pInputText,
+          formControlName="username",
+          placeholder="Enter your username",
+          [class.error]="getFieldError('username')"
+        )
+        small.error-text(*ngIf="getFieldError('username')")
+          | {{ getFieldError("username") }}
+
+      .form-field
+        label(for="email") Email
+        input#email(
+          type="email",
+          pInputText,
+          formControlName="email",
+          placeholder="Enter your corporate email",
+          [class.error]="getFieldError('email')"
+        )
+        small.error-text(*ngIf="getFieldError('email')")
+          | {{ getFieldError("email") }}
+
+      .form-field
+        label(for="role") Role/Position
+        p-dropdown#role(
+          [options]="roleOptions",
+          formControlName="role",
+          placeholder="Select your role",
+          optionLabel="label",
+          optionValue="value",
+          [class.error]="getFieldError('role')"
+        )
+        small.error-text(*ngIf="getFieldError('role')")
+          | {{ getFieldError("role") }}
+
+      .form-field.checkbox-field
+        p-checkbox(
+          formControlName="agreeToTerms",
+          [binary]="true",
+          inputId="agreeToTerms"
+        )
+        label.checkbox-label(for="agreeToTerms")
+          | I agree to the 
+          a.terms-link(href="#") terms and conditions
+        small.error-text(*ngIf="getFieldError('agreeToTerms')")
+          | You must agree to the terms and conditions
+
+      .form-actions
+        button.create-account-btn(
+          type="submit",
+          pButton,
+          label="Create Account",
+          [loading]="loading",
+          [disabled]="signupForm.invalid || loading"
+        )
+
+    //- Sign In Link
+    .signin-link
+      a.signin-text((click)="onSignIn()")
+        | Already registered? Sign in to your account 
