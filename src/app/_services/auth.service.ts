@@ -1,8 +1,8 @@
-import { Injectable, inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, from, throwError, of } from 'rxjs';
-import { catchError, delay, map, tap } from 'rxjs/operators';
-import { Amplify } from 'aws-amplify';
+import { Injectable, inject } from "@angular/core";
+import { Router } from "@angular/router";
+import { BehaviorSubject, Observable, from, throwError, of } from "rxjs";
+import { catchError, delay, map, tap } from "rxjs/operators";
+import { Amplify } from "aws-amplify";
 import {
   signIn,
   signOut,
@@ -17,15 +17,12 @@ import {
   autoSignIn,
   signInWithRedirect,
   // Add device-related imports
-  fetchDevices,
-  rememberDevice,
-  forgetDevice,
-  type ForgetDeviceInput,
-} from 'aws-amplify/auth';
-import { Hub } from 'aws-amplify/utils';
-import { configuration } from '../../environments/environment';
-import { instanceType } from '../utils';
-import * as awsAmplify from 'aws-amplify';
+  // Removed: fetchDevices, rememberDevice, forgetDevice, type ForgetDeviceInput,
+} from "aws-amplify/auth";
+import { Hub } from "aws-amplify/utils";
+import { configuration } from "../../environments/environment";
+import { instanceType } from "../utils";
+import * as awsAmplify from "aws-amplify";
 
 export interface User {
   id: string;
@@ -41,12 +38,12 @@ export interface AuthState {
   isLoading: boolean;
   error: string | null;
   attributes: Record<string, any>;
-  currentDevice?: any; // Properly typed
-  deviceList?: any[]; // Properly typed
+  // Removed: currentDevice?: any; // Properly typed
+  // Removed: deviceList?: any[]; // Properly typed
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class AuthService {
   private router = inject(Router);
@@ -56,8 +53,8 @@ export class AuthService {
     isLoading: true,
     error: null,
     attributes: {},
-    currentDevice: null,
-    deviceList: [],
+    // Removed: currentDevice: null,
+    // Removed: deviceList: [],
   });
 
   authState$ = this.authStateSubject.asObservable();
@@ -75,7 +72,6 @@ export class AuthService {
     }
 
     // Configure Amplify with Gen 2 structure using office-specific config
-    // Add device tracking configuration
     Amplify.configure({
       Auth: {
         Cognito: {
@@ -84,8 +80,8 @@ export class AuthService {
           loginWith: {
             oauth: {
               domain: officeConfig.cognito?.authority,
-              scopes: officeConfig.cognito?.scope.split(' '),
-              responseType: 'code',
+              scopes: officeConfig.cognito?.scope.split(" "),
+              responseType: "code",
               redirectSignIn: [officeConfig.cognito?.redirectUrl],
               redirectSignOut: [officeConfig.cognito?.postLogoutRedirectUri],
             },
@@ -95,37 +91,25 @@ export class AuthService {
     });
 
     // Listen for auth events
-    Hub.listen('auth', ({ payload: { event, data } }: any) => {
+    Hub.listen("auth", ({ payload: { event, data } }: any) => {
       switch (event) {
-        case 'signedIn':
+        case "signedIn":
           this.checkAuthStatus().subscribe(() => {
-            // After successful sign in, also track device
-            this.rememberCurrentDevice().subscribe(
-              (deviceInfo) => {
-                console.log('Device tracked after sign-in:', deviceInfo);
-
-                // After device tracking, redirect to dashboard
-                const officeCode = instanceType();
-                const officeConfig = configuration[officeCode];
-                const langCode = officeConfig?.defaultLanguage || 'en';
-                // Use setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
-                setTimeout(() => {
-                  this.router.navigate([
-                    `/${officeCode}/${langCode}/dashboard`,
-                  ]);
-                });
-              },
-              (err) => console.error('Failed to track device:', err)
-            );
+            const officeCode = instanceType();
+            const officeConfig = configuration[officeCode];
+            const langCode = officeConfig?.defaultLanguage || "en";
+            setTimeout(() => {
+              this.router.navigate([`/${officeCode}/${langCode}/dashboard`]);
+            });
           });
           break;
-        case 'signedOut':
+        case "signedOut":
           this.clearAuth();
           break;
-        case 'tokenRefresh':
+        case "tokenRefresh":
           this.checkAuthStatus();
           break;
-        case 'customOAuthState':
+        case "customOAuthState":
           // Handle OAuth state if needed
           break;
       }
@@ -147,80 +131,16 @@ export class AuthService {
 
   private formatUserAttributes(attributes: any): User {
     return {
-      id: attributes.sub || '',
-      email: attributes.email || '',
-      name: attributes.name || attributes.email || '',
-      role: attributes['custom:role'] || 'user',
+      id: attributes.sub || "",
+      email: attributes.email || "",
+      name: attributes.name || attributes.email || "",
+      role: attributes["custom:role"] || "user",
     };
   }
 
-  // New method: Fetch the current device information
-  fetchCurrentDevice(): Observable<any[] | null> {
-    return from(fetchDevices()).pipe(
-      tap((devices) => {
-        console.log('All devices:', devices);
-
-        if (devices && devices.length > 0) {
-          // Typically the current device is the first in the list
-          const currentDevice = devices[0];
-          console.log('Current device details:', currentDevice);
-
-          // Log detailed device information
-
-          console.log(
-            'Last Used:',
-            new Date(currentDevice.lastAuthenticatedDate).toLocaleString()
-          );
-
-          // Update auth state with current device and full device list
-          const currentState = this.authStateSubject.value;
-          this.authStateSubject.next({
-            ...currentState,
-            currentDevice,
-            deviceList: devices,
-          });
-        } else {
-          console.log('No devices found for current user');
-        }
-      }),
-      catchError((error) => {
-        console.error('Error fetching device info:', error);
-        return of(null);
-      })
-    );
-  }
-
-  // New method: Remember the current device
-  rememberCurrentDevice(): Observable<void> {
-    return from(rememberDevice()).pipe(
-      tap(() => console.log('Device remembered successfully')),
-      catchError((error) => {
-        if (error.name === 'DeviceMetadataNotFoundException') {
-          console.log(
-            'Device tracking not available with redirect flow, continuing'
-          );
-          return of(undefined); // Continue without breaking the flow
-        }
-        return throwError(() => error);
-      })
-    );
-  }
-
-  // New method: Forget a device by its key
-  forgetDeviceById(deviceKey: string): Observable<void> {
-    const input: ForgetDeviceInput = {};
-    return from(forgetDevice(input)).pipe(
-      tap(() => {
-        console.log(`Device ${deviceKey} forgotten successfully`);
-        // Refresh device list
-        this.fetchCurrentDevice().subscribe();
-      }),
-      catchError((error) => {
-        console.error('Error forgetting device:', error);
-        return throwError(() => error);
-      })
-    );
-  }
+  // Removed: fetchCurrentDevice()
+  // Removed: rememberCurrentDevice()
+  // Removed: forgetDeviceById(deviceKey: string)
 
   // New method: Update a device (e.g., give it a name)
 
@@ -239,7 +159,7 @@ export class AuthService {
           }
 
           const currentUser = await getCurrentUser();
-          console.log('Current user:', currentUser);
+          console.log("Current user:", currentUser);
 
           try {
             const userAttributes = await fetchUserAttributes();
@@ -251,52 +171,34 @@ export class AuthService {
               isLoading: false,
               error: null,
               attributes: userAttributes,
+              // Removed: currentDevice, deviceList
             });
-            console.log('User attributes:', userAttributes);
+            console.log("User attributes:", userAttributes);
 
-            // After successful authentication, fetch device info
-            this.fetchCurrentDevice().subscribe(
-              (deviceInfo) =>
-                console.log('Device info fetched after auth:', deviceInfo),
-              (error) =>
-                console.error('Error fetching device info after auth:', error)
-            );
-
+            // Removed: fetchCurrentDevice() after auth
             return true;
           } catch (error) {
-            console.error('Error fetching user attributes:', error);
+            console.error("Error fetching user attributes:", error);
             // If we can't get attributes but have a session, still consider user authenticated
             this.authStateSubject.next({
               user: {
                 id: currentUser.userId,
                 email: currentUser.username,
                 name: currentUser.username,
-                role: 'user',
+                role: "user",
               },
               isAuthenticated: true,
               isLoading: false,
               error: null,
               attributes: {},
+              // Removed: currentDevice, deviceList
             });
 
-            // Try to fetch device info even if we couldn't get user attributes
-            this.fetchCurrentDevice().subscribe(
-              (deviceInfo) =>
-                console.log(
-                  'Device info fetched after partial auth:',
-                  deviceInfo
-                ),
-              (error) =>
-                console.error(
-                  'Error fetching device info after partial auth:',
-                  error
-                )
-            );
-
+            // Removed: fetchCurrentDevice() after partial auth
             return true;
           }
         } catch (error) {
-          console.error('Error checking auth status:', error);
+          console.error("Error checking auth status:", error);
           this.clearAuth();
           return false;
         } finally {
@@ -313,8 +215,7 @@ export class AuthService {
       isLoading: false,
       error: null,
       attributes: {},
-      currentDevice: null,
-      deviceList: [],
+      // Removed: currentDevice, deviceList
     });
   }
 
@@ -326,32 +227,32 @@ export class AuthService {
     const officeConfig = configuration[officeCode];
     // List of managed login language codes from the image
     const managedLoginLanguages = [
-      'de',
-      'en',
-      'es',
-      'fr',
-      'id',
-      'it',
-      'ja',
-      'ko',
-      'pt-BR',
-      'zh-CN',
-      'zh-TW',
+      "de",
+      "en",
+      "es",
+      "fr",
+      "id",
+      "it",
+      "ja",
+      "ko",
+      "pt-BR",
+      "zh-CN",
+      "zh-TW",
     ];
 
     // Get the default language from officeConfig or fallback to 'en'
-    const defaultLanguage = officeConfig?.defaultLanguage || 'en';
+    const defaultLanguage = officeConfig?.defaultLanguage || "en";
 
     // Check if the defaultLanguage is in the list of managed login languages
     const langCode = managedLoginLanguages.includes(defaultLanguage)
       ? defaultLanguage
-      : 'en';
+      : "en";
 
     return from(
       signInWithRedirect({
         customState: JSON.stringify({
           officeCode,
-          langCode: officeConfig?.defaultLanguage || 'en',
+          langCode: officeConfig?.defaultLanguage || "en",
         }),
         options: {
           lang: langCode,
@@ -359,7 +260,7 @@ export class AuthService {
       })
     ).pipe(
       catchError((error) => {
-        this.setError(error.message || 'Login failed');
+        this.setError(error.message || "Login failed");
         this.setLoading(false);
         return throwError(() => error);
       })
@@ -386,21 +287,21 @@ export class AuthService {
       tap((response) => {
         // Listen for auto sign in completion
         if (response.isSignUpComplete) {
-          const listener = Hub.listen('auth', ({ payload }: any) => {
-            if (payload.event === 'autoSignIn') {
+          const listener = Hub.listen("auth", ({ payload }: any) => {
+            if (payload.event === "autoSignIn") {
               this.checkAuthStatus().subscribe(() => {
                 // Remember device after auto sign-in
-                this.rememberCurrentDevice().subscribe(
-                  () => console.log('Device remembered after auto sign-in'),
-                  (err) =>
-                    console.error(
-                      'Failed to remember device after auto sign-in:',
-                      err
-                    )
-                );
+                // this.rememberCurrentDevice().subscribe(
+                //   () => console.log('Device remembered after auto sign-in'),
+                //   (err) =>
+                //     console.error(
+                //       'Failed to remember device after auto sign-in:',
+                //       err
+                //     )
+                // );
               });
               listener(); // Remove listener after receiving event
-            } else if (payload.event === 'autoSignIn_failure') {
+            } else if (payload.event === "autoSignIn_failure") {
               // Auto sign-in failed - user will need to sign in manually
               listener(); // Remove listener after receiving event
             }
@@ -408,7 +309,7 @@ export class AuthService {
         }
       }),
       catchError((error) => {
-        this.setError(error.message || 'Registration failed');
+        this.setError(error.message || "Registration failed");
         this.setLoading(false);
         return throwError(() => error);
       }),
@@ -427,7 +328,7 @@ export class AuthService {
       })
     ).pipe(
       catchError((error) => {
-        this.setError(error.message || 'Confirmation failed');
+        this.setError(error.message || "Confirmation failed");
         this.setLoading(false);
         return throwError(() => error);
       }),
@@ -441,7 +342,7 @@ export class AuthService {
 
     return from(resetPassword({ username: email })).pipe(
       catchError((error) => {
-        this.setError(error.message || 'Password reset request failed');
+        this.setError(error.message || "Password reset request failed");
         this.setLoading(false);
         return throwError(() => error);
       }),
@@ -465,7 +366,7 @@ export class AuthService {
       })
     ).pipe(
       catchError((error) => {
-        this.setError(error.message || 'Password reset confirmation failed');
+        this.setError(error.message || "Password reset confirmation failed");
         this.setLoading(false);
         return throwError(() => error);
       }),
@@ -476,7 +377,7 @@ export class AuthService {
   completeNewPassword(newPassword: string): Observable<any> {
     if (!this.tempUser) {
       return throwError(
-        () => new Error('No temporary user found for password change')
+        () => new Error("No temporary user found for password change")
       );
     }
 
@@ -489,21 +390,21 @@ export class AuthService {
           this.tempUser = null;
           this.checkAuthStatus().subscribe(() => {
             // Remember device after password change
-            this.rememberCurrentDevice().subscribe(
-              () => console.log('Device remembered after password change'),
-              (err) =>
-                console.error(
-                  'Failed to remember device after password change:',
-                  err
-                )
-            );
+            // this.rememberCurrentDevice().subscribe(
+            //   () => console.log('Device remembered after password change'),
+            //   (err) =>
+            //     console.error(
+            //       'Failed to remember device after password change:',
+            //       err
+            //     )
+            // );
           });
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(["/dashboard"]);
         }
         return result;
       }),
       catchError((error) => {
-        this.setError(error.message || 'Password change failed');
+        this.setError(error.message || "Password change failed");
         this.setLoading(false);
         return throwError(() => error);
       }),
@@ -511,31 +412,9 @@ export class AuthService {
     );
   }
 
-  // logout(): Observable<void> {
-  //   this.setLoading(true);
-
-  //   return from(
-  //     signOut({
-  //       global: true,
-  //     })
-  //   ).pipe(
-  //     tap(() => {
-  //       this.clearAuth();
-
-  //       this.router.navigate(['/login']);
-  //     }),
-  //     catchError((error) => {
-  //       this.setError(error.message || 'Logout failed');
-  //       this.setLoading(false);
-  //       return throwError(() => error);
-  //     }),
-  //     map(() => void 0),
-  //     tap(() => this.setLoading(false))
-  //   );
-  // }
   logout(): Observable<void> {
     this.setLoading(true);
-    console.log('Starting logout process...');
+    console.log("Starting logout process...");
 
     return from(
       signOut({
@@ -543,7 +422,7 @@ export class AuthService {
       })
     ).pipe(
       tap(() => {
-        console.log('Local signOut completed, clearing auth state...');
+        console.log("Local signOut completed, clearing auth state...");
         this.clearAuth();
         localStorage.clear();
         sessionStorage.clear();
@@ -552,18 +431,18 @@ export class AuthService {
         try {
           const officeCode = instanceType();
           const officeConfig = configuration[officeCode];
-          console.log('Office config:', officeConfig);
+          console.log("Office config:", officeConfig);
 
           // Get the post-logout redirect URI
           const postLogoutUri =
             officeConfig?.cognito?.postLogoutRedirectUri ||
             window.location.origin;
 
-          console.log('Post logout URI:', postLogoutUri);
+          console.log("Post logout URI:", postLogoutUri);
 
           // Encode the logout URI
           const signoutUrl = encodeURIComponent(postLogoutUri);
-          console.log('Encoded signout URL:', signoutUrl);
+          console.log("Encoded signout URL:", signoutUrl);
 
           // Cognito configuration
           const cognitoDomain = officeConfig?.cognito?.authority;
@@ -571,25 +450,25 @@ export class AuthService {
 
           // Construct the federated sign-out URL
           const federatedSignOutUrl = `https://${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${signoutUrl}`;
-          console.log('Federated sign-out URL:', federatedSignOutUrl);
+          console.log("Federated sign-out URL:", federatedSignOutUrl);
 
           // Use setTimeout to ensure the redirect happens after the current execution context
           setTimeout(() => {
-            console.log('Redirecting to federated sign-out URL...');
+            console.log("Redirecting to federated sign-out URL...");
             window.location.href = federatedSignOutUrl;
           }, 100);
         } catch (error) {
-          console.error('Error during logout process:', error);
+          console.error("Error during logout process:", error);
           // Fallback to local logout if federated logout fails
           const officeCode = instanceType();
           const officeConfig = configuration[officeCode];
-          const langCode = officeConfig?.defaultLanguage || 'en';
+          const langCode = officeConfig?.defaultLanguage || "en";
           this.router.navigate([`/${officeCode}/${langCode}/logged-out`]);
         }
       }),
       catchError((error) => {
-        console.error('Logout error:', error);
-        this.setError(error.message || 'Logout failed');
+        console.error("Logout error:", error);
+        this.setError(error.message || "Logout failed");
         this.setLoading(false);
         return throwError(() => error);
       }),
@@ -613,14 +492,6 @@ export class AuthService {
     return this.authState$.pipe(map((state) => state.error));
   }
 
-  get currentDevice$(): Observable<any | null> {
-    return this.authState$.pipe(map((state) => state.currentDevice || null));
-  }
-
-  get deviceList$(): Observable<any[]> {
-    return this.authState$.pipe(map((state) => state.deviceList || []));
-  }
-
   hasTempUser(): boolean {
     return !!this.tempUser;
   }
@@ -639,7 +510,7 @@ export class AuthService {
         return null;
       }),
       catchError((error) => {
-        console.error('Error fetching encoded tokens:', error);
+        console.error("Error fetching encoded tokens:", error);
         return throwError(() => error);
       })
     );

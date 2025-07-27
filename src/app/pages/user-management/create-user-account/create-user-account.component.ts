@@ -1,30 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 
-import { StepsModule } from 'primeng/steps';
-import { ButtonModule } from 'primeng/button';
-import { CommonModule } from '@angular/common';
-import { BasicInfoFormComponent } from '../basic-info-form/basic-info-form.component';
-import { AppLayoutComponent } from '../../../components/app-layout/app-layout.component';
-import { BreadcrumbsComponent } from '../../../components/breadcrumbs/breadcrumbs.component';
-import { ReviewStepComponent } from '../review-step/review-step.component';
+import { ButtonModule } from "primeng/button";
+import { CommonModule } from "@angular/common";
+import { BasicInfoFormComponent } from "../basic-info-form/basic-info-form.component";
+import { AppLayoutComponent } from "../../../components/app-layout/app-layout.component";
+import { BreadcrumbsComponent } from "../../../components/breadcrumbs/breadcrumbs.component";
+import { ReviewStepComponent } from "../review-step/review-step.component";
+import {
+  ConfigurableStepperComponent,
+  StepperStep,
+} from "../../../components/configurable-stepper/configurable-stepper.component";
 import {
   FormsModule,
   ReactiveFormsModule,
   FormBuilder,
   FormGroup,
   Validators,
-} from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+} from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
 import {
   GroupAssignmentComponent,
   GroupItem,
-} from 'src/app/components/group-assignment/group-assignment.component';
+} from "src/app/components/group-assignment/group-assignment.component";
+import { SidebarMenuService } from "../../../_services/sidebar-menu.service";
 
 @Component({
-  selector: 'app-create-user-account',
+  selector: "app-create-user-account",
   imports: [
     GroupAssignmentComponent,
-    StepsModule,
+    ConfigurableStepperComponent,
     ButtonModule,
     CommonModule,
     BasicInfoFormComponent,
@@ -35,15 +39,15 @@ import {
     ReactiveFormsModule,
   ],
   standalone: true,
-  templateUrl: './create-user-account.component.html',
+  templateUrl: "./create-user-account.component.html",
 })
 export class CreateUserAccountComponent implements OnInit {
-  steps = [
-    { label: 'Basic Info' },
-    { label: 'Groups' },
-    { label: 'Unit' },
-    { label: 'Security' },
-    { label: 'Review' },
+  steps: StepperStep[] = [
+    { value: 0, icon: "pi pi-user", label: "Basic Info" },
+    { value: 1, icon: "pi pi-users", label: "Groups" },
+    { value: 2, icon: "pi pi-building", label: "Unit" },
+    { value: 3, icon: "pi pi-shield", label: "Security" },
+    { value: 4, icon: "pi pi-check-circle", label: "Review" },
   ];
   activeStep = 0;
   isEditMode = false;
@@ -52,10 +56,10 @@ export class CreateUserAccountComponent implements OnInit {
   userForm: FormGroup;
 
   availableGroups: GroupItem[] = [
-    { id: '1', name: 'testzee', type: 'USER' },
-    { id: '2', name: 'PATENT_STAFF', type: 'BUSINESS' },
-    { id: '3', name: 'SYSTEM_ADMINISTRATOR', type: 'BUSINESS' },
-    { id: '4', name: 'VC_Administrator', type: 'USER' },
+    { id: "1", name: "testzee", type: "USER" },
+    { id: "2", name: "PATENT_STAFF", type: "BUSINESS" },
+    { id: "3", name: "SYSTEM_ADMINISTRATOR", type: "BUSINESS" },
+    { id: "4", name: "VC_Administrator", type: "USER" },
   ];
 
   breadcrumbItems = [];
@@ -63,22 +67,28 @@ export class CreateUserAccountComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private menuService: SidebarMenuService
   ) {}
 
   ngOnInit() {
-    const officeCode = this.route.snapshot.params['officeCode'];
-    const langCode = this.route.snapshot.params['langCode'];
-    this.userId = this.route.snapshot.params['userId'];
+    // Initialize sidebar menu items
+    const currentPath = this.router.url;
+    const menuItems = this.menuService.generateUserManagementMenu(currentPath);
+    this.menuService.updateMenuItems(menuItems);
+
+    const officeCode = this.route.snapshot.params["officeCode"];
+    const langCode = this.route.snapshot.params["langCode"];
+    this.userId = this.route.snapshot.params["userId"];
     this.isEditMode = !!this.userId;
 
     this.breadcrumbItems = [
       {
-        label: 'User Management',
+        label: "User Management",
         routerLink: `/${officeCode}/${langCode}/user-management/user-accounts`,
       },
       {
-        label: this.isEditMode ? 'Edit User' : 'Create User',
+        label: this.isEditMode ? "Edit User" : "Create User",
         routerLink: this.isEditMode
           ? `/${officeCode}/${langCode}/user-management/user-accounts/edit-user-account/${this.userId}`
           : `/${officeCode}/${langCode}/user-management/user-accounts/create-user-account`,
@@ -94,17 +104,17 @@ export class CreateUserAccountComponent implements OnInit {
   private initForm() {
     this.userForm = this.fb.group({
       basicInfo: this.fb.group({
-        username: ['', [Validators.required, Validators.minLength(3)]],
-        email: ['', [Validators.required, Validators.email]],
-        telephone: ['', [Validators.pattern('^[0-9-+() ]*$')]],
-        clientId: [''],
-        loginAlias: ['', [Validators.minLength(3)]],
-        signature: [''],
+        username: ["", [Validators.required, Validators.minLength(3)]],
+        email: ["", [Validators.required, Validators.email]],
+        telephone: ["", [Validators.pattern("^[0-9-+() ]*$")]],
+        clientId: [""],
+        loginAlias: ["", [Validators.minLength(3)]],
+        signature: [""],
         profilePicture: [null],
         signatureImage: [null],
       }),
       assignedGroups: [[]],
-      unit: [''],
+      unit: [""],
       security: this.fb.group({
         requirePasswordChange: [false],
         enableTwoFactor: [false],
@@ -117,19 +127,19 @@ export class CreateUserAccountComponent implements OnInit {
     // This is a mock implementation
     const mockUserData = {
       basicInfo: {
-        username: 'john.doe',
-        email: 'john.doe@example.com',
-        telephone: '+1234567890',
-        clientId: 'CLI123',
-        loginAlias: 'jdoe',
+        username: "john.doe",
+        email: "john.doe@example.com",
+        telephone: "+1234567890",
+        clientId: "CLI123",
+        loginAlias: "jdoe",
         profilePicture: null,
         signatureImage: null,
       },
       assignedGroups: [
-        { id: '2', name: 'PATENT_STAFF', type: 'BUSINESS' },
-        { id: '4', name: 'VC_Administrator', type: 'USER' },
+        { id: "2", name: "PATENT_STAFF", type: "BUSINESS" },
+        { id: "4", name: "VC_Administrator", type: "USER" },
       ],
-      unit: 'Patent Division',
+      unit: "Patent Division",
       security: {
         requirePasswordChange: true,
         enableTwoFactor: false,
@@ -140,13 +150,19 @@ export class CreateUserAccountComponent implements OnInit {
   }
 
   onAssignedGroupsChange(groups: GroupItem[]) {
-    this.userForm.get('assignedGroups').setValue(groups);
+    this.userForm.get("assignedGroups").setValue(groups);
+  }
+
+  onStepChange(stepValue: number) {
+    if (stepValue <= this.activeStep) {
+      this.activeStep = stepValue;
+    }
   }
 
   canProceed(): boolean {
     switch (this.activeStep) {
       case 0:
-        return this.userForm.get('basicInfo').valid;
+        return this.userForm.get("basicInfo").valid;
       case 1:
         return true;
       case 2:
@@ -175,13 +191,13 @@ export class CreateUserAccountComponent implements OnInit {
       const userData = this.userForm.value;
       if (this.isEditMode) {
         // TODO: Implement update user API call
-        console.log('Updating user with data:', userData);
+        console.log("Updating user with data:", userData);
       } else {
         // TODO: Implement create user API call
-        console.log('Creating user with data:', userData);
+        console.log("Creating user with data:", userData);
       }
       // Navigate back to user accounts list
-      this.router.navigate(['../'], { relativeTo: this.route });
+      this.router.navigate(["../"], { relativeTo: this.route });
     } else {
       this.userForm.markAllAsTouched();
     }

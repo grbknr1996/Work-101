@@ -1,0 +1,18 @@
+.configurable-stepper
+  .stepper-container
+    .stepper-steps
+      .stepper-step(
+        *ngFor="let step of steps; let i = index",
+        [class.active]="isStepActive(step.value)",
+        [class.completed]="isStepCompleted(step.value)",
+        [class.clickable]="isStepClickable(step.value)",
+        (click)="onStepClick(step.value)"
+      )
+        .step-icon-container
+          .step-icon
+            i([class]="step.icon")
+        .step-label {{ step.label }}
+        
+        //- Connector line (except for last step)
+        .step-connector(*ngIf="i < steps.length - 1")
+          .connector-line 

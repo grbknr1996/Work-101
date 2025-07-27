@@ -2,7 +2,11 @@ app-layout
   app-breadcrumbs([items]="breadcrumbItems")
   .create-user-container
     h1.form-title {{ isEditMode ? 'Edit User' : 'Create User' }}
-    p-steps([model]="steps", [activeIndex]="activeStep")
+    app-configurable-stepper(
+      [steps]="steps",
+      [activeStep]="activeStep",
+      (stepChange)="onStepChange($event)"
+    )
     form([formGroup]="userForm")
       .step-content
         ng-container([ngSwitch]="activeStep")
@@ -21,37 +25,41 @@ app-layout
           )
 
           //- Unit Step
-          .unit-step(*ngSwitchCase="2")
-            h2 Unit Assignment
-            .form-field
-              label(for="unit") Select Unit
-              input(
-                type="text",
-                id="unit",
-                formControlName="unit",
-                placeholder="Enter unit name"
-              )
+          .unit-step-card(*ngSwitchCase="2")
+            .card-header
+              h2 Unit Assignment
+            .card-content
+              .form-field
+                label(for="unit") Select Unit
+                input(
+                  type="text",
+                  id="unit",
+                  formControlName="unit",
+                  placeholder="Enter unit name"
+                )
 
           //- Security Step
-          .security-step(
+          .security-step-card(
             *ngSwitchCase="3",
             [formGroup]="userForm.get('security')"
           )
-            h2 Security Settings
-            .form-field
-              label
-                input(
-                  type="checkbox",
-                  formControlName="requirePasswordChange"
-                )
-                | Require password change on first login
-            .form-field
-              label
-                input(
-                  type="checkbox",
-                  formControlName="enableTwoFactor"
-                )
-                | Enable two-factor authentication
+            .card-header
+              h2 Security Settings
+            .card-content
+              .form-field
+                label.checkbox-label
+                  input(
+                    type="checkbox",
+                    formControlName="requirePasswordChange"
+                  )
+                  span.checkbox-text Require password change on first login
+              .form-field
+                label.checkbox-label
+                  input(
+                    type="checkbox",
+                    formControlName="enableTwoFactor"
+                  )
+                  span.checkbox-text Enable two-factor authentication
 
           //- Review Step
           app-review-step(
@@ -63,25 +71,28 @@ app-layout
           )
 
       .step-actions
-        button.p-button-secondary(
-          pButton,
-          type="button",
-          label="Previous",
-          (click)="prevStep()",
-          *ngIf="activeStep > 0"
-        )
-        button.p-button-primary(
-          pButton,
-          type="button",
-          label="Next",
-          (click)="nextStep()",
-          *ngIf="activeStep < steps.length - 1",
-          [disabled]="!canProceed()"
-        )
-        button.p-button-success(
-          pButton,
-          type="button",
-          [label]="isEditMode ? 'Update User' : 'Create User'",
-          (click)="saveUser()",
-          *ngIf="activeStep === steps.length - 1"
-        )
+        .step-actions-left
+          button.p-button-secondary(
+            pButton,
+            type="button",
+            label="Previous",
+            (click)="prevStep()",
+            *ngIf="activeStep > 0"
+          )
+        .step-actions-divider(*ngIf="activeStep > 0 && activeStep < steps.length - 1")
+        .step-actions-right
+          button.p-button-primary(
+            pButton,
+            type="button",
+            label="Next",
+            (click)="nextStep()",
+            *ngIf="activeStep < steps.length - 1",
+            [disabled]="!canProceed()"
+          )
+          button.p-button-success(
+            pButton,
+            type="button",
+            [label]="isEditMode ? 'Update User' : 'Create User'",
+            (click)="saveUser()",
+            *ngIf="activeStep === steps.length - 1"
+          )

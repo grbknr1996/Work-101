@@ -1,87 +1,91 @@
-.group-assignment-container
-  .group-list.available
-    h3 {{ availableLabel }}
-    .group-list-header
-      label
-        input(
-          type="checkbox",
-          [checked]="isAllAvailableSelected()",
-          (change)="toggleSelectAllAvailable($event.target.checked)"
-        )
-        | Select All
-    .group-list-body
-      .group-item(*ngFor="let group of pagedAvailableGroups")
-        span.drag-handle ⋮⋮
-        .group-info
-          .group-name {{ group.name }}
-          .group-type {{ group.type }}
-        input(
-          type="checkbox",
-          [checked]="availableSelected.has(group.id)",
-          (change)=`availableSelected.has(group.id)
-            ? availableSelected.delete(group.id)
-            : availableSelected.add(group.id)`
-        )
-    .pagination
-      button(
-        (click)="setAvailablePage(availablePage - 1)",
-        [disabled]="availablePage === 1"
-      )
-        i.pi.pi-angle-left
-      span {{ availablePage }}
-      button(
-        (click)="setAvailablePage(availablePage + 1)",
-        [disabled]="availablePage * pageSize >= availableGroups.length"
-      )
-        i.pi.pi-angle-right
+.group-assignment-card
+  .card-header
+    h2 Group Assignment
+  .card-content
+    .group-assignment-container
+      .group-list.available
+        h3 {{ availableLabel }}
+        .group-list-header
+          label
+            input(
+              type="checkbox",
+              [checked]="isAllAvailableSelected()",
+              (change)="toggleSelectAllAvailable($event.target.checked)"
+            )
+            | Select All
+        .group-list-body
+          .group-item(*ngFor="let group of pagedAvailableGroups")
+            span.drag-handle ⋮⋮
+            .group-info
+              .group-name {{ group.name }}
+              .group-type {{ group.type }}
+            input(
+              type="checkbox",
+              [checked]="availableSelected.has(group.id)",
+              (change)=`availableSelected.has(group.id)
+                ? availableSelected.delete(group.id)
+                : availableSelected.add(group.id)`
+            )
+        .pagination
+          button(
+            (click)="setAvailablePage(availablePage - 1)",
+            [disabled]="availablePage === 1"
+          )
+            i.pi.pi-angle-left
+          span {{ availablePage }}
+          button(
+            (click)="setAvailablePage(availablePage + 1)",
+            [disabled]="availablePage * pageSize >= availableGroups.length"
+          )
+            i.pi.pi-angle-right
 
-  .group-list-controls.center-controls
-    button.move-btn(
-      (click)="moveToAssigned()",
-      [disabled]="availableSelected.size === 0"
-    )
-      i.pi.pi-angle-right
-    button.move-btn(
-      (click)="moveToAvailable()",
-      [disabled]="assignedSelected.size === 0"
-    )
-      i.pi.pi-angle-left
+      .group-list-controls.center-controls
+        button.move-btn(
+          (click)="moveToAssigned()",
+          [disabled]="availableSelected.size === 0"
+        )
+          i.pi.pi-angle-right
+        button.move-btn(
+          (click)="moveToAvailable()",
+          [disabled]="assignedSelected.size === 0"
+        )
+          i.pi.pi-angle-left
 
-  .group-list.assigned
-    h3 {{ assignedLabel }}
-    .group-list-header
-      label
-        input(
-          type="checkbox",
-          [checked]="isAllAssignedSelected()",
-          (change)="toggleSelectAllAssigned($event.target.checked)"
-        )
-        | Select All
-    .group-list-body
-      .group-item(
-        *ngFor="let group of pagedAssignedGroups",
-        [class.selected]="assignedSelected.has(group.id)"
-      )
-        span.drag-handle ⋮⋮
-        .group-info
-          .group-name {{ group.name }}
-          .group-type {{ group.type }}
-        input(
-          type="checkbox",
-          [checked]="assignedSelected.has(group.id)",
-          (change)=`assignedSelected.has(group.id)
-            ? assignedSelected.delete(group.id)
-            : assignedSelected.add(group.id)`
-        )
-    .pagination
-      button(
-        (click)="setAssignedPage(assignedPage - 1)",
-        [disabled]="assignedPage === 1"
-      )
-        i.pi.pi-angle-left
-      span {{ assignedPage }}
-      button(
-        (click)="setAssignedPage(assignedPage + 1)",
-        [disabled]="assignedPage * pageSize >= assignedGroups.length"
-      )
-        i.pi.pi-angle-right
+      .group-list.assigned
+        h3 {{ assignedLabel }}
+        .group-list-header
+          label
+            input(
+              type="checkbox",
+              [checked]="isAllAssignedSelected()",
+              (change)="toggleSelectAllAssigned($event.target.checked)"
+            )
+            | Select All
+        .group-list-body
+          .group-item(
+            *ngFor="let group of pagedAssignedGroups",
+            [class.selected]="assignedSelected.has(group.id)"
+          )
+            span.drag-handle ⋮⋮
+            .group-info
+              .group-name {{ group.name }}
+              .group-type {{ group.type }}
+            input(
+              type="checkbox",
+              [checked]="assignedSelected.has(group.id)",
+              (change)=`assignedSelected.has(group.id)
+                ? assignedSelected.delete(group.id)
+                : assignedSelected.add(group.id)`
+            )
+        .pagination
+          button(
+            (click)="setAssignedPage(assignedPage - 1)",
+            [disabled]="assignedPage === 1"
+          )
+            i.pi.pi-angle-left
+          span {{ assignedPage }}
+          button(
+            (click)="setAssignedPage(assignedPage + 1)",
+            [disabled]="assignedPage * pageSize >= assignedGroups.length"
+          )
+            i.pi.pi-angle-right
