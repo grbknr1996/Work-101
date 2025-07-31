@@ -188,7 +188,8 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "buildTarget": "ipas-webapp-frontend:build",
-            "ssl": true
+            "ssl": true,
+            "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
             "awsdev": {
