@@ -123,8 +123,7 @@ $transition-duration = 0.3s
   .p-menubar-button
     display none !important
 
-.card
-  padding-bottom 10rem
+
 app-table
   .p-datatable-thead > tr > th p-columnfilter
       background-color inherit
@@ -656,7 +655,6 @@ $transition-duration = 0.3s
 .layout-content
   margin-top: 64px !important
   flex: 1
-  overflow-x: hidden
   width: 100%
   transition: padding 0.3s ease-in-out
   padding: 1rem
@@ -734,13 +732,13 @@ $transition-duration = 0.3s
 // App Widget Component Styles
 // ============================================
 .widget-container
-  border-bottom 1px solid var(--surface-border, #e9ecef)
   margin-bottom 0
   overflow hidden
   background-color var(--surface-card, #ffffff)
 
 .widget-header
   padding 1rem
+  padding-bottom 0
   display flex
   flex-direction column
 
@@ -778,7 +776,6 @@ $transition-duration = 0.3s
 
 .widget-item
   margin 0
-  border-top 1px solid var(--surface-border, #e9ecef)
 
 .widget-item-link
   display flex
@@ -961,7 +958,7 @@ $transition-duration = 0.3s
   margin-bottom: 2rem
   padding: 2rem 1rem 1.5rem 1rem
   border-radius: 4px
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05)
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08)
 
   .dashboard-title
     font-size: 2rem
@@ -1228,7 +1225,6 @@ $transition-duration = 0.3s
     display block
   .layout-content
     margin-left 0 !important
-    margin 0.5rem !important
     width 100% !important
     padding 0.5rem !important
   .layout-main
@@ -1305,341 +1301,9 @@ $transition-duration = 0.3s
 
 // ============================================
 // End Responsive Layout, Navbar, Sidebar Styles
+//==============================================
 
-
-// =============================
-// Data Exchange Configuration Dashboard Page
-// =============================
-.data-exchange-config-summary-cards
-  display: flex
-  gap: 2rem
-  margin: 2rem 0 2.5rem 0
-  justify-content: flex-start
-
-.summary-card
-  background: #fff
-  border: 2px solid #eee
-  border-radius: 12px
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06)
-  padding: 2rem 2.5rem 1.5rem 2.5rem
-  min-width: 320px
-  max-width: 350px
-  flex: 1 1 0
-  display: flex
-  flex-direction: column
-  align-items: flex-start
-  transition: box-shadow 0.2s
-
-.summary-card:hover
-  box-shadow: 0 4px 16px rgba(0,0,0,0.12)
-
-.summary-card-icon
-  font-size: 2.5rem
-  margin-bottom: 0.5rem
-
-.summary-card-title
-  font-size: 1.3rem
-  font-weight: 600
-  margin-bottom: 0.5rem
-
-.summary-card-count
-  font-size: 2.5rem
-  font-weight: 700
-  margin-bottom: 0.5rem
-
-.summary-card-description
-  font-size: 1rem
-  color: #666
-  margin-top: 0.5rem
-
-
-
-
-// =============================
-// Add Exclusion Rule Component Styles
-// =============================
-.exclusion-chip
-  display: inline-block
-  background: #e6f0fa
-  color: #1976d2
-  border-radius: 16px
-  padding: 0.08rem 0.7rem
-  font-size: 0.92rem
-  margin: 0 0.18rem 0.18rem 0
-  font-weight: 400
-  letter-spacing: 0.01em
-.add-exclusion-rule
-  max-width: 900px
-  margin: 2.5rem auto
-  background: #fff
-  border-radius: 14px
-  box-shadow: 0 4px 24px rgba(25, 118, 210, 0.07)
-  padding: 2.5rem 2.5rem 2rem 2.5rem
-  position: relative
-
-  h2
-    font-size: 1.7rem
-    font-weight: 700
-    margin-bottom: 1.2rem
-    color: #1565c0
-    letter-spacing: 0.01em
-    text-align: left
-
-  .p-steps
-    margin-bottom: 2.5rem
-    .p-steps-item .p-menuitem-link
-      padding: 1.1rem 1.5rem
-      border-radius: 8px
-      font-size: 1.08rem
-      font-weight: 500
-      color: #1976d2
-      background: #f4f8fb
-      transition: background 0.2s
-    .p-steps-item.p-highlight .p-menuitem-link
-      background: #1976d2
-      color: #fff
-      box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08)
-    .p-steps-title
-      font-size: 1.08rem
-      font-weight: 500
-      margin-top: 0.5rem
-
-  .p-formgrid
-    margin-bottom: 1.5rem
-    label
-      display: block
-      margin-bottom: 0.5rem
-      color: #333
-      font-weight: 500
-    .p-dropdown, .p-multiselect
-      width: 100%
-
-  .p-message
-    margin-top: 0.5rem
-
-  .p-tabview
-    margin: 1.5rem 0
-    .p-tabview-panels
-      padding: 1.5rem 0
-    .p-checkbox
-      margin-right: 0.5rem
-    .p-text-secondary
-      color: #666
-      font-size: 0.97rem
-
-  .p-accordion
-    .p-accordion-tab
-      margin-bottom: 1rem
-      .p-accordion-header a
-        padding: 1rem
-        font-weight: 500
-      .p-accordion-content
-        padding: 1rem
-
-  .p-card
-    background: #f8f9fa
-    border: 1px solid #e9ecef
-    border-radius: 8px
-    padding: 1.5rem
-    margin-bottom: 1.5rem
-
-  .p-datatable-table
-    width: 100%
-    border-collapse: collapse
-    margin-bottom: 1.5rem
-    th, td
-      padding: 1rem
-      text-align: left
-      border-bottom: 1px solid #e9ecef
-    th
-      background: #f8f9fa
-      font-weight: 600
-      color: #495057
-
-  .p-d-flex
-    display: flex
-    justify-content: space-between
-    align-items: center
-    gap: 1.5rem
-
-  .p-mt-2
-    margin-top: 1rem
-  .p-mt-3
-    margin-top: 1.5rem
-  .p-mt-4
-    margin-top: 2rem
-  .p-mb-2
-    margin-bottom: 1rem
-  .p-mb-3
-    margin-bottom: 1.5rem
-  .p-ml-2
-    margin-left: 1rem
-  .p-ml-4
-    margin-left: 2rem
-  .p-jc-between
-    justify-content: space-between
-
-  .exclusion-chip
-    display: inline-block
-    background: #e6f0fa
-    color: #1976d2
-    border-radius: 16px
-    padding: 0.08rem 0.7rem
-    font-size: 0.92rem
-    margin: 0 0.18rem 0.18rem 0
-    font-weight: 400
-    letter-spacing: 0.01em
-
-  @media (max-width: 900px)
-    padding: 1.2rem 0.5rem
-    max-width: 100vw
-    .p-formgrid > .p-col-6
-      flex: 1 1 100%
-      max-width: 100%
-      margin-bottom: 1rem
-    .p-d-flex
-      flex-direction: column
-      gap: 1rem
-    .p-tabview-panels
-      padding: 0.5rem 0
-
-// =============================
-// Distribution Exclusion Rules Table Styles
-// =============================
-.exclusion-rules-header
-  display: flex
-  align-items: center
-  justify-content: space-between
-  margin: 2rem 0 1.5rem 0
-
-.exclusion-rules-header h2
-  font-size: 1.5rem
-  font-weight: 600
-  margin: 0
-
-.add-rule-btn
-  background: #1976d2
-  color: #fff
-  border: none
-  border-radius: 6px
-  padding: 0.5rem 1.25rem
-  font-size: 1rem
-  font-weight: 500
-  cursor: pointer
-  display: flex
-  align-items: center
-  gap: 0.5rem
-  transition: background 0.2s
-
-.add-rule-btn:hover
-  background: #125ea2
-
-.exclusion-rules-table-wrapper
-  background: #fff
-  border-radius: 12px
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)
-  padding: 0.5rem 0.5rem 0.5rem 0.5rem
-  margin-bottom: 2rem
-
-.exclusion-rules-table
-  width: 100%
-  border-collapse: separate
-  border-spacing: 0
-
-.exclusion-rules-table th,
-.exclusion-rules-table td
-  padding: 1rem 1rem
-  text-align: left
-  font-size: 1rem
-
-.exclusion-rules-table th
-  background: #f8fafd
-  font-weight: 600
-  color: #1976d2
-  border-bottom: 2px solid #1976d2
-
-.exclusion-rules-table tr
-  border-bottom: 1px solid #e9ecef
-
-.delete-rule-btn
-  background: none
-  border: none
-  color: #e53935
-  font-size: 1.5rem
-  cursor: pointer
-  transition: color 0.2s
-
-.delete-rule-btn:hover
-  color: #b71c1c
-
-// =============================
-// Data Exchange Config: Originating Offices Table Styles
-// =============================
-.originating-offices-header
-  display: flex
-  justify-content: space-between
-  align-items: center
-  margin-bottom: 1rem
-
-.add-office-btn
-  background: var( --p-primary-color)
-  color: #fff
-  border: none
-  border-radius: 6px
-  padding: 0.5rem 1rem
-  font-size: 1rem
-  display: flex
-  align-items: center
-
-.originating-code-badge
-  background: #e3eefc
-  color: #1976d2
-  border-radius: 1.5rem
-  padding: 0.25rem 1rem
-  font-weight: 600
-  font-size: 1rem
-  display: inline-block
-
-// =============================
-// Data Exchange Config: Recipient Systems Table Styles
-// =============================
-.recipient-systems-header
-  display: flex
-  justify-content: space-between
-  align-items: center
-  margin-bottom: 1rem
-
-.add-system-btn
-  background: #1976d2
-  color: #fff
-  border: none
-  border-radius: 6px
-  padding: 0.5rem 1rem
-  font-size: 1rem
-  display: inline-flex
-  align-items: center
-
-.filter-btn
-  margin-right: 0.5rem
-  background: #fff
-  color: #1976d2
-  border: 1px solid #1976d2
-  border-radius: 6px
-  padding: 0.5rem 1rem
-  font-size: 1rem
-  display: inline-flex
-  align-items: center
-
-.recipient-code-badge
-  background: #e3eefc
-  color: #1976d2
-  border-radius: 1.5rem
-  padding: 0.25rem 1rem
-  font-weight: 600
-  font-size: 1rem
-  display: inline-block
-
-// =========================================
+//============================================
 // Configurable Stepper Component Styles
 // =========================================
 app-configurable-stepper
@@ -2402,7 +2066,6 @@ app-fee-config
         }
       }
     }
-
 // =============================
 // Signup Component Styles
 // =============================
@@ -2644,3 +2307,1571 @@ app-signup
 
   :host ::ng-deep .p-button:disabled
     background: #bdbdbd
+// =============================
+// Data Exchange Configuration Styles
+// =============================
+
+// Dashboard Styles
+app-data-exchange-config
+  .page-header
+    background: white
+    border-radius: 12px
+    padding: 24px
+    margin-bottom: 24px
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)
+
+    .header-content
+      display: flex
+      justify-content: space-between
+      align-items: flex-start
+      gap: 24px
+
+    .header-title
+      h1
+        font-size: 28px
+        font-weight: 700
+        color: #2c3e50
+        margin: 0 0 8px 0
+
+      p
+        font-size: 16px
+        color: #6c757d
+        margin: 0
+
+    .header-actions
+      display: flex
+      gap: 12px
+
+  .summary-stats
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))
+    gap: 20px
+    margin-bottom: 24px
+
+    .stat-card
+      background: white
+      border-radius: 12px
+      padding: 20px
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)
+      border-left: 4px solid #007bff
+      cursor: pointer
+      transition: all 0.3s ease
+      
+      &:hover
+        transform: translateY(-2px)
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12)
+        border-left-color: #0056b3
+
+      .stat-content
+        display: flex
+        align-items: center
+        gap: 16px
+
+      .stat-icon
+        width: 48px
+        height: 48px
+        border-radius: 12px
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%)
+        display: flex
+        align-items: center
+        justify-content: center
+        color: white
+        font-size: 20px
+
+      .stat-info
+        .stat-number
+          font-size: 24px
+          font-weight: 700
+          color: #2c3e50
+          line-height: 1
+
+        .stat-label
+          font-size: 14px
+          color: #6c757d
+          margin-top: 4px
+
+  .system-status
+    margin-bottom: 24px
+
+    .status-card
+      background: white
+      border-radius: 12px
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)
+
+      .status-grid
+        display: grid
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))
+        gap: 20px
+
+      .status-item
+        .status-label
+          font-size: 14px
+          color: #6c757d
+          margin-bottom: 4px
+
+        .status-value
+          font-size: 16px
+          font-weight: 600
+          color: #2c3e50
+
+        .health-indicator
+          padding: 4px 12px
+          border-radius: 20px
+          font-size: 12px
+          font-weight: 600
+          text-transform: uppercase
+
+          &.healthy
+            background: #d4edda
+            color: #155724
+
+          &.warning
+            background: #fff3cd
+            color: #856404
+
+          &.error
+            background: #f8d7da
+            color: #721c24
+
+  .navigation-section
+    margin-bottom: 24px
+
+    h2
+      font-size: 20px
+      font-weight: 600
+      color: #2c3e50
+      margin-bottom: 16px
+
+    .navigation-grid
+      display: grid
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))
+      gap: 20px
+
+    .navigation-card
+      background: white
+      border-radius: 12px
+      padding: 24px
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)
+      border: 2px solid transparent
+      cursor: pointer
+      transition: all 0.2s ease
+
+      &:hover
+        transform: translateY(-2px)
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1)
+
+      .card-header
+        display: flex
+        justify-content: space-between
+        align-items: center
+        margin-bottom: 16px
+
+      .card-icon
+        width: 48px
+        height: 48px
+        border-radius: 12px
+        display: flex
+        align-items: center
+        justify-content: center
+        color: white
+        font-size: 20px
+
+      .card-stats
+        .stat-badge
+          background: #f8f9fa
+          color: #6c757d
+          padding: 4px 12px
+          border-radius: 20px
+          font-size: 12px
+          font-weight: 600
+
+      .card-content
+        .card-title
+          font-size: 18px
+          font-weight: 600
+          color: #2c3e50
+          margin: 0 0 8px 0
+
+        .card-description
+          font-size: 14px
+          color: #6c757d
+          line-height: 1.5
+          margin: 0
+
+      .card-footer
+        margin-top: 16px
+
+  .recent-activity
+    .activity-card
+      background: white
+      border-radius: 12px
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)
+
+      .activity-list
+        .activity-item
+          display: flex
+          align-items: flex-start
+          gap: 16px
+          padding: 16px 0
+          border-bottom: 1px solid #f1f3f4
+
+          &:last-child
+            border-bottom: none
+
+          .activity-icon
+            width: 40px
+            height: 40px
+            border-radius: 50%
+            background: #e3f2fd
+            display: flex
+            align-items: center
+            justify-content: center
+            color: #1976d2
+            font-size: 16px
+            flex-shrink: 0
+
+          .activity-content
+            flex: 1
+
+            .activity-title
+              font-size: 14px
+              font-weight: 600
+              color: #2c3e50
+              margin: 0 0 4px 0
+
+            .activity-details
+              font-size: 13px
+              color: #6c757d
+              margin: 0 0 4px 0
+
+            .activity-time
+              font-size: 12px
+              color: #adb5bd
+
+// Originating Offices & Recipient Systems Styles
+app-originating-offices, app-recipient-systems
+  .page-header
+    background: white
+    border-radius: 12px
+    padding: 24px
+    margin-bottom: 24px
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)
+
+    .header-content
+      display: flex
+      justify-content: space-between
+      align-items: flex-start
+      gap: 24px
+
+    .header-title
+      h1
+        font-size: 28px
+        font-weight: 700
+        color: #2c3e50
+        margin: 0 0 8px 0
+
+      p
+        font-size: 16px
+        color: #6c757d
+        margin: 0
+
+    .header-actions
+      display: flex
+      gap: 12px
+
+  .stats-section
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))
+    gap: 20px
+    margin-bottom: 24px
+
+    .stat-card
+      background: white
+      border-radius: 12px
+      padding: 20px
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)
+      border-left: 4px solid #007bff
+
+      .stat-content
+        display: flex
+        align-items: center
+        gap: 16px
+
+      .stat-icon
+        width: 48px
+        height: 48px
+        border-radius: 12px
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%)
+        display: flex
+        align-items: center
+        justify-content: center
+        color: white
+        font-size: 20px
+
+      .stat-info
+        .stat-number
+          font-size: 24px
+          font-weight: 700
+          color: #2c3e50
+          line-height: 1
+
+        .stat-label
+          font-size: 14px
+          color: #6c757d
+          margin-top: 4px
+
+  .table-section
+    .table-card
+      background: white
+      border-radius: 12px
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)
+
+  .status-badge
+    padding: 4px 12px
+    border-radius: 20px
+    font-size: 12px
+    font-weight: 600
+    text-transform: uppercase
+
+    &.status-active
+      background: #d4edda
+      color: #155724
+
+    &.status-inactive
+      background: #f8d7da
+      color: #721c24
+
+  .data-types
+    display: flex
+    flex-wrap: wrap
+    gap: 4px
+
+    .data-type-badge
+      background: #e3f2fd
+      color: #1976d2
+      padding: 2px 8px
+      border-radius: 12px
+      font-size: 11px
+      font-weight: 500
+
+  .exclusion-chip
+    background: #e3f2fd
+    color: #1976d2
+    padding: 4px 10px
+    border-radius: 16px
+    font-size: 12px
+    font-weight: 500
+    margin: 2px
+    display: inline-block
+    border: 1px solid #bbdefb
+    box-shadow: 0 1px 3px rgba(25, 118, 210, 0.1)
+
+  .chips-container
+    display: flex
+    flex-wrap: wrap
+    gap: 4px
+    align-items: center
+
+// Summary Stats - Same as main dashboard
+  .summary-stats
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr))
+    gap: 20px
+    margin-bottom: 30px
+
+  .stat-card
+    background: #fff
+    border-radius: 12px
+    padding: 20px
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)
+    border-left: 4px solid #007bff
+    cursor: pointer
+    transition: all 0.3s ease
+    display: flex
+    align-items: center
+    gap: 16px
+
+    &:hover
+      transform: translateY(-2px)
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12)
+      border-left-color: #0056b3
+
+    .stat-icon
+      width: 48px
+      height: 48px
+      border-radius: 12px
+      background: linear-gradient(135deg, #007bff, #0056b3)
+      display: flex
+      align-items: center
+      justify-content: center
+      color: white
+      font-size: 20px
+
+    .stat-content
+      flex: 1
+
+      .stat-number
+        font-size: 28px
+        font-weight: 700
+        color: #2c3e50
+        line-height: 1
+        margin-bottom: 4px
+
+      .stat-label
+        font-size: 14px
+        color: #6c757d
+        font-weight: 500
+
+  .stats-inline
+    display: flex
+    gap: 24px
+    margin-bottom: 20px
+    padding: 12px 16px
+    background: #f8f9fa
+    border-radius: 8px
+    border-left: 4px solid #1976d2
+
+  .stat-item
+    display: flex
+    align-items: center
+    gap: 8px
+    color: #1976d2
+    font-weight: 500
+    font-size: 14px
+
+    i
+      font-size: 16px
+      color: #1976d2
+
+  .office-form, .system-form
+    .form-grid
+      display: grid
+      grid-template-columns: 1fr 1fr
+      gap: 20px
+
+    .form-field
+      display: flex
+      flex-direction: column
+      gap: 8px
+
+      &.full-width
+        grid-column: 1 / -1
+
+    label
+      font-weight: 600
+      color: #495057
+      font-size: 14px
+
+    input, p-dropdown, p-multiselect, p-inputNumber
+      width: 100%
+
+    .p-dropdown, .p-multiselect
+      width: 100%
+
+    .p-error
+      color: #dc3545
+      font-size: 12px
+      margin-top: 4px
+
+// Settings Styles
+app-data-exchange-settings
+  .page-header
+    background: white
+    border-radius: 12px
+    padding: 24px
+    margin-bottom: 24px
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)
+
+    .header-content
+      display: flex
+      justify-content: space-between
+      align-items: flex-start
+      gap: 24px
+
+    .header-title
+      h1
+        font-size: 28px
+        font-weight: 700
+        color: #2c3e50
+        margin: 0 0 8px 0
+
+      p
+        font-size: 16px
+        color: #6c757d
+        margin: 0
+
+    .header-actions
+      display: flex
+      gap: 12px
+
+  .settings-container
+    .settings-card
+      background: white
+      border-radius: 12px
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)
+
+    .settings-form
+      .form-grid
+        display: grid
+        grid-template-columns: 1fr 1fr
+        gap: 20px
+
+      .form-field
+        display: flex
+        flex-direction: column
+        gap: 8px
+
+        &.full-width
+          grid-column: 1 / -1
+
+      label
+        font-weight: 600
+        color: #495057
+        font-size: 14px
+
+      input, p-dropdown, p-multiselect, p-inputNumber
+        width: 100%
+
+      .p-dropdown, .p-multiselect
+        width: 100%
+
+      .p-error
+        color: #dc3545
+        font-size: 12px
+        margin-top: 4px
+
+      .checkbox-field
+        display: flex
+        align-items: center
+        gap: 8px
+
+        label
+          margin: 0
+          font-weight: 500
+
+// Responsive Design
+@media (max-width: 768px)
+  app-data-exchange-config, app-originating-offices, app-recipient-systems, app-data-exchange-settings
+    .page-header
+      .header-content
+        flex-direction: column
+        align-items: flex-start
+
+      .header-actions
+        width: 100%
+        justify-content: flex-end
+
+    .summary-stats, .stats-section
+      grid-template-columns: 1fr
+
+    .navigation-grid
+      grid-template-columns: 1fr
+
+    .form-grid
+      grid-template-columns: 1fr
+
+    .status-grid
+      grid-template-columns: 1fr
+
+/////////////////////////////////////
+// DATA EXCHANGE CONFIGURATION STYLES
+/////////////////////////////////////
+
+// ========================================
+// Data Exchange Config Dashboard Component
+// ========================================
+app-data-exchange-config
+  .page-header
+    margin-bottom 2rem
+    padding 1.5rem
+    background #fff
+    border-radius 12px
+    box-shadow 0 4px 24px rgba(25, 118, 210, 0.07)
+
+    .header-content
+      display flex
+      align-items center
+      justify-content space-between
+      flex-wrap wrap
+      gap 1rem
+
+    .header-title
+      h1
+        font-size 1.8rem
+        font-weight 700
+        color #1565c0
+        margin 0 0 0.5rem 0
+
+      p
+        color #666
+        font-size 1rem
+        margin 0
+
+    .header-actions
+      display flex
+      gap 1rem
+      align-items center
+
+  // Summary Statistics Cards
+  .summary-stats
+    display grid
+    grid-template-columns repeat(auto-fit, minmax(280px, 1fr))
+    gap 1.5rem
+    margin-bottom 2rem
+
+    .stat-card
+      background #fff
+      border-radius 12px
+      box-shadow 0 4px 24px rgba(25, 118, 210, 0.07)
+      padding 1.5rem
+      transition all 0.3s ease
+      border-left 4px solid #1976d2
+
+      &:hover
+        transform translateY(-2px)
+        box-shadow 0 8px 32px rgba(25, 118, 210, 0.12)
+
+      .stat-content
+        display flex
+        align-items center
+        gap 1rem
+
+      .stat-icon
+        width 60px
+        height 60px
+        border-radius 12px
+        display flex
+        align-items center
+        justify-content center
+        background linear-gradient(135deg, #1976d2 0%, #1976d2dd 100%)
+        color #fff
+        font-size 1.5rem
+
+      .stat-info
+        flex 1
+
+        .stat-number
+          font-size 2rem
+          font-weight 700
+          color #1565c0
+          line-height 1
+
+        .stat-label
+          font-size 0.9rem
+          color #666
+          margin-top 0.25rem
+
+  // System Status Section
+  .system-status
+    margin-bottom 2rem
+
+    .status-card
+      background #fff
+      border-radius 12px
+      box-shadow 0 4px 24px rgba(25, 118, 210, 0.07)
+      padding 1.5rem
+
+      .status-grid
+        display grid
+        grid-template-columns repeat(auto-fit, minmax(200px, 1fr))
+        gap 1rem
+
+  // Navigation Section
+  .navigation-section
+    margin-bottom 2rem
+
+    h2
+      font-size 1.5rem
+      font-weight 600
+      color #1565c0
+      margin-bottom 1rem
+
+    .navigation-grid
+      display grid
+      grid-template-columns repeat(auto-fit, minmax(300px, 1fr))
+      gap 1.5rem
+
+    .navigation-card
+      background #fff
+      border-radius 12px
+      box-shadow 0 4px 24px rgba(25, 118, 210, 0.07)
+      padding 1.5rem
+      transition all 0.3s ease
+      cursor pointer
+      border 1px solid transparent
+
+      &:hover
+        transform translateY(-2px)
+        box-shadow 0 8px 32px rgba(25, 118, 210, 0.12)
+        border-color #1976d2
+
+      .card-header
+        display flex
+        align-items center
+        gap 1rem
+        margin-bottom 1rem
+
+      .card-icon
+        width 50px
+        height 50px
+        border-radius 10px
+        display flex
+        align-items center
+        justify-content center
+        background linear-gradient(135deg, #1976d2 0%, #1976d2dd 100%)
+        color #fff
+        font-size 1.25rem
+
+      .card-title
+        font-size 1.2rem
+        font-weight 600
+        color #1565c0
+
+      .card-description
+        color #666
+        font-size 0.9rem
+        line-height 1.5
+
+      .card-footer
+        margin-top 1rem
+        padding-top 1rem
+        border-top 1px solid #eee
+
+  // Recent Activity Section
+  .recent-activity
+    .activity-card
+      background #fff
+      border-radius 12px
+      box-shadow 0 4px 24px rgba(25, 118, 210, 0.07)
+      padding 1.5rem
+
+// ========================================
+// Distribution Rules Component
+// ========================================
+app-distribution-rules
+  // Summary Statistics Cards
+  .summary-stats
+    display grid
+    grid-template-columns repeat(auto-fit, minmax(280px, 1fr))
+    gap 1.5rem
+    margin-bottom 2rem
+
+    .stat-card
+      background #fff
+      border-radius 12px
+      box-shadow 0 4px 24px rgba(25, 118, 210, 0.07)
+      padding 1.5rem
+      transition all 0.3s ease
+      border-left 4px solid #1976d2
+
+      &:hover
+        transform translateY(-2px)
+        box-shadow 0 8px 32px rgba(25, 118, 210, 0.12)
+
+      .stat-content
+        display flex
+        align-items center
+        gap 1rem
+
+      .stat-icon
+        width 60px
+        height 60px
+        border-radius 12px
+        display flex
+        align-items center
+        justify-content center
+        background linear-gradient(135deg, #1976d2 0%, #1976d2dd 100%)
+        color #fff
+        font-size 1.5rem
+
+      .stat-info
+        flex 1
+
+        .stat-number
+          font-size 2rem
+          font-weight 700
+          color #1565c0
+          line-height 1
+
+        .stat-label
+          font-size 0.9rem
+          color #666
+          margin-top 0.25rem
+
+  // Custom Table Styles
+  .card
+    background #fff
+    border-radius 12px
+    box-shadow 0 4px 24px rgba(25, 118, 210, 0.07)
+    padding 1.5rem
+    margin-top 1.5rem
+
+  .flex-search-bar
+    display flex
+    align-items center
+    justify-content space-between
+    margin-bottom 1rem
+
+  .ml-auto
+    margin-left auto
+
+  .flex
+    display flex
+
+  .gap-2
+    gap 0.5rem
+
+  .justify-content-center
+    justify-content center
+
+  .items-center
+    align-items center
+
+  // PrimeNG Table Customization
+  .p-datatable
+    .p-datatable-thead > tr > th
+      background #f8fafd
+      border 1px solid #e9ecef
+      color #495057
+      font-weight 600
+      padding 1rem
+      text-align left
+
+    .p-datatable-tbody > tr > td
+      border 1px solid #e9ecef
+      padding 1rem
+      vertical-align top
+
+    .p-datatable-tbody > tr:hover
+      background #f8fafd
+
+  // Button Styles
+  .p-button-rounded
+    border-radius 50%
+    width 2.5rem
+    height 2.5rem
+
+  .p-button-text
+    background transparent
+    border none
+
+    &:hover
+      background rgba(0, 0, 0, 0.05)
+
+  .p-button-info
+    color #1976d2
+
+  .p-button-danger
+    color #dc3545
+
+// ========================================
+// Distribution Exclusion Rules Component
+// ========================================
+app-distribution-exclusion-rules
+  .exclusion-rules-header
+    display flex
+    justify-content space-between
+    align-items center
+    margin-bottom 2rem
+
+    h2
+      font-size 1.5rem
+      font-weight 600
+      color #1565c0
+      margin 0
+
+  .add-rule-btn
+    background #1976d2
+    color #fff
+    border none
+    border-radius 8px
+    padding 0.75rem 1.5rem
+    font-size 1rem
+    font-weight 500
+    cursor pointer
+    transition background 0.2s
+    display flex
+    align-items center
+    gap 0.5rem
+
+    &:hover
+      background #125ea2
+
+// ========================================
+// Originating Offices Component
+// ========================================
+app-originating-offices
+  // Page Header
+  .page-header
+    margin-bottom 2rem
+    padding 1.5rem
+    background #fff
+    border-radius 12px
+    box-shadow 0 4px 24px rgba(25, 118, 210, 0.07)
+
+    .header-content
+      display flex
+      align-items center
+      justify-content space-between
+      flex-wrap wrap
+      gap 1rem
+
+    .header-title
+      h1
+        font-size 1.8rem
+        font-weight 700
+        color #1565c0
+        margin 0 0 0.5rem 0
+
+      p
+        color #666
+        font-size 1rem
+        margin 0
+
+    .header-actions
+      display flex
+      gap 1rem
+      align-items center
+
+  // Stats Section
+  .stats-section
+    display grid
+    grid-template-columns repeat(auto-fit, minmax(280px, 1fr))
+    gap 1.5rem
+    margin-bottom 2rem
+
+    .stat-card
+      background #fff
+      border-radius 12px
+      box-shadow 0 4px 24px rgba(25, 118, 210, 0.07)
+      padding 1.5rem
+      transition all 0.3s ease
+      border-left 4px solid #1976d2
+
+      &:hover
+        transform translateY(-2px)
+        box-shadow 0 8px 32px rgba(25, 118, 210, 0.12)
+
+      .stat-content
+        display flex
+        align-items center
+        gap 1rem
+
+      .stat-icon
+        width 60px
+        height 60px
+        border-radius 12px
+        display flex
+        align-items center
+        justify-content center
+        background linear-gradient(135deg, #1976d2 0%, #1976d2dd 100%)
+        color #fff
+        font-size 1.5rem
+
+      .stat-info
+        flex 1
+
+        .stat-number
+          font-size 2rem
+          font-weight 700
+          color #1565c0
+          line-height 1
+
+        .stat-label
+          font-size 0.9rem
+          color #666
+          margin-top 0.25rem
+
+  // Table Section
+  .table-section
+    .table-card
+      background #fff
+      border-radius 12px
+      box-shadow 0 4px 24px rgba(25, 118, 210, 0.07)
+      padding 1.5rem
+
+  // Status Badge Styles
+  .status-badge
+    display inline-block
+    padding 0.25rem 0.75rem
+    border-radius 1rem
+    font-size 0.875rem
+    font-weight 500
+    text-transform capitalize
+
+    &.status-active
+      background #d4edda
+      color #155724
+
+    &.status-inactive
+      background #f8d7da
+      color #721c24
+
+  // Data Types
+  .data-types
+    display flex
+    flex-wrap wrap
+    gap 0.5rem
+
+    .data-type-badge
+      background #e6f0fa
+      color #1976d2
+      padding 0.25rem 0.5rem
+      border-radius 0.5rem
+      font-size 0.75rem
+
+  // Exclusion Chips
+  .exclusion-chip
+    display inline-block
+    background #e6f0fa
+    color #1976d2
+    border-radius 16px
+    padding 0.08rem 0.7rem
+    font-size 0.92rem
+    margin 0 0.18rem 0.18rem 0
+    font-weight 400
+    letter-spacing 0.01em
+
+  // Office Form
+  .office-form
+    .form-grid
+      display grid
+      grid-template-columns repeat(auto-fit, minmax(300px, 1fr))
+      gap 1.5rem
+      margin-bottom 2rem
+
+    .form-field
+      display flex
+      flex-direction column
+
+      &.full-width
+        grid-column 1 / -1
+
+    label
+      font-weight 600
+      margin-bottom 0.5rem
+      color #333
+
+    input
+      padding 0.75rem
+      border 1px solid #ddd
+      border-radius 6px
+      font-size 1rem
+      transition border-color 0.2s
+
+      &:focus
+        outline none
+        border-color #1976d2
+        box-shadow 0 0 0 2px rgba(25, 118, 210, 0.1)
+
+    .p-dropdown
+      width 100%
+
+    .p-error
+      color #dc3545
+      font-size 0.875rem
+      margin-top 0.25rem
+
+// ========================================
+// Recipient Systems Component
+// ========================================
+app-recipient-systems
+  // Inherit styles from originating-offices
+  @extend app-originating-offices
+
+  // Recipient-specific styles
+  .recipient-systems-header
+    display flex
+    justify-content space-between
+    align-items center
+    margin-bottom 2rem
+
+    h2
+      font-size 1.5rem
+      font-weight 600
+      color #1565c0
+      margin 0
+
+  .add-system-btn
+    background #1976d2
+    color #fff
+    border none
+    border-radius 8px
+    padding 0.75rem 1.5rem
+    font-size 1rem
+    font-weight 500
+    cursor pointer
+    transition background 0.2s
+    display flex
+    align-items center
+    gap 0.5rem
+
+    &:hover
+      background #125ea2
+
+  .filter-btn
+    background #6c757d
+    color #fff
+    border none
+    border-radius 6px
+    padding 0.5rem 1rem
+    font-size 0.9rem
+    cursor pointer
+    transition background 0.2s
+
+    &:hover
+      background #5a6268
+
+  .recipient-code-badge
+    display inline-block
+    background #e6f0fa
+    color #1976d2
+    border-radius 16px
+    padding 0.08rem 0.7rem
+    font-size 0.92rem
+    margin 0 0.18rem 0.18rem 0
+    font-weight 400
+    letter-spacing 0.01em
+
+// ========================================
+// Data Exchange Settings Component
+// ========================================
+app-data-exchange-settings
+  .page-header
+    margin-bottom 2rem
+    padding 1.5rem
+    background #fff
+    border-radius 12px
+    box-shadow 0 4px 24px rgba(25, 118, 210, 0.07)
+
+    .header-content
+      display flex
+      align-items center
+      justify-content space-between
+      flex-wrap wrap
+      gap 1rem
+
+    .header-title
+      h1
+        font-size 1.8rem
+        font-weight 700
+        color #1565c0
+        margin 0 0 0.5rem 0
+
+      p
+        color #666
+        font-size 1rem
+        margin 0
+
+    .header-actions
+      display flex
+      gap 1rem
+      align-items center
+
+  .settings-container
+    .settings-card
+      background #fff
+      border-radius 12px
+      box-shadow 0 4px 24px rgba(25, 118, 210, 0.07)
+      padding 2rem
+
+    .settings-form
+      .form-grid
+        display grid
+        grid-template-columns repeat(auto-fit, minmax(300px, 1fr))
+        gap 1.5rem
+        margin-bottom 2rem
+
+      .form-field
+        display flex
+        flex-direction column
+
+      label
+        font-weight 600
+        margin-bottom 0.5rem
+        color #333
+
+      input
+        padding 0.75rem
+        border 1px solid #ddd
+        border-radius 6px
+        font-size 1rem
+        transition border-color 0.2s
+
+        &:focus
+          outline none
+          border-color #1976d2
+          box-shadow 0 0 0 2px rgba(25, 118, 210, 0.1)
+
+      .p-dropdown
+        width 100%
+
+      .p-error
+        color #dc3545
+        font-size 0.875rem
+        margin-top 0.25rem
+
+      .checkbox-field
+        display flex
+        align-items center
+        gap 0.5rem
+
+        input[type="checkbox"]
+          width auto
+          margin 0
+
+// ========================================
+// Add Exclusion Rule Component
+// ========================================
+app-add-exclusion-rule
+  max-width 900px
+  margin 2.5rem auto
+  background #fff
+  border-radius 14px
+  box-shadow 0 4px 24px rgba(25, 118, 210, 0.07)
+  padding 2.5rem 2.5rem 2rem 2.5rem
+  position relative
+
+  h2
+    font-size 1.7rem
+    font-weight 700
+    margin-bottom 1.2rem
+    color #1565c0
+    letter-spacing 0.01em
+    text-align left
+
+  .p-steps
+    margin-bottom 2.5rem
+
+    .p-steps-item .p-menuitem-link
+      padding 1.1rem 1.5rem
+      border-radius 8px
+      font-size 1.08rem
+      font-weight 500
+      color #1976d2
+      background #f4f8fb
+      transition background 0.2s
+
+    .p-steps-item.p-highlight .p-menuitem-link
+      background #1976d2
+      color #fff
+      box-shadow 0 2px 8px rgba(25, 118, 210, 0.08)
+
+    .p-steps-title
+      font-size 1.08rem
+      font-weight 500
+      margin-top 0.5rem
+
+  .p-formgrid
+    margin-bottom 1.5rem
+
+    label
+      display block
+      margin-bottom 0.5rem
+      color #333
+      font-weight 500
+
+    .p-dropdown,
+    .p-multiselect
+      width 100%
+
+  .p-message
+    margin-top 0.5rem
+
+  .p-tabview
+    margin 1.5rem 0
+
+    .p-tabview-panels
+      padding 1.5rem 0
+
+    .p-checkbox
+      margin-right 0.5rem
+
+    .p-text-secondary
+      color #666
+      font-size 0.97rem
+
+  .p-accordion .p-accordion-tab
+    margin-bottom 1rem
+
+    .p-accordion-header a
+      padding 1rem
+      font-weight 500
+
+    .p-accordion-content
+      padding 1rem
+
+  .p-card
+    background #f8f9fa
+    border 1px solid #e9ecef
+    border-radius 8px
+    padding 1.5rem
+    margin-bottom 1.5rem
+
+  .p-datatable-table
+    width 100%
+    border-collapse collapse
+
+    th,
+    td
+      padding 0.75rem
+      border 1px solid #e9ecef
+      text-align left
+
+    th
+      background #f8f9fa
+      font-weight 600
+
+  .p-d-flex
+    display flex
+    align-items center
+    gap 1rem
+
+  .p-mt-2
+    margin-top 0.5rem
+
+  .p-mt-3
+    margin-top 0.75rem
+
+  .p-mt-4
+    margin-top 1rem
+
+  .p-mb-2
+    margin-bottom 0.5rem
+
+  .p-mb-3
+    margin-bottom 0.75rem
+
+  .p-ml-2
+    margin-left 0.5rem
+
+  .p-ml-4
+    margin-left 1rem
+
+  .p-jc-between
+    justify-content space-between
+
+  .exclusion-chip
+    display inline-block
+    background #e6f0fa
+    color #1976d2
+    border-radius 16px
+    padding 0.08rem 0.7rem
+    font-size 0.92rem
+    margin 0 0.18rem 0.18rem 0
+    font-weight 400
+    letter-spacing 0.01em
+
+// ========================================
+// Common Data Exchange Elements
+// ========================================
+
+// Exclusion Chip (Global)
+.exclusion-chip
+  display inline-block
+  background #e6f0fa
+  color #1976d2
+  border-radius 16px
+  padding 0.08rem 0.7rem
+  font-size 0.92rem
+  margin 0 0.18rem 0.18rem 0
+  font-weight 400
+  letter-spacing 0.01em
+
+// Status Badge (Global)
+.status-badge
+  display inline-block
+  padding 0.25rem 0.75rem
+  border-radius 1rem
+  font-size 0.875rem
+  font-weight 500
+  text-transform capitalize
+
+  &.status-active
+    background #d4edda
+    color #155724
+
+  &.status-inactive
+    background #f8d7da
+    color #721c24
+
+// Distribution Rules Header
+.distribution-rules-header
+  display flex
+  justify-content space-between
+  align-items center
+  margin-bottom 2rem
+
+  h2
+    font-size 1.5rem
+    font-weight 600
+    color #1565c0
+    margin 0
+
+// Add Rule Button
+.add-rule-btn
+  background #1976d2
+  color #fff
+  border none
+  border-radius 8px
+  padding 0.75rem 1.5rem
+  font-size 1rem
+  font-weight 500
+  cursor pointer
+  transition background 0.2s
+  display flex
+  align-items center
+  gap 0.5rem
+
+  &:hover
+    background #125ea2
+
+// Loading Container
+.loading-container
+  display flex
+  justify-content center
+  align-items center
+  padding 3rem
+  background #fff
+  border-radius 12px
+  box-shadow 0 4px 24px rgba(25, 118, 210, 0.07)
+
+  p
+    color #666
+    font-size 1.1rem
+    margin 0
+
+// Full Screen Modal Styles
+.full-screen-modal-overlay
+  position fixed
+  top 0
+  left 0
+  width 100vw
+  height 100vh
+  background-color rgba(0, 0, 0, 0.6)
+  backdrop-filter blur(2px)
+  z-index 9999
+  display flex
+  align-items center
+  justify-content center
+
+.full-screen-modal-container
+  width 100vw
+  height 100vh
+  background #fff
+  display flex
+  flex-direction column
+  position relative
+
+.full-screen-modal-header
+  background #f8fafd
+  border-bottom 1px solid #e9ecef
+  padding 1.5rem
+  display flex
+  justify-content space-between
+  align-items center
+  flex-shrink 0
+
+  h2
+    font-size 1.5rem
+    font-weight 600
+    color #1565c0
+    margin 0
+
+.modal-close-btn
+  background transparent
+  border none
+  color #6c757d
+  font-size 1.25rem
+  cursor pointer
+  transition color 0.2s
+  padding 0.5rem
+  border-radius 4px
+
+  &:hover
+    color #495057
+    background rgba(0, 0, 0, 0.05)
+
+.full-screen-modal-content
+  flex 1
+  overflow-y auto
+  padding 0
+
+  app-add-exclusion-rule
+    display block
+    height 100%
+    width 100%
+
+// ========================================
+// Responsive Design for Data Exchange
+// ========================================
+@media (max-width: 768px)
+  // Data Exchange Config
+  app-data-exchange-config
+    .page-header .header-content,
+    app-originating-offices .page-header .header-content,
+    app-data-exchange-settings .page-header .header-content
+      flex-direction column
+      align-items flex-start
+      gap 1rem
+
+    .page-header .header-actions,
+    app-originating-offices .page-header .header-actions,
+    app-data-exchange-settings .page-header .header-actions
+      width 100%
+      justify-content flex-start
+
+    .summary-stats,
+    app-originating-offices .stats-section
+      grid-template-columns 1fr
+      gap 1rem
+
+    .navigation-grid
+      grid-template-columns 1fr
+
+    .form-grid,
+    app-originating-offices .office-form .form-grid,
+    app-data-exchange-settings .settings-container .settings-form .form-grid
+      grid-template-columns 1fr
+
+    .status-grid
+      grid-template-columns repeat(auto-fit, minmax(150px, 1fr))
+
+  // Distribution Rules
+  app-distribution-rules
+    .flex-search-bar
+      flex-direction column
+      gap 1rem
+
+    .ml-auto
+      margin-left 0
+
+  // Full Screen Modal
+  .full-screen-modal-overlay
+    padding 0
+
+  .full-screen-modal-container
+    width 100vw
+    height 100vh
+
+  .full-screen-modal-header
+    padding 1rem
+
+    h2
+      font-size 1.25rem
+
+  // Add Exclusion Rule
+  app-add-exclusion-rule
+    max-width 100%
+    margin 1rem
+    padding 1.5rem
+
+    .p-formgrid > .p-col-6
+      grid-column 1 / -1
+
+    .p-d-flex
+      flex-direction column
+      align-items flex-start
+
+    .p-tabview-panels
+      padding 1rem 0

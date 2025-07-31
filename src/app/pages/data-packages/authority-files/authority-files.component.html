@@ -1,0 +1,8 @@
+
+<app-layout [config]="layoutConfig">
+  <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
+  <div class="user-accounts-header">
+    <h1>Authority Files</h1>
+  </div>
+  <app-table [columns]="tableColumns" [data]="tableData" (actionClick)="onActionClick($event.action, $event.item)"> </app-table>
+</app-layout>

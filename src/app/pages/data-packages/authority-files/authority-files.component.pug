@@ -1,0 +1,5 @@
+app-layout([config]="layoutConfig")
+  app-breadcrumbs([items]="breadcrumbItems")
+  .user-accounts-header
+    h1 Authority Files
+  app-table([columns]="tableColumns", [data]="tableData", (actionClick)="onActionClick($event.action, $event.item)") 

@@ -33,6 +33,8 @@ import cacheBusting from '../../assets-cache-busting.json';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
+//Global Loader
+import { GlobalLoaderComponent } from './components/global-loader/global-loader.component';
 
 // https://github.com/ngx-translate/core
 // AoT requires an exported function for factories
@@ -79,6 +81,7 @@ import { AppNavbarComponent } from './components/app-navbar/app-navbar.component
 import { AppLayoutComponent } from './components/app-layout/app-layout.component';
 import { TableComponent } from './components/table/table.component';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
+import { LoadingInterceptor } from './_interceptors/loading.interceptor';
 
 const WipoThemePreset = definePreset(Aura, {
   primitive: {
@@ -123,6 +126,7 @@ const WipoThemePreset = definePreset(Aura, {
     TableComponent,
     AppNavbarComponent,
     AppSidebarComponent,
+    GlobalLoaderComponent,
     BrowserModule,
     BrowserAnimationsModule,
     ButtonModule,
@@ -156,6 +160,11 @@ const WipoThemePreset = definePreset(Aura, {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AddHeaderInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoadingInterceptor,
       multi: true,
     },
     providePrimeNG({

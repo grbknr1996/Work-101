@@ -1,13 +1,14 @@
-import { Component, Input } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { RouterModule } from "@angular/router";
-import { CardModule } from "primeng/card";
-import { ButtonModule } from "primeng/button";
-import { TooltipModule } from "primeng/tooltip";
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
+import { DividerModule } from 'primeng/divider';
 
 @Component({
-  selector: "app-widget",
-  templateUrl: "./app-widget.component.html",
+  selector: 'app-widget',
+  templateUrl: './app-widget.component.html',
   standalone: true,
   imports: [
     CommonModule,
@@ -15,19 +16,20 @@ import { TooltipModule } from "primeng/tooltip";
     ButtonModule,
     RouterModule,
     TooltipModule,
+    DividerModule,
   ],
 })
 export class AppWidgetComponent {
-  @Input() icon: string = "";
-  @Input() title: string = "";
-  @Input() routerLink: string | any[] = "";
-  @Input() description: string = "";
+  @Input() icon: string = '';
+  @Input() title: string = '';
+  @Input() routerLink: string | any[] = '';
+  @Input() description: string = '';
   @Input() items: { label: string; link: string }[] = [];
   @Input() showBadge: boolean = false;
   @Input() badge?: string;
   @Input() expanded: boolean = false;
 
   logLink(link: string) {
-    console.log("Navigating to:", link);
+    console.log('Navigating to:', link);
   }
 }

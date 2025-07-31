@@ -97,6 +97,27 @@ export class SidebarMenuService {
     ];
   }
 
+  generateConfigurationMenu(currentPath: string): MenuItem[] {
+    console.log('current path:', currentPath);
+    const lastPart = currentPath.split('/').pop();
+    console.log(lastPart);
+    return [
+      {
+        id: 'dashboard',
+        label: 'Home',
+        icon: 'pi pi-home',
+        routerLink: this.getRouterLink('/dashboard'),
+      },
+            {
+        id: 'packages',
+        label: 'packages',
+        icon: 'pi pi-warehouse',
+        routerLink: this.getRouterLink('/data-packages'),
+        expanded: false,
+      },
+    ];
+  }
+
   private loadDefaultMenuItems(): void {
     const menuItems: MenuItem[] = [
       {

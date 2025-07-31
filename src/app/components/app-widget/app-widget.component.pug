@@ -4,7 +4,8 @@ div(class="widget-container")
       i([class]="'pi ' + icon + ' widget-icon'") 
       span(class="widget-title") {{title}}
       span(class="widget-badge", *ngIf="showBadge") {{badge}}
-  
+    p-divider  
+    
   div(class="widget-content p-3")
     ul(class="widget-item-list p-0 m-0 list-none")
       li(class="widget-item mb-2", *ngFor="let item of items")

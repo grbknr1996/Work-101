@@ -3,7 +3,7 @@ export const environment = {
   env: 'awsdev',
   appUrl: 'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int',
   backendUrl:
-    'https://ipoffices.support.wipopublish-dev.ipobs.dev.web1.wipo.int',
+    'https://f9ggriafpl.execute-api.eu-central-1.amazonaws.com/dev/services/users',
 };
 
 export interface CognitoConfig {

@@ -5,6 +5,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { PopoverModule } from 'primeng/popover';
 import { SelectModule } from 'primeng/select';
 import { Table, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
@@ -32,7 +33,8 @@ import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs
     InputIconModule,
     CommonModule,
     AppLayoutComponent,
-    BreadcrumbsComponent
+    BreadcrumbsComponent,
+    PopoverModule
   ],
   templateUrl: './fee-config.component.html',
 })
@@ -159,18 +161,6 @@ export class FeeConfigComponent implements OnInit, OnChanges {
         count: "42",
         color: "#3949AB", // Indigo color
         icon: "pi pi-bars",
-      },
-      {
-        label: "ACTIVE SERVICES",
-        count: "38",
-        color: "#2E7D32", // Green color
-        icon: "pi pi-check",
-      },
-      {
-        label: "AVERAGE FEE",
-        count: "89.50$",
-        color: "#D32F2F", // Red color
-        icon: "pi pi-dollar",
       }
     ];
   }

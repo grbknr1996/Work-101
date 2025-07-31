@@ -400,6 +400,120 @@ export const mockAvailableUsers = [
   },
 ];
 
+
+export const packagesData = [
+  {
+    id: '1',
+    fileName: 'file1.zip',
+    sharedDate: '2025-07-25',
+    processedDate: '2025-07-25',
+    status: 'In Progress',
+    totalCount: '300',
+    processedCount: '280',
+    officeCode: 'KH',
+    ipType: 'Patents',
+//    imageUrl: 'https://images.unsplash.com/photo-1578531506902-49f183f11ea2'
+    imageUrl: 'https://images.unsplash.com/photo-1604608619749-7dc84887834f'
+  },
+  {
+    id: '2',
+    fileName: 'file2.zip',
+    sharedDate: '2024-12-12',
+    processedDate: '2024-12-12',
+    status: 'Processed',
+    totalCount: '500',
+    processedCount: '500',
+    officeCode: 'KH',
+    ipType: 'Trademarks',
+    imageUrl: 'https://images.unsplash.com/photo-1672268931087-9384cca148d8'
+  },
+  {
+    id: '3',
+    fileName: 'file3.zip',
+    sharedDate: '2025-01-02',
+    processedDate: '2025-01-03',
+    status: 'Processed',
+    totalCount: '200',
+    processedCount: '200',
+    officeCode: 'SG',
+    ipType: 'Patents',
+    imageUrl: 'https://images.unsplash.com/photo-1604608619749-7dc84887834f'
+  },
+  {
+    id: '4',
+    fileName: 'file4.zip',
+    sharedDate: '2025-07-13',
+    processedDate: '2025-07-13',
+    status: 'Partial',
+    totalCount: '180',
+    processedCount: '178',
+    officeCode: 'SG',
+    ipType: 'Industrial Designs',
+    imageUrl: 'https://images.unsplash.com/photo-1672268931216-a2e1a6123c88'
+  },
+  {
+    id: '5',
+    fileName: 'file5.zip',
+    sharedDate: '2023-01-25',
+    processedDate: '2023-01-25',
+    status: 'Failed',
+    totalCount: '400',
+    processedCount: '352',
+    officeCode: 'LA',
+    ipType: 'Trademarks',
+    imageUrl: 'https://images.unsplash.com/photo-1672268931087-9384cca148d8'
+  },
+];
+
+export const authorityData = [
+  {
+    id: '1',
+    countryCode: 'KH',
+    applicationNumber: '00501916',
+    filingDate: '05-01-2006',
+    publicationNumber: '1/2006/00501916',
+    publicationDate: '19-06-2013',
+    kindCode: 'U3',
+  },
+  {
+    id: '1',
+    countryCode: 'KH',
+    applicationNumber: '00501934',
+    filingDate: '19-01-2006',
+    publicationNumber: '1/2006/00501934',
+    publicationDate: '17-04-2013',
+    kindCode: 'U3',
+  },
+  {
+    id: '1',
+    countryCode: 'KH',
+    applicationNumber: '00502030',
+    filingDate: '05-01-2006',
+    publicationNumber: '1/2006/00502030',
+    publicationDate: '15-02-2013',
+    kindCode: 'U3',
+  },
+  {
+    id: '1',
+    countryCode: 'KH',
+    applicationNumber: '00500925',
+    filingDate: '05-05-2008',
+    publicationNumber: '1/2008/00500925',
+    publicationDate: '13-02-2019',
+    kindCode: 'B1',
+  },
+  {
+    id: '1',
+    countryCode: 'KH',
+    applicationNumber: '00000194',
+    filingDate: '19-01-2011',
+    publicationNumber: '1/2011/00000194',
+    publicationDate: '08-04-2013',
+    kindCode: 'A1',
+  },
+
+];
+
 export const mockActionProcesses = [
   {
     processId: 'user_doc_sample',

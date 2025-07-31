@@ -1,0 +1,7 @@
+app-layout([config]="layoutConfig")
+  app-breadcrumbs([items]="breadcrumbItems")
+  .user-accounts-header
+    h1 Select Office
+  p-select([options]='offices', [(ngModel)]='selectedOffice', (onChange)="onOfficeChange($event)", placeholder='Select Office', optionLabel='name',)
+  br
+  button.create-user-btn(pButton, type="button", (click)="onSelectOffice()") Select Office

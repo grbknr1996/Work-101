@@ -1,61 +1,23 @@
 app-layout([config]="layoutConfig")
-  .data-exchange-config-summary-cards
-    .summary-card(*ngFor="let card of summaryCards", [ngStyle]="{ borderColor: card.color }", (click)="onSummaryCardClick(card)", [style.cursor]="card.title === 'Distribution Exclusion Rules' ? 'pointer' : 'default'")
-      .summary-card-icon([ngStyle]="{ color: card.color }")
-        i([class]="card.icon")
-      .summary-card-title([ngStyle]="{ color: card.color }") {{ card.title }}
-      .summary-card-count([ngStyle]="{ color: card.color }") {{ card.count }}
-      .summary-card-description {{ card.description }}
+  app-breadcrumbs([items]="getBreadcrumbItems()")
   
-  app-distribution-exclusion-rules(
-    *ngIf="showExclusionRules",
-    [data]="dataExchangeData"
-  )
-  
-  .data-exchange-config-heading(*ngIf="!showExclusionRules")
+  .data-exchange-config-heading.pb-10
     h1 Data Exchange Configuration
-    p This is the Data Exchange Configuration page. Add your configuration UI here.
-
-  // Recipient Systems Table
-  .recipient-systems-header(*ngIf="showRecipientSystems")
-    h2
-      i.pi.pi-database(style="margin-right: 0.5rem;")
-      | Recipient Systems
-    div
-      button.filter-btn(type="button")
-        i.pi.pi-filter(style="margin-right: 0.5rem;")
-        | Filter
-      button.add-system-btn(type="button", (click)="onAddSystemClick()")
-        i.pi.pi-plus(style="margin-right: 0.5rem;")
-        | Add System
-  ng-template(#recipientCodeCell, let-row)
-    span.recipient-code-badge {{ row.code }}
-  app-table(
-    *ngIf="showRecipientSystems",
-    [columns]="recipientSystemsColumns",
-    [data]="recipientSystemsData",
-    [rows]="10",
-    [paginator]="false",
-    (actionClick)="onRecipientSystemAction($event)",
-    [customCellTemplate]="recipientCodeCell"
-  )
-
-  // Originating Offices Table
-  .originating-offices-header(*ngIf="showOriginatingOffices")
-    h2
-      i.pi.pi-building(style="margin-right: 0.5rem;")
-      | Originating Offices
-    button.add-office-btn(type="button", (click)="onAddOfficeClick()")
-      i.pi.pi-plus(style="margin-right: 0.5rem;")
-      | Add Office
-  ng-template(#originatingCodeCell, let-row)
-    span.originating-code-badge {{ row.code }}
-  app-table(
-    *ngIf="showOriginatingOffices",
-    [columns]="originatingOfficesColumns",
-    [data]="originatingOfficesData",
-    [rows]="10",
-    [paginator]="false",
-    (actionClick)="onOriginatingOfficeAction($event)",
-    [customCellTemplate]="originatingCodeCell"
-  )
+    p
+      | Click on any of the cards above to navigate to the respective
+      | configuration section.
+  
+  .summary-stats
+    .stat-card(
+      *ngFor="let card of summaryCards",
+      (click)="onSummaryCardClick(card)",
+      [style.cursor]="card.clickable ? 'pointer' : 'default'"
+    )
+      .stat-content
+        .stat-icon(
+          [ngStyle]="{'background': 'linear-gradient(135deg, ' + card.color + ' 0%, ' + card.color + 'dd 100%)'}"
+        )
+          i([class]="card.icon")
+        .stat-info
+          .stat-number {{ card.count }}
+          .stat-label {{ card.title }}

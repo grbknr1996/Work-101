@@ -2,9 +2,7 @@ export const environment = {
   installedInstances: ['default', 'asean', 'kh', 'kh-moc', 'jp', 'sg', 'bt'],
   env: 'localhost',
   appUrl: 'http://localhost:4200',
-  // backendUrl: 'https://api.wipopublish-webapp-dev.ipobs.dev.web1.wipo.int',
-  backendUrl:
-    'https://ipoffices.support.wipopublish-dev.ipobs.dev.web1.wipo.int',
+  backendUrl: '/dev/services/users',
   autoCompleteApi: '/data-services/',
 };
 

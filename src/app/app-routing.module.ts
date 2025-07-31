@@ -1,59 +1,51 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
-import { AuthGuard } from "./_guards/auth.guard";
-import { DefaultRedirectComponent } from "./components/default-redirect/default-redirect.component";
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { AuthGuard } from './_guards/auth.guard';
+import { DefaultRedirectComponent } from './components/default-redirect/default-redirect.component';
 
 const routes: Routes = [
   // Auth routes with office and language parameters
   {
-    path: ":officeCode/:langCode/sign-in",
+    path: ':officeCode/:langCode/sign-in',
     loadComponent: () =>
-      import("./pages/sign-in/sign-in.component").then(
+      import('./pages/sign-in/sign-in.component').then(
         (m) => m.SignInComponent
       ),
     canActivate: [AuthGuard],
   },
   {
-    path: ":officeCode/:langCode/sign-up",
+    path: ':officeCode/:langCode/signup',
     loadComponent: () =>
-      import("./pages/sign-up/sign-up.component").then(
-        (m) => m.SignUpComponent
-      ),
-    canActivate: [AuthGuard],
+      import('./pages/signup/signup.component').then((m) => m.SignupComponent),
   },
   {
-    path: ":officeCode/:langCode/signup",
+    path: ':officeCode/:langCode/forgot-password',
     loadComponent: () =>
-      import("./pages/signup/signup.component").then((m) => m.SignupComponent),
-  },
-  {
-    path: ":officeCode/:langCode/forgot-password",
-    loadComponent: () =>
-      import("./pages/forgot-password/forgot-password.component").then(
+      import('./pages/forgot-password/forgot-password.component').then(
         (m) => m.ForgotPasswordComponent
       ),
     canActivate: [AuthGuard],
   },
   {
-    path: ":officeCode/:langCode/force-change-password",
+    path: ':officeCode/:langCode/force-change-password',
     loadComponent: () =>
       import(
-        "./pages/force-change-password/force-change-password.component"
+        './pages/force-change-password/force-change-password.component'
       ).then((m) => m.ForceChangePasswordComponent),
     canActivate: [AuthGuard],
   },
   {
-    path: ":officeCode/:langCode/logged-out",
+    path: ':officeCode/:langCode/logged-out',
     loadComponent: () =>
-      import("./pages/auth-signout/auth-signout.component").then(
+      import('./pages/auth-signout/auth-signout.component').then(
         (m) => m.AuthSignoutComponent
       ),
   },
   // Main application routes with office and language parameters
   {
-    path: ":officeCode/:langCode/dashboard",
+    path: ':officeCode/:langCode/dashboard',
     loadChildren: () =>
-      import("./pages/dashboard/dashboard.module").then((m) => {
+      import('./pages/dashboard/dashboard.module').then((m) => {
         return m.DashboardModule;
       }),
     canActivate: [AuthGuard],
@@ -61,32 +53,32 @@ const routes: Routes = [
 
   // Redirects for office/:langCode pattern
   {
-    path: ":officeCode/:langCode",
+    path: ':officeCode/:langCode',
     component: DefaultRedirectComponent,
-    pathMatch: "full",
+    pathMatch: 'full',
   },
   // Specific instance handlers - asean instance
   {
-    path: "asean",
+    path: 'asean',
     component: DefaultRedirectComponent,
-    pathMatch: "full",
+    pathMatch: 'full',
   },
   // General redirects for office pattern - set default language
   {
-    path: ":officeCode",
+    path: ':officeCode',
     component: DefaultRedirectComponent,
-    pathMatch: "full",
+    pathMatch: 'full',
   },
   // Root redirect - set default office and language
   {
-    path: "",
+    path: '',
     component: DefaultRedirectComponent,
-    pathMatch: "full",
+    pathMatch: 'full',
   },
   {
-    path: ":officeCode/:langCode/user-management",
-    redirectTo: ":officeCode/:langCode/user-management/user-accounts",
-    pathMatch: "full",
+    path: ':officeCode/:langCode/user-management',
+    redirectTo: ':officeCode/:langCode/user-management/user-accounts',
+    pathMatch: 'full',
   },
   // {
   //   path: ':officeCode/:langCode/user-management/user-accounts',
@@ -97,40 +89,48 @@ const routes: Routes = [
   //   canActivate: [AuthGuard],
   // },
   {
-    path: ":officeCode/:langCode/user-management",
+    path: ':officeCode/:langCode/user-management',
     loadChildren: () =>
-      import("./pages/user-management/user-management.module").then(
+      import('./pages/user-management/user-management.module').then(
         (m) => m.UserManagementModule
       ),
     canActivate: [AuthGuard],
   },
   {
-    path: ":officeCode/:langCode/configuration/data-exchange/dashboard",
+    path: ':officeCode/:langCode/configuration/data-exchange/dashboard',
     loadChildren: () =>
-      import("./pages/data-exchange-config/data-exchange-config.module").then(
+      import('./pages/data-exchange-config/data-exchange-config.module').then(
         (m) => m.DataExchangeConfigModule
       ),
     canActivate: [AuthGuard],
   },
   {
-    path: ":officeCode/:langCode/system-configuration/fee-config",
+    path: ':officeCode/:langCode/data-packages',
     loadChildren: () =>
-      import("./pages/fee-config/fee-config.module").then(
+      import('./pages/data-packages/data-packages.module').then(
+        (m) => m.DataPackageModule
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: ':officeCode/:langCode/system-configuration/fee-config',
+    loadChildren: () =>
+      import('./pages/fee-config/fee-config.module').then(
         (m) => m.FeeConfigModule
       ),
     canActivate: [AuthGuard],
   },
   {
-    path: ":officeCode/:langCode/notfound",
+    path: ':officeCode/:langCode/notfound',
     loadChildren: () =>
-      import("./pages/page-notfound/page-notfound.module").then(
+      import('./pages/page-notfound/page-notfound.module').then(
         (m) => m.PageNotfoundModule
       ),
   },
 
   {
-    path: "**",
-    redirectTo: "default/en/notfound",
+    path: '**',
+    redirectTo: 'default/en/notfound',
   },
 ];
 
@@ -138,9 +138,9 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, {
       enableTracing: false,
-      initialNavigation: "enabledBlocking",
-      scrollPositionRestoration: "enabled",
-      paramsInheritanceStrategy: "always",
+      initialNavigation: 'enabledBlocking',
+      scrollPositionRestoration: 'enabled',
+      paramsInheritanceStrategy: 'always',
     }),
   ],
   exports: [RouterModule],

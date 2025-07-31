@@ -1,0 +1,9 @@
+
+<app-layout [config]="layoutConfig">
+  <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
+  <div class="user-accounts-header">
+    <h1>Select Office</h1>
+  </div>
+  <p-select [options]="offices" [(ngModel)]="selectedOffice" (onChange)="onOfficeChange($event)" placeholder="Select Office" optionLabel="name"></p-select><br>
+  <button class="create-user-btn" pButton type="button" (click)="onSelectOffice()">Select Office</button>
+</app-layout>

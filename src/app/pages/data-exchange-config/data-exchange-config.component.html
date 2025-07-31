@@ -1,33 +1,22 @@
 
 <app-layout [config]="layoutConfig">
-  <div class="data-exchange-config-summary-cards">
-    <div class="summary-card" *ngFor="let card of summaryCards" [ngStyle]="{ borderColor: card.color }" (click)="onSummaryCardClick(card)" [style.cursor]="card.title === 'Distribution Exclusion Rules' ? 'pointer' : 'default'">
-      <div class="summary-card-icon" [ngStyle]="{ color: card.color }"><i [class]="card.icon"></i></div>
-      <div class="summary-card-title" [ngStyle]="{ color: card.color }">{{ card.title }}</div>
-      <div class="summary-card-count" [ngStyle]="{ color: card.color }">{{ card.count }}</div>
-      <div class="summary-card-description">{{ card.description }}</div>
-    </div>
-  </div>
-  <app-distribution-exclusion-rules *ngIf="showExclusionRules" [data]="dataExchangeData"></app-distribution-exclusion-rules>
-  <div class="data-exchange-config-heading" *ngIf="!showExclusionRules">
+  <app-breadcrumbs [items]="getBreadcrumbItems()"></app-breadcrumbs>
+  <div class="data-exchange-config-heading pb-10">
     <h1>Data Exchange Configuration</h1>
-    <p>This is the Data Exchange Configuration page. Add your configuration UI here.</p>
+    <p>
+      Click on any of the cards above to navigate to the respective
+      configuration section.
+    </p>
   </div>
-  <!-- Recipient Systems Table-->
-  <div class="recipient-systems-header" *ngIf="showRecipientSystems">
-    <h2><i class="pi pi-database" style="margin-right: 0.5rem;"></i>Recipient Systems</h2>
-    <div>
-      <button class="filter-btn" type="button"><i class="pi pi-filter" style="margin-right: 0.5rem;"></i>Filter</button>
-      <button class="add-system-btn" type="button" (click)="onAddSystemClick()"><i class="pi pi-plus" style="margin-right: 0.5rem;"></i>Add System</button>
+  <div class="summary-stats">
+    <div class="stat-card" *ngFor="let card of summaryCards" (click)="onSummaryCardClick(card)" [style.cursor]="card.clickable ? 'pointer' : 'default'">
+      <div class="stat-content">
+        <div class="stat-icon" [ngStyle]="{'background': 'linear-gradient(135deg, ' + card.color + ' 0%, ' + card.color + 'dd 100%)'}"><i [class]="card.icon"></i></div>
+        <div class="stat-info">
+          <div class="stat-number">{{ card.count }}</div>
+          <div class="stat-label">{{ card.title }}</div>
+        </div>
+      </div>
     </div>
   </div>
-  <ng-template #recipientCodeCell let-row><span class="recipient-code-badge">{{ row.code }}</span></ng-template>
-  <app-table *ngIf="showRecipientSystems" [columns]="recipientSystemsColumns" [data]="recipientSystemsData" [rows]="10" [paginator]="false" (actionClick)="onRecipientSystemAction($event)" [customCellTemplate]="recipientCodeCell"></app-table>
-  <!-- Originating Offices Table-->
-  <div class="originating-offices-header" *ngIf="showOriginatingOffices">
-    <h2><i class="pi pi-building" style="margin-right: 0.5rem;"></i>Originating Offices</h2>
-    <button class="add-office-btn" type="button" (click)="onAddOfficeClick()"><i class="pi pi-plus" style="margin-right: 0.5rem;"></i>Add Office</button>
-  </div>
-  <ng-template #originatingCodeCell let-row><span class="originating-code-badge">{{ row.code }}</span></ng-template>
-  <app-table *ngIf="showOriginatingOffices" [columns]="originatingOfficesColumns" [data]="originatingOfficesData" [rows]="10" [paginator]="false" (actionClick)="onOriginatingOfficeAction($event)" [customCellTemplate]="originatingCodeCell"></app-table>
 </app-layout>

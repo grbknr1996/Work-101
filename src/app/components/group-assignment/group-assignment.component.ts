@@ -1,5 +1,5 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 export interface GroupItem {
   id: string;
@@ -8,16 +8,16 @@ export interface GroupItem {
 }
 
 @Component({
-  selector: "app-group-assignment",
+  selector: 'app-group-assignment',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: "./group-assignment.component.html",
+  templateUrl: './group-assignment.component.html',
 })
 export class GroupAssignmentComponent {
   @Input() availableGroups: GroupItem[] = [];
   @Input() assignedGroups: GroupItem[] = [];
-  @Input() availableLabel: string = "Available Groups";
-  @Input() assignedLabel: string = "Assigned Groups";
+  @Input() availableLabel: string = 'Available Groups';
+  @Input() assignedLabel: string = 'Assigned Groups';
   @Input() pageSize: number = 10;
 
   @Output() assignedGroupsChange = new EventEmitter<GroupItem[]>();

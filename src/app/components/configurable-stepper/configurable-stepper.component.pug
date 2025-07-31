@@ -12,7 +12,6 @@
           .step-icon
             i([class]="step.icon")
         .step-label {{ step.label }}
-        
-        //- Connector line (except for last step)
+    
         .step-connector(*ngIf="i < steps.length - 1")
           .connector-line 

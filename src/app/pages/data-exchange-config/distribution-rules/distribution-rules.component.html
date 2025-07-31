@@ -1,0 +1,119 @@
+
+<app-layout [config]="layoutConfig">
+  <app-breadcrumbs [items]="getBreadcrumbItems()"></app-breadcrumbs>
+  <!-- Summary Stats Section-->
+  <div class="summary-stats">
+    <div class="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #0d47a1 0%, #0d47a1dd 100%);"><i class="pi pi-shield"></i></div>
+        <div class="stat-info">
+          <div class="stat-number">{{ activeRulesCount() }}</div>
+          <div class="stat-label">Active Rules</div>
+        </div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #1565c0 0%, #1565c0dd 100%);"><i class="pi pi-building"></i></div>
+        <div class="stat-info">
+          <div class="stat-number">{{ officesCoveredCount() }}</div>
+          <div class="stat-label">Offices Covered</div>
+        </div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #1976d2 0%, #1976d2dd 100%);"><i class="pi pi-list"></i></div>
+        <div class="stat-info">
+          <div class="stat-number">{{ totalRulesCount() }}</div>
+          <div class="stat-label">Total Rules</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Main Content-->
+  <div class="distribution-rules-header">
+    <h2>Distribution Rules</h2>
+    <button class="add-rule-btn" type="button" (click)="addRule()"><i class="pi pi-plus"></i> Add Rule</button>
+  </div>
+  <!-- Loading State-->
+  <div class="loading-container" *ngIf="loading">
+    <p>Loading distribution rules...</p>
+  </div>
+  <!-- Table Content-->
+  <div *ngIf="!loading">
+    <div class="card">
+      <p-table #dt [value]="distributionRulesData()" [rowHover]="true" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" [paginator]="true" [globalFilterFields]="['originatingOffice', 'recipientName']" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [resizableColumns]="false" [reorderableColumns]="false" [responsive]="true" styleClass="p-datatable-sm">
+        <ng-template pTemplate="caption">
+          <div class="flex-search-bar">
+            <button class="p-button-outlined" pButton label="Clear" icon="pi pi-filter-slash" (click)="clear(dt)"></button>
+            <div class="ml-auto">
+              <p-iconField iconPosition="left">
+                <p-inputIcon><i class="pi pi-search"></i></p-inputIcon>
+                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search keyword">
+              </p-iconField>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="originatingOffice" style="width: 15%">
+              <div class="flex items-center">Originating Office
+                <p-sortIcon field="originatingOffice"></p-sortIcon>
+              </div>
+            </th>
+            <th pSortableColumn="recipientName" style="width: 15%">
+              <div class="flex items-center">Recipient Name
+                <p-sortIcon field="recipientName"></p-sortIcon>
+              </div>
+            </th>
+            <th style="width: 15%">IP Category Types</th>
+            <th style="width: 15%">Application Status</th>
+            <th style="width: 15%">Excluded Event Codes</th>
+            <th style="width: 15%">Excluded Documents</th>
+            <th pSortableColumn="status" style="width: 10%">
+              <div class="flex items-center">Status
+                <p-sortIcon field="status"></p-sortIcon>
+              </div>
+            </th>
+            <th style="width: 10%">Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData>
+          <tr>
+            <td>{{ rowData.originatingOffice }}</td>
+            <td>{{ rowData.recipientName }}</td>
+            <td><span class="exclusion-chip" *ngFor="let cat of rowData.ipCategoryTypes">{{ cat }}</span></td>
+            <td><span class="exclusion-chip" *ngFor="let status of rowData.applicationStatus">{{ status }}</span></td>
+            <td><span class="exclusion-chip" *ngIf="rowData.excludedEventCodes !== 'None'">{{ rowData.excludedEventCodes }}</span><span *ngIf="rowData.excludedEventCodes === 'None'">None</span></td>
+            <td><span class="exclusion-chip" *ngIf="rowData.excludedDocuments !== 'Disabled'">{{ rowData.excludedDocuments }}</span><span *ngIf="rowData.excludedDocuments === 'Disabled'">Disabled</span></td>
+            <td><span class="status-badge" [class.status-active]="rowData.status === 'active'" [class.status-inactive]="rowData.status === 'inactive'">{{ rowData.status }}</span></td>
+            <td>
+              <div class="flex gap-2 justify-content-center">
+                <button class="p-button-rounded p-button-text" pButton icon="pi pi-pencil" severity="info" (click)="onActionClick({ action: 'edit', item: rowData })"></button>
+                <button class="p-button-rounded p-button-text" pButton icon="pi pi-trash" severity="danger" (click)="onActionClick({ action: 'delete', item: rowData })"></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="8">No distribution rules found.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+  <!-- Add Rule Full Screen Modal-->
+  <div class="full-screen-modal-overlay" *ngIf="showAddRuleModal">
+    <div class="full-screen-modal-container">
+      <div class="full-screen-modal-header">
+        <h2>Add New Distribution Rule</h2>
+        <button class="modal-close-btn" (click)="onModalHide()"><i class="pi pi-times"></i></button>
+      </div>
+      <div class="full-screen-modal-content">
+        <app-add-exclusion-rule [data]="localData" [onClose]="onFormSubmitted"></app-add-exclusion-rule>
+      </div>
+    </div>
+  </div>
+</app-layout>
