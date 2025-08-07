@@ -52,13 +52,13 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
     requiredPermissions: ["pending_request_view"],
     items: [
       {
-        icon: "pi-clock",
+        icon: "pi-calendar-clock",
         label: "Pending Requests",
         link: "/requests",
         requiredPermissions: ["pending_request_view"],
       },
       {
-        icon: "pi-clock",
+        icon: "pi-list-check",
         label: "Pending Tasks",
         link: "/tasks/pending",
         requiredPermissions: ["pending_task_allocation"],
@@ -116,7 +116,7 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
         requiredPermissions: ["reception_batch_open"],
       },
       {
-        icon: "pi-clock",
+        icon: "pi-hourglass",
         label: "Pending Reception",
         link: "/reception/pending",
         requiredPermissions: ["reception_batch_view"],
@@ -190,7 +190,7 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
   {
     id: "data-configuration",
     title: "Data Configuration",
-    icon: "pi-objects-column",
+    icon: "pi-server",
     requiredPermissions: [],
     items: [
       {
@@ -246,7 +246,7 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
     requiredPermissions: ["annuity_projection_view"],
     items: [
       {
-        icon: "pi-refresh",
+        icon: "pi-calendar-plus",
         label: "Annuities",
         link: "/annuities",
         requiredPermissions: ["annuity_projection_view"],
@@ -300,7 +300,7 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
   {
     id: "payment-management",
     title: "Payment Management",
-    icon: "pi-credit-card",
+    icon: "pi-wallet",
     requiredPermissions: ["payment_fee_search"],
     items: [
       {
@@ -316,7 +316,7 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
         requiredPermissions: ["bankdriver_config_edit"],
       },
       {
-        icon: "pi-check-circle",
+        icon: "pi-receipt",
         label: "Payment Status",
         link: "/payment-status",
         requiredPermissions: ["payment_status_check"],
