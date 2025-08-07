@@ -1,0 +1,68 @@
+
+<app-layout>
+  <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
+  <div class="grid grid-cols-12 gap-6">
+    <!-- Left section-->
+    <p-card class="col-span-8 mb-4 calculator">
+      <h1 class="text-xl pb-4">Fee Calculator</h1>
+      <div class="grid grid-cols-12 gap-4">
+        <p-floatlabel class="col-span-4 mb-4" variant="on">
+          <p-select class="w-full" id="category" [options]="categories" [(ngModel)]="selectedCategory"></p-select>
+          <label for="category">Category</label>
+        </p-floatlabel>
+        <p-floatlabel class="col-span-4 mb-4" variant="on">
+          <p-select class="w-full" id="services" [options]="services" [(ngModel)]="selectedService"></p-select>
+          <label for="services">Services</label>
+        </p-floatlabel>
+        <p-floatlabel class="col-span-4 mb-4" variant="on">
+          <p-select class="w-full" id="locations" [options]="locations" [(ngModel)]="selectedLocation"></p-select>
+          <label for="locations">Location/Offices</label>
+        </p-floatlabel>
+      </div>
+      <hr class="mt-4 mb-4">
+      <p-table class="mt-4" [value]="services">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Service(s)</th>
+            <th class="text-right">Unit(s)</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-service="">
+          <tr>
+            <td>{{ service.label }}</td>
+            <td class="text-right">
+              <div class="flex items-center gap-2 justify-end">
+                <button class="p-button-sm p-button-text" pButton="" icon="pi pi-minus" (click)="decreaseUnit(service)"></button>{{ service.units }}
+                <button class="p-button-sm p-button-text" pButton="" icon="pi pi-plus" (click)="increaseUnit(service)"></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p-floatlabel class="w-full mt-4" variant="on">
+        <p-select class="w-full" id="discounts" [options]="discountOptions" [(ngModel)]="selectedDiscount"></p-select>
+        <label for="discounts">Available Discounts</label>
+      </p-floatlabel>
+      <button class="w-full mt-4" pButton="" label="Calculate" (click)="calculateTotal()"></button>
+    </p-card>
+    <!-- Right section-->
+    <p-card class="col-span-4 summary">
+      <div class="text-lg pb-4">Summary</div>
+      <div class="flex justify-between mb-4" *ngFor="let item of calculatedItems">
+        <div>{{ item.quantity }} X {{ item.label }}</div>
+        <div class="font-semibold">{{ item.amount | currency:&apos;USD&apos; }}</div>
+      </div>
+      <div class="flex justify-between mb-4 text-green-500" *ngFor="let discount of discounts">
+        <div>Discount &#64; {{ discount.rate }}%</div>
+        <div>-{{ discount.amount | currency:&apos;USD&apos; }}</div>
+      </div>
+      <div class="flex justify-between mt-3"><strong>Subtotal</strong><strong>{{ subtotal | currency:&apos;USD&apos; }}</strong></div>
+      <div class="flex justify-between mt-2"><span>*Tax</span><span>{{ tax | currency:&apos;USD&apos; }}</span></div>
+      <hr class="mt-4 mb-4">
+      <div class="flex justify-between text-xl font-bold"><span>Total Including Tax</span><span>{{ totalWithTax | currency:&apos;USD&apos; }}</span></div>
+      <div class="mt-4 p-3 bg-yellow-100 border-round"><strong>*Tax Details:</strong>
+        <p>Tax calculated at 18% on subtotal after discounts</p>
+      </div>
+    </p-card>
+  </div>
+</app-layout>
