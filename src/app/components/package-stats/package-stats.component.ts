@@ -27,25 +27,10 @@ interface PackageStat {
   imports: [CommonModule],
 })
 export class PackageStatsComponent implements OnInit, OnChanges {
-  @Input() totalPackages: number = 0;
-  @Input() yearPackages: number = 0;
-  @Input() monthPackages: number = 0;
-  @Input() weekPackages: number = 0;
-
-  @Input() totalPackagesPercentChange: number = 0;
-  @Input() yearPackagesPercentChange: number = 0;
-  @Input() monthPackagesPercentChange: number = 0;
-  @Input() weekPackagesPercentChange: number = 0;
-
-  @Input() totalPackagesPeriod: string = "last decade";
-  @Input() yearPackagesPeriod: string = "last year";
-  @Input() monthPackagesPeriod: string = "last month";
-  @Input() weekPackagesPeriod: string = "last week";
 
   @Output() statSelected = new EventEmitter<string>();
-
   @Input() selectedStat: string | null = null;
-  packageStats: PackageStat[] = [];
+  @Input() packageStats: PackageStat[] = [];
 
   ngOnInit(): void {
     this.initPackageStats();
@@ -57,40 +42,7 @@ export class PackageStatsComponent implements OnInit, OnChanges {
   }
 
   initPackageStats(): void {
-    this.packageStats = [
-      {
-        label: "TOTAL COUNT",
-        count: this.totalPackages,
-        percentChange: this.totalPackagesPercentChange,
-        period: this.totalPackagesPeriod,
-        color: "#3949AB", // Indigo color
-        icon: "pi pi-thumbtack",
-      },
-      {
-        label: "TOTAL IN YEAR",
-        count: this.yearPackages,
-        percentChange: this.yearPackagesPercentChange,
-        period: this.yearPackagesPeriod,
-        color: "#2E7D32", // Green color
-        icon: "pi pi-check-circle",
-      },
-      {
-        label: "TOTAL IN MONTH",
-        count: this.monthPackages,
-        percentChange: this.monthPackagesPercentChange,
-        period: this.monthPackagesPeriod,
-        color: "#022382", // Dark blue color
-        icon: "pi pi-tag",
-      },
-      {
-        label: "TOTAL IN WEEK",
-        count: this.weekPackages,
-        percentChange: this.weekPackagesPercentChange,
-        period: this.weekPackagesPeriod,
-        color: "#0288D1", // Blue color
-        icon: "pi pi-spinner",
-      },
-    ];
+    
   }
 
   selectStat(statLabel: string): void {

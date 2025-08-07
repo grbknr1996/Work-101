@@ -136,9 +136,13 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() customCellTemplate: any;
   @Input() actionTemplate: any;
   @Input() locale: string = 'en';
+  @Input() searchPlaceHolder: string = 'Search keyword';
+  @Input() clearButton: string = 'Clear';
   @Input() onLazyLoadEvent: EventEmitter<any> = new EventEmitter();
 
   @Output() actionClick = new EventEmitter<{ action: string; item: any }>();
+
+  @Input() showPdf: string = '';
 
   // Cache for menu items to prevent regeneration
   private menuItemsCache = new Map<string, MenuItem[]>();

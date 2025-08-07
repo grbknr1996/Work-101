@@ -1,0 +1,57 @@
+app-layout
+    app-breadcrumbs([items]="breadcrumbItems")
+    .grid.grid-cols-12.gap-6
+        // Left section
+        p-card.col-span-8.mb-4.calculator
+            h1.text-xl.pb-4 Fee Calculator
+            .grid.grid-cols-12.gap-4
+                p-floatlabel.col-span-4.mb-4(variant='on')
+                    p-select#category.w-full([options]='categories', [(ngModel)]='selectedCategory')
+                    label(for='category') Category
+                p-floatlabel.col-span-4.mb-4(variant='on')
+                    p-select#services.w-full([options]='services', [(ngModel)]='selectedService')
+                    label(for='services') Services
+                p-floatlabel.col-span-4.mb-4(variant='on')
+                    p-select#locations.w-full([options]='locations', [(ngModel)]='selectedLocation')
+                    label(for='locations') Location/Offices
+            hr.mt-4.mb-4
+            p-table.mt-4([value]='services')
+                ng-template(pTemplate='header')
+                    tr
+                        th Service(s)
+                        th.text-right Unit(s)
+                ng-template(pTemplate='body', let-service='')
+                    tr
+                        td {{ service.label }}
+                        td.text-right
+                            .flex.items-center.gap-2.justify-end
+                                button.p-button-sm.p-button-text(pButton='', icon='pi pi-minus', (click)='decreaseUnit(service)')
+                                | {{ service.units }}
+                                button.p-button-sm.p-button-text(pButton='', icon='pi pi-plus', (click)='increaseUnit(service)')
+            p-floatlabel.w-full.mt-4(variant='on')
+                p-select.w-full#discounts([options]='discountOptions', [(ngModel)]='selectedDiscount')
+                label(for='discounts') Available Discounts
+            button.w-full.mt-4(pButton='', label='Calculate', (click)='calculateTotal()')
+        // Right section
+        p-card.col-span-4.summary
+            .text-lg.pb-4 Summary
+            .flex.justify-between.mb-4(*ngFor='let item of calculatedItems')
+                div {{ item.quantity }} X {{ item.label }}
+                .font-semibold {{ item.amount | currency:&apos;USD&apos; }}
+            .flex.justify-between.mb-4.text-green-500(*ngFor='let discount of discounts')
+                div Discount &#64; {{ discount.rate }}%
+                div -{{ discount.amount | currency:&apos;USD&apos; }}
+            .flex.justify-between.mt-3
+                strong Subtotal
+                strong {{ subtotal | currency:&apos;USD&apos; }}
+            .flex.justify-between.mt-2
+                span *Tax
+                span {{ tax | currency:&apos;USD&apos; }}
+            hr.mt-4.mb-4
+            .flex.justify-between.text-xl.font-bold
+                span Total Including Tax
+                span {{ totalWithTax | currency:&apos;USD&apos; }}
+            .mt-4.p-3.bg-yellow-100.border-round
+                strong *Tax Details:
+                p Tax calculated at 18% on subtotal after discounts
+

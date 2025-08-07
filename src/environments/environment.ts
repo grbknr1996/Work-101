@@ -2,7 +2,7 @@ export const environment = {
   installedInstances: ['default', 'asean', 'kh', 'kh-moc', 'jp', 'sg', 'bt'],
   env: 'localhost',
   appUrl: 'http://localhost:4200',
-  backendUrl: '/dev/services/users',
+  backendUrl: '/services/users',
   autoCompleteApi: '/data-services/',
 };
 

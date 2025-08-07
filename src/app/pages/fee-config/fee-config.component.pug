@@ -1,86 +1,88 @@
 app-layout
     app-breadcrumbs([items]="breadcrumbItems")
-    h1.text-xl.ml-4.mb-1.col-span-3 Online Service Request Fees
-    h6.ml-4.col-span-6 View all service fees and charges for online requests 
-    .grid.grid-cols-6.gap-4.p-2.fee-page
-        .user-stats-container.col-span-2
-            .user-stat-card(
-                *ngFor="let stat of feeStats"
-                "[class.selected]"="selectedStat === stat.label"
-                "(click)"="selectStat(stat.label)"
+    .floating-calculator(
+        cdkDrag='', 
+        pToolTip='Calculator', 
+        toolTipPosition='left',
+        (click)='openCalculator()'
+        )
+        i.pi.pi-calculator
+    h1.text-xl.ml-4.mb-1.col-span-3 Filling Fees
+    .grid.grid-cols-6.mt-2
+        .col-span-6.grid.grid-cols-12.filter
+            .col-span-4
+                p-floatlabel(variant='on')
+                    p-iconfield
+                        p-inputicon.pi.pi-search
+                        input.w-full#on_label(pInputText='', [(ngModel)]='searchBar', autocomplete='off')
+                    label(for='on_label') Search
+            .col-span-8.flex.justify-end.gap-2.filter-icons
+                app-configurable-filter(
+                    [filters]="filterConfigs",
+                    [showClearAll]="true",
+                    [showApplyButton]="true",
+                    [showSearch]="true"
+                    [searchPlaceholder]="'Search groups...'",
+                    (filterChange)="onFilterChange($event)",
+                    (filterCleared)="onFilterCleared()",
+                    (filterApplied)="onFilterApplied($event)",
+                    (searchChange)="onSearchChange($event)",
+                    (appliedFiltersChange)="onAppliedFiltersChange($event)"
+                )
+                p-button(icon='pi pi-file-pdf', [outlined]="true", [text]="true", style="font-size: 1.5rem")
+                p-button(icon='pi pi-info-circle', [outlined]="true", [text]="true" style="font-size: 1.5rem")
+    .mb-8.mt-1.w-full
+        app-filter-chips(
+                [appliedFilters]="appliedFilters",
+                [showClearAll]="true",
+                [clearAllLabel]="'Clear All'",
+                [getDisplayValue]="getFilterDisplayValue.bind(this)",
+                (chipRemove)="removeFilterChip($event)",
+                (clearAll)="clearAllFilters()"
             )
-                .stat-header
-                    span.stat-label("[style.color]"="stat.color") {{ stat.label }}
-                    i("[class]"="stat.icon", "[style.color]"="stat.color")
-                
-                .stat-content
-                    span.stat-count("[style.color]"="stat.color") {{ stat.count }}
-        .user-stats-container.col-span-4
-            .user-stat-card
-                .text-xl.font-bold Fee Structure Information
-                .grid.grid-cols-6.mt-2
-                    .col-span-3
-                        .text-sm.font-semibold.mb-2 Standard Processing
-                        ul.list-disc.list-inside.text-sm.text-gray-700
-                            li Regular processing timeline
-                            li Standard service quality
-                    .col-span-3
-                        .text-sm.font-semibold.mb-2 Express Processing
-                        ul.list-disc.list-inside.text-sm.text-gray-700
-                            li Expedited processing (50% faster)
-                            li Prority handling
-                            li SMS and small notifications
-        p-table(
-            #dt1='',
-            [value]='customers', 
-            dataKey='id', 
-            [rows]='10', 
-            [rowsPerPageOptions]='[10, 25, 50]', 
-            [loading]='loading', 
-            [paginator]='true', 
-            [globalFilterFields]="['name', 'country.name', 'representative.name', 'category']"
-            ).col-span-6
-            ng-template(#caption='')
-                .flex
-                    p-button(
-                        label='Clear', 
-                        [outlined]='true', 
-                        icon='pi pi-filter-slash', 
-                        (click)='clear(dt1)')
-                    p-iconfield.ml-auto(iconPosition='left')
-                        p-inputicon
-                            i.pi.pi-search
-                        input(
-                            pInputText='', 
-                            type='text', 
-                            (input)="dt1.filterGlobal($event.target.value, 'contains')", 
-                            placeholder='Search keyword')
-            ng-template(#header='')
-                tr
-                    th(style='min-width:15rem')
-                        .flex.items-center.justify-between
-                            | SERVICE NAME
-                            p-columnFilter(type='text', field='name', display='menu', style="border-width: 0px;")
-                    th(style='min-width:10rem')
-                        .flex.items-center.justify-between
-                            | CATEGORY
-                            p-columnFilter(field='category', matchMode='equals', display='menu')
-                                ng-template(#filter='', let-value='', let-filter='filterCallback')
-                                    p-select.w-full([(ngModel)]='value', [options]='categories', (onChange)='filter($event.value)', placeholder='Select One')
-                                        ng-template(let-option='', #item='')
-                                            p-tag([value]='option.value', [severity]='getSeverity(option.value)')
-                    th(style='min-width:10rem')
-                        .flex.items-center.justify-between
-                            | Basic Fee
-            ng-template(#body='', let-customer='')
-                tr
-                    td
-                        | {{ customer.name }}
-                    td
-                        p-tag([value]='customer.category', [severity]='getSeverity(customer.category)')
-                    td
-                        | {{ customer.balance | currency: 'USD' : 'symbol' }}
-            ng-template(#emptymessage='')
-                tr
-                    td(colspan='7') No customers found.
+        .col-span-6
+            p-tabs(value="trademark")
+                p-tablist
+                    | @for (category of categories; track category.ipType) {
+                    p-tab([value]="category.ipType")
+                        .category-label {{ category.ipType | capitalizeWords }}
+                        p-badge([value]="category.count")
+                    | }
+                p-tabpanels
+                    | @for (category of categories; track category.ipType) {
+                    p-tabpanel([value]="category.ipType").grid.grid-cols-12.gap-3
+                            | @for (service of category.data; track service.name) {
+                            .col-span-3.mt-3
+                                p-card.w-full
+                                    ng-template(#header='')
+                                        h1.flex
+                                            p-checkbox(inputId="service", [(ngModel)]="checked", [binary]="true")
+                                            label.flex-1(for="service") {{service.name}}
+                                    .text-base.font-bold.mb-2  New Application 
+                                    .text-xs  Regular fees IP
+                                    ng-template(#footer='')
+                                        .flex.gap-4.mt-1
+                                            p-button.w-full(size="small", severity='secondary', [outlined]='true', styleClass='w-full')
+                                                | Basic Fee {{ service.basicFee }}$
+                                            p-button.w-full(size="small", styleClass='w-full')
+                                                | Variable Fee {{ service.variableFee }}$
+                            | }
+                    | }
+    
 
+
+
+//- .user-stat-card
+//-     .text-xl.font-bold Fee Structure Information
+//-     .grid.grid-cols-6.mt-2
+//-         .col-span-3
+//-             .text-sm.font-semibold.mb-2 Standard Processing
+//-             ul.list-disc.list-inside.text-sm.text-gray-700
+//-                 li Regular processing timeline
+//-                 li Standard service quality
+//-         .col-span-3
+//-             .text-sm.font-semibold.mb-2 Express Processing
+//-             ul.list-disc.list-inside.text-sm.text-gray-700
+//-                 li Expedited processing (50% faster)
+//-                 li Prority handling
+//-                 li SMS and small notifications

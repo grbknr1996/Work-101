@@ -7,8 +7,15 @@ import { LoadingService } from './loading.service';
 import { Amplify } from 'aws-amplify';
 import { fetchAuthSession } from 'aws-amplify/auth';
 
+export interface PermissionSet {
+  permissionSetId: string;
+  permissionSetName: string;
+  permissions: string[];
+}
+
 export interface PermissionState {
   permissions: string[];
+  permissionSets: PermissionSet[];
   isLoading: boolean;
   error: string | null;
   isLoaded: boolean;
@@ -20,6 +27,7 @@ export interface PermissionState {
 export class PermissionService {
   private permissionStateSubject = new BehaviorSubject<PermissionState>({
     permissions: [],
+    permissionSets: [],
     isLoading: false,
     error: null,
     isLoaded: false,
@@ -32,7 +40,7 @@ export class PermissionService {
     private loadingService: LoadingService
   ) {}
 
-  fetchUserPermissions(): Observable<string[]> {
+  fetchUserPermissions(): Observable<any[]> {
     console.log('PermissionService: fetchUserPermissions called');
     this.setLoading(true);
     this.setError(null);
@@ -64,27 +72,33 @@ export class PermissionService {
       // Make the actual API call
       //take from username
       switchMap(({ accessToken, username }) => {
+        // Extract platform code from username (format: xx_username)
+        const platformCode = username.split('_')[0];
+
         const headers = new HttpHeaders({
           Authorization: `Bearer ${accessToken}`,
-          'wipo-platform-code': 'vc', //hardcoded
+          'wipo-platform-code': platformCode,
           'Content-Type': 'application/json',
         });
 
         const url = `${environment.backendUrl}/permissions?userId=${username}`;
-        return this.http.get<string[]>(url, { headers }) as Observable<
-          string[]
-        >;
+        return this.http.get<any[]>(url, { headers }) as Observable<any[]>;
       }),
-      tap((permissions) => {
+      tap((apiResponse) => {
+        console.log('=== API Response Debug ===');
+        console.log('Raw API response:', apiResponse);
+
+        // Handle the actual API response format
+        const { permissions, permissionSets } =
+          this.processApiResponse(apiResponse);
+
         this.permissionStateSubject.next({
           permissions,
+          permissionSets,
           isLoading: false,
           error: null,
           isLoaded: true,
         });
-        // Don't hide loading here since the interceptor will handle it
-        // this.loadingService.hide();
-        console.log('User permissions loaded:', permissions);
       }),
       catchError((error) => {
         console.error('Error fetching user permissions:', error);
@@ -95,6 +109,69 @@ export class PermissionService {
         return throwError(() => error);
       })
     );
+  }
+
+  /**
+   * Process the API response to extract permissions and permission sets
+   */
+  private processApiResponse(apiResponse: any[]): {
+    permissions: string[];
+    permissionSets: PermissionSet[];
+  } {
+    // If the API response is already in the expected format
+    if (Array.isArray(apiResponse) && apiResponse.length > 0) {
+      // Check if the first item has permissionSetId (meaning it's already in permission set format)
+      const firstItem = apiResponse[0];
+      if (firstItem && firstItem.permissionSetId) {
+        // Extract all permissions from all permission sets
+        const allPermissions: string[] = [];
+        const permissionSets: PermissionSet[] = [];
+
+        apiResponse.forEach((item) => {
+          if (item.permissions && Array.isArray(item.permissions)) {
+            allPermissions.push(...item.permissions);
+            permissionSets.push({
+              permissionSetId: item.permissionSetId,
+              permissionSetName: item.permissionSetName,
+              permissions: item.permissions,
+            });
+          }
+        });
+
+        // Remove duplicates from allPermissions
+        const uniquePermissions = [...new Set(allPermissions)];
+
+        console.log('Extracted permissions:', uniquePermissions);
+        console.log('Extracted permission sets:', permissionSets);
+        console.log('=====================================');
+
+        return {
+          permissions: uniquePermissions,
+          permissionSets: permissionSets,
+        };
+      }
+    }
+
+    const permissions = Array.isArray(apiResponse) ? apiResponse : [];
+    const permissionSets: PermissionSet[] = [];
+
+    return {
+      permissions,
+      permissionSets,
+    };
+  }
+
+  /**
+   * Get permissions from a specific permission set
+   */
+  getPermissionsFromSet(permissionSetId: string): string[] {
+    const currentState = this.permissionStateSubject.value;
+
+    const permissionSet = currentState.permissionSets.find(
+      (set) => set.permissionSetId === permissionSetId
+    );
+
+    return permissionSet ? permissionSet.permissions : [];
   }
 
   /**
@@ -110,9 +187,12 @@ export class PermissionService {
    */
   hasAnyPermission(permissions: string[]): boolean {
     const currentState = this.permissionStateSubject.value;
-    return permissions.some((permission) =>
+
+    const hasPermission = permissions.some((permission) =>
       currentState.permissions.includes(permission)
     );
+
+    return hasPermission;
   }
 
   /**
@@ -133,11 +213,19 @@ export class PermissionService {
   }
 
   /**
+   * Get all permission sets
+   */
+  getPermissionSets(): PermissionSet[] {
+    return this.permissionStateSubject.value.permissionSets;
+  }
+
+  /**
    * Clear permissions (useful for logout)
    */
   clearPermissions(): void {
     this.permissionStateSubject.next({
       permissions: [],
+      permissionSets: [],
       isLoading: false,
       error: null,
       isLoaded: false,

@@ -1,0 +1,19 @@
+// Filter Chips Container
+.filter-chips-container(*ngIf="appliedFilters.length > 0")
+  .filter-chips-content
+    .filter-chips-list
+      p-chip(
+        *ngFor="let filter of appliedFilters",
+        [label]="getFilterDisplayValue(filter)",
+        [removable]="true",
+        (onRemove)="onChipRemove(filter.key)",
+        class="filter-chip"
+      )
+    button(
+      *ngIf="showClearAll",
+      pButton,
+      [label]="clearAllLabel",
+      icon="pi pi-times",
+      class="p-button-text p-button-sm clear-all-button",
+      (click)="onClearAll()"
+    )

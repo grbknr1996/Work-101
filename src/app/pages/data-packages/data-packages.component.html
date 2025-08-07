@@ -4,6 +4,12 @@
   <div class="user-accounts-header">
     <h1>Data Sharing</h1>
   </div>
-  <app-package-stats [totalPackages]="totalPackages" [yearPackages]="yearPackages" [monthPackages]="monthPackages" [weekPackages]="weekPackages" [totalPackagesPercentChange]="39" [yearPackagesPercentChange]="40" [monthPackagesPercentChange]="41" [weekPackagesPercentChange]="42" [totalPackagesPeriod]="'1999'" [yearPackagesPeriod]="'1 year'" [monthPackagesPeriod]="'1 month'" [weekPackagesPeriod]="'7 days'" (statSelected)="onStatSelect($event)" [selectedStat]="'TOTAL IN MONTH'"></app-package-stats>
-  <app-table [columns]="tableColumns" [data]="tableData" (actionClick)="onActionClick($event.action, $event.item)"> </app-table>
+  <app-package-stats [packageStats]="packageStats" (statSelected)="onStatSelect($event)" [selectedStat]="'TOTAL IN MONTH'"></app-package-stats>
+  <div class="mb-4 flex justify-between items-center">
+    <div class="flex-1"></div>
+    <div class="flex items-center gap-3">
+      <app-configurable-filter [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showSearch]="'Search Package Name'" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (searchChange)="onSearchChange($event)"></app-configurable-filter>
+    </div>
+  </div>
+  <app-table [columns]="tableColumns" [data]="tableData" (actionClick)="onActionClick($event.action, $event.item)" [searchPlaceHolder]="'Search Package Name'"> </app-table>
 </app-layout>

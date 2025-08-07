@@ -28,20 +28,23 @@
         button.p-button-outlined(
           *ngIf='showClearButton',
           pButton,
-          label='Clear',
+          [label]='clearButton',
           icon='pi pi-filter-slash',
           (click)='clear(dt)'
         )
         .ml-auto
-          p-iconField(iconPosition='left')
-            p-inputIcon
-              i.pi.pi-search
-            input(
-              pInputText,
-              type='text',
-              (input)="dt.filterGlobal($event.target.value, 'contains')",
-              placeholder='Search keyword'
-            )
+          button([style]="showPdf=='' ? 'display:none;' : '' ", (click)='onActionClick("showPdf", showPdf); $event.stopPropagation()')
+            p-iconField(iconPosition='left')
+              i.pi.pi-file-pdf(style="font-size: 2em; color: red;")
+        p-iconField(iconPosition='left')
+          p-inputIcon
+            i.pi.pi-search
+          input(
+            pInputText,
+            type='text',
+            (input)="dt.filterGlobal($event.target.value, 'contains')",
+            [placeholder]='searchPlaceHolder'
+          )
 
     ng-template(pTemplate='header')
       tr

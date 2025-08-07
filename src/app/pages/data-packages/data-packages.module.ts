@@ -12,7 +12,15 @@ const routes: Routes = [
     component: AuthorityFilesComponent,
   },
   {
+    path: 'authority-files/:office',
+    component: AuthorityFilesComponent,
+  },
+  {
     path: 'select-office',
+    component: SelectOfficeComponent,
+  },
+  {
+    path: 'select-office/:office',
     component: SelectOfficeComponent,
   },
   {

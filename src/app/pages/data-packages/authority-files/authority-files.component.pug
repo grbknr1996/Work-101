@@ -2,4 +2,25 @@ app-layout([config]="layoutConfig")
   app-breadcrumbs([items]="breadcrumbItems")
   .user-accounts-header
     h1 Authority Files
-  app-table([columns]="tableColumns", [data]="tableData", (actionClick)="onActionClick($event.action, $event.item)") 
+  app-package-stats([packageStats]="packageStats", (statSelected)="onStatSelect($event)", [selectedStat]="'All'")
+  .mb-4.flex.justify-between.items-center
+    .flex-1
+    .flex.items-center.gap-3
+      app-configurable-filter(
+        [filters]="filterConfigs",
+        [showClearAll]="true",
+        [showApplyButton]="true",
+        [showSearch]="true"
+        [searchPlaceholder]="'Search Publication Number'",
+        (filterChange)="onFilterChange($event)",
+        (filterCleared)="onFilterCleared()",
+        (filterApplied)="onFilterApplied($event)",
+        (searchChange)="onSearchChange($event)"
+      )
+  app-table(
+    [columns]="tableColumns", 
+    [data]="tableData", 
+    [searchPlaceHolder]="'Search Publication Number'", 
+    (actionClick)="onActionClick($event.action, $event.item)", 
+    showPdf='true',
+  ) 

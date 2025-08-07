@@ -102,11 +102,7 @@ export class GlobalLoaderComponent implements OnInit, OnDestroy {
     this.loading$ = this.loadingService.loading$;
   }
 
-  ngOnInit() {
-    // No need for manual subscription when using async pipe
-  }
+  ngOnInit() {}
 
-  ngOnDestroy() {
-    // No need for manual cleanup when using async pipe
-  }
+  ngOnDestroy() {}
 }

@@ -1,67 +1,162 @@
-import { ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+
 import { ButtonModule } from 'primeng/button';
+import { BadgeModule } from 'primeng/badge';
+import { TabsModule } from 'primeng/tabs';
 import { CardModule } from 'primeng/card';
+import { PopoverModule } from 'primeng/popover';
+import { CheckboxModule } from 'primeng/checkbox';
+import { FormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
+import { FloatLabelModule } from 'primeng/floatlabel';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-import { InputTextModule } from 'primeng/inputtext';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { PopoverModule } from 'primeng/popover';
-import { SelectModule } from 'primeng/select';
-import { Table, TableModule } from 'primeng/table';
-import { TagModule } from 'primeng/tag';
-import { CustomerService } from 'src/app/_services/customerservice';
-import { Customer, Representative } from 'src/app/schemas/customer-schema';
-import { CommonModule } from '@angular/common';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
 import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
+
 import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
-import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
+import { FeeService } from 'src/app/_services/FeeService';
+import { Fee } from 'src/app/schemas/fee-schema';
+import { CapitalizeWordsPipe } from 'src/app/_pipes/capitalize-words.pipe';
+import {
+  ConfigurableFilterComponent,
+  FilterConfig,
+  FilterValue,
+} from 'src/app/components/configurable-filter/configurable-filter.component';
+import { FilterChipsComponent } from 'src/app/components/filter-chips/filter-chips.component';
+
+interface TabData {
+  ipType: string;
+  data?: Fee[] | [];
+  count?: number | 0;
+}
+
+enum IpTypes {
+  TRADEMARK = 'trademark',
+  PATENT = 'patent',
+  COPYRIGHT = 'copyright',
+  POST_QUALIFIED = 'post qualified',
+  INDUSTRIAL_DESIGN = 'industrial design',
+  GI = 'gi',
+}
 
 @Component({
   selector: 'app-fee-config',
   standalone: true,
   imports: [
     CardModule,
-    TableModule,
-    InputTextModule,
-    TagModule,
-    SelectModule,
-    MultiSelectModule,
     ButtonModule,
-    IconFieldModule,
-    InputIconModule,
+    BadgeModule,
+    CheckboxModule,
     CommonModule,
+    FormsModule,
     AppLayoutComponent,
     BreadcrumbsComponent,
-    PopoverModule
+    CapitalizeWordsPipe,
+    PopoverModule,
+    InputTextModule,
+    FloatLabelModule,
+    IconFieldModule,
+    InputIconModule,
+    TabsModule,
+    ConfigurableFilterComponent,
+    FilterChipsComponent,
+    RouterModule,
+    DragDropModule
+  ],
+  providers: [
+    FeeService
   ],
   templateUrl: './fee-config.component.html',
 })
-export class FeeConfigComponent implements OnInit, OnChanges {
-  customers!: Customer[];
+export class FeeConfigComponent implements OnInit {
+  @ViewChild(ConfigurableFilterComponent)
+  configurableFilter!: ConfigurableFilterComponent;
+  feeServices!: Fee[];
 
   breadcrumbItems = [];
 
-  categories!: any[];
+  checked: boolean = false;
 
-  statuses!: any[];
+  categories!: TabData[];
 
   loading: boolean = true;
 
-  activityValues: number[] = [0, 100];
+  searchBar: string;
 
-  searchValue: string | undefined;
+  groups: any[] = [];
 
-  feeStats = [];
-
+  filterConfigs: FilterConfig[] = [
+    {
+      key: 'active',
+      label: 'Active',
+      type: 'checkbox',
+      section: 'STATUS',
+    },
+    {
+      key: 'inactive',
+      label: 'Inactive',
+      type: 'checkbox',
+      section: 'STATUS',
+    },
+    {
+      key: 'business',
+      label: 'Business',
+      type: 'checkbox',
+      section: 'GROUP TYPE',
+    },
+    {
+      key: 'user',
+      label: 'User',
+      type: 'checkbox',
+      section: 'GROUP TYPE',
+    },
+    {
+      key: 'dropdown',
+      label: 'Group Type',
+      type: 'dropdown',
+      options: [
+        {
+          label: 'Business',
+          value: 'bus',
+        },
+        {
+          label: 'User',
+          value: 'user',
+        },
+      ],
+    },
+    {
+      key: 'createdOnRange',
+      label: 'Created Date Range',
+      type: 'dateRange',
+      placeholder: 'Select date range',
+      dateFormat: 'dd/mm/yy',
+      section: 'DATE FILTERS',
+    },
+    {
+      key: 'updatedOnRange',
+      label: 'Updated Date Range',
+      type: 'dateRange',
+      placeholder: 'Select date range',
+      dateFormat: 'dd/mm/yy',
+      section: 'DATE FILTERS',
+    },
+  ];
+  filteredGroups: any[] = [];
+  appliedFilters: FilterValue[] = [];
   constructor(
-    private customerService: CustomerService,
+    private feeService: FeeService,
     private menuService: SidebarMenuService,
     public ms: MechanicsService,
     private cdr: ChangeDetectorRef,
     private router: Router,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
@@ -88,80 +183,200 @@ export class FeeConfigComponent implements OnInit, OnChanges {
       // Trigger change detection after updating breadcrumbs
       this.cdr.markForCheck();
     });
-    this.customerService.getCustomersLarge().then((customers) => {
-      this.customers = customers;
+    this.feeService.getFeeServices().then((feeServices) => {
+      this.feeServices = feeServices;
       this.loading = false;
+      console.log('feeServices: ', this.feeServices);
+      this.categories = this.getTabData(this.feeServices);
+    });
+  }
+  clearAllFilters(): void {
+    this.appliedFilters = [];
+    this.filteredGroups = this.groups;
+    this.configurableFilter.clearAllFilters();
+    this.cdr.detectChanges();
+  }
+  getFilterDisplayValue(filter: FilterValue): string {
+    if (filter.key === 'search') {
+      return `Search: "${filter.value}"`;
+    }
+    const filterConfig = this.filterConfigs.find((f) => f.key === filter.key);
+    if (!filterConfig) return filter.key;
 
-      this.customers.forEach((customer) => (customer.date = new Date(<Date>customer.date)));
-      console.log("customers: ", this.customers);
+    switch (filterConfig.type) {
+      case 'checkbox':
+        return filterConfig.label;
+      case 'dateRange':
+        if (Array.isArray(filter.value) && filter.value.length === 2) {
+          const [startDate, endDate] = filter.value;
+          return `${filterConfig.label
+            }: ${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`;
+        }
+        return filterConfig.label;
+      default:
+        return `${filterConfig.label}: ${filter.value}`;
+    }
+  }
+  removeFilterChip(filterKey: string): void {
+    // Find the filter config to get the display value
+    const filterConfig = this.filterConfigs.find((f) => f.key === filterKey);
+    if (filterConfig) {
+      // Remove the filter from applied filters
+      this.appliedFilters = this.appliedFilters.filter(
+        (f) => f.key !== filterKey
+      );
+
+      // Update the filtered groups
+      this.applyFilters(this.appliedFilters);
+      this.cdr.detectChanges();
+    }
+  }
+  getTabData(feeServicesData: Fee[]): TabData[] {
+    const map = new Map<string, Fee[]>();
+
+    // Grouping items by category
+    for (const item of feeServicesData) {
+      const category = item.category;
+      if (!map.has(category)) {
+        map.set(category, []);
+      }
+      map.get(category)?.push(item);
+    }
+
+    // Creating TabData from the map
+    let tabData: TabData[] = Array.from(map.entries()).map(
+      ([ipType, data]) => ({
+        ipType,
+        data,
+        count: data.length,
+      })
+    );
+
+    const orderedTypes = [
+      IpTypes.TRADEMARK,
+      IpTypes.PATENT,
+      IpTypes.COPYRIGHT,
+      IpTypes.POST_QUALIFIED,
+      IpTypes.INDUSTRIAL_DESIGN,
+      IpTypes.GI,
+    ];
+
+    tabData = orderedTypes.map((ipType) => ({
+      ipType,
+      data: map.get(ipType) || [],
+      count: map.get(ipType)?.length || 0,
+    }));
+
+    console.log('TabData: ', tabData);
+    return tabData;
+  }
+
+  onFilterApplied(filters: FilterValue[]): void {
+    console.log('Filters applied:', filters);
+    this.applyFilters(filters);
+    this.cdr.detectChanges();
+  }
+
+  onAppliedFiltersChange(filters: FilterValue[]): void {
+    this.appliedFilters = filters;
+    this.cdr.detectChanges();
+  }
+
+  private applyFilters(filters: FilterValue[]): void {
+    let filtered = [...this.groups];
+
+    filters.forEach((filter) => {
+      switch (filter.key) {
+        case 'search':
+          if (filter.value && filter.value.trim()) {
+            const searchTerm = filter.value.toLowerCase().trim();
+            filtered = filtered.filter(
+              (item) =>
+                item.groupName?.toLowerCase().includes(searchTerm) ||
+                item.description?.toLowerCase().includes(searchTerm)
+            );
+          }
+          break;
+        case 'active':
+          if (filter.value === true) {
+            filtered = filtered.filter((item) => item.isActive === true);
+          }
+          break;
+        case 'inactive':
+          if (filter.value === true) {
+            filtered = filtered.filter((item) => item.isActive === false);
+          }
+          break;
+        case 'business':
+          if (filter.value === true) {
+            filtered = filtered.filter((item) => item.groupType === 'business');
+          }
+          break;
+        case 'user':
+          if (filter.value === true) {
+            filtered = filtered.filter((item) => item.groupType === 'user');
+          }
+          break;
+        case 'createdOnRange':
+          if (
+            filter.value &&
+            Array.isArray(filter.value) &&
+            filter.value.length === 2
+          ) {
+            const [startDate, endDate] = filter.value;
+            if (startDate && endDate) {
+              filtered = filtered.filter((item) => {
+                const itemDate = new Date(item.createdOn);
+                return itemDate >= startDate && itemDate <= endDate;
+              });
+            }
+          }
+          break;
+        case 'updatedOnRange':
+          if (
+            filter.value &&
+            Array.isArray(filter.value) &&
+            filter.value.length === 2
+          ) {
+            const [startDate, endDate] = filter.value;
+            if (startDate && endDate) {
+              filtered = filtered.filter((item) => {
+                const itemDate = new Date(item.updatedOn);
+                return itemDate >= startDate && itemDate <= endDate;
+              });
+            }
+          }
+          break;
+      }
     });
 
-    this.categories = [
-      { label: 'Copyright', value: 'copyright' },
-      { label: 'Gi', value: 'gi' },
-      { label: 'Trademark', value: 'trademark' },
-      { label: 'Post Qualified', value: 'post-qualified' },
-      { label: 'Industrial Design', value: 'industrial-design' },
-      { label: 'Patent', value: 'patent' }
-    ];
-
-    this.statuses = [
-      { label: 'Active', value: 'active' },
-      { label: 'Under Review', value: 'under-review' }
-    ]
-
-    this.initialFeeStats();
+    this.filteredGroups = filtered;
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.initialFeeStats();
+  onSearchChange(searchTerm: string): void {
+    console.log('Search changed:', searchTerm);
+    // Search is now handled in applyFilters method when filters are applied
   }
 
-  clear(table: Table) {
-    table.clear();
-    this.searchValue = ''
+  onFilterCleared(): void {
+    console.log('Filters cleared');
+    this.filteredGroups = this.groups;
+    this.cdr.detectChanges();
   }
 
-  getSeverity(status: string) {
-    switch (status.toLowerCase()) {
-      case 'copyright':
-        return 'danger';
-
-      case 'gi':
-        return 'success';
-
-      case 'trademark':
-        return 'info';
-
-      case 'post-qualified':
-        return 'warn';
-
-      case 'industrial-design':
-        return 'help';
-        
-      case 'patent':
-        return 'secondary';
-    }
+  onFilterChange(filters: FilterValue[]): void {
+    console.log('Filter changed:', filters);
+    // Don't apply filters or show red dot on change - only track changes
   }
 
-  getActiveStatus(status: string) {
-    switch (status.toLowerCase()) {
-      case 'under-review':
-        return 'danger';
-
-      case 'active':
-        return 'success';
-    }
+  openCalculator() {
+    console.log("Calculator clicked!");
+    this.route.params.subscribe((params) => {
+      const officeCode =
+        params['officeCode'] || this.ms.getCurrentOffice() || 'default';
+      const langCode = params['langCode'] || 'en';
+      this.router.navigate([`/${officeCode}/${langCode}/system-configuration/fee-config/calculator`])
+    });
   }
 
-  initialFeeStats() {
-    this.feeStats = [
-      {
-        label: "TOTAL SERVICES",
-        count: "42",
-        color: "#3949AB", // Indigo color
-        icon: "pi pi-bars",
-      }
-    ];
-  }
 }

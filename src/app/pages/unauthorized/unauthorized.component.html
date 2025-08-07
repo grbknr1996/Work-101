@@ -1,0 +1,38 @@
+
+<div class="flex justify-center align-items-center" style="
+    min-height: 100vh;
+    background: linear-gradient(
+      135deg,
+      var(--p-primary-color) 50%,
+      var(--p-primary-600) 25%
+    );
+    padding: 1rem;
+  ">
+  <p-card class="max-w-25rem text-center shadow-8">
+    <ng-template pTemplate="header">
+      <div class="flex justify-content-center p-3"><i class="pi pi-shield-exclamation text-6xl text-red-500 animate-pulse"></i></div>
+    </ng-template>
+    <ng-template pTemplate="title">
+      <h1 class="text-2xl font-bold text-gray-800 m-0">Access Denied</h1>
+    </ng-template>
+    <ng-template pTemplate="content">
+      <div class="text-gray-600 line-height-2 mb-3">
+        <p class="text-base mb-2">Sorry, you don't have permission to access this page.</p>
+        <p class="text-base">Please contact your administrator if you believe this is an error.</p>
+      </div>
+      <p-divider></p-divider>
+      <div class="flex justify-center mb-3">
+        <p-chip label="Error 403" severity="danger" styleClass="text-sm"></p-chip>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <div class="flex flex-column gap-2 sm">
+        <flex-row class="sm">
+          <justify-content-center>
+            <p-button icon="pi pi-arrow-left" label="Go Back" severity="primary" (onClick)="goBack()" styleClass="w-full sm:w-auto text-sm"></p-button>
+          </justify-content-center>
+        </flex-row>
+      </div>
+    </ng-template>
+  </p-card>
+</div>

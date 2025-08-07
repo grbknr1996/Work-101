@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './_guards/auth.guard';
+import { PermissionGuard } from './_guards/permission.guard';
 import { DefaultRedirectComponent } from './components/default-redirect/default-redirect.component';
 
 const routes: Routes = [
@@ -51,6 +52,68 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
 
+  {
+    path: ':officeCode/:langCode/user-management',
+    loadChildren: () =>
+      import('./pages/user-management/user-management.module').then(
+        (m) => m.UserManagementModule
+      ),
+    canActivate: [AuthGuard],
+    data: {
+      permissions: [],
+    },
+  },
+  {
+    path: ':officeCode/:langCode/configuration/data-exchange/dashboard',
+    loadChildren: () =>
+      import('./pages/data-exchange-config/data-exchange-config.module').then(
+        (m) => m.DataExchangeConfigModule
+      ),
+    canActivate: [AuthGuard],
+    data: {
+      //permissions: ['system_config_view'],
+      // permissionSet: '1',
+    },
+  },
+  {
+    path: ':officeCode/:langCode/data-packages',
+    loadChildren: () =>
+      import('./pages/data-packages/data-packages.module').then(
+        (m) => m.DataPackageModule
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: ':officeCode/:langCode/system-configuration/fee-config',
+    loadComponent: () =>
+      import('./pages/fee-config/fee-config.component').then(
+        (m) => m.FeeConfigComponent
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: ':officeCode/:langCode/system-configuration/fee-config/calculator',
+    loadComponent: () =>
+      import('./pages/fee-calculator/fee-calculator.component').then(
+        (m) => m.FeeCalculatorComponent
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: ':officeCode/:langCode/notfound',
+    loadChildren: () =>
+      import('./pages/page-notfound/page-notfound.module').then(
+        (m) => m.PageNotfoundModule
+      ),
+  },
+  {
+    path: ':officeCode/:langCode/unauthorized',
+    loadComponent: () =>
+      import('./pages/unauthorized/unauthorized.component').then(
+        (m) => m.UnauthorizedComponent
+      ),
+  },
+
   // Redirects for office/:langCode pattern
   {
     path: ':officeCode/:langCode',
@@ -69,65 +132,13 @@ const routes: Routes = [
     component: DefaultRedirectComponent,
     pathMatch: 'full',
   },
-  // Root redirect - set default office and language
+  // Default redirect
   {
     path: '',
     component: DefaultRedirectComponent,
     pathMatch: 'full',
   },
-  {
-    path: ':officeCode/:langCode/user-management',
-    redirectTo: ':officeCode/:langCode/user-management/user-accounts',
-    pathMatch: 'full',
-  },
-  // {
-  //   path: ':officeCode/:langCode/user-management/user-accounts',
-  //   loadChildren: () =>
-  //     import('./pages/user-management/user-accounts/user-accounts.module').then(
-  //       (m) => m.UserAccountsModule
-  //     ),
-  //   canActivate: [AuthGuard],
-  // },
-  {
-    path: ':officeCode/:langCode/user-management',
-    loadChildren: () =>
-      import('./pages/user-management/user-management.module').then(
-        (m) => m.UserManagementModule
-      ),
-    canActivate: [AuthGuard],
-  },
-  {
-    path: ':officeCode/:langCode/configuration/data-exchange/dashboard',
-    loadChildren: () =>
-      import('./pages/data-exchange-config/data-exchange-config.module').then(
-        (m) => m.DataExchangeConfigModule
-      ),
-    canActivate: [AuthGuard],
-  },
-  {
-    path: ':officeCode/:langCode/data-packages',
-    loadChildren: () =>
-      import('./pages/data-packages/data-packages.module').then(
-        (m) => m.DataPackageModule
-      ),
-    canActivate: [AuthGuard],
-  },
-  {
-    path: ':officeCode/:langCode/system-configuration/fee-config',
-    loadChildren: () =>
-      import('./pages/fee-config/fee-config.module').then(
-        (m) => m.FeeConfigModule
-      ),
-    canActivate: [AuthGuard],
-  },
-  {
-    path: ':officeCode/:langCode/notfound',
-    loadChildren: () =>
-      import('./pages/page-notfound/page-notfound.module').then(
-        (m) => m.PageNotfoundModule
-      ),
-  },
-
+  // Catch all route - 404
   {
     path: '**',
     redirectTo: 'default/en/notfound',

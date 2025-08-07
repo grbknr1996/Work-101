@@ -6,6 +6,11 @@ import { GroupsComponent } from './groups/groups.component';
 
 const routes: Routes = [
   {
+    path: '',
+    redirectTo: 'user-accounts',
+    pathMatch: 'full',
+  },
+  {
     path: 'user-accounts',
     component: UserAccountsComponent,
     canActivate: [AuthGuard],

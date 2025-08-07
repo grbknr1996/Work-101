@@ -4,13 +4,16 @@
   <p-table #dt [value]="isSignal(data) ? data() : data" [columns]="columns" [rowHover]="true" [rows]="rows" [rowsPerPageOptions]="rowsPerPageOptions" [loading]="loading" [paginator]="paginator" [globalFilterFields]="globalFilterFields" [showCurrentPageReport]="showCurrentPageReport" [currentPageReportTemplate]="currentPageReportTemplate" [resizableColumns]="resizableColumns" [reorderableColumns]="reorderableColumns" [responsive]="responsive" [lazy]="lazy" [totalRecords]="totalRecords" [scrollable]="scrollable" [scrollHeight]="scrollHeight" [dataKey]="dataKey" (onLazyLoad)="onLazyLoadEvent.emit($event)" styleClass="p-datatable-sm">
     <ng-template pTemplate="caption">
       <div class="flex-search-bar">
-        <button class="p-button-outlined" *ngIf="showClearButton" pButton label="Clear" icon="pi pi-filter-slash" (click)="clear(dt)"></button>
+        <button class="p-button-outlined" *ngIf="showClearButton" pButton [label]="clearButton" icon="pi pi-filter-slash" (click)="clear(dt)"></button>
         <div class="ml-auto">
-          <p-iconField iconPosition="left">
-            <p-inputIcon><i class="pi pi-search"></i></p-inputIcon>
-            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search keyword">
-          </p-iconField>
+          <button [style]="showPdf=='' ? 'display:none;' : '' " (click)="onActionClick(&quot;showPdf&quot;, showPdf); $event.stopPropagation()">
+            <p-iconField iconPosition="left"><i class="pi pi-file-pdf" style="font-size: 2em; color: red;"></i></p-iconField>
+          </button>
         </div>
+        <p-iconField iconPosition="left">
+          <p-inputIcon><i class="pi pi-search"></i></p-inputIcon>
+          <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" [placeholder]="searchPlaceHolder">
+        </p-iconField>
       </div>
     </ng-template>
     <ng-template pTemplate="header">

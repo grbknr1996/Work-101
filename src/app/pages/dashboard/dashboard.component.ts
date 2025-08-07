@@ -15,6 +15,8 @@ import {
 import { BreadcrumbsComponent } from '../../components/breadcrumbs/breadcrumbs.component';
 import { AppWidgetComponent } from 'src/app/components/app-widget/app-widget.component';
 import { PermissionService } from 'src/app/_services/permission.service';
+import { DashboardWidgetService } from 'src/app/_services/dashboard-widget.service';
+import { DashboardWidget } from 'src/app/interfaces';
 
 @Component({
   selector: 'app-dashboard',
@@ -34,13 +36,14 @@ import { PermissionService } from 'src/app/_services/permission.service';
 })
 export class DashboardComponent implements OnInit {
   layoutConfig: LayoutConfig;
-  widgets: any[] = [];
+  widgets: DashboardWidget[] = [];
 
   constructor(
     private authService: AuthService,
     public ms: MechanicsService,
     private route: ActivatedRoute,
-    private permissionService: PermissionService
+    private permissionService: PermissionService,
+    private dashboardWidgetService: DashboardWidgetService
   ) {
     // Initialize layout config
     this.layoutConfig = {
@@ -71,116 +74,11 @@ export class DashboardComponent implements OnInit {
     const officeCode = this.route.snapshot.params.officeCode || 'default';
     const langCode = this.route.snapshot.params['langCode'] || 'en';
     console.log('office code:::', officeCode, langCode);
-    this.widgets = [
-      {
-        icon: 'pi-check-square',
-        title: 'Pending Tasks',
-        items: [
-          { icon: 'pi-clock', label: 'Pending Requests', link: '/requests' },
-          {
-            icon: 'pi-truck',
-            label: 'Physical Deliveries',
-            link: '/deliveries',
-          },
-          { icon: 'pi-users', label: 'Process Groups', link: '/groups' },
-        ],
-      },
-      {
-        icon: 'pi-inbox',
-        title: 'New Reception',
-        items: [
-          {
-            icon: 'pi-hourglass',
-            label: 'Pending Reception',
-            link: '/reception',
-          },
-          { icon: 'pi-chart-pie', label: 'Dashboard', link: '/dashboard' },
-          { icon: 'pi-sliders-h', label: 'Configurations', link: '/configs' },
-          { icon: 'pi-eye', label: 'Filing Review', link: '/filing-review' },
-        ],
-      },
-      {
-        icon: 'pi-id-card',
-        title: 'Register View',
-        items: [
-          {
-            icon: 'pi-user-plus',
-            label: 'Stakeholders',
-            link: '/stakeholders',
-          },
-          {
-            icon: 'pi-envelope',
-            label: 'Email Register',
-            link: '/email-register',
-          },
-        ],
-      },
-      {
-        icon: 'pi-file-edit',
-        title: 'Pending Publication',
-        showBadge: true,
-        badge: '3',
-        items: [
-          { icon: 'pi-bell', label: 'Notifications', link: '/notifications' },
-        ],
-      },
-      {
-        title: 'Configuration',
-        icon: 'pi-objects-column',
-        items: [
-          {
-            icon: 'pi-database',
-            label: 'Data Exchange Configuration',
-            link: `/${officeCode}/${this.ms.lang}/configuration/data-exchange/dashboard`,
-          },
-          {
-            icon: 'pi-box',
-            label: 'Data Sharing',
-            link: `/${officeCode}/${this.ms.lang}/data-packages`,
-          },
-        ],
-      },
-      {
-        icon: 'pi-cog',
-        title: 'System Configuration',
-        items: [
-          {
-            icon: 'pi-money-bill',
-            label: 'Fee Configuration',
-            link: `/${officeCode}/${this.ms.lang}/system-configuration/fee-config`,
-          },
-          {
-            icon: 'pi-send',
-            label: 'Mailmerge Configuration',
-            link: '/mailmerge',
-          },
-          {
-            icon: 'pi-file-word',
-            label: 'Custom Content',
-            link: '/custom-content',
-          },
-        ],
-      },
-      {
-        icon: 'pi-calendar',
-        title: 'Annuities',
-        items: [
-          { icon: 'pi-refresh', label: 'Renewals', link: '/renewals' },
-          { icon: 'pi-chart-bar', label: 'Performance', link: '/performance' },
-          { icon: 'pi-chart-line', label: 'Statistics', link: '/statistics' },
-        ],
-      },
-      {
-        icon: 'pi-shield',
-        title: 'System Administration',
-        items: [
-          {
-            icon: 'pi-users',
-            label: 'User Management',
-            link: `/${officeCode}/${this.ms.lang}/user-management/user-accounts`,
-          },
-        ],
-      },
-    ];
+
+    // Subscribe to permission-based dashboard widgets from the service
+    this.dashboardWidgetService.getDashboardWidgets().subscribe((widgets) => {
+      this.widgets = widgets;
+      console.log('Dashboard widgets loaded:', this.widgets);
+    });
   }
 }

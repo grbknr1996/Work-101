@@ -15,6 +15,11 @@ import { MechanicsService } from 'src/app/_services/mechanics.service';
 //import { Select } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 //import { DatePickerModule } from 'primeng/datepicker';
+import {
+  ConfigurableFilterComponent,
+  FilterConfig,
+  FilterValue,
+} from '../../components/configurable-filter/configurable-filter.component';
 
 interface IpType {
     name: string;
@@ -30,6 +35,7 @@ interface IpType {
     AppLayoutComponent,
     TableComponent,
     FormsModule,
+    ConfigurableFilterComponent,
 //    Select,
 //    DatePickerModule,
   ],
@@ -53,11 +59,56 @@ export class DataPackagesComponent implements OnInit {
 
   breadcrumbItems = [];
 
-  // Static Package stats for demo
+
+    // Static Package stats for demo
   totalPackages = 1580;
   yearPackages = 1180;
   monthPackages = 480;
   weekPackages = 300;
+  totalPackagesPercentChange="39";
+  yearPackagesPercentChange="40";
+  monthPackagesPercentChange="41";
+  weekPackagesPercentChange="42";
+  totalPackagesPeriod="'1999'";
+  yearPackagesPeriod="'1 year'";
+  monthPackagesPeriod="'1 month'";
+  weekPackagesPeriod="'7 days'";
+    
+  packageStats = [
+      {
+        label: "TOTAL COUNT",
+        count: this.totalPackages,
+        percentChange: this.totalPackagesPercentChange,
+        period: this.totalPackagesPeriod,
+        color: "#3949AB", // Indigo color
+        icon: "pi pi-thumbtack",
+      },
+      {
+        label: "TOTAL IN YEAR",
+        count: this.yearPackages,
+        percentChange: this.yearPackagesPercentChange,
+        period: this.yearPackagesPeriod,
+        color: "#2E7D32", // Green color
+        icon: "pi pi-check-circle",
+      },
+      {
+        label: "TOTAL IN MONTH",
+        count: this.monthPackages,
+        percentChange: this.monthPackagesPercentChange,
+        period: this.monthPackagesPeriod,
+        color: "#022382", // Dark blue color
+        icon: "pi pi-tag",
+      },
+      {
+        label: "TOTAL IN WEEK",
+        count: this.weekPackages,
+        percentChange: this.weekPackagesPercentChange,
+        period: this.weekPackagesPeriod,
+        color: "#0288D1", // Blue color
+        icon: "pi pi-spinner",
+      },
+    ];
+
   globalFilterFields = ['ipType', 'fileName', 'status'];
 
   tableColumns = [
@@ -115,6 +166,56 @@ export class DataPackagesComponent implements OnInit {
 
 //  defaultMaxDate: Date;
 
+  officeCode;
+
+  officeCodeParam;
+
+  sortField: string = 'publicationNumber';
+  sortOrder: number = 1;
+
+  applicationOfficeCode="";
+
+  filterConfigs: FilterConfig[] = [
+    {
+      key: 'fileName',
+      label: 'File Number',
+      type: 'text',
+      section: 'FILE NAME',
+    },
+    {
+      key: 'sharedDate',
+      label: 'Shared Date',
+      type: 'dateRange',
+      placeholder: 'Select date range',
+      dateFormat: 'dd/mm/yy',
+      section: 'DATE FILTERS',
+    },
+    {
+      key: 'processed',
+      label: 'Processed',
+      type: 'checkbox',
+      section: 'STATUS',
+    },
+    {
+      key: 'failed',
+      label: 'Failed',
+      type: 'checkbox',
+      section: 'STATUS',
+    },
+    {
+      key: 'partial',
+      label: 'Partial',
+      type: 'checkbox',
+      section: 'STATUS',
+    },
+    {
+      key: 'inProgress',
+      label: 'In Progress',
+      type: 'checkbox',
+      section: 'STATUS',
+    },
+  ];
+
   constructor(
     private menuService: SidebarMenuService,
     private router: Router,
@@ -134,16 +235,19 @@ export class DataPackagesComponent implements OnInit {
         params['officeCode'] || this.ms.getCurrentOffice() || 'default';
       const langCode = params['langCode'] || 'en';
 
-      const officeCodeParam = this.route.snapshot.params['office'];
+      this.officeCodeParam = this.route.snapshot.params['office'];
 
-      console.log('officeCodeParam ',officeCodeParam);
+      console.log('officeCodeParam ',this.officeCodeParam);
 
-      if(officeCode=='default' && (officeCodeParam==null || officeCodeParam==undefined || officeCodeParam=='')){
+      this.officeCode = officeCode;
+
+      if(officeCode=='default' && (this.officeCodeParam==null || this.officeCodeParam==undefined || this.officeCodeParam=='')){
         this.router.navigate(['select-office'], { relativeTo: this.route });
       }
 
 
       if(officeCode=='default'){
+        this.applicationOfficeCode = this.officeCodeParam;
         this.breadcrumbItems = [
           {
             label: 'Offices',
@@ -155,6 +259,7 @@ export class DataPackagesComponent implements OnInit {
           },
         ];
       } else {
+        this.applicationOfficeCode = this.officeCode;
         this.breadcrumbItems = [
           {
             label: 'Data Sharing',
@@ -261,7 +366,100 @@ export class DataPackagesComponent implements OnInit {
     // });
     // TODO: Implement edit user functionality
     console.log('Download details:', user);
-    this.router.navigate(['authority-files'], { relativeTo: this.route });
+    if(this.officeCode=='default'){
+      this.router.navigate(['../authority-files',this.officeCodeParam], { relativeTo: this.route });
+    }else{
+      this.router.navigate(['authority-files'], { relativeTo: this.route });
+    }
+
+  }
+
+  onFilterChange(filters: FilterValue[]): void {
+    console.log('Filter changed:', filters);
+    // Don't apply filters or show red dot on change - only track changes
+  }
+
+  onFilterCleared(): void {
+    console.log('Filters cleared');
+    this.tableData = packagesData;
+    this.cdr.detectChanges();
+  }
+
+  onFilterApplied(filters: FilterValue[]): void {
+    console.log('Filters applied:', filters);
+    this.applyFilters(filters);
+    this.cdr.detectChanges();
+  }
+
+  private applyFilters(filters: FilterValue[]): void {
+    let filtered = [...this.tableData];
+
+    filters.forEach((filter) => {
+      switch (filter.key) {
+        case 'search':
+          if (filter.value && filter.value.trim()) {
+            const searchTerm = filter.value.toLowerCase().trim();
+            filtered = filtered.filter(
+              (item) =>
+                item.fileName.toLowerCase().includes(searchTerm) ||
+                item.status?.toLowerCase().includes(searchTerm)
+            );
+          }
+          break;
+        case 'fileName':
+          if (filter.value != '') {
+            filtered = filtered.filter((item) => item.fileName.includes(filter.value));
+          }
+          break;
+        case 'processed':
+          if (filter.value === true) {
+            filtered = filtered.filter((item) => item.status == 'Processed');
+          }
+          break;
+        case 'failed':
+          if (filter.value === true) {
+            filtered = filtered.filter((item) => item.status == 'Failed');
+          }
+          break;
+        case 'partial':
+          if (filter.value === true) {
+            filtered = filtered.filter((item) => item.status == 'Partial');
+          }
+          break;
+        case 'inProgress':
+          if (filter.value === true) {
+            filtered = filtered.filter((item) => item.status == 'In Progress');
+          }
+          break;
+        case 'sharedDate':
+          if (
+            filter.value &&
+            Array.isArray(filter.value) &&
+            filter.value.length === 2
+          ) {
+            const [startDate, endDate] = filter.value;
+            if (startDate && endDate) {
+              filtered = filtered.filter((item) => {
+                const itemDate = new Date(item.sharedDate);
+                return itemDate >= startDate && itemDate <= endDate;
+              });
+            }
+          }
+          break;
+      }
+    });
+
+    this.tableData = filtered;
+  }
+
+  onSearchChange(searchTerm: string): void {
+    console.log('Search changed:', searchTerm);
+    // Search is now handled in applyFilters method when filters are applied
+  }
+
+  onSort(event: any) {
+    this.sortField = event.field;
+    this.sortOrder = event.order;
   }
 
 }

@@ -2048,24 +2048,78 @@ app-group-assignment
 // =========================================
 
 // =============================
-// Fee System Configuration Dashboard Page
+// Start of Fee System Configuration Dashboard Page
 // =============================
 
 app-fee-config
-  .fee-page
-    h1
-      font-weight: 800
-  p-table
-    :host ::ng-deep {
-      .p-progressbar {
-        height: .5rem;
-        background-color: #D8DADC;
+  .floating-calculator
+    position: fixed;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background-color: #007ad9; /* PrimeNG blue */
+    color: white;
+    padding: 10px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 
-        .p-progressbar-value {
-            background-color: #607D8B;
-        }
-      }
-    }
+  .floating-calculator:hover
+    background-color: #005fa3;
+
+  .floating-calculator i
+    font-size: 20px;
+  .filter
+    padding 0.4rem;
+    background-color #e5f3f7;
+    border-radius var(--p-inputtext-border-radius, 6px);
+    .filter-icons
+      .p-button-text
+        color var(--p-button-outlined-secondary-color)
+      p-button
+        button.p-button-outlined
+          background transparent
+         
+  p-tabs
+    p-tablist
+      p-tab
+        .category-label
+          font-size 1rem
+    p-tabpanels
+      p-tabpanel
+        p-card
+          h1
+            border-top-left-radius: var(--p-card-border-radius);
+            border-top-right-radius: var(--p-card-border-radius);
+            text-align center;
+            padding 1rem;
+            font-size 1rem;
+            background-color #e5f3f7
+            color #1c1c1c !important
+
+// =============================
+// End of Fee System Configuration Dashboard Page
+// =============================
+
+// =============================
+// Start of Fee Calculator Page
+// =============================
+app-fee-calculator
+  .calculator
+    .p-card
+      min-width: 80%
+      background-color: #f9fafb;
+  .summary
+    .p-card
+      background-color: #f9fafb;
+
+
+// =============================
+// End of Fee Calculator Page
+// =============================
+  
 // =============================
 // Signup Component Styles
 // =============================
@@ -3875,3 +3929,546 @@ app-add-exclusion-rule
 
     .p-tabview-panels
       padding 1rem 0
+// ========================================
+// App-Configurable-filter
+// ========================================
+// Filter Component Container
+app-configurable-filter
+  /* Filter Component Container */
+  .filter-component-container
+    position relative
+    display flex
+    justify-content space-between
+    align-items center
+    width 100%
+    gap 1rem
+
+  /* Mobile-specific container adjustments */
+  @media (max-width: 480px)
+    .filter-component-container
+      flex-direction row
+      align-items center
+      gap 0.5rem
+
+  /* Applied Filter Chips - Left Side */
+  .applied-filters-left
+    display flex
+    flex-wrap wrap
+    gap 0.5rem
+    align-items center
+    flex 1
+    min-height 2rem
+    overflow-x auto
+    overflow-y hidden
+    scrollbar-width none /* Firefox */
+    -ms-overflow-style none /* IE and Edge */
+
+  /* Hide scrollbar for webkit browsers */
+  .applied-filters-left::-webkit-scrollbar
+    display none
+
+  /* Applied Filter Chips - External Container (for backward compatibility) */
+  .applied-filters-external
+    display flex
+    flex-wrap wrap
+    gap 0.5rem
+    margin-top 0.75rem
+    align-items center
+    width 100%
+    min-height 2rem
+
+  /* Applied Filter Chips - Internal (for backward compatibility) */
+  .applied-filters
+    display flex
+    flex-wrap wrap
+    gap 0.5rem
+    margin-top 0.75rem
+    align-items center
+    width 100%
+    min-height 2rem
+
+  .filter-chip
+    background-color #eff6ff !important
+    color #1e40af !important
+    border 1px solid #bfdbfe !important
+    font-size 0.75rem !important
+    padding 0.25rem 0.5rem !important
+    flex-shrink 0
+    white-space nowrap
+
+    &:hover
+      background-color #dbeafe !important
+
+  /* Filter Button - Fixed Position */
+  .filter-button
+    flex-shrink 0
+    min-width auto
+    width auto
+    margin-right 10px
+    border none
+
+    /* Remove focus/active border */
+    &:focus,
+    &:active,
+    &:focus-visible
+      outline none !important
+      border none !important
+      box-shadow none !important
+
+  /* PrimeNG Chip Overrides */
+  :host ::ng-deep .p-chip
+    background-color #eff6ff !important
+    color #1e40af !important
+    border 1px solid #bfdbfe !important
+    font-size 0.75rem !important
+    padding 0.25rem 0.5rem !important
+
+    .p-chip-remove-icon
+      color #1e40af !important
+      font-size 0.75rem !important
+
+      &:hover
+        color #dc2626 !important
+
+  /* Filter Overlay */
+  .filter-overlay
+    position absolute
+    top 100%
+    right 0
+    width 400px
+    max-width 90vw
+    max-height 80vh
+    z-index 9999
+    margin-top 8px
+
+  /* Ensure overlay doesn't go off-screen on mobile devices only */
+  @media (max-width: 480px)
+    .filter-overlay
+      right 0 !important
+      width 280px !important
+      max-width 90vw !important
+      z-index 9999
+
+  .filter-panel
+    background white
+    border-radius 8px
+    box-shadow 0 10px 25px rgba(0, 0, 0, 0.15)
+    width 100%
+    max-height 80vh
+    display flex
+    flex-direction column
+    overflow hidden
+    animation slideIn 0.3s ease-out
+    position relative
+
+    &::before
+      content ""
+      position absolute
+      top -8px
+      right 20px
+      width 0
+      height 0
+      border-left 8px solid transparent
+      border-right 8px solid transparent
+      border-bottom 8px solid white
+      z-index 1
+
+  /* Center arrow on mobile devices only */
+  @media (max-width: 480px)
+    .filter-panel::before
+      right 20px !important
+      transform none !important
+
+  @keyframes slideIn
+    from
+      transform translateY(-20px)
+      opacity 0
+    to
+      transform translateY(0)
+      opacity 1
+
+  /* Header Section */
+  .filter-header
+    padding 1.5rem 1.5rem 1rem 1.5rem
+    border-bottom 1px solid #e5e7eb
+    background #f9fafb
+
+  .search-section
+    margin-bottom 1rem
+
+  .search-input
+    width 100%
+    padding 0.75rem 1rem
+    border 1px solid #d1d5db
+    border-radius 6px
+    font-size 0.875rem
+    background white
+    transition border-color 0.2s ease
+
+    &:focus
+      outline none
+      border-color #3b82f6
+      box-shadow 0 0 0 3px rgba(59, 130, 246, 0.1)
+
+  .header-actions
+    display flex
+    gap 0.5rem
+    align-items center
+    justify-content flex-end
+
+  .action-icon
+    width 2rem
+    height 2rem
+    border-radius 4px
+    display flex
+    align-items center
+    justify-content center
+    color #6b7280
+    transition all 0.2s ease
+    position relative
+
+    &:hover
+      background-color #f3f4f6
+      color #374151
+
+    &.active-filter
+      color #3b82f6
+      background-color #eff6ff
+
+  .filter-badge
+    position absolute
+    top -4px
+    right -4px
+    background #ef4444
+    color white
+    font-size 0.75rem
+    font-weight 600
+    padding 0.125rem 0.375rem
+    border-radius 10px
+    min-width 18px
+    height 18px
+    display flex
+    align-items center
+    justify-content center
+
+  .close-button
+    width 2rem
+    height 2rem
+    border-radius 4px
+    display flex
+    align-items center
+    justify-content center
+    color #6b7280
+    transition all 0.2s ease
+    margin-left 0.5rem
+
+    &:hover
+      background-color #f3f4f6
+      color #374151
+
+  /* Filter Content */
+  .filter-content
+    flex 1
+    overflow-y auto
+    padding 1rem 1.5rem
+
+  .filter-sections
+    display flex
+    flex-direction column
+    gap 1.5rem
+
+  .filter-section
+    border-bottom 1px solid #f3f4f6
+    padding-bottom 1rem
+
+    &:last-child
+      border-bottom none
+      padding-bottom 0
+
+  .section-title
+    font-size 0.875rem
+    font-weight 700
+    color #374151
+    text-transform uppercase
+    letter-spacing 0.05em
+    margin-bottom 0.75rem
+    margin-top 0
+
+  .filter-options
+    display flex
+    flex-direction column
+    gap 0.5rem
+
+  .filter-option
+    padding 0.75rem 0
+    margin-bottom 0.5rem
+
+  /* Checkbox Options */
+  .checkbox-option
+    display flex
+    align-items center
+    gap 0.75rem
+    padding 0.5rem 0
+
+  .checkbox-label
+    font-size 0.875rem
+    color #374151
+    cursor pointer
+    user-select none
+    flex 1
+
+  /* Multi-Select and Dropdown Options */
+  .multiselect-option,
+  .dropdown-option,
+  .text-option,
+  .number-option,
+  .date-option,
+  .daterange-option
+    width 100%
+
+  /* Filter Labels */
+  .filter-label
+    display block
+    font-size 0.875rem
+    font-weight 600
+    color #374151
+    margin-bottom 0.5rem
+    line-height 1.25rem
+
+  /* PrimeNG Component Overrides - Essential Only */
+  :host ::ng-deep .p-multiselect,
+  :host ::ng-deep .p-dropdown,
+  :host ::ng-deep .p-calendar,
+  :host ::ng-deep .p-inputnumber
+    width 100%
+
+  /* Input Field Styling - Essential Only */
+  :host ::ng-deep .p-multiselect:focus,
+  :host ::ng-deep .p-dropdown:focus,
+  :host ::ng-deep .p-inputtext:focus,
+  :host ::ng-deep .p-inputnumber:focus
+    border-color #3b82f6
+    box-shadow 0 0 0 3px rgba(59, 130, 246, 0.1)
+    outline none
+
+  /* Calendar Specific Styling - Essential Only */
+  :host ::ng-deep .date-calendar .p-calendar,
+  :host ::ng-deep .date-range-calendar .p-calendar
+    width 100%
+
+  :host ::ng-deep .date-calendar .p-calendar .p-inputtext:focus,
+  :host ::ng-deep .date-range-calendar .p-calendar .p-inputtext:focus
+    border-color #3b82f6
+    box-shadow 0 0 0 3px rgba(59, 130, 246, 0.1)
+    outline none
+
+  /* Date Range Calendar Input Improvements */
+  :host ::ng-deep .date-range-calendar .p-calendar .p-inputtext
+    font-size 0.875rem
+    padding 0.5rem 0.75rem
+    text-overflow ellipsis
+    white-space nowrap
+    overflow hidden
+
+    &::placeholder
+      font-size 0.875rem
+      color #9ca3af
+
+  /* Calendar Panel Styling - Essential Only */
+  :host ::ng-deep .p-datepicker
+    border 1px solid #e5e7eb
+    border-radius 8px
+    box-shadow 0 10px 25px rgba(0, 0, 0, 0.15)
+    background white
+
+  :host ::ng-deep .p-datepicker td > span.p-range-start,
+  :host ::ng-deep .p-datepicker td > span.p-range-end
+    background #3b82f6
+    color white
+
+  :host ::ng-deep .p-datepicker td > span.p-range-between
+    background #dbeafe
+    color #1e40af
+
+  /* Action Buttons */
+  .filter-actions
+    padding 1rem 1.5rem
+    border-top 1px solid #e5e7eb
+    background #f9fafb
+
+  .action-buttons
+    display flex
+    gap 0.75rem
+    justify-content space-between
+
+    button
+      flex 1
+      padding 0.75rem 1rem
+      font-size 0.875rem
+      font-weight 600
+      border-radius 6px
+      transition all 0.2s ease
+
+  /* Responsive Design */
+  @media (max-width: 768px)
+    .filter-overlay
+      width 350px
+      max-width 90vw
+      right 0
+      z-index 9999
+
+    .filter-panel
+      max-height 60vh
+
+    .filter-header
+      padding 1rem
+
+    .filter-content
+      padding 1rem
+
+    .filter-actions
+      padding 1rem
+
+  @media (max-width: 480px)
+    .filter-overlay
+      width 280px
+      max-width 90vw
+      right 0 !important
+      z-index 9999
+
+    .filter-panel
+      max-height 50vh
+
+    .header-actions
+      gap 0.25rem
+
+    .action-icon,
+    .close-button
+      width 1.75rem
+      height 1.75rem
+
+    .action-buttons
+      flex-direction column
+
+  /* Scrollbar Styling */
+  .filter-content::-webkit-scrollbar
+    width 6px
+
+  .filter-content::-webkit-scrollbar-track
+    background #f1f5f9
+
+  .filter-content::-webkit-scrollbar-thumb
+    background #cbd5e1
+    border-radius 3px
+
+    &:hover
+      background #94a3b8
+
+  /* Filter Button Active State */
+  .filter-button.has-active-filters
+    position relative !important
+
+    /* Red dot for filter button */
+    &::after
+      content "" !important
+      position absolute !important
+      top 2px !important
+      right 2px !important
+      width 8px !important
+      height 8px !important
+      background-color #ef4444 !important
+      border-radius 50% !important
+      z-index 9999 !important
+      display block !important
+      visibility visible !important
+      opacity 1 !important
+
+  /* Error Styles */
+  .error-message
+    color #dc2626
+    font-size 0.75rem
+    margin-top 0.25rem
+    display block
+
+  :host ::ng-deep .p-calendar.error .p-inputtext
+    border-color #dc2626
+
+    &:focus
+      border-color #dc2626
+      box-shadow 0 0 0 0.2rem rgba(220, 38, 38, 0.25)
+  app-configurable-filter
+    .filter-overlay
+      width 350px
+      max-width 90vw
+      left 0
+
+    .filter-panel
+      max-height 60vh
+
+    .filter-header
+      padding 1rem
+
+    .filter-content
+      padding 1rem
+
+    .filter-actions
+      padding 1rem
+// ========================================
+// Filter chips Component
+// ========================================
+app-filter-chips
+  .filter-chips-container
+    background linear-gradient(135deg, #e5f3f7 0%, var(--p-primary-color) 100%)
+    border-radius 8px
+    padding 12px 16px
+    box-shadow 0 4px 6px rgba(0, 0, 0, 0.1)
+
+  .filter-chips-content
+    display flex
+    justify-content space-between
+    align-items center
+    gap 12px
+
+  .filter-chips-list
+    display flex
+    flex-wrap wrap
+    gap 8px
+    flex 1
+
+  .filter-chip
+    background-color rgba(255, 255, 255, 0.9) !important
+    color #4a5568 !important
+    border 1px solid rgba(255, 255, 255, 0.3) !important
+    font-size 0.75rem !important
+    padding 0.25rem 0.5rem !important
+    backdrop-filter blur(10px)
+    
+    &:hover
+      background-color rgba(255, 255, 255, 1) !important
+
+  .clear-all-button
+    color white !important
+    background-color rgba(255, 255, 255, 0.2) !important
+    border 1px solid rgba(255, 255, 255, 0.3) !important
+    font-size 0.75rem !important
+    padding 0.25rem 0.75rem !important
+    border-radius 4px !important
+    transition all 0.2s ease
+    
+    &:hover
+      background-color rgba(255, 255, 255, 0.3) !important
+      color white !important
+
+  @media (max-width: 768px)
+    .filter-chips-content
+      flex-direction column
+      align-items stretch
+      gap 8px
+
+    .filter-chips-list
+      justify-content center
+
+    .clear-all-button
+      align-self center
+      width fit-content
+  

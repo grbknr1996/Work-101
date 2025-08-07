@@ -1,0 +1,87 @@
+
+<!-- Filter Component Container-->
+<div class="filter-component-container">
+  <!-- Filter Button - Right Side-->
+  <button class="p-button-outlined p-button-secondary filter-button" pButton type="button" icon="pi pi-sliders-h" [class.has-active-filters]="hasActiveFilters" (click)="toggleFilter()" pTooltip="Open Filters"></button>
+  <!-- Filter Overlay-->
+  <div class="filter-overlay" *ngIf="visible">
+    <div class="filter-panel">
+      <!-- Header with Search and Icons-->
+      <div class="filter-header">
+        <div class="search-section">
+          <input class="search-input" *ngIf="showSearch" pInputText [(ngModel)]="searchTerm" [placeholder]="searchPlaceholder" (input)="onSearchChange()">
+        </div>
+        <div class="header-actions">
+          <button class="p-button-text p-button-sm action-icon" *ngIf="showSearch" pButton type="button" icon="pi pi-search" pTooltip="Search"></button>
+          <button class="p-button-text p-button-sm close-button" pButton type="button" icon="pi pi-times" pTooltip="Close" (click)="onClose()"></button>
+        </div>
+      </div>
+      <!-- Filter Content-->
+      <div class="filter-content">
+        <form class="filter-form" [formGroup]="filterForm">
+          <div class="filter-sections">
+            <div class="filter-section" *ngFor="let sectionKey of getSectionKeys()">
+              <h3 class="section-title">{{ sectionKey }}</h3>
+              <div class="filter-options">
+                <div class="filter-option" *ngFor="let filter of getFiltersBySection()[sectionKey]">
+                  <!-- Checkbox Type-->
+                  <div class="checkbox-option" *ngIf="filter.type === 'checkbox'">
+                    <p-checkbox [formControlName]="filter.key" [binary]="true" [inputId]="filter.key"></p-checkbox>
+                    <label class="checkbox-label" [for]="filter.key">{{ filter.label }}</label>
+                  </div>
+                  <!-- Radio Type-->
+                  <div class="radio-option" *ngIf="filter.type === 'radio'">
+                    <label class="filter-label">{{ filter.label }}</label>
+                    <div class="radio-group">
+                      <div class="radio-item" *ngFor="let option of filter.options; let i = index">
+                        <p-radioButton [formControlName]="filter.key" [value]="option.value" [inputId]="filter.key + '_' + i" [name]="filter.key"></p-radioButton>
+                        <label class="radio-label" [for]="filter.key + '_' + i">{{ option.label }}</label>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Multi-Select Type-->
+                  <div class="multiselect-option" *ngIf="filter.type === 'multiSelect'">
+                    <label class="filter-label">{{ filter.label }}</label>
+                    <p-multiSelect class="w-full" [formControlName]="filter.key" [options]="filter.options || []" [placeholder]="filter.placeholder || 'Select options'" [showClear]="filter.showClear !== false" [showFilter]="filter.showFilter !== false" [filterBy]="filter.filterBy || 'label'" [optionLabel]="filter.optionLabel || 'label'" [optionValue]="filter.optionValue || 'value'"></p-multiSelect>
+                  </div>
+                  <!-- Dropdown Type-->
+                  <div class="dropdown-option" *ngIf="filter.type === 'dropdown'">
+                    <label class="filter-label">{{ filter.label }}</label>
+                    <p-dropdown class="w-full" [formControlName]="filter.key" [options]="filter.options || []" [placeholder]="filter.placeholder || 'Select option'" [showClear]="filter.showClear !== false" [filter]="filter.showFilter !== false" [filterBy]="filter.filterBy || 'label'" [optionLabel]="filter.optionLabel || 'label'" [optionValue]="filter.optionValue || 'value'"></p-dropdown>
+                  </div>
+                  <!-- Text Input Type-->
+                  <div class="text-option" *ngIf="filter.type === 'text'">
+                    <label class="filter-label">{{ filter.label }}</label>
+                    <input class="w-full" pInputText [formControlName]="filter.key" [placeholder]="filter.placeholder || 'Enter text'">
+                  </div>
+                  <!-- Number Input Type-->
+                  <div class="number-option" *ngIf="filter.type === 'number'">
+                    <label class="filter-label">{{ filter.label }}</label>
+                    <p-inputNumber class="w-full" [formControlName]="filter.key" [placeholder]="filter.placeholder || 'Enter number'" [min]="filter.min" [max]="filter.max" [step]="filter.step"></p-inputNumber>
+                  </div>
+                  <!-- Date Input Type-->
+                  <div class="date-option" *ngIf="filter.type === 'date'">
+                    <label class="filter-label">{{ filter.label }}</label>
+                    <p-calendar class="w-full date-calendar" [formControlName]="filter.key" [placeholder]="filter.placeholder || 'Select date'" [dateFormat]="filter.dateFormat || 'dd/mm/yy'" [showClear]="filter.showClear !== false" [showIcon]="true" [showButtonBar]="true" [touchUI]="false"></p-calendar>
+                  </div>
+                  <!-- Date Range Input Type-->
+                  <div class="daterange-option" *ngIf="filter.type === 'dateRange'">
+                    <label class="filter-label">{{ filter.label }}</label>
+                    <p-calendar class="w-full date-range-calendar" [formControlName]="filter.key" [placeholder]="filter.placeholder || 'Select date range'" [dateFormat]="filter.dateFormat || 'dd/mm/yy'" [showClear]="filter.showClear !== false" selectionMode="range" [showIcon]="true" [showButtonBar]="true" [touchUI]="false" [class.error]="hasDateRangeError(filter.key)"></p-calendar><small class="error-message" *ngIf="hasDateRangeError(filter.key)">{{ getDateRangeError(filter.key) }}</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- Action Buttons-->
+      <div class="filter-actions" *ngIf="showClearAll || showApplyButton">
+        <div class="action-buttons">
+          <button class="p-button-outlined p-button-secondary" *ngIf="showClearAll" pButton type="button" label="CLEAR ALL" (click)="onClearAll()"></button>
+          <button class="p-button-primary" *ngIf="showApplyButton" pButton type="button" label="APPLY" (click)="onApplyFilters()"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

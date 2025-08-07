@@ -11,9 +11,9 @@
     .stat-content
       span.stat-count("[style.color]"="stat.color") {{ stat.count }}
       
-      span.stat-change
+      span.stat-change("[style]"="stat.percentChange!=null ? '' : 'display:none;'")
         i(
-          "[class]"="stat.percentChange >= 0 ? 'pi pi-arrow-up' : 'pi pi-arrow-down'"
+          "[class]"="stat.percentChange!=null ? (stat.percentChange >= 0 ? 'pi pi-arrow-up' : 'pi pi-arrow-down') : ''"
           "[style.color]"="stat.percentChange >= 0 ? '#16a34a' : '#dc2626'"
         )
         span("[style.color]"="stat.percentChange >= 0 ? '#16a34a' : '#dc2626'") {{ stat.percentChange }}%

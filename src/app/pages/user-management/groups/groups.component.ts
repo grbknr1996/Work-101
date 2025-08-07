@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -14,6 +14,12 @@ import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
 import { BreadcrumbsComponent } from '../../../components/breadcrumbs/breadcrumbs.component';
+import {
+  ConfigurableFilterComponent,
+  FilterConfig,
+  FilterValue,
+} from '../../../components/configurable-filter/configurable-filter.component';
+import { FilterChipsComponent } from '../../../components/filter-chips/filter-chips.component';
 
 @Component({
   selector: 'app-groups',
@@ -28,19 +34,87 @@ import { BreadcrumbsComponent } from '../../../components/breadcrumbs/breadcrumb
     TooltipModule,
     InputTextModule,
     DropdownModule,
+
     GroupFormComponent,
     AppLayoutComponent,
     RouterModule,
     BreadcrumbsComponent,
+    ConfigurableFilterComponent,
+    FilterChipsComponent,
   ],
 })
 export class GroupsComponent implements OnInit {
+  @ViewChild(ConfigurableFilterComponent)
+  configurableFilter!: ConfigurableFilterComponent;
+
   groups: any[] = [];
   loading: boolean = true;
 
   // Sorting properties
   sortField: string = 'groupName';
   sortOrder: number = 1;
+
+  // Filter configuration for groups
+  filterConfigs: FilterConfig[] = [
+    {
+      key: 'active',
+      label: 'Active',
+      type: 'checkbox',
+      section: 'STATUS',
+    },
+    {
+      key: 'inactive',
+      label: 'Inactive',
+      type: 'checkbox',
+      section: 'STATUS',
+    },
+    {
+      key: 'business',
+      label: 'Business',
+      type: 'checkbox',
+      section: 'GROUP TYPE',
+    },
+    {
+      key: 'user',
+      label: 'User',
+      type: 'checkbox',
+      section: 'GROUP TYPE',
+    },
+    {
+      key: 'createdOnRange',
+      label: 'Created Date Range',
+      type: 'dateRange',
+      placeholder: 'Select date range',
+      dateFormat: 'dd/mm/yy',
+      section: 'DATE FILTERS',
+    },
+    {
+      key: 'updatedOnRange',
+      label: 'Updated Date Range',
+      type: 'dateRange',
+      placeholder: 'Select date range',
+      dateFormat: 'dd/mm/yy',
+      section: 'DATE FILTERS',
+    },
+    {
+      key: 'groupCategory',
+      label: 'Group Category',
+      type: 'radio',
+      options: [
+        { label: 'All Categories', value: 'all' },
+        { label: 'System Groups', value: 'system' },
+        { label: 'Custom Groups', value: 'custom' },
+        { label: 'Department Groups', value: 'department' },
+      ],
+      defaultValue: 'all',
+      section: 'GROUP CATEGORY',
+    },
+  ];
+
+  filteredGroups: any[] = [];
+
+  // Applied filters from configurable filter component
+  appliedFilters: FilterValue[] = [];
 
   // Dialog visibility
   groupFormVisible: boolean = false;
@@ -88,6 +162,7 @@ export class GroupsComponent implements OnInit {
 
     setTimeout(() => {
       this.groups = mockGroups;
+      this.filteredGroups = mockGroups;
       this.loading = false;
       this.cdr.markForCheck();
     }, 1000);
@@ -149,5 +224,154 @@ export class GroupsComponent implements OnInit {
       this.groups.push(groupData);
     }
     this.groupFormVisible = false;
+  }
+
+  // Filter event handlers
+  onFilterChange(filters: FilterValue[]): void {
+    console.log('Filter changed:', filters);
+    // Don't apply filters or show red dot on change - only track changes
+  }
+
+  onFilterCleared(): void {
+    console.log('Filters cleared');
+    this.filteredGroups = this.groups;
+    this.appliedFilters = [];
+    this.cdr.detectChanges();
+  }
+
+  onFilterApplied(filters: FilterValue[]): void {
+    console.log('Filters applied:', filters);
+    this.applyFilters(filters);
+    this.cdr.detectChanges();
+  }
+
+  onAppliedFiltersChange(filters: FilterValue[]): void {
+    this.appliedFilters = filters;
+    this.cdr.detectChanges();
+  }
+
+  // Remove individual filter chip
+  removeFilterChip(filterKey: string): void {
+    // Find the filter config to get the display value
+    const filterConfig = this.filterConfigs.find((f) => f.key === filterKey);
+    if (filterConfig) {
+      // Remove the filter from applied filters
+      this.appliedFilters = this.appliedFilters.filter(
+        (f) => f.key !== filterKey
+      );
+
+      // Update the filtered groups
+      this.applyFilters(this.appliedFilters);
+      this.cdr.detectChanges();
+    }
+  }
+
+  // Clear all filters
+  clearAllFilters(): void {
+    this.appliedFilters = [];
+    this.filteredGroups = this.groups;
+    // Clear the red dot by calling the configurable filter's clear method
+    this.configurableFilter.clearAllFilters();
+    this.cdr.detectChanges();
+  }
+
+  // Get filter display value
+  getFilterDisplayValue(filter: FilterValue): string {
+    if (filter.key === 'search') {
+      return `Search: "${filter.value}"`;
+    }
+    const filterConfig = this.filterConfigs.find((f) => f.key === filter.key);
+    if (!filterConfig) return filter.key;
+
+    switch (filterConfig.type) {
+      case 'checkbox':
+        return filterConfig.label;
+      case 'dateRange':
+        if (Array.isArray(filter.value) && filter.value.length === 2) {
+          const [startDate, endDate] = filter.value;
+          return `${
+            filterConfig.label
+          }: ${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`;
+        }
+        return filterConfig.label;
+      default:
+        return `${filterConfig.label}: ${filter.value}`;
+    }
+  }
+
+  onSearchChange(searchTerm: string): void {
+    console.log('Search changed:', searchTerm);
+    // Search is now handled in applyFilters method when filters are applied
+  }
+
+  private applyFilters(filters: FilterValue[]): void {
+    let filtered = [...this.groups];
+
+    filters.forEach((filter) => {
+      switch (filter.key) {
+        case 'search':
+          if (filter.value && filter.value.trim()) {
+            const searchTerm = filter.value.toLowerCase().trim();
+            filtered = filtered.filter(
+              (item) =>
+                item.groupName?.toLowerCase().includes(searchTerm) ||
+                item.description?.toLowerCase().includes(searchTerm)
+            );
+          }
+          break;
+        case 'active':
+          if (filter.value === true) {
+            filtered = filtered.filter((item) => item.isActive === true);
+          }
+          break;
+        case 'inactive':
+          if (filter.value === true) {
+            filtered = filtered.filter((item) => item.isActive === false);
+          }
+          break;
+        case 'business':
+          if (filter.value === true) {
+            filtered = filtered.filter((item) => item.groupType === 'business');
+          }
+          break;
+        case 'user':
+          if (filter.value === true) {
+            filtered = filtered.filter((item) => item.groupType === 'user');
+          }
+          break;
+        case 'createdOnRange':
+          if (
+            filter.value &&
+            Array.isArray(filter.value) &&
+            filter.value.length === 2
+          ) {
+            const [startDate, endDate] = filter.value;
+            if (startDate && endDate) {
+              filtered = filtered.filter((item) => {
+                const itemDate = new Date(item.createdOn);
+                return itemDate >= startDate && itemDate <= endDate;
+              });
+            }
+          }
+          break;
+        case 'updatedOnRange':
+          if (
+            filter.value &&
+            Array.isArray(filter.value) &&
+            filter.value.length === 2
+          ) {
+            const [startDate, endDate] = filter.value;
+            if (startDate && endDate) {
+              filtered = filtered.filter((item) => {
+                const itemDate = new Date(item.updatedOn);
+                return itemDate >= startDate && itemDate <= endDate;
+              });
+            }
+          }
+          break;
+      }
+    });
+
+    this.filteredGroups = filtered;
   }
 }
