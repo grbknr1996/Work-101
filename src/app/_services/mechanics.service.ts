@@ -14,6 +14,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { instanceType, resizeImage } from '../utils';
 import { BehaviorSubject, Observable, firstValueFrom, map, take } from 'rxjs';
 import { AnySoaRecord } from 'dns';
+import { AuthService } from './auth.service';
 
 const localesMapping = {
   // for Intl.DateTimeFormat and language switching
@@ -56,8 +57,7 @@ export class MechanicsService {
   private searchErrorTimeout = null;
 
   // Language
-  public availableLangs: string[] =
-    configuration[instanceType()].availableLangs;
+  public availableLangs: string[] = [];
   public lang: string;
   public translations: any;
   public defaultTranslation;
@@ -99,10 +99,17 @@ export class MechanicsService {
   public currentOffice$ = this.currentOfficeSubject.asObservable();
 
   getLogo(): string {
-    return configuration[instanceType()].logo;
+    const officeConfig = this.getCurrentOfficeConfig();
+    return officeConfig?.logo || configuration['default']?.logo || '';
   }
+
   getOfficeName(): string {
-    return configuration[instanceType()].name;
+    const officeConfig = this.getCurrentOfficeConfig();
+    return (
+      officeConfig?.name ||
+      configuration['default']?.name ||
+      'WIPO IPAS Central'
+    );
   }
 
   async downloadBase64ImageFromUrl(imageUrl) {
@@ -145,7 +152,8 @@ export class MechanicsService {
     public ts: TranslateService,
     private http: HttpClient,
     public activatedRoute: ActivatedRoute,
-    public router: Router
+    public router: Router,
+    private authService: AuthService
   ) {
     const l: string = `MS constructor - `;
 
@@ -154,11 +162,18 @@ export class MechanicsService {
 
     this.isBeta = (localStorage.getItem(`beta`) || '') != '';
 
-    // Set available languages
-    this.availableLangs = configuration[instanceType()].availableLangs;
+    // Subscribe to auth service to get office code from user ID
+    this.authService.currentOfficeCode$.subscribe((officeCode) => {
+      if (officeCode && officeCode !== 'default') {
+        this.setCurrentOffice(officeCode);
+      }
+    });
+
+    // Set available languages based on current office
+    this.updateAvailableLangs();
 
     // Set default language
-    const defaultLang = configuration[instanceType()].defaultLanguage;
+    const defaultLang = this.getDefaultLanguage();
     this.ts.setDefaultLang(defaultLang);
 
     // Add languages to translate service
@@ -189,6 +204,12 @@ export class MechanicsService {
 
     // Initialize language
     this.switchLang();
+  }
+
+  private updateAvailableLangs(): void {
+    const officeCode = this.getCurrentOffice();
+    const officeConfig = configuration[officeCode];
+    this.availableLangs = officeConfig?.availableLangs || ['en'];
   }
 
   _rename_for_special_collection(root: any, needle: string, replace: string) {
@@ -355,8 +376,8 @@ export class MechanicsService {
     }
 
     // Priority: 1. Explicitly passed lang, 2. URL lang, 3. Default lang
-    const officeType = instanceType();
-    const defaultLang = configuration[officeType].defaultLanguage;
+    const officeType = this.getCurrentOffice();
+    const defaultLang = configuration[officeType]?.defaultLanguage || 'en';
 
     lang = lang || routeLang || defaultLang;
 
@@ -564,16 +585,20 @@ export class MechanicsService {
   setCurrentOffice(officeCode: string): void {
     if (configuration[officeCode]) {
       this.currentOfficeSubject.next(officeCode);
+      // Update available languages for the new office
+      this.updateAvailableLangs();
     } else {
       console.warn(
         `Office code '${officeCode}' not found in configuration, using default`
       );
       this.currentOfficeSubject.next('default');
+      this.updateAvailableLangs();
     }
   }
 
   getCurrentOfficeConfig(): any {
-    return configuration[this.getCurrentOffice()];
+    const officeCode = this.getCurrentOffice();
+    return configuration[officeCode] || configuration['default'];
   }
 
   getDefaultLanguage(): string {

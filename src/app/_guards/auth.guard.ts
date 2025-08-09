@@ -38,28 +38,44 @@ export class AuthGuard {
       map((isAuthenticated) => {
         // Determine if this is an auth page by checking the URL
         const isAuthPage = this.isAuthenticationPage(state.url);
-        const routeOfficeCode = route.params['officeCode'];
-        const routeLangCode = route.params['langCode'];
 
         if (isAuthenticated) {
-          // User is authenticated
-          if (isAuthPage) {
-            // If trying to access auth pages while authenticated, redirect to dashboard
+          // User is authenticated - always use their office code
+          const userOfficeCode = this.authService.getCurrentOfficeCode();
+          const officeConfig =
+            configuration[userOfficeCode] || configuration['default'];
+          const userLangCode = officeConfig?.defaultLanguage || 'en';
+
+          // Get the requested office code from route params
+          const requestedOfficeCode = route.params['officeCode'];
+          const requestedLangCode = route.params['langCode'];
+
+          // If user is trying to access a different office code, redirect them to their office
+          if (requestedOfficeCode && requestedOfficeCode !== userOfficeCode) {
+            console.log(
+              `User office code: ${userOfficeCode}, requested: ${requestedOfficeCode} - redirecting to user's office`
+            );
             this.router.navigate([
-              `/${routeOfficeCode}/${routeLangCode}/dashboard`,
+              `/${userOfficeCode}/${userLangCode}/dashboard`,
             ]);
             return false;
           }
+
+          // If trying to access auth pages while authenticated, redirect to dashboard
+          if (isAuthPage) {
+            this.router.navigate([
+              `/${userOfficeCode}/${userLangCode}/dashboard`,
+            ]);
+            return false;
+          }
+
           return true;
         } else {
-          // User is not authenticated
           if (isAuthPage) {
             return true;
           }
-          // Redirect to login page
-          this.router.navigate([
-            `/${routeOfficeCode}/${routeLangCode}/sign-in`,
-          ]);
+
+          this.router.navigate([`sign-in`]);
           return false;
         }
       })

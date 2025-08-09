@@ -1,21 +1,31 @@
 export const environment = {
-  installedInstances: ['default', 'asean', 'kh', 'kh-moc', 'jp', 'sg', 'bt'],
+  installedInstances: [
+    'default',
+    'asean',
+    'kh',
+    'kh-moc',
+    'jp',
+    'sg',
+    'bt',
+    'vc',
+    'cv',
+  ],
   env: 'localhost',
   appUrl: 'http://localhost:4200',
   backendUrl: '/services/users',
   autoCompleteApi: '/data-services/',
+  cognito: {
+    region: 'eu-central-1',
+    userPoolId: 'eu-central-1_aIn5Yy5c5',
+    clientId: '7vp4nvcrpsttatcg8lf7cds7g4',
+    authority: 'auth.iims.ipobs.dev.web1.wipo.int',
+    redirectUrl: 'https://localhost:4200/auth-callback',
+    postLogoutRedirectUri: 'https://localhost:4200/logged-out',
+    scope:
+      'aws.cognito.signin.user.admin email im-api/im-access openid profile wipopublish-api/data-quality-access',
+    responseType: 'code',
+  },
 };
-
-export interface CognitoConfig {
-  region: string;
-  userPoolId: string;
-  clientId: string;
-  authority: string;
-  redirectUrl: string;
-  postLogoutRedirectUri: string;
-  scope: string;
-  responseType: string;
-}
 
 export const configuration = {
   default: {
@@ -25,17 +35,6 @@ export const configuration = {
     availableLangs: ['ar', 'en', 'fr', 'id', 'jp', 'kh', 'ms', 'vi'],
     defaultLanguage: 'en',
     defaultLandingModule: 'dashboard',
-    cognito: {
-      region: 'eu-central-1',
-      userPoolId: 'eu-central-1_aIn5Yy5c5',
-      clientId: '7vp4nvcrpsttatcg8lf7cds7g4',
-      authority: 'auth.iims.ipobs.dev.web1.wipo.int',
-      redirectUrl: 'https://localhost:4200/default/en/dashboard',
-      postLogoutRedirectUri: 'https://localhost:4200/default/en/logged-out',
-      scope:
-        'aws.cognito.signin.user.admin email im-api/im-access openid profile wipopublish-api/data-quality-access',
-      responseType: 'code',
-    },
   },
   asean: {
     name: 'ASEAN',
@@ -44,27 +43,14 @@ export const configuration = {
     availableLangs: ['ar', 'en', 'fr', 'id', 'jp', 'kh', 'ms', 'vi'],
     defaultLanguage: 'fr',
     defaultLandingModule: 'dashboard',
-    cognito: {
-      region: 'eu-central-1',
-      userPoolId: 'eu-central-1_aIn5Yy5c5',
-      clientId: '2i1omm37jqd6pqke1l4brv2r0a',
-      authority: 'auth.iims.ipobs.dev.web1.wipo.int',
-      redirectUrl: 'https://localhost:4200/asean/fr',
-      postLogoutRedirectUri: 'https://localhost:4200',
-      scope:
-        'aws.cognito.signin.user.admin email im-api/im-access openid profile',
-      responseType: 'code',
-    },
-    // cognito: {
-    //   region: 'eu-central-1',
-    //   userPoolId: 'eu-central-1_eHUXOp3ra',
-    //   clientId: '1dh7vob23eetq87sbeapsc8g4m',
-    //   authority: 'eu-central-1ehuxop3ra.auth.eu-central-1.amazoncognito.com',
-    //   redirectUrl: 'https://localhost:4200/asean/fr',
-    //   postLogoutRedirectUri: 'https://localhost:4200',
-    //   scope: 'aws.cognito.signin.user.admin email openid profile',
-    //   responseType: 'code',
-    // },
+  },
+  vc: {
+    name: 'CIPO St. Vincent & Grenadines',
+    officeCode: 'vc',
+    logo: '/assets/images/vc-logo.png',
+    availableLangs: ['en', 'fr', 'id', 'jp', 'ar'],
+    defaultLanguage: 'en',
+    defaultLandingModule: 'dashboard',
   },
   'kh-moc': {
     name: 'KH MOC',
@@ -81,16 +67,6 @@ export const configuration = {
     availableLangs: ['ar', 'en', 'fr', 'id', 'jp', 'kh', 'ms', 'vi'],
     defaultLanguage: 'fr',
     defaultLandingModule: 'dashboard',
-    cognito: {
-      region: 'eu-central-1',
-      userPoolId: 'eu-central-1_eHUXOp3ra',
-      clientId: '67ja72pqjths4dlltkgfglt0rr',
-      authority: 'eu-central-1ehuxop3ra.auth.eu-central-1.amazoncognito.com',
-      redirectUrl: 'https://localhost:4200/kh/fr',
-      postLogoutRedirectUri: 'https://localhost:4200/kh/fr/logged-out',
-      scope: 'aws.cognito.signin.user.admin email openid profile',
-      responseType: 'code',
-    },
   },
   bt: {
     name: 'Ministry of Industry,<br/> Commerce and Employment <br/> (MoICE)',
@@ -99,26 +75,6 @@ export const configuration = {
     availableLangs: ['ar', 'en', 'fr', 'id', 'jp', 'kh', 'ms', 'vi'],
     defaultLanguage: 'en',
     defaultLandingModule: 'dashboard',
-    cognito: {
-      // region: 'eu-central-1',
-      // userPoolId: 'eu-central-1_aIn5Yy5c5',
-      // clientId: '4do4levt2p1nt7lamebp96u0gp',
-      // authority: 'auth.iims.ipobs.dev.web1.wipo.int',
-      // redirectUrl: 'https://localhost:4200/bt/en',
-      // postLogoutRedirectUri: 'https://localhost:4200',
-      // scope:
-      //   'aws.cognito.signin.user.admin email im-api/im-access openid profile',
-      // responseType: 'code',
-
-      region: 'eu-central-1',
-      userPoolId: 'eu-central-1_eHUXOp3ra',
-      clientId: '6s9qgqo9197o7a44ebtc9r9d0f',
-      authority: 'eu-central-1ehuxop3ra.auth.eu-central-1.amazoncognito.com',
-      redirectUrl: 'https://localhost:4200/bt/en',
-      postLogoutRedirectUri: 'https://localhost:4200/bt/en',
-      scope: 'aws.cognito.signin.user.admin email openid profile',
-      responseType: 'code',
-    },
   },
   // Additional WIPO offices
   au: {
@@ -152,7 +108,6 @@ export const configuration = {
     defaultLanguage: 'zh',
     defaultLandingModule: 'dashboard',
   },
-
   jp: {
     name: 'JPO Japan',
     officeCode: 'jp',
@@ -161,7 +116,6 @@ export const configuration = {
     defaultLanguage: 'jp',
     defaultLandingModule: 'dashboard',
   },
-
   sg: {
     name: 'IPOS Singapore',
     officeCode: 'sg',
@@ -178,7 +132,6 @@ export const configuration = {
     defaultLanguage: 'th',
     defaultLandingModule: 'dashboard',
   },
-
   vn: {
     name: 'IP Vietnam',
     officeCode: 'vn',
@@ -187,7 +140,6 @@ export const configuration = {
     defaultLanguage: 'vi',
     defaultLandingModule: 'dashboard',
   },
-
   sa: {
     name: 'SAIP Saudi Arabia',
     officeCode: 'sa',
@@ -196,13 +148,12 @@ export const configuration = {
     defaultLanguage: 'ar',
     defaultLandingModule: 'dashboard',
   },
-
-  vc: {
-    name: 'CIPO St. Vincent & Grenadines',
-    officeCode: 'vc',
-    logo: '/assets/images/vc-logo.png',
-    availableLangs: ['en'],
-    defaultLanguage: 'en',
+  cv: {
+    name: 'IGQPI - Instituto de Gestão da Qualidade e da \n Propriedade Intelectual',
+    officeCode: 'cv',
+    logo: '/assets/images/cv-logo.jpeg',
+    availableLangs: ['en', 'fr'],
+    defaultLanguage: 'fr',
     defaultLandingModule: 'dashboard',
   },
 };

@@ -10,7 +10,7 @@
             <p-iconField iconPosition="left"><i class="pi pi-file-pdf" style="font-size: 2em; color: red;"></i></p-iconField>
           </button>
         </div>
-        <p-iconField iconPosition="left">
+        <p-iconField iconPosition="left" *ngIf="showSearch">
           <p-inputIcon><i class="pi pi-search"></i></p-inputIcon>
           <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" [placeholder]="searchPlaceHolder">
         </p-iconField>

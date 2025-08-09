@@ -67,7 +67,7 @@ export class PermissionGuard implements CanActivate {
           const officeCode =
             this.mechanicsService.getCurrentOffice() || 'default';
           const langCode = this.mechanicsService.lang || 'en';
-          this.router.navigate([`/${officeCode}/${langCode}/notfound`]);
+          this.router.navigate([`/${officeCode}/${langCode}/unauthorized`]);
           return of(false);
         })
       );

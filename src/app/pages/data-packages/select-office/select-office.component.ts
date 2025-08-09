@@ -59,10 +59,6 @@ export class SelectOfficeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const currentPath = this.router.url;
-    const menuItems = this.menuService.generateConfigurationMenu(currentPath);
-    this.menuService.updateMenuItems(menuItems);
-    // Optionally, dynamically set menu items here
 
     this.route.params.subscribe((params) => {
       const officeCode =
@@ -82,6 +78,11 @@ export class SelectOfficeComponent implements OnInit {
       // Trigger change detection after updating breadcrumbs
       this.cdr.markForCheck();
     });
+
+    const currentPath = this.router.url;
+    const menuItems = this.menuService.generateConfigurationMenu(currentPath,'');
+    this.menuService.updateMenuItems(menuItems);
+
 
     this.offices = [
       { name: 'Combodia', code: 'kh' },

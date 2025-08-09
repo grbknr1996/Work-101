@@ -3,6 +3,7 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
+  ViewChild,
 } from '@angular/core';
 import { packagesData } from '../../../assets/data';
 import { SidebarMenuService } from '../../_services/sidebar-menu.service';
@@ -15,11 +16,16 @@ import { MechanicsService } from 'src/app/_services/mechanics.service';
 //import { Select } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 //import { DatePickerModule } from 'primeng/datepicker';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { ButtonModule } from 'primeng/button';
 import {
   ConfigurableFilterComponent,
   FilterConfig,
   FilterValue,
 } from '../../components/configurable-filter/configurable-filter.component';
+import { FilterChipsComponent } from 'src/app/components/filter-chips/filter-chips.component';
 
 interface IpType {
     name: string;
@@ -38,11 +44,20 @@ interface IpType {
     ConfigurableFilterComponent,
 //    Select,
 //    DatePickerModule,
+    FilterChipsComponent,
+    FloatLabelModule,
+    IconFieldModule,
+    InputIconModule,
+    ButtonModule,
   ],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataPackagesComponent implements OnInit {
+
+  @ViewChild(ConfigurableFilterComponent)
+  configurableFilter!: ConfigurableFilterComponent;
+
   layoutConfig = {
     appTitle: 'WIPO IPAS Central',
     showHeader: true,
@@ -108,6 +123,8 @@ export class DataPackagesComponent implements OnInit {
         icon: "pi pi-spinner",
       },
     ];
+
+  statSelected;
 
   globalFilterFields = ['ipType', 'fileName', 'status'];
 
@@ -216,6 +233,11 @@ export class DataPackagesComponent implements OnInit {
     },
   ];
 
+  appliedFilters: FilterValue[] = [];
+
+  searchBar: string;
+
+
   constructor(
     private menuService: SidebarMenuService,
     private router: Router,
@@ -225,10 +247,6 @@ export class DataPackagesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const currentPath = this.router.url;
-    const menuItems = this.menuService.generateConfigurationMenu(currentPath);
-    this.menuService.updateMenuItems(menuItems);
-    // Optionally, dynamically set menu items here
 
     this.route.params.subscribe((params) => {
       const officeCode =
@@ -273,6 +291,11 @@ export class DataPackagesComponent implements OnInit {
       this.cdr.markForCheck();
     });
 
+    const currentPath = this.router.url;
+    const menuItems = this.menuService.generateConfigurationMenu(currentPath,this.applicationOfficeCode);
+    this.menuService.updateMenuItems(menuItems);
+
+
 //    this.ipTypes = [
 //      { name: 'Trademarks', code: 'trademarks' },
 //      { name: 'Patents', code: 'patents' },
@@ -314,30 +337,6 @@ export class DataPackagesComponent implements OnInit {
 //
 //  }
 
-  onStatSelect(statLabel: string){
-    console.log('Stats Selected:', statLabel);
-
-    let endDate = new Date();
-
-    let startDate = new Date();
-    if(statLabel=='TOTAL IN YEAR'){
-      startDate.setFullYear(endDate.getFullYear()-1);
-    }else if(statLabel=='TOTAL IN MONTH'){
-      startDate.setMonth(endDate.getMonth()-1);
-    }else if(statLabel=='TOTAL IN WEEK'){
-      startDate.setDate(endDate.getDate()-7);
-    }else {
-      //TOTAL COUNT
-      startDate = null;
-    }
-
-    if(startDate==null){
-      this.tableData = packagesData;
-    }else{
-      this.tableData = packagesData.filter(item => new Date(item.sharedDate) >= startDate);
-    }
-  }
-
 //  onIpTypeChange(event: any) {
 //    console.log('Selected IpType:', this.selectedIpType);
 //    this.filtering();
@@ -366,11 +365,11 @@ export class DataPackagesComponent implements OnInit {
     // });
     // TODO: Implement edit user functionality
     console.log('Download details:', user);
-    if(this.officeCode=='default'){
+    /*if(this.officeCode=='default'){
       this.router.navigate(['../authority-files',this.officeCodeParam], { relativeTo: this.route });
     }else{
       this.router.navigate(['authority-files'], { relativeTo: this.route });
-    }
+    }*/
 
   }
 
@@ -381,20 +380,71 @@ export class DataPackagesComponent implements OnInit {
 
   onFilterCleared(): void {
     console.log('Filters cleared');
+    this.appliedFilters = [];
+    this.searchBar = '';
     this.tableData = packagesData;
+    this.filterByStats();
     this.cdr.detectChanges();
   }
 
   onFilterApplied(filters: FilterValue[]): void {
     console.log('Filters applied:', filters);
-    this.applyFilters(filters);
+    this.appliedFilters = filters;
+    this.applyFilters();
     this.cdr.detectChanges();
   }
 
-  private applyFilters(filters: FilterValue[]): void {
+  onAppliedFiltersChange(filters: FilterValue[]): void {
+    this.appliedFilters = filters;
+    this.cdr.detectChanges();
+  }
+
+  onStatSelect(statLabel: string){
+    console.log('Stats Selected:', statLabel);
+    this.statSelected = statLabel;
+    this.applyFilters();
+  }
+
+  private filterByStats(): void {
+    let endDate = new Date();
+
+    let startDate = new Date();
+    if(this.statSelected=='TOTAL IN YEAR'){
+      startDate.setFullYear(endDate.getFullYear()-1);
+    }else if(this.statSelected=='TOTAL IN MONTH'){
+      startDate.setMonth(endDate.getMonth()-1);
+    }else if(this.statSelected=='TOTAL IN WEEK'){
+      startDate.setDate(endDate.getDate()-7);
+    }else {
+      //TOTAL COUNT
+      startDate = null;
+    }
+
+    if(startDate==null){
+      this.tableData = packagesData;
+    }else{
+      this.tableData = packagesData.filter(item => new Date(item.sharedDate) >= startDate);
+    }
+  }
+
+  filterSearch(value: string) {
+    console.log(value);
+    this.tableData = this.tableData.filter((item) => item.fileName?.toLowerCase().includes(value));
+  }
+
+  private applyFilters(): void {
+    this.filterByStats();
     let filtered = [...this.tableData];
 
-    filters.forEach((filter) => {
+    if (this.searchBar && this.searchBar.trim()) {
+      this.appliedFilters.push({
+        key: 'search',
+        value: this.searchBar.trim(),
+        type: 'text',
+      });
+    }
+
+    this.appliedFilters.forEach((filter) => {
       switch (filter.key) {
         case 'search':
           if (filter.value && filter.value.trim()) {
@@ -461,5 +511,61 @@ export class DataPackagesComponent implements OnInit {
     this.sortField = event.field;
     this.sortOrder = event.order;
   }
+
+  clearAllFilters(): void {
+      this.appliedFilters = [];
+      this.searchBar = '';
+      this.tableData = packagesData;
+      this.configurableFilter.clearAllFilters();
+      this.cdr.detectChanges();
+    }
+  
+    getFilterDisplayValue(filter: FilterValue): string {
+      if (filter.key === 'search') {
+        return `Search: "${filter.value}"`;
+      }
+      const filterConfig = this.filterConfigs.find((f) => f.key === filter.key);
+      if (!filterConfig) return filter.key;
+  
+      switch (filterConfig.type) {
+        case 'checkbox':
+          return filterConfig.label;
+        case 'dateRange':
+          if (Array.isArray(filter.value) && filter.value.length === 2) {
+            const [startDate, endDate] = filter.value;
+            return `${
+              filterConfig.label
+            }: ${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`;
+          }
+          return filterConfig.label;
+        default:
+          return `${filterConfig.label}: ${filter.value}`;
+      }
+    }
+  
+    removeFilterChip(filterKey: string): void {
+      console.log("removeFilterChip "+ filterKey)
+  
+      if (filterKey === 'search') {
+        this.searchBar = '';
+        this.appliedFilters = this.appliedFilters.filter(
+          (f) => f.key !== filterKey
+        );
+        this.applyFilters();
+        this.cdr.detectChanges();
+      }
+      // Find the filter config to get the display value
+      const filterConfig = this.filterConfigs.find((f) => f.key === filterKey);
+      if (filterConfig) {
+        // Remove the filter from applied filters
+        this.appliedFilters = this.appliedFilters.filter(
+          (f) => f.key !== filterKey
+        );
+  
+        // Update the filtered groups
+        this.applyFilters();
+        this.cdr.detectChanges();
+      }
+    }
 
 }

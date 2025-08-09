@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { instanceType } from 'src/app/utils';
+import { AuthService } from '../../_services/auth.service';
+import { MechanicsService } from '../../_services/mechanics.service';
 import { configuration } from 'src/environments/environment';
 
 @Component({
@@ -10,16 +11,15 @@ import { configuration } from 'src/environments/environment';
 })
 export class AuthSignoutComponent implements OnInit {
   officeCode = '';
-  officeConfig;
-
+  officeConfig: any;
   langCode = '';
 
-  constructor() {
-    this.officeCode = instanceType();
-    this.officeConfig = configuration[this.officeCode];
+  constructor(private authService: AuthService, private ms: MechanicsService) {
+    this.officeCode = this.authService.getCurrentOfficeCode() || 'default';
+    this.officeConfig =
+      configuration[this.officeCode] || configuration['default'];
     this.langCode = this.officeConfig?.defaultLanguage || 'en';
   }
-  ngOnInit() {
-    // TODO: Replace <OIDC_PROVIDER_DOMAIN> with your actual OIDC provider's logout URL
-  }
+
+  ngOnInit() {}
 }

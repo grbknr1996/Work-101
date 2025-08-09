@@ -3,6 +3,7 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
+  ViewChild,
 } from '@angular/core';
 import { authorityData } from '../../../../assets/data';
 import { SidebarMenuService } from '../../../_services/sidebar-menu.service';
@@ -14,11 +15,16 @@ import { MechanicsService } from 'src/app/_services/mechanics.service';
 import { FormsModule } from '@angular/forms';
 import { PackageStatsComponent } from 'src/app/components/package-stats/package-stats.component';
 import { HttpClient } from '@angular/common/http';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { ButtonModule } from 'primeng/button';
 import {
   ConfigurableFilterComponent,
   FilterConfig,
   FilterValue,
 } from '../../../components/configurable-filter/configurable-filter.component';
+import { FilterChipsComponent } from 'src/app/components/filter-chips/filter-chips.component';
 
 interface IpType {
     name: string;
@@ -35,11 +41,20 @@ interface IpType {
     FormsModule,
     PackageStatsComponent,
     ConfigurableFilterComponent,
+    FilterChipsComponent,
+    FloatLabelModule,
+    IconFieldModule,
+    InputIconModule,
+    ButtonModule,
   ],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthorityFilesComponent implements OnInit {
+
+  @ViewChild(ConfigurableFilterComponent)
+  configurableFilter!: ConfigurableFilterComponent;
+
   layoutConfig = {
     appTitle: 'WIPO IPAS Central',
     showHeader: true,
@@ -50,7 +65,7 @@ export class AuthorityFilesComponent implements OnInit {
     fixedHeader: true,
     fixedSidebar: true,
     sidebarCollapsed: false,
-    theme: 'light',
+    //theme: 'light',
     logo: '',
   };
 
@@ -78,6 +93,8 @@ export class AuthorityFilesComponent implements OnInit {
         color: "#0288D1", // Blue color
       },
     ];
+  
+  statSelected;
 
   globalFilterFields = ['publicationNumber'];
 
@@ -133,6 +150,10 @@ export class AuthorityFilesComponent implements OnInit {
     },
   ];
 
+  appliedFilters: FilterValue[] = [];
+
+  searchBar: string;
+
   constructor(
     private menuService: SidebarMenuService,
     private router: Router,
@@ -143,11 +164,6 @@ export class AuthorityFilesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const currentPath = this.router.url;
-    const menuItems = this.menuService.generateConfigurationMenu(currentPath);
-    this.menuService.updateMenuItems(menuItems);
-    // Optionally, dynamically set menu items here
-
     this.route.params.subscribe((params) => {
       const officeCode =
         params['officeCode'] || this.ms.getCurrentOffice() || 'default';
@@ -190,6 +206,11 @@ export class AuthorityFilesComponent implements OnInit {
       this.cdr.markForCheck();
     });
 
+    const currentPath = this.router.url;
+    const menuItems = this.menuService.generateConfigurationMenu(currentPath, this.applicationOfficeCode);
+    this.menuService.updateMenuItems(menuItems);
+
+
     let today = new Date();
     
     let startDate = new Date();
@@ -197,29 +218,50 @@ export class AuthorityFilesComponent implements OnInit {
     //this.tableData = packagesData.filter(item => new Date(item.sharedDate) >= startDate);
   }
 
-  onStatSelect(statLabel: string){
-    console.log('Stats Selected:', statLabel);
-
-    if(statLabel=='Patents'){
-      this.tableData = authorityData.filter(item => item.kindCode=='A1' || item.kindCode=='B1');
-    }else if(statLabel=='Utility Models'){
-      this.tableData = authorityData.filter(item => item.kindCode=='U1' || item.kindCode=='U3');
-    }else {
-      this.tableData = authorityData;
-    }
-
-  }
-
   onActionClick(action: string, item: any) {
     console.log('Action clicked:', action, item);
     switch (action) {
       case 'showPdf':
-        this.downloadDetails(item);
+        //this.downloadDetails();
+        this.downloadFileWithRedirect('https://ipoffices.support.wipopublish-dev.ipobs.dev.web1.wipo.int/data-services/authority-files/definition-files?IPOfficeCode='+this.applicationOfficeCode);
         break;
     }
   }
 
-  downloadDetails(user: any) {
+  downloadFileWithRedirect(apiUrl: string): void {
+  try {
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', apiUrl, true);
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        // This likely won't be reached due to CORS
+        console.log('XHR Response:', xhr.status);
+      }
+    };
+
+    xhr.onerror = (error) => {
+      // Try to extract S3 URL from error message
+      console.log('XHR Error:', error);
+      // This is hacky but might work in some browsers
+    };
+
+    xhr.send();
+  } catch (error: any) {
+    console.log('Full error:', error);
+    // Try to extract the S3 URL from error message
+    const errorMsg = error.toString();
+    const s3UrlMatch = errorMsg.match(/https:\/\/[^'"\s]+\.s3[^'"\s]*/);
+    if (s3UrlMatch) {
+
+      const s3Url = s3UrlMatch[0];
+      console.log('Extracted S3 URL:', s3Url);
+      window.open(s3Url, '_blank');
+    }
+  }
+}
+
+  downloadDetails() {
    this.http.get('https://ipoffices.support.wipopublish-dev.ipobs.dev.web1.wipo.int/data-services/authority-files/definition-files?IPOfficeCode='+this.applicationOfficeCode, { responseType: 'blob' }).subscribe((data: Blob) => {
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
@@ -232,6 +274,12 @@ export class AuthorityFilesComponent implements OnInit {
     });
   }
 
+  onStatSelect(statLabel: string){
+    console.log('Stats Selected:', statLabel);
+    this.statSelected = statLabel;
+    this.applyFilters();
+  }
+
   onFilterChange(filters: FilterValue[]): void {
     console.log('Filter changed:', filters);
     // Don't apply filters or show red dot on change - only track changes
@@ -239,20 +287,53 @@ export class AuthorityFilesComponent implements OnInit {
 
   onFilterCleared(): void {
     console.log('Filters cleared');
+    this.appliedFilters = [];
+    this.searchBar = '';
     this.tableData = authorityData;
+    this.filterByStats();
     this.cdr.detectChanges();
   }
 
   onFilterApplied(filters: FilterValue[]): void {
     console.log('Filters applied:', filters);
-    this.applyFilters(filters);
+    this.appliedFilters = filters;
+    this.applyFilters();
     this.cdr.detectChanges();
   }
 
-  private applyFilters(filters: FilterValue[]): void {
+  onAppliedFiltersChange(filters: FilterValue[]): void {
+    this.appliedFilters = filters;
+    this.cdr.detectChanges();
+  }
+
+  private filterByStats(): void{
+    if(this.statSelected=='Patents'){
+      this.tableData = authorityData.filter(item => item.kindCode=='A1' || item.kindCode=='B1');
+    }else if(this.statSelected=='Utility Models'){
+      this.tableData = authorityData.filter(item => item.kindCode=='U1' || item.kindCode=='U3');
+    }else {
+      this.tableData = authorityData;
+    }
+  }
+
+  filterSearch(value: string) {
+    console.log(value);
+    this.tableData = this.tableData.filter((item) => item.publicationNumber?.toLowerCase().includes(value));
+  }
+
+  private applyFilters(): void {
+    this.filterByStats();
     let filtered = [...this.tableData];
 
-    filters.forEach((filter) => {
+    if (this.searchBar && this.searchBar.trim()) {
+      this.appliedFilters.push({
+        key: 'search',
+        value: this.searchBar.trim(),
+        type: 'text',
+      });
+    }
+
+    this.appliedFilters.forEach((filter) => {
       switch (filter.key) {
         case 'search':
           if (filter.value && filter.value.trim()) {
@@ -313,6 +394,62 @@ export class AuthorityFilesComponent implements OnInit {
   onSort(event: any) {
     this.sortField = event.field;
     this.sortOrder = event.order;
+  }
+
+  clearAllFilters(): void {
+    this.appliedFilters = [];
+    this.searchBar = '';
+    this.tableData = authorityData;
+    this.configurableFilter.clearAllFilters();
+    this.cdr.detectChanges();
+  }
+
+  getFilterDisplayValue(filter: FilterValue): string {
+    if (filter.key === 'search') {
+      return `Search: "${filter.value}"`;
+    }
+    const filterConfig = this.filterConfigs.find((f) => f.key === filter.key);
+    if (!filterConfig) return filter.key;
+
+    switch (filterConfig.type) {
+      case 'checkbox':
+        return filterConfig.label;
+      case 'dateRange':
+        if (Array.isArray(filter.value) && filter.value.length === 2) {
+          const [startDate, endDate] = filter.value;
+          return `${
+            filterConfig.label
+          }: ${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`;
+        }
+        return filterConfig.label;
+      default:
+        return `${filterConfig.label}: ${filter.value}`;
+    }
+  }
+
+  removeFilterChip(filterKey: string): void {
+    console.log("removeFilterChip "+ filterKey)
+
+    if (filterKey === 'search') {
+      this.searchBar = '';
+      this.appliedFilters = this.appliedFilters.filter(
+        (f) => f.key !== filterKey
+      );
+      this.applyFilters();
+      this.cdr.detectChanges();
+    }
+    // Find the filter config to get the display value
+    const filterConfig = this.filterConfigs.find((f) => f.key === filterKey);
+    if (filterConfig) {
+      // Remove the filter from applied filters
+      this.appliedFilters = this.appliedFilters.filter(
+        (f) => f.key !== filterKey
+      );
+
+      // Update the filtered groups
+      this.applyFilters();
+      this.cdr.detectChanges();
+    }
   }
 
 }

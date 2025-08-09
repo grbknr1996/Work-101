@@ -2,9 +2,32 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './_guards/auth.guard';
 import { PermissionGuard } from './_guards/permission.guard';
-import { DefaultRedirectComponent } from './components/default-redirect/default-redirect.component';
 
 const routes: Routes = [
+  // Auth callback route - handles redirect from AWS Cognito
+  {
+    path: 'auth-callback',
+    loadComponent: () =>
+      import('./components/auth-callback/auth-callback.component').then(
+        (m) => m.AuthCallbackComponent
+      ),
+  },
+  // Logged-out route - handles logout redirect
+  {
+    path: 'logged-out',
+    loadComponent: () =>
+      import('./pages/auth-signout/auth-signout.component').then(
+        (m) => m.AuthSignoutComponent
+      ),
+  },
+  // Simple sign-in route - redirects to hosted UI
+  {
+    path: 'sign-in',
+    loadComponent: () =>
+      import('./pages/sign-in/sign-in.component').then(
+        (m) => m.SignInComponent
+      ),
+  },
   // Auth routes with office and language parameters
   {
     path: ':officeCode/:langCode/sign-in',
@@ -58,9 +81,9 @@ const routes: Routes = [
       import('./pages/user-management/user-management.module').then(
         (m) => m.UserManagementModule
       ),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, PermissionGuard],
     data: {
-      permissions: [],
+      permissions: ['user_management_view'],
     },
   },
   {
@@ -117,25 +140,25 @@ const routes: Routes = [
   // Redirects for office/:langCode pattern
   {
     path: ':officeCode/:langCode',
-    component: DefaultRedirectComponent,
+    redirectTo: ':officeCode/:langCode/dashboard',
     pathMatch: 'full',
   },
   // Specific instance handlers - asean instance
   {
     path: 'asean',
-    component: DefaultRedirectComponent,
+    redirectTo: 'asean/fr/dashboard',
     pathMatch: 'full',
   },
   // General redirects for office pattern - set default language
   {
     path: ':officeCode',
-    component: DefaultRedirectComponent,
+    redirectTo: ':officeCode/en/dashboard',
     pathMatch: 'full',
   },
-  // Default redirect
+  // Default redirect - redirect to sign-in
   {
     path: '',
-    component: DefaultRedirectComponent,
+    redirectTo: 'sign-in',
     pathMatch: 'full',
   },
   // Catch all route - 404

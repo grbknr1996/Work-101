@@ -97,7 +97,7 @@ export class SidebarMenuService {
     ];
   }
 
-  generateConfigurationMenu(currentPath: string): MenuItem[] {
+  generateConfigurationMenu(currentPath: string, officeCode: string): MenuItem[] {
     console.log('current path:', currentPath);
     const lastPart = currentPath.split('/').pop();
     console.log(lastPart);
@@ -108,13 +108,25 @@ export class SidebarMenuService {
         icon: 'pi pi-home',
         routerLink: this.getRouterLink('/dashboard'),
       },
-            {
+      {
         id: 'packages',
-        label: 'packages',
+        label: 'Data Sharing',
         icon: 'pi pi-warehouse',
-        routerLink: this.getRouterLink('/data-packages'),
-        expanded: false,
+        routerLink: this.getRouterLink(`/data-packages/${officeCode}`),
       },
+      {
+        id: 'authority-files',
+        label: 'Authority Files',
+        icon: 'pi pi-search',
+        routerLink: this.getRouterLink(`/data-packages/authority-files/${officeCode}`),
+      },
+      {
+        id: 'data-configuration',
+        label: 'Data Exchange Configuration',
+        icon: 'pi pi-database',
+        routerLink: this.getRouterLink(`/configuration/data-exchange/dashboard`),
+      },
+      
     ];
   }
 

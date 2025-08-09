@@ -292,10 +292,9 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
     this.auth.logout().subscribe({
       next: () => {
         this.ms.resetOffice();
-        this.router.navigate([`/${currentOffice}/${currentLang}/sign-in`]);
       },
       error: () => {
-        this.router.navigate([`/${currentOffice}/${currentLang}/sign-in`]);
+        this.router.navigate([`/sign-in`]);
       },
     });
   }

@@ -5,18 +5,33 @@ app-layout([config]="layoutConfig")
   app-package-stats([packageStats]="packageStats",
     (statSelected)="onStatSelect($event)",
     [selectedStat]="'TOTAL IN MONTH'")
-  .mb-4.flex.justify-between.items-center
-    .flex-1
-    .flex.items-center.gap-3
-      app-configurable-filter(
-        [filters]="filterConfigs",
-        [showClearAll]="true",
-        [showApplyButton]="true",
-        [showSearch]="true"
-        [searchPlaceholder]="'Search Package Name'",
-        (filterChange)="onFilterChange($event)",
-        (filterCleared)="onFilterCleared()",
-        (filterApplied)="onFilterApplied($event)",
-        (searchChange)="onSearchChange($event)"
-      )
-  app-table([columns]="tableColumns", [data]="tableData", (actionClick)="onActionClick($event.action, $event.item)", [searchPlaceHolder]="'Search Package Name'") 
+  .grid.grid-cols-6.mt-2
+    .col-span-6.grid.grid-cols-12.filter
+      .col-span-4
+        p-floatlabel(variant='on')
+          p-iconfield
+            p-inputicon.pi.pi-search
+            input.w-full#on_label(pInputText='', [(ngModel)]='searchBar', (input)="filterSearch(searchBar)", autocomplete='off')
+          label(for='on_label') Search Package Name
+      .col-span-8.flex.justify-end.gap-2.filter-icons
+        app-configurable-filter(
+          [filters]="filterConfigs",
+          [showClearAll]="true",
+          [showApplyButton]="true",
+          [showSearch]="false",
+          (filterChange)="onFilterChange($event)",
+          (filterCleared)="onFilterCleared()",
+          (filterApplied)="onFilterApplied($event)",
+          (searchChange)="onSearchChange($event)",
+          (appliedFiltersChange)="onAppliedFiltersChange($event)"
+        )
+  .mb-8.mt-1.w-full
+    app-filter-chips(
+      [appliedFilters]="appliedFilters",
+      [showClearAll]="true",
+      [clearAllLabel]="'Clear All'",
+      [getDisplayValue]="getFilterDisplayValue.bind(this)",
+      (chipRemove)="removeFilterChip($event)",
+      (clearAll)="clearAllFilters()"
+    )
+  app-table([columns]="tableColumns", [data]="tableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false") 

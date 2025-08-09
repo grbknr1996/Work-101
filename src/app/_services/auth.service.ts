@@ -23,12 +23,14 @@ import { Hub } from 'aws-amplify/utils';
 import { configuration } from '../../environments/environment';
 import { instanceType } from '../utils';
 import * as awsAmplify from 'aws-amplify';
+import { environment } from '../../environments/environment';
 
 export interface User {
   id: string;
   email: string;
   name: string;
   role: string;
+  officeCode?: string; // Add office code to user interface
 }
 
 // Update AuthState to include device information
@@ -38,8 +40,7 @@ export interface AuthState {
   isLoading: boolean;
   error: string | null;
   attributes: Record<string, any>;
-  // Removed: currentDevice?: any; // Properly typed
-  // Removed: deviceList?: any[]; // Properly typed
+  officeCode?: string;
 }
 
 @Injectable({
@@ -53,8 +54,7 @@ export class AuthService {
     isLoading: true,
     error: null,
     attributes: {},
-    // Removed: currentDevice: null,
-    // Removed: deviceList: [],
+    officeCode: 'default',
   });
 
   authState$ = this.authStateSubject.asObservable();
@@ -62,28 +62,31 @@ export class AuthService {
   private tempUser: any = null; // Store user during challenges
 
   constructor() {
-    // Get the current office code from the URL
-    const officeCode = instanceType();
-    const officeConfig = configuration[officeCode];
-
-    if (!officeConfig) {
-      console.error(`No configuration found for office code: ${officeCode}`);
-      return;
-    }
-
-    // Configure Amplify with Gen 2 structure using office-specific config
     Amplify.configure({
       Auth: {
         Cognito: {
-          userPoolId: officeConfig.cognito?.userPoolId,
-          userPoolClientId: officeConfig.cognito?.clientId,
+          userPoolId:
+            environment.cognito?.userPoolId || 'eu-central-1_aIn5Yy5c5',
+          userPoolClientId:
+            environment.cognito?.clientId || '7vp4nvcrpsttatcg8lf7cds7g4',
           loginWith: {
             oauth: {
-              domain: officeConfig.cognito?.authority,
-              scopes: officeConfig.cognito?.scope.split(' '),
+              domain:
+                environment.cognito?.authority ||
+                'auth.iims.ipobs.dev.web1.wipo.int',
+              scopes: (
+                environment.cognito?.scope ||
+                'aws.cognito.signin.user.admin email im-api/im-access openid profile'
+              ).split(' '),
               responseType: 'code',
-              redirectSignIn: [officeConfig.cognito?.redirectUrl],
-              redirectSignOut: [officeConfig.cognito?.postLogoutRedirectUri],
+              redirectSignIn: [
+                environment.cognito?.redirectUrl ||
+                  'https://localhost:4200/auth-callback',
+              ],
+              redirectSignOut: [
+                environment.cognito?.postLogoutRedirectUri ||
+                  'https://localhost:4200/logged-out',
+              ],
             },
           },
         },
@@ -94,13 +97,16 @@ export class AuthService {
     Hub.listen('auth', ({ payload: { event, data } }: any) => {
       switch (event) {
         case 'signedIn':
-          this.checkAuthStatus().subscribe(() => {
-            const officeCode = instanceType();
-            const officeConfig = configuration[officeCode];
-            const langCode = officeConfig?.defaultLanguage || 'en';
-            setTimeout(() => {
-              this.router.navigate([`/${officeCode}/${langCode}/dashboard`]);
-            });
+          this.checkAuthStatus().subscribe((isAuthenticated) => {
+            if (isAuthenticated) {
+              const currentState = this.authStateSubject.value;
+              const officeCode = currentState.officeCode || 'default';
+              const officeConfig = configuration[officeCode];
+              const langCode = officeConfig?.defaultLanguage || 'en';
+              setTimeout(() => {
+                this.router.navigate([`/${officeCode}/${langCode}/dashboard`]);
+              });
+            }
           });
           break;
         case 'signedOut':
@@ -119,6 +125,29 @@ export class AuthService {
     this.checkAuthStatus();
   }
 
+  /**
+   * Extract office code from user ID (e.g., "vc_gkonardf730" -> "vc")
+   * @param userId - The user ID to extract office code from
+   * @returns The extracted office code or "default" if not found
+   */
+  private extractOfficeCodeFromUserId(userId: string): string {
+    console.log('userId$$$', userId);
+    if (!userId || typeof userId !== 'string') {
+      return 'default';
+    }
+
+    const parts = userId.split('_');
+    if (parts.length >= 2) {
+      const officeCode = parts[0].toLowerCase();
+      // Check if the extracted office code is in the installed instances
+      if (environment.installedInstances.includes(officeCode)) {
+        return officeCode;
+      }
+    }
+
+    return 'default';
+  }
+
   private setLoading(isLoading: boolean): void {
     const currentState = this.authStateSubject.value;
     this.authStateSubject.next({ ...currentState, isLoading });
@@ -130,11 +159,15 @@ export class AuthService {
   }
 
   private formatUserAttributes(attributes: any): User {
+    const userId = attributes.sub || '';
+    const officeCode = this.extractOfficeCodeFromUserId(attributes.name);
+
     return {
-      id: attributes.sub || '',
+      id: userId,
       email: attributes.email || '',
       name: attributes.name || attributes.email || '',
       role: attributes['custom:role'] || 'user',
+      officeCode: officeCode,
     };
   }
 
@@ -164,6 +197,7 @@ export class AuthService {
           try {
             const userAttributes = await fetchUserAttributes();
             const formattedUser = this.formatUserAttributes(userAttributes);
+            const officeCode = formattedUser.officeCode || 'default';
 
             this.authStateSubject.next({
               user: formattedUser,
@@ -171,26 +205,33 @@ export class AuthService {
               isLoading: false,
               error: null,
               attributes: userAttributes,
+              officeCode: officeCode,
               // Removed: currentDevice, deviceList
             });
             console.log('User attributes:', userAttributes);
+            console.log('Extracted office code:', officeCode);
 
             // Removed: fetchCurrentDevice() after auth
             return true;
           } catch (error) {
             console.error('Error fetching user attributes:', error);
             // If we can't get attributes but have a session, still consider user authenticated
+            const officeCode = this.extractOfficeCodeFromUserId(
+              currentUser.userId
+            );
             this.authStateSubject.next({
               user: {
                 id: currentUser.userId,
                 email: currentUser.username,
                 name: currentUser.username,
                 role: 'user',
+                officeCode: officeCode,
               },
               isAuthenticated: true,
               isLoading: false,
               error: null,
               attributes: {},
+              officeCode: officeCode,
               // Removed: currentDevice, deviceList
             });
 
@@ -215,6 +256,7 @@ export class AuthService {
       isLoading: false,
       error: null,
       attributes: {},
+      officeCode: 'default',
       // Removed: currentDevice, deviceList
     });
   }
@@ -223,8 +265,6 @@ export class AuthService {
     this.setLoading(true);
     this.setError(null);
 
-    const officeCode = instanceType();
-    const officeConfig = configuration[officeCode];
     // List of managed login language codes from the image
     const managedLoginLanguages = [
       'de',
@@ -240,19 +280,13 @@ export class AuthService {
       'zh-TW',
     ];
 
-    // Get the default language from officeConfig or fallback to 'en'
-    const defaultLanguage = officeConfig?.defaultLanguage || 'en';
-
-    // Check if the defaultLanguage is in the list of managed login languages
-    const langCode = managedLoginLanguages.includes(defaultLanguage)
-      ? defaultLanguage
-      : 'en';
+    // Use 'en' as default language for login
+    const langCode = 'en';
 
     return from(
       signInWithRedirect({
         customState: JSON.stringify({
-          officeCode,
-          langCode: officeConfig?.defaultLanguage || 'en',
+          langCode: langCode,
         }),
         options: {
           lang: langCode,
@@ -429,13 +463,14 @@ export class AuthService {
       }),
       tap(() => {
         try {
-          const officeCode = instanceType();
+          const currentState = this.authStateSubject.value;
+          const officeCode = currentState.officeCode || 'default';
           const officeConfig = configuration[officeCode];
           console.log('Office config:', officeConfig);
 
           // Get the post-logout redirect URI
           const postLogoutUri =
-            officeConfig?.cognito?.postLogoutRedirectUri ||
+            environment.cognito?.postLogoutRedirectUri ||
             window.location.origin;
 
           console.log('Post logout URI:', postLogoutUri);
@@ -445,8 +480,11 @@ export class AuthService {
           console.log('Encoded signout URL:', signoutUrl);
 
           // Cognito configuration
-          const cognitoDomain = officeConfig?.cognito?.authority;
-          const clientId = officeConfig?.cognito?.clientId;
+          const cognitoDomain =
+            environment.cognito?.authority ||
+            'auth.iims.ipobs.dev.web1.wipo.int';
+          const clientId =
+            environment.cognito?.clientId || '7vp4nvcrpsttatcg8lf7cds7g4';
 
           // Construct the federated sign-out URL
           const federatedSignOutUrl = `https://${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${signoutUrl}`;
@@ -460,7 +498,8 @@ export class AuthService {
         } catch (error) {
           console.error('Error during logout process:', error);
           // Fallback to local logout if federated logout fails
-          const officeCode = instanceType();
+          const currentState = this.authStateSubject.value;
+          const officeCode = currentState.officeCode || 'default';
           const officeConfig = configuration[officeCode];
           const langCode = officeConfig?.defaultLanguage || 'en';
           this.router.navigate([`/${officeCode}/${langCode}/logged-out`]);
@@ -490,6 +529,14 @@ export class AuthService {
 
   get error$(): Observable<string | null> {
     return this.authState$.pipe(map((state) => state.error));
+  }
+
+  get currentOfficeCode$(): Observable<string> {
+    return this.authState$.pipe(map((state) => state.officeCode || 'default'));
+  }
+
+  getCurrentOfficeCode(): string {
+    return this.authStateSubject.value.officeCode || 'default';
   }
 
   hasTempUser(): boolean {

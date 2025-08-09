@@ -131,6 +131,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() totalRecords: number = 0;
   @Input() dataKey: string = 'id';
   @Input() showClearButton: boolean = true;
+  @Input() showSearch: boolean = true;
   @Input() emptyMessage: string = 'No records found.';
   @Input() showActionsColumn: boolean = false;
   @Input() customCellTemplate: any;

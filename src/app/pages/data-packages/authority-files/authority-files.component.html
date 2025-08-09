@@ -5,11 +5,25 @@
     <h1>Authority Files</h1>
   </div>
   <app-package-stats [packageStats]="packageStats" (statSelected)="onStatSelect($event)" [selectedStat]="'All'"></app-package-stats>
-  <div class="mb-4 flex justify-between items-center">
-    <div class="flex-1"></div>
-    <div class="flex items-center gap-3">
-      <app-configurable-filter [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showSearch]="'Search Publication Number'" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (searchChange)="onSearchChange($event)"></app-configurable-filter>
+  <div class="grid grid-cols-6 mt-2">
+    <div class="col-span-6 grid grid-cols-12 filter">
+      <div class="col-span-4">
+        <p-floatlabel variant="on">
+          <p-iconfield>
+            <p-inputicon class="pi pi-search"></p-inputicon>
+            <input class="w-full" id="on_label" pInputText="" [(ngModel)]="searchBar" (input)="filterSearch(searchBar)" autocomplete="off">
+          </p-iconfield>
+          <label for="on_label">Search Publication Number</label>
+        </p-floatlabel>
+      </div>
+      <div class="col-span-8 flex justify-end gap-2 filter-icons">
+        <app-configurable-filter [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showSearch]="false" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (searchChange)="onSearchChange($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>
+        <p-button icon="pi pi-file-pdf" [outlined]="true" [text]="true" (click)="downloadDetails(); $event.stopPropagation()"></p-button>
+      </div>
     </div>
   </div>
-  <app-table [columns]="tableColumns" [data]="tableData" [searchPlaceHolder]="'Search Publication Number'" (actionClick)="onActionClick($event.action, $event.item)" showPdf="true"> </app-table>
+  <div class="mb-8 mt-1 w-full">
+    <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="true" [clearAllLabel]="'Clear All'" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-filter-chips>
+  </div>
+  <app-table [columns]="tableColumns" [data]="tableData" [showClearButton]="false" [showSearch]="false"> </app-table>
 </app-layout>
