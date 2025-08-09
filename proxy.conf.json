@@ -1,6 +1,6 @@
 {
   "/services": {
-    "target": "https://r8xu72vahc.execute-api.eu-central-1.amazonaws.com/dev",
+    "target": "https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/",
     "secure": true,
     "changeOrigin": true,
     "logLevel": "debug"
