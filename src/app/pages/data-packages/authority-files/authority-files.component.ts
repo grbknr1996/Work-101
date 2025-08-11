@@ -27,8 +27,8 @@ import {
 import { FilterChipsComponent } from 'src/app/components/filter-chips/filter-chips.component';
 
 interface IpType {
-    name: string;
-    code: string;
+  name: string;
+  code: string;
 }
 
 @Component({
@@ -51,7 +51,6 @@ interface IpType {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthorityFilesComponent implements OnInit {
-
   @ViewChild(ConfigurableFilterComponent)
   configurableFilter!: ConfigurableFilterComponent;
 
@@ -72,34 +71,38 @@ export class AuthorityFilesComponent implements OnInit {
   breadcrumbItems = [];
 
   // Static Package stats for demo
-   
+
   packageStats = [
-      {
-        label: "All",
-        count: 3222929,
-        period: "2025",
-        color: "#3949AB", // Indigo color
-      },
-      {
-        label: "Patents",
-        count: 292929,
-        period: "2025",
-        color: "#2E7D32", // Green color
-      },
-      {
-        label: "Utility Models",
-        count: 1288239,
-        period: "2025",
-        color: "#0288D1", // Blue color
-      },
-    ];
-  
+    {
+      label: 'All',
+      count: 3222929,
+      period: '2025',
+      color: '#3949AB', // Indigo color
+    },
+    {
+      label: 'Patents',
+      count: 292929,
+      period: '2025',
+      color: '#2E7D32', // Green color
+    },
+    {
+      label: 'Utility Models',
+      count: 1288239,
+      period: '2025',
+      color: '#0288D1', // Blue color
+    },
+  ];
+
   statSelected;
 
   globalFilterFields = ['publicationNumber'];
 
   tableColumns = [
-    { field: 'publicationNumber', header: 'Publication Number', sortable: true, },
+    {
+      field: 'publicationNumber',
+      header: 'Publication Number',
+      sortable: true,
+    },
     { field: 'publicationDate', header: 'Publication Date' },
     { field: 'kindCode', header: 'Kind Code' },
     { field: 'exceptionCode', header: 'Exception Code' },
@@ -113,7 +116,7 @@ export class AuthorityFilesComponent implements OnInit {
   sortField: string = 'publicationNumber';
   sortOrder: number = 1;
 
-  applicationOfficeCode="";
+  applicationOfficeCode = '';
 
   filterConfigs: FilterConfig[] = [
     {
@@ -171,7 +174,7 @@ export class AuthorityFilesComponent implements OnInit {
 
       const officeCodeParam = this.route.snapshot.params['office'];
 
-      if(officeCode=='default'){
+      if (officeCode == 'default') {
         this.applicationOfficeCode = officeCodeParam;
         this.breadcrumbItems = [
           {
@@ -201,18 +204,19 @@ export class AuthorityFilesComponent implements OnInit {
         ];
       }
 
-
       // Trigger change detection after updating breadcrumbs
       this.cdr.markForCheck();
     });
 
     const currentPath = this.router.url;
-    const menuItems = this.menuService.generateConfigurationMenu(currentPath, this.applicationOfficeCode);
+    const menuItems = this.menuService.generateConfigurationMenu(
+      currentPath,
+      this.applicationOfficeCode
+    );
     this.menuService.updateMenuItems(menuItems);
 
-
     let today = new Date();
-    
+
     let startDate = new Date();
     startDate.setMonth(today.getMonth() - 1);
     //this.tableData = packagesData.filter(item => new Date(item.sharedDate) >= startDate);
@@ -223,58 +227,65 @@ export class AuthorityFilesComponent implements OnInit {
     switch (action) {
       case 'showPdf':
         //this.downloadDetails();
-        this.downloadFileWithRedirect('https://ipoffices.support.wipopublish-dev.ipobs.dev.web1.wipo.int/data-services/authority-files/definition-files?IPOfficeCode='+this.applicationOfficeCode);
+        this.downloadFileWithRedirect(
+          'https://ipoffices.support.wipopublish-dev.ipobs.dev.web1.wipo.int/data-services/authority-files/definition-files?IPOfficeCode=' +
+            this.applicationOfficeCode
+        );
         break;
     }
   }
 
   downloadFileWithRedirect(apiUrl: string): void {
-  try {
+    try {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', apiUrl, true);
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          // This likely won't be reached due to CORS
+          console.log('XHR Response:', xhr.status);
+        }
+      };
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', apiUrl, true);
-    xhr.onreadystatechange = () => {
-      if (xhr.readyState === XMLHttpRequest.DONE) {
-        // This likely won't be reached due to CORS
-        console.log('XHR Response:', xhr.status);
+      xhr.onerror = (error) => {
+        // Try to extract S3 URL from error message
+        console.log('XHR Error:', error);
+        // This is hacky but might work in some browsers
+      };
+
+      xhr.send();
+    } catch (error: any) {
+      console.log('Full error:', error);
+      // Try to extract the S3 URL from error message
+      const errorMsg = error.toString();
+      const s3UrlMatch = errorMsg.match(/https:\/\/[^'"\s]+\.s3[^'"\s]*/);
+      if (s3UrlMatch) {
+        const s3Url = s3UrlMatch[0];
+        console.log('Extracted S3 URL:', s3Url);
+        window.open(s3Url, '_blank');
       }
-    };
-
-    xhr.onerror = (error) => {
-      // Try to extract S3 URL from error message
-      console.log('XHR Error:', error);
-      // This is hacky but might work in some browsers
-    };
-
-    xhr.send();
-  } catch (error: any) {
-    console.log('Full error:', error);
-    // Try to extract the S3 URL from error message
-    const errorMsg = error.toString();
-    const s3UrlMatch = errorMsg.match(/https:\/\/[^'"\s]+\.s3[^'"\s]*/);
-    if (s3UrlMatch) {
-
-      const s3Url = s3UrlMatch[0];
-      console.log('Extracted S3 URL:', s3Url);
-      window.open(s3Url, '_blank');
     }
   }
-}
 
   downloadDetails() {
-   this.http.get('https://ipoffices.support.wipopublish-dev.ipobs.dev.web1.wipo.int/data-services/authority-files/definition-files?IPOfficeCode='+this.applicationOfficeCode, { responseType: 'blob' }).subscribe((data: Blob) => {
-      const blob = new Blob([data], { type: 'application/pdf' });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'definition-document.pdf';
-      link.click();
-      window.URL.revokeObjectURL(url); // Clean up the URL object
-      link.remove();
-    });
+    this.http
+      .get(
+        'https://ipoffices.support.wipopublish-dev.ipobs.dev.web1.wipo.int/data-services/authority-files/definition-files?IPOfficeCode=' +
+          this.applicationOfficeCode,
+        { responseType: 'blob' }
+      )
+      .subscribe((data: Blob) => {
+        const blob = new Blob([data], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'definition-document.pdf';
+        link.click();
+        window.URL.revokeObjectURL(url); // Clean up the URL object
+        link.remove();
+      });
   }
 
-  onStatSelect(statLabel: string){
+  onStatSelect(statLabel: string) {
     console.log('Stats Selected:', statLabel);
     this.statSelected = statLabel;
     this.applyFilters();
@@ -306,19 +317,25 @@ export class AuthorityFilesComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  private filterByStats(): void{
-    if(this.statSelected=='Patents'){
-      this.tableData = authorityData.filter(item => item.kindCode=='A1' || item.kindCode=='B1');
-    }else if(this.statSelected=='Utility Models'){
-      this.tableData = authorityData.filter(item => item.kindCode=='U1' || item.kindCode=='U3');
-    }else {
+  private filterByStats(): void {
+    if (this.statSelected == 'Patents') {
+      this.tableData = authorityData.filter(
+        (item) => item.kindCode == 'A1' || item.kindCode == 'B1'
+      );
+    } else if (this.statSelected == 'Utility Models') {
+      this.tableData = authorityData.filter(
+        (item) => item.kindCode == 'U1' || item.kindCode == 'U3'
+      );
+    } else {
       this.tableData = authorityData;
     }
   }
 
   filterSearch(value: string) {
     console.log(value);
-    this.tableData = this.tableData.filter((item) => item.publicationNumber?.toLowerCase().includes(value));
+    this.tableData = this.tableData.filter((item) =>
+      item.publicationNumber?.toLowerCase().includes(value)
+    );
   }
 
   private applyFilters(): void {
@@ -347,7 +364,9 @@ export class AuthorityFilesComponent implements OnInit {
           break;
         case 'publicationNumber':
           if (filter.value != '') {
-            filtered = filtered.filter((item) => item.publicationNumber.includes(filter.value));
+            filtered = filtered.filter((item) =>
+              item.publicationNumber.includes(filter.value)
+            );
           }
           break;
         case 'abstract':
@@ -386,11 +405,6 @@ export class AuthorityFilesComponent implements OnInit {
     this.tableData = filtered;
   }
 
-  onSearchChange(searchTerm: string): void {
-    console.log('Search changed:', searchTerm);
-    // Search is now handled in applyFilters method when filters are applied
-  }
-
   onSort(event: any) {
     this.sortField = event.field;
     this.sortOrder = event.order;
@@ -405,9 +419,6 @@ export class AuthorityFilesComponent implements OnInit {
   }
 
   getFilterDisplayValue(filter: FilterValue): string {
-    if (filter.key === 'search') {
-      return `Search: "${filter.value}"`;
-    }
     const filterConfig = this.filterConfigs.find((f) => f.key === filter.key);
     if (!filterConfig) return filter.key;
 
@@ -428,16 +439,8 @@ export class AuthorityFilesComponent implements OnInit {
   }
 
   removeFilterChip(filterKey: string): void {
-    console.log("removeFilterChip "+ filterKey)
+    console.log('removeFilterChip ' + filterKey);
 
-    if (filterKey === 'search') {
-      this.searchBar = '';
-      this.appliedFilters = this.appliedFilters.filter(
-        (f) => f.key !== filterKey
-      );
-      this.applyFilters();
-      this.cdr.detectChanges();
-    }
     // Find the filter config to get the display value
     const filterConfig = this.filterConfigs.find((f) => f.key === filterKey);
     if (filterConfig) {
@@ -446,10 +449,12 @@ export class AuthorityFilesComponent implements OnInit {
         (f) => f.key !== filterKey
       );
 
+      // Also remove the filter from the configurable filter component to sync state
+      this.configurableFilter.removeFilterChip(filterKey);
+
       // Update the filtered groups
       this.applyFilters();
       this.cdr.detectChanges();
     }
   }
-
 }

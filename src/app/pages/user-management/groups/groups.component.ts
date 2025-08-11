@@ -260,6 +260,9 @@ export class GroupsComponent implements OnInit {
         (f) => f.key !== filterKey
       );
 
+      // Also remove the filter from the configurable filter component to sync state
+      this.configurableFilter.removeFilterChip(filterKey);
+
       // Update the filtered groups
       this.applyFilters(this.appliedFilters);
       this.cdr.detectChanges();

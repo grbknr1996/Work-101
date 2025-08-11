@@ -21,11 +21,12 @@ app-layout
         app-configurable-filter(
           #configurableFilter,
           [filters]="filterConfigs",
+          [showFilterSelector]="true",
+          [filterSelectorPlaceholder]="'Select filters to display'",
           (filterChange)="onFilterChange($event)",
           (filterCleared)="onFilterCleared()",
           (filterApplied)="onFilterApplied($event)",
-          (searchChange)="onSearchChange($event)",
-          (appliedFiltersChange)="onAppliedFiltersChange($event)"
+          (appliedFiltersChange)="onAppliedFiltersChange($event)"  
         )
         button(
           pButton,

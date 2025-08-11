@@ -13,7 +13,7 @@
     <!-- Filter Section with Button-->
     <div class="mb-4 flex justify-end items-center">
       <div class="flex items-center gap-3">
-        <app-configurable-filter #configurableFilter [filters]="filterConfigs" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (searchChange)="onSearchChange($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>
+        <app-configurable-filter #configurableFilter [filters]="filterConfigs" [showFilterSelector]="true" [filterSelectorPlaceholder]="'Select filters to display'" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>
         <button class="p-button-text" pButton icon="pi pi-download" style="color:var(--p-button-outlined-secondary-color)"></button>
       </div>
     </div>

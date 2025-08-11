@@ -7,23 +7,23 @@
       <h1 class="text-xl pb-4">Fee Calculator</h1>
       <div class="grid grid-cols-12 gap-4">
         <p-floatlabel class="col-span-4 mb-4" variant="on">
-          <p-select class="w-full" id="category" [options]="categories" [(ngModel)]="selectedCategory"></p-select>
+          <p-select class="w-full" id="locations" [options]="locations" [(ngModel)]="selectedLocation"></p-select>
+          <label for="locations">Location/Offices</label>
+        </p-floatlabel>
+        <p-floatlabel class="col-span-4 mb-4" variant="on">
+          <p-select class="w-full" id="category" [options]="categories" [(ngModel)]="selectedCategory" [disabled]="selectedLocation === null"></p-select>
           <label for="category">Category</label>
         </p-floatlabel>
         <p-floatlabel class="col-span-4 mb-4" variant="on">
-          <p-select class="w-full" id="services" [options]="services" [(ngModel)]="selectedService"></p-select>
+          <p-select class="w-full" id="services" [options]="services" [(ngModel)]="selectedService" [disabled]="selectedLocation === null"></p-select>
           <label for="services">Services</label>
-        </p-floatlabel>
-        <p-floatlabel class="col-span-4 mb-4" variant="on">
-          <p-select class="w-full" id="locations" [options]="locations" [(ngModel)]="selectedLocation"></p-select>
-          <label for="locations">Location/Offices</label>
         </p-floatlabel>
       </div>
       <hr class="mt-4 mb-4">
       <p-table class="mt-4" [value]="services">
         <ng-template pTemplate="header">
           <tr>
-            <th>Service(s)</th>
+            <th>Fee</th>
             <th class="text-right">Unit(s)</th>
           </tr>
         </ng-template>

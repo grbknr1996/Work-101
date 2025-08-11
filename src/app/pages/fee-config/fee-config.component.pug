@@ -1,88 +1,103 @@
 app-layout
-    app-breadcrumbs([items]="breadcrumbItems")
-    .floating-calculator(
-        cdkDrag='', 
-        pToolTip='Calculator', 
-        toolTipPosition='left',
-        (click)='openCalculator()'
-        )
-        i.pi.pi-calculator
-    h1.text-xl.ml-4.mb-1.col-span-3 Filling Fees
-    .grid.grid-cols-6.mt-2
-        .col-span-6.grid.grid-cols-12.filter
-            .col-span-4
-                p-floatlabel(variant='on')
-                    p-iconfield
-                        p-inputicon.pi.pi-search
-                        input.w-full#on_label(pInputText='', [(ngModel)]='searchBar', autocomplete='off')
-                    label(for='on_label') Search
-            .col-span-8.flex.justify-end.gap-2.filter-icons
-                app-configurable-filter(
-                    [filters]="filterConfigs",
-                    [showClearAll]="true",
-                    [showApplyButton]="true",
-                    [showSearch]="true"
-                    [searchPlaceholder]="'Search groups...'",
-                    (filterChange)="onFilterChange($event)",
-                    (filterCleared)="onFilterCleared()",
-                    (filterApplied)="onFilterApplied($event)",
-                    (searchChange)="onSearchChange($event)",
-                    (appliedFiltersChange)="onAppliedFiltersChange($event)"
-                )
-                p-button(icon='pi pi-file-pdf', [outlined]="true", [text]="true", style="font-size: 1.5rem")
-                p-button(icon='pi pi-info-circle', [outlined]="true", [text]="true" style="font-size: 1.5rem")
-    .mb-8.mt-1.w-full
-        app-filter-chips(
-                [appliedFilters]="appliedFilters",
-                [showClearAll]="true",
-                [clearAllLabel]="'Clear All'",
-                [getDisplayValue]="getFilterDisplayValue.bind(this)",
-                (chipRemove)="removeFilterChip($event)",
-                (clearAll)="clearAllFilters()"
+  app-breadcrumbs([items]="breadcrumbItems")
+  
+  .floating-calculator(
+    cdkDrag="",
+    pToolTip="Calculator",
+    toolTipPosition="left",
+    (click)="openCalculator()"
+  )
+    i.pi.pi-calculator
+  
+  h1.text-xl.ml-4.mb-1.col-span-3 Filling Fees
+  
+  .grid.grid-cols-6.mt-2
+    .col-span-6.grid.grid-cols-12.filter
+      .col-span-4
+        p-floatlabel(variant="on")
+          p-iconfield
+            p-inputicon.pi.pi-search
+            input.w-full(
+              id="on_label",
+              pInputText="",
+              [(ngModel)]="searchBar",
+              autocomplete="off"
             )
-        .col-span-6
-            p-tabs(value="trademark")
-                p-tablist
-                    | @for (category of categories; track category.ipType) {
-                    p-tab([value]="category.ipType")
-                        .category-label {{ category.ipType | capitalizeWords }}
-                        p-badge([value]="category.count")
-                    | }
-                p-tabpanels
-                    | @for (category of categories; track category.ipType) {
-                    p-tabpanel([value]="category.ipType").grid.grid-cols-12.gap-3
-                            | @for (service of category.data; track service.name) {
-                            .col-span-3.mt-3
-                                p-card.w-full
-                                    ng-template(#header='')
-                                        h1.flex
-                                            p-checkbox(inputId="service", [(ngModel)]="checked", [binary]="true")
-                                            label.flex-1(for="service") {{service.name}}
-                                    .text-base.font-bold.mb-2  New Application 
-                                    .text-xs  Regular fees IP
-                                    ng-template(#footer='')
-                                        .flex.gap-4.mt-1
-                                            p-button.w-full(size="small", severity='secondary', [outlined]='true', styleClass='w-full')
-                                                | Basic Fee {{ service.basicFee }}$
-                                            p-button.w-full(size="small", styleClass='w-full')
-                                                | Variable Fee {{ service.variableFee }}$
-                            | }
-                    | }
+          label(for="on_label") Search
+      
+      .col-span-8.flex.justify-end.gap-2.filter-icons
+        app-configurable-filter(
+          [filters]="filterConfigs",
+          [showClearAll]="true",
+          [showApplyButton]="true",
+          [showFilterSelector]="true",
+          [filterSelectorPlaceholder]="'Select filters to display'",
+          (filterChange)="onFilterChange($event)",
+          (filterCleared)="onFilterCleared()",
+          (filterApplied)="onFilterApplied($event)",
+          (appliedFiltersChange)="onAppliedFiltersChange($event)"
+        )
+        p-button(
+          icon="pi pi-file-pdf",
+          [outlined]="true",
+          [text]="true",
+          style="font-size: 1.5rem"
+        )
+        p-button(
+          icon="pi pi-info-circle",
+          [outlined]="true",
+          [text]="true",
+          style="font-size: 1.5rem"
+        )
+  
+  .mb-8.mt-1.w-full
+    app-filter-chips(
+      [appliedFilters]="appliedFilters",
+      [showClearAll]="true",
+      [clearAllLabel]="'Clear All'",
+      [getDisplayValue]="getFilterDisplayValue.bind(this)",
+      (chipRemove)="removeFilterChip($event)",
+      (clearAll)="clearAllFilters()"
+    )
     
-
-
-
-//- .user-stat-card
-//-     .text-xl.font-bold Fee Structure Information
-//-     .grid.grid-cols-6.mt-2
-//-         .col-span-3
-//-             .text-sm.font-semibold.mb-2 Standard Processing
-//-             ul.list-disc.list-inside.text-sm.text-gray-700
-//-                 li Regular processing timeline
-//-                 li Standard service quality
-//-         .col-span-3
-//-             .text-sm.font-semibold.mb-2 Express Processing
-//-             ul.list-disc.list-inside.text-sm.text-gray-700
-//-                 li Expedited processing (50% faster)
-//-                 li Prority handling
-//-                 li SMS and small notifications
+    .col-span-6
+      p-tabs(value="trademark")
+        p-tablist
+          | @for (category of categories; track category.ipType) {
+          p-tab([value]="category.ipType")
+            .category-label {{ category.ipType | capitalizeWords }}
+            p-badge([value]="category.count")
+          | }
+        
+        p-tabpanels
+          | @for (category of categories; track category.ipType) {
+          p-tabpanel.grid.grid-cols-12.gap-3([value]="category.ipType")
+            | @for (service of category.data; track service.name) {
+            .col-span-3.mt-3
+              p-card.w-full
+                ng-template(#header="")
+                  h1.flex
+                    p-checkbox(
+                      inputId="service",
+                      [(ngModel)]="checked",
+                      [binary]="true"
+                    )
+                    label.flex-1(for="service") {{ service.name }}
+                
+                .text-base.font-bold.mb-2 New Application
+                .text-xs Regular fees IP
+                
+                ng-template(#footer="")
+                  .flex.gap-4.mt-1
+                    p-button.w-full(
+                      size="small",
+                      severity="secondary",
+                      [outlined]="true",
+                      styleClass="w-full"
+                    ) Basic Fee {{ service.basicFee }}$
+                    p-button.w-full(
+                      size="small",
+                      styleClass="w-full"
+                    ) Variable Fee {{ service.variableFee }}$
+            | }
+          | }

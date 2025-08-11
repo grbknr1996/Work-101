@@ -318,7 +318,7 @@ app-groups
     top 56px !important
     z-index 2000 !important
     .notification-list
-      max-height 50vh
+      max-height 60vh
       overflow-y auto
 
 :host-context(.with-sidebar.sidebar-compact:not(.sidebar-mobile))
@@ -1296,7 +1296,7 @@ $transition-duration = 0.3s
     top 56px !important
     z-index 2000 !important
     .notification-list
-      max-height 50vh
+      max-height 60vh
       overflow-y auto
 
 // ============================================
@@ -2098,6 +2098,9 @@ app-fee-config
             font-size 1rem;
             background-color #e5f3f7
             color #1c1c1c !important
+          p-button
+            button.p-button
+              cursor: default;
 
 // =============================
 // End of Fee System Configuration Dashboard Page
@@ -4087,7 +4090,7 @@ app-configurable-filter
     border-radius 8px
     box-shadow 0 10px 25px rgba(0, 0, 0, 0.15)
     width 100%
-    max-height 80vh
+    max-height 60vh
     display flex
     flex-direction column
     overflow hidden
@@ -4125,6 +4128,24 @@ app-configurable-filter
     padding 1.5rem 1.5rem 1rem 1.5rem
     border-bottom 1px solid #e5e7eb
     background #f9fafb
+
+  /* Filter Selector Section */
+  .filter-selector-section
+    margin-bottom 1rem
+
+  .filter-selector-label
+    display block
+    font-size 0.875rem
+    font-weight 600
+    color #374151
+    margin-bottom 0.5rem
+    line-height 1.25rem
+
+  .filter-selector-controls
+    width 100%
+
+  .filter-selector
+    width 100%
 
   .search-section
     margin-bottom 1rem
@@ -4199,11 +4220,34 @@ app-configurable-filter
       background-color #f3f4f6
       color #374151
 
+  /* Close Button Overlay */
+  .close-button-overlay
+    position absolute
+    top 0.75rem
+    right 0.75rem
+    z-index 10
+    width 2rem
+    height 2rem
+    border-radius 4px
+    display flex
+    align-items center
+    justify-content center
+    color #6b7280
+    background transparent
+    border none
+    cursor pointer
+    transition all 0.2s ease
+
+    &:hover
+      background-color #f3f4f6
+      color #374151
+
   /* Filter Content */
   .filter-content
     flex 1
     overflow-y auto
     padding 1rem 1.5rem
+    min-height 200px
 
   .filter-sections
     display flex
@@ -4233,8 +4277,6 @@ app-configurable-filter
     gap 0.5rem
 
   .filter-option
-    padding 0.75rem 0
-    margin-bottom 0.5rem
 
   /* Checkbox Options */
   .checkbox-option
@@ -4352,12 +4394,14 @@ app-configurable-filter
 
     .filter-panel
       max-height 60vh
+      min-height 300px
 
     .filter-header
       padding 1rem
 
     .filter-content
       padding 1rem
+      min-height 200px
 
     .filter-actions
       padding 1rem
@@ -4366,11 +4410,12 @@ app-configurable-filter
     .filter-overlay
       width 280px
       max-width 90vw
-      right 0 !important
+      right -50px !important
       z-index 9999
 
     .filter-panel
-      max-height 50vh
+      max-height 60vh
+      min-height 250px
 
     .header-actions
       gap 0.25rem
@@ -4437,12 +4482,14 @@ app-configurable-filter
 
     .filter-panel
       max-height 60vh
+      min-height 300px
 
     .filter-header
       padding 1rem
 
     .filter-content
       padding 1rem
+      min-height 200px
 
     .filter-actions
       padding 1rem

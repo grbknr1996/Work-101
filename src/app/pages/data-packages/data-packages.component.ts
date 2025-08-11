@@ -28,8 +28,8 @@ import {
 import { FilterChipsComponent } from 'src/app/components/filter-chips/filter-chips.component';
 
 interface IpType {
-    name: string;
-    code: string;
+  name: string;
+  code: string;
 }
 
 @Component({
@@ -42,8 +42,8 @@ interface IpType {
     TableComponent,
     FormsModule,
     ConfigurableFilterComponent,
-//    Select,
-//    DatePickerModule,
+    //    Select,
+    //    DatePickerModule,
     FilterChipsComponent,
     FloatLabelModule,
     IconFieldModule,
@@ -54,7 +54,6 @@ interface IpType {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataPackagesComponent implements OnInit {
-
   @ViewChild(ConfigurableFilterComponent)
   configurableFilter!: ConfigurableFilterComponent;
 
@@ -74,80 +73,79 @@ export class DataPackagesComponent implements OnInit {
 
   breadcrumbItems = [];
 
-
-    // Static Package stats for demo
+  // Static Package stats for demo
   totalPackages = 1580;
   yearPackages = 1180;
   monthPackages = 480;
   weekPackages = 300;
-  totalPackagesPercentChange="39";
-  yearPackagesPercentChange="40";
-  monthPackagesPercentChange="41";
-  weekPackagesPercentChange="42";
-  totalPackagesPeriod="'1999'";
-  yearPackagesPeriod="'1 year'";
-  monthPackagesPeriod="'1 month'";
-  weekPackagesPeriod="'7 days'";
-    
+  totalPackagesPercentChange = '39';
+  yearPackagesPercentChange = '40';
+  monthPackagesPercentChange = '41';
+  weekPackagesPercentChange = '42';
+  totalPackagesPeriod = "'1999'";
+  yearPackagesPeriod = "'1 year'";
+  monthPackagesPeriod = "'1 month'";
+  weekPackagesPeriod = "'7 days'";
+
   packageStats = [
-      {
-        label: "TOTAL COUNT",
-        count: this.totalPackages,
-        percentChange: this.totalPackagesPercentChange,
-        period: this.totalPackagesPeriod,
-        color: "#3949AB", // Indigo color
-        icon: "pi pi-thumbtack",
-      },
-      {
-        label: "TOTAL IN YEAR",
-        count: this.yearPackages,
-        percentChange: this.yearPackagesPercentChange,
-        period: this.yearPackagesPeriod,
-        color: "#2E7D32", // Green color
-        icon: "pi pi-check-circle",
-      },
-      {
-        label: "TOTAL IN MONTH",
-        count: this.monthPackages,
-        percentChange: this.monthPackagesPercentChange,
-        period: this.monthPackagesPeriod,
-        color: "#022382", // Dark blue color
-        icon: "pi pi-tag",
-      },
-      {
-        label: "TOTAL IN WEEK",
-        count: this.weekPackages,
-        percentChange: this.weekPackagesPercentChange,
-        period: this.weekPackagesPeriod,
-        color: "#0288D1", // Blue color
-        icon: "pi pi-spinner",
-      },
-    ];
+    {
+      label: 'TOTAL COUNT',
+      count: this.totalPackages,
+      percentChange: this.totalPackagesPercentChange,
+      period: this.totalPackagesPeriod,
+      color: '#3949AB', // Indigo color
+      icon: 'pi pi-thumbtack',
+    },
+    {
+      label: 'TOTAL IN YEAR',
+      count: this.yearPackages,
+      percentChange: this.yearPackagesPercentChange,
+      period: this.yearPackagesPeriod,
+      color: '#2E7D32', // Green color
+      icon: 'pi pi-check-circle',
+    },
+    {
+      label: 'TOTAL IN MONTH',
+      count: this.monthPackages,
+      percentChange: this.monthPackagesPercentChange,
+      period: this.monthPackagesPeriod,
+      color: '#022382', // Dark blue color
+      icon: 'pi pi-tag',
+    },
+    {
+      label: 'TOTAL IN WEEK',
+      count: this.weekPackages,
+      percentChange: this.weekPackagesPercentChange,
+      period: this.weekPackagesPeriod,
+      color: '#0288D1', // Blue color
+      icon: 'pi pi-spinner',
+    },
+  ];
 
   statSelected;
 
   globalFilterFields = ['ipType', 'fileName', 'status'];
 
   tableColumns = [
-    { field: 'ipType', header: 'IP Right Category', sortable: true, },
+    { field: 'ipType', header: 'IP Right Category', sortable: true },
     {
       field: 'fileName',
       header: 'File name',
       sortable: true,
     },
-    { field: 'sharedDate', header: 'Shared Date', },
+    { field: 'sharedDate', header: 'Shared Date' },
     { field: 'processedDate', header: 'Processed Date' },
     {
       field: 'status',
       header: 'Status',
       display: 'tag',
-//      filterType: 'dropdown',
+      //      filterType: 'dropdown',
       severity: (value) => {
         if (value === 'Processed') {
           return 'success';
         } else if (value === 'Failed') {
           return 'danger';
-        } else if(value === 'Partial') { 
+        } else if (value === 'Partial') {
           return 'warn';
         } else {
           return 'info';
@@ -173,15 +171,15 @@ export class DataPackagesComponent implements OnInit {
 
   tableData = packagesData;
 
-//  ipTypes: IpType[] | undefined;
+  //  ipTypes: IpType[] | undefined;
 
-//  selectedIpType: IpType | undefined;
+  //  selectedIpType: IpType | undefined;
 
-//  date: Date | undefined;
+  //  date: Date | undefined;
 
-//  maxDate: Date;
+  //  maxDate: Date;
 
-//  defaultMaxDate: Date;
+  //  defaultMaxDate: Date;
 
   officeCode;
 
@@ -190,7 +188,7 @@ export class DataPackagesComponent implements OnInit {
   sortField: string = 'publicationNumber';
   sortOrder: number = 1;
 
-  applicationOfficeCode="";
+  applicationOfficeCode = '';
 
   filterConfigs: FilterConfig[] = [
     {
@@ -237,7 +235,6 @@ export class DataPackagesComponent implements OnInit {
 
   searchBar: string;
 
-
   constructor(
     private menuService: SidebarMenuService,
     private router: Router,
@@ -247,7 +244,6 @@ export class DataPackagesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
     this.route.params.subscribe((params) => {
       const officeCode =
         params['officeCode'] || this.ms.getCurrentOffice() || 'default';
@@ -255,16 +251,20 @@ export class DataPackagesComponent implements OnInit {
 
       this.officeCodeParam = this.route.snapshot.params['office'];
 
-      console.log('officeCodeParam ',this.officeCodeParam);
+      console.log('officeCodeParam ', this.officeCodeParam);
 
       this.officeCode = officeCode;
 
-      if(officeCode=='default' && (this.officeCodeParam==null || this.officeCodeParam==undefined || this.officeCodeParam=='')){
+      if (
+        officeCode == 'default' &&
+        (this.officeCodeParam == null ||
+          this.officeCodeParam == undefined ||
+          this.officeCodeParam == '')
+      ) {
         this.router.navigate(['select-office'], { relativeTo: this.route });
       }
 
-
-      if(officeCode=='default'){
+      if (officeCode == 'default') {
         this.applicationOfficeCode = this.officeCodeParam;
         this.breadcrumbItems = [
           {
@@ -286,69 +286,72 @@ export class DataPackagesComponent implements OnInit {
         ];
       }
 
-
       // Trigger change detection after updating breadcrumbs
       this.cdr.markForCheck();
     });
 
     const currentPath = this.router.url;
-    const menuItems = this.menuService.generateConfigurationMenu(currentPath,this.applicationOfficeCode);
+    const menuItems = this.menuService.generateConfigurationMenu(
+      currentPath,
+      this.applicationOfficeCode
+    );
     this.menuService.updateMenuItems(menuItems);
 
-
-//    this.ipTypes = [
-//      { name: 'Trademarks', code: 'trademarks' },
-//      { name: 'Patents', code: 'patents' },
-//      { name: 'Industrial Designs', code: 'designs' },
-//      { name: 'Copyright', code: 'copyright' },
-//      { name: 'Geographical Indications', code: 'gi' },
-//    ];
+    //    this.ipTypes = [
+    //      { name: 'Trademarks', code: 'trademarks' },
+    //      { name: 'Patents', code: 'patents' },
+    //      { name: 'Industrial Designs', code: 'designs' },
+    //      { name: 'Copyright', code: 'copyright' },
+    //      { name: 'Geographical Indications', code: 'gi' },
+    //    ];
 
     let today = new Date();
-    
-//    this.maxDate = new Date();
-//    this.maxDate.setDate(today.getDate() + 1);
-//    this.defaultMaxDate = this.maxDate;
+
+    //    this.maxDate = new Date();
+    //    this.maxDate.setDate(today.getDate() + 1);
+    //    this.defaultMaxDate = this.maxDate;
 
     let startDate = new Date();
     startDate.setMonth(today.getMonth() - 1);
-    this.tableData = packagesData.filter(item => new Date(item.sharedDate) >= startDate);
+    this.tableData = packagesData.filter(
+      (item) => new Date(item.sharedDate) >= startDate
+    );
   }
 
-//  onDateSelect(event: any) {
-//    console.log('Selected Date:', this.date);
-//
-//    if(this.date[0]!=null){
-//      let newStartDate = this.date[0];
-//      let dateToSet = newStartDate.getDate();
-//      dateToSet = dateToSet + 90;
-//      this.maxDate.setFullYear(newStartDate.getFullYear());
-//      this.maxDate.setMonth(newStartDate.getMonth());
-//      this.maxDate.setDate(dateToSet);
-//
-//      //if(this.maxDate>this.defaultMaxDate){
-//      //  this.maxDate = this.defaultMaxDate;
-//      //}
-//    }
-//
-//    if(this.date[0]!=null && this.date[1]!=null){
-//       this.tableData = packagesData.filter(item => new Date(item.sharedDate) >= this.date[0] && new Date(item.sharedDate) <= this.date[1]);
-//    }
-//
-//  }
+  //  onDateSelect(event: any) {
+  //    console.log('Selected Date:', this.date);
+  //
+  //    if(this.date[0]!=null){
+  //      let newStartDate = this.date[0];
+  //      let dateToSet = newStartDate.getDate();
+  //      dateToSet = dateToSet + 90;
+  //      this.maxDate.setFullYear(newStartDate.getFullYear());
+  //      this.maxDate.setMonth(newStartDate.getMonth());
+  //      this.maxDate.setDate(dateToSet);
+  //
+  //      //if(this.maxDate>this.defaultMaxDate){
+  //      //  this.maxDate = this.defaultMaxDate;
+  //      //}
+  //    }
+  //
+  //    if(this.date[0]!=null && this.date[1]!=null){
+  //       this.tableData = packagesData.filter(item => new Date(item.sharedDate) >= this.date[0] && new Date(item.sharedDate) <= this.date[1]);
+  //    }
+  //
+  //  }
 
-//  onIpTypeChange(event: any) {
-//    console.log('Selected IpType:', this.selectedIpType);
-//    this.filtering();
-//  }
+  //  onIpTypeChange(event: any) {
+  //    console.log('Selected IpType:', this.selectedIpType);
+  //    this.filtering();
+  //  }
 
-//  filtering(){
-//    let tempData = packagesData;
-//    if(this.selectedIpType!=null && this.selectedIpType!=undefined&& this.selectedIpType.name!=null && this.selectedIpType.name!='') {
-//      tempData = tempData.filter(item => item.ipType == this.selectedIpType.name);
-//    }    
-//    this.tableData = tempData;
-//  }
+  //  filtering(){
+  //    let tempData = packagesData;
+  //    if(this.selectedIpType!=null && this.selectedIpType!=undefined&& this.selectedIpType.name!=null && this.selectedIpType.name!='') {
+  //      tempData = tempData.filter(item => item.ipType == this.selectedIpType.name);
+  //    }
+  //    this.tableData = tempData;
+  //  }
 
   onActionClick(action: string, item: any) {
     console.log('Action clicked:', action, item);
@@ -370,7 +373,6 @@ export class DataPackagesComponent implements OnInit {
     }else{
       this.router.navigate(['authority-files'], { relativeTo: this.route });
     }*/
-
   }
 
   onFilterChange(filters: FilterValue[]): void {
@@ -399,7 +401,7 @@ export class DataPackagesComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  onStatSelect(statLabel: string){
+  onStatSelect(statLabel: string) {
     console.log('Stats Selected:', statLabel);
     this.statSelected = statLabel;
     this.applyFilters();
@@ -409,27 +411,31 @@ export class DataPackagesComponent implements OnInit {
     let endDate = new Date();
 
     let startDate = new Date();
-    if(this.statSelected=='TOTAL IN YEAR'){
-      startDate.setFullYear(endDate.getFullYear()-1);
-    }else if(this.statSelected=='TOTAL IN MONTH'){
-      startDate.setMonth(endDate.getMonth()-1);
-    }else if(this.statSelected=='TOTAL IN WEEK'){
-      startDate.setDate(endDate.getDate()-7);
-    }else {
+    if (this.statSelected == 'TOTAL IN YEAR') {
+      startDate.setFullYear(endDate.getFullYear() - 1);
+    } else if (this.statSelected == 'TOTAL IN MONTH') {
+      startDate.setMonth(endDate.getMonth() - 1);
+    } else if (this.statSelected == 'TOTAL IN WEEK') {
+      startDate.setDate(endDate.getDate() - 7);
+    } else {
       //TOTAL COUNT
       startDate = null;
     }
 
-    if(startDate==null){
+    if (startDate == null) {
       this.tableData = packagesData;
-    }else{
-      this.tableData = packagesData.filter(item => new Date(item.sharedDate) >= startDate);
+    } else {
+      this.tableData = packagesData.filter(
+        (item) => new Date(item.sharedDate) >= startDate
+      );
     }
   }
 
   filterSearch(value: string) {
     console.log(value);
-    this.tableData = this.tableData.filter((item) => item.fileName?.toLowerCase().includes(value));
+    this.tableData = this.tableData.filter((item) =>
+      item.fileName?.toLowerCase().includes(value)
+    );
   }
 
   private applyFilters(): void {
@@ -458,7 +464,9 @@ export class DataPackagesComponent implements OnInit {
           break;
         case 'fileName':
           if (filter.value != '') {
-            filtered = filtered.filter((item) => item.fileName.includes(filter.value));
+            filtered = filtered.filter((item) =>
+              item.fileName.includes(filter.value)
+            );
           }
           break;
         case 'processed':
@@ -502,70 +510,53 @@ export class DataPackagesComponent implements OnInit {
     this.tableData = filtered;
   }
 
-  onSearchChange(searchTerm: string): void {
-    console.log('Search changed:', searchTerm);
-    // Search is now handled in applyFilters method when filters are applied
-  }
-
   onSort(event: any) {
     this.sortField = event.field;
     this.sortOrder = event.order;
   }
 
   clearAllFilters(): void {
-      this.appliedFilters = [];
-      this.searchBar = '';
-      this.tableData = packagesData;
-      this.configurableFilter.clearAllFilters();
+    this.appliedFilters = [];
+    this.searchBar = '';
+    this.tableData = packagesData;
+    this.configurableFilter.clearAllFilters();
+    this.cdr.detectChanges();
+  }
+
+  getFilterDisplayValue(filter: FilterValue): string {
+    const filterConfig = this.filterConfigs.find((f) => f.key === filter.key);
+    if (!filterConfig) return filter.key;
+
+    switch (filterConfig.type) {
+      case 'checkbox':
+        return filterConfig.label;
+      case 'dateRange':
+        if (Array.isArray(filter.value) && filter.value.length === 2) {
+          const [startDate, endDate] = filter.value;
+          return `${
+            filterConfig.label
+          }: ${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`;
+        }
+        return filterConfig.label;
+      default:
+        return `${filterConfig.label}: ${filter.value}`;
+    }
+  }
+
+  removeFilterChip(filterKey: string): void {
+    console.log('removeFilterChip ' + filterKey);
+
+    // Find the filter config to get the display value
+    const filterConfig = this.filterConfigs.find((f) => f.key === filterKey);
+    if (filterConfig) {
+      // Remove the filter from applied filters
+      this.appliedFilters = this.appliedFilters.filter(
+        (f) => f.key !== filterKey
+      );
+      this.configurableFilter.removeFilterChip(filterKey);
+      // Update the filtered groups
+      this.applyFilters();
       this.cdr.detectChanges();
     }
-  
-    getFilterDisplayValue(filter: FilterValue): string {
-      if (filter.key === 'search') {
-        return `Search: "${filter.value}"`;
-      }
-      const filterConfig = this.filterConfigs.find((f) => f.key === filter.key);
-      if (!filterConfig) return filter.key;
-  
-      switch (filterConfig.type) {
-        case 'checkbox':
-          return filterConfig.label;
-        case 'dateRange':
-          if (Array.isArray(filter.value) && filter.value.length === 2) {
-            const [startDate, endDate] = filter.value;
-            return `${
-              filterConfig.label
-            }: ${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`;
-          }
-          return filterConfig.label;
-        default:
-          return `${filterConfig.label}: ${filter.value}`;
-      }
-    }
-  
-    removeFilterChip(filterKey: string): void {
-      console.log("removeFilterChip "+ filterKey)
-  
-      if (filterKey === 'search') {
-        this.searchBar = '';
-        this.appliedFilters = this.appliedFilters.filter(
-          (f) => f.key !== filterKey
-        );
-        this.applyFilters();
-        this.cdr.detectChanges();
-      }
-      // Find the filter config to get the display value
-      const filterConfig = this.filterConfigs.find((f) => f.key === filterKey);
-      if (filterConfig) {
-        // Remove the filter from applied filters
-        this.appliedFilters = this.appliedFilters.filter(
-          (f) => f.key !== filterKey
-        );
-  
-        // Update the filtered groups
-        this.applyFilters();
-        this.cdr.detectChanges();
-      }
-    }
-
+  }
 }

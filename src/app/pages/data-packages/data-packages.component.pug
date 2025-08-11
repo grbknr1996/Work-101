@@ -18,12 +18,14 @@ app-layout([config]="layoutConfig")
           [filters]="filterConfigs",
           [showClearAll]="true",
           [showApplyButton]="true",
-          [showSearch]="false",
+          [showFilterSelector]="true",
+          [filterSelectorPlaceholder]="'Select filters to display'",
           (filterChange)="onFilterChange($event)",
           (filterCleared)="onFilterCleared()",
           (filterApplied)="onFilterApplied($event)",
-          (searchChange)="onSearchChange($event)",
-          (appliedFiltersChange)="onAppliedFiltersChange($event)"
+  
+          (appliedFiltersChange)="onAppliedFiltersChange($event)",
+  
         )
   .mb-8.mt-1.w-full
     app-filter-chips(

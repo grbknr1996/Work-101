@@ -120,20 +120,20 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
   @Input() showClearAll: boolean = true;
   @Input() showApplyButton: boolean = true;
   @Input() debounceTime: number = 300;
-  @Input() showSearch: boolean = true;
-  @Input() searchPlaceholder: string = 'Search...';
+  @Input() showFilterSelector: boolean = true;
+  @Input() filterSelectorPlaceholder: string = 'Select filters to display';
   @Input() visible: boolean = false;
 
   @Output() filterChange = new EventEmitter<FilterValue[]>();
   @Output() filterCleared = new EventEmitter<void>();
   @Output() filterApplied = new EventEmitter<FilterValue[]>();
-  @Output() searchChange = new EventEmitter<string>();
   @Output() visibleChange = new EventEmitter<boolean>();
-  @Output() hasActiveFiltersChange = new EventEmitter<boolean>();
+  @Output() hasActiveFiltersChange = new EventEmitter<boolean>(); // Optional output
   @Output() appliedFiltersChange = new EventEmitter<FilterValue[]>();
+  @Output() visibleFiltersChange = new EventEmitter<FilterConfig[]>(); // Optional output
 
   filterForm: FormGroup;
-  searchTerm: string = '';
+  selectedFilters: string[] = [];
   activeFiltersCount: number = 0;
   hasActiveFilters: boolean = false;
   appliedFilters: FilterValue[] = [];
@@ -146,6 +146,7 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.initializeForm();
     this.setupFilterChangeListener();
+    this.initializeFilterSelector();
   }
 
   ngOnDestroy(): void {
@@ -163,6 +164,12 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
     this.filterForm = this.fb.group(formControls);
   }
 
+  private initializeFilterSelector(): void {
+    // Initially select all filters
+    this.selectedFilters = this.filters.map((filter) => filter.key);
+    this.emitVisibleFiltersChange();
+  }
+
   private setupFilterChangeListener(): void {
     this.filterForm.valueChanges
       .pipe(
@@ -171,8 +178,11 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
         distinctUntilChanged()
       )
       .subscribe((values) => {
+        console.log('Form value changes detected:', values);
         const filterValues = this.convertToFilterValues(values);
-        this.activeFiltersCount = filterValues.length;
+        console.log('Converted filter values:', filterValues);
+        // Don't update hasActiveFilters or emit here - only track form changes
+        // The red dot should only appear after filters are actually applied
       });
   }
 
@@ -239,20 +249,12 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
     const values = this.filterForm.value;
     const filterValues = this.convertToFilterValues(values);
 
-    // Add search term as a filter if it exists
-    if (this.searchTerm && this.searchTerm.trim()) {
-      filterValues.push({
-        key: 'search',
-        value: this.searchTerm.trim(),
-        type: 'text',
-      });
-    }
-
+    this.activeFiltersCount = filterValues.length;
     this.hasActiveFilters = filterValues.length > 0;
     this.appliedFilters = filterValues; // Store applied filters for chips
     this.filterApplied.emit(filterValues);
     this.filterChange.emit(filterValues); // Also emit filterChange for backward compatibility
-    this.hasActiveFiltersChange.emit(filterValues.length > 0);
+    this.hasActiveFiltersChange.emit(this.hasActiveFilters);
     this.appliedFiltersChange.emit(filterValues);
 
     this.onClose(); // Close the overlay after applying filters
@@ -260,11 +262,10 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
 
   onClearAll(): void {
     this.filterForm.reset();
-    this.searchTerm = '';
     this.activeFiltersCount = 0;
     this.hasActiveFilters = false;
     this.appliedFilters = []; // Clear applied filters
-    this.hasActiveFiltersChange.emit(false);
+    this.hasActiveFiltersChange.emit(this.hasActiveFilters);
     this.filterCleared.emit();
     this.appliedFiltersChange.emit([]);
   }
@@ -278,9 +279,25 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
     this.filterForm.get(key)?.reset();
   }
 
-  onSearchChange(): void {
-    // Don't emit search change immediately - wait for apply button
-    // This method is now just for tracking the search term
+  onFilterSelectorChange(): void {
+    this.emitVisibleFiltersChange();
+  }
+
+  onSelectAll(): void {
+    this.selectedFilters = this.filters.map((filter) => filter.key);
+    this.emitVisibleFiltersChange();
+  }
+
+  onDeselectAll(): void {
+    this.selectedFilters = [];
+    this.emitVisibleFiltersChange();
+  }
+
+  private emitVisibleFiltersChange(): void {
+    const visibleFilters = this.filters.filter((filter) =>
+      this.selectedFilters.includes(filter.key)
+    );
+    this.visibleFiltersChange.emit(visibleFilters);
   }
 
   onClose(): void {
@@ -305,7 +322,12 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
   getFiltersBySection(): { [key: string]: FilterConfig[] } {
     const sections: { [key: string]: FilterConfig[] } = {};
 
-    this.filters.forEach((filter) => {
+    // Only show selected filters
+    const visibleFilters = this.filters.filter((filter) =>
+      this.selectedFilters.includes(filter.key)
+    );
+
+    visibleFilters.forEach((filter) => {
       const section = filter.section || 'General';
       if (!sections[section]) {
         sections[section] = [];
@@ -321,21 +343,32 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
   }
 
   removeFilterChip(filterKey: string): void {
+    console.log('removeFilterChip called with key:', filterKey);
+    console.log('Applied filters before removal:', this.appliedFilters);
+
     // Remove from applied filters
     this.appliedFilters = this.appliedFilters.filter(
       (f) => f.key !== filterKey
     );
 
-    // Clear the form control or search term
-    if (filterKey === 'search') {
-      this.searchTerm = '';
-    } else {
-      this.filterForm.get(filterKey)?.reset();
-    }
+    console.log('Applied filters after removal:', this.appliedFilters);
 
-    // Update states
+    // Clear the form control
+    this.filterForm.get(filterKey)?.reset();
+
+    // Update states - sync all filter-related state variables
+    this.activeFiltersCount = this.appliedFilters.length;
     this.hasActiveFilters = this.appliedFilters.length > 0;
-    this.hasActiveFiltersChange.emit(this.appliedFilters.length > 0);
+
+    console.log(
+      'State after removal - activeFiltersCount:',
+      this.activeFiltersCount,
+      'hasActiveFilters:',
+      this.hasActiveFilters
+    );
+
+    // Emit state changes
+    this.hasActiveFiltersChange.emit(this.hasActiveFilters);
     this.appliedFiltersChange.emit(this.appliedFilters);
 
     // Emit the updated filters
@@ -344,19 +377,11 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
   }
 
   getFilterLabel(key: string): string {
-    if (key === 'search') {
-      return 'Search';
-    }
     const filter = this.filters.find((f) => f.key === key);
     return filter ? filter.label : key;
   }
 
   getFilterDisplayValue(filter: FilterValue): string {
-    // Handle search filter specially
-    if (filter.key === 'search') {
-      return `Search: "${filter.value}"`;
-    }
-
     const filterLabel = this.getFilterLabel(filter.key);
     let displayValue = '';
 
@@ -413,6 +438,13 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
     return filter.type === 'checkbox'
       ? displayValue
       : `${filterLabel}: ${displayValue}`;
+  }
+
+  getFilterSelectorOptions(): Array<{ label: string; value: string }> {
+    return this.filters.map((filter) => ({
+      label: filter.label,
+      value: filter.key,
+    }));
   }
 
   @HostListener('document:click', ['$event'])

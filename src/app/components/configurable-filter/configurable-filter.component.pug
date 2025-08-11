@@ -7,37 +7,37 @@
     icon="pi pi-sliders-h",
     [class.has-active-filters]="hasActiveFilters",
     (click)="toggleFilter()",
-    pTooltip="Open Filters"
+    pTooltip="Open Filter"
+     tooltipStyleClass="text-xs px-2 py-1"
   )
   
   // Filter Overlay
   .filter-overlay(*ngIf="visible")
     .filter-panel
-      // Header with Search and Icons
+      // Close Button - Positioned at top right corner
+      button.p-button-text.p-button-sm.close-button-overlay(
+        pButton,
+        type="button",
+        icon="pi pi-times",
+        pTooltip="Close",
+        (click)="onClose()"
+      )
+      
+      // Header with Filter Selector and Icons
       .filter-header
-        .search-section
-          input.search-input(
-            *ngIf="showSearch",
-            pInputText,
-            [(ngModel)]="searchTerm",
-            [placeholder]="searchPlaceholder",
-            (input)="onSearchChange()"
-          )
-        .header-actions
-          button.p-button-text.p-button-sm.action-icon(
-            *ngIf="showSearch",
-            pButton,
-            type="button",
-            icon="pi pi-search",
-            pTooltip="Search"
-          )
-          button.p-button-text.p-button-sm.close-button(
-            pButton,
-            type="button",
-            icon="pi pi-times",
-            pTooltip="Close",
-            (click)="onClose()"
-          )
+        .filter-selector-section
+          label.filter-selector-label Display Filters:
+          .filter-selector-controls
+            p-multiSelect.filter-selector(
+              [options]="getFilterSelectorOptions()",
+              [(ngModel)]="selectedFilters",
+              [placeholder]="filterSelectorPlaceholder",
+              [showClear]="false",
+              [showFilter]="true",
+              (onChange)="onFilterSelectorChange()",
+              optionLabel="label",
+              optionValue="value"
+            )
       
       // Filter Content
       .filter-content

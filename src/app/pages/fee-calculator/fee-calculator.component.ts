@@ -128,7 +128,7 @@ export class FeeCalculatorComponent implements OnInit {
           routerLink: `/${officeCode}/${langCode}/system-configuration`,
         },
         {
-          label: 'Fee Configuration',
+          label: 'Fee',
           routerLink: `/${officeCode}/${langCode}/system-configuration/fee-config`,
         },
         {

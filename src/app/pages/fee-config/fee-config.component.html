@@ -15,7 +15,7 @@
         </p-floatlabel>
       </div>
       <div class="col-span-8 flex justify-end gap-2 filter-icons">
-        <app-configurable-filter [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showSearch]="'Search groups...'" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (searchChange)="onSearchChange($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>
+        <app-configurable-filter [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'Select filters to display'" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>
         <p-button icon="pi pi-file-pdf" [outlined]="true" [text]="true" style="font-size: 1.5rem"></p-button>
         <p-button icon="pi pi-info-circle" [outlined]="true" [text]="true" style="font-size: 1.5rem"></p-button>
       </div>
@@ -38,11 +38,11 @@
                 <ng-template #header="">
                   <h1 class="flex">
                     <p-checkbox inputId="service" [(ngModel)]="checked" [binary]="true"></p-checkbox>
-                    <label class="flex-1" for="service">{{service.name}}</label>
+                    <label class="flex-1" for="service">{{ service.name }}</label>
                   </h1>
                 </ng-template>
-                <div class="text-base font-bold mb-2"> New Application </div>
-                <div class="text-xs"> Regular fees IP</div>
+                <div class="text-base font-bold mb-2">New Application</div>
+                <div class="text-xs">Regular fees IP</div>
                 <ng-template #footer="">
                   <div class="flex gap-4 mt-1">
                     <p-button class="w-full" size="small" severity="secondary" [outlined]="true" styleClass="w-full">Basic Fee {{ service.basicFee }}$</p-button>

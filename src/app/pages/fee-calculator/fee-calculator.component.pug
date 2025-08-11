@@ -6,19 +6,27 @@ app-layout
             h1.text-xl.pb-4 Fee Calculator
             .grid.grid-cols-12.gap-4
                 p-floatlabel.col-span-4.mb-4(variant='on')
-                    p-select#category.w-full([options]='categories', [(ngModel)]='selectedCategory')
-                    label(for='category') Category
-                p-floatlabel.col-span-4.mb-4(variant='on')
-                    p-select#services.w-full([options]='services', [(ngModel)]='selectedService')
-                    label(for='services') Services
-                p-floatlabel.col-span-4.mb-4(variant='on')
                     p-select#locations.w-full([options]='locations', [(ngModel)]='selectedLocation')
                     label(for='locations') Location/Offices
+                p-floatlabel.col-span-4.mb-4(variant='on')
+                    p-select#category.w-full(
+                        [options]='categories', 
+                        [(ngModel)]='selectedCategory',
+                        [disabled]="selectedLocation === null"
+                    )
+                    label(for='category') Category
+                p-floatlabel.col-span-4.mb-4(variant='on')
+                    p-select#services.w-full(
+                        [options]='services', 
+                        [(ngModel)]='selectedService',
+                        [disabled]="selectedLocation === null"
+                    )
+                    label(for='services') Services
             hr.mt-4.mb-4
             p-table.mt-4([value]='services')
                 ng-template(pTemplate='header')
                     tr
-                        th Service(s)
+                        th Fee
                         th.text-right Unit(s)
                 ng-template(pTemplate='body', let-service='')
                     tr

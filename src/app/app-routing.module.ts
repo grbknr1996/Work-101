@@ -81,9 +81,9 @@ const routes: Routes = [
       import('./pages/user-management/user-management.module').then(
         (m) => m.UserManagementModule
       ),
-    canActivate: [AuthGuard, PermissionGuard],
+    canActivate: [AuthGuard],
     data: {
-      permissions: ['user_management_view'],
+      permissions: [],
     },
   },
   {

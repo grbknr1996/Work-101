@@ -211,7 +211,7 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
     id: 'system-settings',
     title: 'System Settings',
     icon: 'pi-cog',
-    requiredPermissions: ['system_config_view'],
+    requiredPermissions: [],
     items: [
       {
         icon: 'pi-cog',
@@ -223,7 +223,7 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
         icon: 'pi-money-bill',
         label: 'Fee Configuration',
         link: '/system-configuration/fee-config',
-        requiredPermissions: ['fee_configuration_view'],
+        requiredPermissions: [],
       },
       {
         icon: 'pi-send',

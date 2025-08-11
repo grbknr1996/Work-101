@@ -17,7 +17,7 @@
         </p-floatlabel>
       </div>
       <div class="col-span-8 flex justify-end gap-2 filter-icons">
-        <app-configurable-filter [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showSearch]="false" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (searchChange)="onSearchChange($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>
+        <app-configurable-filter [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'Select filters to display'" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>
       </div>
     </div>
   </div>

@@ -14,6 +14,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
 import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
@@ -64,14 +65,13 @@ enum IpTypes {
     IconFieldModule,
     InputIconModule,
     TabsModule,
+    TooltipModule,
     ConfigurableFilterComponent,
     FilterChipsComponent,
     RouterModule,
-    DragDropModule
+    DragDropModule,
   ],
-  providers: [
-    FeeService
-  ],
+  providers: [FeeService],
   templateUrl: './fee-config.component.html',
 })
 export class FeeConfigComponent implements OnInit {
@@ -157,7 +157,7 @@ export class FeeConfigComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private router: Router,
     private route: ActivatedRoute
-  ) { }
+  ) {}
 
   ngOnInit() {
     const currentPath = this.router.url;
@@ -175,7 +175,7 @@ export class FeeConfigComponent implements OnInit {
           routerLink: `/${officeCode}/${langCode}/system-configuration`,
         },
         {
-          label: 'Fee Configuration',
+          label: 'Fee',
           routerLink: `/${officeCode}/${langCode}/system-configuration/fee-config`,
         },
       ];
@@ -209,8 +209,9 @@ export class FeeConfigComponent implements OnInit {
       case 'dateRange':
         if (Array.isArray(filter.value) && filter.value.length === 2) {
           const [startDate, endDate] = filter.value;
-          return `${filterConfig.label
-            }: ${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`;
+          return `${
+            filterConfig.label
+          }: ${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`;
         }
         return filterConfig.label;
       default:
@@ -225,6 +226,9 @@ export class FeeConfigComponent implements OnInit {
       this.appliedFilters = this.appliedFilters.filter(
         (f) => f.key !== filterKey
       );
+
+      // Also remove the filter from the configurable filter component to sync state
+      this.configurableFilter.removeFilterChip(filterKey);
 
       // Update the filtered groups
       this.applyFilters(this.appliedFilters);
@@ -287,16 +291,6 @@ export class FeeConfigComponent implements OnInit {
 
     filters.forEach((filter) => {
       switch (filter.key) {
-        case 'search':
-          if (filter.value && filter.value.trim()) {
-            const searchTerm = filter.value.toLowerCase().trim();
-            filtered = filtered.filter(
-              (item) =>
-                item.groupName?.toLowerCase().includes(searchTerm) ||
-                item.description?.toLowerCase().includes(searchTerm)
-            );
-          }
-          break;
         case 'active':
           if (filter.value === true) {
             filtered = filtered.filter((item) => item.isActive === true);
@@ -353,11 +347,6 @@ export class FeeConfigComponent implements OnInit {
     this.filteredGroups = filtered;
   }
 
-  onSearchChange(searchTerm: string): void {
-    console.log('Search changed:', searchTerm);
-    // Search is now handled in applyFilters method when filters are applied
-  }
-
   onFilterCleared(): void {
     console.log('Filters cleared');
     this.filteredGroups = this.groups;
@@ -370,13 +359,14 @@ export class FeeConfigComponent implements OnInit {
   }
 
   openCalculator() {
-    console.log("Calculator clicked!");
+    console.log('Calculator clicked!');
     this.route.params.subscribe((params) => {
       const officeCode =
         params['officeCode'] || this.ms.getCurrentOffice() || 'default';
       const langCode = params['langCode'] || 'en';
-      this.router.navigate([`/${officeCode}/${langCode}/system-configuration/fee-config/calculator`])
+      this.router.navigate([
+        `/${officeCode}/${langCode}/system-configuration/fee-config/calculator`,
+      ]);
     });
   }
-
 }

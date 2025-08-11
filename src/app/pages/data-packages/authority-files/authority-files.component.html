@@ -17,7 +17,7 @@
         </p-floatlabel>
       </div>
       <div class="col-span-8 flex justify-end gap-2 filter-icons">
-        <app-configurable-filter [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showSearch]="false" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (searchChange)="onSearchChange($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>
+        <app-configurable-filter [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'Select filters to display'" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>
         <p-button icon="pi pi-file-pdf" [outlined]="true" [text]="true" (click)="downloadDetails(); $event.stopPropagation()"></p-button>
       </div>
     </div>
@@ -25,5 +25,5 @@
   <div class="mb-8 mt-1 w-full">
     <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="true" [clearAllLabel]="'Clear All'" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-filter-chips>
   </div>
-  <app-table [columns]="tableColumns" [data]="tableData" [showClearButton]="false" [showSearch]="false"> </app-table>
+  <app-table [columns]="tableColumns" [data]="tableData" [showClearButton]="false" [showSearch]="false"></app-table>
 </app-layout>

@@ -2,18 +2,19 @@
 <!-- Filter Component Container-->
 <div class="filter-component-container">
   <!-- Filter Button - Right Side-->
-  <button class="p-button-outlined p-button-secondary filter-button" pButton type="button" icon="pi pi-sliders-h" [class.has-active-filters]="hasActiveFilters" (click)="toggleFilter()" pTooltip="Open Filters"></button>
+  <button class="p-button-outlined p-button-secondary filter-button" pButton type="button" icon="pi pi-sliders-h" [class.has-active-filters]="hasActiveFilters" (click)="toggleFilter()" pTooltip="Open Filter" tooltipStyleClass="text-xs px-2 py-1"></button>
   <!-- Filter Overlay-->
   <div class="filter-overlay" *ngIf="visible">
     <div class="filter-panel">
-      <!-- Header with Search and Icons-->
+      <!-- Close Button - Positioned at top right corner-->
+      <button class="p-button-text p-button-sm close-button-overlay" pButton type="button" icon="pi pi-times" pTooltip="Close" (click)="onClose()"></button>
+      <!-- Header with Filter Selector and Icons-->
       <div class="filter-header">
-        <div class="search-section">
-          <input class="search-input" *ngIf="showSearch" pInputText [(ngModel)]="searchTerm" [placeholder]="searchPlaceholder" (input)="onSearchChange()">
-        </div>
-        <div class="header-actions">
-          <button class="p-button-text p-button-sm action-icon" *ngIf="showSearch" pButton type="button" icon="pi pi-search" pTooltip="Search"></button>
-          <button class="p-button-text p-button-sm close-button" pButton type="button" icon="pi pi-times" pTooltip="Close" (click)="onClose()"></button>
+        <div class="filter-selector-section">
+          <label class="filter-selector-label">Display Filters:</label>
+          <div class="filter-selector-controls">
+            <p-multiSelect class="filter-selector" [options]="getFilterSelectorOptions()" [(ngModel)]="selectedFilters" [placeholder]="filterSelectorPlaceholder" [showClear]="false" [showFilter]="true" (onChange)="onFilterSelectorChange()" optionLabel="label" optionValue="value"></p-multiSelect>
+          </div>
         </div>
       </div>
       <!-- Filter Content-->
