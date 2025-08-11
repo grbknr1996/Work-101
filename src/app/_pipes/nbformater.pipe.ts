@@ -6,7 +6,7 @@ import { instanceType } from '../utils';
 	name: 'NbFormater',
     standalone: false,
 })
-export class NbFromater implements PipeTransform {
+export class NbFormatter implements PipeTransform {
 
     
     public thousandFormat: string

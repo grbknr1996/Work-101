@@ -41,9 +41,9 @@ enum IpTypes {
   TRADEMARK = 'trademark',
   PATENT = 'patent',
   COPYRIGHT = 'copyright',
-  POST_QUALIFIED = 'post qualified',
+  POST_FILINGS = 'post filings',
   INDUSTRIAL_DESIGN = 'industrial design',
-  GI = 'gi',
+  GEOGRAPHICAL_INDICATIONS = 'geographical indications',
 }
 
 @Component({
@@ -161,7 +161,7 @@ export class FeeConfigComponent implements OnInit {
 
   ngOnInit() {
     const currentPath = this.router.url;
-    const menuItems = this.menuService.generateUserManagementMenu(currentPath);
+    const menuItems = this.menuService.generateFeeConfigurationMenu(currentPath);
     this.menuService.updateMenuItems(menuItems);
     // Optionally, dynamically set menu items here
     this.route.params.subscribe((params) => {
@@ -175,7 +175,7 @@ export class FeeConfigComponent implements OnInit {
           routerLink: `/${officeCode}/${langCode}/system-configuration`,
         },
         {
-          label: 'Fee',
+          label: 'Fees',
           routerLink: `/${officeCode}/${langCode}/system-configuration/fee-config`,
         },
       ];
@@ -259,10 +259,10 @@ export class FeeConfigComponent implements OnInit {
     const orderedTypes = [
       IpTypes.TRADEMARK,
       IpTypes.PATENT,
-      IpTypes.COPYRIGHT,
-      IpTypes.POST_QUALIFIED,
       IpTypes.INDUSTRIAL_DESIGN,
-      IpTypes.GI,
+      IpTypes.COPYRIGHT,
+      IpTypes.POST_FILINGS,
+      IpTypes.GEOGRAPHICAL_INDICATIONS,
     ];
 
     tabData = orderedTypes.map((ipType) => ({

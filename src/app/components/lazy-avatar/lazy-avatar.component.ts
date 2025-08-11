@@ -107,7 +107,7 @@ export class LazyAvatarComponent implements OnInit, AfterViewInit {
   @Input() src: string = '';
   @Input() alt: string = 'Avatar';
   @Input() size: number = 32;
-  @Input() fallbackSrc: string = 'assets/images/no-image.png';
+  @Input() fallbackSrc: string = '';
 
   @ViewChild('avatarImg') avatarImg!: ElementRef<HTMLImageElement>;
 
@@ -119,12 +119,18 @@ export class LazyAvatarComponent implements OnInit, AfterViewInit {
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
-    // Start with placeholder
-    this.currentSrc = this.fallbackSrc;
+    // Start with generated avatar if no src provided
+    if (!this.src) {
+      this.currentSrc = this.getDefaultAvatar(this.alt);
+      this.isLoading = false;
+      this.cdr.markForCheck();
+    }
   }
 
   ngAfterViewInit() {
-    this.setupIntersectionObserver();
+    if (this.src) {
+      this.setupIntersectionObserver();
+    }
   }
 
   private setupIntersectionObserver() {
@@ -175,8 +181,21 @@ export class LazyAvatarComponent implements OnInit, AfterViewInit {
   onImageError() {
     this.isLoading = false;
     this.hasError = true;
-    this.currentSrc = this.fallbackSrc;
+    // Use generated avatar as fallback instead of fallbackSrc
+    this.currentSrc = this.getDefaultAvatar(this.alt);
     this.cdr.markForCheck();
+  }
+
+  getDefaultAvatar(userName: string): string {
+    // Generate a default avatar URL based on username
+    const initials = userName
+      .split(' ')
+      .map((name) => name.charAt(0))
+      .join('')
+      .toUpperCase();
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(
+      initials
+    )}&background=random&size=${this.size}`;
   }
 
   ngOnDestroy() {

@@ -8,10 +8,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import {
-  HttpClient,
-  HttpClientModule,
   HTTP_INTERCEPTORS,
   HttpBackend,
+  HttpClientModule,
 } from '@angular/common/http';
 
 import { ButtonModule } from 'primeng/button';
@@ -52,18 +51,10 @@ export function HttpLoaderFactory(http: HttpBackend) {
   ]);
 }
 
-import { NgxEchartsModule } from 'ngx-echarts';
-// import echarts core
-import * as echarts from 'echarts/core';
-// import necessary echarts components
-import { MapChart } from 'echarts/charts';
-import { GridComponent } from 'echarts/components';
-import { CanvasRenderer } from 'echarts/renderers';
-echarts.use([MapChart, GridComponent, CanvasRenderer]);
 import { TableModule } from 'primeng/table';
 import { CompMenuBar } from './components/comp-nav-bar/comp-nav-bar.component';
 
-import { NbFromater } from './_pipes/nbformater.pipe';
+import { NbFormatter } from './_pipes/nbformater.pipe';
 
 // PAGES COMPONENTS
 
@@ -119,7 +110,7 @@ const WipoThemePreset = definePreset(Aura, {
     AppComponent,
     PageRedirectComponent,
     PageNotfoundComponent,
-    NbFromater,
+    NbFormatter,
   ],
   imports: [
     AppLayoutComponent,
@@ -136,10 +127,10 @@ const WipoThemePreset = definePreset(Aura, {
     SelectModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule,
     DataViewModule,
     TableModule,
     BreadcrumbsComponent,
+    HttpClientModule,
     // https://github.com/ngx-translate/core
     TranslateModule.forRoot({
       defaultLanguage: 'en',
@@ -149,14 +140,15 @@ const WipoThemePreset = definePreset(Aura, {
         deps: [HttpBackend],
       },
     }),
-    NgxEchartsModule.forRoot({ echarts }),
   ],
   providers: [
-    /*{
-			provide: HTTP_INTERCEPTORS,
-			useClass: AwsInterceptInterceptor,
-			multi: true // false completely breaks the app, for some reason
-		},*/
+    /*
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AwsInterceptInterceptor,
+      multi: true // false completely breaks the app, for some reason
+    },
+    */
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AddHeaderInterceptor,

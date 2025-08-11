@@ -1,18 +1,17 @@
 
-<!-- table.component.pug-->
 <div class="card">
-  <p-table #dt [value]="isSignal(data) ? data() : data" [columns]="columns" [rowHover]="true" [rows]="rows" [rowsPerPageOptions]="rowsPerPageOptions" [loading]="loading" [paginator]="paginator" [globalFilterFields]="globalFilterFields" [showCurrentPageReport]="showCurrentPageReport" [currentPageReportTemplate]="currentPageReportTemplate" [resizableColumns]="resizableColumns" [reorderableColumns]="reorderableColumns" [responsive]="responsive" [lazy]="lazy" [totalRecords]="totalRecords" [scrollable]="scrollable" [scrollHeight]="scrollHeight" [dataKey]="dataKey" (onLazyLoad)="onLazyLoadEvent.emit($event)" styleClass="p-datatable-sm">
+  <p-table #dt [value]="isSignal(data) ? data() : data" [columns]="columns" [rowHover]="true" [rows]="rows" [rowsPerPageOptions]="rowsPerPageOptions" [loading]="loading" [paginator]="paginator" [globalFilterFields]="globalFilterFields" [showCurrentPageReport]="showCurrentPageReport" [currentPageReportTemplate]="currentPageReportTemplate" [resizableColumns]="resizableColumns" [reorderableColumns]="reorderableColumns" [responsive]="responsive" [lazy]="lazy" [totalRecords]="totalRecords" [scrollable]="scrollable" [scrollHeight]="scrollHeight" [dataKey]="dataKey" (onLazyLoad)="onLazyLoad.emit($event)" styleClass="p-datatable-sm">
     <ng-template pTemplate="caption">
       <div class="flex-search-bar">
         <button class="p-button-outlined" *ngIf="showClearButton" pButton [label]="clearButton" icon="pi pi-filter-slash" (click)="clear(dt)"></button>
         <div class="ml-auto">
-          <button [style]="showPdf=='' ? 'display:none;' : '' " (click)="onActionClick(&quot;showPdf&quot;, showPdf); $event.stopPropagation()">
-            <p-iconField iconPosition="left"><i class="pi pi-file-pdf" style="font-size: 2em; color: red;"></i></p-iconField>
+          <button [style]="showPdf == '' ? 'display:none;' : ''" (click)="onActionClick('showPdf', showPdf); $event.stopPropagation()">
+            <p-iconField iconPosition="left"><i class="pi pi-file-pdf" style="font-size: 2em; color: red"></i></p-iconField>
           </button>
         </div>
-        <p-iconField iconPosition="left" *ngIf="showSearch">
+        <p-iconField iconPosition="left" *ngIf="showSearchButton">
           <p-inputIcon><i class="pi pi-search"></i></p-inputIcon>
-          <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" [placeholder]="searchPlaceHolder">
+          <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" [placeholder]="searchPlaceHolder" *ngIf="showSearchButton">
         </p-iconField>
       </div>
     </ng-template>
@@ -44,7 +43,7 @@
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                 <p-multiSelect [ngModel]="value" [options]="col.dropdownOptions || []" placeholder="Any" (onChange)="filter($event.value)" [optionLabel]="col.optionLabel || 'name'" styleClass="w-full" [panelStyle]="{ minWidth: '16rem' }">
                   <ng-template *ngIf="col.customTemplate" pTemplate="item" let-option>
-                    <div class="flex items-center gap-2"><img *ngIf="option.image" [alt]="option.label" [src]="option.image" style="width: 32px"><span>{{ option[col.optionLabel || "name"] }}</span></div>
+                    <div class="flex items-center gap-2"><img *ngIf="option.image" [alt]="option.label" [src]="option.image" style="width: 32px"><span>{{ option[col.optionLabel || 'name'] }}</span></div>
                   </ng-template>
                 </p-multiSelect>
               </ng-template>
@@ -67,28 +66,28 @@
           <!-- Text Display-->
           <ng-container *ngIf="col.display === 'text' || !col.display">{{ getValue(rowData, col.field) }}</ng-container>
           <!-- Date Display-->
-          <ng-container *ngIf="col.display === 'date'">{{ getValue(rowData, col.field) | date : (col.dateFormat || "MM/dd/yyyy") }}</ng-container>
+          <ng-container *ngIf="col.display === 'date'">{{ getValue(rowData, col.field) | date : col.dateFormat || 'MM/dd/yyyy' }}</ng-container>
           <!-- Currency Display-->
-          <ng-container *ngIf="col.display === 'currency'">{{ getValue(rowData, col.field) | currency : (col.currency || "USD") : "symbol" }}</ng-container>
+          <ng-container *ngIf="col.display === 'currency'">{{ getValue(rowData, col.field) | currency : col.currency || 'USD' : 'symbol' }}</ng-container>
           <!-- Avatar Display with Lazy Loading-->
           <ng-container *ngIf="col.display === 'avatar'">
             <div class="flex items-center gap-2">
-              <app-lazy-avatar [src]="getValue(rowData, col.field)" [alt]="getValue(rowData, col.nameField || &quot;username&quot;) || &quot;User Avatar&quot;" [size]="32" [fallbackSrc]="'assets/images/no-image.png'"></app-lazy-avatar><span *ngIf="col.showName">{{ getValue(rowData, col.nameField || "name") }}</span>
+              <app-lazy-avatar [src]="getValue(rowData, col.field)" [alt]="getValue(rowData, col.nameField || 'username') || 'User Avatar'" [size]="32" [fallbackSrc]="'assets/images/no-image.png'"></app-lazy-avatar><span *ngIf="col.showName">{{ getValue(rowData, col.nameField || 'name') }}</span>
             </div>
           </ng-container>
           <!-- Tag Display-->
           <ng-container *ngIf="col.display === 'tag'">
-            <p-tag [value]="getValue(rowData, col.field)" [severity]="col.severity ? col.severity(getValue(rowData, col.field)) : &quot;success&quot;"></p-tag>
+            <p-tag [value]="getValue(rowData, col.field)" [severity]="col.severity ? col.severity(getValue(rowData, col.field)) : 'success'"></p-tag>
           </ng-container>
           <!-- Progress Display-->
           <ng-container *ngIf="col.display === 'progress'">
             <p-progressBar [value]="getValue(rowData, col.field)" [showValue]="false"></p-progressBar>
           </ng-container>
           <!-- Icon Display-->
-          <ng-container *ngIf="col.display === 'icon'"><i class="pi" [ngClass]="col.iconClass ? col.iconClass(getValue(rowData, col.field)) : &quot;&quot;" style="font-size: 1.5rem"></i></ng-container>
+          <ng-container *ngIf="col.display === 'icon'"><i class="pi" [ngClass]="col.iconClass ? col.iconClass(getValue(rowData, col.field)) : ''" style="font-size: 1.5rem"></i></ng-container>
           <!-- Boolean Display-->
           <ng-container *ngIf="col.display === 'boolean'">
-            <div class="text-center"><i class="pi" [ngClass]="{'text-green-500 pi-check-circle': getValue(rowData, col.field), 'text-red-500 pi-times-circle': !getValue(rowData, col.field)}"></i></div>
+            <div class="text-center"><i class="pi" [ngClass]="{ 'text-green-500 pi-check-circle': getValue(rowData, col.field), 'text-red-500 pi-times-circle': !getValue(rowData, col.field) }"></i></div>
           </ng-container>
           <!-- Custom Template-->
           <ng-container *ngIf="col.display === 'custom'">
@@ -106,7 +105,7 @@
               <ng-container *ngIf="col.showAsDropdown === false">
                 <div class="flex gap-2">
                   <ng-container *ngFor="let action of col.actions">
-                    <button class="p-button-rounded p-button-text" *ngIf="!action.visible || action.visible(rowData)" pButton [icon]="action.icon ?? &quot;&quot;" [class]="action.severity ? &quot;p-button-&quot; + action.severity : &quot;&quot;" (click)="onActionClick(action.action, rowData); $event.stopPropagation()"></button>
+                    <button class="p-button-rounded p-button-text" *ngIf="!action.visible || action.visible(rowData)" pButton [icon]="action.icon ?? ''" [class]="action.severity ? 'p-button-' + action.severity : ''" (click)="onActionClick(action.action, rowData); $event.stopPropagation()"></button>
                   </ng-container>
                 </div>
               </ng-container>

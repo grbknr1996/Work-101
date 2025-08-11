@@ -130,6 +130,44 @@ export class SidebarMenuService {
     ];
   }
 
+  generateFeeConfigurationMenu(currentPath: string): MenuItem[] {
+    console.log('current path:', currentPath);
+    const lastPart = currentPath.split('/').pop();
+    console.log(lastPart);
+    return [
+      {
+        id: 'dashboard',
+        label: 'Home',
+        icon: 'pi pi-home',
+        routerLink: this.getRouterLink('/dashboard'),
+      },
+      {
+        id: 'fee-configuration',
+        label: 'Fees',
+        icon: 'pi pi-money-bill',
+        expanded: currentPath.includes('fee-config'),
+        items: [
+          {
+            id: 'fees',
+            label: 'Fees',
+            icon: 'pi pi-money-bill',
+            routerLink: this.getRouterLink('/system-configuration/fee-config'),
+            styleClass: lastPart.includes('fee-config') ? 'active' : '',
+          },
+          {
+            id: 'fees-calculator',
+            label: 'Fee Calculator',
+            icon: 'pi pi-calculator',
+            routerLink: this.getRouterLink(
+              '/system-configuration/fee-config/calculator'
+            ),
+            styleClass: lastPart.includes('calculator') ? 'active' : '',
+          }
+        ],
+      },
+    ];
+  }
+
   private loadDefaultMenuItems(): void {
     const menuItems: MenuItem[] = [
       {

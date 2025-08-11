@@ -272,7 +272,6 @@ app-groups
 
 @media screen and (max-width: 768px)
   .navbar-end
-    flex-wrap wrap
     flex-direction row
     justify-content flex-end
     align-items center
@@ -1250,7 +1249,6 @@ $transition-duration = 0.3s
 // Navbar tweaks for mobile
 @media screen and (max-width: 768px)
   .navbar-end
-    flex-wrap wrap
     flex-direction row
     justify-content flex-end
     align-items center
@@ -4551,4 +4549,304 @@ app-filter-chips
     .clear-all-button
       align-self center
       width fit-content
+// ========================================
+// TABLE CARDS COMPONENT
+// ========================================
+app-table-card
+  .table-card-container
+    width 100%
+
+  /* Controls Bar */
+  .controls-bar
+    display flex
+    justify-content space-between
+    align-items center
+    padding 1rem
+    background var(--p-surface-50)
+    border-radius var(--p-border-radius)
+    border 1px solid var(--p-border-color)
+
+  .sort-container
+    display flex
+    align-items center
+    gap 0.75rem
+    flex 1
+    max-width 400px
+
+  .sort-label
+    font-weight 600
+    color var(--p-text-color)
+    white-space nowrap
+
+  .controls-right
+    display flex
+    gap 0.5rem
+
+  /* Loading State */
+  .loading-container
+    padding 2rem
+    color var(--p-text-color-secondary)
+
+  /* Cards Grid */
+  .cards-grid
+    display grid
+    grid-template-columns repeat(auto-fill, minmax(250px, 1fr))
+    gap 1rem
+    margin-bottom 2rem
+
+  @media (max-width: 768px)
+    .cards-grid
+      grid-template-columns 1fr
+      gap 0.75rem
+
+  @media (min-width: 769px) and (max-width: 1024px)
+    .cards-grid
+      grid-template-columns repeat(auto-fill, minmax(220px, 1fr))
+      gap 0.75rem
+
+  /* Individual Card */
+  .card-item
+    height 100%
+
+    :global(.p-card)
+      height 100%
+      transition transform 0.2s ease, box-shadow 0.2s ease
+      border none
+
+      &:hover
+        transform translateY(-2px)
+        box-shadow 0 8px 25px var(--p-shadow-color)
+
+  /* Card Header */
+  .card-header
+    display flex
+    justify-content space-between
+    align-items flex-start
+    margin-bottom 0px
+    padding 0.75rem
+    background linear-gradient(135deg, var(--p-primary-color) 0%, var(--p-primary-600) 100%)
+    color var(--p-tag-contrast-color)
+    border-radius var(--p-border-radius) var(--p-border-radius) 0 0
+    border none
+
+  .header-left
+    display flex
+    align-items center
+    gap 0.75rem
+
+  .header-info
+    display flex
+    flex-direction column
+    gap 0.25rem
+
+  .header-title
+    font-size 0.875rem
+    font-weight 600
+    margin 0
+    color var(--p-tag-contrast-color)
+
+  .header-subtitle
+    display flex
+    align-items center
+
+  .avatar-section
+    display flex
+    align-items center
+    gap 0.75rem
+
+  .avatar-fallback
+    width 40px
+    height 40px
+    border-radius 50%
+    background rgba(255, 255, 255, 0.2)
+    display flex
+    align-items center
+    justify-content center
+    color var(--p-tag-contrast-color)
+
+  .header-right
+    display flex
+    flex-direction column
+    align-items flex-end
+    gap 0.5rem
+
+  .status-section
+    display flex
+    align-items center
+
+  .actions-section
+    display flex
+    align-items center
+
+  .header-actions-btn
+    background transparent !important
+    border none !important
+    color var(--p-tag-contrast-color) !important
+
+    &:hover
+      background rgba(255, 255, 255, 0.1) !important
+      border none !important
+
+  /* Card Content */
+  .card-content
+    padding 0.75rem
+
+  /* Card Sections */
+  .card-section
+    margin-bottom 1rem
+
+    &:last-child
+      margin-bottom 0
+
+  .section-title
+    font-size 0.875rem
+    font-weight 600
+    color var(--p-tag-contrast-color)
+    margin 0 0 0.5rem 0
+    padding-bottom 0.25rem
+    border-bottom 1px solid var(--p-border-color)
+
+  .body-section
+    border-bottom 1px solid var(--p-border-color)
+    padding-bottom 0.75rem
+
+  .info-section
+    padding-top 0.5rem
+
+  .content-row
+    display flex
+    justify-content space-between
+    align-items center
+    padding 0.375rem 0
+    border-bottom 1px solid var(--p-border-color)
+
+    &:last-child
+      border-bottom none
+
+  .field-label
+    font-weight 600
+    color var(--p-text-color)
+    font-size 0.75rem
+    min-width 100px
+
+  .field-value
+    flex 1
+    text-align right
+    color var(--p-primary-color-text)
+    font-size 0.75rem
+    word-break break-word
+
+  /* Remove all card borders */
+  .card-item
+    :global(.p-card),
+    :global(.p-card .p-card-body),
+    :global(.p-card .p-card-content),
+    :global(.p-card .p-card-header)
+      border none !important
+      outline none !important
+
+  /* Empty State */
+  .empty-state
+    padding 3rem 1rem
+    color var(--p-text-color-secondary)
+
+    i
+      display block
+      margin-bottom 1rem
+
+  /* Pagination */
+  .pagination-container
+    display flex
+    justify-content center
+    padding 1rem
+    background var(--p-surface-50)
+    border-radius var(--p-border-radius)
+    border 1px solid var(--p-border-color)
+
+  /* Responsive adjustments */
+  @media (max-width: 480px)
+    .controls-bar
+      flex-direction column
+      gap 1rem
+      align-items stretch
+
+    .search-container
+      max-width none
+
+    .controls-right
+      justify-content center
+
+    .field-label
+      min-width 100px
+      font-size 0.8rem
+
+    .field-value
+      font-size 0.8rem
+
+  /* Smaller tags for compact cards */
+  .card-item
+    :global(.p-tag)
+      font-size 0.625rem !important
+      padding 0.125rem 0.375rem !important
+      border-radius 0.25rem !important
+
+  /* Custom scrollbar for cards */
+  .cards-grid
+    &::-webkit-scrollbar
+      width 6px
+
+    &::-webkit-scrollbar-track
+      background #f1f1f1
+      border-radius 3px
+
+    &::-webkit-scrollbar-thumb
+      background #c1c1c1
+      border-radius 3px
+
+      &:hover
+        background #a8a8a8
+
+  /* Animation for card loading */
+  @keyframes cardFadeIn
+    from
+      opacity 0
+      transform translateY(20px)
+    to
+      opacity 1
+      transform translateY(0)
+
+  .card-item
+    animation cardFadeIn 0.3s ease-out
+
+  /* Hover effects for interactive elements */
+  .card-item
+    :global(.p-card .p-button:hover)
+      transform scale(1.05)
+
+    :global(.p-card .p-tag:hover)
+      transform scale(1.05)
+
+  /* Focus states for accessibility */
+  .card-item
+    :global(.p-card:focus-within)
+      outline 2px solid var(--p-focus-ring-color)
+      outline-offset 2px
+
+  /* Dark mode support (if needed) */
+  @media (prefers-color-scheme: dark)
+    .card-item
+      :global(.p-card)
+        background #2d3748
+        color #e2e8f0
+        border-color #4a5568
+
+    .field-label
+      color #e2e8f0
+
+    .field-value
+      color #a0aec0
+
+    .card-actions
+      background #4a5568
+      border-color #718096
   

@@ -74,7 +74,11 @@ const routes: Routes = [
       }),
     canActivate: [AuthGuard],
   },
-
+  // {
+  //   path: ':officeCode/:langCode/statistics',
+  //   loadChildren: () => import('./pages/statistics/statistics.module').then((m) => m.StatisticsModule),
+  //   canActivate: [AuthGuard]
+  // },
   {
     path: ':officeCode/:langCode/user-management',
     loadChildren: () =>

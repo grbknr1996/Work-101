@@ -114,7 +114,7 @@ export class FeeCalculatorComponent implements OnInit {
 
   ngOnInit() {
     const currentPath = this.router.url;
-    const menuItems = this.menuService.generateUserManagementMenu(currentPath);
+    const menuItems = this.menuService.generateFeeConfigurationMenu(currentPath);
     this.menuService.updateMenuItems(menuItems);
     // Optionally, dynamically set menu items here
     this.route.params.subscribe((params) => {
@@ -128,7 +128,7 @@ export class FeeCalculatorComponent implements OnInit {
           routerLink: `/${officeCode}/${langCode}/system-configuration`,
         },
         {
-          label: 'Fee',
+          label: 'Fees',
           routerLink: `/${officeCode}/${langCode}/system-configuration/fee-config`,
         },
         {

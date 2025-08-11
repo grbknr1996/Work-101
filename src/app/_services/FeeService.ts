@@ -20,7 +20,7 @@ export class FeeService {
             },
             {
                 name: "Amendment of description",
-                category: "gi",
+                category: "geographical indications",
                 basicFee: 20,
                 variableFee: 10
             },
@@ -56,7 +56,7 @@ export class FeeService {
             },
             {
                 name: "Amendment of title",
-                category: "gi",
+                category: "geographical indications",
                 basicFee: 70,
                 variableFee: 40
             },
@@ -80,7 +80,7 @@ export class FeeService {
             },
             {
                 name: "Amendment of description",
-                category: "gi",
+                category: "geographical indications",
                 basicFee: 20,
                 variableFee: 10
             },
@@ -116,7 +116,7 @@ export class FeeService {
             },
             {
                 name: "Amendment of title",
-                category: "gi",
+                category: "geographical indications",
                 basicFee: 70,
                 variableFee: 40
             },

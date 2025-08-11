@@ -7,7 +7,6 @@ import {
   OnInit,
   Output,
   Signal,
-  TemplateRef,
   ViewChild,
   ChangeDetectorRef,
   ChangeDetectionStrategy,
@@ -65,6 +64,7 @@ export interface ColumnDefinition {
   severity?: (
     value: any
   ) => 'success' | 'info' | 'warn' | 'danger' | 'secondary' | undefined;
+  value?: (value: any) => string; // Custom value formatter for display
   customTemplate?: boolean;
   actions?: Action[];
   showAsDropdown?: boolean;
@@ -137,11 +137,13 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() customCellTemplate: any;
   @Input() actionTemplate: any;
   @Input() locale: string = 'en';
+  @Input() showSearchButton: boolean = false;
   @Input() searchPlaceHolder: string = 'Search keyword';
   @Input() clearButton: string = 'Clear';
   @Input() onLazyLoadEvent: EventEmitter<any> = new EventEmitter();
 
   @Output() actionClick = new EventEmitter<{ action: string; item: any }>();
+  @Output() onLazyLoad = new EventEmitter<any>();
 
   @Input() showPdf: string = '';
 
