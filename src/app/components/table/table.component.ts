@@ -6,13 +6,13 @@ import {
   Input,
   OnInit,
   Output,
-  Signal,
   ViewChild,
   ChangeDetectorRef,
   ChangeDetectionStrategy,
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
+import { Signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -24,7 +24,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';
 import { Table, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { LazyAvatarComponent } from '../lazy-avatar/lazy-avatar.component';
+import { AvatarModule } from 'primeng/avatar';
 
 export interface ColumnDefinition {
   field: string;
@@ -61,9 +61,7 @@ export interface ColumnDefinition {
   dropdownOptions?: any[];
   optionLabel?: string;
   filterOptions?: any;
-  severity?: (
-    value: any
-  ) => 'success' | 'info' | 'warn' | 'danger' | 'secondary' | undefined;
+  severity?: (value: any) => 'success' | 'info' | 'warn' | 'danger' | 'secondary' | undefined;
   value?: (value: any) => string; // Custom value formatter for display
   customTemplate?: boolean;
   actions?: Action[];
@@ -77,15 +75,7 @@ export interface Action {
   label: string;
   icon?: string;
   action: string;
-  severity?:
-    | 'success'
-    | 'info'
-    | 'warn'
-    | 'warning'
-    | 'danger'
-    | 'secondary'
-    | 'contrast'
-    | 'help';
+  severity?: 'success' | 'info' | 'warn' | 'warning' | 'danger' | 'secondary' | 'contrast' | 'help';
   visible?: (item: any) => boolean;
 }
 
@@ -104,7 +94,7 @@ export interface Action {
     FormsModule,
     IconFieldModule,
     InputIconModule,
-    LazyAvatarComponent,
+    AvatarModule,
   ],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -154,7 +144,7 @@ export class TableComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     if (!this.globalFilterFields.length && this.columns.length) {
-      this.globalFilterFields = this.columns.map((col) => col.field);
+      this.globalFilterFields = this.columns.map(col => col.field);
     }
   }
 
@@ -202,11 +192,7 @@ export class TableComponent implements OnInit, OnChanges {
     let value = rowData;
 
     for (const prop of props) {
-      if (
-        value === null ||
-        value === undefined ||
-        !value.hasOwnProperty(prop)
-      ) {
+      if (value === null || value === undefined || !value.hasOwnProperty(prop)) {
         return null;
       }
       value = value[prop];
@@ -215,12 +201,25 @@ export class TableComponent implements OnInit, OnChanges {
     return value;
   }
 
+  isValidImageUrl(value: any): boolean {
+    if (!value || typeof value !== 'string') {
+      return false;
+    }
+    // Check if it's a valid URL or data URL
+    return (
+      value.startsWith('http://') ||
+      value.startsWith('https://') ||
+      value.startsWith('data:') ||
+      value.startsWith('/')
+    );
+  }
+
   getMenuItems(actions: Action[] | undefined, rowData: any): MenuItem[] {
     if (!actions) return [];
 
     // Create a cache key based on actions and row data
     const cacheKey = JSON.stringify({
-      actions: actions.map((a) => ({ label: a.label, action: a.action })),
+      actions: actions.map(a => ({ label: a.label, action: a.action })),
       rowId: rowData.id || rowData.username || 'unknown',
     });
 
@@ -231,8 +230,8 @@ export class TableComponent implements OnInit, OnChanges {
 
     // Generate menu items
     const menuItems: MenuItem[] = actions
-      .filter((action) => !action.visible || action.visible(rowData))
-      .map((action) => ({
+      .filter(action => !action.visible || action.visible(rowData))
+      .map(action => ({
         label: action.label,
         icon: action.icon,
         command: () => this.handleMenuCommand(action.action, rowData),

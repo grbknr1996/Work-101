@@ -1,11 +1,4 @@
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  OnInit,
-  OnDestroy,
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 // PrimeNG imports
@@ -91,8 +84,7 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
     if (pathSegments.length >= 3 && pathSegments[2]) {
       const urlLang = pathSegments[2];
       const officeConfig = this.ms.getCurrentOfficeConfig();
-      const supportedLangs =
-        officeConfig?.supportedLanguages || this.ms.availableLangs;
+      const supportedLangs = officeConfig?.supportedLanguages || this.ms.availableLangs;
 
       if (supportedLangs.includes(urlLang)) {
         this.selectedLanguage = urlLang;
@@ -131,7 +123,7 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
 
       await this.initLanguageOptions();
 
-      this.userSubscription = this.auth.currentUser$.subscribe((user) => {
+      this.userSubscription = this.auth.currentUser$.subscribe(user => {
         this.currentUser = user;
         if (user) {
           this.userName = user.name || user.email || 'User';
@@ -144,6 +136,11 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
 
       this.initializeMenuItems();
       this.loadNotifications();
+
+      // Apply mobile classes after a short delay to ensure DOM is ready
+      setTimeout(() => {
+        this.updateMobileClasses();
+      }, 100);
     } catch (error) {
       console.error('Error during initialization:', error);
     }
@@ -158,10 +155,28 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
 
   onResize() {
     this.checkScreenSize();
+    this.updateMobileClasses();
   }
 
   checkScreenSize() {
     this.isMobileView = this.ms.isMobileView;
+    this.updateMobileClasses();
+  }
+
+  private updateMobileClasses() {
+    const navbarElement = document.querySelector('.app-navbar');
+    if (navbarElement) {
+      // Remove existing mobile classes
+      navbarElement.classList.remove('navbar-mobile-compact', 'navbar-mobile-tiny');
+
+      // Add appropriate mobile class based on screen width
+      const screenWidth = window.innerWidth;
+      if (screenWidth <= 375) {
+        navbarElement.classList.add('navbar-mobile-tiny');
+      } else if (screenWidth <= 480) {
+        navbarElement.classList.add('navbar-mobile-compact');
+      }
+    }
   }
 
   closeMobileMenu() {
@@ -174,26 +189,19 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
   }
 
   getLangLabel(langValue: string): string {
-    const langOption = this.languageOptions.find(
-      (lang) => lang.value === langValue
-    );
+    const langOption = this.languageOptions.find(lang => lang.value === langValue);
     return langOption ? langOption.label : langValue;
   }
 
   private async initLanguageOptions() {
     const availableLanguages = this.ms.availableLangs;
     if (availableLanguages?.length > 0) {
-      this.languageOptions = availableLanguages.map((lang) => ({
-        label:
-          this.ms.translate(`language.display.label.${lang}`) ||
-          lang.toUpperCase(),
+      this.languageOptions = availableLanguages.map(lang => ({
+        label: this.ms.translate(`language.display.label.${lang}`) || lang.toUpperCase(),
         value: lang,
       }));
 
-      if (
-        !this.selectedLanguage ||
-        !availableLanguages.includes(this.selectedLanguage)
-      ) {
+      if (!this.selectedLanguage || !availableLanguages.includes(this.selectedLanguage)) {
         this.selectedLanguage = this.ms.getDefaultLanguage();
       }
     } else {
@@ -216,8 +224,7 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
     try {
       const newLang = event.value;
       const officeConfig = this.ms.getCurrentOfficeConfig();
-      const supportedLangs =
-        officeConfig?.supportedLanguages || this.ms.availableLangs;
+      const supportedLangs = officeConfig?.supportedLanguages || this.ms.availableLangs;
 
       if (!supportedLangs.includes(newLang)) {
         return;
@@ -272,7 +279,7 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
     // Add header items to mobile menu
     this.mobileMenuItems = [];
     if (this.items && this.items.length > 0) {
-      this.items.forEach((item) => {
+      this.items.forEach(item => {
         if (!item.separator) {
           this.mobileMenuItems.push({
             label: this.ms.translate(item.label),
@@ -319,7 +326,7 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
   }
 
   markAllNotificationsAsRead() {
-    this.notificationItems.forEach((item) => {
+    this.notificationItems.forEach(item => {
       if (item.styleClass) {
         item.styleClass = item.styleClass.replace('unread', '').trim();
       }

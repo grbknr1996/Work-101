@@ -202,14 +202,15 @@
           ng-container(*ngIf="col.display === 'date'") {{ getValue(rowData, col.field) | date : col.dateFormat || 'MM/dd/yyyy' }}
           // Currency Display
           ng-container(*ngIf="col.display === 'currency'") {{ getValue(rowData, col.field) | currency : col.currency || 'USD' : 'symbol' }}
-          // Avatar Display with Lazy Loading
+          // Avatar Display with PrimeNG Avatar
           ng-container(*ngIf="col.display === 'avatar'")
             .flex.items-center.gap-2
-              app-lazy-avatar(
-                [src]="getValue(rowData, col.field)",
+              p-avatar(
+                [image]="isValidImageUrl(getValue(rowData, col.field)) ? getValue(rowData, col.field) : null",
+                [label]="!isValidImageUrl(getValue(rowData, col.field)) ? getValue(rowData, col.field) : null",
                 [alt]="getValue(rowData, col.nameField || 'username') || 'User Avatar'",
-                [size]="32",
-                [fallbackSrc]="'assets/images/no-image.png'"
+                size="normal",
+                shape="circle"
               )
               span(*ngIf="col.showName") {{ getValue(rowData, col.nameField || 'name') }}
           // Tag Display

@@ -23,7 +23,7 @@
           <div class="card-header">
             <div class="header-left">
               <div class="avatar-section">
-                <app-lazy-avatar *ngIf="getAvatarField()" [src]="getValue(item, getAvatarField())" [alt]="getValue(item, getNameField()) || getValue(item, 'userName') || 'User'" [size]="40" [fallbackSrc]="'assets/images/no-image.png'"></app-lazy-avatar>
+                <p-avatar *ngIf="getAvatarField()" [image]="isValidImageUrl(getValue(item, getAvatarField())) ? getValue(item, getAvatarField()) : null" [label]="!isValidImageUrl(getValue(item, getAvatarField())) ? getValue(item, getAvatarField()) : null" [alt]="getValue(item, getNameField()) || getValue(item, 'userName') || 'User'" size="large" shape="circle"></p-avatar>
                 <div class="avatar-fallback" *ngIf="!getAvatarField()"><i class="pi pi-image" style="font-size: 2rem; color: var(--p-tag-contrast-color)"></i></div>
               </div>
               <div class="header-info">
