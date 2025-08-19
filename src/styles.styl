@@ -133,7 +133,7 @@ app-groups
       background-color inherit
       border none
   
-@media screen and (max-width: 320px)
+@media screen and (max-width: 480px)
   .p-menubar
     display: block !important
 
@@ -273,7 +273,7 @@ app-groups
 @media screen and (max-width: 768px)
   .navbar-end
     flex-direction row
-    justify-content flex-end
+    justify-content space-evenly
     align-items center
     gap 0.25rem
     min-width 0
@@ -790,6 +790,13 @@ $transition-duration = 0.3s
   &:hover
     background-color var(--surface-hover, #f8f9fa)
     background-color var(--surface-hover)
+     transform scale(1.02)
+    transition all 0.1s ease 
+    span
+      color var(--p-primary-color, #3b82f6)
+      font-weight 600
+    i
+      color var(--p-primary-color, #3b82f6)
 
 .item-icon
   margin-right 0.5rem
@@ -860,8 +867,9 @@ $transition-duration = 0.3s
       box-shadow 0 4px 8px rgba(0, 0, 0, 0.1)
 
     &.selected
-      border 2px solid var(--p-primary-color-500, #3b82f6)
-      box-shadow 0 0 0 1px var(--p-primary-color-500, #3b82f6)
+       background-color: rgba(59, 130, 246, 0.08);
+       border: 2px solid #3B82F6;
+       box-shadow: inset 0 0 0 2px rgba(59, 130, 246, 0.2);
 
   .stat-header
     display flex
@@ -991,24 +999,29 @@ $transition-duration = 0.3s
 // ============================================
 // User Accounts Page Styles
 // ============================================
-.user-accounts-header
-  display: flex
-  align-items: center
-  justify-content: space-between
-  margin-bottom: 1.5rem
+app-user-accounts
+  .p-avatar
+    background var(--p-primary-color)
+    color var(--p-avatar-background)
+    font-weight 600
+  .user-accounts-header
+    display: flex
+    align-items: center
+    justify-content: space-between
+    margin-bottom: 1.5rem
 
-.create-user-btn
-  background-color: #1976d2
-  color: #fff
-  border: none
-  border-radius: 4px
-  padding: 0.5rem 1.25rem
-  font-size: 1rem
-  font-weight: 500
-  cursor: pointer
-  transition: background 0.2s
-  &:hover
-    background-color: #125ea2
+  .create-user-btn
+    background-color: #1976d2
+    color: #fff
+    border: none
+    border-radius: 4px
+    padding: 0.5rem 1.25rem
+    font-size: 1rem
+    font-weight: 500
+    cursor: pointer
+    transition: background 0.2s
+    &:hover
+      background-color: #125ea2
 // ============================================
 // End of User Accounts Page Styles
 // ============================================
@@ -1250,7 +1263,7 @@ $transition-duration = 0.3s
 @media screen and (max-width: 768px)
   .navbar-end
     flex-direction row
-    justify-content flex-end
+    justify-content space-evenly
     align-items center
     gap 0.25rem
     min-width 0
@@ -2120,6 +2133,46 @@ app-fee-calculator
 // =============================
 // End of Fee Calculator Page
 // =============================
+
+// =============================
+// Start of Journal Publication Page
+// =============================
+
+app-journal-publication
+  .filter
+    padding 0.4rem;
+    background-color #e5f3f7;
+    border-radius var(--p-inputtext-border-radius, 6px);
+    .filter-icons
+      .p-button-text
+        color var(--p-button-outlined-secondary-color)
+      p-button
+        button.p-button-outlined
+          background transparent
+         
+  p-tabs
+    p-tablist
+      p-tab
+        .category-label
+          font-size 1rem
+    p-tabpanels
+      p-tabpanel
+        p-card
+          h1
+            border-top-left-radius: var(--p-card-border-radius);
+            border-top-right-radius: var(--p-card-border-radius);
+            text-align center;
+            padding 1rem;
+            font-size 1rem;
+            background-color #e5f3f7
+            color #1c1c1c !important
+          p-button
+            button.p-button
+              cursor: default;
+
+// =============================
+// End of Journal Publication Page
+// =============================
   
 // =============================
 // Signup Component Styles
@@ -2393,10 +2446,89 @@ app-authority-files
         button.p-button-outlined
           background transparent
 
+  .floating-file
+    position: fixed;
+    top: 38%;
+    right: 10px;
+    transform: translateY(-50%);
+    background-color: #007ad9; /* PrimeNG blue */
+    color: white;
+    padding: 10px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+  .floating-file:hover
+    background-color: #005fa3;
+
+  .floating-file i
+    font-size: 20px;
+
+  .floating-doc
+    position: fixed;
+    top: 30%;
+    right: 10px;
+    transform: translateY(-50%);
+    background-color: #007ad9; /* PrimeNG blue */
+    color: white;
+    padding: 10px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+  .floating-doc:hover
+    background-color: #005fa3;
+
+  .floating-doc i
+    font-size: 20px;
+
 // ================================
 // END of Data Sharing Styles
 // ================================
 
+// ================================
+// Aripo Notifications Styles
+// ================================
+
+app-aripo-notifications
+  .filter
+    padding 0.4rem;
+    background-color #e5f3f7;
+    border-radius var(--p-inputtext-border-radius, 6px);
+    .filter-icons
+      .p-button-text
+        color var(--p-button-outlined-secondary-color)
+      p-button
+        button.p-button-outlined
+          background transparent
+
+// ================================
+// End of Aripo Notifications Styles
+// ================================
+
+// ================================
+// Acknowledge Notifications Styles
+// ================================
+
+app-acknowledge-notifications
+  .filter
+    padding 0.4rem;
+    background-color #e5f3f7;
+    border-radius var(--p-inputtext-border-radius, 6px);
+    .filter-icons
+      .p-button-text
+        color var(--p-button-outlined-secondary-color)
+      p-button
+        button.p-button-outlined
+          background transparent
+
+// ================================
+// End of Acknowledge Notifications Styles
+// ================================
 
 // Dashboard Styles
 app-data-exchange-config
@@ -3611,13 +3743,7 @@ app-data-exchange-settings
 // Add Exclusion Rule Component
 // ========================================
 app-add-exclusion-rule
-  max-width 900px
-  margin 2.5rem auto
-  background #fff
-  border-radius 14px
-  box-shadow 0 4px 24px rgba(25, 118, 210, 0.07)
-  padding 2.5rem 2.5rem 2rem 2.5rem
-  position relative
+  
 
   h2
     font-size 1.7rem
@@ -3966,6 +4092,11 @@ app-add-exclusion-rule
 // App-Configurable-filter
 // ========================================
 // Filter Component Container
+app-configurable-filter-bar
+  .filter-panel-left
+    position absolute
+    left -280px
+    
 app-configurable-filter-bar
 app-configurable-filter
   /* Filter Component Container */
@@ -4555,7 +4686,10 @@ app-filter-chips
 app-table-card
   .table-card-container
     width 100%
-
+  .p-avatar-lg
+    color var(--p-avatar-background)
+  .p-avatar
+    background: var(--p-primary-color)
   /* Controls Bar */
   .controls-bar
     display flex
@@ -4624,9 +4758,9 @@ app-table-card
     align-items flex-start
     margin-bottom 0px
     padding 0.75rem
-    background linear-gradient(135deg, var(--p-primary-color) 0%, var(--p-primary-600) 100%)
+    background linear-gradient(45deg, #E8EBF0, #ffffff);
     color var(--p-tag-contrast-color)
-    border-radius var(--p-border-radius) var(--p-border-radius) 0 0
+    border-radius var(--p-card-border-radius) var(--p-card-border-radius) 0 0
     border none
 
   .header-left
@@ -4643,7 +4777,7 @@ app-table-card
     font-size 0.875rem
     font-weight 600
     margin 0
-    color var(--p-tag-contrast-color)
+    color var(--p-badge-contrast-background)
 
   .header-subtitle
     display flex
@@ -4677,11 +4811,12 @@ app-table-card
   .actions-section
     display flex
     align-items center
-
+  .p-tag
+    font-size 0.65rem
   .header-actions-btn
     background transparent !important
     border none !important
-    color var(--p-tag-contrast-color) !important
+    color var(--p-badge-contrast-background)
 
     &:hover
       background rgba(255, 255, 255, 0.1) !important
@@ -4744,6 +4879,8 @@ app-table-card
     :global(.p-card .p-card-header)
       border none !important
       outline none !important
+  .p-card-body
+    padding 0    
 
   /* Empty State */
   .empty-state
@@ -4818,35 +4955,4 @@ app-table-card
   .card-item
     animation cardFadeIn 0.3s ease-out
 
-  /* Hover effects for interactive elements */
-  .card-item
-    :global(.p-card .p-button:hover)
-      transform scale(1.05)
-
-    :global(.p-card .p-tag:hover)
-      transform scale(1.05)
-
-  /* Focus states for accessibility */
-  .card-item
-    :global(.p-card:focus-within)
-      outline 2px solid var(--p-focus-ring-color)
-      outline-offset 2px
-
-  /* Dark mode support (if needed) */
-  @media (prefers-color-scheme: dark)
-    .card-item
-      :global(.p-card)
-        background #2d3748
-        color #e2e8f0
-        border-color #4a5568
-
-    .field-label
-      color #e2e8f0
-
-    .field-value
-      color #a0aec0
-
-    .card-actions
-      background #4a5568
-      border-color #718096
   
