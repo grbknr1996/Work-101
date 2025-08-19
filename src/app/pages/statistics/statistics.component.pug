@@ -1,0 +1,23 @@
+app-layout([config]="layout")
+    br
+    app-breadcrumbs([autoGenerate]="false", [home]="home", [items]="items")
+    app-card-group
+    br
+    div(style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;")
+        h1 OFFICE STATISTICS OVERVIEW
+    
+        div(style="display: flex; align-items: center; gap: 0.5rem;")
+            i(class="pi pi-filter", style="font-size: 1rem; font-weight: 400; color: grey; cursor: pointer;", (click)="showDrawer = true")
+            i(class="pi pi-refresh", style="font-size: 1rem; font-weight: 400; color: grey; cursor: pointer;", (click)="onReset()")
+
+    p-drawer([(visible)]="showDrawer", position="right", header="CHART FILTERS", [modal]="true")
+        .p-fluid
+            .p-field
+                label(style="font-weight: bold") DATE RANGE
+                p-datepicker([(ngModel)]="dateRange", selectionMode="range", view="year", dateFormat="yy", [yearNavigator]="true", [minDate]="minDate", [maxDate]="maxDate", [showIcon]="true", [readonlyInput]="true")
+            br
+            .p-field
+                label(style="font-weight: bold") ORIGIN
+                p-select([options]="originOptions", [(ngModel)]="selectedOrigin", placeholder="All", class="w-full")
+
+    div(echarts, [(options)]="chartOption", (chartInit)="onChartEvent($event, 'chartInit')", (chartClick)="onChartEvent($event, 'chartClick')", (chartLegendSelectChanged)="onChartEvent($event, 'chartLegendSelectChanged')", [ngStyle]="{'height.px' : chartHeightFunc() }")

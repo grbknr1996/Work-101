@@ -35,6 +35,7 @@ interface TabData {
   ipType: string;
   data?: Fee[] | [];
   count?: number | 0;
+  checked?: boolean;
 }
 
 enum IpTypes {
@@ -184,7 +185,10 @@ export class FeeConfigComponent implements OnInit {
       this.cdr.markForCheck();
     });
     this.feeService.getFeeServices().then((feeServices) => {
-      this.feeServices = feeServices;
+      this.feeServices = feeServices.map(item => ({
+        ...item,
+        checked: false
+      }));
       this.loading = false;
       console.log('feeServices: ', this.feeServices);
       this.categories = this.getTabData(this.feeServices);
@@ -364,6 +368,7 @@ export class FeeConfigComponent implements OnInit {
       const officeCode =
         params['officeCode'] || this.ms.getCurrentOffice() || 'default';
       const langCode = params['langCode'] || 'en';
+      this.feeService.setSelectedItems(this.categories);
       this.router.navigate([
         `/${officeCode}/${langCode}/system-configuration/fee-config/calculator`,
       ]);

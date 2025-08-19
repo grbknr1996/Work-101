@@ -1,5 +1,21 @@
 app-layout([config]="layoutConfig")
   app-breadcrumbs([items]="breadcrumbItems")
+
+  .floating-file(
+    cdkDrag="",
+    pToolTip="Definition File",
+    toolTipPosition="left",
+    (click)="downloadDetails()"
+  )
+    i.pi.pi-book
+  
+  .floating-doc(
+    cdkDrag="",
+    pToolTip="Authority File",
+    toolTipPosition="left",
+    (click)="downloadDetails()"
+  )
+    i.pi.pi-file
   
   .user-accounts-header
     h1 Authority Files
@@ -10,23 +26,7 @@ app-layout([config]="layoutConfig")
     [selectedStat]="'All'"
   )
   
-  .grid.grid-cols-6.mt-2
-    .col-span-6.grid.grid-cols-12.filter
-      .col-span-4
-        p-floatlabel(variant="on")
-          p-iconfield
-            p-inputicon.pi.pi-search
-            input.w-full(
-              id="on_label",
-              pInputText="",
-              [(ngModel)]="searchBar",
-              (input)="filterSearch(searchBar)",
-              autocomplete="off"
-            )
-          label(for="on_label") Search Publication Number
-      
-      .col-span-8.flex.justify-end.gap-2.filter-icons
-        app-configurable-filter(
+  app-configurable-filter-bar(
           [filters]="filterConfigs",
           [showClearAll]="true",
           [showApplyButton]="true",
@@ -35,25 +35,18 @@ app-layout([config]="layoutConfig")
           (filterChange)="onFilterChange($event)",
           (filterCleared)="onFilterCleared()",
           (filterApplied)="onFilterApplied($event)",
-          (appliedFiltersChange)="onAppliedFiltersChange($event)"
+          (appliedFiltersChange)="onAppliedFiltersChange($event)",
+          [showSearchBar]="true",
+          [searchBar]="searchBar",
+          (filterSearch)="filterSearch($event)",
+          [searchLabel]="'Search Publication Number'",
+          [appliedFilters]="appliedFilters",
+          [clearAllLabel]="'Clear All'",
+          [getDisplayValue]="getFilterDisplayValue.bind(this)",
+          (chipRemove)="removeFilterChip($event)",
+          (clearAll)="clearAllFilters()",
         )
-        p-button(
-          icon="pi pi-file-pdf",
-          [outlined]="true",
-          [text]="true",
-          (click)="downloadDetails(); $event.stopPropagation()"
-        )
-  
-  .mb-8.mt-1.w-full
-    app-filter-chips(
-      [appliedFilters]="appliedFilters",
-      [showClearAll]="true",
-      [clearAllLabel]="'Clear All'",
-      [getDisplayValue]="getFilterDisplayValue.bind(this)",
-      (chipRemove)="removeFilterChip($event)",
-      (clearAll)="clearAllFilters()"
-    )
-  
+
   app-table(
     [columns]="tableColumns",
     [data]="tableData",

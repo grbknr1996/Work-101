@@ -18,7 +18,11 @@ import {
 } from 'src/app/components/configurable-filter/configurable-filter.component';
 import { FilterChipsComponent } from 'src/app/components/filter-chips/filter-chips.component';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
-import { UserService, UserAccount, UserQueryParams } from 'src/app/_services/user.service';
+import {
+  UserService,
+  UserAccount,
+  UserQueryParams,
+} from 'src/app/_services/user.service';
 import { catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
@@ -72,9 +76,6 @@ export class UserAccountsComponent implements OnInit {
   unconfirmedUsers = 0;
   globalFilterFields = ['userName', 'userEmail', 'loginId'];
 
-  // Error state
-  error = '';
-
   // Pagination properties
   currentPage = 0;
   pageSize = 10;
@@ -122,14 +123,35 @@ export class UserAccountsComponent implements OnInit {
       type: 'checkbox',
       section: 'STATUS',
     },
+    {
+      key: 'isActive',
+      label: 'Unverified',
+      type: 'checkbox',
+      section: 'STATUS',
+    },
+    {
+      key: 'creationDateRange',
+      label: 'Creation Date Range',
+      type: 'dateRange',
+      placeholder: 'From - To (dd/mm/yy)',
+      dateFormat: 'dd/mm/yy',
+      section: 'DATE FILTERS',
+    },
+    {
+      key: 'updatedDateRange',
+      label: 'Updated Date Range',
+      type: 'dateRange',
+      placeholder: 'From - To (dd/mm/yy)',
+      dateFormat: 'dd/mm/yy',
+      section: 'DATE FILTERS',
+    },
   ];
 
   tableColumns = [
-    { field: 'imageUrl', header: 'Avatar', display: 'avatar', sortable: true },
+    { field: 'imageUrl', header: 'Avatar', display: 'avatar' },
     {
       field: 'userName',
       header: 'Username',
-      filterType: 'text',
       sortable: true,
     },
     { field: 'userEmail', header: 'Email', sortable: true },
@@ -294,8 +316,9 @@ export class UserAccountsComponent implements OnInit {
     const menuItems = this.menuService.generateUserManagementMenu(currentPath);
     this.menuService.updateMenuItems(menuItems);
 
-    this.route.params.subscribe(params => {
-      const officeCode = params['officeCode'] || this.ms.getCurrentOffice() || 'default';
+    this.route.params.subscribe((params) => {
+      const officeCode =
+        params['officeCode'] || this.ms.getCurrentOffice() || 'default';
       const langCode = params['langCode'] || 'en';
 
       this.breadcrumbItems = [
@@ -309,17 +332,12 @@ export class UserAccountsComponent implements OnInit {
         },
       ];
 
-      // Load user accounts data
-      this.loadUserAccounts();
-
       // Trigger change detection after updating breadcrumbs
       this.cdr.markForCheck();
     });
   }
 
   loadUserAccounts(params: Partial<UserQueryParams> = {}) {
-    this.error = '';
-
     const queryParams: UserQueryParams = {
       limit: this.pageSize,
       offset: this.currentPage * this.pageSize,
@@ -334,31 +352,12 @@ export class UserAccountsComponent implements OnInit {
     this.userService
       .getUserAccounts(queryParams)
       .pipe(
-        catchError(error => {
-          console.error('Error loading user accounts:', error);
-
-          // Handle different types of errors
-          if (error.status === 401) {
-            this.error = 'Authentication failed. Please log in again.';
-          } else if (error.status === 403) {
-            this.error = "You don't have permission to access user accounts.";
-          } else if (error.status === 0) {
-            this.error = 'Network error. Please check your connection.';
-          } else {
-            this.error = `Failed to load user accounts: ${error.message || 'Unknown error'}`;
-          }
-
-          return of({
-            query: { totalUserAccountQuantity: 0 },
-            userAccounts: [],
-          });
-        }),
         finalize(() => {
           this.cdr.markForCheck();
         })
       )
-      .subscribe(response => {
-        this.tableData = response.userAccounts.map(user => ({
+      .subscribe((response) => {
+        this.tableData = response.userAccounts.map((user) => ({
           ...user,
           // Map API fields to table fields and handle missing values
           userName: user.userName || '-',
@@ -369,7 +368,8 @@ export class UserAccountsComponent implements OnInit {
           createdByName: user.createdByName || '-',
           creationDate: user.creationDate || '-',
           // Add computed fields - provide fallback for avatar
-          imageUrl: user.imageUrl || this.getInitialsForAvatar(user.userName || 'User'),
+          imageUrl:
+            user.imageUrl || this.getInitialsForAvatar(user.userName || 'User'),
           id: user.loginId || user.userName || 'unknown',
         }));
 
@@ -382,8 +382,12 @@ export class UserAccountsComponent implements OnInit {
 
   updateUserStats() {
     this.totalUsers = this.tableData.length;
-    this.activeUsers = this.tableData.filter(user => user.isActive === 'true').length;
-    this.inactiveUsers = this.tableData.filter(user => user.isActive === 'false').length;
+    this.activeUsers = this.tableData.filter(
+      (user) => user.isActive === 'true'
+    ).length;
+    this.inactiveUsers = this.tableData.filter(
+      (user) => user.isActive === 'false'
+    ).length;
     this.unconfirmedUsers = 0; // API doesn't provide this info, set to 0
   }
 
@@ -427,7 +431,9 @@ export class UserAccountsComponent implements OnInit {
 
   onFilterChipRemoved(filterKey: string): void {
     // Remove the specific filter from applied filters
-    this.appliedFilters = this.appliedFilters.filter(f => f.key !== filterKey);
+    this.appliedFilters = this.appliedFilters.filter(
+      (f) => f.key !== filterKey
+    );
     this.hasActiveFilters = this.appliedFilters.length > 0;
 
     // If no filters left, clear all and reload
@@ -467,43 +473,15 @@ export class UserAccountsComponent implements OnInit {
   }
 
   deactivateUser(user: UserAccount) {
-    this.userService
-      .toggleUserStatus(user.loginId, false)
-      .pipe(
-        catchError(error => {
-          console.error('Error deactivating user:', error);
-          if (error.status === 401) {
-            this.error = 'Authentication failed. Please log in again.';
-          } else {
-            this.error = `Failed to deactivate user: ${error.message || 'Unknown error'}`;
-          }
-          return of(null);
-        })
-      )
-      .subscribe(() => {
-        // Reload the data to reflect changes
-        this.loadUserAccounts();
-      });
+    this.userService.toggleUserStatus(user.loginId, false).subscribe(() => {
+      this.loadUserAccounts();
+    });
   }
 
   activateUser(user: UserAccount) {
-    this.userService
-      .toggleUserStatus(user.loginId, true)
-      .pipe(
-        catchError(error => {
-          console.error('Error activating user:', error);
-          if (error.status === 401) {
-            this.error = 'Authentication failed. Please log in again.';
-          } else {
-            this.error = `Failed to activate user: ${error.message || 'Unknown error'}`;
-          }
-          return of(null);
-        })
-      )
-      .subscribe(() => {
-        // Reload the data to reflect changes
-        this.loadUserAccounts();
-      });
+    this.userService.toggleUserStatus(user.loginId, true).subscribe(() => {
+      this.loadUserAccounts();
+    });
   }
 
   onCreateUser() {
@@ -538,7 +516,12 @@ export class UserAccountsComponent implements OnInit {
       this.pageSize = event.rows;
     }
 
-    console.log('Calculated - currentPage:', this.currentPage, 'pageSize:', this.pageSize);
+    console.log(
+      'Calculated - currentPage:',
+      this.currentPage,
+      'pageSize:',
+      this.pageSize
+    );
 
     // Convert applied filters to API parameters
     const apiParams = this.convertFiltersToApiParams(this.appliedFilters);
@@ -550,10 +533,12 @@ export class UserAccountsComponent implements OnInit {
   }
 
   // Helper method to convert filters to API parameters
-  private convertFiltersToApiParams(filters: FilterValue[]): Partial<UserQueryParams> {
+  private convertFiltersToApiParams(
+    filters: FilterValue[]
+  ): Partial<UserQueryParams> {
     const apiParams: Partial<UserQueryParams> = {};
 
-    filters.forEach(filter => {
+    filters.forEach((filter) => {
       switch (filter.key) {
         case 'loginId':
           apiParams.loginId = filter.value;
@@ -588,13 +573,15 @@ export class UserAccountsComponent implements OnInit {
       return `Search: "${filter.value}"`;
     }
 
-    const filterConfig = this.filterConfigs.find(f => f.key === filter.key);
+    const filterConfig = this.filterConfigs.find((f) => f.key === filter.key);
     if (!filterConfig) {
       return `${filter.key}: ${filter.value}`;
     }
 
     if (filter.type === 'dropdown' && filterConfig.options) {
-      const option = filterConfig.options.find(opt => opt.value === filter.value);
+      const option = filterConfig.options.find(
+        (opt) => opt.value === filter.value
+      );
       return `${filterConfig.label}: ${option ? option.label : filter.value}`;
     }
 
@@ -603,12 +590,15 @@ export class UserAccountsComponent implements OnInit {
 
   private getInitialsForAvatar(name: string): string {
     if (!name) {
-      return 'U'; // Default initial if name is empty
+      return 'U';
     }
     const names = name.split(' ');
     if (names.length === 0) {
       return name.charAt(0);
     }
-    return names[0].charAt(0) + (names.length > 1 ? names[names.length - 1].charAt(0) : '');
+    return (
+      names[0].charAt(0) +
+      (names.length > 1 ? names[names.length - 1].charAt(0) : '')
+    );
   }
 }

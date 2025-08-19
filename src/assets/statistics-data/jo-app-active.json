@@ -1,0 +1,47 @@
+{
+  "platformCode": "jo",
+  "description": "Total Accounted Applications",
+  "applicationStatus": "active",
+  "producedDateTime": "2025-06-19T19:15:00.000Z",
+  "totalQuantity": 185499,
+  "applicationBag": [
+    {
+      "ipCategory": "D",
+      "totalQuantity": 1920,
+      "dataBag": [
+        {
+          "applicationCategory": "ID-ND",
+          "count": 1632
+        },
+        {
+          "applicationCategory": "ID-NI",
+          "count": 288
+        }
+      ]
+    },
+    {
+      "ipCategory": "P",
+      "totalQuantity": 8045,
+      "dataBag": [
+        {
+          "applicationCategory": "PA-NP",
+          "count": 6211
+        },
+        {
+          "applicationCategory": "PA-PT",
+          "count": 1834
+        }
+      ]
+    },
+    {
+      "ipCategory": "T",
+      "totalQuantity": 175534,
+      "dataBag": [
+        {
+          "applicationCategory": "TM-PR",
+          "count": 175534
+        }
+      ]
+    }
+  ]
+}

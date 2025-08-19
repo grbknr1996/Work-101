@@ -74,11 +74,11 @@ const routes: Routes = [
       }),
     canActivate: [AuthGuard],
   },
-  // {
-  //   path: ':officeCode/:langCode/statistics',
-  //   loadChildren: () => import('./pages/statistics/statistics.module').then((m) => m.StatisticsModule),
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: ':officeCode/:langCode/statistics',
+    loadChildren: () => import('./pages/statistics/statistics.module').then((m) => m.StatisticsModule),
+    canActivate: [AuthGuard]
+  },
   {
     path: ':officeCode/:langCode/user-management',
     loadChildren: () =>
@@ -111,6 +111,22 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: ':officeCode/:langCode/aripo-notifications',
+    loadChildren: () =>
+      import('./pages/aripo-notifications/aripo-notifications.module').then(
+        (m) => m.AripoNotificationsModule
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: ':officeCode/:langCode/acknowledge-notifications',
+    loadChildren: () =>
+      import('./pages/acknowledge-notifications/acknowledge-notifications.module').then(
+        (m) => m.AcknowledgeNotificationsModule
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
     path: ':officeCode/:langCode/system-configuration/fee-config',
     loadComponent: () =>
       import('./pages/fee-config/fee-config.component').then(
@@ -123,6 +139,14 @@ const routes: Routes = [
     loadComponent: () =>
       import('./pages/fee-calculator/fee-calculator.component').then(
         (m) => m.FeeCalculatorComponent
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: ':officeCode/:langCode/publication/pending',
+    loadComponent: () =>
+      import('./pages/journal-publication/journal-publication.component').then(
+        (m) => m.JournalPublicationComponent
       ),
     canActivate: [AuthGuard],
   },
@@ -183,4 +207,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

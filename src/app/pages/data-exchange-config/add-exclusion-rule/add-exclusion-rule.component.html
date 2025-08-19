@@ -1,32 +1,31 @@
 
-<div class="add-exclusion-rule">
-  <h2>Add Distribution Exclusion Rule</h2>
-  <p-steps class="p-mb-4" [model]="steps" [(activeIndex)]="step" [readonly]="true"></p-steps>
-  <!-- Step 1: Select Source & Categories-->
+<app-layout [config]="layoutConfig">
+  <app-breadcrumbs [items]="getBreadcrumbItems()"></app-breadcrumbs>
+  <h2>Create Distribution Exclusion Rule</h2>
+  <app-configurable-stepper class="p-mb-4" [steps]="steps" [activeStep]="step" (stepChange)="onStepChange($event)"></app-configurable-stepper>
   <div *ngIf="step === 0">
-    <form [formGroup]="form1">
+    <form [formGroup]="sourceCategoriesForm">
       <div class="p-grid p-formgrid">
         <div class="p-col-6">
           <label>Originating Office</label>
-          <p-dropdown [options]="offices" formControlName="office" placeholder="Select Office"></p-dropdown>
+          <p-dropdown [options]="originatingOffices()" formControlName="office" placeholder="Select Office" [disabled]="true"></p-dropdown><small class="p-text-secondary">This is automatically set to your current office</small>
         </div>
         <div class="p-col-6">
           <label>Recipient System</label>
-          <p-dropdown [options]="systems" formControlName="system" placeholder="Select System"></p-dropdown>
+          <p-dropdown [options]="recipientOffices()" formControlName="system" placeholder="Select System" (onChange)="onRecipientSystemChange()"></p-dropdown>
         </div>
       </div>
       <div class="p-mt-3">
         <label>IP Category Types</label>
-        <p-multiSelect [options]="ipCategories" formControlName="categories" defaultLabel="Select IP Categories" display="chip"></p-multiSelect>
-        <p-message *ngIf="form1.value.categories.length" severity="success" text="You have selected {{ form1.value.categories.length }} IP categories. Each category can have its own specific exclusion rules."></p-message>
+        <p-multiSelect [options]="ipCategories()" formControlName="categories" defaultLabel="Select IP Categories" display="chip"></p-multiSelect>
+        <p-message *ngIf="sourceCategoriesForm.value.categories.length" severity="success" text="You have selected {{ sourceCategoriesForm.value.categories.length }} IP categories. Each category can have its own specific exclusion rules."></p-message>
       </div>
       <div class="p-mt-4 p-d-flex p-jc-between">
-        <button class="p-button-secondary" pButton type="button" label="Cancel" (click)="onClose()"></button>
-        <button pButton type="button" label="Next" (click)="nextStep()" [disabled]="!form1.valid"></button>
+        <button class="p-button-secondary" pButton type="button" label="Cancel" (click)="cancel()"></button>
+        <button pButton type="button" label="Next" (click)="nextStep()" [disabled]="!sourceCategoriesForm.valid"></button>
       </div>
     </form>
   </div>
-  <!-- Step 2: Configure Status Exclusions-->
   <div *ngIf="step === 1">
     <p-tabView>
       <p-tabPanel *ngFor="let cat of selectedCategories" [header]="getCategoryLabel(cat)">
@@ -35,18 +34,12 @@
           <div class="p-col-6">
             <p-checkbox [(ngModel)]="statusExclusions[cat].unpublished" binary="true" inputId="unpublished-{{ cat }}"></p-checkbox>
             <label class="p-ml-2" for="unpublished-{{ cat }}">Exclude Unpublished Applications</label>
-            <div class="p-ml-4 p-mt-1 p-text-secondary">
-              Unpublished
-              {{ getCategoryLabel(cat) }} applications will not be shared.
-            </div>
+            <div class="p-ml-4 p-mt-1 p-text-secondary">Unpublished {{ getCategoryLabel(cat) }} applications will not be shared.</div>
           </div>
           <div class="p-col-6">
             <p-checkbox [(ngModel)]="statusExclusions[cat].unregistered" binary="true" inputId="unregistered-{{ cat }}"></p-checkbox>
             <label class="p-ml-2" for="unregistered-{{ cat }}">Exclude Unregistered Rights</label>
-            <div class="p-ml-4 p-mt-1 p-text-secondary">
-              Ungranted/unregistered
-              {{ getCategoryLabel(cat) }} rights will not be shared.
-            </div>
+            <div class="p-ml-4 p-mt-1 p-text-secondary">Ungranted/unregistered {{ getCategoryLabel(cat) }} rights will not be shared.</div>
           </div>
         </div>
       </p-tabPanel>
@@ -56,7 +49,6 @@
       <button pButton type="button" label="Next" (click)="nextStep()"></button>
     </div>
   </div>
-  <!-- Step 3: Configure Category-Specific Exclusions-->
   <div *ngIf="step === 2">
     <p-tabView>
       <p-tabPanel *ngFor="let cat of selectedCategories" [header]="getCategoryLabel(cat)">
@@ -66,12 +58,9 @@
             <div class="p-text-secondary">(Demo section for application types)</div>
           </p-accordionTab>
           <p-accordionTab header="Event Code Exclusions">
-            <div class="p-mb-2">
-              Select event codes to exclude from data sharing for
-              {{ getCategoryLabel(cat) }}.
-            </div>
+            <div class="p-mb-2">Select event codes to exclude from data sharing for {{ getCategoryLabel(cat) }}.</div>
             <div class="p-grid">
-              <div class="p-col-6" *ngFor="let event of eventCodes; let i = index">
+              <div class="p-col-6" *ngFor="let event of getEventCodesForCategory(cat); let i = index">
                 <p-checkbox [(ngModel)]="eventExclusions[cat]" [value]="event.code" [binary]="false" inputId="event-{{ cat }}-{{ event.code }}"></p-checkbox>
                 <label class="p-ml-2" for="event-{{ cat }}-{{ event.code }}">{{ event.code }}: {{ event.label }}</label>
               </div>
@@ -82,7 +71,7 @@
             <label class="p-ml-2" for="enable-doc-{{ cat }}">Enable Document Exclusions</label>
             <div class="p-mt-2" *ngIf="enableDocumentExclusions[cat]">
               <label>Select Document Types to Exclude</label>
-              <p-multiSelect [options]="documentTypes" [(ngModel)]="documentExclusions[cat]" defaultLabel="Select Document Types" display="chip"></p-multiSelect>
+              <p-multiSelect [options]="getDocumentTypesForCategory(cat)" [(ngModel)]="documentExclusions[cat]" defaultLabel="Select Document Types" display="chip"></p-multiSelect>
             </div>
           </p-accordionTab>
         </p-accordion>
@@ -93,38 +82,73 @@
       <button pButton type="button" label="Next" (click)="nextStep()"></button>
     </div>
   </div>
-  <!-- Step 4: Review Configuration-->
   <div *ngIf="step === 3">
+    <h3>Review Your Exclusion Rule Configuration</h3>
     <div class="p-card p-mb-3">
+      <h4>Basic Configuration</h4>
       <div class="p-grid">
-        <div class="p-col-6"><b>Originating Office:</b><br>{{ getOfficeLabel(form1.value.office) }}</div>
-        <div class="p-col-6"><b>Recipient System:</b><br>{{ getSystemLabel(form1.value.system) }}</div>
-        <div class="p-col-12 p-mt-2"><b>IP Category Types:</b><span class="exclusion-chip" *ngFor="let cat of selectedCategories">{{ getCategoryLabel(cat) }}</span></div>
+        <div class="p-col-6"><b>Originating Office:</b><br>{{ getOfficeLabel(sourceCategoriesForm.value.office) }}</div>
+        <div class="p-col-6"><b>Recipient System:</b><br>{{ getSystemLabel(sourceCategoriesForm.value.system) }}</div>
+        <div class="p-col-12 p-mt-2"><b>IP Category Types:</b><br><span class="p-chip p-mr-2 p-mb-2" *ngFor="let cat of selectedCategories">{{ getCategoryLabel(cat) }}</span></div>
       </div>
     </div>
-    <table class="p-datatable-table p-mb-3">
-      <thead>
-        <tr>
-          <th>IP Category</th>
-          <th>Unpublished Apps</th>
-          <th>Unregistered Rights</th>
-          <th>Events Excluded</th>
-          <th>Documents Excluded</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let cat of selectedCategories">
-          <td>{{ getCategoryLabel(cat) }}</td>
-          <td>{{ statusExclusions[cat]?.unpublished ? "Yes" : "No" }}</td>
-          <td>{{ statusExclusions[cat]?.unregistered ? "Yes" : "No" }}</td>
-          <td>{{ eventExclusions[cat]?.length || 0 }}</td>
-          <td>{{ enableDocumentExclusions[cat] ? documentExclusions[cat]?.length || 0 : 0 }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="p-card p-mb-3" *ngFor="let cat of selectedCategories">
+      <h4>{{ getCategoryLabel(cat) }} Exclusions</h4>
+      <div class="p-mb-3">
+        <h5>Status Exclusions</h5>
+        <div class="p-grid">
+          <div class="p-col-6"><i class="pi" [ngClass]="statusExclusions[cat]?.unpublished ? 'pi-check-circle text-green' : 'pi-times-circle text-red'"></i><span class="p-ml-2">Exclude Unpublished Applications: <b>{{ statusExclusions[cat]?.unpublished ? 'Yes' : 'No' }}</b></span></div>
+          <div class="p-col-6"><i class="pi" [ngClass]="statusExclusions[cat]?.unregistered ? 'pi-check-circle text-green' : 'pi-times-circle text-red'"></i><span class="p-ml-2">Exclude Unregistered Rights: <b>{{ statusExclusions[cat]?.unregistered ? 'Yes' : 'No' }}</b></span></div>
+        </div>
+      </div>
+      <div class="p-mb-3" *ngIf="eventExclusions[cat]?.length &gt; 0">
+        <h5>Event Code Exclusions ({{ eventExclusions[cat]?.length }} selected)</h5>
+        <div class="p-grid">
+          <div class="p-col-6" *ngFor="let eventCode of eventExclusions[cat]"><i class="pi pi-ban text-red"></i><span class="p-ml-2">{{ getEventCodeLabel(eventCode) }}</span></div>
+        </div>
+      </div>
+      <div class="p-mb-3" *ngIf="!eventExclusions[cat]?.length">
+        <h5>Event Code Exclusions</h5>
+        <p class="p-text-secondary">No event codes excluded for this category.</p>
+      </div>
+      <div class="p-mb-3" *ngIf="enableDocumentExclusions[cat]">
+        <h5>Document Exclusions ({{ documentExclusions[cat]?.length || 0 }} selected)</h5>
+        <div class="p-grid" *ngIf="documentExclusions[cat]?.length &gt; 0">
+          <div class="p-col-6" *ngFor="let docCode of documentExclusions[cat]"><i class="pi pi-ban text-red"></i><span class="p-ml-2">{{ getDocumentTypeLabel(docCode) }}</span></div>
+        </div>
+        <p class="p-text-secondary" *ngIf="!documentExclusions[cat]?.length">No document types selected for exclusion.</p>
+      </div>
+      <div class="p-mb-3" *ngIf="!enableDocumentExclusions[cat]">
+        <h5>Document Exclusions</h5>
+        <p class="p-text-secondary">Document exclusions are disabled for this category.</p>
+      </div>
+    </div>
+    <div class="p-card p-mb-3">
+      <h4>Configuration Summary</h4>
+      <table class="p-datatable-table">
+        <thead>
+          <tr>
+            <th>IP Category</th>
+            <th>Unpublished Apps</th>
+            <th>Unregistered Rights</th>
+            <th>Events Excluded</th>
+            <th>Documents Excluded</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cat of selectedCategories">
+            <td><b>{{ getCategoryLabel(cat) }}</b></td>
+            <td><i class="pi" [ngClass]="statusExclusions[cat]?.unpublished ? 'pi-check-circle text-green' : 'pi-times-circle text-red'"></i>{{ statusExclusions[cat]?.unpublished ? 'Yes' : 'No' }}</td>
+            <td><i class="pi" [ngClass]="statusExclusions[cat]?.unregistered ? 'pi-check-circle text-green' : 'pi-times-circle text-red'"></i>{{ statusExclusions[cat]?.unregistered ? 'Yes' : 'No' }}</td>
+            <td><span class="p-badge" [ngClass]="eventExclusions[cat]?.length ? 'p-badge-warning' : 'p-badge-success'">{{ eventExclusions[cat]?.length || 0 }}</span></td>
+            <td><span class="p-badge" [ngClass]="enableDocumentExclusions[cat] &amp;&amp; documentExclusions[cat]?.length ? 'p-badge-warning' : 'p-badge-success'">{{ enableDocumentExclusions[cat] ? documentExclusions[cat]?.length || 0 : 0 }}</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div class="p-mt-4 p-d-flex p-jc-between">
       <button class="p-button-secondary" pButton type="button" label="Back" (click)="prevStep()"></button>
       <button class="p-button-success" pButton type="button" label="Add Rule" (click)="addRule()"></button>
     </div>
   </div>
-</div>
+</app-layout>

@@ -21,16 +21,10 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { ButtonModule } from 'primeng/button';
 import {
-  ConfigurableFilterComponent,
   FilterConfig,
   FilterValue,
-} from '../../components/configurable-filter/configurable-filter.component';
-import { FilterChipsComponent } from 'src/app/components/filter-chips/filter-chips.component';
-
-interface IpType {
-  name: string;
-  code: string;
-}
+  ConfigurableFilterBarComponent,
+} from '../../components/configurable-filter-bar/configurable-filter-bar.component';
 
 @Component({
   selector: 'app-data-packages',
@@ -41,10 +35,9 @@ interface IpType {
     AppLayoutComponent,
     TableComponent,
     FormsModule,
-    ConfigurableFilterComponent,
+    ConfigurableFilterBarComponent,
     //    Select,
     //    DatePickerModule,
-    FilterChipsComponent,
     FloatLabelModule,
     IconFieldModule,
     InputIconModule,
@@ -54,8 +47,8 @@ interface IpType {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataPackagesComponent implements OnInit {
-  @ViewChild(ConfigurableFilterComponent)
-  configurableFilter!: ConfigurableFilterComponent;
+  @ViewChild(ConfigurableFilterBarComponent)
+  configurableFilter!: ConfigurableFilterBarComponent;
 
   layoutConfig = {
     appTitle: 'WIPO IPAS Central',
@@ -82,10 +75,10 @@ export class DataPackagesComponent implements OnInit {
   yearPackagesPercentChange = '40';
   monthPackagesPercentChange = '41';
   weekPackagesPercentChange = '42';
-  totalPackagesPeriod = "'1999'";
-  yearPackagesPeriod = "'1 year'";
-  monthPackagesPeriod = "'1 month'";
-  weekPackagesPeriod = "'7 days'";
+  totalPackagesPeriod = "'Since 1999'";
+  yearPackagesPeriod = "'Since 1 year'";
+  monthPackagesPeriod = "'Since 1 month'";
+  weekPackagesPeriod = "'Since 7 days'";
 
   packageStats = [
     {
@@ -185,7 +178,7 @@ export class DataPackagesComponent implements OnInit {
 
   officeCodeParam;
 
-  sortField: string = 'publicationNumber';
+  sortField: string = 'fileName';
   sortOrder: number = 1;
 
   applicationOfficeCode = '';
@@ -193,7 +186,7 @@ export class DataPackagesComponent implements OnInit {
   filterConfigs: FilterConfig[] = [
     {
       key: 'fileName',
-      label: 'File Number',
+      label: 'File Name',
       type: 'text',
       section: 'FILE NAME',
     },
@@ -202,7 +195,7 @@ export class DataPackagesComponent implements OnInit {
       label: 'Shared Date',
       type: 'dateRange',
       placeholder: 'Select date range',
-      dateFormat: 'dd/mm/yy',
+      dateFormat: 'yy/mm/dd',
       section: 'DATE FILTERS',
     },
     {
@@ -384,6 +377,7 @@ export class DataPackagesComponent implements OnInit {
     console.log('Filters cleared');
     this.appliedFilters = [];
     this.searchBar = '';
+    this.configurableFilter.searchBar = '';
     this.tableData = packagesData;
     this.filterByStats();
     this.cdr.detectChanges();
@@ -433,21 +427,28 @@ export class DataPackagesComponent implements OnInit {
 
   filterSearch(value: string) {
     console.log(value);
+    this.searchBar = value;
+    this.searchByFilter();
+  }
+
+  searchByFilter(): void{
     this.tableData = this.tableData.filter((item) =>
-      item.fileName?.toLowerCase().includes(value)
+      item.fileName?.toLowerCase().includes(this.searchBar)
     );
   }
 
   private applyFilters(): void {
     this.filterByStats();
+    //this.searchByFilter();
     let filtered = [...this.tableData];
 
+    console.log("searchBar "+this.searchBar)
     if (this.searchBar && this.searchBar.trim()) {
-      this.appliedFilters.push({
-        key: 'search',
-        value: this.searchBar.trim(),
-        type: 'text',
-      });
+      filtered = filtered.filter(
+        (item) =>
+          item.fileName?.toLowerCase().includes(this.searchBar) ||
+          item.status?.toLowerCase().includes(this.searchBar)
+      );
     }
 
     this.appliedFilters.forEach((filter) => {
@@ -518,6 +519,7 @@ export class DataPackagesComponent implements OnInit {
   clearAllFilters(): void {
     this.appliedFilters = [];
     this.searchBar = '';
+    this.configurableFilter.searchBar = '';
     this.tableData = packagesData;
     this.configurableFilter.clearAllFilters();
     this.cdr.detectChanges();
@@ -525,6 +527,11 @@ export class DataPackagesComponent implements OnInit {
 
   getFilterDisplayValue(filter: FilterValue): string {
     const filterConfig = this.filterConfigs.find((f) => f.key === filter.key);
+
+    if(filter.key == 'search'){
+      return `${filter.key}: ${filter.value}`
+    }
+
     if (!filterConfig) return filter.key;
 
     switch (filterConfig.type) {

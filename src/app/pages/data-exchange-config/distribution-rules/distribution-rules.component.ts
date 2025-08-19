@@ -6,7 +6,6 @@ import {
   LayoutConfig,
 } from '../../../components/app-layout/app-layout.component';
 import { BreadcrumbsComponent } from '../../../components/breadcrumbs/breadcrumbs.component';
-import { AddExclusionRuleComponent } from '../add-exclusion-rule/add-exclusion-rule.component';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
@@ -14,6 +13,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { DataExchangeConfigService } from '../../../_services/data-exchange-config.service';
+import { ExclusionRule } from '../../../interfaces';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-distribution-rules',
@@ -27,7 +28,6 @@ import { DataExchangeConfigService } from '../../../_services/data-exchange-conf
     InputIconModule,
     AppLayoutComponent,
     BreadcrumbsComponent,
-    AddExclusionRuleComponent,
     CardModule,
     ButtonModule,
   ],
@@ -37,19 +37,18 @@ export class DistributionRulesComponent implements OnInit {
   officeCode: string;
   langCode: string;
   loading = false;
-  showAddRuleModal = false;
 
   columns: any[] = [
     {
-      field: 'originatingOffice',
+      field: 'originatingOfficeName',
       header: 'Originating Office',
       display: 'text',
     },
     { field: 'recipientName', header: 'Recipient Name', display: 'text' },
     {
-      field: 'ipCategoryTypes',
-      header: 'IP Category Types',
-      display: 'custom',
+      field: 'ipCategory',
+      header: 'IP Category',
+      display: 'text',
     },
     {
       field: 'applicationStatus',
@@ -57,18 +56,13 @@ export class DistributionRulesComponent implements OnInit {
       display: 'custom',
     },
     {
-      field: 'excludedEventCodes',
-      header: 'Excluded Event Codes',
+      field: 'publishDocuments',
+      header: 'Unpublished Documents',
       display: 'custom',
     },
     {
-      field: 'excludedDocuments',
-      header: 'Excluded Documents',
-      display: 'custom',
-    },
-    {
-      field: 'status',
-      header: 'Status',
+      field: 'documentList',
+      header: 'Documents Excluded',
       display: 'custom',
     },
     {
@@ -93,46 +87,77 @@ export class DistributionRulesComponent implements OnInit {
     },
   ];
 
-  // Create a local data signal
-  public localData = signal<any>({});
+  // Create a data signal for the rules
+  public rulesData = signal<ExclusionRule[]>([]);
+
+  // Add signal for configuration data
+  public configData = signal<any>(null);
 
   distributionRulesData = computed(() => {
-    const data = this.localData();
-    console.log('Local data in computed:', data);
-
-    // Check for both possible property names
-    let rules =
-      data?.distributionRulesData || data?.distributionExclusionRulesData;
-
-    if (!rules) {
-      console.log('No distribution rules data found, returning empty array');
-      return [];
-    }
-
-    console.log('Distribution Rules Data for table:', rules);
-    return rules;
+    const rules = this.rulesData();
+    console.log('Rules data for table:', rules);
+    return rules || [];
   });
 
   // Computed properties for template expressions
   activeRulesCount = computed(
     () =>
-      this.distributionRulesData().filter((rule) => rule.status === 'active')
-        .length
+      this.distributionRulesData().filter(
+        (rule) => rule.publishDocuments === true
+      ).length
   );
 
   officesCoveredCount = computed(
     () =>
       new Set(
-        this.distributionRulesData().map((rule) => rule.originatingOffice)
+        this.distributionRulesData().map((rule) => rule.originatingOfficeName)
       ).size
   );
 
   totalRulesCount = computed(() => this.distributionRulesData().length);
 
+  // Helper method to get application status text and styling
+  getApplicationStatus(rule: any): {
+    text: string;
+    class: string;
+    bgColor: string;
+    textColor: string;
+    icon: string;
+  } {
+    if (!rule.applicationPublished) {
+      return {
+        text: 'Unpublished',
+        class: 'status-inactive',
+        bgColor: '#ffebee',
+        textColor: '#c62828',
+        icon: 'pi pi-eye-slash',
+      };
+    }
+
+    if (rule.ipRightsGranted) {
+      return {
+        text: 'Published & Granted',
+        class: 'status-active',
+        bgColor: '#e8f5e8',
+        textColor: '#2e7d32',
+        icon: 'pi pi-check-circle',
+      };
+    }
+
+    return {
+      text: 'Published',
+      class: 'status-active',
+      bgColor: '#e3f2fd',
+      textColor: '#1976d2',
+      icon: 'pi pi-eye',
+    };
+  }
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private dataExchangeService: DataExchangeConfigService
+    private dataExchangeService: DataExchangeConfigService,
+    private http: HttpClient
   ) {
     this.officeCode = this.route.snapshot.params['officeCode'] || 'default';
     this.langCode = this.route.snapshot.params['langCode'] || 'en';
@@ -150,42 +175,6 @@ export class DistributionRulesComponent implements OnInit {
       theme: 'light',
       logo: '',
     };
-
-    // Initialize with default data immediately
-    this.localData.set({
-      distributionRulesData: [
-        {
-          id: 1,
-          originatingOffice: 'USPTO',
-          recipientName: 'PATENTSCOPE',
-          ipCategoryTypes: ['Patent', 'Trademark'],
-          applicationStatus: ['Published', 'Granted'],
-          excludedEventCodes: 'None',
-          excludedDocuments: 'Disabled',
-          status: 'active',
-        },
-        {
-          id: 2,
-          originatingOffice: 'EPO',
-          recipientName: 'Global Brand Database',
-          ipCategoryTypes: ['Patent'],
-          applicationStatus: ['Published'],
-          excludedEventCodes: 'G10, F10',
-          excludedDocuments: 'search_report',
-          status: 'active',
-        },
-        {
-          id: 3,
-          originatingOffice: 'JPO',
-          recipientName: 'ASEAN IP Register',
-          ipCategoryTypes: ['Trademark', 'Industrial Design'],
-          applicationStatus: ['Registered'],
-          excludedEventCodes: 'None',
-          excludedDocuments: 'Disabled',
-          status: 'inactive',
-        },
-      ],
-    });
   }
 
   ngOnInit(): void {
@@ -195,204 +184,53 @@ export class DistributionRulesComponent implements OnInit {
   private loadData(): void {
     this.loading = true;
 
-    // Use setTimeout to simulate API call and ensure loading state is visible
-    setTimeout(() => {
-      this.dataExchangeService
-        .getDataExchangeData('7bnv35u5b6j6mk5pnfb65jqqe6', 'patent', 'JP')
-        .subscribe({
-          next: (data) => {
-            console.log('API Response Data: ', data);
+    // Always load JSON config for the add exclusion rule component
+    this.loadFromJsonConfig();
 
-            // Create our comprehensive mock data
-            const mockData = {
-              distributionRulesData: [
-                {
-                  id: 1,
-                  originatingOffice: 'USPTO',
-                  recipientName: 'PATENTSCOPE',
-                  ipCategoryTypes: ['Patent', 'Trademark'],
-                  applicationStatus: ['Published', 'Granted'],
-                  excludedEventCodes: 'None',
-                  excludedDocuments: 'Disabled',
-                  status: 'active',
-                },
-                {
-                  id: 2,
-                  originatingOffice: 'EPO',
-                  recipientName: 'Global Brand Database',
-                  ipCategoryTypes: ['Patent'],
-                  applicationStatus: ['Published'],
-                  excludedEventCodes: 'G10, F10',
-                  excludedDocuments: 'search_report',
-                  status: 'active',
-                },
-                {
-                  id: 3,
-                  originatingOffice: 'JPO',
-                  recipientName: 'ASEAN IP Register',
-                  ipCategoryTypes: ['Trademark', 'Industrial Design'],
-                  applicationStatus: ['Registered'],
-                  excludedEventCodes: 'None',
-                  excludedDocuments: 'Disabled',
-                  status: 'inactive',
-                },
-                {
-                  id: 4,
-                  originatingOffice: 'CNIPA',
-                  recipientName: 'WIPO Global Database',
-                  ipCategoryTypes: ['Patent', 'Utility Model'],
-                  applicationStatus: ['Published', 'Pending'],
-                  excludedEventCodes: 'A01, B02',
-                  excludedDocuments: 'examination_report',
-                  status: 'active',
-                },
-                {
-                  id: 5,
-                  originatingOffice: 'KIPO',
-                  recipientName: 'International Patent System',
-                  ipCategoryTypes: ['Patent'],
-                  applicationStatus: ['Granted'],
-                  excludedEventCodes: 'None',
-                  excludedDocuments: 'Disabled',
-                  status: 'active',
-                },
-                {
-                  id: 6,
-                  originatingOffice: 'UKIPO',
-                  recipientName: 'European Patent Office',
-                  ipCategoryTypes: ['Trademark', 'Design'],
-                  applicationStatus: ['Registered', 'Published'],
-                  excludedEventCodes: 'C05, D12',
-                  excludedDocuments: 'opposition_notice',
-                  status: 'inactive',
-                },
-                {
-                  id: 7,
-                  originatingOffice: 'CIPO',
-                  recipientName: 'Global Patent Index',
-                  ipCategoryTypes: ['Patent'],
-                  applicationStatus: ['Published'],
-                  excludedEventCodes: 'E08, F15',
-                  excludedDocuments: 'priority_document',
-                  status: 'active',
-                },
-                {
-                  id: 8,
-                  originatingOffice: 'INPI',
-                  recipientName: 'International Trademark System',
-                  ipCategoryTypes: ['Trademark'],
-                  applicationStatus: ['Registered'],
-                  excludedEventCodes: 'None',
-                  excludedDocuments: 'Disabled',
-                  status: 'active',
-                },
-                {
-                  id: 9,
-                  originatingOffice: 'DPMA',
-                  recipientName: 'European Union IP Office',
-                  ipCategoryTypes: ['Patent', 'Trademark', 'Design'],
-                  applicationStatus: ['Published', 'Registered'],
-                  excludedEventCodes: 'G20, H25',
-                  excludedDocuments: 'translation_document',
-                  status: 'active',
-                },
-                {
-                  id: 10,
-                  originatingOffice: 'IP Australia',
-                  recipientName: 'Pacific IP Network',
-                  ipCategoryTypes: ['Patent', 'Trademark'],
-                  applicationStatus: ['Granted', 'Registered'],
-                  excludedEventCodes: 'I30, J35',
-                  excludedDocuments: 'certificate_document',
-                  status: 'inactive',
-                },
-                {
-                  id: 11,
-                  originatingOffice: 'Rospatent',
-                  recipientName: 'Eurasian Patent Organization',
-                  ipCategoryTypes: ['Patent'],
-                  applicationStatus: ['Published'],
-                  excludedEventCodes: 'K40, L45',
-                  excludedDocuments: 'search_report',
-                  status: 'active',
-                },
-                {
-                  id: 12,
-                  originatingOffice: 'INPI Brazil',
-                  recipientName: 'Latin American IP Network',
-                  ipCategoryTypes: ['Patent', 'Trademark', 'Industrial Design'],
-                  applicationStatus: ['Published', 'Registered'],
-                  excludedEventCodes: 'None',
-                  excludedDocuments: 'Disabled',
-                  status: 'active',
-                },
-              ],
-            };
+    // Load exclusion rules from service for the table
+    this.dataExchangeService.getExclusionRules().subscribe({
+      next: (rules) => {
+        console.log('API Response (ExclusionRule[]): ', rules);
+        this.rulesData.set(rules || []);
+        this.loading = false;
+        console.log('Data loaded successfully, loading set to false');
+      },
+      error: (error) => {
+        console.error('Error loading data from API:', error);
+        this.rulesData.set([]);
+        this.loading = false;
+      },
+    });
+  }
 
-            // Merge API data with our mock data if API returns data
-            if (data && Object.keys(data).length > 0) {
-              // If API has distributionExclusionRulesData, merge it
-              if (data.distributionExclusionRulesData) {
-                console.log(
-                  'API returned exclusion rules data, merging with mock data'
-                );
-                // You could merge the API data here if needed
-              }
-            }
-
-            // Always use our comprehensive mock data for now
-            this.localData.set(mockData);
-            this.loading = false;
-            console.log('Data loaded successfully, loading set to false');
-          },
-          error: (error) => {
-            console.error('Error loading data:', error);
-            // Set mock data even on error
-            const mockData = {
-              distributionRulesData: [
-                {
-                  id: 1,
-                  originatingOffice: 'USPTO',
-                  recipientName: 'PATENTSCOPE',
-                  ipCategoryTypes: ['Patent', 'Trademark'],
-                  applicationStatus: ['Published', 'Granted'],
-                  excludedEventCodes: 'None',
-                  excludedDocuments: 'Disabled',
-                  status: 'active',
-                },
-                {
-                  id: 2,
-                  originatingOffice: 'EPO',
-                  recipientName: 'Global Brand Database',
-                  ipCategoryTypes: ['Patent'],
-                  applicationStatus: ['Published'],
-                  excludedEventCodes: 'G10, F10',
-                  excludedDocuments: 'search_report',
-                  status: 'active',
-                },
-              ],
-            };
-            this.localData.set(mockData);
-            this.loading = false;
-            console.log('Mock data set due to error, loading set to false');
-          },
-        });
-    }, 500); // Small delay to show loading state
+  private loadFromJsonConfig(): void {
+    console.log('Loading JSON configuration...');
+    // Load data from the JSON configuration file
+    this.http.get<any>('/assets/configuration/data-exchange.json').subscribe({
+      next: (data) => {
+        console.log('JSON config loaded successfully:', data);
+        if (data.recipientSystems) {
+          // Store the full configuration data for add exclusion rule component
+          this.configData.set(data);
+          console.log('ConfigData signal set with:', data);
+        } else {
+          console.log('No recipient systems found in JSON configuration');
+          this.configData.set(null);
+        }
+      },
+      error: (error) => {
+        console.error('Error loading JSON configuration:', error);
+        this.configData.set(null);
+      },
+    });
   }
 
   addRule() {
-    console.log('Opening add rule modal...');
-    this.showAddRuleModal = true;
-  }
-
-  onFormSubmitted = () => {
-    this.showAddRuleModal = false; // close modal on submit
-    // Optionally refresh the data after adding a rule
-    this.loadData();
-  };
-
-  onModalHide() {
-    this.showAddRuleModal = false;
+    console.log('Navigating to add exclusion rule page...');
+    // Navigate to the add-exclusion-rule route
+    this.router.navigate([
+      `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/add-exclusion-rule`,
+    ]);
   }
 
   onActionClick(event: { action: string; item: any }) {
@@ -400,7 +238,9 @@ export class DistributionRulesComponent implements OnInit {
 
     if (event.action === 'edit') {
       const basePath = `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard`;
-      this.router.navigate([`${basePath}/edit-rule/${event.item.id}`]);
+      this.router.navigate([
+        `${basePath}/edit-rule/${event.item.recipientClientId}`,
+      ]);
     } else if (event.action === 'delete') {
       // Handle delete action
       this.deleteRule(event.item);
@@ -414,12 +254,9 @@ export class DistributionRulesComponent implements OnInit {
   private deleteRule(rule: any) {
     console.log('Deleting rule:', rule);
     // Update local data to remove the rule
-    this.localData.update((current) => ({
-      ...current,
-      distributionRulesData: current.distributionRulesData.filter(
-        (r) => r.id !== rule.id
-      ),
-    }));
+    this.rulesData.update((current) =>
+      current.filter((r) => r.recipientClientId !== rule.recipientClientId)
+    );
   }
 
   getBreadcrumbItems() {

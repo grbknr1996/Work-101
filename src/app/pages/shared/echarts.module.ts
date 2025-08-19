@@ -7,13 +7,15 @@ import * as echarts from 'echarts/core';
 //import 'echarts-gl'; //ECHARTS 3D
 import {
   BarChart,
-  LineChart
+  LineChart,
+  PieChart
 } from 'echarts/charts';
 import {
-  TitleComponent,
-  TooltipComponent,
+  GraphicComponent,
   GridComponent,
-  LegendComponent
+  LegendComponent,
+  TitleComponent,
+  TooltipComponent
 } from 'echarts/components';
 import {
   CanvasRenderer
@@ -23,10 +25,12 @@ import {
 echarts.use([
   BarChart,
   LineChart,
-  TitleComponent,
-  TooltipComponent,
+  PieChart,
+  GraphicComponent,
   GridComponent,
   LegendComponent,
+  TitleComponent,
+  TooltipComponent,
   CanvasRenderer
 ])
 

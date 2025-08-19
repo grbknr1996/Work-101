@@ -1747,5 +1747,21 @@
     "display": {
       "RPNA": "Representative Name"
     }
+  },
+  "charts": {
+    "statistics": {
+      "application_count": {
+        "ID-ND": "Designs",
+        "ID-NI": "Models",
+        "PA-NP": "Conventional Patents",
+        "PA-PT": "PCT Applications",
+        "TM-PR": "Trademarks",
+        "D": "Industrial Designs",
+        "P": "Patents",
+        "T": "Trademarks",
+        "accounted_application": "Accounted Applications",
+        "active_application": "Active Applications"
+      }
+    }
   }
 }

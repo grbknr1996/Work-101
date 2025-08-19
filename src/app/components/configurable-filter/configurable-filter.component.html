@@ -5,7 +5,7 @@
   <button class="p-button-outlined p-button-secondary filter-button" pButton type="button" icon="pi pi-sliders-h" [class.has-active-filters]="hasActiveFilters" (click)="toggleFilter()" pTooltip="Open Filter" tooltipStyleClass="text-xs px-2 py-1"></button>
   <!-- Filter Overlay-->
   <div class="filter-overlay" *ngIf="visible">
-    <div class="filter-panel">
+    <div class="filter-panel filter-panel-left">
       <!-- Close Button - Positioned at top right corner-->
       <button class="p-button-text p-button-sm close-button-overlay" pButton type="button" icon="pi pi-times" pTooltip="Close" (click)="onClose()"></button>
       <!-- Header with Filter Selector and Icons-->

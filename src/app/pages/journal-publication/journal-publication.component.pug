@@ -1,0 +1,146 @@
+app-layout
+  app-breadcrumbs([items]="breadcrumbItems")
+  
+  .flex.justify-between
+    h1.pt-5.text-xl.ml-4.col-span-3 Pending Publication
+    p-button.mb-3(label="New Journal", icon="pi pi-plus")
+
+  .mb-4
+    .user-stats-container
+      .user-stat-card(
+        *ngFor="let stat of userStats"
+        "[class.selected]"="selectedStat === stat.label"
+        "(click)"="selectStat(stat.label)"
+      )
+        .stat-header
+          span.stat-label("[style.color]"="stat.color") {{ stat.label }}
+          i("[class]"="stat.icon", "[style.color]"="stat.color")
+        
+        .stat-content
+          span.stat-count("[style.color]"="stat.color") {{ stat.count }}
+          
+          span.stat-change
+            i(
+              "[class]"="stat.percentChange >= 0 ? 'pi pi-arrow-up' : isString(stat.percentChange) ? '' : 'pi pi-arrow-down'"
+              "[style.color]"="stat.percentChange >= 0 ? '#16a34a' : '#dc2626'"
+            )
+            span("[style.color]"="stat.percentChange >= 0 ? '#16a34a' : isString(stat.percentChange) ? '#990efc' : '#dc2626'") {{ stat.percentChange }}{{ isString(stat.percentChange) ? '' : '%' }}
+        
+        .stat-period {{ stat.period }}
+  
+  .grid.grid-cols-6.mt-2
+    .col-span-6.grid.grid-cols-12.filter
+      .col-span-4
+        p-floatlabel(variant="on")
+          p-iconfield
+            p-inputicon.pi.pi-search
+            input.w-full(
+              id="on_label",
+              pInputText="",
+              [(ngModel)]="searchBar",
+              autocomplete="off"
+            )
+          label(for="on_label") Search
+      
+      .col-span-8.flex.justify-end.gap-2.filter-icons
+        button.p-button-text.p-button-sm(
+          pButton,
+          type="button",
+          [icon]="isCardView ? 'pi pi-list' : 'pi pi-th-large'",
+          (click)="toggleView()",
+          pTooltip="Toggle between table and card view",
+          style="color: var(--p-button-outlined-secondary-color)"
+        )
+        app-configurable-filter(
+          [filters]="filterConfigs",
+          [showClearAll]="true",
+          [showApplyButton]="true",
+          [showFilterSelector]="true",
+          [filterSelectorPlaceholder]="'Select filters to display'",
+          (filterChange)="onFilterChange($event)",
+          (filterCleared)="onFilterCleared()",
+          (filterApplied)="onFilterApplied($event)",
+          (appliedFiltersChange)="onAppliedFiltersChange($event)"
+        )
+        p-button(
+          icon="pi pi-file-pdf",
+          [outlined]="true",
+          [text]="true",
+          style="font-size: 1.5rem"
+        )
+        p-button(
+          icon="pi pi-info-circle",
+          [outlined]="true",
+          [text]="true",
+          style="font-size: 1.5rem"
+        )
+  
+  .mb-8.mt-1.w-full
+    app-filter-chips(
+      [appliedFilters]="appliedFilters",
+      [showClearAll]="true",
+      [clearAllLabel]="'Clear All'",
+      [getDisplayValue]="getFilterDisplayValue.bind(this)",
+      (chipRemove)="removeFilterChip($event)",
+      (clearAll)="clearAllFilters()"
+    )
+    
+    .col-span-6(*ngIf="isCardView")
+      p-tabs(value="trademark")
+        p-tablist
+          | @for (category of categories; track category.ipType) {
+          p-tab([value]="category.ipType")
+            .category-label {{ category.ipType | capitalizeWords }}
+            p-badge([value]="category.count")
+          | }
+        
+        p-tabpanels
+          | @for (category of categories; track category.ipType) {
+          p-tabpanel.grid.grid-cols-12.gap-3([value]="category.ipType")
+            | @for (service of category.data; track service.name) {
+            .col-span-3.mt-3
+              p-card.w-full
+                ng-template(#header="")
+                  h1.flex
+                    p-checkbox(
+                      inputId="service",
+                      [(ngModel)]="service.checked",
+                      [binary]="true"
+                    )
+                    label.flex-1(for="service") {{ service.name }}
+                
+                .text-base.font-bold.mb-2 New Application
+                .text-xs Regular fees IP
+                
+                ng-template(#footer="")
+                  .flex.gap-4.mt-1
+                    p-button.w-full(
+                      size="small",
+                      severity="secondary",
+                      [outlined]="true",
+                      styleClass="w-full"
+                    ) Basic Fee {{ service.basicFee }}$
+                    p-button.w-full(
+                      size="small",
+                      styleClass="w-full"
+                    ) Variable Fee {{ service.variableFee }}$
+            | }
+          | }
+
+    .col-span-6(*ngIf="!isCardView")
+      app-table(
+        [columns]="tableColumns",
+        [data]="tableData",
+        [globalFilterFields]="globalFilterFields",
+        [showSearchButton]="false",
+        [showClearButton]="false",
+        [paginator]="true",
+        [lazy]="true",
+        [rows]="pageSize",
+        [totalRecords]="totalRecords",
+        [rowsPerPageOptions]="[10, 25, 50, 100]",
+        [showCurrentPageReport]="true",
+        [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} users'",
+        (actionClick)="onActionClick($event.action, $event.item)",
+        (onLazyLoad)="onLazyLoad($event)"
+      )

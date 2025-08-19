@@ -1,50 +1,42 @@
 app-layout([config]="layoutConfig")
   app-breadcrumbs([items]="getBreadcrumbItems()")
-
-  // Summary Stats Section
+  
+  //- Summary Stats Section
   .summary-stats
     .stat-card
       .stat-content
-        .stat-icon(
-          style="background: linear-gradient(135deg, #0d47a1 0%, #0d47a1dd 100%);"
-        )
+        .stat-icon(style="background: linear-gradient(135deg, #0d47a1 0%, #0d47a1dd 100%)")
           i.pi.pi-shield
         .stat-info
           .stat-number {{ activeRulesCount() }}
-          .stat-label Active Rules
-
+          .stat-label Published Documents
     .stat-card
       .stat-content
-        .stat-icon(
-          style="background: linear-gradient(135deg, #1565c0 0%, #1565c0dd 100%);"
-        )
+        .stat-icon(style="background: linear-gradient(135deg, #1565c0 0%, #1565c0dd 100%)")
           i.pi.pi-building
         .stat-info
           .stat-number {{ officesCoveredCount() }}
           .stat-label Offices Covered
-
     .stat-card
       .stat-content
-        .stat-icon(
-          style="background: linear-gradient(135deg, #1976d2 0%, #1976d2dd 100%);"
-        )
+        .stat-icon(style="background: linear-gradient(135deg, #1976d2 0%, #1976d2dd 100%)")
           i.pi.pi-list
         .stat-info
           .stat-number {{ totalRulesCount() }}
           .stat-label Total Rules
-
-  // Main Content
+  
+  //- Main Content
   .distribution-rules-header
     h2 Distribution Rules
     button.add-rule-btn(type="button", (click)="addRule()")
       i.pi.pi-plus
       |  Add Rule
-
-  // Loading State
+  
+  //- Loading State
   .loading-container(*ngIf="loading")
     p Loading distribution rules...
-
-  // Table Content
+  
+  //- Table Content
   div(*ngIf="!loading")
     .card
       p-table(
@@ -55,7 +47,7 @@ app-layout([config]="layoutConfig")
         [rowsPerPageOptions]="[10, 25, 50]",
         [loading]="loading",
         [paginator]="true",
-        [globalFilterFields]="['originatingOffice', 'recipientName']",
+        [globalFilterFields]="['originatingOfficeName', 'recipientName']",
         [showCurrentPageReport]="true",
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries",
         [resizableColumns]="false",
@@ -81,46 +73,80 @@ app-layout([config]="layoutConfig")
                   (input)="dt.filterGlobal($event.target.value, 'contains')",
                   placeholder="Search keyword"
                 )
-
+        
         ng-template(pTemplate="header")
           tr
-            th(pSortableColumn="originatingOffice", style="width: 15%")
+            th(pSortableColumn="originatingOfficeName", style="width: 12%")
               .flex.items-center
                 | Originating Office
-                p-sortIcon(field="originatingOffice")
-            th(pSortableColumn="recipientName", style="width: 15%")
+                p-sortIcon(field="originatingOfficeName")
+            th(pSortableColumn="recipientName", style="width: 12%")
               .flex.items-center
                 | Recipient Name
                 p-sortIcon(field="recipientName")
-            th(style="width: 15%") IP Category Types
+            th(style="width: 12%") IP Category
             th(style="width: 15%") Application Status
-            th(style="width: 15%") Excluded Event Codes
-            th(style="width: 15%") Excluded Documents
-            th(pSortableColumn="status", style="width: 10%")
-              .flex.items-center
-                | Status
-                p-sortIcon(field="status")
-            th(style="width: 10%") Actions
-
+            th(style="width: 15%") Unpublished Documents
+            th(style="width: 18%") Documents Excluded
+            th(style="width: 14%") Event Codes
+            th(style="width: 14%") Actions
+        
         ng-template(pTemplate="body", let-rowData)
           tr
-            td {{ rowData.originatingOffice }}
+            td {{ rowData.originatingOfficeName }}
             td {{ rowData.recipientName }}
             td
-              span.exclusion-chip(*ngFor="let cat of rowData.ipCategoryTypes") {{ cat }}
-            td
-              span.exclusion-chip(*ngFor="let status of rowData.applicationStatus") {{ status }}
-            td
-              span.exclusion-chip(*ngIf="rowData.excludedEventCodes !== 'None'") {{ rowData.excludedEventCodes }}
-              span(*ngIf="rowData.excludedEventCodes === 'None'") None
-            td
-              span.exclusion-chip(*ngIf="rowData.excludedDocuments !== 'Disabled'") {{ rowData.excludedDocuments }}
-              span(*ngIf="rowData.excludedDocuments === 'Disabled'") Disabled
+              span.exclusion-chip(
+                style="background: #e3f2fd; color: #1976d2; padding: 4px 12px; border-radius: 16px; font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
+              )
+                i.pi.pi-file(style="font-size: 10px")
+                | {{ rowData.ipCategory }}
             td
               span.status-badge(
-                [class.status-active]="rowData.status === 'active'",
-                [class.status-inactive]="rowData.status === 'inactive'"
-              ) {{ rowData.status }}
+                [class]="getApplicationStatus(rowData).class",
+                [style.background-color]="getApplicationStatus(rowData).bgColor",
+                [style.color]="getApplicationStatus(rowData).textColor",
+                style="padding: 4px 12px; border-radius: 16px; font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
+              )
+                i([class]="getApplicationStatus(rowData).icon", style="font-size: 10px")
+                | {{ getApplicationStatus(rowData).text }}
+            td
+              span.status-badge(
+                [class.status-active]="!rowData.publishDocuments",
+                [class.status-inactive]="rowData.publishDocuments",
+                [style.background-color]="!rowData.publishDocuments ? '#fff3e0' : '#f5f5f5'",
+                [style.color]="!rowData.publishDocuments ? '#e65100' : '#757575'",
+                style="padding: 4px 12px; border-radius: 16px; font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
+              )
+                i(
+                  [class]="!rowData.publishDocuments ? 'pi pi-exclamation-triangle' : 'pi pi-check'",
+                  style="font-size: 10px"
+                )
+                | {{ !rowData.publishDocuments ? 'Yes' : 'No' }}
+            td
+              .document-list(style="display: flex; flex-wrap: wrap; gap: 4px")
+                span.document-item(
+                  *ngFor="let doc of rowData.documentList",
+                  style="background: #e3f2fd; color: #1976d2; padding: 4px 12px; border-radius: 16px; font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
+                )
+                  i.pi.pi-file-text(style="font-size: 10px")
+                  | {{ doc }}
+                span.no-documents(
+                  *ngIf="!rowData.documentList || rowData.documentList.length === 0",
+                  style="color: #757575; font-style: italic; font-size: 11px"
+                ) No documents excluded
+            td
+              .event-codes(style="display: flex; flex-wrap: wrap; gap: 4px")
+                span.event-code-item(
+                  *ngFor="let code of rowData.eventCodes",
+                  style="background: #ede7f6; color: #5e35b1; padding: 4px 12px; border-radius: 16px; font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
+                )
+                  i.pi.pi-tag(style="font-size: 10px")
+                  | {{ code }}
+                span.no-events(
+                  *ngIf="!rowData.eventCodes || rowData.eventCodes.length === 0",
+                  style="color: #757575; font-style: italic; font-size: 11px"
+                ) No events
             td
               .flex.gap-2.justify-content-center
                 button.p-button-rounded.p-button-text(
@@ -135,17 +161,7 @@ app-layout([config]="layoutConfig")
                   severity="danger",
                   (click)="onActionClick({ action: 'delete', item: rowData })"
                 )
-
+        
         ng-template(pTemplate="emptymessage")
           tr
             td(colspan="8") No distribution rules found.
-
-  // Add Rule Full Screen Modal
-  .full-screen-modal-overlay(*ngIf="showAddRuleModal")
-    .full-screen-modal-container
-      .full-screen-modal-header
-        h2 Add New Distribution Rule
-        button.modal-close-btn((click)="onModalHide()")
-          i.pi.pi-times
-      .full-screen-modal-content
-        app-add-exclusion-rule([data]="localData", [onClose]="onFormSubmitted")

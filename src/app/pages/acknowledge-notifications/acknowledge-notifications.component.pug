@@ -1,0 +1,66 @@
+app-layout([config]="layoutConfig")
+  app-breadcrumbs([items]="breadcrumbItems")
+  .user-accounts-header
+    h1 Acknowledge Notifications
+  app-configurable-filter-bar(
+          [filters]="filterConfigs",
+          [showClearAll]="true",
+          [showApplyButton]="true",
+          [showFilterSelector]="true",
+          [filterSelectorPlaceholder]="'Select filters to display'",
+          (filterChange)="onFilterChange($event)",
+          (filterCleared)="onFilterCleared()",
+          (filterApplied)="onFilterApplied($event)",
+          (appliedFiltersChange)="onAppliedFiltersChange($event)",
+          [showSearchBar]="true",
+          [searchBar]="searchBar",
+          (filterSearch)="filterSearch($event)",
+          [searchLabel]="'Search File Id'",
+          [showDownloadIcon]="false",
+          [appliedFilters]="appliedFilters",
+          [clearAllLabel]="'Clear All'",
+          [getDisplayValue]="getFilterDisplayValue.bind(this)",
+          (chipRemove)="removeFilterChip($event)",
+          (clearAll)="clearAllFilters()",
+        )
+  app-table([columns]="tableColumns", [data]="acknowledgeData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false")
+  
+  p-dialog(
+    header="Acknowledge Notification",
+    [(visible)]="showEditDialog",
+    [modal]="true",
+    [style]="{ width: '400px' }",
+    [draggable]="false",
+    [resizable]="false"
+  )
+    form([formGroup]="acknowledgeForm", class="office-form")
+      .form-grid
+        .form-field
+          label(for="acknowledge") Acknowledgement Date *
+          p-calendar.w-full.date-calendar(
+                      id="acknowledge"
+                      [formControlName]="acknowledgeDate"
+                      [placeholder]="'Select date'",
+                      [dateFormat]="'yy/mm/dd'",
+                      [showClear]="true",
+                      [showIcon]="true",
+                      [showButtonBar]="true",
+                      [touchUI]="false"
+          )
+    ng-template(pTemplate="footer")
+      button(
+        pButton,
+        type="button",
+        label="Cancel",
+        class="p-button-text",
+        (click)="onCancel()"
+      )
+      button(
+        pButton,
+        type="button",
+        label="Update",
+        (click)="onSaveOffice()",
+      )
+
+  // Confirmation Dialog
+  p-confirmDialog 

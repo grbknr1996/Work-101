@@ -2,37 +2,41 @@ import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import {
   AppLayoutComponent,
   LayoutConfig,
 } from '../../../components/app-layout/app-layout.component';
 import { BreadcrumbsComponent } from '../../../components/breadcrumbs/breadcrumbs.component';
-import { TableComponent } from '../../../components/table/table.component';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { DialogModule } from 'primeng/dialog';
-import { MessageModule } from 'primeng/message';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService } from 'primeng/api';
-import { DataExchangeConfigService } from '../../../_services/data-exchange-config.service';
+import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
+import {
+  ModalComponent,
+  ModalConfig,
+} from '../../../components/modal/modal.component';
+import { HttpClient } from '@angular/common/http';
+
+interface DocumentType {
+  documentCode: string;
+  documentName: string;
+}
+
+interface EventType {
+  eventCode: string;
+  eventLabel: string;
+}
+
+interface IpTypeCategory {
+  ipTypeCategory: string;
+  ipTypeLabel: string;
+  documentTypeBag: DocumentType[];
+  eventTypes: EventType[];
+}
 
 interface RecipientSystem {
-  code: string;
-  name: string;
-  type: 'Global' | 'Regional' | 'National';
-  status: 'active' | 'inactive';
-  totalRules: number;
-  lastSync?: string;
-  dataTypes: string[];
-  endpoint?: string;
+  recipientCode: string;
+  recipientName: string;
+  ipTypeCategoryBag: IpTypeCategory[];
 }
 
 @Component({
@@ -40,20 +44,15 @@ interface RecipientSystem {
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     AppLayoutComponent,
     BreadcrumbsComponent,
-    TableComponent,
     CardModule,
     ButtonModule,
-    InputTextModule,
-    DropdownModule,
-    MultiSelectModule,
-    DialogModule,
-    MessageModule,
-    ConfirmDialogModule,
+    TableModule,
+    TooltipModule,
+    ModalComponent,
   ],
-  providers: [ConfirmationService],
+  providers: [],
   templateUrl: './recipient-systems.component.html',
 })
 export class RecipientSystemsComponent implements OnInit {
@@ -64,89 +63,74 @@ export class RecipientSystemsComponent implements OnInit {
   systems = signal<RecipientSystem[]>([]);
   filteredSystems = computed(() => this.systems());
 
+  // Add expandable rows tracking
+  expandedRows = signal<Set<string>>(new Set());
+
   // Computed properties for template expressions
-  activeSystemsCount = computed(
-    () => this.filteredSystems().filter((s) => s.status === 'active').length
-  );
+  totalSystemsCount = computed(() => this.filteredSystems().length);
 
-  syncedTodayCount = computed(
-    () =>
-      this.filteredSystems().filter((s) => s.lastSync && s.lastSync !== 'Never')
-        .length
-  );
+  totalIpTypesCount = computed(() => {
+    const allIpTypes = new Set<string>();
+    this.filteredSystems().forEach((system) => {
+      system.ipTypeCategoryBag.forEach((category) => {
+        allIpTypes.add(category.ipTypeCategory);
+      });
+    });
+    return allIpTypes.size;
+  });
 
-  totalRulesCount = computed(() =>
-    this.filteredSystems().reduce(
-      (total, system) => total + system.totalRules,
-      0
-    )
-  );
+  totalEventTypesCount = computed(() => {
+    let total = 0;
+    this.filteredSystems().forEach((system) => {
+      system.ipTypeCategoryBag.forEach((category) => {
+        total += category.eventTypes.length;
+      });
+    });
+    return total;
+  });
 
-  globalSystemsCount = computed(
-    () => this.filteredSystems().filter((s) => s.type === 'Global').length
-  );
+  totalDocumentTypesCount = computed(() => {
+    let total = 0;
+    this.filteredSystems().forEach((system) => {
+      system.ipTypeCategoryBag.forEach((category) => {
+        total += category.documentTypeBag.length;
+      });
+    });
+    return total;
+  });
 
-  showAddDialog = false;
-  showEditDialog = false;
-  selectedSystem: RecipientSystem | null = null;
+  showInfoDialog = false;
   loading = false;
 
-  systemForm: FormGroup;
+  // Modal configuration
+  modalConfig: ModalConfig = {
+    header: 'Information',
+    content:
+      '<h3>Update Recipient Systems</h3><p>To update recipient system configurations, please contact your system administrator.</p>',
+    showIcon: true,
+    iconClass: 'pi pi-info-circle',
+    iconColor: '#2196f3',
+    iconSize: '3rem',
+    showCloseButton: true,
+    closeButtonText: 'Close',
+    width: '500px',
+  };
 
-  columns = [
-    { field: 'code', header: 'System Code', display: 'text' },
-    { field: 'name', header: 'System Name', display: 'text' },
-    { field: 'type', header: 'Type', display: 'text' },
-    {
-      field: 'status',
-      header: 'Status',
-      display: 'custom',
-      template: 'statusTemplate',
-    },
-    { field: 'totalRules', header: 'Total Rules', display: 'text' },
-    { field: 'lastSync', header: 'Last Sync', display: 'text' },
-    { field: 'dataTypes', header: 'Data Types', display: 'custom' },
-    {
-      field: 'actions',
-      header: 'Actions',
-      display: 'actions',
-      actions: [
-        {
-          label: 'Edit',
-          icon: 'pi pi-pencil',
-          action: 'edit',
-          severity: 'info',
-        },
-        {
-          label: 'Delete',
-          icon: 'pi pi-trash',
-          action: 'delete',
-          severity: 'danger',
-        },
-      ],
-      showAsDropdown: true,
-    },
-  ];
-
-  systemTypes = [
-    { label: 'Global', value: 'Global' },
-    { label: 'Regional', value: 'Regional' },
-    { label: 'National', value: 'National' },
-  ];
-
-  dataTypes = [
-    { label: 'Patents', value: 'patent' },
-    { label: 'Trademarks', value: 'trademark' },
-    { label: 'Industrial Designs', value: 'design' },
-    { label: 'Geographical Indications', value: 'gi' },
-  ];
+  // Tooltip configuration for better mobile experience
+  tooltipOptions = {
+    tooltipPosition: 'top',
+    tooltipEvent: 'hover',
+    appendTo: 'body',
+    autoHide: true,
+    showDelay: 200,
+    hideDelay: 100,
+    tooltipStyleClass: 'mobile-friendly-tooltip',
+  };
 
   constructor(
-    private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private dataExchangeService: DataExchangeConfigService,
-    private confirmationService: ConfirmationService
+    private http: HttpClient
   ) {
     this.officeCode = this.route.snapshot.params['officeCode'] || 'default';
     this.langCode = this.route.snapshot.params['langCode'] || 'en';
@@ -164,116 +148,49 @@ export class RecipientSystemsComponent implements OnInit {
       theme: 'light',
       logo: '',
     };
-
-    this.initForm();
   }
 
   ngOnInit(): void {
     this.loadSystems();
   }
 
-  private initForm(): void {
-    this.systemForm = this.fb.group({
-      code: ['', [Validators.required, Validators.maxLength(20)]],
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      type: ['', Validators.required],
-      status: ['active', Validators.required],
-      dataTypes: [[], Validators.required],
-      endpoint: ['', Validators.pattern('https?://.+')],
-    });
-  }
-
   private loadSystems(): void {
     this.loading = true;
-    this.dataExchangeService
-      .getDataExchangeData('7bnv35u5b6j6mk5pnfb65jqqe6', 'patent', 'JP')
-      .subscribe((data) => {
-        const systemsData = data.recipientSystemsData || [];
-        const systems: RecipientSystem[] = systemsData.map((system: any) => ({
-          code: system.code,
-          name: system.name,
-          type: system.type as 'Global' | 'Regional' | 'National',
-          status: 'active' as const,
-          totalRules: system.totalRules || 0,
-          lastSync: '1 hour ago',
-          dataTypes: ['patent', 'trademark'],
-          endpoint: `https://api.wipo.int/${system.code.toLowerCase()}`,
-        }));
-        this.systems.set(systems);
+
+    // Load data from the JSON configuration file
+    this.http.get<any>('/assets/configuration/data-exchange.json').subscribe({
+      next: (data) => {
+        if (data.recipientSystems) {
+          // Transform the data to include computed counts
+          const transformedSystems = data.recipientSystems.map(
+            (system: RecipientSystem) => ({
+              ...system,
+              ipTypeCount: system.ipTypeCategoryBag.length,
+              eventTypesCount: system.ipTypeCategoryBag.reduce(
+                (total, category) => total + category.eventTypes.length,
+                0
+              ),
+              documentTypesCount: system.ipTypeCategoryBag.reduce(
+                (total, category) => total + category.documentTypeBag.length,
+                0
+              ),
+            })
+          );
+          this.systems.set(transformedSystems);
+        }
         this.loading = false;
-      });
-  }
-
-  onAddSystem(): void {
-    this.systemForm.reset({ status: 'active', dataTypes: [] });
-    this.showAddDialog = true;
-  }
-
-  onEditSystem(system: RecipientSystem): void {
-    this.selectedSystem = system;
-    this.systemForm.patchValue({
-      code: system.code,
-      name: system.name,
-      type: system.type,
-      status: system.status,
-      dataTypes: system.dataTypes,
-      endpoint: system.endpoint,
-    });
-    this.showEditDialog = true;
-  }
-
-  onDeleteSystem(system: RecipientSystem): void {
-    this.confirmationService.confirm({
-      message: `Are you sure you want to delete ${system.name}?`,
-      header: 'Delete System',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.systems.update((systems) =>
-          systems.filter((s) => s.code !== system.code)
-        );
+      },
+      error: (error) => {
+        console.error('Error loading recipient systems:', error);
+        this.loading = false;
+        // Fallback to empty array
+        this.systems.set([]);
       },
     });
   }
 
-  onSaveSystem(): void {
-    if (this.systemForm.valid) {
-      const formData = this.systemForm.value;
-
-      if (this.showAddDialog) {
-        const newSystem: RecipientSystem = {
-          ...formData,
-          totalRules: 0,
-          lastSync: 'Never',
-        };
-        this.systems.update((systems) => [...systems, newSystem]);
-      } else if (this.selectedSystem) {
-        this.systems.update((systems) =>
-          systems.map((system) =>
-            system.code === this.selectedSystem?.code
-              ? { ...system, ...formData }
-              : system
-          )
-        );
-      }
-
-      this.showAddDialog = false;
-      this.showEditDialog = false;
-      this.selectedSystem = null;
-    }
-  }
-
-  onCancel(): void {
-    this.showAddDialog = false;
-    this.showEditDialog = false;
-    this.selectedSystem = null;
-  }
-
-  onActionClick(event: { action: string; item: any }): void {
-    if (event.action === 'edit') {
-      this.onEditSystem(event.item);
-    } else if (event.action === 'delete') {
-      this.onDeleteSystem(event.item);
-    }
+  showInfoMessage(): void {
+    this.showInfoDialog = true;
   }
 
   getBreadcrumbItems() {
@@ -293,28 +210,37 @@ export class RecipientSystemsComponent implements OnInit {
     ];
   }
 
-  getStatusClass(status: string): string {
-    return status === 'active' ? 'status-active' : 'status-inactive';
+  getEventTypesTooltip(category: IpTypeCategory): string {
+    const eventLabels = category.eventTypes.map((event) => event.eventLabel);
+    return `Event Types:\n${eventLabels.join('\n')}`;
   }
 
-  getDataTypesLabel(types: string[]): string {
-    return types
-      .map(
-        (type) => this.dataTypes.find((dt) => dt.value === type)?.label || type
-      )
-      .join(', ');
+  getDocumentTypesTooltip(category: IpTypeCategory): string {
+    const docLabels = category.documentTypeBag.map(
+      (doc) => `${doc.documentCode}: ${doc.documentName}`
+    );
+    return `Document Types:\n${docLabels.join('\n')}`;
   }
 
-  getTypeClass(type: string): string {
-    switch (type) {
-      case 'Global':
-        return 'type-global';
-      case 'Regional':
-        return 'type-regional';
-      case 'National':
-        return 'type-national';
-      default:
-        return 'type-default';
+  // Expandable rows methods
+  isRowExpanded(systemCode: string): boolean {
+    return this.expandedRows().has(systemCode);
+  }
+
+  toggleRowExpansion(systemCode: string): void {
+    const currentExpanded = this.expandedRows();
+    const newExpanded = new Set(currentExpanded);
+
+    if (newExpanded.has(systemCode)) {
+      newExpanded.delete(systemCode);
+    } else {
+      newExpanded.add(systemCode);
     }
+
+    this.expandedRows.set(newExpanded);
+  }
+
+  getExpandedRowKey(system: RecipientSystem): string {
+    return system.recipientCode;
   }
 }

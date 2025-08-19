@@ -15,6 +15,7 @@ import { MechanicsService } from 'src/app/_services/mechanics.service';
 import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
 import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
 import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
+import { FeeService } from 'src/app/_services/FeeService';
 
 @Component({
   selector: 'app-fee-calculator',
@@ -33,6 +34,9 @@ import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs
     CurrencyPipe,
     AppLayoutComponent,
     BreadcrumbsComponent,
+  ],
+  providers: [
+    FeeService
   ],
   templateUrl: './fee-calculator.component.html'
 })
@@ -106,6 +110,7 @@ export class FeeCalculatorComponent implements OnInit {
 
   constructor(
     private menuService: SidebarMenuService,
+    private feeService: FeeService,
     public ms: MechanicsService,
     private cdr: ChangeDetectorRef,
     private router: Router,
@@ -140,6 +145,7 @@ export class FeeCalculatorComponent implements OnInit {
       // Trigger change detection after updating breadcrumbs
       this.cdr.markForCheck();
     });
+    console.log("Selected Items: ", this.feeService.selectedItems())
   }
 
 }

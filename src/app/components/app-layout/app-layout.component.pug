@@ -21,6 +21,7 @@ div.layout-main([style]="config.showSidebar ? 'margin-left: 3rem' : 'margin-left
   
   // Content area
   div.layout-content([ngStyle]="{'margin-left': sidebarVisible ? '3rem' : '0'}")
+    app-toast
     // Breadcrumbs
     div.breadcrumbs-container(*ngIf="ms.breadcrumbs")
       p-breadcrumb(

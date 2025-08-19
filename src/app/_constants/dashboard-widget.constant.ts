@@ -40,7 +40,7 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
       {
         icon: 'pi-bell',
         label: 'Notifications',
-        link: '/notifications',
+        link: '/aripo-notifications',
         requiredPermissions: [],
       },
     ],
@@ -80,7 +80,7 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
   {
     id: 'data-capture',
     title: 'Data Capture',
-    icon: 'pi-laptop',
+    icon: 'pi-file-import',
     requiredPermissions: ['pending_data_capture_view'],
     items: [
       {
@@ -154,7 +154,7 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
         requiredPermissions: ['person_manage_view'],
       },
       {
-        icon: 'pi-user-plus',
+        icon: 'pi-address-book',
         label: 'Register View',
         link: '/register',
         requiredPermissions: ['person_manage_view'],

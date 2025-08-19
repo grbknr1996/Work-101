@@ -114,3 +114,36 @@ export interface DashboardWidgetItem {
   link: string;
   requiredPermissions: string[];
 }
+
+// Data Exchange Configuration Interfaces
+export interface AuthTokenResponse {
+  access_token: string;
+  expires_in: number;
+  token_type: string;
+}
+
+export interface ExclusionRule {
+  recipientClientId: string;
+  recipientCode: string;
+  recipientName: string;
+  ipCategory: string;
+  originatingOfficeCode: string;
+  originatingOfficeName: string;
+  ipRightsGranted: boolean;
+  applicationPublished: boolean;
+  publishDocuments: boolean;
+  documentList: any[];
+  eventCodes: any[];
+  updatedOn: string | null;
+}
+
+export interface DataExchangeResponse {
+  message: string;
+  data: ExclusionRule[];
+}
+
+export interface ExclusionRuleFilters {
+  Recipient_ClientID?: string;
+  ipCategory?: string;
+  originatingOfficeCode?: string;
+}

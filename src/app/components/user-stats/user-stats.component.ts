@@ -7,9 +7,9 @@ import {
   OnChanges,
   SimpleChanges,
   Output,
-} from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { PrimeIcons } from "primeng/api";
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { PrimeIcons } from 'primeng/api';
 
 interface UserStat {
   label: string;
@@ -21,8 +21,8 @@ interface UserStat {
 }
 
 @Component({
-  selector: "app-user-stats",
-  templateUrl: "./user-stats.component.html",
+  selector: 'app-user-stats',
+  templateUrl: './user-stats.component.html',
   standalone: true,
   imports: [CommonModule],
 })
@@ -37,10 +37,10 @@ export class UserStatsComponent implements OnInit, OnChanges {
   @Input() inactiveUsersPercentChange: number = 0;
   @Input() unconfirmedUsersPercentChange: number = 0;
 
-  @Input() totalUsersPeriod: string = "last month";
-  @Input() activeUsersPeriod: string = "last week";
-  @Input() inactiveUsersPeriod: string = "last month";
-  @Input() unconfirmedUsersPeriod: string = "last week";
+  @Input() totalUsersPeriod: string = 'last month';
+  @Input() activeUsersPeriod: string = 'last week';
+  @Input() inactiveUsersPeriod: string = 'last month';
+  @Input() unconfirmedUsersPeriod: string = 'last week';
 
   @Output() statSelected = new EventEmitter<string>();
 
@@ -59,36 +59,36 @@ export class UserStatsComponent implements OnInit, OnChanges {
   initUserStats(): void {
     this.userStats = [
       {
-        label: "TOTAL USERS",
+        label: 'TOTAL USERS',
         count: this.totalUsers,
         percentChange: this.totalUsersPercentChange,
         period: this.totalUsersPeriod,
-        color: "#3949AB", // Indigo color
-        icon: "pi pi-users",
+        color: '#3949AB', // Indigo color
+        icon: 'pi pi-users',
       },
       {
-        label: "ACTIVE USERS",
+        label: 'ACTIVE USERS',
         count: this.activeUsers,
         percentChange: this.activeUsersPercentChange,
         period: this.activeUsersPeriod,
-        color: "#2E7D32", // Green color
-        icon: "pi pi-check-circle",
+        color: '#2E7D32',
+        icon: 'pi pi-check-circle',
       },
       {
-        label: "INACTIVE USERS",
+        label: 'INACTIVE USERS',
         count: this.inactiveUsers,
         percentChange: this.inactiveUsersPercentChange,
         period: this.inactiveUsersPeriod,
-        color: "#D32F2F", // Red color
-        icon: "pi pi-times-circle",
+        color: '#D32F2F',
+        icon: 'pi pi-times-circle',
       },
       {
-        label: "UNCONFIRMED USERS",
+        label: 'UNVERIFIED USERS',
         count: this.unconfirmedUsers,
         percentChange: this.unconfirmedUsersPercentChange,
         period: this.unconfirmedUsersPeriod,
-        color: "#0288D1", // Blue color
-        icon: "pi pi-user-plus",
+        color: '#0288D1',
+        icon: 'pi pi-user-plus',
       },
     ];
   }

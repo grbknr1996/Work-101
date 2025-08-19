@@ -1,0 +1,369 @@
+{
+  "recipientSystems": [
+    {
+      "recipientCode": "jpo",
+      "recipientName": "Japan Patent Office",
+      "recipientClientId": "jpo-app-client-8f4a2b1c",
+      "ipTypeCategoryBag": [
+        {
+          "ipTypeCategory": "patent",
+          "ipTypeLabel": "Patents",
+          "documentTypeBag": [
+            { "documentCode": "CLM", "documentName": "claims" },
+            { "documentCode": "ABS", "documentName": "abstract" }
+          ],
+          "eventTypes": [
+            { "eventCode": "KE001", "eventLabel": "Application Filing" },
+            { "eventCode": "KE002", "eventLabel": "Examination Request" }
+          ]
+        },
+        {
+          "ipTypeCategory": "trademark",
+          "ipTypeLabel": "Trademarks",
+          "documentTypeBag": [
+            { "documentCode": "IMG", "documentName": "image" },
+            { "documentCode": "SND", "documentName": "sound mark" }
+          ],
+          "eventTypes": [{ "eventCode": "KE003", "eventLabel": "Registration" }]
+        },
+        {
+          "ipTypeCategory": "design",
+          "ipTypeLabel": "Industrial Designs",
+          "documentTypeBag": [
+            { "documentCode": "3D", "documentName": "3D views" },
+            { "documentCode": "IMG", "documentName": "illustration" }
+          ],
+          "eventTypes": [
+            { "eventCode": "KE004", "eventLabel": "Design Filing" },
+            { "eventCode": "KE005", "eventLabel": "Design Publication" }
+          ]
+        },
+        {
+          "ipTypeCategory": "copyright",
+          "ipTypeLabel": "Copyright",
+          "documentTypeBag": [
+            { "documentCode": "TXT", "documentName": "text content" }
+          ],
+          "eventTypes": [
+            { "eventCode": "KE006", "eventLabel": "Copyright Registration" }
+          ]
+        },
+        {
+          "ipTypeCategory": "gi",
+          "ipTypeLabel": "Geographical Indications",
+          "documentTypeBag": [
+            { "documentCode": "GIL", "documentName": "GI label" }
+          ],
+          "eventTypes": [
+            { "eventCode": "KE007", "eventLabel": "GI Application" }
+          ]
+        }
+      ]
+    },
+    {
+      "recipientCode": "epo",
+      "recipientName": "European Patent Office",
+      "recipientClientId": "epo-app-client-9d3c4e5f",
+      "ipTypeCategoryBag": [
+        {
+          "ipTypeCategory": "patent",
+          "ipTypeLabel": "Patents",
+          "documentTypeBag": [
+            { "documentCode": "CLM", "documentName": "claims" },
+            { "documentCode": "DES", "documentName": "description" }
+          ],
+          "eventTypes": [{ "eventCode": "KE010", "eventLabel": "EPO Filing" }]
+        },
+        {
+          "ipTypeCategory": "trademark",
+          "ipTypeLabel": "Trademarks",
+          "documentTypeBag": [
+            { "documentCode": "WDS", "documentName": "word mark" },
+            { "documentCode": "IMG", "documentName": "logo" }
+          ],
+          "eventTypes": [
+            { "eventCode": "KE011", "eventLabel": "Trademark Opposition" },
+            { "eventCode": "KE012", "eventLabel": "Trademark Renewal" }
+          ]
+        },
+        {
+          "ipTypeCategory": "design",
+          "ipTypeLabel": "Industrial Designs",
+          "documentTypeBag": [
+            { "documentCode": "3D", "documentName": "3D model" }
+          ],
+          "eventTypes": [
+            { "eventCode": "KE013", "eventLabel": "Design Registration" }
+          ]
+        },
+        {
+          "ipTypeCategory": "copyright",
+          "ipTypeLabel": "Copyright",
+          "documentTypeBag": [
+            { "documentCode": "ART", "documentName": "artwork" }
+          ],
+          "eventTypes": [
+            { "eventCode": "KE014", "eventLabel": "Copyright Assignment" }
+          ]
+        },
+        {
+          "ipTypeCategory": "gi",
+          "ipTypeLabel": "Geographical Indications",
+          "documentTypeBag": [
+            { "documentCode": "GIS", "documentName": "GI specification" }
+          ],
+          "eventTypes": [
+            { "eventCode": "KE015", "eventLabel": "GI Specification" }
+          ]
+        }
+      ]
+    },
+    {
+      "recipientCode": "vc",
+      "recipientName": "CIPO St. Vincent & Grenadines",
+      "recipientClientId": "vc-app-client-7a1b2c3d",
+      "ipTypeCategoryBag": [
+        {
+          "ipTypeCategory": "copyright",
+          "ipTypeLabel": "Copyright",
+          "documentTypeBag": [
+            { "documentCode": "TXT", "documentName": "text content" },
+            { "documentCode": "ART", "documentName": "artwork" },
+            { "documentCode": "MUS", "documentName": "musical composition" }
+          ],
+          "eventTypes": [
+            { "eventCode": "VC001", "eventLabel": "Copyright Registration" },
+            { "eventCode": "VC002", "eventLabel": "Copyright Assignment" },
+            { "eventCode": "VC003", "eventLabel": "Copyright Renewal" }
+          ]
+        },
+        {
+          "ipTypeCategory": "trademark",
+          "ipTypeLabel": "Trademarks",
+          "documentTypeBag": [
+            { "documentCode": "IMG", "documentName": "logo" },
+            { "documentCode": "WDS", "documentName": "word mark" }
+          ],
+          "eventTypes": [
+            { "eventCode": "VC004", "eventLabel": "Trademark Filing" },
+            { "eventCode": "VC005", "eventLabel": "Trademark Registration" }
+          ]
+        }
+      ]
+    },
+    {
+      "recipientCode": "cv",
+      "recipientName": "IGQPI - Instituto de Gestão da Qualidade e da Propriedade Intelectual",
+      "recipientClientId": "cv-app-client-6e4f5a6b",
+      "ipTypeCategoryBag": [
+        {
+          "ipTypeCategory": "patent",
+          "ipTypeLabel": "Patents",
+          "documentTypeBag": [
+            { "documentCode": "CLM", "documentName": "claims" },
+            { "documentCode": "DES", "documentName": "description" },
+            { "documentCode": "DRW", "documentName": "drawings" }
+          ],
+          "eventTypes": [
+            { "eventCode": "CV001", "eventLabel": "Patent Filing" },
+            { "eventCode": "CV002", "eventLabel": "Patent Examination" }
+          ]
+        },
+        {
+          "ipTypeCategory": "trademark",
+          "ipTypeLabel": "Trademarks",
+          "documentTypeBag": [
+            { "documentCode": "IMG", "documentName": "logo" },
+            { "documentCode": "WDS", "documentName": "word mark" },
+            { "documentCode": "SND", "documentName": "sound mark" }
+          ],
+          "eventTypes": [
+            { "eventCode": "CV003", "eventLabel": "Trademark Filing" },
+            { "eventCode": "CV004", "eventLabel": "Trademark Registration" }
+          ]
+        },
+        {
+          "ipTypeCategory": "design",
+          "ipTypeLabel": "Industrial Designs",
+          "documentTypeBag": [
+            { "documentCode": "IMG", "documentName": "illustration" },
+            { "documentCode": "3D", "documentName": "3D views" }
+          ],
+          "eventTypes": [
+            { "eventCode": "CV005", "eventLabel": "Design Registration" }
+          ]
+        }
+      ]
+    },
+    {
+      "recipientCode": "bt",
+      "recipientName": "Bhutan Intellectual Property Office",
+      "recipientClientId": "bt-app-client-5c7d8e9f",
+      "ipTypeCategoryBag": [
+        {
+          "ipTypeCategory": "patent",
+          "ipTypeLabel": "Patents",
+          "documentTypeBag": [
+            { "documentCode": "CLM", "documentName": "claims" },
+            { "documentCode": "ABS", "documentName": "abstract" },
+            { "documentCode": "DRW", "documentName": "drawings" }
+          ],
+          "eventTypes": [
+            { "eventCode": "BT001", "eventLabel": "Patent Filing" },
+            { "eventCode": "BT002", "eventLabel": "Patent Examination" },
+            { "eventCode": "BT003", "eventLabel": "Patent Grant" }
+          ]
+        },
+        {
+          "ipTypeCategory": "trademark",
+          "ipTypeLabel": "Trademarks",
+          "documentTypeBag": [
+            { "documentCode": "IMG", "documentName": "logo" },
+            { "documentCode": "WDS", "documentName": "word mark" }
+          ],
+          "eventTypes": [
+            { "eventCode": "BT004", "eventLabel": "Trademark Filing" },
+            { "eventCode": "BT005", "eventLabel": "Trademark Registration" }
+          ]
+        },
+        {
+          "ipTypeCategory": "copyright",
+          "ipTypeLabel": "Copyright",
+          "documentTypeBag": [
+            { "documentCode": "TXT", "documentName": "text content" },
+            { "documentCode": "ART", "documentName": "artwork" }
+          ],
+          "eventTypes": [
+            { "eventCode": "BT006", "eventLabel": "Copyright Registration" },
+            { "eventCode": "BT007", "eventLabel": "Copyright Assignment" }
+          ]
+        },
+        {
+          "ipTypeCategory": "gi",
+          "ipTypeLabel": "Geographical Indications",
+          "documentTypeBag": [
+            { "documentCode": "GIL", "documentName": "GI label" },
+            { "documentCode": "GIS", "documentName": "GI specification" }
+          ],
+          "eventTypes": [
+            { "eventCode": "BT008", "eventLabel": "GI Registration" }
+          ]
+        }
+      ]
+    },
+    {
+      "recipientCode": "kh",
+      "recipientName": "Cambodia Department of Intellectual Property Rights",
+      "recipientClientId": "kh-app-client-4b5c6d7e",
+      "ipTypeCategoryBag": [
+        {
+          "ipTypeCategory": "patent",
+          "ipTypeLabel": "Patents",
+          "documentTypeBag": [
+            { "documentCode": "CLM", "documentName": "claims" },
+            { "documentCode": "DES", "documentName": "description" },
+            { "documentCode": "DRW", "documentName": "drawings" },
+            { "documentCode": "ABS", "documentName": "abstract" }
+          ],
+          "eventTypes": [
+            { "eventCode": "KH001", "eventLabel": "Patent Filing" },
+            { "eventCode": "KH002", "eventLabel": "Patent Examination" },
+            { "eventCode": "KH003", "eventLabel": "Patent Publication" },
+            { "eventCode": "KH004", "eventLabel": "Patent Grant" }
+          ]
+        },
+        {
+          "ipTypeCategory": "trademark",
+          "ipTypeLabel": "Trademarks",
+          "documentTypeBag": [
+            { "documentCode": "IMG", "documentName": "logo" },
+            { "documentCode": "WDS", "documentName": "word mark" },
+            { "documentCode": "SND", "documentName": "sound mark" },
+            { "documentCode": "COL", "documentName": "color mark" }
+          ],
+          "eventTypes": [
+            { "eventCode": "KH005", "eventLabel": "Trademark Filing" },
+            { "eventCode": "KH006", "eventLabel": "Trademark Examination" },
+            { "eventCode": "KH007", "eventLabel": "Trademark Registration" }
+          ]
+        },
+        {
+          "ipTypeCategory": "design",
+          "ipTypeLabel": "Industrial Designs",
+          "documentTypeBag": [
+            { "documentCode": "IMG", "documentName": "illustration" },
+            { "documentCode": "3D", "documentName": "3D views" },
+            { "documentCode": "DRW", "documentName": "technical drawings" }
+          ],
+          "eventTypes": [
+            { "eventCode": "KH008", "eventLabel": "Design Filing" },
+            { "eventCode": "KH009", "eventLabel": "Design Registration" }
+          ]
+        },
+        {
+          "ipTypeCategory": "copyright",
+          "ipTypeLabel": "Copyright",
+          "documentTypeBag": [
+            { "documentCode": "TXT", "documentName": "text content" },
+            { "documentCode": "ART", "documentName": "artwork" },
+            { "documentCode": "MUS", "documentName": "musical composition" }
+          ],
+          "eventTypes": [
+            { "eventCode": "KH010", "eventLabel": "Copyright Registration" },
+            { "eventCode": "KH011", "eventLabel": "Copyright Assignment" }
+          ]
+        }
+      ]
+    },
+    {
+      "recipientCode": "kh-moc",
+      "recipientName": "Cambodia Ministry of Commerce",
+      "recipientClientId": "kh-moc-app-client-3a4b5c6d",
+      "ipTypeCategoryBag": [
+        {
+          "ipTypeCategory": "trademark",
+          "ipTypeLabel": "Trademarks",
+          "documentTypeBag": [
+            { "documentCode": "IMG", "documentName": "logo" },
+            { "documentCode": "WDS", "documentName": "word mark" },
+            { "documentCode": "SND", "documentName": "sound mark" },
+            { "documentCode": "COL", "documentName": "color mark" },
+            { "documentCode": "HOL", "documentName": "hologram mark" }
+          ],
+          "eventTypes": [
+            { "eventCode": "KHM001", "eventLabel": "Trademark Filing" },
+            { "eventCode": "KHM002", "eventLabel": "Trademark Examination" },
+            { "eventCode": "KHM003", "eventLabel": "Trademark Publication" },
+            { "eventCode": "KHM004", "eventLabel": "Trademark Registration" }
+          ]
+        },
+        {
+          "ipTypeCategory": "gi",
+          "ipTypeLabel": "Geographical Indications",
+          "documentTypeBag": [
+            { "documentCode": "GIL", "documentName": "GI label" },
+            { "documentCode": "GIS", "documentName": "GI specification" },
+            { "documentCode": "GIM", "documentName": "GI map" }
+          ],
+          "eventTypes": [
+            { "eventCode": "KHM005", "eventLabel": "GI Filing" },
+            { "eventCode": "KHM006", "eventLabel": "GI Registration" }
+          ]
+        },
+        {
+          "ipTypeCategory": "patent",
+          "ipTypeLabel": "Patents",
+          "documentTypeBag": [
+            { "documentCode": "CLM", "documentName": "claims" },
+            { "documentCode": "DES", "documentName": "description" },
+            { "documentCode": "DRW", "documentName": "drawings" }
+          ],
+          "eventTypes": [
+            { "eventCode": "KHM007", "eventLabel": "Patent Filing" },
+            { "eventCode": "KHM008", "eventLabel": "Patent Registration" }
+          ]
+        }
+      ]
+    }
+  ]
+}

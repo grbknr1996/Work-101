@@ -182,21 +182,18 @@ export class OriginatingOfficesComponent implements OnInit {
 
   private loadOffices(): void {
     this.loading = true;
-    this.dataExchangeService
-      .getDataExchangeData('7bnv35u5b6j6mk5pnfb65jqqe6', 'patent', 'JP')
-      .subscribe((data) => {
-        const officesData = data.originatingOfficesData || [];
-        const offices: Office[] = officesData.map((office: any) => ({
-          code: office.code,
-          name: office.name,
-          country: this.getCountryFromCode(office.code),
-          status: 'active' as const,
-          lastSync: '2 hours ago',
-          dataTypes: ['patent', 'trademark'],
-        }));
-        this.offices.set(offices);
-        this.loading = false;
-      });
+
+    const officesData = [];
+    const offices: Office[] = officesData.map((office: any) => ({
+      code: office.code,
+      name: office.name,
+      country: this.getCountryFromCode(office.code),
+      status: 'active' as const,
+      lastSync: '2 hours ago',
+      dataTypes: ['patent', 'trademark'],
+    }));
+    this.offices.set(offices);
+    this.loading = false;
   }
 
   private getCountryFromCode(code: string): string {

@@ -130,6 +130,40 @@ export class SidebarMenuService {
     ];
   }
 
+
+  generateMyWorkspaceMenu(currentPath: string): MenuItem[] {
+    console.log('current path:', currentPath);
+    const lastPart = currentPath.split('/').pop();
+    console.log(lastPart);
+    return [
+      {
+        id: 'dashboard',
+        label: 'Home',
+        icon: 'pi pi-home',
+        routerLink: this.getRouterLink('/dashboard'),
+      },
+      {
+        id: 'filing-dashboard',
+        label: 'Filing Dashboard',
+        icon: 'pi pi-objects-column',
+        routerLink: this.getRouterLink(`/filing-dashboard`),
+      },
+      {
+        id: 'new-filings',
+        label: 'New Filings',
+        icon: 'pi pi-plus-circle',
+        routerLink: this.getRouterLink(`/new-filings`),
+      },
+      {
+        id: 'notifications',
+        label: 'Notifications',
+        icon: 'pi pi-bell',
+        routerLink: this.getRouterLink(`/aripo-notifications`),
+      },
+      
+    ];
+  }
+
   generateFeeConfigurationMenu(currentPath: string): MenuItem[] {
     console.log('current path:', currentPath);
     const lastPart = currentPath.split('/').pop();

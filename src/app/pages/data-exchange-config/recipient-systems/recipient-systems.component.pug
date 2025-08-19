@@ -2,25 +2,20 @@ app-layout([config]="layoutConfig")
   app-breadcrumbs([items]="getBreadcrumbItems()")
 
   // Page Header
-  .page-header
-    .header-content
-      .header-title
-        h1 Recipient Systems
-        p Configure systems that receive data from IP offices
-      .header-actions
+  .mb-8
+    .flex.justify-between.items-center.mb-4
+      div
+        h1.text-2xl.font-semibold.text-gray-800.mb-2 Recipient Systems
+        p.text-gray-600.text-sm Configure systems that receive data from IP offices
+      .flex.gap-3
         button(
           pButton,
           type="button",
-          label="Import Systems",
-          icon="pi pi-upload",
-          class="p-button-outlined"
-        )
-        button(
-          pButton,
-          type="button",
-          label="Add System",
-          icon="pi pi-plus",
-          (click)="onAddSystem()"
+          icon="pi pi-info-circle",
+          class="p-button-text p-button-rounded",
+          (click)="showInfoMessage()",
+          pTooltip="Click for information about updating recipient systems",
+          tooltipPosition="bottom"
         )
 
   // Statistics Cards
@@ -30,276 +25,148 @@ app-layout([config]="layoutConfig")
         .stat-icon
           i.pi.pi-database
         .stat-info
-          .stat-number {{ filteredSystems().length }}
-          .stat-label Total Systems
+          .stat-number {{ totalSystemsCount() }}
+          .stat-label Total Recipients
 
     p-card(styleClass="stat-card")
       .stat-content
         .stat-icon
-          i.pi.pi-check-circle
+          i.pi.pi-tags
         .stat-info
-          .stat-number {{ activeSystemsCount() }}
-          .stat-label Active Systems
+          .stat-number {{ totalIpTypesCount() }}
+          .stat-label IP Types
 
     p-card(styleClass="stat-card")
       .stat-content
         .stat-icon
-          i.pi.pi-globe
+          i.pi.pi-calendar
         .stat-info
-          .stat-number {{ globalSystemsCount() }}
-          .stat-label Global Systems
+          .stat-number {{ totalEventTypesCount() }}
+          .stat-label Event Types
 
     p-card(styleClass="stat-card")
       .stat-content
         .stat-icon
-          i.pi.pi-shield
+          i.pi.pi-file
         .stat-info
-          .stat-number {{ totalRulesCount() }}
-          .stat-label Total Rules
+          .stat-number {{ totalDocumentTypesCount() }}
+          .stat-label Document Types
 
   // Systems Table
-  .table-section
-    p-card(header="Recipient Systems", styleClass="table-card")
-      app-table(
-        [columns]="columns",
-        [data]="filteredSystems()",
+  .mb-8
+    p-card(styleClass="bg-white rounded-lg shadow-sm border border-gray-200")
+      p-table(
+        [value]="filteredSystems()",
         [rows]="10",
         [paginator]="true",
         [loading]="loading",
-        (actionClick)="onActionClick($event)"
+        [showCurrentPageReport]="true",
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries",
+        [rowsPerPageOptions]="[10, 25, 50]",
+        styleClass="p-datatable-sm",
+        [dataKey]="'recipientCode'"
       )
-        // Status Template
-        ng-template(#statusTemplate, let-row)
-          span.status-badge([ngClass]="getStatusClass(row.status)") {{ row.status }}
+        // IP Types Column
+        ng-template(pTemplate="header")
+          tr
+            th.w-12
+            th Recipient Name
+            th IP Types
+            th Event Types
+            th Document Types
 
-        // Data Types Template
-        ng-template(#dataTypesTemplate, let-row)
-          .data-types
-            span.data-type-badge(*ngFor="let type of row.dataTypes") {{ getDataTypesLabel([type]) }}
+        ng-template(pTemplate="body", let-row)
+          tr
+            td
+              button(
+                pButton,
+                type="button",
+                [icon]="isRowExpanded(row.recipientCode) ? 'pi pi-chevron-down' : 'pi pi-chevron-right'",
+                class="p-button-text p-button-rounded p-button-sm",
+                (click)="toggleRowExpansion(row.recipientCode)",
+                pTooltip="Click to expand/collapse details",
+                tooltipPosition="top"
+              )
 
-  // Add System Dialog
-  p-dialog(
-    header="Add Recipient System",
-    [(visible)]="showAddDialog",
-    [modal]="true",
-    [style]="{ width: '700px' }",
-    [draggable]="false",
-    [resizable]="false"
+            td {{ row.recipientName }}
+            td
+              .flex.flex-wrap.gap-2
+                span.inline-flex.items-center.px-3.py-1.rounded-full.text-xs.font-medium.bg-blue-50.text-blue-700.border.border-blue-200(
+                  *ngFor="let category of row.ipTypeCategoryBag"
+                )
+                  | {{ category.ipTypeLabel }}
+
+            td
+              .flex.flex-wrap.gap-2
+                span.inline-flex.items-center.px-3.py-1.rounded-full.text-xs.font-medium.bg-purple-50.text-purple-700.border.border-purple-200(
+                  *ngFor="let category of row.ipTypeCategoryBag",
+                  [pTooltip]="getEventTypesTooltip(category)",
+                  tooltipPosition="top",
+                  [tooltipOptions]="tooltipOptions"
+                )
+                  span.mr-1 {{ category.ipTypeLabel }}:
+                  span(class="bg-white bg-opacity-70 rounded-full px-2 py-0.5 text-xs font-semibold min-w-4 text-center")
+                    | {{ category.eventTypes.length }}
+
+            td
+              .flex.flex-wrap.gap-2
+                span.inline-flex.items-center.px-3.py-1.rounded-full.text-xs.font-medium.bg-green-50.text-green-700.border.border-green-200(
+                  *ngFor="let category of row.ipTypeCategoryBag",
+                  [pTooltip]="getDocumentTypesTooltip(category)",
+                  tooltipPosition="top",
+                  [tooltipOptions]="tooltipOptions"
+                )
+                  span.mr-1 {{ category.ipTypeLabel }}:
+                  span(class="bg-white bg-opacity-70 rounded-full px-2 py-0.5 text-xs font-semibold min-w-4 text-center")
+                    | {{ category.documentTypeBag.length }}
+
+          // Expanded Row Content
+          tr.bg-gray-50.border-l-4.border-blue-500(
+            *ngIf="isRowExpanded(row.recipientCode)"
+          )
+            td(colspan="6")
+              .p-4
+                div(
+                  class="mb-5 last:mb-0",
+                  *ngFor="let category of row.ipTypeCategoryBag"
+                )
+                  .mb-3
+                    h4(class="text-blue-600 font-semibold text-sm border-b-2 border-blue-100 pb-2")
+                      | {{ category.ipTypeLabel }}
+
+                  div(class="grid gap-4")
+                    // Event Types Section
+                    div
+                      h5.flex.items-center.gap-2.mb-3.text-gray-800.font-semibold.text-sm
+                        i.pi.pi-calendar.text-blue-500.text-xs
+                        | Event Types ({{ category.eventTypes.length }})
+                      div(class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2")
+                        div(
+                          class="flex items-center p-2 rounded border border-gray-200 bg-white hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 border-l-2 border-l-purple-500",
+                          *ngFor="let event of category.eventTypes"
+                        )
+                          span.bg-gray-100.text-gray-600.px-2.py-1.rounded.text-xs.font-mono.font-semibold.mr-3.min-w-12.text-center
+                            | {{ event.eventCode }}
+                          span.text-gray-700.text-sm.font-medium.flex-1
+                            | {{ event.eventLabel }}
+
+                    // Document Types Section
+                    div
+                      h5.flex.items-center.gap-2.mb-3.text-gray-800.font-semibold.text-sm
+                        i.pi.pi-file.text-blue-500.text-xs
+                        | Document Types ({{ category.documentTypeBag.length }})
+                      div(class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2")
+                        div(
+                          class="flex items-center p-2 rounded border border-gray-200 bg-white hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 border-l-2 border-l-green-500",
+                          *ngFor="let doc of category.documentTypeBag"
+                        )
+                          span.bg-gray-100.text-gray-600.px-2.py-1.rounded.text-xs.font-mono.font-semibold.mr-3.min-w-12.text-center
+                            | {{ doc.documentCode }}
+                          span.text-gray-700.text-sm.font-medium.flex-1
+                            | {{ doc.documentName }}
+
+  // Reusable Modal Component
+  app-modal(
+    [(visible)]="showInfoDialog",
+    [config]="modalConfig"
   )
-    form([formGroup]="systemForm", class="system-form")
-      .form-grid
-        .form-field
-          label(for="code") System Code *
-          input(
-            id="code",
-            type="text",
-            pInputText,
-            formControlName="code",
-            placeholder="e.g., PATENTSCOPE, GBDB",
-            maxlength="20"
-          )
-          small.p-error(
-            *ngIf="systemForm.get('code')?.invalid && systemForm.get('code')?.touched"
-          )
-            | System code is required and must be 20 characters or less
-
-        .form-field
-          label(for="name") System Name *
-          input(
-            id="name",
-            type="text",
-            pInputText,
-            formControlName="name",
-            placeholder="e.g., WIPO PATENTSCOPE"
-          )
-          small.p-error(
-            *ngIf="systemForm.get('name')?.invalid && systemForm.get('name')?.touched"
-          )
-            | System name is required and must be at least 3 characters
-
-        .form-field
-          label(for="type") System Type *
-          p-dropdown(
-            id="type",
-            [options]="systemTypes",
-            formControlName="type",
-            placeholder="Select Type",
-            optionLabel="label",
-            optionValue="value"
-          )
-          small.p-error(
-            *ngIf="systemForm.get('type')?.invalid && systemForm.get('type')?.touched"
-          )
-            | System type is required
-
-        .form-field
-          label(for="status") Status *
-          p-dropdown(
-            id="status",
-            [options]="[{ label: 'Active', value: 'active' }, { label: 'Inactive', value: 'inactive' }]",
-            formControlName="status",
-            placeholder="Select Status",
-            optionLabel="label",
-            optionValue="value"
-          )
-
-        .form-field.full-width
-          label(for="endpoint") API Endpoint
-          input(
-            id="endpoint",
-            type="url",
-            pInputText,
-            formControlName="endpoint",
-            placeholder="https://api.wipo.int/system-name"
-          )
-          small.p-error(
-            *ngIf="systemForm.get('endpoint')?.invalid && systemForm.get('endpoint')?.touched"
-          )
-            | Please enter a valid URL starting with http:// or https://
-
-        .form-field.full-width
-          label(for="dataTypes") Data Types *
-          p-multiselect(
-            id="dataTypes",
-            [options]="dataTypes",
-            formControlName="dataTypes",
-            placeholder="Select Data Types",
-            optionLabel="label",
-            optionValue="value",
-            display="chip"
-          )
-          small.p-error(
-            *ngIf="systemForm.get('dataTypes')?.invalid && systemForm.get('dataTypes')?.touched"
-          )
-            | At least one data type must be selected
-
-    ng-template(pTemplate="footer")
-      button(
-        pButton,
-        type="button",
-        label="Cancel",
-        class="p-button-text",
-        (click)="onCancel()"
-      )
-      button(
-        pButton,
-        type="button",
-        label="Save",
-        (click)="onSaveSystem()",
-        [disabled]="!systemForm.valid"
-      )
-
-  // Edit System Dialog
-  p-dialog(
-    header="Edit Recipient System",
-    [(visible)]="showEditDialog",
-    [modal]="true",
-    [style]="{ width: '700px' }",
-    [draggable]="false",
-    [resizable]="false"
-  )
-    form([formGroup]="systemForm", class="system-form")
-      .form-grid
-        .form-field
-          label(for="edit-code") System Code *
-          input(
-            id="edit-code",
-            type="text",
-            pInputText,
-            formControlName="code",
-            placeholder="e.g., PATENTSCOPE, GBDB",
-            maxlength="20"
-          )
-          small.p-error(
-            *ngIf="systemForm.get('code')?.invalid && systemForm.get('code')?.touched"
-          )
-            | System code is required and must be 20 characters or less
-
-        .form-field
-          label(for="edit-name") System Name *
-          input(
-            id="edit-name",
-            type="text",
-            pInputText,
-            formControlName="name",
-            placeholder="e.g., WIPO PATENTSCOPE"
-          )
-          small.p-error(
-            *ngIf="systemForm.get('name')?.invalid && systemForm.get('name')?.touched"
-          )
-            | System name is required and must be at least 3 characters
-
-        .form-field
-          label(for="edit-type") System Type *
-          p-dropdown(
-            id="edit-type",
-            [options]="systemTypes",
-            formControlName="type",
-            placeholder="Select Type",
-            optionLabel="label",
-            optionValue="value"
-          )
-          small.p-error(
-            *ngIf="systemForm.get('type')?.invalid && systemForm.get('type')?.touched"
-          )
-            | System type is required
-
-        .form-field
-          label(for="edit-status") Status *
-          p-dropdown(
-            id="edit-status",
-            [options]="[{ label: 'Active', value: 'active' }, { label: 'Inactive', value: 'inactive' }]",
-            formControlName="status",
-            placeholder="Select Status",
-            optionLabel="label",
-            optionValue="value"
-          )
-
-        .form-field.full-width
-          label(for="edit-endpoint") API Endpoint
-          input(
-            id="edit-endpoint",
-            type="url",
-            pInputText,
-            formControlName="endpoint",
-            placeholder="https://api.wipo.int/system-name"
-          )
-          small.p-error(
-            *ngIf="systemForm.get('endpoint')?.invalid && systemForm.get('endpoint')?.touched"
-          )
-            | Please enter a valid URL starting with http:// or https://
-
-        .form-field.full-width
-          label(for="edit-dataTypes") Data Types *
-          p-multiselect(
-            id="edit-dataTypes",
-            [options]="dataTypes",
-            formControlName="dataTypes",
-            placeholder="Select Data Types",
-            optionLabel="label",
-            optionValue="value",
-            display="chip"
-          )
-          small.p-error(
-            *ngIf="systemForm.get('dataTypes')?.invalid && systemForm.get('dataTypes')?.touched"
-          )
-            | At least one data type must be selected
-
-    ng-template(pTemplate="footer")
-      button(
-        pButton,
-        type="button",
-        label="Cancel",
-        class="p-button-text",
-        (click)="onCancel()"
-      )
-      button(
-        pButton,
-        type="button",
-        label="Update",
-        (click)="onSaveSystem()",
-        [disabled]="!systemForm.valid"
-      )
-
-  // Confirmation Dialog
-  p-confirmDialog

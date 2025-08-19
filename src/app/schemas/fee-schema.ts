@@ -2,5 +2,6 @@ export interface Fee {
     name: string,
     category: string,
     basicFee: number,
-    variableFee: number
+    variableFee: number,
+    checked?: boolean
 }

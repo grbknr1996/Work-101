@@ -1,0 +1,2 @@
+.card-group
+    app-stat-card(*ngFor='let card of cards', [icon]='card.icon', [label]='card.label', [current]='selectedCard === card.label', (cardClick)='handleCardClick(card)')

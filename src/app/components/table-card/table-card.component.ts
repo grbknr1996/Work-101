@@ -44,7 +44,9 @@ export interface CardColumnDefinition {
   dateFormat?: string;
   currency?: string;
   customClass?: string;
-  severity?: (value: any) => 'success' | 'info' | 'warn' | 'danger' | 'secondary' | undefined;
+  severity?: (
+    value: any
+  ) => 'success' | 'info' | 'warn' | 'danger' | 'secondary' | undefined;
   value?: (value: any) => string;
   customTemplate?: boolean;
   actions?: CardAction[];
@@ -58,7 +60,15 @@ export interface CardAction {
   label: string;
   icon?: string;
   action: string;
-  severity?: 'success' | 'info' | 'warn' | 'warning' | 'danger' | 'secondary' | 'contrast' | 'help';
+  severity?:
+    | 'success'
+    | 'info'
+    | 'warn'
+    | 'warning'
+    | 'danger'
+    | 'secondary'
+    | 'contrast'
+    | 'help';
   visible?: (item: any) => boolean;
 }
 
@@ -132,17 +142,17 @@ export class TableCardComponent implements OnInit, OnChanges {
 
   // Helper methods for card display
   getAvatarField(): string | null {
-    const avatarCol = this.columns.find(col => col.display === 'avatar');
+    const avatarCol = this.columns.find((col) => col.display === 'avatar');
     return avatarCol ? avatarCol.field : null;
   }
 
   getNameField(): string | null {
-    const nameCol = this.columns.find(col => col.nameField);
+    const nameCol = this.columns.find((col) => col.nameField);
     return nameCol ? nameCol.nameField! : null;
   }
 
   getStatusField(): string | null {
-    const statusCol = this.columns.find(col => col.display === 'tag');
+    const statusCol = this.columns.find((col) => col.display === 'tag');
     return statusCol ? statusCol.field : null;
   }
 
@@ -151,7 +161,7 @@ export class TableCardComponent implements OnInit, OnChanges {
     if (!statusField) return '';
 
     const value = this.getValue(item, statusField);
-    const statusCol = this.columns.find(col => col.display === 'tag');
+    const statusCol = this.columns.find((col) => col.display === 'tag');
 
     if (statusCol && statusCol.value) {
       return statusCol.value(value);
@@ -165,7 +175,7 @@ export class TableCardComponent implements OnInit, OnChanges {
     if (!statusField) return 'secondary';
 
     const value = this.getValue(item, statusField);
-    const statusCol = this.columns.find(col => col.display === 'tag');
+    const statusCol = this.columns.find((col) => col.display === 'tag');
 
     if (statusCol && statusCol.severity) {
       return statusCol.severity(value) || 'secondary';
@@ -180,8 +190,8 @@ export class TableCardComponent implements OnInit, OnChanges {
 
   private initSortOptions() {
     this.sortOptions = this.columns
-      .filter(col => col.sortable)
-      .map(col => ({
+      .filter((col) => col.sortable)
+      .map((col) => ({
         label: col.label,
         value: col.field,
       }));
@@ -209,7 +219,7 @@ export class TableCardComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     if (!this.globalFilterFields.length && this.columns.length) {
-      this.globalFilterFields = this.columns.map(col => col.field);
+      this.globalFilterFields = this.columns.map((col) => col.field);
     }
 
     // Initialize sort options from sortable columns
@@ -314,7 +324,11 @@ export class TableCardComponent implements OnInit, OnChanges {
     let value = rowData;
 
     for (const prop of props) {
-      if (value === null || value === undefined || !value.hasOwnProperty(prop)) {
+      if (
+        value === null ||
+        value === undefined ||
+        !value.hasOwnProperty(prop)
+      ) {
         return null;
       }
       value = value[prop];
@@ -341,7 +355,7 @@ export class TableCardComponent implements OnInit, OnChanges {
 
     // Create a cache key based on actions and row data
     const cacheKey = JSON.stringify({
-      actions: actions.map(a => ({ label: a.label, action: a.action })),
+      actions: actions.map((a) => ({ label: a.label, action: a.action })),
       rowId: rowData.id || rowData.username || 'unknown',
     });
 
@@ -352,8 +366,8 @@ export class TableCardComponent implements OnInit, OnChanges {
 
     // Generate menu items
     const menuItems: MenuItem[] = actions
-      .filter(action => !action.visible || action.visible(rowData))
-      .map(action => ({
+      .filter((action) => !action.visible || action.visible(rowData))
+      .map((action) => ({
         label: action.label,
         icon: action.icon,
         command: () => this.handleMenuCommand(action.action, rowData),
@@ -367,7 +381,7 @@ export class TableCardComponent implements OnInit, OnChanges {
 
   // Helper method to get columns by section
   getColumnsBySection(section: string): CardColumnDefinition[] {
-    return this.columns.filter(col => col.section === section);
+    return this.columns.filter((col) => col.section === section);
   }
 
   private handleMenuCommand(action: string, rowData: any) {

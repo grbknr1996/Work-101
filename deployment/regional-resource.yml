@@ -1,0 +1,342 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::LanguageExtensions
+
+Description: >
+  Regional resources
+
+Parameters:
+  NamePrefix:
+    Description: Prefix added to the name of resources created in this stack (must be the same as the one of the pipeline)
+    Type: String
+
+  Service:
+    Description: Value of the service tag
+    Type: String
+
+  Environment:
+    Description: 'Environment type (controls various parameters of the deployment, ip ranges, size of the EC2 instances, tags, etc.)'
+    Type: String
+    AllowedValues: [dev, acc, prd]
+
+  AccountShortName:
+    Description: 'The short name of the AWS account'
+    Type: String
+
+  PublicHostedZoneName:
+    Description: The public hosted zone
+    Type: String
+
+  BuildRoleArns:
+    Description: 'ARNs of build roles to copy into web bucket'
+    Type: String
+
+  CdnCertificateArn:
+    Description: CDN Certificate Arn
+    Type: String
+
+  CdnCertificateAliases:
+    Description: CDN Certificate Alias
+    Type: String
+
+  WebACLArn:
+    Description: WebACL Id that will be associated to the CloudFront distribution
+    Type: String
+    Default: none
+
+Mappings:
+  Constant:
+    CloudFront:
+      HostedZoneId: 'Z2FDTNDATAQYW2'
+      ManagedCachingOptimized: '658327ea-f89d-4fab-a63d-7e88639e58f6'
+      ManagedCachingDisabled: '4135ea2d-6df8-44a3-9df3-4b5a84be39ad'
+      ManagedCorsS3Origin: '88a5eaf4-2fd4-4709-b370-b4c650ea3fcf'
+      ManagedAllVieweExceptHostHeader: 'b689b0a8-53d0-40ab-baf2-68738e2966ac'
+      ManagedAllViewer: '216adef6-5c7f-47e4-b989-5492eafa07d3'
+    Frontend:
+      Identifier: frontend
+    Backend:
+      Identifier: backend
+      DomainName: !Sub 'api.ipas-ipoffice-${Environment}.ipobs.${Environment}.web1.wipo.int'
+      BasePath: '/services'
+    DataServices:
+      Identifier: data-services-api
+      DomainName: !Sub 'ipoffices.support.wipopublish-${Environment}.ipobs.${Environment}.web1.wipo.int'
+      BasePath: '/data-services'
+
+Conditions:
+  hasWebACLArn:
+    Fn::Not: [Fn::Equals: ['none', Ref: WebACLArn]]
+  hasBuildRoleArns:
+    Fn::Not: [Fn::Equals: ['none', Ref: BuildRoleArns]]
+
+Resources:
+  SpaRouterFunction:
+    Type: 'AWS::CloudFront::Function'
+    Properties:
+      AutoPublish: true
+      FunctionCode: |
+        async function handler(event) {
+          const request = event.request;
+          const reqUri = request.uri || '/';
+          const uriPaths = reqUri.split('/');
+          const lastPart = uriPaths[uriPaths.length - 1];
+          const lastParts = lastPart.split('.');
+          const extension = lastParts.length > 1 ? lastParts[lastParts.length - 1] : '';
+          request.uri = extension ? reqUri : `/index.html`;
+          return request;
+        }
+      FunctionConfig:
+        Comment: 'Angular router function'
+        Runtime: 'cloudfront-js-2.0'
+      Name:
+        Fn::Sub: '${NamePrefix}-angular-router'
+
+  Bucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketName:
+        Fn::Sub: ${NamePrefix}-${AccountShortName}-${AWS::Region}-${AWS::AccountId}
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+              # SSEAlgorithm: aws:kms
+              # KMSMasterKeyID:
+              #   Fn::Sub: 'arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/${KmsKeyId}'
+      VersioningConfiguration:
+        Status: Enabled
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      Tags:
+        - Key: service
+          Value:
+            Ref: Service
+
+  CloudfrontOAC:
+    Type: 'AWS::CloudFront::OriginAccessControl'
+    Properties:
+      OriginAccessControlConfig:
+        Name:
+          Fn::Sub: '${Bucket}-OAC'
+        Description:
+          Fn::Sub: 'CloudFront OAC for ${Bucket} bucket'
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: Bucket
+      PolicyDocument:
+        Id:
+          Fn::Sub: '${Bucket}-bucket-policy'
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: 'cloudfront.amazonaws.com'
+            Action:
+              - 's3:GetObject*'
+              - 's3:ListBucket*'
+            Resource:
+              - Fn::Sub: 'arn:aws:s3:::${Bucket}'
+              - Fn::Sub: 'arn:aws:s3:::${Bucket}/*'
+            Condition:
+              StringLike:
+                AWS:SourceArn:
+                  Fn::Sub: 'arn:aws:cloudfront::${AWS::AccountId}:distribution/*'
+          - Fn::If:
+              - hasBuildRoleArns
+              - Effect: Allow
+                Principal:
+                  AWS:
+                    Fn::Split: [',', Ref: BuildRoleArns]
+                Action:
+                  - 's3:PutObject*'
+                  - 's3:ListBucket'
+                  - 's3:GetObject*'
+                  - 's3:DeleteObject*'
+                Resource:
+                  - Fn::Sub: 'arn:aws:s3:::${Bucket}'
+                  - Fn::Sub: 'arn:aws:s3:::${Bucket}/*'
+              - Ref: AWS::NoValue
+
+  CloudFront:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Comment:
+          Fn::Sub:
+            - '${Prefix}-${Identifier}'
+            - Prefix:
+                Ref: NamePrefix
+              Identifier:
+                Fn::FindInMap: [Constant, Frontend, Identifier]
+        Aliases:
+          Fn::Split: [',', Ref: CdnCertificateAliases]
+        WebACLId:
+          Fn::If: [hasWebACLArn, Ref: WebACLArn, Ref: AWS::NoValue]
+        Origins:
+          - DomainName:
+              Fn::Sub: '${Bucket}.s3.${AWS::Region}.amazonaws.com'
+            Id:
+              Fn::FindInMap: [Constant, Frontend, Identifier]
+            OriginAccessControlId:
+              Ref: CloudfrontOAC
+            S3OriginConfig:
+              OriginAccessIdentity: ''
+          - DomainName:
+              Fn::FindInMap: [Constant, Backend, DomainName]
+            Id:
+              Fn::FindInMap: [Constant, Backend, Identifier]
+            CustomOriginConfig:
+              OriginProtocolPolicy: https-only
+              HTTPSPort: 443
+              OriginSSLProtocols:
+                - TLSv1.2
+          - DomainName:
+              Fn::FindInMap: [Constant, DataServices, DomainName]
+            Id:
+              Fn::FindInMap: [Constant, DataServices, Identifier]
+            CustomOriginConfig:
+              OriginProtocolPolicy: https-only
+              HTTPSPort: 443
+              OriginSSLProtocols:
+                - TLSv1.2
+        Enabled: true
+        HttpVersion: 'http2'
+        DefaultRootObject: 'index.html'
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          CachePolicyId:
+            Fn::FindInMap: [Constant, CloudFront, ManagedCachingDisabled]
+          FunctionAssociations:
+            - EventType: viewer-request
+              FunctionARN:
+                Fn::GetAtt: [SpaRouterFunction, FunctionARN]
+          OriginRequestPolicyId:
+            Fn::FindInMap: [Constant, CloudFront, ManagedCorsS3Origin]
+          TargetOriginId:
+            Fn::FindInMap: [Constant, Frontend, Identifier]
+          ViewerProtocolPolicy: redirect-to-https
+        CacheBehaviors:
+          - AllowedMethods:
+              - GET
+              - HEAD
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+              - PATCH
+            CachePolicyId:
+              Fn::FindInMap: [Constant, CloudFront, ManagedCachingDisabled]
+            OriginRequestPolicyId:
+              Fn::FindInMap: [Constant, CloudFront, ManagedAllVieweExceptHostHeader]
+            TargetOriginId:
+              Fn::FindInMap: [Constant, Backend, Identifier]
+            ViewerProtocolPolicy: https-only
+            Compress: true
+            PathPattern:
+              Fn::Sub:
+                - '${Path}/*'
+                - Path:
+                    Fn::FindInMap: [Constant, Backend, BasePath]
+          - AllowedMethods:
+              - GET
+              - HEAD
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+              - PATCH
+            CachePolicyId:
+              Fn::FindInMap: [Constant, CloudFront, ManagedCachingDisabled]
+            OriginRequestPolicyId:
+              Fn::FindInMap: [Constant, CloudFront, ManagedAllVieweExceptHostHeader]
+            TargetOriginId:
+              Fn::FindInMap: [Constant, DataServices, Identifier]
+            ViewerProtocolPolicy: https-only
+            Compress: true
+            PathPattern:
+              Fn::Sub:
+                - '${Path}/*'
+                - Path:
+                    Fn::FindInMap: [Constant, DataServices, BasePath]
+        PriceClass: PriceClass_All
+        ViewerCertificate:
+          AcmCertificateArn:
+            Ref: CdnCertificateArn
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.2_2019
+        # Logging:
+        #   Bucket:
+        #     Fn::Sub: "${LogsBucket}.s3.amazonaws.com"
+        #   IncludeCookies: false
+        #   Prefix:
+        #     Fn::Sub:
+        #       - "${Prefix}-${Identifier}"
+        #       - Prefix:
+        #           Ref: NamePrefix
+        #         Identifier:
+        #           Fn::FindInMap: [Constant, Frontend, Identifier]
+      Tags:
+        - Key: Name
+          Value:
+            Fn::Sub:
+              - '${Prefix}-${Identifier}-cloudfront'
+              - Prefix:
+                  Ref: NamePrefix
+                Identifier:
+                  Fn::FindInMap: [Constant, Frontend, Identifier]
+
+  DNSRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName:
+        Fn::Sub: '${PublicHostedZoneName}.'
+      Comment:
+        Fn::Sub:
+          - '${Prefix}-${Identifier}'
+          - Prefix:
+              Ref: NamePrefix
+            Identifier:
+              Fn::FindInMap: [Constant, Frontend, Identifier]
+      Name:
+        Fn::Select:
+          - 0
+          - Fn::Split:
+              - ','
+              - Ref: CdnCertificateAliases
+      Type: A
+      AliasTarget:
+        HostedZoneId:
+          Fn::FindInMap: [Constant, CloudFront, HostedZoneId]
+        DNSName:
+          Fn::Sub: '${CloudFront.DomainName}'
+
+Outputs:
+  PortalBucket:
+    Description: 'The bucket name'
+    Value:
+      Ref: Bucket
+
+  PortalBucketArn:
+    Description: 'The arn of the bucket'
+    Value:
+      Fn::GetAtt: [Bucket, Arn]
+
+  PortalCloudfrontOAC:
+    Value:
+      Ref: CloudfrontOAC

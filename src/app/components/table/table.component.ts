@@ -61,7 +61,9 @@ export interface ColumnDefinition {
   dropdownOptions?: any[];
   optionLabel?: string;
   filterOptions?: any;
-  severity?: (value: any) => 'success' | 'info' | 'warn' | 'danger' | 'secondary' | undefined;
+  severity?: (
+    value: any
+  ) => 'success' | 'info' | 'warn' | 'danger' | 'secondary' | undefined;
   value?: (value: any) => string; // Custom value formatter for display
   customTemplate?: boolean;
   actions?: Action[];
@@ -75,7 +77,15 @@ export interface Action {
   label: string;
   icon?: string;
   action: string;
-  severity?: 'success' | 'info' | 'warn' | 'warning' | 'danger' | 'secondary' | 'contrast' | 'help';
+  severity?:
+    | 'success'
+    | 'info'
+    | 'warn'
+    | 'warning'
+    | 'danger'
+    | 'secondary'
+    | 'contrast'
+    | 'help';
   visible?: (item: any) => boolean;
 }
 
@@ -144,7 +154,7 @@ export class TableComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     if (!this.globalFilterFields.length && this.columns.length) {
-      this.globalFilterFields = this.columns.map(col => col.field);
+      this.globalFilterFields = this.columns.map((col) => col.field);
     }
   }
 
@@ -192,7 +202,11 @@ export class TableComponent implements OnInit, OnChanges {
     let value = rowData;
 
     for (const prop of props) {
-      if (value === null || value === undefined || !value.hasOwnProperty(prop)) {
+      if (
+        value === null ||
+        value === undefined ||
+        !value.hasOwnProperty(prop)
+      ) {
         return null;
       }
       value = value[prop];
@@ -219,7 +233,7 @@ export class TableComponent implements OnInit, OnChanges {
 
     // Create a cache key based on actions and row data
     const cacheKey = JSON.stringify({
-      actions: actions.map(a => ({ label: a.label, action: a.action })),
+      actions: actions.map((a) => ({ label: a.label, action: a.action })),
       rowId: rowData.id || rowData.username || 'unknown',
     });
 
@@ -230,8 +244,8 @@ export class TableComponent implements OnInit, OnChanges {
 
     // Generate menu items
     const menuItems: MenuItem[] = actions
-      .filter(action => !action.visible || action.visible(rowData))
-      .map(action => ({
+      .filter((action) => !action.visible || action.visible(rowData))
+      .map((action) => ({
         label: action.label,
         icon: action.icon,
         command: () => this.handleMenuCommand(action.action, rowData),

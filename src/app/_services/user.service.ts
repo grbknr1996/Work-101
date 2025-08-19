@@ -1,22 +1,24 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { Observable, switchMap, of } from 'rxjs';
+import { Observable, switchMap, of, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.service';
+import { ToastService } from './toast.service';
 
 export interface UserAccount {
   userName: string;
   loginId: string;
   userEmail: string;
-  isActive: string; // API returns "true" or "false" as strings
+  isActive: string;
   updatedById: number;
   updatedDate: string;
   updatedByName?: string;
   createdById?: number;
   createdByName?: string;
-  creationDate?: string; // API might return this field
-  id?: string; // Computed field for table
-  imageUrl?: string; // Computed field for avatar
+  creationDate?: string;
+  id?: string;
+  imageUrl?: string;
 }
 
 export interface UserQueryResponse {
@@ -49,7 +51,42 @@ export interface UserQueryParams {
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    private toastService: ToastService
+  ) {}
+
+  /**
+   * Handle HTTP errors and show appropriate toast messages
+   */
+  private handleError(error: any, operation: string): Observable<never> {
+    let errorMessage = 'An unexpected error occurred';
+
+    if (error.status === 401) {
+      errorMessage = 'Authentication failed. Please log in again.';
+      this.toastService.showError('Authentication Error', errorMessage);
+    } else if (error.status === 403) {
+      errorMessage = "You don't have permission to perform this action.";
+      this.toastService.showError('Permission Denied', errorMessage);
+    } else if (error.status === 404) {
+      errorMessage = 'The requested resource was not found.';
+      this.toastService.showError('Not Found', errorMessage);
+    } else if (error.status === 0) {
+      errorMessage = 'Network error. Please check your connection.';
+      this.toastService.showError('Network Error', errorMessage);
+    } else if (error.status >= 500) {
+      errorMessage = 'Server error. Please try again later.';
+      this.toastService.showError('Server Error', errorMessage);
+    } else {
+      errorMessage =
+        error.message || error.error?.message || 'Unknown error occurred';
+      this.toastService.showError('Error', errorMessage);
+    }
+
+    console.error(`${operation} failed:`, error);
+    return throwError(() => new Error(errorMessage));
+  }
 
   /**
    * Get the authorization headers with Bearer token
@@ -126,7 +163,8 @@ export class UserService {
           params: httpParams,
           headers: headers,
         })
-      )
+      ),
+      catchError((error) => this.handleError(error, 'Loading user accounts'))
     );
   }
 
@@ -142,6 +180,9 @@ export class UserService {
             headers: headers,
           }
         )
+      ),
+      catchError((error) =>
+        this.handleError(error, `Loading user account ${loginId}`)
       )
     );
   }
@@ -150,17 +191,28 @@ export class UserService {
    * Create a new user account
    */
   createUserAccount(userData: Partial<UserAccount>): Observable<UserAccount> {
-    return this.getAuthHeaders().pipe(
-      switchMap((headers) =>
-        this.http.post<UserAccount>(
-          `${environment.backendUrl}/users`,
-          userData,
-          {
-            headers: headers,
-          }
-        )
+    return this.getAuthHeaders()
+      .pipe(
+        switchMap((headers) =>
+          this.http.post<UserAccount>(
+            `${environment.backendUrl}/users`,
+            userData,
+            {
+              headers: headers,
+            }
+          )
+        ),
+        catchError((error) => this.handleError(error, 'Creating user account'))
       )
-    );
+      .pipe(
+        switchMap((user) => {
+          this.toastService.showSuccess(
+            'Success',
+            `User account ${user.loginId} created successfully`
+          );
+          return of(user);
+        })
+      );
   }
 
   /**
@@ -170,30 +222,56 @@ export class UserService {
     loginId: string,
     userData: Partial<UserAccount>
   ): Observable<UserAccount> {
-    return this.getAuthHeaders().pipe(
-      switchMap((headers) =>
-        this.http.put<UserAccount>(
-          `${environment.backendUrl}/users/${loginId}`,
-          userData,
-          {
-            headers: headers,
-          }
+    return this.getAuthHeaders()
+      .pipe(
+        switchMap((headers) =>
+          this.http.put<UserAccount>(
+            `${environment.backendUrl}/users/${loginId}`,
+            userData,
+            {
+              headers: headers,
+            }
+          )
+        ),
+        catchError((error) =>
+          this.handleError(error, `Updating user account ${loginId}`)
         )
       )
-    );
+      .pipe(
+        switchMap((user) => {
+          this.toastService.showSuccess(
+            'Success',
+            `User account ${loginId} updated successfully`
+          );
+          return of(user);
+        })
+      );
   }
 
   /**
    * Delete a user account
    */
   deleteUserAccount(loginId: string): Observable<void> {
-    return this.getAuthHeaders().pipe(
-      switchMap((headers) =>
-        this.http.delete<void>(`${environment.backendUrl}/users/${loginId}`, {
-          headers: headers,
-        })
+    return this.getAuthHeaders()
+      .pipe(
+        switchMap((headers) =>
+          this.http.delete<void>(`${environment.backendUrl}/users/${loginId}`, {
+            headers: headers,
+          })
+        ),
+        catchError((error) =>
+          this.handleError(error, `Deleting user account ${loginId}`)
+        )
       )
-    );
+      .pipe(
+        switchMap(() => {
+          this.toastService.showSuccess(
+            'Success',
+            `User account ${loginId} deleted successfully`
+          );
+          return of(void 0);
+        })
+      );
   }
 
   /**
@@ -203,14 +281,33 @@ export class UserService {
     loginId: string,
     isActive: boolean
   ): Observable<UserAccount> {
-    return this.getAuthHeaders().pipe(
-      switchMap((headers) =>
-        this.http.patch<UserAccount>(
-          `${environment.backendUrl}/users/${loginId}/status`,
-          { isActive },
-          { headers: headers }
+    return this.getAuthHeaders()
+      .pipe(
+        switchMap((headers) =>
+          this.http.patch<UserAccount>(
+            `${environment.backendUrl}/users/${loginId}/status`,
+            { isActive },
+            { headers: headers }
+          )
+        ),
+        catchError((error) =>
+          this.handleError(
+            error,
+            `${
+              isActive ? 'Activating' : 'Deactivating'
+            } user account ${loginId}`
+          )
         )
       )
-    );
+      .pipe(
+        switchMap((user) => {
+          const action = isActive ? 'activated' : 'deactivated';
+          this.toastService.showSuccess(
+            'Success',
+            `User account ${loginId} ${action} successfully`
+          );
+          return of(user);
+        })
+      );
   }
 }

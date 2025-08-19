@@ -143,43 +143,37 @@ export class DataExchangeConfigComponent implements OnInit {
   }
 
   private loadData(): void {
-    this.dataExchangeService
-      .getDataExchangeData('7bnv35u5b6j6mk5pnfb65jqqe6', 'patent', 'JP')
-      .subscribe((data) => {
-        console.log('ExchangeData: ', data);
-        if (!data || Object.keys(data).length === 0) {
-          data = {
-            originatingOfficesData: [
-              {
-                code: 'USPTO',
-                name: 'United States Patent and Trademark Office',
-                status: 'active',
-              },
-              { code: 'EPO', name: 'European Patent Office', status: 'active' },
-              { code: 'JPO', name: 'Japan Patent Office', status: 'active' },
-            ],
-            recipientSystemsData: [
-              { name: 'PATENTSCOPE', status: 'active' },
-              { name: 'Global Brand Database', status: 'active' },
-            ],
-            distributionExclusionRulesData: [
-              {
-                originatingOffice: 'USPTO',
-                recipientName: 'PATENTSCOPE',
-                status: 'active',
-              },
-              {
-                originatingOffice: 'EPO',
-                recipientName: 'Global Brand Database',
-                status: 'active',
-              },
-            ],
-          };
-        }
-        this.dataExchangeData.set(data);
+    const data = {
+      originatingOfficesData: [
+        {
+          code: 'USPTO',
+          name: 'United States Patent and Trademark Office',
+          status: 'active',
+        },
+        { code: 'EPO', name: 'European Patent Office', status: 'active' },
+        { code: 'JPO', name: 'Japan Patent Office', status: 'active' },
+      ],
+      recipientSystemsData: [
+        { name: 'PATENTSCOPE', status: 'active' },
+        { name: 'Global Brand Database', status: 'active' },
+      ],
+      distributionExclusionRulesData: [
+        {
+          originatingOffice: 'USPTO',
+          recipientName: 'PATENTSCOPE',
+          status: 'active',
+        },
+        {
+          originatingOffice: 'EPO',
+          recipientName: 'Global Brand Database',
+          status: 'active',
+        },
+      ],
+    };
 
-        this.updateStats();
-      });
+    this.dataExchangeData.set(data);
+
+    this.updateStats();
   }
 
   private updateStats(): void {

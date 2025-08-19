@@ -1,11 +1,19 @@
 //ANGULAR CORE
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 //PRIMENG
-import { ButtonModule } from 'primeng/button';
+import { DrawerModule } from 'primeng/drawer';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { DatePickerModule } from 'primeng/datepicker';
+import { SelectModule } from 'primeng/select';
 
 const PrimeNGModules: any[] = [
-  ButtonModule
+  FormsModule,
+  DrawerModule,
+  RadioButtonModule,
+  DatePickerModule,
+  SelectModule
 ];
 
 @NgModule({

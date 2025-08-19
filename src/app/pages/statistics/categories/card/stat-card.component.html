@@ -1,0 +1,7 @@
+
+<div class="stat-card" [class.selected]="current" (click)="onCardClick()">
+  <div class="icon-label-box">
+    <div class="icon-area"><i [class]="'pi ' + icon + ' stat-icon'"></i></div>
+    <div class="label-area">{{ label }}</div>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+
+<div class="grid grid-cols-6 mt-2">
+  <div class="col-span-6 grid grid-cols-12 filter">
+    <div class="col-span-4">
+      <p-floatlabel variant="on" [style]="showSearchBar? '' :'display:none' ">
+        <p-iconfield>
+          <p-inputicon class="pi pi-search"></p-inputicon>
+          <input class="w-full" id="on_label" pInputText="" [(ngModel)]="searchBar" (input)="onFilterSearch(searchBar)" autocomplete="off">
+        </p-iconfield>
+        <label for="on_label">{{ searchLabel }}</label>
+      </p-floatlabel>
+    </div>
+    <div class="col-span-8 flex justify-end gap-2 filter-icons">
+      <app-configurable-filter [filters]="filters" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'Select filters to display'" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>
+      <p-button *ngIf="showDownloadIcon" icon="pi pi-file-pdf" [outlined]="true" [text]="true" (click)="onDownloadDetails()"></p-button>
+      <p-button *ngIf="showInfoIcon" icon="pi pi-info-circle" [outlined]="true" [text]="true" (click)="onInfoDetails()"></p-button>
+    </div>
+  </div>
+</div>
+<div class="mb-8 mt-1 w-full">
+  <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="true" [clearAllLabel]="'Clear All'" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-filter-chips>
+</div>

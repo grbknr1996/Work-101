@@ -11,6 +11,7 @@
   <div class="sidebar-overlay" *ngIf="sidebarVisible &amp;&amp; ms.isMobileView" (click)="sidebarVisible = false"></div>
   <!-- Content area-->
   <div class="layout-content" [ngStyle]="{'margin-left': sidebarVisible ? '3rem' : '0'}">
+    <app-toast></app-toast>
     <!-- Breadcrumbs-->
     <div class="breadcrumbs-container" *ngIf="ms.breadcrumbs">
       <p-breadcrumb [model]="breadcrumbItems" [home]="breadcrumbHome"></p-breadcrumb>

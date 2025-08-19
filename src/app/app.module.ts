@@ -73,6 +73,7 @@ import { AppLayoutComponent } from './components/app-layout/app-layout.component
 import { TableComponent } from './components/table/table.component';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 import { LoadingInterceptor } from './_interceptors/loading.interceptor';
+import { MessageService } from 'primeng/api';
 
 const WipoThemePreset = definePreset(Aura, {
   primitive: {
@@ -159,6 +160,7 @@ const WipoThemePreset = definePreset(Aura, {
       useClass: LoadingInterceptor,
       multi: true,
     },
+    MessageService,
     providePrimeNG({
       theme: {
         preset: WipoThemePreset,

@@ -13,7 +13,10 @@ export const environment = {
   env: 'localhost',
   appUrl: 'http://localhost:4200',
   backendUrl: '/services/users',
-  autoCompleteApi: '/data-services/',
+  dataServicesApi: '/data-services/',
+  authApi: 'https://auth.iims.ipobs.dev.web1.wipo.int/oauth2/token',
+  authApiUsername: '669h7kl059b8i246an6v455vja',
+  authApiPassword: '9nso5vg4rmf7v1rfr6adjt4ncd6e4c5694ti71mp5pstg7h12li',
   cognito: {
     region: 'eu-central-1',
     userPoolId: 'eu-central-1_aIn5Yy5c5',

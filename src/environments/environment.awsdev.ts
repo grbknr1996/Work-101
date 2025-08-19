@@ -11,7 +11,12 @@ export const environment = {
     'cv',
   ],
   env: 'awsdev',
-  appUrl: 'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int',
+  appUrl: 'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/data-services',
+  dataServicesApi:
+    'https://ipoffices.support.wipopublish-dev.ipobs.dev.web1.wipo.int',
+  authApi: 'https://auth.iims.ipobs.dev.web1.wipo.int/oauth2/token',
+  authApiUsername: '669h7kl059b8i246an6v455vja',
+  authApiPassword: '9nso5vg4rmf7v1rfr6adjt4ncd6e4c5694ti71mp5pstg7h12li',
   backendUrl:
     'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/services/users',
   cognito: {
