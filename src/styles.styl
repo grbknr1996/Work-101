@@ -3743,6 +3743,8 @@ app-data-exchange-settings
 // Add Exclusion Rule Component
 // ========================================
 app-add-exclusion-rule
+ 
+
   h2
     font-size 1.7rem
     font-weight 700
@@ -3751,43 +3753,25 @@ app-add-exclusion-rule
     letter-spacing 0.01em
     text-align left
 
-  .p-steps
-    margin-bottom 2.5rem
-
-    .p-steps-item .p-menuitem-link
-      padding 1.1rem 1.5rem
-      border-radius 8px
-      font-size 1.08rem
-      font-weight 500
-      color #1976d2
-      background #f4f8fb
-      transition background 0.2s
-
-    .p-steps-item.p-highlight .p-menuitem-link
-      background #1976d2
-      color #fff
-      box-shadow 0 2px 8px rgba(25, 118, 210, 0.08)
-
-    .p-steps-title
-      font-size 1.08rem
-      font-weight 500
-      margin-top 0.5rem
+  
 
   .p-formgrid
     margin-bottom 1.5rem
 
-    label
-      display block
-      margin-bottom 0.5rem
-      color #333
-      font-weight 500
+  label
+    display block
+    margin-bottom 0.5rem
+    color #333
+    font-weight 500
 
-    .p-dropdown,
-    .p-multiselect
-      width 100%
+  .p-dropdown,
+  .p-multiselect
+    width 100%
 
   .p-message
     margin-top 0.5rem
+  .p-accordion .p-accordioncontent
+    overflow visible
 
   .p-tabview
     margin 1.5rem 0
@@ -3798,8 +3782,10 @@ app-add-exclusion-rule
     .p-checkbox
       margin-right 0.5rem
 
-  .p-accordion .p-accordioncontent
-    overflow visible
+    .p-text-secondary
+      color #666
+      font-size 0.97rem
+
   .p-accordion .p-accordion-tab
     margin-bottom 1rem
 
@@ -3836,9 +3822,6 @@ app-add-exclusion-rule
     align-items center
     gap 1rem
 
-  .p-mt-1
-    margin-top 0.25rem
-
   .p-mt-2
     margin-top 0.5rem
 
@@ -3860,23 +3843,8 @@ app-add-exclusion-rule
   .p-ml-4
     margin-left 1rem
 
-  .p-mr-2
-    margin-right 0.5rem
-
   .p-jc-between
     justify-content space-between
-
-  .exclusion-chip
-    display inline-block
-    background #e6f0fa
-    color #1976d2
-    border-radius 16px
-    padding 0.08rem 0.7rem
-    font-size 0.92rem
-    margin 0 0.18rem 0.18rem 0
-    font-weight 400
-    letter-spacing 0.01em
-
 // ========================================
 // Common Data Exchange Elements
 // ========================================
@@ -4078,8 +4046,7 @@ app-add-exclusion-rule
   // Add Exclusion Rule
   app-add-exclusion-rule
     max-width 100%
-    margin 1rem
-    padding 1.5rem
+    
 
     .p-formgrid > .p-col-6
       grid-column 1 / -1
