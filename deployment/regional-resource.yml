@@ -56,11 +56,11 @@ Mappings:
       Identifier: frontend
     Backend:
       Identifier: backend
-      DomainName: !Sub 'api.ipas-ipoffice-${Environment}.ipobs.${Environment}.web1.wipo.int'
+      DomainName: 'api.ipas-ipoffice-dev.ipobs.dev.web1.wipo.int'
       BasePath: '/services'
     DataServices:
       Identifier: data-services-api
-      DomainName: !Sub 'ipoffices.support.wipopublish-${Environment}.ipobs.${Environment}.web1.wipo.int'
+      DomainName: 'ipoffices.support.wipopublish-dev.ipobs.dev.web1.wipo.int'
       BasePath: '/data-services'
 
 Conditions:
