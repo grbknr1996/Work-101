@@ -8,10 +8,6 @@
         <h1>Originating Offices</h1>
         <p>Manage IP offices that provide data to the WIPO system</p>
       </div>
-      <div class="header-actions">
-        <button class="p-button-outlined" pButton type="button" label="Import Offices" icon="pi pi-upload"></button>
-        <button pButton type="button" label="Add Office" icon="pi pi-plus" (click)="onAddOffice()"></button>
-      </div>
     </div>
   </div>
   <!-- Statistics Cards-->
@@ -20,26 +16,8 @@
       <div class="stat-content">
         <div class="stat-icon"><i class="pi pi-building"></i></div>
         <div class="stat-info">
-          <div class="stat-number">{{ filteredOffices().length }}</div>
-          <div class="stat-label">Total Offices</div>
-        </div>
-      </div>
-    </p-card>
-    <p-card styleClass="stat-card">
-      <div class="stat-content">
-        <div class="stat-icon"><i class="pi pi-check-circle"></i></div>
-        <div class="stat-info">
-          <div class="stat-number">{{ activeOfficesCount() }}</div>
-          <div class="stat-label">Active Offices</div>
-        </div>
-      </div>
-    </p-card>
-    <p-card styleClass="stat-card">
-      <div class="stat-content">
-        <div class="stat-icon"><i class="pi pi-sync"></i></div>
-        <div class="stat-info">
-          <div class="stat-number">{{ syncedTodayCount() }}</div>
-          <div class="stat-label">Synced Today</div>
+          <div class="stat-number">{{ totalOfficesCount() }}</div>
+          <div class="stat-label">Total Originating Offices</div>
         </div>
       </div>
     </p-card>
@@ -47,78 +25,7 @@
   <!-- Offices Table-->
   <div class="table-section">
     <p-card header="Originating Offices" styleClass="table-card">
-      <app-table [columns]="columns" [data]="filteredOffices()" [rows]="10" [paginator]="true" [loading]="loading" (actionClick)="onActionClick($event)">
-        <!-- Status Template-->
-        <ng-template #statusTemplate let-row><span class="status-badge" [ngClass]="getStatusClass(row.status)">{{ row.status }}</span></ng-template>
-        <!-- Data Types Template-->
-        <ng-template #dataTypesTemplate let-row>
-          <div class="data-types"><span class="data-type-badge" *ngFor="let type of row.dataTypes">{{ getDataTypesLabel([type]) }}</span></div>
-        </ng-template>
-      </app-table>
+      <app-table [columns]="columns" [data]="filteredOffices()" [rows]="10" [paginator]="true" [loading]="false"></app-table>
     </p-card>
   </div>
-  <!-- Add Office Dialog-->
-  <p-dialog header="Add Originating Office" [(visible)]="showAddDialog" [modal]="true" [style]="{ width: '600px' }" [draggable]="false" [resizable]="false">
-    <form class="office-form" [formGroup]="officeForm">
-      <div class="form-grid">
-        <div class="form-field">
-          <label for="code">Office Code *</label>
-          <input id="code" type="text" pInputText formControlName="code" placeholder="e.g., US, EP, JP" maxlength="10"><small class="p-error" *ngIf="officeForm.get('code')?.invalid &amp;&amp; officeForm.get('code')?.touched">Office code is required and must be 10 characters or less</small>
-        </div>
-        <div class="form-field">
-          <label for="name">Office Name *</label>
-          <input id="name" type="text" pInputText formControlName="name" placeholder="e.g., United States Patent and Trademark Office"><small class="p-error" *ngIf="officeForm.get('name')?.invalid &amp;&amp; officeForm.get('name')?.touched">Office name is required and must be at least 3 characters</small>
-        </div>
-        <div class="form-field">
-          <label for="country">Country *</label>
-          <p-dropdown id="country" [options]="countries" formControlName="country" placeholder="Select Country" optionLabel="label" optionValue="value"></p-dropdown><small class="p-error" *ngIf="officeForm.get('country')?.invalid &amp;&amp; officeForm.get('country')?.touched">Country is required</small>
-        </div>
-        <div class="form-field">
-          <label for="status">Status *</label>
-          <p-dropdown id="status" [options]="[{ label: 'Active', value: 'active' }, { label: 'Inactive', value: 'inactive' }]" formControlName="status" placeholder="Select Status" optionLabel="label" optionValue="value"></p-dropdown>
-        </div>
-        <div class="form-field full-width">
-          <label for="dataTypes">Data Types *</label>
-          <p-multiselect id="dataTypes" [options]="dataTypes" formControlName="dataTypes" placeholder="Select Data Types" optionLabel="label" optionValue="value" display="chip"></p-multiselect><small class="p-error" *ngIf="officeForm.get('dataTypes')?.invalid &amp;&amp; officeForm.get('dataTypes')?.touched">At least one data type must be selected</small>
-        </div>
-      </div>
-    </form>
-    <ng-template pTemplate="footer">
-      <button class="p-button-text" pButton type="button" label="Cancel" (click)="onCancel()"></button>
-      <button pButton type="button" label="Save" (click)="onSaveOffice()" [disabled]="!officeForm.valid"></button>
-    </ng-template>
-  </p-dialog>
-  <!-- Edit Office Dialog-->
-  <p-dialog header="Edit Originating Office" [(visible)]="showEditDialog" [modal]="true" [style]="{ width: '600px' }" [draggable]="false" [resizable]="false">
-    <form class="office-form" [formGroup]="officeForm">
-      <div class="form-grid">
-        <div class="form-field">
-          <label for="edit-code">Office Code *</label>
-          <input id="edit-code" type="text" pInputText formControlName="code" placeholder="e.g., US, EP, JP" maxlength="10"><small class="p-error" *ngIf="officeForm.get('code')?.invalid &amp;&amp; officeForm.get('code')?.touched">Office code is required and must be 10 characters or less</small>
-        </div>
-        <div class="form-field">
-          <label for="edit-name">Office Name *</label>
-          <input id="edit-name" type="text" pInputText formControlName="name" placeholder="e.g., United States Patent and Trademark Office"><small class="p-error" *ngIf="officeForm.get('name')?.invalid &amp;&amp; officeForm.get('name')?.touched">Office name is required and must be at least 3 characters</small>
-        </div>
-        <div class="form-field">
-          <label for="edit-country">Country *</label>
-          <p-dropdown id="edit-country" [options]="countries" formControlName="country" placeholder="Select Country" optionLabel="label" optionValue="value"></p-dropdown><small class="p-error" *ngIf="officeForm.get('country')?.invalid &amp;&amp; officeForm.get('country')?.touched">Country is required</small>
-        </div>
-        <div class="form-field">
-          <label for="edit-status">Status *</label>
-          <p-dropdown id="edit-status" [options]="[{ label: 'Active', value: 'active' }, { label: 'Inactive', value: 'inactive' }]" formControlName="status" placeholder="Select Status" optionLabel="label" optionValue="value"></p-dropdown>
-        </div>
-        <div class="form-field full-width">
-          <label for="edit-dataTypes">Data Types *</label>
-          <p-multiselect id="edit-dataTypes" [options]="dataTypes" formControlName="dataTypes" placeholder="Select Data Types" optionLabel="label" optionValue="value" display="chip"></p-multiselect><small class="p-error" *ngIf="officeForm.get('dataTypes')?.invalid &amp;&amp; officeForm.get('dataTypes')?.touched">At least one data type must be selected</small>
-        </div>
-      </div>
-    </form>
-    <ng-template pTemplate="footer">
-      <button class="p-button-text" pButton type="button" label="Cancel" (click)="onCancel()"></button>
-      <button pButton type="button" label="Update" (click)="onSaveOffice()" [disabled]="!officeForm.valid"></button>
-    </ng-template>
-  </p-dialog>
-  <!-- Confirmation Dialog-->
-  <p-confirmDialog></p-confirmDialog>
 </app-layout>

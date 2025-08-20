@@ -13,7 +13,7 @@
       <div class="stat-content">
         <div class="stat-icon" [ngStyle]="{'background': 'linear-gradient(135deg, ' + card.color + ' 0%, ' + card.color + 'dd 100%)'}"><i [class]="card.icon"></i></div>
         <div class="stat-info">
-          <div class="stat-number">{{ card.count }}</div>
+          <div class="stat-number" *ngIf="card.count !== null">{{ card.count }}</div>
           <div class="stat-label">{{ card.title }}</div>
         </div>
       </div>

@@ -6,7 +6,7 @@
     "logLevel": "debug"
   },
   "/data-services": {
-    "target": "https://ipoffices.support.wipopublish-dev.ipobs.dev.web1.wipo.int/data-services/distribution-exclusion",
+    "target": "https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int",
     "secure": true,
     "changeOrigin": true,
     "logLevel": "debug"

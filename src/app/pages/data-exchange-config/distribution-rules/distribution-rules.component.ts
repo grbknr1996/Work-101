@@ -13,6 +13,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { DataExchangeConfigService } from '../../../_services/data-exchange-config.service';
+import { LoadingService } from '../../../_services/loading.service';
 import { ExclusionRule } from '../../../interfaces';
 import { HttpClient } from '@angular/common/http';
 
@@ -36,7 +37,6 @@ export class DistributionRulesComponent implements OnInit {
   layoutConfig: LayoutConfig;
   officeCode: string;
   langCode: string;
-  loading = false;
 
   columns: any[] = [
     {
@@ -101,17 +101,11 @@ export class DistributionRulesComponent implements OnInit {
 
   // Computed properties for template expressions
   activeRulesCount = computed(
-    () =>
-      this.distributionRulesData().filter(
-        (rule) => rule.publishDocuments === true
-      ).length
+    () => this.distributionRulesData().filter(rule => rule.publishDocuments === true).length
   );
 
   officesCoveredCount = computed(
-    () =>
-      new Set(
-        this.distributionRulesData().map((rule) => rule.originatingOfficeName)
-      ).size
+    () => new Set(this.distributionRulesData().map(rule => rule.originatingOfficeName)).size
   );
 
   totalRulesCount = computed(() => this.distributionRulesData().length);
@@ -157,7 +151,8 @@ export class DistributionRulesComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private dataExchangeService: DataExchangeConfigService,
-    private http: HttpClient
+    private http: HttpClient,
+    private loadingService: LoadingService
   ) {
     this.officeCode = this.route.snapshot.params['officeCode'] || 'default';
     this.langCode = this.route.snapshot.params['langCode'] || 'en';
@@ -182,81 +177,65 @@ export class DistributionRulesComponent implements OnInit {
   }
 
   private loadData(): void {
-    this.loading = true;
-
-    // Always load JSON config for the add exclusion rule component
-    this.loadFromJsonConfig();
+    this.loadingService.show('Loading distribution rules...');
 
     // Load exclusion rules from service for the table
     this.dataExchangeService.getExclusionRules().subscribe({
-      next: (rules) => {
+      next: rules => {
         console.log('API Response (ExclusionRule[]): ', rules);
         this.rulesData.set(rules || []);
-        this.loading = false;
+        this.loadingService.hide();
         console.log('Data loaded successfully, loading set to false');
       },
-      error: (error) => {
+      error: error => {
         console.error('Error loading data from API:', error);
         this.rulesData.set([]);
-        this.loading = false;
-      },
-    });
-  }
-
-  private loadFromJsonConfig(): void {
-    console.log('Loading JSON configuration...');
-    // Load data from the JSON configuration file
-    this.http.get<any>('/assets/configuration/data-exchange.json').subscribe({
-      next: (data) => {
-        console.log('JSON config loaded successfully:', data);
-        if (data.recipientSystems) {
-          // Store the full configuration data for add exclusion rule component
-          this.configData.set(data);
-          console.log('ConfigData signal set with:', data);
-        } else {
-          console.log('No recipient systems found in JSON configuration');
-          this.configData.set(null);
-        }
-      },
-      error: (error) => {
-        console.error('Error loading JSON configuration:', error);
-        this.configData.set(null);
+        this.loadingService.hide();
       },
     });
   }
 
   addRule() {
     console.log('Navigating to add exclusion rule page...');
+    this.loadingService.show('Loading add rule page...');
+
     // Navigate to the add-exclusion-rule route
-    this.router.navigate([
-      `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/add-exclusion-rule`,
-    ]);
+    this.router
+      .navigate([
+        `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/add-exclusion-rule`,
+      ])
+      .then(() => {
+        this.loadingService.hide();
+      });
   }
 
   onActionClick(event: { action: string; item: any }) {
     console.log('Action clicked:', event);
 
     if (event.action === 'edit') {
+      this.loadingService.show('Loading edit rule page...');
       const basePath = `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard`;
-      this.router.navigate([
-        `${basePath}/edit-rule/${event.item.recipientClientId}`,
-      ]);
+      this.router.navigate([`${basePath}/edit-rule/${event.item.recipientClientId}`]).then(() => {
+        this.loadingService.hide();
+      });
     } else if (event.action === 'delete') {
       // Handle delete action
       this.deleteRule(event.item);
     }
   }
 
-  clear(table: any) {
-    table.clear();
-  }
-
   private deleteRule(rule: any) {
     console.log('Deleting rule:', rule);
-    // Update local data to remove the rule
-    this.rulesData.update((current) =>
-      current.filter((r) => r.recipientClientId !== rule.recipientClientId)
-    );
+    this.loadingService.show('Deleting rule...');
+
+    // Simulate API call delay (replace with actual API call)
+    setTimeout(() => {
+      // Update local data to remove the rule
+      this.rulesData.update(current =>
+        current.filter(r => r.recipientClientId !== rule.recipientClientId)
+      );
+      this.loadingService.hide();
+    }, 500);
   }
 
   getBreadcrumbItems() {

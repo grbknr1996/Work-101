@@ -25,55 +25,29 @@ app-layout([config]="layoutConfig")
           .stat-number {{ totalRulesCount() }}
           .stat-label Total Rules
   
-  //- Main Content
+  //- Page Title and Action Button
   .distribution-rules-header
     h2 Distribution Rules
     button.add-rule-btn(type="button", (click)="addRule()")
       i.pi.pi-plus
       |  Add Rule
   
-  //- Loading State
-  .loading-container(*ngIf="loading")
-    p Loading distribution rules...
-  
   //- Table Content
-  div(*ngIf="!loading")
-    .card
-      p-table(
-        #dt,
-        [value]="distributionRulesData()",
-        [rowHover]="true",
-        [rows]="10",
-        [rowsPerPageOptions]="[10, 25, 50]",
-        [loading]="loading",
-        [paginator]="true",
-        [globalFilterFields]="['originatingOfficeName', 'recipientName']",
-        [showCurrentPageReport]="true",
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries",
-        [resizableColumns]="false",
-        [reorderableColumns]="false",
-        [responsive]="true",
-        styleClass="p-datatable-sm"
-      )
-        ng-template(pTemplate="caption")
-          .flex-search-bar
-            button.p-button-outlined(
-              pButton,
-              label="Clear",
-              icon="pi pi-filter-slash",
-              (click)="clear(dt)"
-            )
-            .ml-auto
-              p-iconField(iconPosition="left")
-                p-inputIcon
-                  i.pi.pi-search
-                input(
-                  pInputText,
-                  type="text",
-                  (input)="dt.filterGlobal($event.target.value, 'contains')",
-                  placeholder="Search keyword"
-                )
-        
+  .card
+    p-table(
+      #dt,
+      [value]="distributionRulesData()",
+      [rowHover]="true",
+      [rows]="10",
+      [rowsPerPageOptions]="[10, 25, 50]",
+      [paginator]="true",
+      [showCurrentPageReport]="true",
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries",
+      [resizableColumns]="false",
+      [reorderableColumns]="false",
+      [responsive]="true",
+      styleClass="p-datatable-sm"
+    )
         ng-template(pTemplate="header")
           tr
             th(pSortableColumn="originatingOfficeName", style="width: 12%")

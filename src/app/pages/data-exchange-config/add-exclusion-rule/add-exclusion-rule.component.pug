@@ -29,19 +29,34 @@ app-layout([config]="layoutConfig")
             placeholder="Select System",
             (onChange)="onRecipientSystemChange()"
           )
-      .w-full.mt-6
-        label.block.text-sm.font-medium.text-gray-700.mb-2 IP Category Types
-        p-multiSelect.w-full(
-          [options]="ipCategories()",
-          formControlName="categories",
-          defaultLabel="Select IP Categories",
-          display="chip"
-        )
-        p-message(
-          *ngIf="sourceCategoriesForm.value.categories.length",
-          severity="success",
-          text="You have selected {{ sourceCategoriesForm.value.categories.length }} IP categories. Each category can have its own specific exclusion rules."
-        )
+      .w-full.mt-6.grid.grid-cols-1.gap-6(class="md:grid-cols-2")
+        .col-span-1
+          label.block.text-sm.font-medium.text-gray-700.mb-2 IP Category Types
+          p-multiSelect.w-full(
+            [options]="ipCategories()",
+            formControlName="categories",
+            defaultLabel="Select IP Categories",
+            display="chip"
+          )
+          p-message(
+            *ngIf="sourceCategoriesForm.value.categories.length",
+            severity="success",
+            text="You have selected {{ sourceCategoriesForm.value.categories.length }} IP categories. Each category can have its own specific exclusion rules."
+          )
+        
+        .col-span-1
+          label.block.text-sm.font-medium.text-gray-700.mb-2 Recipient Client ID
+          input.w-full.px-3.py-2.border.border-gray-300.rounded-md.shadow-sm(
+            type="text",
+            formControlName="recipientClientId",
+            placeholder="Enter recipient client ID",
+            class="focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          )
+          small.text-sm.text-gray-500.mt-1.block Enter the unique client identifier for the recipient system
+          small.p-error.text-red-600.text-sm.mt-1.block(
+            *ngIf="sourceCategoriesForm.get('recipientClientId')?.invalid && sourceCategoriesForm.get('recipientClientId')?.touched"
+          )
+            | Recipient Client ID is required
       .w-full.mt-8.flex.justify-between
         button.bg-gray-500.text-white.px-6.py-2.rounded-lg.transition-colors(class="hover:bg-gray-600")(
           pButton,
@@ -86,8 +101,20 @@ app-layout([config]="layoutConfig")
               .ml-6.mt-1.text-sm.text-gray-500
                  |Ungranted/unregistered {{ getCategoryLabel(cat) }} rights will not be shared.
     .w-full.mt-8.flex.justify-between
-      button.bg-gray-500.text-white.px-6.py-2.rounded-lg.transition-colors(class="hover:bg-gray-600" pButton, type="button", label="Back", (click)="prevStep()")
-      button.bg-blue-600.text-white.px-6.py-2.rounded-lg.transition-colors(class="hover:bg-blue-700" pButton, type="button", label="Next", (click)="nextStep()")
+      button.bg-gray-500.text-white.px-6.py-2.rounded-lg.transition-colors(
+        class="hover:bg-gray-600",
+        pButton,
+        type="button",
+        label="Back",
+        (click)="prevStep()"
+      )
+      button.bg-blue-600.text-white.px-6.py-2.rounded-lg.transition-colors(
+        class="hover:bg-blue-700",
+        pButton,
+        type="button",
+        label="Next",
+        (click)="nextStep()"
+      )
 
   //- Step 2
   div(*ngIf="step === 2")
@@ -99,9 +126,6 @@ app-layout([config]="layoutConfig")
         .mb-6
           b.text-lg.font-semibold.text-gray-800 Configure Exclusion Rules for {{ getCategoryLabel(cat) }}
         p-accordion
-          p-accordionTab(header="Application Types to Exclude")
-            .text-sm.text-gray-500 (Demo section for application types)
-
           p-accordionTab(header="Event Code Exclusions")
             .mb-4.text-sm.text-gray-600
               | Choose which event codes should be excluded from data sharing for {{ getCategoryLabel(cat) }}.
@@ -138,8 +162,20 @@ app-layout([config]="layoutConfig")
                 display="chip"
               )
     .mt-8.flex.justify-between
-      button.bg-gray-500.text-white.px-6.py-2.rounded-lg.transition-colors(class="hover:bg-gray-600" pButton, type="button", label="Back", (click)="prevStep()")
-      button.bg-blue-600.text-white.px-6.py-2.rounded-lg.transition-colors(class="hover:bg-blue-700" pButton, type="button", label="Next", (click)="nextStep()")
+      button.bg-gray-500.text-white.px-6.py-2.rounded-lg.transition-colors(
+        class="hover:bg-gray-600",
+        pButton,
+        type="button",
+        label="Back",
+        (click)="prevStep()"
+      )
+      button.bg-blue-600.text-white.px-6.py-2.rounded-lg.transition-colors(
+        class="hover:bg-blue-700",
+        pButton,
+        type="button",
+        label="Next",
+        (click)="nextStep()"
+      )
 
   //- Step 3
   div(*ngIf="step === 3")
@@ -156,6 +192,10 @@ app-layout([config]="layoutConfig")
           b.text-gray-700 Recipient System:
           br
           | {{ getSystemLabel(sourceCategoriesForm.value.system) }}
+        .col-span-1
+          b.text-gray-700 Recipient Client ID:
+          br
+          | {{ sourceCategoriesForm.value.recipientClientId }}
         .col-span-2.mt-4
           b.text-gray-700 IP Category Types:
           br

@@ -144,9 +144,7 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
       return null;
     }
 
-    return config.recipientSystems.find(
-      (system: any) => system.recipientCode === selectedSystem
-    );
+    return config.recipientSystems.find((system: any) => system.recipientCode === selectedSystem);
   });
 
   // IP Categories based on selected recipient system
@@ -155,33 +153,28 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
       return [];
     }
 
-    return this.selectedRecipientSystem().ipTypeCategoryBag.map(
-      (category: any) => ({
-        label: category.ipTypeLabel,
-        value: category.ipTypeCategory,
-      })
-    );
+    return this.selectedRecipientSystem().ipTypeCategoryBag.map((category: any) => ({
+      label: category.ipTypeLabel,
+      value: category.ipTypeCategory,
+    }));
   });
 
   // Document Types based on selected IP category
   documentTypes = computed(() => {
-    const currentCategories =
-      this.sourceCategoriesForm?.get('categories')?.value || [];
+    const currentCategories = this.sourceCategoriesForm?.get('categories')?.value || [];
     if (!this.selectedRecipientSystem() || !currentCategories.length) {
       return [];
     }
 
     const documentsMap = new Map<string, string>();
 
-    this.selectedRecipientSystem().ipTypeCategoryBag.forEach(
-      (category: any) => {
-        if (currentCategories.includes(category.ipTypeCategory)) {
-          category.documentTypeBag.forEach((doc: any) => {
-            documentsMap.set(doc.documentCode, doc.documentName);
-          });
-        }
+    this.selectedRecipientSystem().ipTypeCategoryBag.forEach((category: any) => {
+      if (currentCategories.includes(category.ipTypeCategory)) {
+        category.documentTypeBag.forEach((doc: any) => {
+          documentsMap.set(doc.documentCode, doc.documentName);
+        });
       }
-    );
+    });
 
     return Array.from(documentsMap.entries()).map(([code, name]) => ({
       label: `${code}: ${name}`,
@@ -191,23 +184,20 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
 
   // Event Codes based on selected IP category
   eventCodes = computed(() => {
-    const currentCategories =
-      this.sourceCategoriesForm?.get('categories')?.value || [];
+    const currentCategories = this.sourceCategoriesForm?.get('categories')?.value || [];
     if (!this.selectedRecipientSystem() || !currentCategories.length) {
       return [];
     }
 
     const eventsMap = new Map<string, string>();
 
-    this.selectedRecipientSystem().ipTypeCategoryBag.forEach(
-      (category: any) => {
-        if (currentCategories.includes(category.ipTypeCategory)) {
-          category.eventTypes.forEach((event: any) => {
-            eventsMap.set(event.eventCode, event.eventLabel);
-          });
-        }
+    this.selectedRecipientSystem().ipTypeCategoryBag.forEach((category: any) => {
+      if (currentCategories.includes(category.ipTypeCategory)) {
+        category.eventTypes.forEach((event: any) => {
+          eventsMap.set(event.eventCode, event.eventLabel);
+        });
       }
-    );
+    });
 
     return Array.from(eventsMap.entries()).map(([code, label]) => ({
       code: code,
@@ -296,10 +286,7 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
   documentExclusions: any = {};
   enableDocumentExclusions: any = {};
 
-  constructor(
-    private fb: FormBuilder,
-    private dataExchaneService: DataExchangeConfigService
-  ) {
+  constructor(private fb: FormBuilder, private dataExchaneService: DataExchangeConfigService) {
     this.officeCode = this.route.snapshot.params['officeCode'] || 'default';
     this.langCode = this.route.snapshot.params['langCode'] || 'en';
 
@@ -321,6 +308,7 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
       office: [null, Validators.required],
       system: [null, Validators.required],
       categories: [[], Validators.required],
+      recipientClientId: ['', Validators.required],
     });
   }
 
@@ -358,7 +346,7 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
     // Load configuration data from JSON file
     console.log('Loading configuration data...');
     this.http.get<any>('/assets/configuration/data-exchange.json').subscribe({
-      next: (data) => {
+      next: data => {
         console.log('JSON config loaded successfully:', data);
         if (data.recipientSystems) {
           this.configData.set(data);
@@ -369,7 +357,7 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
           this.configData.set(null);
         }
       },
-      error: (error) => {
+      error: error => {
         console.error('Error loading JSON configuration:', error);
         this.configData.set(null);
       },
@@ -434,19 +422,19 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
 
   getCategoryLabel(cat: string): string {
     const categories = this.ipCategories();
-    const found = categories.find((c) => c.value === cat);
+    const found = categories.find(c => c.value === cat);
     return found ? found.label : cat;
   }
 
   getOfficeLabel(value: string): string {
     const offices = this.recipientOffices();
-    const found = offices.find((o) => o.value === value);
+    const found = offices.find(o => o.value === value);
     return found ? found.label : value;
   }
 
   getSystemLabel(value: string): string {
     const systems = this.recipientOffices();
-    const found = systems.find((s) => s.value === value);
+    const found = systems.find(s => s.value === value);
     return found ? found.label : value;
   }
 
@@ -456,9 +444,7 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
     if (!selectedSystem) return eventCode;
 
     for (const category of selectedSystem.ipTypeCategoryBag) {
-      const event = category.eventTypes.find(
-        (e: any) => e.eventCode === eventCode
-      );
+      const event = category.eventTypes.find((e: any) => e.eventCode === eventCode);
       if (event) {
         return `${eventCode}: ${event.eventLabel}`;
       }
@@ -472,9 +458,7 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
     if (!selectedSystem) return docCode;
 
     for (const category of selectedSystem.ipTypeCategoryBag) {
-      const doc = category.documentTypeBag.find(
-        (d: any) => d.documentCode === docCode
-      );
+      const doc = category.documentTypeBag.find((d: any) => d.documentCode === docCode);
       if (doc) {
         return `${docCode}: ${doc.documentName}`;
       }
@@ -484,17 +468,15 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
 
   addRule() {
     const newRule = this.sourceCategoriesForm.value;
-    this.dataExchaneService
-      .postDataExchangeData(newRule)
-      .subscribe((addedRule) => {
-        // Update local data
-        this.data.update((currentRules) => [...currentRules, addedRule]);
+    this.dataExchaneService.postDataExchangeData(newRule).subscribe(addedRule => {
+      // Update local data
+      this.data.update(currentRules => [...currentRules, addedRule]);
 
-        // Navigate back to distribution rules page
-        this.router.navigate([
-          `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/distribution-rules`,
-        ]);
-      });
+      // Navigate back to distribution rules page
+      this.router.navigate([
+        `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/distribution-rules`,
+      ]);
+    });
   }
 
   cancel() {

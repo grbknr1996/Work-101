@@ -19,5 +19,5 @@ app-layout([config]="layoutConfig")
         )
           i([class]="card.icon")
         .stat-info
-          .stat-number {{ card.count }}
+          .stat-number(*ngIf="card.count !== null") {{ card.count }}
           .stat-label {{ card.title }}
