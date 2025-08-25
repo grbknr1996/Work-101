@@ -9,6 +9,10 @@ const routes: Routes = [
     path: '',
     component: AripoNotificationsComponent,
   },
+  {
+    path: ':option',
+    component: AripoNotificationsComponent,
+  }
 ];
 
 @NgModule({

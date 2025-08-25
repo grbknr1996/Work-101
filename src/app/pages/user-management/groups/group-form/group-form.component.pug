@@ -1,278 +1,309 @@
-p group-form works!
+app-layout
+  app-breadcrumbs([items]="breadcrumbItems")
+  .p-4
+    // Header Section
+    .mb-6
+      h1.text-3xl.font-bold.text-gray-800 {{ isEditMode ? 'Edit Group' : 'Create Group' }}
+      p.text-gray-600
+        | {{ isEditMode ? 'Update group information and settings' : 'Create a new user group with members and permissions' }}
 
-p-dialog(
-  [header]="group ? 'Edit Group' : 'Create Group'",
-  [(visible)]="visible",
-  [style]='{width: "90vw", maxWidth: "1200px", height: "90vh"}',
-  [modal]="true",
-  [draggable]="false",
-  [resizable]="false",
-  (onHide)="onVisibleChange(false)",
-  [contentStyle]='{height: "calc(90vh - 120px)", overflow: "auto"}'
-)
-  .p-fluid
-    p-steps(
-      [model]="steps",
-      [activeIndex]="activeIndex",
-      [readonly]="false"
-    )
+    // Form Content
+    .bg-white.rounded-lg.shadow-sm.p-6
+      app-configurable-stepper(
+        [steps]="steps",
+        [activeStep]="activeIndex",
+        (stepChange)="onStepChange($event)"
+      )
 
-    // Basic Info Step
-    div(*ngIf="activeIndex === 0" class="mt-4")
-      .grid.grid-cols-1.gap-6(class="md:grid-cols-2")
-        div
-          .field.mb-4
-            label.font-semibold.mb-1.block(for="groupName") Group Name
-            input#groupName(
-              type="text",
-              pInputText,
-              [(ngModel)]="formData.groupName",
-              required,
-              class="w-full"
-            )
-          .field.mb-4
-            label.font-semibold.mb-1.block(for="groupType") Group Type
-            p-dropdown#groupType(
-              [options]="groupTypes",
-              [(ngModel)]="formData.groupType",
-              class="w-full"
-            )
-        div
-          .field.mb-4
-            label.font-semibold.mb-1.block(for="description") Description
-            input#description(
-              type="text",
-              pInputText,
-              [(ngModel)]="formData.description",
-              class="w-full"
-            )
-          .field.mb-4
-            label.font-semibold.mb-1.block Status
-            .flex.items-center.gap-4.mt-2
-              div(
-                (click)="formData.status = 'active'; formData.isActive = true",
-                [class]='"px-4 py-2 rounded-full text-sm cursor-pointer flex items-center gap-2 transition-colors duration-200 " + (formData.status === "active" ? "bg-green-100 text-green-800 font-medium" : "bg-gray-100 text-gray-600 hover:bg-gray-200")'
+      // Basic Info Step
+      div(*ngIf="activeIndex === 0" class="mt-6")
+        .grid.grid-cols-1.gap-6(class="md:grid-cols-2")
+          div
+            .field.mb-4
+              label.font-semibold.mb-1.block(for="groupName") Group Name
+              input#groupName(
+                type="text",
+                pInputText,
+                [(ngModel)]="formData.groupName",
+                required,
+                class="w-full"
               )
-                i.pi.pi-check.text-xs(*ngIf="formData.status === 'active'")
-                | Active
-
-              div(
-                (click)="formData.status = 'inactive'; formData.isActive = false",
-                [class]='"px-4 py-2 rounded-full text-sm cursor-pointer flex items-center gap-2 transition-colors duration-200 " + (formData.status === "inactive" ? "bg-red-100 text-red-800 font-medium" : "bg-gray-100 text-gray-600 hover:bg-gray-200")'
+            .field.mb-4
+              label.font-semibold.mb-1.block(for="groupType") Group Type
+              p-dropdown#groupType(
+                [options]="groupTypes",
+                [(ngModel)]="formData.groupType",
+                class="w-full"
               )
-                i.pi.pi-check.text-xs(*ngIf="formData.status === 'inactive'")
-                | Inactive
-
-    // Members Step
-    div(*ngIf="activeIndex === 1" class="mt-4")
-      .grid.grid-cols-2.gap-4
-        // Current Members
-        div
-          h4.font-semibold.mb-2 Current Members
-          .mb-3
-            input(
-              pInputText,
-              type="text",
-              [(ngModel)]="membersSearchTerm",
-              placeholder="Search members...",
-              class="w-full"
-            )
-          .space-y-2
-            .flex.justify-between.items-center.p-2.bg-gray-50.rounded-t
-              .flex.gap-4
-                button.text-sm.font-medium.flex.items-center.gap-1(
-                  class="hover:text-primary",
-                  (click)="sortMembers('username')"
+          div
+            .field.mb-4
+              label.font-semibold.mb-1.block(for="description") Description
+              input#description(
+                type="text",
+                pInputText,
+                [(ngModel)]="formData.description",
+                class="w-full"
+              )
+            .field.mb-4
+              label.font-semibold.mb-1.block Status
+              .flex.items-center.gap-4.mt-2
+                div(
+                  (click)="formData.status = 'active'; formData.isActive = true",
+                  [class]='"px-4 py-2 rounded-full text-sm cursor-pointer flex items-center gap-2 transition-colors duration-200 " + (formData.status === "active" ? "bg-green-100 text-green-800 font-medium" : "bg-gray-100 text-gray-600 hover:bg-gray-200")'
                 )
-                  | Username
-                  i.pi.pi-sort-alt(
-                    [ngClass]='{' +
-                      '"pi-sort-amount-up": membersSortField === "username" && membersSortOrder === 1,' +
-                      '"pi-sort-amount-down": membersSortField === "username" && membersSortOrder === -1' +
-                    '}'
+                  i.pi.pi-check.text-xs(*ngIf="formData.status === 'active'")
+                  | Active
+
+                div(
+                  (click)="formData.status = 'inactive'; formData.isActive = false",
+                  [class]='"px-4 py-2 rounded-full text-sm cursor-pointer flex items-center gap-2 transition-colors duration-200 " + (formData.status === "inactive" ? "bg-red-100 text-red-800 font-medium" : "bg-gray-100 text-gray-600 hover:bg-gray-200")'
+                )
+                  i.pi.pi-check.text-xs(*ngIf="formData.status === 'inactive'")
+                  | Inactive
+
+      // Members Step
+      div(*ngIf="activeIndex === 1" class="mt-6")
+        .mb-4
+          h3.font-semibold.text-lg.text-gray-800 Manage Group Members
+          p.text-sm.text-gray-600 Select users to add to or remove from this group. Both username and email are displayed for easy identification.
+        
+        .grid.grid-cols-2.gap-4
+          // Current Members
+          div
+            h4.font-semibold.mb-2 Current Members
+            .mb-3
+              input(
+                pInputText,
+                type="text",
+                [(ngModel)]="membersSearchTerm",
+                placeholder="Search members...",
+                class="w-full"
+              )
+            .space-y-2
+              .flex.justify-between.items-center.p-2.bg-gray-50.rounded-t
+                .flex.gap-4
+                  button.text-sm.font-medium.flex.items-center.gap-1(
+                    class="hover:text-primary",
+                    (click)="sortMembers('username')"
                   )
-                button.text-sm.font-medium.flex.items-center.gap-1(
-                  class="hover:text-primary",
-                  (click)="sortMembers('email')"
-                )
-                  | Email
-                  i.pi.pi-sort-alt(
-                    [ngClass]='{' +
-                      '"pi-sort-amount-up": membersSortField === "email" && membersSortOrder === 1,' +
-                      '"pi-sort-amount-down": membersSortField === "email" && membersSortOrder === -1' +
-                    '}'
-                  )
-            .p-2.bg-blue-50.rounded.flex.justify-between.items-center(*ngIf="selectedMembers.length > 0")
-              span.text-sm.text-blue-700 {{ selectedMembers.length }} selected
-              button(
-                pButton,
-                label="Remove Selected",
-                icon="pi pi-times",
-                class="p-button-danger p-button-sm",
-                (click)="removeSelectedMembers()"
-              )
-            .p-3.bg-white.rounded-lg.shadow-sm.flex.justify-between.items-center(*ngFor="let member of filterMembers()")
-              .flex.items-center.gap-3
-                p-checkbox(
-                  [value]="member",
-                  [(ngModel)]="selectedMembers",
-                  [multiple]="true"
-                )
-                div
-                  .font-medium {{ member.username }}
-                  .text-sm.text-gray-600 {{ member.email }}
-              button(
-                pButton,
-                icon="pi pi-times",
-                class="p-button-rounded p-button-danger p-button-text",
-                (click)="removeMember(member)",
-                pTooltip="Remove Member"
-              )
-
-        // Available Users
-        div
-          h4.font-semibold.mb-2 Available Users
-          .mb-3
-            input(
-              pInputText,
-              type="text",
-              [(ngModel)]="availableUsersSearchTerm",
-              placeholder="Search users...",
-              class="w-full"
-            )
-          .space-y-2
-            .flex.justify-between.items-center.p-2.bg-gray-50.rounded-t
-              .flex.gap-4
-                button.text-sm.font-medium.flex.items-center.gap-1(
-                  class="hover:text-primary",
-                  (click)="sortAvailableUsers('username')"
-                )
-                  | Username
-                  i.pi.pi-sort-alt(
-                    [ngClass]='{' +
-                      '"pi-sort-amount-up": availableUsersSortField === "username" && availableUsersSortOrder === 1,' +
-                      '"pi-sort-amount-down": availableUsersSortField === "username" && availableUsersSortOrder === -1' +
-                    '}'
-                  )
-                button.text-sm.font-medium.flex.items-center.gap-1(
-                  class="hover:text-primary",
-                  (click)="sortAvailableUsers('email')"
-                )
-                  | Email
-                  i.pi.pi-sort-alt(
-                    [ngClass]='{' +
-                      '"pi-sort-amount-up": availableUsersSortField === "email" && availableUsersSortOrder === 1,' +
-                      '"pi-sort-amount-down": availableUsersSortField === "email" && availableUsersSortOrder === -1' +
-                    '}'
-                  )
-            .p-2.bg-blue-50.rounded.flex.justify-between.items-center(*ngIf="selectedUsers.length > 0")
-              span.text-sm.text-blue-700 {{ selectedUsers.length }} selected
-              button(
-                pButton,
-                label="Add Selected",
-                icon="pi pi-plus",
-                class="p-button-success p-button-sm",
-                (click)="addSelectedMembers()"
-              )
-            p-scrollPanel(
-              [style]='{width: "100%", height: "400px"}',
-              (onScroll)="onScroll($event)"
-            )
-              .space-y-2
-                .p-3.bg-white.rounded-lg.shadow-sm.flex.justify-between.items-center(*ngFor="let user of filterAvailableUsers()")
-                  .flex.items-center.gap-3
-                    p-checkbox(
-                      [value]="user",
-                      [(ngModel)]="selectedUsers",
-                      [multiple]="true"
+                    | Username
+                    i.pi.pi-sort-alt(
+                      [ngClass]='{' +
+                        '"pi-sort-amount-up": membersSortField === "username" && membersSortOrder === 1,' +
+                        '"pi-sort-amount-down": membersSortField === "username" && membersSortOrder === -1' +
+                      '}'
                     )
-                    div
-                      .font-medium {{ user.username }}
-                      .text-sm.text-gray-600 {{ user.email }}
-                  button(
-                    pButton,
-                    icon="pi pi-plus",
-                    class="p-button-rounded p-button-success p-button-text",
-                    (click)="addMember(user)",
-                    pTooltip="Add Member"
+                  button.text-sm.font-medium.flex.items-center.gap-1(
+                    class="hover:text-primary",
+                    (click)="sortMembers('email')"
                   )
-                .text-center.p-3(*ngIf="isLoadingMore")
-                  i.pi.pi-spin.pi-spinner(style="font-size: 1.5rem")
-                .text-center.p-3.text-gray-500(*ngIf="!hasMoreUsers && availableUsers.length > 0")
-                  | No more users to load
+                    | Email
+                    i.pi.pi-sort-alt(
+                      [ngClass]='{' +
+                        '"pi-sort-amount-up": membersSortField === "email" && membersSortOrder === 1,' +
+                        '"pi-sort-amount-down": membersSortField === "email" && membersSortOrder === -1' +
+                      '}'
+                    )
+              .p-2.bg-blue-50.rounded.flex.justify-between.items-center(*ngIf="selectedMembers.length > 0")
+                span.text-sm.text-blue-700 {{ selectedMembers.length }} selected
+                button(
+                  pButton,
+                  label="Remove Selected",
+                  icon="pi pi-times",
+                  class="p-button-danger p-button-sm",
+                  (click)="removeSelectedMembers()"
+                )
+              .p-3.bg-white.rounded-lg.shadow-sm.flex.justify-between.items-center(*ngFor="let member of filterMembers()")
+                .flex.items-center.gap-3
+                  p-checkbox(
+                    [value]="member",
+                    [(ngModel)]="selectedMembers",
+                    [multiple]="true"
+                  )
+                  div
+                    .font-medium {{ member.username }}
+                    .flex.items-center.gap-2.text-sm.text-gray-600
+                      i.pi.pi-envelope.text-gray-400
+                      span {{ member.email }}
+                button(
+                  pButton,
+                  icon="pi pi-times",
+                  class="p-button-rounded p-button-danger p-button-text",
+                  (click)="removeMember(member)",
+                  pTooltip="Remove Member"
+                )
 
-    // Permissions Step
-    div(*ngIf="activeIndex === 2" class="mt-4")
-      .grid
-        .col-12
-          label.block.mb-2.font-medium Permission Sets
-          p-multiSelect(
-            [options]="availablePermissions",
-            [(ngModel)]="selectedPermissions",
-            optionLabel="label",
-            [filter]="true",
-            placeholder="Select Permission Sets",
-            class="w-full",
-            [panelStyle]='{minWidth: "600px", width: "80vw", maxWidth: "700px", maxHeight: "400px", overflowX: "auto"}',
-            [virtualScroll]="true",
-            [virtualScrollItemSize]="34",
-            [showToggleAll]="true",
-            appendTo="body"
-          )
-            ng-template(let-permission pTemplate="item")
-              .flex.items-center.justify-between.p-2(style="min-width: 350px")
-                span.font-semibold {{ permission.label }}
-                span.text-gray-500.text-xs.ml-4.whitespace-nowrap
-                  | {{ permission.permissions.length }} permission{{ permission.permissions.length > 1 ? "s" : "" }}
+          // Available Users
+          div
+            h4.font-semibold.mb-2 Available Users
+            .mb-3
+              .flex.gap-2
+                input(
+                  pInputText,
+                  type="text",
+                  [(ngModel)]="availableUsersSearchTerm",
+                  (ngModelChange)="onAvailableUsersSearchChange()",
+                  placeholder="Search users...",
+                  class="flex-1"
+                )
+                button(
+                  *ngIf="availableUsersSearchTerm",
+                  pButton,
+                  icon="pi pi-times",
+                  class="p-button-text p-button-sm",
+                  (click)="clearSearch()",
+                  pTooltip="Clear Search"
+                )
+            .space-y-2
+              .flex.justify-between.items-center.p-2.bg-gray-50.rounded-t
+                .flex.gap-4
+                  button.text-sm.font-medium.flex.items-center.gap-1(
+                    class="hover:text-primary",
+                    (click)="sortAvailableUsers('username')"
+                  )
+                    | Username
+                    i.pi.pi-sort-alt(
+                      [ngClass]='{' +
+                        '"pi-sort-amount-up": availableUsersSortField === "username" && availableUsersSortOrder === 1,' +
+                        '"pi-sort-amount-down": availableUsersSortField === "username" && availableUsersSortOrder === -1' +
+                      '}'
+                    )
+                  button.text-sm.font-medium.flex.items-center.gap-1(
+                    class="hover:text-primary",
+                    (click)="sortAvailableUsers('email')"
+                  )
+                    | Email
+                    i.pi.pi-sort-alt(
+                      [ngClass]='{' +
+                        '"pi-sort-amount-up": availableUsersSortField === "email" && availableUsersSortOrder === 1,' +
+                        '"pi-sort-amount-down": availableUsersSortField === "email" && availableUsersSortOrder === -1' +
+                      '}'
+                    )
+              .p-2.bg-blue-50.rounded.flex.justify-between.items-center(*ngIf="selectedUsers.length > 0")
+                span.text-sm.text-blue-700 {{ selectedUsers.length }} selected
+                button(
+                  pButton,
+                  label="Add Selected",
+                  icon="pi pi-plus",
+                  class="p-button-success p-button-sm",
+                  (click)="addSelectedMembers()"
+                )
+            // Users list
+            .space-y-2
+              // Loading state
+              .text-center.p-3(*ngIf="isLoadingUsers")
+                i.pi.pi-spin.pi-spinner(style="font-size: 1.5rem")
+                .text-sm.text-gray-500.mt-2 Loading users...
+              
+              // Users list
+              .p-3.bg-white.rounded-lg.shadow-sm.flex.justify-between.items-center(*ngFor="let user of filterAvailableUsers()")
+                .flex.items-center.gap-3
+                  p-checkbox(
+                    [value]="user",
+                    [(ngModel)]="selectedUsers",
+                    [multiple]="true"
+                  )
+                  div
+                    .font-medium {{ user.username }}
+                    .flex.items-center.gap-2.text-sm.text-gray-600
+                      i.pi.pi-envelope.text-gray-400
+                      span {{ user.email }}
+                button(
+                  pButton,
+                  icon="pi pi-plus",
+                  class="p-button-rounded p-button-success p-button-text",
+                  (click)="addMember(user)",
+                  pTooltip="Add Member"
+                )
+              
+              // Empty state
+              .text-center.p-3.text-gray-500(*ngIf="availableUsers.length === 0 && !isLoadingUsers")
+                | No users found
+            
+            // Pagination
+            .mt-4(*ngIf="totalUsers > rowsPerPage")
+              p-paginator(
+                [rows]="rowsPerPage",
+                [totalRecords]="totalUsers",
+                [rowsPerPageOptions]="rowsPerPageOptions",
+                (onPageChange)="onPageChange($event)",
+                [showCurrentPageReport]="true",
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
+              )
 
-        .col-12.mt-4
-          .bg-gray-50.p-4.rounded-lg
-            h4.font-semibold.mb-4 Selected Permissions
-            .grid.grid-cols-1.gap-4(class="md:grid-cols-2 lg:grid-cols-3")
-              .p-4.bg-white.rounded-lg.shadow-sm(*ngFor="let permission of selectedPermissions")
-                .font-medium.text-lg.mb-2 {{ permission.label }}
-                .text-sm.text-gray-600
-                  .flex.flex-wrap.gap-2
-                    span.inline-block.bg-blue-100.text-blue-800.px-2.py-1.rounded-full.text-xs(*ngFor="let perm of permission.permissions")
-                      | {{ perm }}
+      // Review Step
+      div(*ngIf="activeIndex === 2" class="mt-6")
+        .bg-gray-50.p-6.rounded-lg
+          h3.font-bold.text-xl.mb-6 Review Group Information
+          
+          // Basic Info Review
+          .mb-6
+            h4.font-semibold.text-lg.mb-3.text-blue-600 Basic Information
+            .grid.grid-cols-1.gap-4(class="md:grid-cols-2")
+              .bg-white.p-4.rounded-lg
+                .text-sm.text-gray-600 Group Name
+                .font-medium {{ formData.groupName }}
+              .bg-white.p-4.rounded-lg
+                .text-sm.text-gray-600 Group Type
+                .font-medium {{ formData.groupType }}
+              .bg-white.p-4.rounded-lg
+                .text-sm.text-gray-600 Description
+                .font-medium {{ formData.description || 'No description provided' }}
+              .bg-white.p-4.rounded-lg
+                .text-sm.text-gray-600 Status
+                .font-medium([class]="formData.status === 'active' ? 'text-green-600' : 'text-red-600'") {{ formData.status === 'active' ? 'Active' : 'Inactive' }}
+          
+          // Members Review
+          .mb-6
+            h4.font-semibold.text-lg.mb-3.text-blue-600 Members
+            .bg-white.p-4.rounded-lg
+              .mt-3(*ngIf="groupMembers.length > 0")
+                .text-sm.text-gray-600.mb-2 Added Members:
+                .space-y-1
+                  .p-2.bg-gray-50.rounded(*ngFor="let member of groupMembers")
+                    .flex.items-center.gap-2.mb-1
+                      i.pi.pi-user.text-gray-400
+                      span.font-medium {{ member.username }}
+                    .text-sm.text-gray-500.ml-6 {{ member.email }}
+              .mt-3(*ngIf="groupMembers.length === 0")
+                .text-sm.text-gray-500 No members added to this group
 
-  ng-template(pTemplate="footer")
-    .flex.justify-between
+    // Action Buttons
+    .mt-6.flex.justify-between.items-center
       div
         button(
+          *ngIf="activeIndex === 0",
+          pButton,
+          pRipple,
+          label="Cancel",
+          icon="pi pi-times",
+          (click)="router.navigate(['../'], { relativeTo: route })"
+        )
+        button(
+          *ngIf="activeIndex > 0",
           pButton,
           pRipple,
           label="Previous",
           icon="pi pi-arrow-left",
-          class="p-button-text",
-          (click)="activeIndex = activeIndex - 1",
-          [disabled]="activeIndex === 0"
+          (click)="onPreviousStep()"
         )
+      div
         button(
+          *ngIf="activeIndex < 2",
           pButton,
           pRipple,
           label="Next",
           icon="pi pi-arrow-right",
           iconPos="right",
-          class="p-button-text",
-          (click)="activeIndex = activeIndex + 1",
-          [disabled]="activeIndex === steps.length - 1"
-        )
-      div
-        button(
-          pButton,
-          pRipple,
-          label="Cancel",
-          icon="pi pi-times",
-          class="p-button-text",
-          (click)="onVisibleChange(false)"
+          [disabled]="!canProceedToNext()",
+          (click)="onNextStep()"
         )
         button(
+          *ngIf="activeIndex === 2",
           pButton,
           pRipple,
           label="Save",
-          icon="pi pi-check",
-          class="p-button-text",
-          (click)="onSave()",
-          [disabled]="activeIndex !== steps.length - 1"
+          icon="pi pi-save",
+          class="p-button-primary",
+          (click)="onSave()"
         )

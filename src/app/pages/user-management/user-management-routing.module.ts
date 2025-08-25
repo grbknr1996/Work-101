@@ -37,6 +37,22 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'user-accounts/groups/create',
+    loadComponent: () =>
+      import('./groups/group-form/group-form.component').then(
+        (m) => m.GroupFormComponent
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'user-accounts/groups/edit/:groupId',
+    loadComponent: () =>
+      import('./groups/group-form/group-form.component').then(
+        (m) => m.GroupFormComponent
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'units',
     loadComponent: () =>
       import('./units/units-page.component').then((m) => m.UnitsPageComponent),

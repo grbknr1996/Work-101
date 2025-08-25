@@ -2,7 +2,7 @@ app-layout
   app-breadcrumbs([items]="breadcrumbItems")
   
   .flex.justify-between
-    h1.pt-5.text-xl.ml-4.col-span-3 Pending Publication
+    h1.pt-4.text-xl.ml-4.col-span-3 Pending Publication
     p-button.mb-3(label="New Journal", icon="pi pi-plus")
 
   .mb-4
@@ -109,8 +109,11 @@ app-layout
                     )
                     label.flex-1(for="service") {{ service.name }}
                 
-                .text-base.font-bold.mb-2 New Application
-                .text-xs Regular fees IP
+                p-tag(
+                  [severity]="getTagColorValue(service.status).severity", 
+                  [value]="getTagColorValue(service.status).value | capitalizeWords").mb-2
+                .text-sm.mb-2 Code: {{ service.journalCode }}
+                .text-sm.mb-3 Files: {{ service.files }}
                 
                 ng-template(#footer="")
                   .flex.gap-4.mt-1

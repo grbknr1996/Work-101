@@ -2,7 +2,10 @@ import { Component, OnInit, signal, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { AppLayoutComponent, LayoutConfig } from '../../components/app-layout/app-layout.component';
+import {
+  AppLayoutComponent,
+  LayoutConfig,
+} from '../../components/app-layout/app-layout.component';
 import { BreadcrumbsComponent } from '../../components/breadcrumbs/breadcrumbs.component';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -87,13 +90,13 @@ export class DataExchangeConfigComponent implements OnInit {
   private loadRecipientSystemsCount(): void {
     // Load recipient systems count from assets data exchange configuration
     this.http.get<any>('/assets/configuration/data-exchange.json').subscribe({
-      next: data => {
+      next: (data) => {
         if (data.recipientSystems && Array.isArray(data.recipientSystems)) {
           const recipientSystemsCount = data.recipientSystems.length;
 
           // Update the recipient systems count in summary cards
           const recipientSystemsCard = this.summaryCards.find(
-            card => card.title === 'Recipient Systems'
+            (card) => card.title === 'Recipient Systems'
           );
           if (recipientSystemsCard) {
             recipientSystemsCard.count = recipientSystemsCount;
@@ -103,7 +106,7 @@ export class DataExchangeConfigComponent implements OnInit {
           this.cdr.detectChanges();
         }
       },
-      error: error => {
+      error: (error) => {
         // Keep default count of 0
       },
     });
@@ -115,7 +118,7 @@ export class DataExchangeConfigComponent implements OnInit {
 
     if (card.title === 'Distribution Exclusion Rules') {
       // Navigate to exclusion rules page
-      const targetPath = `${basePath}/distribution-rules`;
+      const targetPath = `${basePath}/distribution-exclusion-rules`;
       this.router.navigate([targetPath]);
     } else if (card.title === 'Recipient Systems') {
       // Navigate to recipient systems page

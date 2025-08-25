@@ -14,25 +14,19 @@ p-menubar([style]="{'position': 'fixed','z-index':1000,'width':'100%'}", [model]
         span.navbar-title([innerHTML]="title")
   ng-template(pTemplate="end")
     .navbar-end
-      //- Language Selector
-      .language-dropdown-container(*ngIf="showLanguageSelector")
-        p-dropdown(
-          [options]="languageOptions",
-          [(ngModel)]="selectedLanguage",
-          (onChange)="onChangeLang($event)",
-          optionLabel="label",
-          optionValue="value",
-          [style]="{'min-width': '8rem'}",
-          styleClass="language-selector",
-          appendTo="body",
-          [placeholder]="getLangLabel(selectedLanguage)"
+      p-dropdown(
+        [options]="languageOptions",
+        *ngIf="showLanguageSelector"
+        [(ngModel)]="selectedLanguage",
+        (onChange)="onChangeLang($event)",
+        optionLabel="label",
+        optionValue="value",          
+        appendTo="body",
+        [placeholder]="getLangLabel(selectedLanguage)"
+        dropdownIcon="pi pi-language",
+        panelStyleClass="w-full"
         )
-          ng-template(pTemplate="selectedItem")
-            .flex.align-items-center
-              span.pi.pi-globe.mr-2
-              span {{ getLangLabel(selectedLanguage) }}
-          ng-template(let-language, pTemplate="item")
-            span {{language.label}}
+       
       //- Notifications
       .notification-container.mx-3
         button(

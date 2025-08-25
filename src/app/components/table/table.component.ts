@@ -25,6 +25,7 @@ import { MenuModule } from 'primeng/menu';
 import { Table, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { AvatarModule } from 'primeng/avatar';
+import { ChipModule } from 'primeng/chip';
 
 export interface ColumnDefinition {
   field: string;
@@ -51,7 +52,8 @@ export interface ColumnDefinition {
     | 'icon'
     | 'boolean'
     | 'custom'
-    | 'actions';
+    | 'actions'
+    | 'chip';
   filterDisplay?: 'menu' | 'row';
   filterMatchMode?: string;
   dateFormat?: string;
@@ -105,6 +107,7 @@ export interface Action {
     IconFieldModule,
     InputIconModule,
     AvatarModule,
+    ChipModule,
   ],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -130,7 +133,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() lazy: boolean = false;
   @Input() totalRecords: number = 0;
   @Input() dataKey: string = 'id';
-  @Input() showClearButton: boolean = true;
+  @Input() showClearButton: boolean = false;
   @Input() showSearch: boolean = true;
   @Input() emptyMessage: string = 'No records found.';
   @Input() showActionsColumn: boolean = false;
@@ -259,5 +262,36 @@ export class TableComponent implements OnInit, OnChanges {
 
   private handleMenuCommand(action: string, rowData: any) {
     this.onActionClick(action, rowData);
+  }
+  getChipStyleClass(col: ColumnDefinition, rowData: any): string {
+    const baseClasses =
+      'inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border';
+    const fieldValue = this.getValue(rowData, col.field);
+    const severity = col.severity ? col.severity(fieldValue) : null;
+
+    let colorClasses = '';
+
+    switch (severity) {
+      case 'success':
+        colorClasses = 'bg-green-50 text-green-700 border-green-200';
+        break;
+      case 'info':
+        colorClasses = 'bg-blue-50 text-blue-700 border-blue-200';
+        break;
+      case 'warn':
+        colorClasses = 'bg-yellow-50 text-yellow-700 border-yellow-200';
+        break;
+      case 'danger':
+        colorClasses = 'bg-red-50 text-red-700 border-red-200';
+        break;
+      case 'secondary':
+        colorClasses = 'bg-gray-50 text-gray-700 border-gray-200';
+        break;
+      default:
+        colorClasses = 'bg-purple-50 text-purple-700 border-purple-200';
+        break;
+    }
+
+    return `${baseClasses} ${colorClasses}`;
   }
 }

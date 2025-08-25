@@ -1,14 +1,15 @@
 app-layout([config]="layoutConfig")
   app-breadcrumbs([items]="breadcrumbItems")
-  p-tabView
+  p-tabView([(activeIndex)]="notificationActiveIndex")
     p-tabpanel(value="aripo")
       ng-template(pTemplate="header")
         div((click)="onTabClick($event, 'aripo-incoming')") ARIPO Notifications
       app-package-stats([packageStats]="aripoStats",
         (statSelected)="onStatSelect($event)",
-        [selectedStat]="'TOTAL IN MONTH'")
+        [selectedStat]="aripoStatSelected")
       app-configurable-filter-bar(
-              [filters]="aripoFilterConfigs",
+              [filters]="aripoIncomingFilterConfigs",
+              [disabled]="aripoActiveIndex==0? false: true",
               [showClearAll]="true",
               [showApplyButton]="true",
               [showFilterSelector]="true",
@@ -28,7 +29,29 @@ app-layout([config]="layoutConfig")
               (chipRemove)="removeFilterChip($event)",
               (clearAll)="clearAllFilters()",
             )
-      p-tabView
+      app-configurable-filter-bar(
+              [filters]="aripoOutgoingFilterConfigs",
+              [disabled]="aripoActiveIndex==0? true: false",
+              [showClearAll]="true",
+              [showApplyButton]="true",
+              [showFilterSelector]="true",
+              [filterSelectorPlaceholder]="'Select filters to display'",
+              (filterChange)="onFilterChange($event)",
+              (filterCleared)="onFilterCleared()",
+              (filterApplied)="onFilterApplied($event)",
+              (appliedFiltersChange)="onAppliedFiltersChange($event)",
+              [showSearchBar]="true",
+              [searchBar]="searchBar",
+              (filterSearch)="filterSearch($event)",
+              [searchLabel]="'Search File Id'",
+              [showDownloadIcon]="false",
+              [appliedFilters]="appliedFilters",
+              [clearAllLabel]="'Clear All'",
+              [getDisplayValue]="getFilterDisplayValue.bind(this)",
+              (chipRemove)="removeFilterChip($event)",
+              (clearAll)="clearAllFilters()",
+            )
+      p-tabView([(activeIndex)]="aripoActiveIndex")
           p-tabpanel(value="aripo-incoming")
               ng-template(pTemplate="header")
                 div((click)="onHeaderClick($event, 'aripo-incoming')") ARIPO Incoming Notifications
@@ -41,15 +64,63 @@ app-layout([config]="layoutConfig")
     p-tabpanel(value="hague")
       ng-template(pTemplate="header")
         div((click)="onTabClick($event, 'hague-incoming')") Hague Notifications
-
-      p-tabView
+      app-package-stats([packageStats]="hagueStats",
+        (statSelected)="onStatSelect($event)",
+        [selectedStat]="hagueStatSelected")
+      app-configurable-filter-bar(
+              [filters]="hagueIncomingFilterConfigs",
+              [disabled]="hagueActiveIndex==0? false: true",
+              [showClearAll]="true",
+              [showApplyButton]="true",
+              [showFilterSelector]="true",
+              [filterSelectorPlaceholder]="'Select filters to display'",
+              (filterChange)="onFilterChange($event)",
+              (filterCleared)="onFilterCleared()",
+              (filterApplied)="onFilterApplied($event)",
+              (appliedFiltersChange)="onAppliedFiltersChange($event)",
+              [showSearchBar]="true",
+              [searchBar]="searchBar",
+              (filterSearch)="filterSearch($event)",
+              [searchLabel]="'Search IRN'",
+              [showDownloadIcon]="false",
+              [appliedFilters]="appliedFilters",
+              [clearAllLabel]="'Clear All'",
+              [getDisplayValue]="getFilterDisplayValue.bind(this)",
+              (chipRemove)="removeFilterChip($event)",
+              (clearAll)="clearAllFilters()",
+            )
+      app-configurable-filter-bar(
+              [filters]="hagueOutgoingFilterConfigs",
+              [disabled]="hagueActiveIndex==0? true: false",
+              [showClearAll]="true",
+              [showApplyButton]="true",
+              [showFilterSelector]="true",
+              [filterSelectorPlaceholder]="'Select filters to display'",
+              (filterChange)="onFilterChange($event)",
+              (filterCleared)="onFilterCleared()",
+              (filterApplied)="onFilterApplied($event)",
+              (appliedFiltersChange)="onAppliedFiltersChange($event)",
+              [showSearchBar]="true",
+              [searchBar]="searchBar",
+              (filterSearch)="filterSearch($event)",
+              [searchLabel]="'Search IRN'",
+              [showDownloadIcon]="false",
+              [appliedFilters]="appliedFilters",
+              [clearAllLabel]="'Clear All'",
+              [getDisplayValue]="getFilterDisplayValue.bind(this)",
+              (chipRemove)="removeFilterChip($event)",
+              (clearAll)="clearAllFilters()",
+            )
+      p-tabView([(activeIndex)]="hagueActiveIndex")
         p-tabpanel(value="hague-incoming")
           ng-template(pTemplate="header")
             div((click)="onHeaderClick($event, 'hague-incoming')") Hague Incoming Notifications
+          app-table([columns]="hagueIncomingTableColumns", [data]="hagueIncomingTableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false") 
 
         p-tabpanel(value="hague-outgoing")
           ng-template(pTemplate="header")
-            div((click)="onHeaderClick($event, 'hague-outgoing')") Hague Outgoing Notifications 
+            div((click)="onHeaderClick($event, 'hague-outgoing')") Hague Outgoing Notifications
+          app-table([columns]="hagueOutgoingTableColumns", [data]="hagueOutgoingTableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false")
 
 
     p-tabpanel(value="madrid")

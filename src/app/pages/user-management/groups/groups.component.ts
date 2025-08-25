@@ -1,14 +1,11 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { TooltipModule } from 'primeng/tooltip';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
-import { GroupFormComponent } from './group-form/group-form.component';
-import { mockGroups } from 'src/assets/data';
 import { AppLayoutComponent } from '../../../components/app-layout/app-layout.component';
 import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -20,6 +17,17 @@ import {
   FilterValue,
 } from '../../../components/configurable-filter/configurable-filter.component';
 import { FilterChipsComponent } from '../../../components/filter-chips/filter-chips.component';
+import {
+  UserService,
+  UserGroup,
+  UserGroupQueryParams,
+} from 'src/app/_services/user.service';
+import { finalize, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import {
+  TableComponent,
+  ColumnDefinition,
+} from '../../../components/table/table.component';
 
 @Component({
   selector: 'app-groups',
@@ -28,31 +36,119 @@ import { FilterChipsComponent } from '../../../components/filter-chips/filter-ch
   imports: [
     CommonModule,
     FormsModule,
-    TableModule,
     ButtonModule,
     DialogModule,
     TooltipModule,
     InputTextModule,
     DropdownModule,
 
-    GroupFormComponent,
     AppLayoutComponent,
     RouterModule,
     BreadcrumbsComponent,
     ConfigurableFilterComponent,
     FilterChipsComponent,
+    TableComponent,
   ],
 })
-export class GroupsComponent implements OnInit {
+export class GroupsComponent implements OnInit, OnDestroy {
   @ViewChild(ConfigurableFilterComponent)
   configurableFilter!: ConfigurableFilterComponent;
 
-  groups: any[] = [];
-  loading: boolean = true;
+  private destroy$ = new Subject<void>();
+  private isInitialized = false;
+  private lastRequestParams: string = '';
+
+  groups: UserGroup[] = [];
+  loading: boolean = false;
+  totalRecords: number = 0;
+
+  // Pagination properties
+  currentPage: number = 0;
+  pageSize: number = 10;
 
   // Sorting properties
   sortField: string = 'groupName';
   sortOrder: number = 1;
+
+  // Computed pagination properties
+  get totalPages(): number {
+    return Math.ceil(this.totalRecords / this.pageSize);
+  }
+
+  get currentPageInfo(): string {
+    if (this.totalRecords === 0) return 'No groups';
+    const start = this.currentPage * this.pageSize + 1;
+    const end = Math.min(
+      (this.currentPage + 1) * this.pageSize,
+      this.totalRecords
+    );
+    return `Page ${this.currentPage + 1} of ${
+      this.totalPages
+    } (${start}-${end} of ${this.totalRecords})`;
+  }
+
+  // Table column definitions for app-table
+  tableColumns: ColumnDefinition[] = [
+    {
+      field: 'groupName',
+      header: 'Group Name',
+      sortable: true,
+
+      display: 'text',
+    },
+    {
+      field: 'groupType',
+      header: 'Type',
+      sortable: true,
+
+      display: 'chip',
+      severity: (value: any) => {
+        return value === 'BUSINESS' ? 'info' : 'success';
+      },
+    },
+    {
+      field: 'description',
+      header: 'Description',
+      sortable: true,
+      display: 'text',
+    },
+    {
+      field: 'isActive',
+      header: 'Status',
+      sortable: true,
+
+      display: 'chip',
+      severity: (value: any) => {
+        return value ? 'success' : 'danger';
+      },
+      value: (value: any) => (value ? 'Active' : 'Inactive'),
+    },
+    {
+      field: 'actions',
+      header: 'Actions',
+      display: 'actions',
+      actions: [
+        {
+          label: 'Toggle Status',
+          icon: 'pi pi-sync',
+          action: 'toggleStatus',
+          severity: 'secondary',
+        },
+        {
+          label: 'Edit',
+          icon: 'pi pi-pencil',
+          action: 'edit',
+          severity: 'info',
+        },
+        {
+          label: 'Delete',
+          icon: 'pi pi-trash',
+          action: 'delete',
+          severity: 'danger',
+        },
+      ],
+    },
+  ];
 
   // Filter configuration for groups
   filterConfigs: FilterConfig[] = [
@@ -111,36 +207,33 @@ export class GroupsComponent implements OnInit {
     },
   ];
 
-  filteredGroups: any[] = [];
+  filteredGroups: UserGroup[] = [];
 
   // Applied filters from configurable filter component
   appliedFilters: FilterValue[] = [];
 
   // Dialog visibility
-  groupFormVisible: boolean = false;
   deleteGroupDialog: boolean = false;
-
-  selectedGroup: any = null;
+  selectedGroup: UserGroup | null = null;
 
   breadcrumbItems = [];
+
   constructor(
     private menuService: SidebarMenuService,
     private router: Router,
     private route: ActivatedRoute,
     public ms: MechanicsService,
-    private cdr: ChangeDetectorRef
+    private userService: UserService
   ) {}
 
   ngOnInit() {
     const currentPath = this.router.url;
     const menuItems = this.menuService.generateUserManagementMenu(currentPath);
     this.menuService.updateMenuItems(menuItems);
-    // Optionally, dynamically set menu items here
 
     this.route.params.subscribe((params) => {
       const officeCode =
         params['officeCode'] || this.ms.getCurrentOffice() || 'default';
-      console.log('officeCode:::', officeCode);
       const langCode = params['langCode'] || 'en';
 
       this.breadcrumbItems = [
@@ -158,96 +251,231 @@ export class GroupsComponent implements OnInit {
         },
       ];
     });
-    // Simulate API call
 
-    setTimeout(() => {
-      this.groups = mockGroups;
-      this.filteredGroups = mockGroups;
-      this.loading = false;
-      this.cdr.markForCheck();
-    }, 1000);
+    // Load groups from API only once on init
+    this.isInitialized = true;
+    this.loadGroups();
   }
 
-  // Sort table data
-  onSort(event: any) {
-    this.sortField = event.field;
-    this.sortOrder = event.order;
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  // Global filter
-  onGlobalFilter(event: any) {
-    const table = event.target.closest('p-table');
-    if (table) {
-      table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+  /**
+   * Handle table action clicks
+   */
+  onTableAction(action: { action: string; item: any }): void {
+    const { action: actionType, item } = action;
+
+    switch (actionType) {
+      case 'edit':
+        this.openEditGroupDialog(item);
+        break;
+      case 'delete':
+        this.openDeleteGroupDialog(item);
+        break;
+
+      default:
+        console.log('Unknown action:', actionType);
     }
+  }
+
+  /**
+   * Handle lazy load events from app-table (pagination, sorting, filtering)
+   */
+  onLazyLoad(event: any): void {
+    // Handle pagination
+    if (event.first !== undefined && event.rows !== undefined) {
+      const newPage = Math.floor(event.first / event.rows);
+      const newPageSize = event.rows;
+
+      if (this.currentPage !== newPage || this.pageSize !== newPageSize) {
+        this.currentPage = newPage;
+        this.pageSize = newPageSize;
+        this.loadGroups();
+      }
+    }
+
+    // Handle sorting
+    if (event.sortField && event.sortOrder !== undefined) {
+      const newSortField = event.sortField;
+      const newSortOrder = event.sortOrder;
+
+      if (this.sortField !== newSortField || this.sortOrder !== newSortOrder) {
+        this.sortField = newSortField;
+        this.sortOrder = newSortOrder;
+        this.currentPage = 0; // Reset to first page when sorting
+        this.loadGroups();
+      }
+    }
+  }
+
+  /**
+   * Load groups from API with current filters and pagination
+   */
+  loadGroups(): void {
+    // Prevent multiple simultaneous calls
+    if (this.loading || !this.isInitialized) {
+      return;
+    }
+
+    // Build query parameters for pagination and sorting
+    const queryParams: UserGroupQueryParams = {
+      limit: this.pageSize,
+      offset: this.currentPage * this.pageSize,
+      sort: this.sortField,
+      order: this.sortOrder === 1 ? 'asc' : 'desc',
+      exactMatchIndicator: false,
+    };
+
+    // Create a string representation of the request parameters
+    const requestParamsString = JSON.stringify(queryParams);
+
+    // Check if this is a duplicate request to prevent unnecessary API calls
+    if (this.lastRequestParams === requestParamsString) {
+      return;
+    }
+
+    // Store the current request parameters to prevent duplicates
+    this.lastRequestParams = requestParamsString;
+
+    this.loading = true;
+
+    this.userService
+      .getUserGroups(queryParams)
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.loading = false;
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          if (
+            response &&
+            response.query &&
+            response.result &&
+            response.result.userGroups
+          ) {
+            this.groups = response.result.userGroups;
+            this.filteredGroups = response.result.userGroups;
+            // Use totalUserGroupQuantity from the API response for proper pagination
+            this.totalRecords = response.query.totalUserGroupQuantity || 0;
+          } else {
+            this.groups = [];
+            this.filteredGroups = [];
+            this.totalRecords = 0;
+          }
+        },
+        error: (error) => {
+          console.error('Error loading groups:', error);
+          this.groups = [];
+          this.filteredGroups = [];
+          this.totalRecords = 0;
+        },
+      });
+
+    // Add a timeout to ensure loading state is reset even if there are issues
+    setTimeout(() => {
+      if (this.loading) {
+        this.forceResetLoading();
+      }
+    }, 10000); // 10 second timeout
+  }
+
+  /**
+   * Force reset loading state (for debugging)
+   */
+  private forceResetLoading(): void {
+    this.loading = false;
   }
 
   // Create new group
   openCreateGroupDialog() {
-    this.selectedGroup = null;
-    this.groupFormVisible = true;
+    const officeCode = this.ms.getCurrentOffice() || 'default';
+    const langCode = this.route.snapshot.params['langCode'] || 'en';
+    this.router.navigate([
+      officeCode,
+      langCode,
+      'user-management',
+      'user-accounts',
+      'groups',
+      'create',
+    ]);
   }
 
   // Edit group
-  openEditGroupDialog(group: any) {
-    this.selectedGroup = { ...group };
-    this.groupFormVisible = true;
+  openEditGroupDialog(group: UserGroup) {
+    const officeCode = this.ms.getCurrentOffice() || 'default';
+    const langCode = this.route.snapshot.params['langCode'] || 'en';
+    this.router.navigate([
+      officeCode,
+      langCode,
+      'user-management',
+      'user-accounts',
+      'groups',
+      'edit',
+      group.groupId,
+    ]);
   }
 
   // Delete group
-  openDeleteGroupDialog(group: any) {
+  openDeleteGroupDialog(group: UserGroup) {
     this.selectedGroup = group;
     this.deleteGroupDialog = true;
   }
 
   deleteGroup() {
-    // TODO: Implement API call
-    console.log('Deleting group:', this.selectedGroup);
-    this.groups = this.groups.filter(
-      (g) => g.groupIdentifier !== this.selectedGroup.groupIdentifier
-    );
-    this.deleteGroupDialog = false;
-  }
+    if (!this.deleteGroupDialog || !this.selectedGroup) return;
 
-  // Handle group form save
-  onGroupSave(groupData: any) {
-    if (this.selectedGroup) {
-      // Update existing group
-      const index = this.groups.findIndex(
-        (g) => g.groupIdentifier === groupData.groupIdentifier
-      );
-      if (index !== -1) {
-        this.groups[index] = groupData;
-      }
-    } else {
-      // Add new group
-      this.groups.push(groupData);
-    }
-    this.groupFormVisible = false;
+    this.loading = true;
+    this.userService
+      .deleteUserGroup(this.selectedGroup.groupId)
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.loading = false;
+          this.deleteGroupDialog = false;
+          this.selectedGroup = null;
+        })
+      )
+      .subscribe({
+        next: () => {
+          // Reload groups after deletion
+          this.loadGroups();
+        },
+        error: (error) => {
+          console.error('Error deleting group:', error);
+        },
+      });
   }
 
   // Filter event handlers
   onFilterChange(filters: FilterValue[]): void {
-    console.log('Filter changed:', filters);
     // Don't apply filters or show red dot on change - only track changes
   }
 
   onFilterCleared(): void {
-    console.log('Filters cleared');
-    this.filteredGroups = this.groups;
     this.appliedFilters = [];
-    this.cdr.detectChanges();
+    this.resetPagination();
   }
 
   onFilterApplied(filters: FilterValue[]): void {
-    console.log('Filters applied:', filters);
-    this.applyFilters(filters);
-    this.cdr.detectChanges();
+    this.appliedFilters = filters;
+    this.resetPagination();
   }
 
   onAppliedFiltersChange(filters: FilterValue[]): void {
     this.appliedFilters = filters;
-    this.cdr.detectChanges();
+  }
+
+  /**
+   * Reset pagination to first page
+   */
+  private resetPagination(): void {
+    this.currentPage = 0;
+    this.loadGroups();
   }
 
   // Remove individual filter chip
@@ -263,19 +491,17 @@ export class GroupsComponent implements OnInit {
       // Also remove the filter from the configurable filter component to sync state
       this.configurableFilter.removeFilterChip(filterKey);
 
-      // Update the filtered groups
-      this.applyFilters(this.appliedFilters);
-      this.cdr.detectChanges();
+      // Reload groups with updated filters
+      this.resetPagination();
     }
   }
 
   // Clear all filters
   clearAllFilters(): void {
     this.appliedFilters = [];
-    this.filteredGroups = this.groups;
     // Clear the red dot by calling the configurable filter's clear method
     this.configurableFilter.clearAllFilters();
-    this.cdr.detectChanges();
+    this.resetPagination();
   }
 
   // Get filter display value
@@ -300,81 +526,5 @@ export class GroupsComponent implements OnInit {
       default:
         return `${filterConfig.label}: ${filter.value}`;
     }
-  }
-
-  onSearchChange(searchTerm: string): void {
-    console.log('Search changed:', searchTerm);
-    // Search is now handled in applyFilters method when filters are applied
-  }
-
-  private applyFilters(filters: FilterValue[]): void {
-    let filtered = [...this.groups];
-
-    filters.forEach((filter) => {
-      switch (filter.key) {
-        case 'search':
-          if (filter.value && filter.value.trim()) {
-            const searchTerm = filter.value.toLowerCase().trim();
-            filtered = filtered.filter(
-              (item) =>
-                item.groupName?.toLowerCase().includes(searchTerm) ||
-                item.description?.toLowerCase().includes(searchTerm)
-            );
-          }
-          break;
-        case 'active':
-          if (filter.value === true) {
-            filtered = filtered.filter((item) => item.isActive === true);
-          }
-          break;
-        case 'inactive':
-          if (filter.value === true) {
-            filtered = filtered.filter((item) => item.isActive === false);
-          }
-          break;
-        case 'business':
-          if (filter.value === true) {
-            filtered = filtered.filter((item) => item.groupType === 'business');
-          }
-          break;
-        case 'user':
-          if (filter.value === true) {
-            filtered = filtered.filter((item) => item.groupType === 'user');
-          }
-          break;
-        case 'createdOnRange':
-          if (
-            filter.value &&
-            Array.isArray(filter.value) &&
-            filter.value.length === 2
-          ) {
-            const [startDate, endDate] = filter.value;
-            if (startDate && endDate) {
-              filtered = filtered.filter((item) => {
-                const itemDate = new Date(item.createdOn);
-                return itemDate >= startDate && itemDate <= endDate;
-              });
-            }
-          }
-          break;
-        case 'updatedOnRange':
-          if (
-            filter.value &&
-            Array.isArray(filter.value) &&
-            filter.value.length === 2
-          ) {
-            const [startDate, endDate] = filter.value;
-            if (startDate && endDate) {
-              filtered = filtered.filter((item) => {
-                const itemDate = new Date(item.updatedOn);
-                return itemDate >= startDate && itemDate <= endDate;
-              });
-            }
-          }
-          break;
-      }
-    });
-
-    this.filteredGroups = filtered;
   }
 }

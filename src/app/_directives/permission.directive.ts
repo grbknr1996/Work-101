@@ -5,8 +5,9 @@ import {
   ViewContainerRef,
   OnInit,
   OnDestroy,
+  inject,
+  effect,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { PermissionService } from '../_services/permission.service';
 
 @Directive({
@@ -18,27 +19,26 @@ export class PermissionDirective implements OnInit, OnDestroy {
   @Input() appPermissionSet: string = '';
   @Input() appPermissionMode: 'any' | 'all' = 'any'; // 'any' = OR, 'all' = AND
 
-  private subscription: Subscription = new Subscription();
+  private permissionService = inject(PermissionService);
   private hasView = false;
 
   constructor(
     private templateRef: TemplateRef<any>,
-    private viewContainer: ViewContainerRef,
-    private permissionService: PermissionService
+    private viewContainer: ViewContainerRef
   ) {}
 
   ngOnInit() {
-    this.subscription.add(
-      this.permissionService.permissionState$.subscribe((state) => {
-        if (state.isLoaded) {
-          this.updateView();
-        }
-      })
-    );
+    // Use effect to reactively update view when permissions change
+    effect(() => {
+      const permissionState = this.permissionService.permissionState();
+      if (permissionState.isLoaded) {
+        this.updateView();
+      }
+    });
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    // No need to manually unsubscribe with signals
   }
 
   private updateView() {

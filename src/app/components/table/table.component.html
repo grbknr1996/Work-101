@@ -79,6 +79,9 @@
           <ng-container *ngIf="col.display === 'tag'">
             <p-tag [value]="getValue(rowData, col.field)" [severity]="col.severity ? col.severity(getValue(rowData, col.field)) : 'success'"></p-tag>
           </ng-container>
+          <ng-container *ngIf="col.display === 'chip'">
+            <div [ngClass]="getChipStyleClass(col, rowData)">{{ col.value ? col.value(getValue(rowData, col.field)) : getValue(rowData, col.field) }}</div>
+          </ng-container>
           <!-- Progress Display-->
           <ng-container *ngIf="col.display === 'progress'">
             <p-progressBar [value]="getValue(rowData, col.field)" [showValue]="false"></p-progressBar>

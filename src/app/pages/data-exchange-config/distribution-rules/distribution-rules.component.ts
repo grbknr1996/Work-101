@@ -101,11 +101,17 @@ export class DistributionRulesComponent implements OnInit {
 
   // Computed properties for template expressions
   activeRulesCount = computed(
-    () => this.distributionRulesData().filter(rule => rule.publishDocuments === true).length
+    () =>
+      this.distributionRulesData().filter(
+        (rule) => rule.publishDocuments === true
+      ).length
   );
 
   officesCoveredCount = computed(
-    () => new Set(this.distributionRulesData().map(rule => rule.originatingOfficeName)).size
+    () =>
+      new Set(
+        this.distributionRulesData().map((rule) => rule.originatingOfficeName)
+      ).size
   );
 
   totalRulesCount = computed(() => this.distributionRulesData().length);
@@ -177,17 +183,17 @@ export class DistributionRulesComponent implements OnInit {
   }
 
   private loadData(): void {
-    this.loadingService.show('Loading distribution rules...');
+    this.loadingService.show('Loading distribution exclusion rules...');
 
     // Load exclusion rules from service for the table
     this.dataExchangeService.getExclusionRules().subscribe({
-      next: rules => {
+      next: (rules) => {
         console.log('API Response (ExclusionRule[]): ', rules);
         this.rulesData.set(rules || []);
         this.loadingService.hide();
         console.log('Data loaded successfully, loading set to false');
       },
-      error: error => {
+      error: (error) => {
         console.error('Error loading data from API:', error);
         this.rulesData.set([]);
         this.loadingService.hide();
@@ -215,9 +221,11 @@ export class DistributionRulesComponent implements OnInit {
     if (event.action === 'edit') {
       this.loadingService.show('Loading edit rule page...');
       const basePath = `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard`;
-      this.router.navigate([`${basePath}/edit-rule/${event.item.recipientClientId}`]).then(() => {
-        this.loadingService.hide();
-      });
+      this.router
+        .navigate([`${basePath}/edit-rule/${event.item.recipientClientId}`])
+        .then(() => {
+          this.loadingService.hide();
+        });
     } else if (event.action === 'delete') {
       // Handle delete action
       this.deleteRule(event.item);
@@ -231,8 +239,8 @@ export class DistributionRulesComponent implements OnInit {
     // Simulate API call delay (replace with actual API call)
     setTimeout(() => {
       // Update local data to remove the rule
-      this.rulesData.update(current =>
-        current.filter(r => r.recipientClientId !== rule.recipientClientId)
+      this.rulesData.update((current) =>
+        current.filter((r) => r.recipientClientId !== rule.recipientClientId)
       );
       this.loadingService.hide();
     }, 500);
@@ -249,8 +257,8 @@ export class DistributionRulesComponent implements OnInit {
         routerLink: `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard`,
       },
       {
-        label: 'Distribution Rules',
-        routerLink: `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/distribution-rules`,
+        label: 'Distribution Exclusion Rules',
+        routerLink: `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/distribution-exclusion-rules`,
       },
     ];
   }

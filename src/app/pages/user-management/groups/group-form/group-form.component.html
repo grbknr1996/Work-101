@@ -1,140 +1,182 @@
 
-<p>group-form works!</p>
-<p-dialog [header]="group ? 'Edit Group' : 'Create Group'" [(visible)]="visible" [style]="{width: &quot;90vw&quot;, maxWidth: &quot;1200px&quot;, height: &quot;90vh&quot;}" [modal]="true" [draggable]="false" [resizable]="false" (onHide)="onVisibleChange(false)" [contentStyle]="{height: &quot;calc(90vh - 120px)&quot;, overflow: &quot;auto&quot;}">
-  <div class="p-fluid">
-    <p-steps [model]="steps" [activeIndex]="activeIndex" [readonly]="false"></p-steps>
-    <!-- Basic Info Step-->
-    <div class="mt-4" *ngIf="activeIndex === 0">
-      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <div>
-          <div class="field mb-4">
-            <label class="font-semibold mb-1 block" for="groupName">Group Name</label>
-            <input class="w-full" id="groupName" type="text" pInputText [(ngModel)]="formData.groupName" required>
+<app-layout>
+  <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
+  <div class="p-4">
+    <!-- Header Section-->
+    <div class="mb-6">
+      <h1 class="text-3xl font-bold text-gray-800">{{ isEditMode ? 'Edit Group' : 'Create Group' }}</h1>
+      <p class="text-gray-600">{{ isEditMode ? 'Update group information and settings' : 'Create a new user group with members and permissions' }}</p>
+    </div>
+    <!-- Form Content-->
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      <app-configurable-stepper [steps]="steps" [activeStep]="activeIndex" (stepChange)="onStepChange($event)"></app-configurable-stepper>
+      <!-- Basic Info Step-->
+      <div class="mt-6" *ngIf="activeIndex === 0">
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div>
+            <div class="field mb-4">
+              <label class="font-semibold mb-1 block" for="groupName">Group Name</label>
+              <input class="w-full" id="groupName" type="text" pInputText [(ngModel)]="formData.groupName" required>
+            </div>
+            <div class="field mb-4">
+              <label class="font-semibold mb-1 block" for="groupType">Group Type</label>
+              <p-dropdown class="w-full" id="groupType" [options]="groupTypes" [(ngModel)]="formData.groupType"></p-dropdown>
+            </div>
           </div>
-          <div class="field mb-4">
-            <label class="font-semibold mb-1 block" for="groupType">Group Type</label>
-            <p-dropdown class="w-full" id="groupType" [options]="groupTypes" [(ngModel)]="formData.groupType"></p-dropdown>
-          </div>
-        </div>
-        <div>
-          <div class="field mb-4">
-            <label class="font-semibold mb-1 block" for="description">Description</label>
-            <input class="w-full" id="description" type="text" pInputText [(ngModel)]="formData.description">
-          </div>
-          <div class="field mb-4">
-            <label class="font-semibold mb-1 block">Status</label>
-            <div class="flex items-center gap-4 mt-2">
-              <div (click)="formData.status = 'active'; formData.isActive = true" [class]="&quot;px-4 py-2 rounded-full text-sm cursor-pointer flex items-center gap-2 transition-colors duration-200 &quot; + (formData.status === &quot;active&quot; ? &quot;bg-green-100 text-green-800 font-medium&quot; : &quot;bg-gray-100 text-gray-600 hover:bg-gray-200&quot;)"><i class="pi pi-check text-xs" *ngIf="formData.status === 'active'"></i>Active</div>
-              <div (click)="formData.status = 'inactive'; formData.isActive = false" [class]="&quot;px-4 py-2 rounded-full text-sm cursor-pointer flex items-center gap-2 transition-colors duration-200 &quot; + (formData.status === &quot;inactive&quot; ? &quot;bg-red-100 text-red-800 font-medium&quot; : &quot;bg-gray-100 text-gray-600 hover:bg-gray-200&quot;)"><i class="pi pi-check text-xs" *ngIf="formData.status === 'inactive'"></i>Inactive</div>
+          <div>
+            <div class="field mb-4">
+              <label class="font-semibold mb-1 block" for="description">Description</label>
+              <input class="w-full" id="description" type="text" pInputText [(ngModel)]="formData.description">
+            </div>
+            <div class="field mb-4">
+              <label class="font-semibold mb-1 block">Status</label>
+              <div class="flex items-center gap-4 mt-2">
+                <div (click)="formData.status = 'active'; formData.isActive = true" [class]="&quot;px-4 py-2 rounded-full text-sm cursor-pointer flex items-center gap-2 transition-colors duration-200 &quot; + (formData.status === &quot;active&quot; ? &quot;bg-green-100 text-green-800 font-medium&quot; : &quot;bg-gray-100 text-gray-600 hover:bg-gray-200&quot;)"><i class="pi pi-check text-xs" *ngIf="formData.status === 'active'"></i>Active</div>
+                <div (click)="formData.status = 'inactive'; formData.isActive = false" [class]="&quot;px-4 py-2 rounded-full text-sm cursor-pointer flex items-center gap-2 transition-colors duration-200 &quot; + (formData.status === &quot;inactive&quot; ? &quot;bg-red-100 text-red-800 font-medium&quot; : &quot;bg-gray-100 text-gray-600 hover:bg-gray-200&quot;)"><i class="pi pi-check text-xs" *ngIf="formData.status === 'inactive'"></i>Inactive</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- Members Step-->
-    <div class="mt-4" *ngIf="activeIndex === 1">
-      <div class="grid grid-cols-2 gap-4">
-        <!-- Current Members-->
-        <div>
-          <h4 class="font-semibold mb-2">Current Members</h4>
-          <div class="mb-3">
-            <input class="w-full" pInputText type="text" [(ngModel)]="membersSearchTerm" placeholder="Search members...">
-          </div>
-          <div class="space-y-2">
-            <div class="flex justify-between items-center p-2 bg-gray-50 rounded-t">
-              <div class="flex gap-4">
-                <button class="text-sm font-medium flex items-center gap-1 hover:text-primary" (click)="sortMembers('username')">Username<i class="pi pi-sort-alt" [ngClass]="{&quot;pi-sort-amount-up&quot;: membersSortField === &quot;username&quot; &amp;&amp; membersSortOrder === 1,&quot;pi-sort-amount-down&quot;: membersSortField === &quot;username&quot; &amp;&amp; membersSortOrder === -1}"></i></button>
-                <button class="text-sm font-medium flex items-center gap-1 hover:text-primary" (click)="sortMembers('email')">Email<i class="pi pi-sort-alt" [ngClass]="{&quot;pi-sort-amount-up&quot;: membersSortField === &quot;email&quot; &amp;&amp; membersSortOrder === 1,&quot;pi-sort-amount-down&quot;: membersSortField === &quot;email&quot; &amp;&amp; membersSortOrder === -1}"></i></button>
-              </div>
+      <!-- Members Step-->
+      <div class="mt-6" *ngIf="activeIndex === 1">
+        <div class="mb-4">
+          <h3 class="font-semibold text-lg text-gray-800">Manage Group Members</h3>
+          <p class="text-sm text-gray-600">Select users to add to or remove from this group. Both username and email are displayed for easy identification.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <!-- Current Members-->
+          <div>
+            <h4 class="font-semibold mb-2">Current Members</h4>
+            <div class="mb-3">
+              <input class="w-full" pInputText type="text" [(ngModel)]="membersSearchTerm" placeholder="Search members...">
             </div>
-            <div class="p-2 bg-blue-50 rounded flex justify-between items-center" *ngIf="selectedMembers.length &gt; 0"><span class="text-sm text-blue-700">{{ selectedMembers.length }} selected</span>
-              <button class="p-button-danger p-button-sm" pButton label="Remove Selected" icon="pi pi-times" (click)="removeSelectedMembers()"></button>
-            </div>
-            <div class="p-3 bg-white rounded-lg shadow-sm flex justify-between items-center" *ngFor="let member of filterMembers()">
-              <div class="flex items-center gap-3">
-                <p-checkbox [value]="member" [(ngModel)]="selectedMembers" [multiple]="true"></p-checkbox>
-                <div>
-                  <div class="font-medium">{{ member.username }}</div>
-                  <div class="text-sm text-gray-600">{{ member.email }}</div>
+            <div class="space-y-2">
+              <div class="flex justify-between items-center p-2 bg-gray-50 rounded-t">
+                <div class="flex gap-4">
+                  <button class="text-sm font-medium flex items-center gap-1 hover:text-primary" (click)="sortMembers('username')">Username<i class="pi pi-sort-alt" [ngClass]="{&quot;pi-sort-amount-up&quot;: membersSortField === &quot;username&quot; &amp;&amp; membersSortOrder === 1,&quot;pi-sort-amount-down&quot;: membersSortField === &quot;username&quot; &amp;&amp; membersSortOrder === -1}"></i></button>
+                  <button class="text-sm font-medium flex items-center gap-1 hover:text-primary" (click)="sortMembers('email')">Email<i class="pi pi-sort-alt" [ngClass]="{&quot;pi-sort-amount-up&quot;: membersSortField === &quot;email&quot; &amp;&amp; membersSortOrder === 1,&quot;pi-sort-amount-down&quot;: membersSortField === &quot;email&quot; &amp;&amp; membersSortOrder === -1}"></i></button>
                 </div>
               </div>
-              <button class="p-button-rounded p-button-danger p-button-text" pButton icon="pi pi-times" (click)="removeMember(member)" pTooltip="Remove Member"></button>
-            </div>
-          </div>
-        </div>
-        <!-- Available Users-->
-        <div>
-          <h4 class="font-semibold mb-2">Available Users</h4>
-          <div class="mb-3">
-            <input class="w-full" pInputText type="text" [(ngModel)]="availableUsersSearchTerm" placeholder="Search users...">
-          </div>
-          <div class="space-y-2">
-            <div class="flex justify-between items-center p-2 bg-gray-50 rounded-t">
-              <div class="flex gap-4">
-                <button class="text-sm font-medium flex items-center gap-1 hover:text-primary" (click)="sortAvailableUsers('username')">Username<i class="pi pi-sort-alt" [ngClass]="{&quot;pi-sort-amount-up&quot;: availableUsersSortField === &quot;username&quot; &amp;&amp; availableUsersSortOrder === 1,&quot;pi-sort-amount-down&quot;: availableUsersSortField === &quot;username&quot; &amp;&amp; availableUsersSortOrder === -1}"></i></button>
-                <button class="text-sm font-medium flex items-center gap-1 hover:text-primary" (click)="sortAvailableUsers('email')">Email<i class="pi pi-sort-alt" [ngClass]="{&quot;pi-sort-amount-up&quot;: availableUsersSortField === &quot;email&quot; &amp;&amp; availableUsersSortOrder === 1,&quot;pi-sort-amount-down&quot;: availableUsersSortField === &quot;email&quot; &amp;&amp; availableUsersSortOrder === -1}"></i></button>
+              <div class="p-2 bg-blue-50 rounded flex justify-between items-center" *ngIf="selectedMembers.length &gt; 0"><span class="text-sm text-blue-700">{{ selectedMembers.length }} selected</span>
+                <button class="p-button-danger p-button-sm" pButton label="Remove Selected" icon="pi pi-times" (click)="removeSelectedMembers()"></button>
               </div>
-            </div>
-            <div class="p-2 bg-blue-50 rounded flex justify-between items-center" *ngIf="selectedUsers.length &gt; 0"><span class="text-sm text-blue-700">{{ selectedUsers.length }} selected</span>
-              <button class="p-button-success p-button-sm" pButton label="Add Selected" icon="pi pi-plus" (click)="addSelectedMembers()"></button>
-            </div>
-            <p-scrollPanel [style]="{width: &quot;100%&quot;, height: &quot;400px&quot;}" (onScroll)="onScroll($event)">
-              <div class="space-y-2">
-                <div class="p-3 bg-white rounded-lg shadow-sm flex justify-between items-center" *ngFor="let user of filterAvailableUsers()">
-                  <div class="flex items-center gap-3">
-                    <p-checkbox [value]="user" [(ngModel)]="selectedUsers" [multiple]="true"></p-checkbox>
-                    <div>
-                      <div class="font-medium">{{ user.username }}</div>
-                      <div class="text-sm text-gray-600">{{ user.email }}</div>
-                    </div>
+              <div class="p-3 bg-white rounded-lg shadow-sm flex justify-between items-center" *ngFor="let member of filterMembers()">
+                <div class="flex items-center gap-3">
+                  <p-checkbox [value]="member" [(ngModel)]="selectedMembers" [multiple]="true"></p-checkbox>
+                  <div>
+                    <div class="font-medium">{{ member.username }}</div>
+                    <div class="flex items-center gap-2 text-sm text-gray-600"><i class="pi pi-envelope text-gray-400"></i><span>{{ member.email }}</span></div>
                   </div>
-                  <button class="p-button-rounded p-button-success p-button-text" pButton icon="pi pi-plus" (click)="addMember(user)" pTooltip="Add Member"></button>
                 </div>
-                <div class="text-center p-3" *ngIf="isLoadingMore"><i class="pi pi-spin pi-spinner" style="font-size: 1.5rem"></i></div>
-                <div class="text-center p-3 text-gray-500" *ngIf="!hasMoreUsers &amp;&amp; availableUsers.length &gt; 0">No more users to load</div>
+                <button class="p-button-rounded p-button-danger p-button-text" pButton icon="pi pi-times" (click)="removeMember(member)" pTooltip="Remove Member"></button>
               </div>
-            </p-scrollPanel>
+            </div>
+          </div>
+          <!-- Available Users-->
+          <div>
+            <h4 class="font-semibold mb-2">Available Users</h4>
+            <div class="mb-3">
+              <div class="flex gap-2">
+                <input class="flex-1" pInputText type="text" [(ngModel)]="availableUsersSearchTerm" (ngModelChange)="onAvailableUsersSearchChange()" placeholder="Search users...">
+                <button class="p-button-text p-button-sm" *ngIf="availableUsersSearchTerm" pButton icon="pi pi-times" (click)="clearSearch()" pTooltip="Clear Search"></button>
+              </div>
+            </div>
+            <div class="space-y-2">
+              <div class="flex justify-between items-center p-2 bg-gray-50 rounded-t">
+                <div class="flex gap-4">
+                  <button class="text-sm font-medium flex items-center gap-1 hover:text-primary" (click)="sortAvailableUsers('username')">Username<i class="pi pi-sort-alt" [ngClass]="{&quot;pi-sort-amount-up&quot;: availableUsersSortField === &quot;username&quot; &amp;&amp; availableUsersSortOrder === 1,&quot;pi-sort-amount-down&quot;: availableUsersSortField === &quot;username&quot; &amp;&amp; availableUsersSortOrder === -1}"></i></button>
+                  <button class="text-sm font-medium flex items-center gap-1 hover:text-primary" (click)="sortAvailableUsers('email')">Email<i class="pi pi-sort-alt" [ngClass]="{&quot;pi-sort-amount-up&quot;: availableUsersSortField === &quot;email&quot; &amp;&amp; availableUsersSortOrder === 1,&quot;pi-sort-amount-down&quot;: availableUsersSortField === &quot;email&quot; &amp;&amp; availableUsersSortOrder === -1}"></i></button>
+                </div>
+              </div>
+              <div class="p-2 bg-blue-50 rounded flex justify-between items-center" *ngIf="selectedUsers.length &gt; 0"><span class="text-sm text-blue-700">{{ selectedUsers.length }} selected</span>
+                <button class="p-button-success p-button-sm" pButton label="Add Selected" icon="pi pi-plus" (click)="addSelectedMembers()"></button>
+              </div>
+            </div>
+            <!-- Users list-->
+            <div class="space-y-2">
+              <!-- Loading state-->
+              <div class="text-center p-3" *ngIf="isLoadingUsers"><i class="pi pi-spin pi-spinner" style="font-size: 1.5rem"></i>
+                <div class="text-sm text-gray-500 mt-2">Loading users...</div>
+              </div>
+              <!-- Users list-->
+              <div class="p-3 bg-white rounded-lg shadow-sm flex justify-between items-center" *ngFor="let user of filterAvailableUsers()">
+                <div class="flex items-center gap-3">
+                  <p-checkbox [value]="user" [(ngModel)]="selectedUsers" [multiple]="true"></p-checkbox>
+                  <div>
+                    <div class="font-medium">{{ user.username }}</div>
+                    <div class="flex items-center gap-2 text-sm text-gray-600"><i class="pi pi-envelope text-gray-400"></i><span>{{ user.email }}</span></div>
+                  </div>
+                </div>
+                <button class="p-button-rounded p-button-success p-button-text" pButton icon="pi pi-plus" (click)="addMember(user)" pTooltip="Add Member"></button>
+              </div>
+              <!-- Empty state-->
+              <div class="text-center p-3 text-gray-500" *ngIf="availableUsers.length === 0 &amp;&amp; !isLoadingUsers">No users found</div>
+            </div>
+            <!-- Pagination-->
+            <div class="mt-4" *ngIf="totalUsers &gt; rowsPerPage">
+              <p-paginator [rows]="rowsPerPage" [totalRecords]="totalUsers" [rowsPerPageOptions]="rowsPerPageOptions" (onPageChange)="onPageChange($event)" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"></p-paginator>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- Permissions Step-->
-    <div class="mt-4" *ngIf="activeIndex === 2">
-      <div class="grid">
-        <div class="col-12">
-          <label class="block mb-2 font-medium">Permission Sets</label>
-          <p-multiSelect class="w-full" [options]="availablePermissions" [(ngModel)]="selectedPermissions" optionLabel="label" [filter]="true" placeholder="Select Permission Sets" [panelStyle]="{minWidth: &quot;600px&quot;, width: &quot;80vw&quot;, maxWidth: &quot;700px&quot;, maxHeight: &quot;400px&quot;, overflowX: &quot;auto&quot;}" [virtualScroll]="true" [virtualScrollItemSize]="34" [showToggleAll]="true" appendTo="body">
-            <ng-template let-permission pTemplate="item">
-              <div class="flex items-center justify-between p-2" style="min-width: 350px"><span class="font-semibold">{{ permission.label }}</span><span class="text-gray-500 text-xs ml-4 whitespace-nowrap">{{ permission.permissions.length }} permission{{ permission.permissions.length > 1 ? "s" : "" }}</span></div>
-            </ng-template>
-          </p-multiSelect>
-        </div>
-        <div class="col-12 mt-4">
-          <div class="bg-gray-50 p-4 rounded-lg">
-            <h4 class="font-semibold mb-4">Selected Permissions</h4>
-            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-              <div class="p-4 bg-white rounded-lg shadow-sm" *ngFor="let permission of selectedPermissions">
-                <div class="font-medium text-lg mb-2">{{ permission.label }}</div>
-                <div class="text-sm text-gray-600">
-                  <div class="flex flex-wrap gap-2"><span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs" *ngFor="let perm of permission.permissions">{{ perm }}</span></div>
+      <!-- Review Step-->
+      <div class="mt-6" *ngIf="activeIndex === 2">
+        <div class="bg-gray-50 p-6 rounded-lg">
+          <h3 class="font-bold text-xl mb-6">Review Group Information</h3>
+          <!-- Basic Info Review-->
+          <div class="mb-6">
+            <h4 class="font-semibold text-lg mb-3 text-blue-600">Basic Information</h4>
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div class="bg-white p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Group Name</div>
+                <div class="font-medium">{{ formData.groupName }}</div>
+              </div>
+              <div class="bg-white p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Group Type</div>
+                <div class="font-medium">{{ formData.groupType }}</div>
+              </div>
+              <div class="bg-white p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Description</div>
+                <div class="font-medium">{{ formData.description || 'No description provided' }}</div>
+              </div>
+              <div class="bg-white p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Status</div>
+                <div class="font-medium" [class]="formData.status === 'active' ? 'text-green-600' : 'text-red-600'">{{ formData.status === 'active' ? 'Active' : 'Inactive' }}</div>
+              </div>
+            </div>
+          </div>
+          <!-- Members Review-->
+          <div class="mb-6">
+            <h4 class="font-semibold text-lg mb-3 text-blue-600">Members</h4>
+            <div class="bg-white p-4 rounded-lg">
+              <div class="mt-3" *ngIf="groupMembers.length &gt; 0">
+                <div class="text-sm text-gray-600 mb-2">Added Members:</div>
+                <div class="space-y-1">
+                  <div class="p-2 bg-gray-50 rounded" *ngFor="let member of groupMembers">
+                    <div class="flex items-center gap-2 mb-1"><i class="pi pi-user text-gray-400"></i><span class="font-medium">{{ member.username }}</span></div>
+                    <div class="text-sm text-gray-500 ml-6">{{ member.email }}</div>
+                  </div>
                 </div>
+              </div>
+              <div class="mt-3" *ngIf="groupMembers.length === 0">
+                <div class="text-sm text-gray-500">No members added to this group</div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <!-- Action Buttons-->
+    <div class="mt-6 flex justify-between items-center">
+      <div>
+        <button *ngIf="activeIndex === 0" pButton pRipple label="Cancel" icon="pi pi-times" (click)="router.navigate(['../'], { relativeTo: route })"></button>
+        <button *ngIf="activeIndex &gt; 0" pButton pRipple label="Previous" icon="pi pi-arrow-left" (click)="onPreviousStep()"></button>
+      </div>
+      <div>
+        <button *ngIf="activeIndex &lt; 2" pButton pRipple label="Next" icon="pi pi-arrow-right" iconPos="right" [disabled]="!canProceedToNext()" (click)="onNextStep()"></button>
+        <button class="p-button-primary" *ngIf="activeIndex === 2" pButton pRipple label="Save" icon="pi pi-save" (click)="onSave()"></button>
       </div>
     </div>
   </div>
-  <ng-template pTemplate="footer">
-    <div class="flex justify-between">
-      <div>
-        <button class="p-button-text" pButton pRipple label="Previous" icon="pi pi-arrow-left" (click)="activeIndex = activeIndex - 1" [disabled]="activeIndex === 0"></button>
-        <button class="p-button-text" pButton pRipple label="Next" icon="pi pi-arrow-right" iconPos="right" (click)="activeIndex = activeIndex + 1" [disabled]="activeIndex === steps.length - 1"></button>
-      </div>
-      <div>
-        <button class="p-button-text" pButton pRipple label="Cancel" icon="pi pi-times" (click)="onVisibleChange(false)"></button>
-        <button class="p-button-text" pButton pRipple label="Save" icon="pi pi-check" (click)="onSave()" [disabled]="activeIndex !== steps.length - 1"></button>
-      </div>
-    </div>
-  </ng-template>
-</p-dialog>
+</app-layout>

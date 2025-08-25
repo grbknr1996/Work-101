@@ -74,7 +74,7 @@ export class UserAccountsComponent implements OnInit {
   activeUsers = 0;
   inactiveUsers = 0;
   unconfirmedUsers = 0;
-  globalFilterFields = ['userName', 'userEmail', 'loginId'];
+  globalFilterFields = ['userName', 'email', 'loginId'];
 
   // Pagination properties
   currentPage = 0;
@@ -105,7 +105,7 @@ export class UserAccountsComponent implements OnInit {
       showClear: true,
     },
     {
-      key: 'userEmail',
+      key: 'email',
       label: 'Email',
       type: 'text',
       placeholder: 'Enter email...',
@@ -154,12 +154,12 @@ export class UserAccountsComponent implements OnInit {
       header: 'Username',
       sortable: true,
     },
-    { field: 'userEmail', header: 'Email', sortable: true },
+    { field: 'email', header: 'Email', sortable: true },
     { field: 'loginId', header: 'Login ID', sortable: true },
     {
       field: 'isActive',
       header: 'Status',
-      display: 'tag',
+      display: 'chip',
       sortable: true,
       severity: (value: string) => {
         return value === 'true' ? 'success' : 'danger';
@@ -234,7 +234,7 @@ export class UserAccountsComponent implements OnInit {
 
     // Card Body Section
     {
-      field: 'userEmail',
+      field: 'email',
       label: 'Email',
       display: 'text',
       section: 'body',
@@ -361,7 +361,7 @@ export class UserAccountsComponent implements OnInit {
           ...user,
           // Map API fields to table fields and handle missing values
           userName: user.userName || '-',
-          userEmail: user.userEmail || '-',
+          email: user.email || '-',
           loginId: user.loginId || '-',
           isActive: user.isActive || 'false', // Keep original isActive value
           updatedDate: user.updatedDate || '-',
@@ -547,8 +547,8 @@ export class UserAccountsComponent implements OnInit {
           // Note: API might not support userName filter directly
           // You may need to adjust based on actual API capabilities
           break;
-        case 'userEmail':
-          apiParams.userEmail = filter.value;
+        case 'email':
+          apiParams.email = filter.value;
           break;
         case 'isActive':
           apiParams.isActive = filter.value;

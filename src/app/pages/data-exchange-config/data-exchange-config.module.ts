@@ -27,7 +27,7 @@ const routes: Routes = [
     component: RecipientSystemsComponent,
   },
   {
-    path: 'distribution-rules',
+    path: 'distribution-exclusion-rules',
     component: DistributionRulesComponent,
   },
   {

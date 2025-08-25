@@ -34,7 +34,7 @@ export class PermissionGuard implements CanActivate {
     }
 
     // Check if permissions are loaded
-    if (!this.permissionService.isLoaded) {
+    if (!this.permissionService.isPermissionsLoaded) {
       // If permissions not loaded, try to fetch them
       return this.permissionService.fetchUserPermissions().pipe(
         switchMap(() => {
@@ -100,10 +100,6 @@ export class PermissionGuard implements CanActivate {
     requiredPermissions?: string[],
     requiredPermissionSet?: string
   ): boolean {
-    console.log('=== checkPermissions Debug ===');
-    console.log('Required permissions:', requiredPermissions);
-    console.log('Required permission set:', requiredPermissionSet);
-
     let individualPermissionPassed = true;
     let permissionSetPassed = true;
 

@@ -15,6 +15,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TooltipModule } from 'primeng/tooltip';
+import { TagModule } from 'primeng/tag';
 
 import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
 import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
@@ -32,10 +33,11 @@ import {
 import { FilterChipsComponent } from 'src/app/components/filter-chips/filter-chips.component';
 import { UserAccount } from 'src/app/_services/user.service';
 import { TableComponent } from 'src/app/components/table/table.component';
+import { JournalPublication } from 'src/app/schemas/journal-publication-schema';
 
 interface TabData {
   ipType: string;
-  data?: Fee[] | [];
+  data?: JournalPublication[] | [];
   count?: number | 0;
   checked?: boolean;
 }
@@ -68,6 +70,7 @@ enum IpTypes {
     IconFieldModule,
     InputIconModule,
     TabsModule,
+    TagModule,
     TooltipModule,
     ConfigurableFilterComponent,
     FilterChipsComponent,
@@ -75,7 +78,7 @@ enum IpTypes {
     RouterModule,
     DragDropModule,
   ],
-  providers: [JournalPublicationService],
+  providers: [JournalPublicationService, CapitalizeWordsPipe ],
   templateUrl: './journal-publication.component.html',
 })
 export class JournalPublicationComponent implements OnInit, OnChanges {
@@ -108,7 +111,7 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
   selectedStat: string | null = null;
   userStats: any[] = [];
 
-  feeServices!: Fee[];
+  journalPublicationServices!: JournalPublication[];
 
   breadcrumbItems = [];
 
@@ -125,26 +128,33 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
   isCardView = false;
 
   tableColumns = [
-    { field: 'imageUrl', header: 'Journal code', display: 'journalCode' },
+    { field: 'journalCode', header: 'Journal code', sortable: false },
     {
       field: 'name',
       header: 'Name',
       sortable: true,
     },
-    { field: 'processType', header: 'Process Type', sortable: true },
+    { 
+      field: 'category', 
+      header: 'IP Type', 
+      sortable: true,
+
+    },
     {
-      field: 'isActive',
+      field: 'status',
       header: 'Status',
       display: 'tag',
       sortable: true,
       severity: (value: string) => {
-        return value === 'true' ? 'success' : 'danger';
+          const tag = this.getTagColorValue(value);
+          return tag?.severity ?? 'secondary';
       },
       value: (value: string) => {
-        return value.toLowerCase() === 'true' ? 'Active' : 'Inactive';
+          const tag = this.getTagColorValue(value);
+          return this.capitalizeWordsPipe.transform(tag?.value ?? value);
       },
     },
-    { field: 'creationDate', header: 'Created On', sortable: true },
+    { field: 'creationDate', header: 'Created Date', sortable: true },
     { field: 'publicationDate', header: 'Publication Date', sortable: true },
     { field: 'files', header: 'Files', sortable: true },
     {
@@ -175,8 +185,8 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
       ],
     },
   ];
-  
-  tableData: UserAccount[] = [];
+
+  tableData: JournalPublication[] = [];
 
   filterConfigs: FilterConfig[] = [
     {
@@ -243,8 +253,9 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
     public ms: MechanicsService,
     private cdr: ChangeDetectorRef,
     private router: Router,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private capitalizeWordsPipe: CapitalizeWordsPipe
+  ) { }
 
   ngOnInit() {
     const currentPath = this.router.url;
@@ -271,14 +282,15 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
       // Trigger change detection after updating breadcrumbs
       this.cdr.markForCheck();
     });
-    this.journalPublicationService.getJournalPublicationServices().then((feeServices) => {
-      this.feeServices = feeServices.map(item => ({
+    this.journalPublicationService.getJournalPublicationServices().then((journalPublicationData) => {
+      this.journalPublicationServices = journalPublicationData.map(item => ({
         ...item,
         checked: false
       }));
       this.loading = false;
-      console.log('feeServices: ', this.feeServices);
-      this.categories = this.getTabData(this.feeServices);
+      console.log('journalPublicationServices: ', this.journalPublicationServices);
+      this.categories = this.getTabData(this.journalPublicationServices);
+      this.tableData = this.journalPublicationServices
     });
   }
 
@@ -352,9 +364,8 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
       case 'dateRange':
         if (Array.isArray(filter.value) && filter.value.length === 2) {
           const [startDate, endDate] = filter.value;
-          return `${
-            filterConfig.label
-          }: ${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`;
+          return `${filterConfig.label
+            }: ${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`;
         }
         return filterConfig.label;
       default:
@@ -378,8 +389,8 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
       this.cdr.detectChanges();
     }
   }
-  getTabData(feeServicesData: Fee[]): TabData[] {
-    const map = new Map<string, Fee[]>();
+  getTabData(feeServicesData: JournalPublication[]): TabData[] {
+    const map = new Map<string, JournalPublication[]>();
 
     // Grouping items by category
     for (const item of feeServicesData) {
@@ -517,13 +528,13 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
   onActionClick(action: string, item: UserAccount) {
     switch (action) {
       case 'edit':
-        
+
         break;
       case 'deactivate':
-        
+
         break;
       case 'activate':
-        
+
         break;
     }
   }
@@ -551,9 +562,33 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
     );
   }
 
-    // Toggle between table and card view
+  // Toggle between table and card view
   toggleView() {
     this.isCardView = !this.isCardView;
     this.cdr.markForCheck();
   }
+
+  getTagColorValue = (value: string) => {
+    switch (value) {
+      case IpTypes.TRADEMARK:
+        return { severity:"secondary", value: IpTypes.TRADEMARK }
+      case IpTypes.PATENT:
+        return { severity:"success", value: IpTypes.PATENT }
+      case IpTypes.INDUSTRIAL_DESIGN:
+        return { severity:"info", value: IpTypes.INDUSTRIAL_DESIGN }
+      case IpTypes.COPYRIGHT:
+        return { severity:"warn", value: IpTypes.COPYRIGHT }
+      case IpTypes.POST_FILINGS:
+        return { severity:"danger", value: IpTypes.POST_FILINGS }
+      case IpTypes.GEOGRAPHICAL_INDICATIONS:
+        return { severity:"contrast", value: IpTypes.GEOGRAPHICAL_INDICATIONS }
+      case "closed":
+        return { severity:"info", value: "closed" }
+      case "pending":
+        return { severity:"warn", value: "pending" }
+      case "published":
+        return { severity:"success", value: "published" }
+    }
+  }
+
 }

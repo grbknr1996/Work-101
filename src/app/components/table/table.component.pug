@@ -96,6 +96,7 @@
               [field]="col.filterField || col.field",
               [display]="col.filterDisplay || 'menu'"
             )
+            
             // Dropdown Filter
             p-columnFilter(
               *ngIf="col.filterType === 'dropdown'",
@@ -220,6 +221,11 @@
               [value]="getValue(rowData, col.field)",
               [severity]="col.severity ? col.severity(getValue(rowData, col.field)) : 'success'"
             )
+          ng-container(*ngIf="col.display === 'chip'")
+            div(
+              [ngClass]="getChipStyleClass(col, rowData)"
+            ) {{ col.value ? col.value(getValue(rowData, col.field)) : getValue(rowData, col.field) }}
+
           // Progress Display
           ng-container(*ngIf="col.display === 'progress'")
             p-progressBar(

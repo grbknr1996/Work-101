@@ -5,7 +5,7 @@ import { AripoNotificationsComponent } from './aripo-notifications.component';
 
 const routes: Routes = [
   {
-    path: 'aripo-notifications',
+    path: 'notifications',
     component: AripoNotificationsComponent,
     canActivate: [AuthGuard],
   },

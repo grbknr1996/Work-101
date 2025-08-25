@@ -49,7 +49,6 @@ interface Acknowledge {
   selector: 'app-acknowledge-notifications',
   templateUrl: './acknowledge-notifications.component.html',
   imports: [
-    PackageStatsComponent,
     BreadcrumbsComponent,
     AppLayoutComponent,
     TableComponent,

@@ -3,7 +3,11 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { AuthTokenResponse, DataExchangeResponse, ExclusionRule } from '../interfaces';
+import {
+  AuthTokenResponse,
+  DataExchangeResponse,
+  ExclusionRule,
+} from '../interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +22,9 @@ export class DataExchangeConfigService {
    * Get authentication token using Basic Auth
    */
   private getAuthToken(): Observable<string> {
-    const credentials = btoa(`${environment.authApiUsername}:${environment.authApiPassword}`);
+    const credentials = btoa(
+      `${environment.authApiUsername}:${environment.authApiPassword}`
+    );
     const headers = new HttpHeaders({
       Authorization: `Basic ${credentials}`,
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -26,30 +32,32 @@ export class DataExchangeConfigService {
 
     const body = 'grant_type=client_credentials';
 
-    return this.http.post<AuthTokenResponse>(environment.authApi, body, { headers }).pipe(
-      map(response => {
-        console.log('Auth API response received:', {
-          hasToken: !!response.access_token,
-          expiresIn: response.expires_in,
-          tokenType: response.token_type,
-        });
-        if (response.access_token) {
-          this.accessTokenSubject.next(response.access_token);
-          return response.access_token;
-        }
-        throw new Error('No access token received');
-      }),
-      catchError(error => {
-        console.error('Authentication failed:', error);
-        console.error('Error details:', {
-          status: error.status,
-          statusText: error.statusText,
-          message: error.message,
-          url: environment.authApi,
-        });
-        return throwError(() => new Error('Failed to authenticate'));
-      })
-    );
+    return this.http
+      .post<AuthTokenResponse>(environment.authApi, body, { headers })
+      .pipe(
+        map((response) => {
+          console.log('Auth API response received:', {
+            hasToken: !!response.access_token,
+            expiresIn: response.expires_in,
+            tokenType: response.token_type,
+          });
+          if (response.access_token) {
+            this.accessTokenSubject.next(response.access_token);
+            return response.access_token;
+          }
+          throw new Error('No access token received');
+        }),
+        catchError((error) => {
+          console.error('Authentication failed:', error);
+          console.error('Error details:', {
+            status: error.status,
+            statusText: error.statusText,
+            message: error.message,
+            url: environment.authApi,
+          });
+          return throwError(() => new Error('Failed to authenticate'));
+        })
+      );
   }
 
   /**
@@ -57,7 +65,7 @@ export class DataExchangeConfigService {
    */
   getExclusionRules(): Observable<ExclusionRule[]> {
     return this.getAccessToken().pipe(
-      switchMap(token => {
+      switchMap((token) => {
         const headers = new HttpHeaders({
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -70,7 +78,7 @@ export class DataExchangeConfigService {
             headers,
           })
           .pipe(
-            map(response => {
+            map((response) => {
               console.log('Data services API response received:', {
                 hasData: !!response.data,
                 dataLength: response.data?.length || 0,
@@ -81,7 +89,7 @@ export class DataExchangeConfigService {
               }
               return [];
             }),
-            catchError(error => {
+            catchError((error) => {
               console.error('Failed to fetch exclusion rules:', error);
               console.error('Error details:', {
                 status: error.status,
@@ -89,7 +97,9 @@ export class DataExchangeConfigService {
                 message: error.message,
                 url: dataServicesUrl,
               });
-              return throwError(() => new Error('Failed to fetch exclusion rules'));
+              return throwError(
+                () => new Error('Failed to fetch exclusion rules')
+              );
             })
           );
       })
@@ -121,29 +131,36 @@ export class DataExchangeConfigService {
    */
   postDataExchangeData(newRule: any): Observable<any> {
     return this.getAccessToken().pipe(
-      switchMap(token => {
+      switchMap((token) => {
         const headers = new HttpHeaders({
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         });
 
-        // Use proxy for data services API
-        const dataServicesUrl = `${environment.dataServicesApi}distribution-exclusion`;
+        // Use correct endpoint for distribution exclusion rules
+        const dataServicesUrl = `${environment.dataServicesApi}/data-services/distribution-exclusion`;
 
         return this.http.post<any>(dataServicesUrl, newRule, { headers }).pipe(
-          map(response => {
-            console.log('New exclusion rule created:', response);
+          map((response) => {
             return response;
           }),
-          catchError(error => {
+          catchError((error) => {
             console.error('Failed to create exclusion rule:', error);
             console.error('Error details:', {
               status: error.status,
               statusText: error.statusText,
               message: error.message,
               url: dataServicesUrl,
+              payload: newRule,
             });
-            return throwError(() => new Error('Failed to create exclusion rule'));
+            return throwError(
+              () =>
+                new Error(
+                  `Failed to create exclusion rule: ${
+                    error.message || 'Unknown error'
+                  }`
+                )
+            );
           })
         );
       })

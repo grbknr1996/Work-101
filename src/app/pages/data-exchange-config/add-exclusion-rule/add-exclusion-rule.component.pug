@@ -32,16 +32,16 @@ app-layout([config]="layoutConfig")
       .w-full.mt-6.grid.grid-cols-1.gap-6(class="md:grid-cols-2")
         .col-span-1
           label.block.text-sm.font-medium.text-gray-700.mb-2 IP Category Types
-          p-multiSelect.w-full(
+          p-dropdown.w-full(
             [options]="ipCategories()",
             formControlName="categories",
-            defaultLabel="Select IP Categories",
-            display="chip"
+            placeholder="Select IP Category",
+            (onChange)="onIpCategoryChange()"
           )
           p-message(
-            *ngIf="sourceCategoriesForm.value.categories.length",
+            *ngIf="sourceCategoriesForm.value.categories",
             severity="success",
-            text="You have selected {{ sourceCategoriesForm.value.categories.length }} IP categories. Each category can have its own specific exclusion rules."
+            text="You have selected {{ getCategoryLabel(sourceCategoriesForm.value.categories) }}. This category will have its own specific exclusion rules."
           )
         
         .col-span-1
@@ -58,13 +58,15 @@ app-layout([config]="layoutConfig")
           )
             | Recipient Client ID is required
       .w-full.mt-8.flex.justify-between
-        button.bg-gray-500.text-white.px-6.py-2.rounded-lg.transition-colors(class="hover:bg-gray-600")(
+        button.bg-gray-500.text-white.px-6.py-2.rounded-lg.transition-colors(
+          class="hover:bg-gray-600",
           pButton,
           type="button",
           label="Cancel",
           (click)="cancel()"
         )
-        button.bg-blue-600.text-white.px-6.py-2.rounded-lg.transition-colors(class="hover:bg-blue-700")(
+        button.bg-blue-600.text-white.px-6.py-2.rounded-lg.transition-colors(
+          class="hover:bg-blue-700",
           pButton,
           type="button",
           label="Next",
@@ -269,5 +271,17 @@ app-layout([config]="layoutConfig")
                   | {{ enableDocumentExclusions[cat] ? documentExclusions[cat]?.length || 0 : 0 }}
 
     .mt-8.flex.justify-between
-      button.bg-gray-500.text-white.px-6.py-2.rounded-lg.transition-colors(class="hover:bg-gray-600" pButton, type="button", label="Back", (click)="prevStep()")
-      button.bg-green-600.text-white.px-6.py-2.rounded-lg.transition-colors(class="hover:bg-green-700" pButton, type="button", label="Add Rule", (click)="addRule()")
+      button.bg-gray-500.text-white.px-6.py-2.rounded-lg.transition-colors(
+        class="hover:bg-gray-600",
+        pButton,
+        type="button",
+        label="Back",
+        (click)="prevStep()"
+      )
+      button.bg-green-600.text-white.px-6.py-2.rounded-lg.transition-colors(
+        class="hover:bg-green-700",
+        pButton,
+        type="button",
+        label="Add Rule",
+        (click)="addRule()"
+      )

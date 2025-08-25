@@ -111,7 +111,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: ':officeCode/:langCode/aripo-notifications',
+    path: ':officeCode/:langCode/notifications',
     loadChildren: () =>
       import('./pages/aripo-notifications/aripo-notifications.module').then(
         (m) => m.AripoNotificationsModule

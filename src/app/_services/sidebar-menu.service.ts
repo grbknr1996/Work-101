@@ -158,7 +158,7 @@ export class SidebarMenuService {
         id: 'notifications',
         label: 'Notifications',
         icon: 'pi pi-bell',
-        routerLink: this.getRouterLink(`/aripo-notifications`),
+        routerLink: this.getRouterLink(`/notifications/aripo-incoming`),
       },
       
     ];

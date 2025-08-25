@@ -186,11 +186,7 @@ app-groups
   align-items: center
   gap 0.5rem
 
-.language-selector
-  min-width: 120px
 
-.language-dropdown-container
-  margin-right: 0.5rem
 
 .notification-container
   position: relative
@@ -292,15 +288,8 @@ app-groups
     .user-profile .user-name
       display none
     // Optionally shrink/hide language selector if space is tight
-    .language-dropdown-container
-      min-width 0
-      max-width 80px
-      overflow hidden
-      .language-selector
-        min-width 0
-        max-width 80px
-        font-size 0.9rem
-        padding 0.1rem
+ 
+
     // Mobile menu toggle always last
     .mobile-menu-toggle
       order 99
@@ -1282,15 +1271,8 @@ app-user-accounts
     .user-profile .user-name
       display none
     // Optionally shrink/hide language selector if space is tight
-    .language-dropdown-container
-      min-width 0
-      max-width 80px
-      overflow hidden
-      .language-selector
-        min-width 0
-        max-width 80px
-        font-size 0.9rem
-        padding 0.1rem
+   
+    
     // Mobile menu toggle always last
     .mobile-menu-toggle
       order 99
@@ -3739,7 +3721,12 @@ app-data-exchange-settings
           width auto
           margin 0
 
-
+// ========================================
+// Add Exclusion Rule Component
+// ========================================
+app-add-exclusion-rule
+  .p-accordion .p-accordioncontent
+    overflow visible
 // ========================================
 // Common Data Exchange Elements
 // ========================================
@@ -3818,11 +3805,6 @@ app-data-exchange-settings
     color #666
     font-size 1.1rem
     margin 0
-
-
-
-  
-
 // ========================================
 // Responsive Design for Data Exchange
 // ========================================

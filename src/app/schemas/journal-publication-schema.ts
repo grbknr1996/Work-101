@@ -7,10 +7,12 @@ enum IpTypes {
   GEOGRAPHICAL_INDICATIONS = 'geographical indications',
 }
 
-export interface Fee {
+export interface JournalPublication {
+    journalCode: string,
     name: string,
     category: `${IpTypes}`,
-    basicFee: number,
-    variableFee: number,
-    checked?: boolean
+    status: string,
+    creationDate: string,
+    publicationDate: string,
+    files: number
 }

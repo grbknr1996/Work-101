@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Fee } from '../schemas/fee-schema';
+import { JournalPublication } from '../schemas/journal-publication-schema';
 
 @Injectable()
 export class JournalPublicationService {
@@ -15,128 +16,62 @@ export class JournalPublicationService {
         this.selectedItems.set([]);
     }
 
-    getData(): Fee[] {
+    getData(): JournalPublication[] {
         return [
             {
-                name: "Amendment of title 1",
-                category: "trademark",
-                basicFee: 70,
-                variableFee: 40
-            },
-            {
-                name: "Amendment of Claim 1",
-                category: "trademark",
-                basicFee: 50,
-                variableFee: 30
-            },
-            {
-                name: "Amendment of description 1",
-                category: "geographical indications",
-                basicFee: 20,
-                variableFee: 10
-            },
-            {
-                name: "Amendment of title 3",
+                journalCode: "PJ-2025-Q1-001",
+                name: "Patent Journal Q1 2025",
                 category: "patent",
-                basicFee: 70,
-                variableFee: 40
+                status: "closed",
+                creationDate: "2023-01-02",
+                publicationDate: "2024-03-15",
+                files: 201
             },
             {
-                name: "PCT_Nation Phase Entry 1",
-                category: "copyright",
-                basicFee: 70,
-                variableFee: 40
-            },
-            {
-                name: "Amendment of title 4",
-                category: "trademark",
-                basicFee: 70,
-                variableFee: 40
-            },
-            {
-                name: "Amendment of Claim 2",
-                category: "industrial design",
-                basicFee: 50,
-                variableFee: 30
-            },
-            {
-                name: "Amendment of description 2",
+                journalCode: "TG-2025-01-001",
+                name: "Trademark Gazette January",
                 category: "patent",
-                basicFee: 20,
-                variableFee: 10
+                status: "pending",
+                creationDate: "2022-01-02",
+                publicationDate: "2024-03-15",
+                files: 100
             },
             {
-                name: "Amendment of title 5",
-                category: "geographical indications",
-                basicFee: 70,
-                variableFee: 40
-            },
-            {
-                name: "PCT_Nation Phase Entry 2",
-                category: "industrial design",
-                basicFee: 70,
-                variableFee: 40
-            },
-            {
-                name: "Amendment of title 6",
+                journalCode: "DJ-2024-12-003",
+                name: "Design Journal December",
                 category: "trademark",
-                basicFee: 70,
-                variableFee: 40
+                status: "published",
+                creationDate: "2021-01-02",
+                publicationDate: "2025-03-15",
+                files: 126
             },
             {
-                name: "Amendment of Claim 3",
-                category: "trademark",
-                basicFee: 50,
-                variableFee: 30
-            },
-            {
-                name: "Amendment of description 3",
-                category: "geographical indications",
-                basicFee: 20,
-                variableFee: 10
-            },
-            {
-                name: "Amendment of title 7",
-                category: "patent",
-                basicFee: 70,
-                variableFee: 40
-            },
-            {
-                name: "PCT_Nation Phase Entry 3",
-                category: "copyright",
-                basicFee: 70,
-                variableFee: 40
-            },
-            {
-                name: "Amendment of title 8",
-                category: "trademark",
-                basicFee: 70,
-                variableFee: 40
-            },
-            {
-                name: "Amendment of Claim 4",
+                journalCode: "CB-2024-Q4-001",
+                name: "Copyright Bulletin Q4",
                 category: "industrial design",
-                basicFee: 50,
-                variableFee: 30
+                status: "pending",
+                creationDate: "2024-01-02",
+                publicationDate: "2024-03-15",
+                files: 33
             },
             {
-                name: "Amendment of description 4",
-                category: "patent",
-                basicFee: 20,
-                variableFee: 10
-            },
-            {
-                name: "Amendment of title 9",
-                category: "geographical indications",
-                basicFee: 70,
-                variableFee: 40
-            },
-            {
-                name: "PCT_Nation Phase Entry 4",
+                journalCode: "AL-2024-12-001",
+                name: "Assignments & Licenses December",
                 category: "industrial design",
-                basicFee: 70,
-                variableFee: 40
-            }
+                status: "pending",
+                creationDate: "2024-01-02",
+                publicationDate: "2024-03-15",
+                files: 48
+            },
+            {
+                journalCode: "PJ-2025-Q2-002",
+                name: "Patent Journal Q2 2025",
+                category: "post filings",
+                status: "closed",
+                creationDate: "2020-01-02",
+                publicationDate: "2024-03-15",
+                files: 10
+            },
         ];
     }
 

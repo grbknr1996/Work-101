@@ -1,10 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, computed, effect } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, of, throwError, from } from 'rxjs';
+import { Observable, of, throwError, from } from 'rxjs';
 import { catchError, tap, map, switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { LoadingService } from './loading.service';
-import { Amplify } from 'aws-amplify';
 import { fetchAuthSession } from 'aws-amplify/auth';
 
 export interface PermissionSet {
@@ -16,7 +15,6 @@ export interface PermissionSet {
 export interface PermissionState {
   permissions: string[];
   permissionSets: PermissionSet[];
-  isLoading: boolean;
   error: string | null;
   isLoaded: boolean;
 }
@@ -25,33 +23,54 @@ export interface PermissionState {
   providedIn: 'root',
 })
 export class PermissionService {
-  private permissionStateSubject = new BehaviorSubject<PermissionState>({
-    permissions: [],
-    permissionSets: [],
-    isLoading: false,
-    error: null,
-    isLoaded: false,
-  });
+  // Signals for state management
+  private permissions = signal<string[]>([]);
+  private permissionSets = signal<PermissionSet[]>([]);
+  private error = signal<string | null>(null);
+  private isLoaded = signal<boolean>(false);
 
-  permissionState$ = this.permissionStateSubject.asObservable();
+  // Computed signals for derived state
+  readonly permissionState = computed(() => ({
+    permissions: this.permissions(),
+    permissionSets: this.permissionSets(),
+    error: this.error(),
+    isLoaded: this.isLoaded(),
+  }));
+
+  // Public getters using signals
+  readonly permissions$ = this.permissions.asReadonly();
+  readonly permissionSets$ = this.permissionSets.asReadonly();
+  readonly error$ = this.error.asReadonly();
+  readonly isLoaded$ = this.isLoaded.asReadonly();
 
   constructor(
     private http: HttpClient,
     private loadingService: LoadingService
-  ) {}
+  ) {
+    // Effect to log state changes for debugging
+    effect(() => {
+      console.log('Permission state changed:', this.permissionState());
+    });
+  }
 
   fetchUserPermissions(): Observable<any[]> {
     console.log('PermissionService: fetchUserPermissions called');
-    this.setLoading(true);
+
+    // Check if permissions are already loaded to avoid unnecessary API calls
+    if (this.isLoaded()) {
+      console.log('Permissions already loaded, returning cached data');
+      return of(this.permissions());
+    }
+
     this.setError(null);
 
     return from(fetchAuthSession()).pipe(
-      map((session: any) => {
-        if (!session.tokens?.accessToken) {
+      map((accessToken) => {
+        if (!accessToken.tokens?.accessToken) {
           throw new Error('No access token available');
         }
-        const accessToken = session.tokens.accessToken.toString();
-        return accessToken;
+        const token = accessToken.tokens.accessToken.toString();
+        return token;
       }),
       // Extract username from JWT token
       map((accessToken) => {
@@ -85,27 +104,19 @@ export class PermissionService {
         return this.http.get<any[]>(url, { headers }) as Observable<any[]>;
       }),
       tap((apiResponse) => {
-        console.log('=== API Response Debug ===');
-        console.log('Raw API response:', apiResponse);
-
         // Handle the actual API response format
         const { permissions, permissionSets } =
           this.processApiResponse(apiResponse);
 
-        this.permissionStateSubject.next({
-          permissions,
-          permissionSets,
-          isLoading: false,
-          error: null,
-          isLoaded: true,
-        });
+        // Update signals
+        this.permissions.set(permissions);
+        this.permissionSets.set(permissionSets);
+        this.isLoaded.set(true);
+        this.error.set(null);
       }),
       catchError((error) => {
         console.error('Error fetching user permissions:', error);
         this.setError(error.message || 'Failed to fetch permissions');
-        this.setLoading(false);
-        // Don't hide loading here since the interceptor will handle it
-        // this.loadingService.hide();
         return throwError(() => error);
       })
     );
@@ -141,10 +152,6 @@ export class PermissionService {
         // Remove duplicates from allPermissions
         const uniquePermissions = [...new Set(allPermissions)];
 
-        console.log('Extracted permissions:', uniquePermissions);
-        console.log('Extracted permission sets:', permissionSets);
-        console.log('=====================================');
-
         return {
           permissions: uniquePermissions,
           permissionSets: permissionSets,
@@ -165,9 +172,7 @@ export class PermissionService {
    * Get permissions from a specific permission set
    */
   getPermissionsFromSet(permissionSetId: string): string[] {
-    const currentState = this.permissionStateSubject.value;
-
-    const permissionSet = currentState.permissionSets.find(
+    const permissionSet = this.permissionSets().find(
       (set) => set.permissionSetId === permissionSetId
     );
 
@@ -178,30 +183,24 @@ export class PermissionService {
    * Check if user has a specific permission
    */
   hasPermission(permission: string): boolean {
-    const currentState = this.permissionStateSubject.value;
-    return currentState.permissions.includes(permission);
+    return this.permissions().includes(permission);
   }
 
   /**
    * Check if user has any of the specified permissions
    */
   hasAnyPermission(permissions: string[]): boolean {
-    const currentState = this.permissionStateSubject.value;
-
-    const hasPermission = permissions.some((permission) =>
-      currentState.permissions.includes(permission)
+    return permissions.some((permission) =>
+      this.permissions().includes(permission)
     );
-
-    return hasPermission;
   }
 
   /**
    * Check if user has all of the specified permissions
    */
   hasAllPermissions(permissions: string[]): boolean {
-    const currentState = this.permissionStateSubject.value;
     return permissions.every((permission) =>
-      currentState.permissions.includes(permission)
+      this.permissions().includes(permission)
     );
   }
 
@@ -209,51 +208,46 @@ export class PermissionService {
    * Get all user permissions
    */
   getPermissions(): string[] {
-    return this.permissionStateSubject.value.permissions;
+    return this.permissions();
   }
 
   /**
    * Get all permission sets
    */
   getPermissionSets(): PermissionSet[] {
-    return this.permissionStateSubject.value.permissionSets;
+    return this.permissionSets();
   }
 
   /**
    * Clear permissions (useful for logout)
    */
   clearPermissions(): void {
-    this.permissionStateSubject.next({
-      permissions: [],
-      permissionSets: [],
-      isLoading: false,
-      error: null,
-      isLoaded: false,
-    });
+    this.permissions.set([]);
+    this.permissionSets.set([]);
+    this.error.set(null);
+    this.isLoaded.set(false);
+  }
+
+  /**
+   * Force refresh permissions (useful when user permissions change)
+   */
+  refreshPermissions(): Observable<any[]> {
+    this.isLoaded.set(false);
+    return this.fetchUserPermissions();
   }
 
   /**
    * Check if permissions are loaded
    */
-  get isLoaded(): boolean {
-    return this.permissionStateSubject.value.isLoaded;
+  get isPermissionsLoaded(): boolean {
+    return this.isLoaded();
   }
 
-  get isLoading(): boolean {
-    return this.permissionStateSubject.value.isLoading;
-  }
-
-  get error(): string | null {
-    return this.permissionStateSubject.value.error;
-  }
-
-  private setLoading(isLoading: boolean): void {
-    const currentState = this.permissionStateSubject.value;
-    this.permissionStateSubject.next({ ...currentState, isLoading });
+  get permissionsError(): string | null {
+    return this.error();
   }
 
   private setError(error: string | null): void {
-    const currentState = this.permissionStateSubject.value;
-    this.permissionStateSubject.next({ ...currentState, error });
+    this.error.set(error);
   }
 }

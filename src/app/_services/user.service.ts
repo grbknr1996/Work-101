@@ -9,7 +9,7 @@ import { ToastService } from './toast.service';
 export interface UserAccount {
   userName: string;
   loginId: string;
-  userEmail: string;
+  email: string;
   isActive: string;
   updatedById: number;
   updatedDate: string;
@@ -37,8 +37,47 @@ export interface UserQueryResponse {
 
 export interface UserQueryParams {
   loginId?: string;
-  userEmail?: string;
+  email?: string;
   isActive?: boolean;
+  exactMatchIndicator?: boolean;
+  limit?: number;
+  offset?: number;
+  sort?: string;
+  order?: 'asc' | 'desc';
+  wipoPlatformCode?: string;
+}
+
+export interface UserGroup {
+  groupId: number;
+  groupName: string;
+  groupType: string;
+  description: string;
+  isActive: boolean;
+}
+
+export interface UserGroupQueryResponse {
+  query: {
+    platformCode: string;
+    exactMatchIndicator: boolean;
+    offset: number;
+    limit: number;
+    sort: string;
+    order: string;
+    totalUserGroupQuantity: number;
+  };
+  result: {
+    platformCode: string;
+    userGroups: UserGroup[];
+  };
+}
+
+export interface UserGroupQueryParams {
+  groupId?: number;
+  groupName?: string;
+  description?: string;
+  isActive?: boolean;
+  groupType?: string;
+  userId?: string;
   exactMatchIndicator?: boolean;
   limit?: number;
   offset?: number;
@@ -126,8 +165,8 @@ export class UserService {
     if (params.loginId) {
       httpParams = httpParams.set('loginId', params.loginId);
     }
-    if (params.userEmail) {
-      httpParams = httpParams.set('email', params.userEmail);
+    if (params.email) {
+      httpParams = httpParams.set('email', params.email);
     }
     if (params.isActive !== undefined) {
       httpParams = httpParams.set('isActive', params.isActive.toString());
@@ -307,6 +346,165 @@ export class UserService {
             `User account ${loginId} ${action} successfully`
           );
           return of(user);
+        })
+      );
+  }
+
+  /**
+   * Get user groups with filter criteria
+   * Based on the API endpoint: {{baseUrl}}/groups/queries
+   */
+  getUserGroups(
+    params: UserGroupQueryParams = {}
+  ): Observable<UserGroupQueryResponse> {
+    let httpParams = new HttpParams();
+
+    // Add query parameters if they are provided
+    if (params.groupId) {
+      httpParams = httpParams.set('groupId', params.groupId.toString());
+    }
+    if (params.groupName) {
+      httpParams = httpParams.set('groupName', params.groupName);
+    }
+    if (params.description) {
+      httpParams = httpParams.set('description', params.description);
+    }
+    if (params.isActive !== undefined) {
+      httpParams = httpParams.set('isActive', params.isActive.toString());
+    }
+    if (params.groupType) {
+      httpParams = httpParams.set('groupType', params.groupType);
+    }
+    if (params.userId) {
+      httpParams = httpParams.set('userId', params.userId);
+    }
+    if (params.exactMatchIndicator !== undefined) {
+      httpParams = httpParams.set(
+        'exactMatchIndicator',
+        params.exactMatchIndicator.toString()
+      );
+    }
+    if (params.limit) {
+      httpParams = httpParams.set('limit', params.limit.toString());
+    }
+    if (params.offset) {
+      httpParams = httpParams.set('offset', params.offset.toString());
+    }
+    if (params.sort) {
+      httpParams = httpParams.set('sort', params.sort);
+    }
+    if (params.order) {
+      httpParams = httpParams.set('order', params.order);
+    }
+    if (params.wipoPlatformCode) {
+      httpParams = httpParams.set(
+        'wipo-platform-code',
+        params.wipoPlatformCode
+      );
+    }
+
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) => {
+        const finalOptions =
+          Object.keys(params).length > 0
+            ? { params: httpParams, headers: headers }
+            : { headers: headers };
+
+        return this.http.get<UserGroupQueryResponse>(
+          `${environment.backendUrl}/groups/queries`,
+          finalOptions
+        );
+      }),
+      catchError((error) => this.handleError(error, 'Loading user groups'))
+    );
+  }
+
+  /**
+   * Create a new user group
+   */
+  createUserGroup(groupData: Partial<UserGroup>): Observable<UserGroup> {
+    return this.getAuthHeaders()
+      .pipe(
+        switchMap((headers) =>
+          this.http.post<UserGroup>(
+            `${environment.backendUrl}/groups`,
+            groupData,
+            {
+              headers: headers,
+            }
+          )
+        ),
+        catchError((error) => this.handleError(error, 'Creating user group'))
+      )
+      .pipe(
+        switchMap((group) => {
+          this.toastService.showSuccess(
+            'Success',
+            `User group ${group.groupName} created successfully`
+          );
+          return of(group);
+        })
+      );
+  }
+
+  /**
+   * Update an existing user group
+   */
+  updateUserGroup(
+    groupId: number,
+    groupData: Partial<UserGroup>
+  ): Observable<UserGroup> {
+    return this.getAuthHeaders()
+      .pipe(
+        switchMap((headers) =>
+          this.http.put<UserGroup>(
+            `${environment.backendUrl}/groups/${groupId}`,
+            groupData,
+            {
+              headers: headers,
+            }
+          )
+        ),
+        catchError((error) =>
+          this.handleError(error, `Updating user group ${groupId}`)
+        )
+      )
+      .pipe(
+        switchMap((group) => {
+          this.toastService.showSuccess(
+            'Success',
+            `User group ${groupId} updated successfully`
+          );
+          return of(group);
+        })
+      );
+  }
+
+  /**
+   * Delete a user group
+   */
+  deleteUserGroup(groupId: number): Observable<void> {
+    return this.getAuthHeaders()
+      .pipe(
+        switchMap((headers) =>
+          this.http.delete<void>(
+            `${environment.backendUrl}/groups/${groupId}`,
+            {
+              headers: headers,
+            }
+          )
+        ),
+        catchError((error) =>
+          this.handleError(error, `Deleting user group ${groupId}`)
+        )
+      )
+      .pipe(
+        switchMap(() => {
+          this.toastService.showSuccess(
+            'Success',
+            `User group ${groupId} deleted successfully`
+          );
+          return of(void 0);
         })
       );
   }

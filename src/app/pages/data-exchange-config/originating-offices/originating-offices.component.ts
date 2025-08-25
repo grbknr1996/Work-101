@@ -18,7 +18,13 @@ interface Office {
 @Component({
   selector: 'app-originating-offices',
   standalone: true,
-  imports: [CommonModule, AppLayoutComponent, BreadcrumbsComponent, TableComponent, CardModule],
+  imports: [
+    CommonModule,
+    AppLayoutComponent,
+    BreadcrumbsComponent,
+    TableComponent,
+    CardModule,
+  ],
   providers: [],
   templateUrl: './originating-offices.component.html',
 })

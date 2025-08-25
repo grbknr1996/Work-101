@@ -6,6 +6,7 @@ import {
   OnInit,
   OnDestroy,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -99,7 +100,7 @@ export interface FilterValue {
     ConfigurableFilterComponent,
     FilterChipsComponent,
   ],
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfigurableFilterBarComponent {
 
@@ -118,6 +119,7 @@ export class ConfigurableFilterBarComponent {
   @Input() showInfoIcon: boolean = false;
   @Input() showSearchBar: boolean = false;
   @Input() searchLabel: string = 'Search';
+  @Input() disabled: boolean = false;
 
   @Output() filterChange = new EventEmitter<FilterValue[]>();
   @Output() filterCleared = new EventEmitter<void>();
@@ -145,6 +147,13 @@ export class ConfigurableFilterBarComponent {
   activeFiltersCount: number = 0;
   hasActiveFilters: boolean = false;
   //appliedFilters: FilterValue[] = [];
+
+  constructor(private cdr: ChangeDetectorRef) {}
+
+  updateData() {
+  // ... modify data ...
+    this.cdr.detectChanges(); // Manually trigger change detection
+  }
 
   clearAllFilters(): void {
     this.configurableFilter.onClearAll();

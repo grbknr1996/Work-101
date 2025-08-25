@@ -7,14 +7,7 @@
   </ng-template>
   <ng-template pTemplate="end">
     <div class="navbar-end">
-      <div class="language-dropdown-container" *ngIf="showLanguageSelector">
-        <p-dropdown [options]="languageOptions" [(ngModel)]="selectedLanguage" (onChange)="onChangeLang($event)" optionLabel="label" optionValue="value" [style]="{'min-width': '8rem'}" styleClass="language-selector" appendTo="body" [placeholder]="getLangLabel(selectedLanguage)">
-          <ng-template pTemplate="selectedItem">
-            <div class="flex align-items-center"><span class="pi pi-globe mr-2"></span><span>{{ getLangLabel(selectedLanguage) }}</span></div>
-          </ng-template>
-          <ng-template let-language pTemplate="item"><span>{{language.label}}</span></ng-template>
-        </p-dropdown>
-      </div>
+      <p-dropdown [options]="languageOptions" *ngIf="selectedLanguage" (onChange)="onChangeLang($event)" optionLabel="label" optionValue="value" appendTo="body" [placeholder]="getLangLabel(selectedLanguage)" dropdownIcon="pi pi-language" panelStyleClass="w-full"></p-dropdown>
       <div class="notification-container mx-3">
         <button class="p-button-rounded p-button-text" pButton type="button" icon="pi pi-bell" (click)="notificationPanel.toggle($event)"></button>
         <p-badge *ngIf="notificationCount &gt; 0" [value]="notificationCount.toString()" severity="danger" styleClass="notification-badge"></p-badge>
