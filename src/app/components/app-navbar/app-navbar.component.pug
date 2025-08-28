@@ -106,3 +106,12 @@ p-menubar([style]="{'position': 'fixed','z-index':1000,'width':'100%'}", [model]
         )
           span.pi.mobile-menu-icon([ngClass]="item.icon")
           span {{item.label}}
+
+    
+    app-platform-selection(
+      *ngIf="showPlatformSelector",
+      [isModal]="true",
+      [currentPlatform]="ms.getWipoPlatform()",
+      (platformSelected)="onPlatformSelected($event)",
+      (modalClosed)="showPlatformSelector = false"
+    )

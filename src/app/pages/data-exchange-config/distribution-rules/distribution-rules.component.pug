@@ -8,7 +8,7 @@ app-layout([config]="layoutConfig")
           i.pi.pi-shield
         .stat-info
           .stat-number {{ activeRulesCount() }}
-          .stat-label Published Documents
+          .stat-label Allowed Unpublished Applications
     
     .stat-card
       .stat-content
@@ -27,7 +27,7 @@ app-layout([config]="layoutConfig")
           .stat-label Total Rules
   
   .distribution-rules-header
-    h2 Distribution Exclusion Rules
+    h2 Distribution Rules
     button.add-rule-btn(type="button", (click)="addRule()")
       i.pi.pi-plus
       |  Add Rule
@@ -44,7 +44,7 @@ app-layout([config]="layoutConfig")
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries",
       [resizableColumns]="false",
       [reorderableColumns]="false",
-      [responsive]="true",
+      responsiveLayout="scroll",
       styleClass="p-datatable-sm"
     )
       ng-template(pTemplate="header")
@@ -60,11 +60,10 @@ app-layout([config]="layoutConfig")
               p-sortIcon(field="recipientName")
           
           th(style="width: 12%") IP Category
-          th(style="width: 15%") Application Status
-          th(style="width: 15%") Unpublished Documents
-          th(style="width: 18%") Documents Excluded
+          th(style="width: 15%") Included Application Type
+          th(style="width: 18%") Documents Included
           th(style="width: 14%") Event Codes
-          th(style="width: 14%") Actions
+          th(style="width: 5%") Actions
       
       ng-template(pTemplate="body", let-rowData)
         tr
@@ -80,24 +79,14 @@ app-layout([config]="layoutConfig")
           
           td
             span.status-badge(
-              [class]="getApplicationStatus(rowData).class",
-              [style.background-color]="getApplicationStatus(rowData).bgColor",
-              [style.color]="getApplicationStatus(rowData).textColor",
+              [class.status-active]="rowData.unpublishedApplication",
+              [class.status-inactive]="!rowData.unpublishedApplication",
+              [style.background-color]="rowData.unpublishedApplication ? '#fff3e0' : '#e8f5e8'",
+              [style.color]="rowData.unpublishedApplication ? '#e65100' : '#2e7d32'",
               style="padding: 4px 12px; border-radius: 16px; font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
             )
-              i([class]="getApplicationStatus(rowData).icon", style="font-size: 10px")
-              | {{ getApplicationStatus(rowData).text }}
-          
-          td
-            span.status-badge(
-              [class.status-active]="!rowData.publishDocuments",
-              [class.status-inactive]="rowData.publishDocuments",
-              [style.background-color]="!rowData.publishDocuments ? '#fff3e0' : '#f5f5f5'",
-              [style.color]="!rowData.publishDocuments ? '#e65100' : '#757575'",
-              style="padding: 4px 12px; border-radius: 16px; font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
-            )
-              i([class]="!rowData.publishDocuments ? 'pi pi-exclamation-triangle' : 'pi pi-check'", style="font-size: 10px")
-              | {{ !rowData.publishDocuments ? 'Yes' : 'No' }}
+              i([class]="rowData.unpublishedApplication ? 'pi pi-exclamation-triangle' : 'pi pi-eye'", style="font-size: 10px")
+              | {{ rowData.unpublishedApplication ? 'Unpublished' : 'Published' }}
           
           td
             .document-list(style="display: flex; flex-wrap: wrap; gap: 4px")
@@ -110,7 +99,7 @@ app-layout([config]="layoutConfig")
               span.no-documents(
                 *ngIf="!rowData.documentList || rowData.documentList.length === 0",
                 style="color: #757575; font-style: italic; font-size: 11px"
-              ) No documents excluded
+              ) No documents included
           
           td
             .event-codes(style="display: flex; flex-wrap: wrap; gap: 4px")
@@ -131,15 +120,17 @@ app-layout([config]="layoutConfig")
                 pButton,
                 icon="pi pi-pencil",
                 severity="info",
-                (click)="onActionClick({ action: 'edit', item: rowData })"
+                (click)="onActionClick({ action: 'edit', item: rowData })",
+                aria-label="Edit rule"
               )
               button.p-button-rounded.p-button-text(
                 pButton,
                 icon="pi pi-trash",
                 severity="danger",
-                (click)="onActionClick({ action: 'delete', item: rowData })"
+                (click)="onActionClick({ action: 'delete', item: rowData })",
+                aria-label="Delete rule"
               )
       
       ng-template(pTemplate="emptymessage")
         tr
-          td(colspan="8") No distribution exclusion rules found.
+          td(colspan="7") No distribution rules found.

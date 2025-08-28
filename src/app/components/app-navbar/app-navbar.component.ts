@@ -21,6 +21,9 @@ import { instanceType } from '../../utils';
 import { configuration } from '../../../environments/environment';
 import { TranslateModule } from '@ngx-translate/core';
 
+// Components
+import { PlatformSelectionComponent } from '../platform-selection/platform-selection.component';
+
 // Services
 import { MechanicsService } from '../../_services/mechanics.service';
 import { QueryParamsService } from 'src/app/_services/queryParams.service';
@@ -48,6 +51,7 @@ interface MobileMenuItem {
     OverlayPanelModule,
     MenuModule,
     TranslateModule,
+    PlatformSelectionComponent,
   ],
   templateUrl: './app-navbar.component.html',
 })
@@ -70,6 +74,8 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
   currentUser: User | null = null;
   isMobileView: boolean = false;
   isSidebarOpen = false;
+  showPlatformSelector: boolean = false;
+  isWipoAdmin: boolean = false;
 
   private userSubscription: Subscription | null = null;
 
@@ -136,10 +142,22 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
         if (user) {
           this.userName = user.name || user.email || 'User';
           this.userInitial = this.userName.charAt(0).toUpperCase();
+          // Use MechanicsService to check WIPO admin status
+          this.isWipoAdmin = this.ms.isCurrentUserWipoAdmin();
         } else {
           this.userName = 'Guest';
           this.userInitial = 'G';
+          this.isWipoAdmin = false;
         }
+
+        // Update menu items after user status changes
+        this.initializeMenuItems();
+      });
+
+      // Subscribe to office changes to update WIPO admin status
+      this.ms.currentOffice$.subscribe((officeCode) => {
+        this.isWipoAdmin = this.ms.isCurrentUserWipoAdmin();
+        this.initializeMenuItems();
       });
 
       this.initializeMenuItems();
@@ -259,6 +277,22 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
         icon: 'pi pi-cog',
         routerLink: '/settings',
       },
+    ];
+
+    // Only show "Change Platform Office" for WIPO admins
+    if (this.isWipoAdmin) {
+      this.userMenuItems.push({
+        label: 'Change Platform Office',
+        icon: 'pi pi-sync',
+        command: () => {
+          this.showPlatformSelector = true;
+          console.log('showPlatformSelector$$$$', this.showPlatformSelector);
+          console.log('Modal should now be visible');
+        },
+      });
+    }
+
+    this.userMenuItems.push(
       {
         separator: true,
       },
@@ -266,8 +300,8 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
         label: this.ms.translate('logout'),
         icon: 'pi pi-sign-out',
         command: () => this.logout(),
-      },
-    ];
+      }
+    );
 
     // Add header items to mobile menu
     this.mobileMenuItems = [];
@@ -335,5 +369,19 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
     if (item.command) {
       item.command();
     }
+  }
+
+  // Platform selector methods
+  onPlatformSelected(platformCode: string): void {
+    console.log('Platform selected:', platformCode);
+    this.showPlatformSelector = false;
+
+    // Refresh the page to ensure all components and services pick up the new platform
+    console.log(
+      'Platform selection completed, refreshing page to apply new platform context'
+    );
+    setTimeout(() => {
+      window.location.reload();
+    }, 100); // Small delay to ensure the platform change is persisted
   }
 }

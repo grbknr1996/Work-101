@@ -20,6 +20,7 @@ import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DataExchangeConfigService } from 'src/app/_services/data-exchange-config.service';
+import { ToastService } from 'src/app/_services/toast.service';
 import { ExclusionRule } from 'src/app/interfaces';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
@@ -284,23 +285,23 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
   step = 0;
   steps: StepperStep[] = [
     { value: 0, icon: 'pi pi-home', label: 'Source & Categories' },
-    { value: 1, icon: 'pi pi-filter', label: 'Status Exclusions' },
-    { value: 2, icon: 'pi pi-cog', label: 'Category Exclusions' },
-    { value: 3, icon: 'pi pi-check-circle', label: 'Review' },
+    { value: 1, icon: 'pi pi-cog', label: 'Category Distributions' },
+    { value: 2, icon: 'pi pi-check-circle', label: 'Review' },
   ];
 
   // Step 1 form - Source and Categories selection
   sourceCategoriesForm: FormGroup;
   // Step 2/3/4 data
   selectedCategories: string[] = [];
-  statusExclusions: any = {};
+  includeUnpublishedApplications: boolean = false; // Default to false
   eventExclusions: any = {};
   documentExclusions: any = {};
   enableDocumentExclusions: any = {};
 
   constructor(
     private fb: FormBuilder,
-    private dataExchaneService: DataExchangeConfigService
+    private dataExchaneService: DataExchangeConfigService,
+    private toastService: ToastService
   ) {
     this.officeCode = this.route.snapshot.params['officeCode'] || 'default';
     this.langCode = this.route.snapshot.params['langCode'] || 'en';
@@ -332,9 +333,6 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
   }
 
   ngOnInit(): void {
-    // Set up breadcrumbs
-    this.setupBreadcrumbs();
-
     // Always load configuration data since this is now a standalone page
     this.loadConfigurationData();
 
@@ -350,11 +348,6 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
     if (currentSystem) {
       this.selectedSystemCode.set(currentSystem);
     }
-  }
-
-  private setupBreadcrumbs(): void {
-    // Breadcrumbs will be handled by the breadcrumbs component automatically
-    // based on route data
   }
 
   private loadConfigurationData(): void {
@@ -395,7 +388,6 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
 
     // Clear selected categories array and reset exclusions
     this.selectedCategories = [];
-    this.statusExclusions = {};
     this.eventExclusions = {};
     this.documentExclusions = {};
     this.enableDocumentExclusions = {};
@@ -409,15 +401,22 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
     this.eventCodesCache.clear();
     this.documentTypesCache.clear();
 
-    // Reset exclusions for the new category
+    // Reset exclusions for the new category and set everything to be checked by default
     if (selectedCategory) {
-      this.statusExclusions[selectedCategory] = {
-        unpublished: false,
-        unregistered: false,
-      };
-      this.eventExclusions[selectedCategory] = [];
-      this.documentExclusions[selectedCategory] = [];
-      this.enableDocumentExclusions[selectedCategory] = false;
+      // Get all event codes for this category and check them all by default
+      const eventCodes = this.getEventCodesForCategory(selectedCategory);
+      this.eventExclusions[selectedCategory] = eventCodes.map(
+        (event) => event.code
+      );
+
+      // Get all document types for this category and check them all by default
+      const documentTypes = this.getDocumentTypesForCategory(selectedCategory);
+      this.documentExclusions[selectedCategory] = documentTypes.map(
+        (doc) => doc.value
+      );
+
+      // Enable document exclusions by default
+      this.enableDocumentExclusions[selectedCategory] = true;
     }
   }
 
@@ -426,23 +425,23 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
       const selectedCategory = this.sourceCategoriesForm.value.categories;
       this.selectedCategories = selectedCategory ? [selectedCategory] : [];
 
-      // Initialize exclusions for the selected category
+      // Initialize exclusions for the selected category with everything checked by default
       if (selectedCategory) {
-        if (!this.statusExclusions[selectedCategory]) {
-          this.statusExclusions[selectedCategory] = {
-            unpublished: false,
-            unregistered: false,
-          };
-        }
-        if (!this.eventExclusions[selectedCategory]) {
-          this.eventExclusions[selectedCategory] = [];
-        }
-        if (!this.documentExclusions[selectedCategory]) {
-          this.documentExclusions[selectedCategory] = [];
-        }
-        if (this.enableDocumentExclusions[selectedCategory] === undefined) {
-          this.enableDocumentExclusions[selectedCategory] = false;
-        }
+        // Get all event codes for this category and check them all by default
+        const eventCodes = this.getEventCodesForCategory(selectedCategory);
+        this.eventExclusions[selectedCategory] = eventCodes.map(
+          (event) => event.code
+        );
+
+        // Get all document types for this category and check them all by default
+        const documentTypes =
+          this.getDocumentTypesForCategory(selectedCategory);
+        this.documentExclusions[selectedCategory] = documentTypes.map(
+          (doc) => doc.value
+        );
+
+        // Enable document exclusions by default
+        this.enableDocumentExclusions[selectedCategory] = true;
       }
 
       // Clear caches when categories change
@@ -534,8 +533,7 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
       originatingOfficeCode: formData.office,
       ipCategory: formData.categories, // Keep as single string value
       documentList: this.getDocumentList(),
-      applicationPublished: this.getApplicationPublishedStatus(),
-      ipRightsGranted: this.getIpRightsGrantedStatus(),
+      unpublishedApplication: !this.includeUnpublishedApplications,
       keyEventsCodes: this.getKeyEventsCodes(),
       recipientName: selectedSystem?.recipientName || '',
       originatingOfficeName: this.getOriginatingOfficeName(formData.office),
@@ -547,17 +545,25 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
       .postDataExchangeData(exclusionRulePayload)
       .subscribe({
         next: (addedRule) => {
-          console.log('Exclusion rule created successfully:', addedRule);
+          console.log('Distribution rule created successfully:', addedRule);
 
           this.data.update((currentRules) => [...currentRules, addedRule]);
 
           // Reset loading state
           this.isSubmitting.set(false);
 
-          // Navigate back to distribution rules page
-          this.router.navigate([
-            `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/distribution-exclusion-rules`,
-          ]);
+          // Show success toast message
+          this.toastService.showSuccess(
+            'Success',
+            'Distribution rule created successfully'
+          );
+
+          // Navigate back to distribution rules page after a short delay to show the toast
+          setTimeout(() => {
+            this.router.navigate([
+              `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/distribution-rules`,
+            ]);
+          }, 2000);
         },
         error: (error) => {
           console.error('Failed to create exclusion rule:', error);
@@ -591,8 +597,6 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
     let hasExclusions = false;
     for (const category of this.selectedCategories) {
       if (
-        this.statusExclusions[category]?.unpublished ||
-        this.statusExclusions[category]?.unregistered ||
         this.eventExclusions[category]?.length > 0 ||
         (this.enableDocumentExclusions[category] &&
           this.documentExclusions[category]?.length > 0)
@@ -627,27 +631,7 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
     return documentList;
   }
 
-  // Helper method to get application published status
-  private getApplicationPublishedStatus(): boolean {
-    // Check if any category has unpublished exclusions
-    for (const category of this.selectedCategories) {
-      if (this.statusExclusions[category]?.unpublished) {
-        return true; // When checked, exclude unpublished applications
-      }
-    }
-    return false; // When unchecked, include all applications
-  }
-
-  // Helper method to get IP rights granted status
-  private getIpRightsGrantedStatus(): boolean {
-    // Check if any category has unregistered exclusions
-    for (const category of this.selectedCategories) {
-      if (this.statusExclusions[category]?.unregistered) {
-        return true; // When checked, exclude unregistered rights
-      }
-    }
-    return false; // When unchecked, include all rights
-  }
+  // Note: unpublishedApplication is derived directly from includeUnpublishedApplications in payload
 
   // Helper method to get key events codes
   private getKeyEventsCodes(): string[] {
@@ -701,12 +685,12 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
         routerLink: `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard`,
       },
       {
-        label: 'Distribution Exclusion Rules',
-        routerLink: `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/distribution-exclusion-rules`,
+        label: 'Distribution Rules',
+        routerLink: `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/distribution-rules`,
       },
       {
         label: 'Create Exclusion Rule',
-        routerLink: `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/add-exclusion-rule`,
+        routerLink: `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/add-rule`,
       },
     ];
   }

@@ -97,7 +97,10 @@ export class SidebarMenuService {
     ];
   }
 
-  generateConfigurationMenu(currentPath: string, officeCode: string): MenuItem[] {
+  generateConfigurationMenu(
+    currentPath: string,
+    officeCode: string
+  ): MenuItem[] {
     console.log('current path:', currentPath);
     const lastPart = currentPath.split('/').pop();
     console.log(lastPart);
@@ -118,18 +121,20 @@ export class SidebarMenuService {
         id: 'authority-files',
         label: 'Authority Files',
         icon: 'pi pi-search',
-        routerLink: this.getRouterLink(`/data-packages/authority-files/${officeCode}`),
+        routerLink: this.getRouterLink(
+          `/data-packages/authority-files/${officeCode}`
+        ),
       },
       {
         id: 'data-configuration',
         label: 'Data Exchange Configuration',
         icon: 'pi pi-database',
-        routerLink: this.getRouterLink(`/configuration/data-exchange/dashboard`),
+        routerLink: this.getRouterLink(
+          `/configuration/data-exchange/dashboard`
+        ),
       },
-      
     ];
   }
-
 
   generateMyWorkspaceMenu(currentPath: string): MenuItem[] {
     console.log('current path:', currentPath);
@@ -158,9 +163,28 @@ export class SidebarMenuService {
         id: 'notifications',
         label: 'Notifications',
         icon: 'pi pi-bell',
-        routerLink: this.getRouterLink(`/notifications/aripo-incoming`),
+        expanded: currentPath.includes('notifications'),
+        items: [
+          {
+            id: 'aripo-notifications',
+            label: 'ARIPO',
+            icon: 'pi pi-bell',
+            routerLink: this.getRouterLink('/notifications/aripo-dashboard'),
+          },
+          {
+            id: 'hague-notifications',
+            label: 'Hague',
+            icon: 'pi pi-bell',
+            routerLink: this.getRouterLink('/notifications/hague-dashboard'),
+          },
+          {
+            id: 'madrid-notifications',
+            label: 'Madrid',
+            icon: 'pi pi-bell',
+            routerLink: this.getRouterLink('/notifications/madrid-dashboard'),
+          },
+        ],
       },
-      
     ];
   }
 
@@ -196,7 +220,7 @@ export class SidebarMenuService {
               '/system-configuration/fee-config/calculator'
             ),
             styleClass: lastPart.includes('calculator') ? 'active' : '',
-          }
+          },
         ],
       },
     ];
@@ -211,95 +235,7 @@ export class SidebarMenuService {
         routerLink: this.getRouterLink('/dashboard'),
         expanded: false,
       },
-      {
-        id: 'applications',
-        label: 'applications',
-        icon: 'pi pi-file',
-        expanded: false,
-        items: [
-          {
-            id: 'new-application',
-            label: 'newApplication',
-            icon: 'pi pi-plus',
-            routerLink: this.getRouterLink('/applications/new'),
-          },
-          {
-            id: 'search-applications',
-            label: 'searchApplications',
-            icon: 'pi pi-search',
-            routerLink: this.getRouterLink('/applications/search'),
-          },
-        ],
-      },
-      {
-        id: 'trademarks',
-        label: 'trademarks',
-        icon: 'pi pi-tag',
-        expanded: false,
-        items: [
-          {
-            id: 'register',
-            label: 'register',
-            icon: 'pi pi-plus-circle',
-            routerLink: this.getRouterLink('/trademarks/register'),
-          },
-          {
-            id: 'search',
-            label: 'Search',
-            icon: 'pi pi-search',
-            routerLink: this.getRouterLink('/trademarks/search'),
-          },
-        ],
-      },
-      {
-        id: 'patents',
-        label: 'patents',
-        icon: 'pi pi-briefcase',
-        expanded: false,
-        items: [
-          {
-            id: 'file-patent',
-            label: 'filePatent',
-            icon: 'pi pi-file',
-            routerLink: this.getRouterLink('/patents/file'),
-          },
-          {
-            id: 'patent-search',
-            label: 'patentSearch',
-            icon: 'pi pi-search',
-            routerLink: this.getRouterLink('/patents/search'),
-          },
-        ],
-      },
-      {
-        id: 'reports',
-        label: 'reports',
-        icon: 'pi pi-chart-bar',
-        routerLink: this.getRouterLink('/reports'),
-        expanded: false,
-      },
-      {
-        id: 'admin',
-        label: 'administration',
-        icon: 'pi pi-cog',
-        expanded: false,
-        items: [
-          {
-            id: 'users',
-            label: 'users',
-            icon: 'pi pi-users',
-            routerLink: this.getRouterLink('/admin/users'),
-          },
-          {
-            id: 'settings',
-            label: 'settings',
-            icon: 'pi pi-sliders-h',
-            routerLink: this.getRouterLink('/admin/settings'),
-          },
-        ],
-      },
     ];
-
     this.sidebarItemsSource.next(menuItems);
   }
 

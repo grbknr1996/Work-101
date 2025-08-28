@@ -50,8 +50,8 @@ export class DataExchangeConfigComponent implements OnInit {
     },
     {
       icon: 'pi pi-shield',
-      title: 'Distribution Exclusion Rules',
-      description: 'Active exclusion rules',
+      title: 'Distribution Rules',
+      description: 'Active rules',
       count: null, // No count displayed for distribution rules
       color: '#0d47a1',
       clickable: true,
@@ -116,9 +116,9 @@ export class DataExchangeConfigComponent implements OnInit {
   onSummaryCardClick(card: any): void {
     const basePath = `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard`;
 
-    if (card.title === 'Distribution Exclusion Rules') {
+    if (card.title === 'Distribution Rules') {
       // Navigate to exclusion rules page
-      const targetPath = `${basePath}/distribution-exclusion-rules`;
+      const targetPath = `${basePath}/distribution-rules`;
       this.router.navigate([targetPath]);
     } else if (card.title === 'Recipient Systems') {
       // Navigate to recipient systems page

@@ -3,6 +3,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { providePrimeNG } from 'primeng/config';
+import { PlatformInterceptor } from './_interceptors/platform.interceptor';
 
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -161,6 +162,11 @@ const WipoThemePreset = definePreset(Aura, {
       multi: true,
     },
     MessageService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: PlatformInterceptor,
+      multi: true,
+    },
     providePrimeNG({
       theme: {
         preset: WipoThemePreset,

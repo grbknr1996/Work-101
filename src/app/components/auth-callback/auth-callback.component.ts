@@ -95,8 +95,17 @@ export class AuthCallbackComponent implements OnInit, OnDestroy {
         // Hide loader before navigation
         this.loadingService.hide();
 
-        // Navigate to the appropriate dashboard
-        this.router.navigate([`/${officeCode}/${langCode}/dashboard`]);
+        // Check if user is WIPO admin and needs platform selection
+        if (
+          this.ms.isCurrentUserWipoAdmin() &&
+          this.ms.shouldShowPlatformSelection()
+        ) {
+          // Redirect WIPO admin to platform selection
+          this.router.navigate(['/platform-selection']);
+        } else {
+          // Navigate to the appropriate dashboard
+          this.router.navigate([`/${officeCode}/${langCode}/dashboard`]);
+        }
       } else {
         // If not authenticated, hide loader and redirect to sign-in
         this.loadingService.hide();
@@ -104,7 +113,7 @@ export class AuthCallbackComponent implements OnInit, OnDestroy {
       }
     } catch (error) {
       console.error('Error handling auth callback:', error);
-      // On error, hide loader and redirect to sign-in
+
       this.loadingService.hide();
       this.router.navigate(['/default/en/sign-in']);
     }

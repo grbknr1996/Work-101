@@ -51,18 +51,13 @@ export class DistributionRulesComponent implements OnInit {
       display: 'text',
     },
     {
-      field: 'applicationStatus',
-      header: 'Application Status',
-      display: 'custom',
-    },
-    {
-      field: 'publishDocuments',
-      header: 'Unpublished Documents',
+      field: 'unpublishedApplication',
+      header: 'Included Application Type',
       display: 'custom',
     },
     {
       field: 'documentList',
-      header: 'Documents Excluded',
+      header: 'Documents Included',
       display: 'custom',
     },
     {
@@ -103,7 +98,7 @@ export class DistributionRulesComponent implements OnInit {
   activeRulesCount = computed(
     () =>
       this.distributionRulesData().filter(
-        (rule) => rule.publishDocuments === true
+        (rule) => rule.unpublishedApplication === true
       ).length
   );
 
@@ -115,43 +110,6 @@ export class DistributionRulesComponent implements OnInit {
   );
 
   totalRulesCount = computed(() => this.distributionRulesData().length);
-
-  // Helper method to get application status text and styling
-  getApplicationStatus(rule: any): {
-    text: string;
-    class: string;
-    bgColor: string;
-    textColor: string;
-    icon: string;
-  } {
-    if (!rule.applicationPublished) {
-      return {
-        text: 'Unpublished',
-        class: 'status-inactive',
-        bgColor: '#ffebee',
-        textColor: '#c62828',
-        icon: 'pi pi-eye-slash',
-      };
-    }
-
-    if (rule.ipRightsGranted) {
-      return {
-        text: 'Published & Granted',
-        class: 'status-active',
-        bgColor: '#e8f5e8',
-        textColor: '#2e7d32',
-        icon: 'pi pi-check-circle',
-      };
-    }
-
-    return {
-      text: 'Published',
-      class: 'status-active',
-      bgColor: '#e3f2fd',
-      textColor: '#1976d2',
-      icon: 'pi pi-eye',
-    };
-  }
 
   constructor(
     private router: Router,
@@ -208,7 +166,7 @@ export class DistributionRulesComponent implements OnInit {
     // Navigate to the add-exclusion-rule route
     this.router
       .navigate([
-        `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/add-exclusion-rule`,
+        `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/add-rule`,
       ])
       .then(() => {
         this.loadingService.hide();
@@ -257,8 +215,8 @@ export class DistributionRulesComponent implements OnInit {
         routerLink: `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard`,
       },
       {
-        label: 'Distribution Exclusion Rules',
-        routerLink: `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/distribution-exclusion-rules`,
+        label: 'Distribution Rules',
+        routerLink: `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/distribution-rules`,
       },
     ];
   }

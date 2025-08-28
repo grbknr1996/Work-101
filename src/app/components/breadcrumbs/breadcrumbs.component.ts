@@ -1,15 +1,16 @@
-import { CommonModule } from "@angular/common";
-import { Component, Input, OnInit } from "@angular/core";
+import { CommonModule } from '@angular/common';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import {
   Router,
   NavigationEnd,
   ActivatedRoute,
   RouterModule,
-} from "@angular/router";
-import { BreadcrumbModule } from "primeng/breadcrumb";
-import { MenuItem } from "primeng/api";
-import { filter } from "rxjs/operators";
-import { MechanicsService } from "src/app/_services/mechanics.service";
+} from '@angular/router';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { MenuItem } from 'primeng/api';
+import { filter } from 'rxjs/operators';
+import { MechanicsService } from 'src/app/_services/mechanics.service';
+import { Subscription } from 'rxjs';
 
 interface BreadcrumbItem extends MenuItem {
   routerLink?: any[] | string;
@@ -17,18 +18,20 @@ interface BreadcrumbItem extends MenuItem {
 }
 
 @Component({
-  selector: "app-breadcrumbs",
-  templateUrl: "./breadcrumbs.component.html",
+  selector: 'app-breadcrumbs',
+  templateUrl: './breadcrumbs.component.html',
   standalone: true,
   imports: [CommonModule, BreadcrumbModule, RouterModule],
 })
-export class BreadcrumbsComponent implements OnInit {
-  @Input() home: MenuItem = { icon: "pi pi-home", routerLink: "/" };
+export class BreadcrumbsComponent implements OnInit, OnDestroy {
+  @Input() home: MenuItem = { icon: 'pi pi-home', routerLink: '/' };
   @Input() items: BreadcrumbItem[] = [];
-  @Input() styleClass: string = "";
+  @Input() styleClass: string = '';
 
   // When true, breadcrumbs will be generated automatically from the current route
   @Input() autoGenerate: boolean = false;
+
+  private officeSubscription: Subscription | null = null;
 
   constructor(
     private router: Router,
@@ -37,13 +40,17 @@ export class BreadcrumbsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const officeCode =
-      this.activatedRoute.snapshot.params["officeCode"] || "default";
-    this.home = {
-      icon: "pi pi-home",
-      label: `${officeCode}`,
-      routerLink: `/${officeCode}/en/dashboard`,
-    };
+    this.updateHomeItem();
+
+    // Subscribe to current office changes to update home breadcrumb
+    this.officeSubscription = this.ms.currentOffice$.subscribe((officeCode) => {
+      console.log('Breadcrumbs: Current office changed to:', officeCode);
+      this.updateHomeItem();
+      if (this.autoGenerate) {
+        this.items = this.createBreadcrumbs(this.activatedRoute.root);
+      }
+    });
+
     if (this.autoGenerate) {
       this.router.events
         .pipe(filter((event) => event instanceof NavigationEnd))
@@ -56,9 +63,25 @@ export class BreadcrumbsComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+    if (this.officeSubscription) {
+      this.officeSubscription.unsubscribe();
+    }
+  }
+
+  private updateHomeItem(): void {
+    const officeCode = this.ms.getCurrentOffice() || 'default';
+    const defaultLang = this.ms.getDefaultLanguage() || 'en';
+    this.home = {
+      icon: 'pi pi-home',
+      label: `${officeCode}`,
+      routerLink: `/${officeCode}/${defaultLang}/dashboard`,
+    };
+  }
+
   private createBreadcrumbs(
     route: ActivatedRoute,
-    url: string = "",
+    url: string = '',
     breadcrumbs: BreadcrumbItem[] = []
   ): BreadcrumbItem[] {
     const children: ActivatedRoute[] = route.children;
@@ -70,12 +93,12 @@ export class BreadcrumbsComponent implements OnInit {
     for (const child of children) {
       const routeURL: string = child.snapshot.url
         .map((segment) => segment.path)
-        .join("/");
-      if (routeURL !== "") {
+        .join('/');
+      if (routeURL !== '') {
         url += `/${routeURL}`;
       }
 
-      const label = child.snapshot.data["breadcrumb"];
+      const label = child.snapshot.data['breadcrumb'];
       if (label) {
         breadcrumbs.push({
           label,

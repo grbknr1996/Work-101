@@ -27,11 +27,11 @@ const routes: Routes = [
     component: RecipientSystemsComponent,
   },
   {
-    path: 'distribution-exclusion-rules',
+    path: 'distribution-rules',
     component: DistributionRulesComponent,
   },
   {
-    path: 'add-exclusion-rule',
+    path: 'add-rule',
     component: AddExclusionRuleComponent,
   },
 ];

@@ -1,7 +1,5 @@
 //ANGULAR CORE
 import { Component, OnInit, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -19,60 +17,43 @@ import { UtilityService } from 'src/app/_services/utility.service';
 //CUSTOM COMPONENTS
 import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
 import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
-//STATS-CARD-GROUP
-import { CardGroupComponent } from '../categories/card-group/card-group.component';
+import { ChartNavbarComponent } from '../chart-navbar/chart-navbar.component';
 
 //CUSTOM INTERFACES
 import { LayoutConfig } from 'src/app/components/app-layout/app-layout.component';
 import { MenuItem } from 'primeng/api';
+interface BreadcrumbItem extends MenuItem {
+  routerLink?: any[] | string;
+  label: string;
+}
 
 @Component({
   standalone: true,
   selector: 'app-trends',
   imports: [
-    FormsModule,
-    CommonModule,
     EChartsModule,
     PrimeNGModule,
     AppLayoutComponent,
     BreadcrumbsComponent,
-    CardGroupComponent
+    ChartNavbarComponent
   ],
   templateUrl: './trends.component.html'
 })
 export class TrendsComponent implements OnInit {
 
   //DI
-  private http = inject(HttpClient);
-  private router = inject(Router);
   private route = inject(ActivatedRoute);
-  private translate = inject(TranslateService);
-  private utility = inject(UtilityService);
 
   //Header | Footer
   layout: LayoutConfig;
   //Breadcrumbs
   home: MenuItem = { icon: "pi pi-home", routerLink: "/" };
-  items = [];
+  items: BreadcrumbItem[] = [];
 
   //Property Declarations
   chartHeight: any;
   chartInstance: any;
   chartOption: any;
-
-  //Filter Properties
-  showDrawer: boolean = false;
-  topics = [
-    { label: 'Technology', value: 'option1' },
-    { label: 'Origin', value: 'option2' }
-  ]
-  selectedTopic = 'option1';
-  minDate: Date = new Date(1990, 0, 1);
-  maxDate: Date = new Date();
-  dateRange = [this.minDate, this.maxDate];
-  originOptions = ['All', 'Domestic Filings', 'Foreign Filings'];
-  selectedOrigin = 'All';
-  onReset() { }
 
   //CHART EVENTS
   onChartEvent(event: any, type: string) {
@@ -163,7 +144,7 @@ export class TrendsComponent implements OnInit {
       },
       {
         label: "Trends",
-        routerLink: `/${officeCode}/${langCode}/trends`
+        routerLink: `/${officeCode}/${langCode}/statistics/trends`
       }
     ];
 

@@ -35,5 +35,6 @@
         <div class="mobile-menu-item" *ngFor="let item of mobileMenuItems" (click)="onMobileMenuItemClick(item)"><span class="pi mobile-menu-icon" [ngClass]="item.icon"></span><span>{{item.label}}</span></div>
       </div>
     </p-overlayPanel>
+    <app-platform-selection *ngIf="showPlatformSelector" [isModal]="true" [currentPlatform]="ms.getWipoPlatform()" (platformSelected)="onPlatformSelected($event)" (modalClosed)="showPlatformSelector = false"></app-platform-selection>
   </ng-template>
 </p-menubar>

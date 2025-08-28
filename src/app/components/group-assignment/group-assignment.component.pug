@@ -1,91 +1,116 @@
-.group-assignment-card
-  .card-header
-    h2 Group Assignment
+.group-assignment-card.bg-white.rounded-lg.shadow-lg.p-6(class="min-h-[600px]")
+  .card-header.mb-6
+    h2.text-2xl.font-bold.text-blue-600 Group Assignment
+
   .card-content
-    .group-assignment-container
-      .group-list.available
-        h3 {{ availableLabel }}
-        .group-list-header
-          label
-            input(
+    .group-assignment-container.flex.gap-8
+      //- Available Groups Panel
+      .group-list.available.flex-1
+        h3.text-lg.font-semibold.text-blue-600.mb-4 {{ availableLabel }}
+        .group-list-header.mb-4
+          label.flex.items-center.space-x-2.cursor-pointer
+            input.w-4.h-4.text-blue-600.rounded(
               type="checkbox",
+              class="focus:ring-blue-500",
               [checked]="isAllAvailableSelected()",
               (change)="toggleSelectAllAvailable($event.target.checked)"
             )
-            | Select All
-        .group-list-body
-          .group-item(*ngFor="let group of pagedAvailableGroups")
-            span.drag-handle ⋮⋮
-            .group-info
-              .group-name {{ group.name }}
-              .group-type {{ group.type }}
-            input(
+            span.text-sm.font-medium.text-gray-700 Select All
+
+        .group-list-body.bg-gray-50.rounded-lg.p-4.overflow-y-auto.border(class="min-h-[400px] max-h-[400px]")
+          .group-item.flex.items-center.justify-between.p-3.mb-2.bg-white.rounded-lg.shadow-sm.border.border-gray-200.transition-colors(
+            *ngFor="let group of pagedAvailableGroups",
+            class="hover:border-blue-300"
+          )
+            .flex.items-center.space-x-3.flex-1
+              span.drag-handle.text-gray-400.cursor-move.text-lg ⋮⋮
+              .group-info.flex-1
+                .group-name.font-medium.text-gray-900 {{ group.name }}
+                .group-type
+                  span.inline-flex.items-center.rounded-full.text-xs.font-medium.bg-blue-100.text-blue-800(class="px-2.5 py-0.5") {{ group.type }}
+            input.w-4.h-4.text-blue-600.rounded(
               type="checkbox",
+              class="focus:ring-blue-500",
               [checked]="availableSelected.has(group.id)",
-              (change)=`availableSelected.has(group.id)
-                ? availableSelected.delete(group.id)
-                : availableSelected.add(group.id)`
+              (change)="availableSelected.has(group.id) ? availableSelected.delete(group.id) : availableSelected.add(group.id)"
             )
-        .pagination
-          button(
-            (click)="setAvailablePage(availablePage - 1)",
-            [disabled]="availablePage === 1"
-          )
-            i.pi.pi-angle-left
-          span {{ availablePage }}
-          button(
-            (click)="setAvailablePage(availablePage + 1)",
-            [disabled]="availablePage * pageSize >= availableGroups.length"
-          )
-            i.pi.pi-angle-right
 
-      .group-list-controls.center-controls
-        button.move-btn(
+        //- PrimeNG Paginator for Available Groups
+        .mt-4
+          p-paginator(
+            [rows]="pageSize",
+            [totalRecords]="totalAvailableGroups",
+            [first]="(currentAvailablePage - 1) * pageSize",
+            (onPageChange)="onAvailablePageChange($event)",
+            [showFirstLastIcon]="true",
+            [showPageLinks]="true",
+            [showCurrentPageReport]="false",
+            styleClass="text-xs"
+            [rowsPerPageOptions]="[10, 25, 50]"
+          )
+
+      //- Action Buttons
+      .group-list-controls.center-controls.flex.flex-col.justify-center.space-y-4
+        button.move-btn.w-12.h-12.bg-blue-500.text-white.rounded-full.flex.items-center.justify-center.shadow-lg(
           (click)="moveToAssigned()",
-          [disabled]="availableSelected.size === 0"
+          [disabled]="availableSelected.size === 0",
+          class="hover:bg-blue-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
         )
-          i.pi.pi-angle-right
-        button.move-btn(
+          i.pi.pi-angle-right.text-lg
+        button.move-btn.w-12.h-12.bg-red-500.text-white.rounded-full.flex.items-center.justify-center.shadow-lg(
           (click)="moveToAvailable()",
-          [disabled]="assignedSelected.size === 0"
+          [disabled]="assignedSelected.size === 0",
+          class="hover:bg-red-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
         )
-          i.pi.pi-angle-left
+          i.pi.pi-angle-left.text-lg
 
-      .group-list.assigned
-        h3 {{ assignedLabel }}
-        .group-list-header
-          label
-            input(
+      //- Assigned Groups Panel
+      .group-list.assigned.flex-1
+        h3.text-lg.font-semibold.text-blue-600.mb-4 {{ assignedLabel }}
+        .group-list-header.mb-4
+          label.flex.items-center.space-x-2.cursor-pointer
+            input.w-4.h-4.text-blue-600.rounded(
               type="checkbox",
+              class="focus:ring-blue-500",
               [checked]="isAllAssignedSelected()",
               (change)="toggleSelectAllAssigned($event.target.checked)"
             )
-            | Select All
-        .group-list-body
-          .group-item(
+            span.text-sm.font-medium.text-gray-700 Select All
+
+        .group-list-body.bg-gray-50.rounded-lg.p-4.overflow-y-auto.border(class="min-h-[400px] max-h-[400px]")
+          .group-item.flex.items-center.justify-between.p-3.mb-2.bg-white.rounded-lg.shadow-sm.border.border-gray-200.transition-colors(
             *ngFor="let group of pagedAssignedGroups",
-            [class.selected]="assignedSelected.has(group.id)"
+            [class.selected]="assignedSelected.has(group.id)",
+            class="hover:border-green-300"
           )
-            span.drag-handle ⋮⋮
-            .group-info
-              .group-name {{ group.name }}
-              .group-type {{ group.type }}
-            input(
+            .flex.items-center.space-x-3.flex-1
+              span.drag-handle.text-gray-400.cursor-move.text-lg ⋮⋮
+              .group-info.flex-1
+                .group-name.font-medium.text-gray-900 {{ group.name }}
+                .group-type
+                  span.inline-flex.items-center.rounded-full.text-xs.font-medium.bg-green-100.text-green-800(class="px-2.5 py-0.5") {{ group.type }}
+            input.w-4.h-4.text-blue-600.rounded(
               type="checkbox",
+              class="focus:ring-blue-500",
               [checked]="assignedSelected.has(group.id)",
-              (change)=`assignedSelected.has(group.id)
-                ? assignedSelected.delete(group.id)
-                : assignedSelected.add(group.id)`
+              (change)="assignedSelected.has(group.id) ? assignedSelected.delete(group.id) : assignedSelected.add(group.id)"
             )
-        .pagination
-          button(
-            (click)="setAssignedPage(assignedPage - 1)",
-            [disabled]="assignedPage === 1"
+
+          //- Empty state when no groups assigned
+          .flex.flex-col.items-center.justify-center.text-gray-500(*ngIf="pagedAssignedGroups.length === 0", class="h-64")
+            i.pi.pi-users.text-4xl.mb-2
+            p.text-sm No groups assigned yet
+            p.text-xs.text-gray-400 Select groups from the left panel to assign
+
+        //- PrimeNG Paginator for Assigned Groups
+        .mt-4
+          p-paginator(
+            [rows]="pageSize",
+            [totalRecords]="assignedGroups.length",
+            [first]="assignedFirst",
+            (onPageChange)="onAssignedPageChange($event)",
+            [showFirstLastIcon]="true",
+            [showPageLinks]="true",
+            [showCurrentPageReport]="false",
+            [rowsPerPageOptions]="[10, 25, 50]"
           )
-            i.pi.pi-angle-left
-          span {{ assignedPage }}
-          button(
-            (click)="setAssignedPage(assignedPage + 1)",
-            [disabled]="assignedPage * pageSize >= assignedGroups.length"
-          )
-            i.pi.pi-angle-right

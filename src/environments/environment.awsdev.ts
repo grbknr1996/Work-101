@@ -1,6 +1,7 @@
 export const environment = {
   installedInstances: [
     'default',
+    'xx',
     'asean',
     'kh',
     'kh-moc',
@@ -34,6 +35,14 @@ export const environment = {
 };
 
 export const configuration = {
+  xx: {
+    name: 'WIPO IP Support Office',
+    officeCode: 'xx',
+    logo: '/assets/images/wipo-logo.png',
+    availableLangs: ['ar', 'en', 'fr', 'id', 'jp', 'kh', 'ms', 'vi'],
+    defaultLanguage: 'en',
+    defaultLandingModule: 'dashboard',
+  },
   default: {
     name: 'WIPO IPAS Central',
     officeCode: 'default',
@@ -109,6 +118,7 @@ export const configuration = {
   },
   cn: {
     name: 'CNIPA China',
+    officeCode: 'cn',
     logo: '/assets/images/cn-logo.png',
     availableLangs: ['en', 'zh'],
     defaultLanguage: 'zh',

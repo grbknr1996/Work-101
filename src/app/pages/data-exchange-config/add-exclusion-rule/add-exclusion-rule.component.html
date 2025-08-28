@@ -1,7 +1,7 @@
 
 <app-layout [config]="layoutConfig">
   <app-breadcrumbs [items]="getBreadcrumbItems()"></app-breadcrumbs>
-  <h2 class="text-2xl font-bold text-blue-800 mb-6">Create Distribution Exclusion Rule</h2>
+  <h2 class="text-2xl font-bold text-blue-800 mb-6">Create Distribution Rule</h2>
   <app-configurable-stepper class="mb-8" [steps]="steps" [activeStep]="step" (stepChange)="onStepChange($event)"></app-configurable-stepper>
   <div class="w-full" *ngIf="step === 0">
     <form class="w-full" [formGroup]="sourceCategoriesForm">
@@ -26,6 +26,15 @@
           <input class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" type="text" formControlName="recipientClientId" placeholder="Enter recipient client ID"><small class="text-sm text-gray-500 mt-1 block">Enter the unique client identifier for the recipient system</small><small class="p-error text-red-600 text-sm mt-1 block" *ngIf="sourceCategoriesForm.get('recipientClientId')?.invalid &amp;&amp; sourceCategoriesForm.get('recipientClientId')?.touched">Recipient Client ID is required</small>
         </div>
       </div>
+      <div class="w-full mt-6">
+        <div class="w-full flex items-start">
+          <p-checkbox [(ngModel)]="includeUnpublishedApplications" [ngModelOptions]="{standalone: true}" binary="true" inputId="include-unpublished"></p-checkbox>
+          <div class="ml-3 flex-1">
+            <label class="text-sm text-gray-700" for="include-unpublished">Include Unpublished Applications</label>
+            <div class="mt-1 text-sm text-gray-500">Unpublished applications will be shared with the recipient system.</div>
+          </div>
+        </div>
+      </div>
       <div class="w-full mt-8 flex justify-between">
         <button class="bg-gray-500 text-white px-6 py-2 rounded-lg transition-colors hover:bg-gray-600" pButton type="button" label="Cancel" (click)="cancel()"></button>
         <button class="bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors hover:bg-blue-700" pButton type="button" label="Next" (click)="nextStep()" [disabled]="!sourceCategoriesForm.valid"></button>
@@ -34,36 +43,11 @@
   </div>
   <div class="w-full" *ngIf="step === 1">
     <p-tabView class="w-full">
-      <p-tabPanel class="w-full" *ngFor="let cat of selectedCategories" [header]="getCategoryLabel(cat)">
-        <div class="w-full mb-6"><b class="text-lg font-semibold text-gray-800">Status Exclusions for {{ getCategoryLabel(cat) }}</b></div>
-        <div class="w-full space-y-4">
-          <div class="w-full flex items-start">
-            <p-checkbox [(ngModel)]="statusExclusions[cat].unpublished" binary="true" inputId="unpublished-{{ cat }}"></p-checkbox>
-            <label class="ml-3 text-sm text-gray-700 flex-1" for="unpublished-{{ cat }}">Exclude Unpublished Applications
-              <div class="ml-6 mt-1 text-sm text-gray-500">Unpublished {{ getCategoryLabel(cat) }} applications will not be shared.</div>
-            </label>
-          </div>
-          <div class="w-full flex items-start">
-            <p-checkbox [(ngModel)]="statusExclusions[cat].unregistered" binary="true" inputId="unregistered-{{ cat }}"></p-checkbox>
-            <label class="ml-3 text-sm text-gray-700 flex-1" for="unregistered-{{ cat }}">Exclude Unregistered Rights
-              <div class="ml-6 mt-1 text-sm text-gray-500">Ungranted/unregistered {{ getCategoryLabel(cat) }} rights will not be shared.</div>
-            </label>
-          </div>
-        </div>
-      </p-tabPanel>
-    </p-tabView>
-    <div class="w-full mt-8 flex justify-between">
-      <button class="bg-gray-500 text-white px-6 py-2 rounded-lg transition-colors hover:bg-gray-600" pButton type="button" label="Back" (click)="prevStep()"></button>
-      <button class="bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors hover:bg-blue-700" pButton type="button" label="Next" (click)="nextStep()"></button>
-    </div>
-  </div>
-  <div *ngIf="step === 2">
-    <p-tabView>
       <p-tabPanel *ngFor="let cat of selectedCategories" [header]="getCategoryLabel(cat)">
-        <div class="mb-6"><b class="text-lg font-semibold text-gray-800">Configure Exclusion Rules for {{ getCategoryLabel(cat) }}</b></div>
+        <div class="mb-6"><b class="text-lg font-semibold text-gray-800">Configure Distribution Rules for {{ getCategoryLabel(cat) }}</b></div>
         <p-accordion>
-          <p-accordionTab header="Event Code Exclusions">
-            <div class="mb-4 text-sm text-gray-600">Choose which event codes should be excluded from data sharing for {{ getCategoryLabel(cat) }}.</div>
+          <p-accordionTab header="Event Code Inclusion">
+            <div class="mb-4 text-sm text-gray-600">Choose which event codes should be distributed for {{ getCategoryLabel(cat) }}.</div>
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div class="col-span-1" *ngFor="let event of getEventCodesForCategory(cat); let i = index">
                 <div class="flex items-center">
@@ -73,14 +57,14 @@
               </div>
             </div>
           </p-accordionTab>
-          <p-accordionTab header="Document Exclusions">
+          <p-accordionTab header="Document Inclusion">
             <div class="flex items-center">
               <p-checkbox [(ngModel)]="enableDocumentExclusions[cat]" binary="true" inputId="enable-doc-{{ cat }}"></p-checkbox>
-              <label class="ml-3 text-sm text-gray-700" for="enable-doc-{{ cat }}">Enable Document Exclusions</label>
+              <label class="ml-3 text-sm text-gray-700" for="enable-doc-{{ cat }}">Enable Document Inclusion</label>
             </div>
-            <div class="ml-6 mt-2 text-sm text-gray-500">Document exclusions are disabled by default.</div>
+            <div class="ml-6 mt-2 text-sm text-gray-500">Document inclusion is enabled by default with all document types selected.</div>
             <div class="mt-4" *ngIf="enableDocumentExclusions[cat]">
-              <label class="block text-sm font-medium text-gray-700 mb-2">Select Document Types to Exclude</label>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Select Document Types to Include</label>
               <p-multiSelect [options]="getDocumentTypesForCategory(cat)" [(ngModel)]="documentExclusions[cat]" defaultLabel="Select Document Types" display="chip"></p-multiSelect>
             </div>
           </p-accordionTab>
@@ -92,8 +76,8 @@
       <button class="bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors hover:bg-blue-700" pButton type="button" label="Next" (click)="nextStep()"></button>
     </div>
   </div>
-  <div *ngIf="step === 3">
-    <h3 class="text-2xl font-bold text-gray-800 mb-6">Review Your Exclusion Rule Configuration</h3>
+  <div *ngIf="step === 2">
+    <h3 class="text-2xl font-bold text-gray-800 mb-6">Review Your Distribution Rule Configuration</h3>
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
       <h4 class="text-lg font-semibold text-gray-700 mb-4">Basic Configuration</h4>
       <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -101,37 +85,37 @@
         <div class="col-span-1"><b class="text-gray-700">Recipient System:</b><br>{{ getSystemLabel(sourceCategoriesForm.value.system) }}</div>
         <div class="col-span-1"><b class="text-gray-700">Recipient Client ID:</b><br>{{ sourceCategoriesForm.value.recipientClientId }}</div>
         <div class="col-span-2 mt-4"><b class="text-gray-700">IP Category Types:</b><br><span class="inline-block bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full mr-2 mb-2" *ngFor="let cat of selectedCategories">{{ getCategoryLabel(cat) }}</span></div>
+        <div class="col-span-2 mt-4"><b class="text-gray-700">Include Unpublished Applications:</b><br><i class="pi" [ngClass]="includeUnpublishedApplications ? 'pi-check-circle text-green-600' : 'pi-times-circle text-red-600'"></i><span class="ml-2 text-sm text-gray-700">{{ includeUnpublishedApplications ? 'Yes' : 'No' }}</span></div>
       </div>
     </div>
     <div class="bg-white rounded-lg shadow-md p-6 mb-6" *ngFor="let cat of selectedCategories">
-      <h4 class="text-lg font-semibold text-gray-700 mb-4">{{ getCategoryLabel(cat) }} Exclusions</h4>
+      <h4 class="text-lg font-semibold text-gray-700 mb-4">{{ getCategoryLabel(cat) }} Distributions</h4>
       <div class="mb-6">
         <h5 class="text-md font-medium text-gray-600 mb-3">Status Exclusions</h5>
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div class="col-span-1"><i class="pi" [ngClass]="statusExclusions[cat]?.unpublished ? 'pi-check-circle text-green-600' : 'pi-times-circle text-red-600'"></i><span class="ml-2 text-sm text-gray-700">Exclude Unpublished Applications: <b>{{ statusExclusions[cat]?.unpublished ? 'Yes' : 'No' }}</b></span></div>
-          <div class="col-span-1"><i class="pi" [ngClass]="statusExclusions[cat]?.unregistered ? 'pi-check-circle text-green-600' : 'pi-times-circle text-red-600'"></i><span class="ml-2 text-sm text-gray-700">Exclude Unregistered Rights: <b>{{ statusExclusions[cat]?.unregistered ? 'Yes' : 'No' }}</b></span></div>
+          <div class="col-span-1"><i class="pi" [ngClass]="includeUnpublishedApplications ? 'pi-check-circle text-green-600' : 'pi-times-circle text-red-600'"></i><span class="ml-2 text-sm text-gray-700">Include Unpublished Applications: <b>{{ includeUnpublishedApplications ? 'Yes' : 'No' }}</b></span></div>
         </div>
       </div>
       <div class="mb-6" *ngIf="eventExclusions[cat]?.length &gt; 0">
-        <h5 class="text-md font-medium text-gray-600 mb-3">Event Code Exclusions ({{ eventExclusions[cat]?.length }} selected)</h5>
+        <h5 class="text-md font-medium text-gray-600 mb-3">Event Code Inclusion ({{ eventExclusions[cat]?.length }} selected)</h5>
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div class="col-span-1" *ngFor="let eventCode of eventExclusions[cat]"><i class="pi pi-ban text-red-600"></i><span class="ml-2 text-sm text-gray-700">{{ getEventCodeLabel(eventCode) }}</span></div>
+          <div class="col-span-1" *ngFor="let eventCode of eventExclusions[cat]"><i class="pi pi-check-circle text-green-600"></i><span class="ml-2 text-sm text-gray-700">{{ getEventCodeLabel(eventCode) }}</span></div>
         </div>
       </div>
       <div class="mb-6" *ngIf="!eventExclusions[cat]?.length">
-        <h5 class="text-md font-medium text-gray-600 mb-3">Event Code Exclusions</h5>
-        <p class="text-sm text-gray-500">No event codes excluded for this category.</p>
+        <h5 class="text-md font-medium text-gray-600 mb-3">Event Code Inclusion</h5>
+        <p class="text-sm text-gray-500">No event codes distributed for this category.</p>
       </div>
       <div class="mb-6" *ngIf="enableDocumentExclusions[cat]">
-        <h5 class="text-md font-medium text-gray-600 mb-3">Document Exclusions ({{ documentExclusions[cat]?.length || 0 }} selected)</h5>
+        <h5 class="text-md font-medium text-gray-600 mb-3">Document Inclusion ({{ documentExclusions[cat]?.length || 0 }} selected)</h5>
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2" *ngIf="documentExclusions[cat]?.length &gt; 0">
-          <div class="col-span-1" *ngFor="let docCode of documentExclusions[cat]"><i class="pi pi-ban text-red-600"></i><span class="ml-2 text-sm text-gray-700">{{ getDocumentTypeLabel(docCode) }}</span></div>
+          <div class="col-span-1" *ngFor="let docCode of documentExclusions[cat]"><i class="pi pi-check-circle text-green-600"></i><span class="ml-2 text-sm text-gray-700">{{ getDocumentTypeLabel(docCode) }}</span></div>
         </div>
         <p class="text-sm text-gray-500" *ngIf="!documentExclusions[cat]?.length">No document types selected for exclusion.</p>
       </div>
       <div class="mb-6" *ngIf="!enableDocumentExclusions[cat]">
-        <h5 class="text-md font-medium text-gray-600 mb-3">Document Exclusions</h5>
-        <p class="text-sm text-gray-500">Document exclusions are disabled for this category.</p>
+        <h5 class="text-md font-medium text-gray-600 mb-3">Document Inclusion</h5>
+        <p class="text-sm text-gray-500">Document inclusion is disabled for this category.</p>
       </div>
     </div>
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
@@ -141,17 +125,15 @@
           <thead>
             <tr class="bg-gray-50">
               <th class="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-700">IP Category</th>
-              <th class="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-700">Unpublished Apps</th>
-              <th class="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-700">Unregistered Rights</th>
-              <th class="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-700">Events Excluded</th>
-              <th class="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-700">Documents Excluded</th>
+              <th class="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-700">Include Unpublished Apps</th>
+              <th class="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-700">Events Included</th>
+              <th class="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-700">Documents Included</th>
             </tr>
           </thead>
           <tbody>
             <tr class="border-b border-gray-200" *ngFor="let cat of selectedCategories">
               <td class="border border-gray-200 px-4 py-3"><b class="text-gray-700">{{ getCategoryLabel(cat) }}</b></td>
-              <td class="border border-gray-200 px-4 py-3"><i class="pi" [ngClass]="statusExclusions[cat]?.unpublished ? 'pi-check-circle text-green-600' : 'pi-times-circle text-red-600'"></i>{{ statusExclusions[cat]?.unpublished ? 'Yes' : 'No' }}</td>
-              <td class="border border-gray-200 px-4 py-3"><i class="pi" [ngClass]="statusExclusions[cat]?.unregistered ? 'pi-check-circle text-green-600' : 'pi-times-circle text-red-600'"></i>{{ statusExclusions[cat]?.unregistered ? 'Yes' : 'No' }}</td>
+              <td class="border border-gray-200 px-4 py-3"><i class="pi" [ngClass]="includeUnpublishedApplications ? 'pi-check-circle text-green-600' : 'pi-times-circle text-red-600'"></i>{{ includeUnpublishedApplications ? 'Yes' : 'No' }}</td>
               <td class="border border-gray-200 px-4 py-3"><span class="inline-block px-2 py-1 text-xs font-medium rounded-full" [ngClass]="eventExclusions[cat]?.length ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'">{{ eventExclusions[cat]?.length || 0 }}</span></td>
               <td class="border border-gray-200 px-4 py-3"><span class="inline-block px-2 py-1 text-xs font-medium rounded-full" [ngClass]="enableDocumentExclusions[cat] &amp;&amp; documentExclusions[cat]?.length ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'">{{ enableDocumentExclusions[cat] ? documentExclusions[cat]?.length || 0 : 0 }}</span></td>
             </tr>

@@ -21,6 +21,22 @@ export interface UserAccount {
   imageUrl?: string;
 }
 
+export interface UserGroupBag {
+  groupId: number;
+  groupName: string;
+  iimsGroupId?: string;
+  groupType: string;
+}
+
+export interface UserCreationPayload {
+  userName: string;
+  email: string;
+  clientAppId?: string | null;
+  signaturePicture?: string;
+  signatureType?: string;
+  userGroupsBag: UserGroupBag[];
+}
+
 export interface UserQueryResponse {
   query: {
     platformCode: string;
@@ -210,16 +226,32 @@ export class UserService {
   /**
    * Get a single user account by login ID
    */
+  /**
+   * Get a single user account by login ID
+   */
   getUserAccount(loginId: string): Observable<UserAccount> {
     return this.getAuthHeaders().pipe(
       switchMap((headers) =>
-        this.http.get<UserAccount>(
-          `${environment.backendUrl}/users/${loginId}`,
+        this.http.get<UserQueryResponse>(
+          `${environment.backendUrl}/queries?loginId=${loginId}&limit=1`,
           {
             headers: headers,
           }
         )
       ),
+      switchMap((response) => {
+        if (
+          response &&
+          response.userAccounts &&
+          response.userAccounts.length > 0
+        ) {
+          return of(response.userAccounts[0]);
+        } else {
+          return throwError(
+            () => new Error(`User account with login ID ${loginId} not found`)
+          );
+        }
+      }),
       catchError((error) =>
         this.handleError(error, `Loading user account ${loginId}`)
       )
@@ -229,17 +261,15 @@ export class UserService {
   /**
    * Create a new user account
    */
-  createUserAccount(userData: Partial<UserAccount>): Observable<UserAccount> {
+  createUserAccount(userData: UserCreationPayload): Observable<UserAccount> {
+    console.log('Creating user account with data:', userData);
+
     return this.getAuthHeaders()
       .pipe(
         switchMap((headers) =>
-          this.http.post<UserAccount>(
-            `${environment.backendUrl}/users`,
-            userData,
-            {
-              headers: headers,
-            }
-          )
+          this.http.post<UserAccount>(`${environment.backendUrl}`, userData, {
+            headers: headers,
+          })
         ),
         catchError((error) => this.handleError(error, 'Creating user account'))
       )
@@ -247,7 +277,7 @@ export class UserService {
         switchMap((user) => {
           this.toastService.showSuccess(
             'Success',
-            `User account ${user.loginId} created successfully`
+            `User account ${user.userName || user.loginId} created successfully`
           );
           return of(user);
         })

@@ -3,18 +3,14 @@
 */
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService, TranslationChangeEvent } from '@ngx-translate/core';
 import { configuration, environment } from '../../environments/environment';
 import packagejson from '../../../package.json';
 
-import { HttpErrorResponse } from '@angular/common/http';
-import { instanceType, resizeImage } from '../utils';
 import { BehaviorSubject, Observable, firstValueFrom, map, take } from 'rxjs';
-import { AnySoaRecord } from 'dns';
-import { AuthService } from './auth.service';
 
 const localesMapping = {
   // for Intl.DateTimeFormat and language switching
@@ -95,8 +91,12 @@ export class MechanicsService {
   private currentTranslationLoad: Promise<void> | null = null;
 
   // Office context properties
-  private currentOfficeSubject = new BehaviorSubject<string>('default');
+  private currentOfficeSubject = new BehaviorSubject<string>('xx');
   public currentOffice$ = this.currentOfficeSubject.asObservable();
+
+  // Add a separate subject for WIPO admin selected platform
+  private wipoPlatformSubject = new BehaviorSubject<string | null>(null);
+  public wipoPlatform$ = this.wipoPlatformSubject.asObservable();
 
   getLogo(): string {
     const officeConfig = this.getCurrentOfficeConfig();
@@ -152,8 +152,7 @@ export class MechanicsService {
     public ts: TranslateService,
     private http: HttpClient,
     public activatedRoute: ActivatedRoute,
-    public router: Router,
-    private authService: AuthService
+    public router: Router
   ) {
     const l: string = `MS constructor - `;
 
@@ -162,12 +161,24 @@ export class MechanicsService {
 
     this.isBeta = (localStorage.getItem(`beta`) || '') != '';
 
-    // Subscribe to auth service to get office code from user ID
-    this.authService.currentOfficeCode$.subscribe((officeCode) => {
-      if (officeCode && officeCode !== 'default') {
-        this.setCurrentOffice(officeCode);
-      }
-    });
+    // Initialize WIPO platform from localStorage
+    const savedWipoPlatform = localStorage.getItem('wipoPlatform');
+    console.log(
+      'MechanicsService - Constructor - Loading WIPO platform from localStorage:',
+      savedWipoPlatform
+    );
+
+    if (savedWipoPlatform && configuration[savedWipoPlatform]) {
+      console.log(
+        'MechanicsService - Constructor - Setting WIPO platform from localStorage:',
+        savedWipoPlatform
+      );
+      this.wipoPlatformSubject.next(savedWipoPlatform);
+    } else {
+      console.log(
+        'MechanicsService - Constructor - No valid WIPO platform found in localStorage'
+      );
+    }
 
     // Set available languages based on current office
     this.updateAvailableLangs();
@@ -204,6 +215,11 @@ export class MechanicsService {
 
     // Initialize language
     this.switchLang();
+
+    // Debug initial state
+    setTimeout(() => {
+      this.debugPlatformState();
+    }, 1000);
   }
 
   private updateAvailableLangs(): void {
@@ -250,7 +266,7 @@ export class MechanicsService {
   initNumberFormatter(locale?: string): void {
     locale = locale || new Intl.NumberFormat().resolvedOptions().locale;
 
-    this.numberFormatter = new Intl.NumberFormat(locale); // Default options are good for decimal formatting. 123456 --> '123,456' or '123 456' (returns a string)
+    this.numberFormatter = new Intl.NumberFormat(locale); // Default options are good for decimal formatting. 123456 --> '123,456' or '123 456' (returns a string)
   }
 
   get isMobileView(): boolean {
@@ -577,11 +593,20 @@ export class MechanicsService {
     }
   }
 
-  // Office context methods
+  // Office context methods - SIMPLIFIED to use only getCurrentOffice()
   getCurrentOffice(): string {
+    // If WIPO admin has selected a platform, use that
+    if (this.isCurrentUserWipoAdmin() && this.wipoPlatformSubject.value) {
+      return this.wipoPlatformSubject.value;
+    }
+
+    // Otherwise, use the user's actual office
     return this.currentOfficeSubject.value;
   }
 
+  /**
+   * Set current office
+   */
   setCurrentOffice(officeCode: string): void {
     if (configuration[officeCode]) {
       this.currentOfficeSubject.next(officeCode);
@@ -589,16 +614,144 @@ export class MechanicsService {
       this.updateAvailableLangs();
     } else {
       console.warn(
-        `Office code '${officeCode}' not found in configuration, using default`
+        `Office code '${officeCode}' not found in configuration, using xx`
       );
-      this.currentOfficeSubject.next('default');
+      this.currentOfficeSubject.next('xx');
       this.updateAvailableLangs();
     }
   }
 
-  getCurrentOfficeConfig(): any {
-    const officeCode = this.getCurrentOffice();
+  /**
+   * Set current office from external source (e.g., AuthService) to avoid circular dependency
+   */
+  setCurrentOfficeFromAuth(officeCode: string): void {
+    console.log(
+      'MechanicsService - setCurrentOfficeFromAuth called with:',
+      officeCode
+    );
+
+    if (officeCode && officeCode !== 'default') {
+      console.log(
+        'MechanicsService - Setting current office from auth to:',
+        officeCode
+      );
+      this.setCurrentOffice(officeCode);
+    } else {
+      console.log(
+        'MechanicsService - Invalid office code from auth, not setting:',
+        officeCode
+      );
+    }
+  }
+
+  /**
+   * Get WIPO admin selected platform code
+   */
+  getWipoPlatform(): string | null {
+    return this.wipoPlatformSubject.value;
+  }
+
+  /**
+   * Set WIPO admin selected platform
+   */
+  setWipoPlatform(platformCode: string): void {
+    console.log(
+      'MechanicsService - setWipoPlatform called with:',
+      platformCode
+    );
+
+    const platform = configuration[platformCode];
+    if (platform && typeof platform === 'object') {
+      console.log('MechanicsService - Setting WIPO platform to:', platformCode);
+      this.wipoPlatformSubject.next(platformCode);
+      localStorage.setItem('wipoPlatform', platformCode);
+
+      // For WIPO admins, when they select a platform, also set it as the current office
+      if (this.isCurrentUserWipoAdmin()) {
+        console.log(
+          'MechanicsService - WIPO admin selected platform, updating current office to:',
+          platformCode
+        );
+        this.setCurrentOffice(platformCode);
+      }
+
+      console.log(
+        'MechanicsService - Platform set, current office is now:',
+        this.getCurrentOffice()
+      );
+
+      // Debug localStorage state
+      console.log(
+        'MechanicsService - localStorage wipoPlatform after setting:',
+        localStorage.getItem('wipoPlatform')
+      );
+    } else {
+      console.warn(
+        `Platform code '${platformCode}' not found in configuration`
+      );
+    }
+  }
+
+  /**
+   * Check if current user is WIPO admin
+   */
+  isCurrentUserWipoAdmin(): boolean {
+    return this.currentOfficeSubject.value === 'xx';
+  }
+
+  /**
+   * Check if WIPO admin has selected a platform
+   */
+  hasWipoPlatformSelected(): boolean {
+    return this.isCurrentUserWipoAdmin() && !!this.wipoPlatformSubject.value;
+  }
+
+  /**
+   * Check if WIPO admin needs to show platform selection (first time login or no platform selected)
+   */
+  shouldShowPlatformSelection(): boolean {
+    return this.isCurrentUserWipoAdmin() && !this.wipoPlatformSubject.value;
+  }
+
+  /**
+   * Get office configuration by office code
+   */
+  getOfficeConfig(officeCode: string): any {
     return configuration[officeCode] || configuration['default'];
+  }
+
+  /**
+   * Get current office configuration - SIMPLIFIED to use getCurrentOffice()
+   */
+  getCurrentOfficeConfig(): any {
+    const currentOffice = this.getCurrentOffice();
+    return this.getOfficeConfig(currentOffice);
+  }
+
+  /**
+   * Get all available office configurations (for platform selection)
+   */
+  getAvailableOffices(): any[] {
+    return Object.entries(configuration)
+      .map(([key, office]) => {
+        if (office && typeof office === 'object') {
+          return {
+            ...office,
+            officeCode: office.officeCode || key,
+          };
+        }
+        return null;
+      })
+      .filter((office): office is any => office !== null);
+  }
+
+  /**
+   * Get available platforms for WIPO admin selection (including 'xx' as IPAS Central is also a platform)
+   */
+  getAvailablePlatforms(): any[] {
+    return this.getAvailableOffices().filter(
+      (platform) => platform.officeCode !== 'default' // Only exclude 'default', include 'xx'
+    );
   }
 
   getDefaultLanguage(): string {
@@ -613,5 +766,36 @@ export class MechanicsService {
 
   resetOffice(): void {
     this.currentOfficeSubject.next('default');
+    this.wipoPlatformSubject.next(null);
+    localStorage.removeItem('wipoPlatform');
+  }
+
+  /**
+   * Debug method to check current state
+   */
+  debugPlatformState(): void {
+    console.log('=== MechanicsService Debug State ===');
+    console.log('Current Office:', this.getCurrentOffice());
+    console.log('WIPO Platform:', this.getWipoPlatform());
+    console.log('Is WIPO Admin:', this.isCurrentUserWipoAdmin());
+    console.log('Has Platform Selected:', this.hasWipoPlatformSelected());
+    console.log(
+      'Should Show Platform Selection:',
+      this.shouldShowPlatformSelection()
+    );
+    console.log(
+      'LocalStorage wipoPlatform:',
+      localStorage.getItem('wipoPlatform')
+    );
+    console.log('=====================================');
+  }
+
+  /**
+   * Debug method to manually set WIPO platform for testing
+   */
+  debugSetWipoPlatform(platformCode: string): void {
+    console.log('=== Debug: Manually setting WIPO platform to:', platformCode);
+    this.setWipoPlatform(platformCode);
+    this.debugPlatformState();
   }
 }

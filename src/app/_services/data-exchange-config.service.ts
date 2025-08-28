@@ -71,7 +71,7 @@ export class DataExchangeConfigService {
           'Content-Type': 'application/json',
         });
 
-        const dataServicesUrl = `${environment.dataServicesApi}/data-services/distribution-exclusion`;
+        const dataServicesUrl = `${environment.dataServicesApi}/data-services/v1/distribution-exclusion`;
 
         return this.http
           .get<DataExchangeResponse>(dataServicesUrl, {
@@ -138,7 +138,7 @@ export class DataExchangeConfigService {
         });
 
         // Use correct endpoint for distribution exclusion rules
-        const dataServicesUrl = `${environment.dataServicesApi}/data-services/distribution-exclusion`;
+        const dataServicesUrl = `${environment.dataServicesApi}/data-services/v1/distribution-exclusion`;
 
         return this.http.post<any>(dataServicesUrl, newRule, { headers }).pipe(
           map((response) => {

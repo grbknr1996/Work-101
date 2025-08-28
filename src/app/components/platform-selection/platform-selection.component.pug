@@ -1,0 +1,42 @@
+.platform-selection-container(class="{ 'modal-overlay': isModal }")
+  .platform-selection-modal
+    .modal-header
+      .header-left
+        .header-icon
+          i.pi.pi-cog
+        .header-text
+          h2 Office Platform
+          p.subtitle Select an Office Platform.
+          span.info-text {{ availablePlatforms.length }} offices available
+      button.close-button((click)="isModal ? onClose() : onLogout()")
+        i.pi.pi-times
+    
+    .modal-body
+      .search-section
+        label(for="platform-search") Office Platform
+        .search-input-container
+          input#platform-search.search-input(
+            type="text",
+            placeholder="Type to search offices...",
+            [(ngModel)]="searchTerm",
+            (input)="onSearch()"
+          )
+          button.search-toggle((click)="toggleSearch()")
+            i.pi.pi-chevron-up(*ngIf="!isSearchCollapsed")
+            i.pi.pi-chevron-down(*ngIf="isSearchCollapsed")
+      
+      .platform-list(*ngIf="!isSearchCollapsed")
+        .platform-item(
+          *ngFor="let platform of filteredPlatforms",
+          [class.selected]="selectedPlatform === platform.officeCode",
+          (click)="onPlatformSelect(platform.officeCode)"
+        )
+          span.platform-name {{ platform.name }}
+          span.platform-code ({{ platform.officeCode.toUpperCase() }})
+    
+    .modal-footer
+      button.btn.btn-primary(
+        [disabled]="!selectedPlatform",
+        (click)="onContinue()"
+      )
+        span Continue

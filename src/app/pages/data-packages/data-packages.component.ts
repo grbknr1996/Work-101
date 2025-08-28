@@ -131,7 +131,7 @@ export class DataPackagesComponent implements OnInit {
     {
       field: 'status',
       header: 'Status',
-      display: 'tag',
+      display: 'chip',
       //      filterType: 'dropdown',
       severity: (value) => {
         if (value === 'Processed') {

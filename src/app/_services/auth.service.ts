@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, from, throwError, of } from 'rxjs';
 import { catchError, delay, map, tap } from 'rxjs/operators';
@@ -16,8 +16,6 @@ import {
   fetchAuthSession,
   autoSignIn,
   signInWithRedirect,
-  // Add device-related imports
-  // Removed: fetchDevices, rememberDevice, forgetDevice, type ForgetDeviceInput,
 } from 'aws-amplify/auth';
 import { Hub } from 'aws-amplify/utils';
 import { configuration } from '../../environments/environment';
@@ -48,6 +46,7 @@ export interface AuthState {
 })
 export class AuthService {
   private router = inject(Router);
+  private injector = inject(Injector);
   private authStateSubject = new BehaviorSubject<AuthState>({
     user: null,
     isAuthenticated: false,
@@ -65,28 +64,15 @@ export class AuthService {
     Amplify.configure({
       Auth: {
         Cognito: {
-          userPoolId:
-            environment.cognito?.userPoolId || 'eu-central-1_aIn5Yy5c5',
-          userPoolClientId:
-            environment.cognito?.clientId || '7vp4nvcrpsttatcg8lf7cds7g4',
+          userPoolId: environment.cognito?.userPoolId,
+          userPoolClientId: environment.cognito?.clientId,
           loginWith: {
             oauth: {
-              domain:
-                environment.cognito?.authority ||
-                'auth.iims.ipobs.dev.web1.wipo.int',
-              scopes: (
-                environment.cognito?.scope ||
-                'aws.cognito.signin.user.admin email im-api/im-access openid profile'
-              ).split(' '),
+              domain: environment.cognito?.authority,
+              scopes: (environment.cognito?.scope).split(' '),
               responseType: 'code',
-              redirectSignIn: [
-                environment.cognito?.redirectUrl ||
-                  'https://localhost:4200/auth-callback',
-              ],
-              redirectSignOut: [
-                environment.cognito?.postLogoutRedirectUri ||
-                  'https://localhost:4200/logged-out',
-              ],
+              redirectSignIn: [environment.cognito?.redirectUrl],
+              redirectSignOut: [environment.cognito?.postLogoutRedirectUri],
             },
           },
         },
@@ -100,12 +86,24 @@ export class AuthService {
           this.checkAuthStatus().subscribe((isAuthenticated) => {
             if (isAuthenticated) {
               const currentState = this.authStateSubject.value;
-              const officeCode = currentState.officeCode || 'default';
-              const officeConfig = configuration[officeCode];
-              const langCode = officeConfig?.defaultLanguage || 'en';
-              setTimeout(() => {
+              const officeCode = currentState.officeCode || 'xx';
+
+              if (officeCode === 'xx') {
+                const wipoPlatform = localStorage.getItem('wipoPlatform');
+                if (!wipoPlatform) {
+                  this.router.navigate(['/platform-selection']);
+                } else {
+                  const platformConfig = configuration[wipoPlatform];
+                  const langCode = platformConfig?.defaultLanguage || 'en';
+                  this.router.navigate([
+                    `/${wipoPlatform}/${langCode}/dashboard`,
+                  ]);
+                }
+              } else {
+                const officeConfig = configuration[officeCode];
+                const langCode = officeConfig?.defaultLanguage || 'en';
                 this.router.navigate([`/${officeCode}/${langCode}/dashboard`]);
-              });
+              }
             }
           });
           break;
@@ -131,7 +129,6 @@ export class AuthService {
    * @returns The extracted office code or "default" if not found
    */
   private extractOfficeCodeFromUserId(userId: string): string {
-    console.log('userId$$$', userId);
     if (!userId || typeof userId !== 'string') {
       return 'default';
     }
@@ -139,12 +136,10 @@ export class AuthService {
     const parts = userId.split('_');
     if (parts.length >= 2) {
       const officeCode = parts[0].toLowerCase();
-      // Check if the extracted office code is in the installed instances
       if (environment.installedInstances.includes(officeCode)) {
         return officeCode;
       }
     }
-
     return 'default';
   }
 
@@ -197,7 +192,16 @@ export class AuthService {
           try {
             const userAttributes = await fetchUserAttributes();
             const formattedUser = this.formatUserAttributes(userAttributes);
-            const officeCode = formattedUser.officeCode || 'default';
+            const officeCode = formattedUser.officeCode || 'xx';
+
+            // Update MechanicsService with the office code using injector to avoid circular dependency
+            try {
+              const { MechanicsService } = await import('./mechanics.service');
+              const mechanicsService = this.injector.get(MechanicsService);
+              mechanicsService.setCurrentOfficeFromAuth(officeCode);
+            } catch (error) {
+              console.warn('Could not update MechanicsService:', error);
+            }
 
             this.authStateSubject.next({
               user: formattedUser,
@@ -206,7 +210,6 @@ export class AuthService {
               error: null,
               attributes: userAttributes,
               officeCode: officeCode,
-              // Removed: currentDevice, deviceList
             });
             console.log('User attributes:', userAttributes);
             console.log('Extracted office code:', officeCode);
@@ -216,9 +219,18 @@ export class AuthService {
           } catch (error) {
             console.error('Error fetching user attributes:', error);
             // If we can't get attributes but have a session, still consider user authenticated
-            const officeCode = this.extractOfficeCodeFromUserId(
-              currentUser.userId
-            );
+            const officeCode =
+              this.extractOfficeCodeFromUserId(currentUser.userId) || 'default';
+
+            // Update MechanicsService with the office code using injector to avoid circular dependency
+            try {
+              const { MechanicsService } = await import('./mechanics.service');
+              const mechanicsService = this.injector.get(MechanicsService);
+              mechanicsService.setCurrentOfficeFromAuth(officeCode);
+            } catch (error) {
+              console.warn('Could not update MechanicsService:', error);
+            }
+
             this.authStateSubject.next({
               user: {
                 id: currentUser.userId,

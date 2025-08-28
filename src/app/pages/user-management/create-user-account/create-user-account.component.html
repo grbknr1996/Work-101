@@ -8,7 +8,20 @@
       <div class="step-content">
         <ng-container [ngSwitch]="activeStep">
           <app-basic-info-form *ngSwitchCase="0" [formGroup]="userForm.get('basicInfo')"></app-basic-info-form>
-          <app-group-assignment *ngSwitchCase="1" [availableGroups]="availableGroups" [assignedGroups]="userForm.get('assignedGroups').value" (assignedGroupsChange)="onAssignedGroupsChange($event)"></app-group-assignment>
+          <app-group-assignment *ngSwitchCase="1" [availableGroups]="availableGroups" [assignedGroups]="userForm.get('assignedGroups').value" [currentAvailablePage]="currentGroupsPage" [totalAvailablePages]="totalGroupsPages" [totalAvailableGroups]="totalGroupsCount" (assignedGroupsChange)="onAssignedGroupsChange($event)" (availablePageChange)="onGroupsPageChange($event)">
+            <div class="loading-groups" *ngIf="isLoadingGroups" style="text-align: center; padding: 20px; color: #666;">
+              <p>Loading available groups...</p>
+            </div>
+            <div class="error-groups" *ngIf="groupsLoadError" style="text-align: center; padding: 20px; color: #dc3545;">
+              <p>Failed to load groups. Please try again later.</p>
+              <button class="p-button-sm" pButton type="button" label="Retry" icon="pi pi-refresh" (click)="retryLoadGroups()"></button>
+            </div>
+            <div class="groups-search" *ngIf="!isLoadingGroups &amp;&amp; !groupsLoadError &amp;&amp; totalGroupsCount &gt; 0" style="text-align: center; padding: 10px; color: #666; font-size: 0.9em;">
+              <input type="text" placeholder="Search groups..." [(ngModel)]="groupsSearchTerm" (keyup.enter)="onGroupsSearch(groupsSearchTerm)" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; width: 250px; margin-right: 10px;">
+              <button class="p-button-sm" pButton type="button" label="Search" icon="pi pi-search" (click)="onGroupsSearch(groupsSearchTerm)"></button>
+              <button class="p-button-sm p-button-outlined" pButton type="button" label="Clear" icon="pi pi-times" (click)="onGroupsSearch('')" style="margin-left: 5px;" *ngIf="groupsSearchTerm"></button>
+            </div>
+          </app-group-assignment>
           <div class="unit-step-card" *ngSwitchCase="2">
             <div class="card-header">
               <h2>Unit Assignment</h2>

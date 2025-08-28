@@ -7,8 +7,10 @@ import { StatisticsComponent } from './statistics.component';
 import { TrendsComponent } from './trends/trends.component';
 
 const routes: Routes = [
-  { path: '', component: StatisticsComponent },
-  { path: 'trends', component: TrendsComponent }
+  { path: '', redirectTo: 'application-count', pathMatch: 'full' },
+  { path: 'application-count', component: StatisticsComponent },
+  { path: 'trends', component: TrendsComponent },
+  { path: '*', redirectTo: 'application-count' }
 ];
 
 @NgModule({

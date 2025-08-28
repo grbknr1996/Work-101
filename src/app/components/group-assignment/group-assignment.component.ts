@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { PaginatorModule } from 'primeng/paginator';
 
 export interface GroupItem {
   id: string;
@@ -10,7 +11,7 @@ export interface GroupItem {
 @Component({
   selector: 'app-group-assignment',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PaginatorModule],
   templateUrl: './group-assignment.component.html',
 })
 export class GroupAssignmentComponent {
@@ -19,23 +20,28 @@ export class GroupAssignmentComponent {
   @Input() availableLabel: string = 'Available Groups';
   @Input() assignedLabel: string = 'Assigned Groups';
   @Input() pageSize: number = 10;
+  @Input() currentAvailablePage: number = 1;
+  @Input() totalAvailablePages: number = 1;
+  @Input() totalAvailableGroups: number = 0;
 
   @Output() assignedGroupsChange = new EventEmitter<GroupItem[]>();
+  @Output() availablePageChange = new EventEmitter<number>();
 
   // Selection
   availableSelected: Set<string> = new Set();
   assignedSelected: Set<string> = new Set();
 
-  // Pagination
-  availablePage: number = 1;
+  // Pagination for assigned groups (client-side)
   assignedPage: number = 1;
+  assignedFirst: number = 0;
 
+  // For available groups, use the input directly since it's server-side paginated
   get pagedAvailableGroups() {
-    const start = (this.availablePage - 1) * this.pageSize;
-    return this.availableGroups.slice(start, start + this.pageSize);
+    return this.availableGroups; // No slicing needed - API already provides the page
   }
+
   get pagedAssignedGroups() {
-    const start = (this.assignedPage - 1) * this.pageSize;
+    const start = this.assignedFirst;
     return this.assignedGroups.slice(start, start + this.pageSize);
   }
 
@@ -50,6 +56,7 @@ export class GroupAssignmentComponent {
       );
     }
   }
+
   toggleSelectAllAssigned(checked: boolean) {
     if (checked) {
       this.pagedAssignedGroups.forEach((g) => this.assignedSelected.add(g.id));
@@ -61,13 +68,16 @@ export class GroupAssignmentComponent {
   }
 
   isAllAvailableSelected() {
-    return this.pagedAvailableGroups.every((g) =>
-      this.availableSelected.has(g.id)
+    return (
+      this.pagedAvailableGroups.length > 0 &&
+      this.pagedAvailableGroups.every((g) => this.availableSelected.has(g.id))
     );
   }
+
   isAllAssignedSelected() {
-    return this.pagedAssignedGroups.every((g) =>
-      this.assignedSelected.has(g.id)
+    return (
+      this.pagedAssignedGroups.length > 0 &&
+      this.pagedAssignedGroups.every((g) => this.assignedSelected.has(g.id))
     );
   }
 
@@ -81,22 +91,15 @@ export class GroupAssignmentComponent {
         (g) => !this.assignedGroups.some((ag) => ag.id === g.id)
       ),
     ];
-    this.availableGroups = this.availableGroups.filter(
-      (g) => !this.availableSelected.has(g.id)
-    );
+    // Don't remove from available groups since they're managed by server pagination
     this.availableSelected.clear();
     this.assignedGroupsChange.emit(this.assignedGroups);
   }
+
   moveToAvailable() {
     const toRemove = this.assignedGroups.filter((g) =>
       this.assignedSelected.has(g.id)
     );
-    this.availableGroups = [
-      ...this.availableGroups,
-      ...toRemove.filter(
-        (g) => !this.availableGroups.some((ag) => ag.id === g.id)
-      ),
-    ];
     this.assignedGroups = this.assignedGroups.filter(
       (g) => !this.assignedSelected.has(g.id)
     );
@@ -104,11 +107,42 @@ export class GroupAssignmentComponent {
     this.assignedGroupsChange.emit(this.assignedGroups);
   }
 
-  // Pagination controls
-  setAvailablePage(page: number) {
-    this.availablePage = page;
+  // Pagination controls for available groups (server-side)
+  onAvailablePageChange(event: any) {
+    const page = Math.floor(event.first / event.rows) + 1;
+    if (page !== this.currentAvailablePage) {
+      this.availablePageChange.emit(page);
+    }
   }
+
+  // Pagination controls for assigned groups (client-side)
+  onAssignedPageChange(event: any) {
+    this.assignedFirst = event.first;
+    this.assignedPage = Math.floor(event.first / event.rows) + 1;
+  }
+
+  // Legacy pagination methods for backward compatibility
+  setAvailablePage(page: number) {
+    if (
+      page >= 1 &&
+      page <= this.totalAvailablePages &&
+      page !== this.currentAvailablePage
+    ) {
+      this.availablePageChange.emit(page);
+    }
+  }
+
   setAssignedPage(page: number) {
     this.assignedPage = page;
+    this.assignedFirst = (page - 1) * this.pageSize;
+  }
+
+  // Helper methods for pagination UI
+  canGoToPreviousAvailablePage(): boolean {
+    return this.currentAvailablePage > 1;
+  }
+
+  canGoToNextAvailablePage(): boolean {
+    return this.currentAvailablePage < this.totalAvailablePages;
   }
 }

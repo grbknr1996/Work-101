@@ -129,12 +129,10 @@ export interface ExclusionRule {
   ipCategory: string;
   originatingOfficeCode: string;
   originatingOfficeName: string;
-  ipRightsGranted: boolean;
-  applicationPublished: boolean;
-  publishDocuments: boolean;
-  documentList: any[];
-  eventCodes: any[];
-  updatedOn: string | null;
+  unpublishedApplication: boolean;
+  documentList: string[];
+  eventCodes: string[];
+  updatedOn: string;
 }
 
 export interface DataExchangeResponse {

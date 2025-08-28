@@ -1,7 +1,5 @@
 //ANGULAR CORE
 import { Component, OnInit, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -19,28 +17,31 @@ import { UtilityService } from 'src/app/_services/utility.service';
 //CUSTOM COMPONENTS
 import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
 import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
-//STATS-CARD-GROUP
-import { CardGroupComponent } from './categories/card-group/card-group.component';
+import { ChartNavbarComponent } from './chart-navbar/chart-navbar.component';
 
 //CUSTOM INTERFACES
 import { LayoutConfig } from 'src/app/components/app-layout/app-layout.component';
 import { MenuItem } from 'primeng/api';
+interface BreadcrumbItem extends MenuItem {
+  routerLink?: any[] | string;
+  label: string;
+}
+
+//SERVICE
+import { ChartService } from './chart.service';
 
 @Component({
   standalone: true,
   selector: 'app-statistics',
   imports: [
-    FormsModule,
-    CommonModule,
     EChartsModule,
     PrimeNGModule,
     AppLayoutComponent,
     BreadcrumbsComponent,
-    CardGroupComponent
+    ChartNavbarComponent
   ],
   templateUrl: './statistics.component.html'
 })
-
 export class StatisticsComponent implements OnInit {
 
   //DI
@@ -49,12 +50,14 @@ export class StatisticsComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
   private utility = inject(UtilityService);
+  //SERVICE
+  private chartService = inject(ChartService);
 
   //Header | Footer
   layout: LayoutConfig;
   //Breadcrumbs
   home: MenuItem = { icon: "pi pi-home", routerLink: "/" };
-  items = [];
+  items: BreadcrumbItem[] = [];
 
   //Property Declarations
   translationMap = new Map();
@@ -63,7 +66,10 @@ export class StatisticsComponent implements OnInit {
   activeData: any;
   activeDataMap = new Map();
   IPCategory = new Map();
+  IPCategoryCount = new Map(); //TO DEVELOP
+  currentIPCategory: string = '';
 
+  fontFamily = '';
   chartHeight: any;
   chartInstance: any;
   chartOption: any;
@@ -71,6 +77,7 @@ export class StatisticsComponent implements OnInit {
   chartLegendSelected: any;
   currentLegend: string = 'accounted_application';
 
+  /*
   //Filter Properties
   showDrawer: boolean = false;
   minDate: Date = new Date(1990, 0, 1);
@@ -78,13 +85,16 @@ export class StatisticsComponent implements OnInit {
   dateRange = [this.minDate, this.maxDate];
   originOptions = ['All', 'Domestic Filings', 'Foreign Filings'];
   selectedOrigin = 'All';
+  */
 
   onReset() {
-    this.currentLegend = 'accounted_application'; //To Use Later
+    this.currentIPCategory = '';
+    this.currentLegend = 'accounted_application';
     this.setSeriesData('accounted_application'); //DEFAULT CHART DATA
   }
 
   //CHART EVENTS
+  getGlobalFont(): string { return getComputedStyle(document.body).getPropertyValue('font-family').trim(); }
   onChartEvent(event: any, type: string) {
     console.log("Event, Type", event, type);
 
@@ -92,43 +102,9 @@ export class StatisticsComponent implements OnInit {
     if (type === 'chartClick') {
       //IP Categories - Axis Drilldown
       if (event.componentType === 'xAxis') {
-        let chartData = (this.currentLegend === 'accounted_application') ? this.accountedData : this.activeData;
-        let chartDataMap = (this.currentLegend === 'accounted_application') ? this.accountedDataMap : this.activeDataMap;
-        let keySelected = '', data = chartData.applicationBag, seriesData = [];
-        this.IPCategory.forEach((value, key) => { if (value === event.value) keySelected = key; });
-        data.forEach((item: any) => {
-          if (item.ipCategory === keySelected) {
-            for (let items of item.dataBag) {
-              seriesData.push([this.translationMap.get(items.applicationCategory), chartDataMap.get(items.applicationCategory)]);
-            }
-          }
-        });
-        //2DBAR
-        this.chartInstance.setOption({
-          xAxis: [
-            {
-              data: seriesData.map((data: any) => data[0])
-            },
-            {
-              data: Array.from(this.IPCategory.values())
-            }
-          ],
-          yAxis: {
-            max: this.calculateSpacing((seriesData.map(d => d[1]))).max,
-            interval: this.calculateSpacing((seriesData.map(d => d[1]))).interval
-          },
-          series: [
-            {
-              name: this.translationMap.get('accounted_application'),
-              data: (this.currentLegend === 'accounted_application') ? seriesData : []
-            },
-            {
-              name: this.translationMap.get('active_application'),
-              data: (this.currentLegend === 'active_application') ? seriesData : []
-            }
-          ],
-          notMerge: false
-        }, { devicePixelRatio: this.utility.findPixelRatio() })
+        this.currentIPCategory = '';
+        this.IPCategory.forEach((value, key) => { if (value === event.value) this.currentIPCategory = key; }); //To Use Later
+        this.setSeriesData('accounted_active_application'); //ENTER COMPARISON VIEW
       }
       //Application Categories - Bar Drilldown
       if (event.componentType === 'series') {
@@ -136,52 +112,56 @@ export class StatisticsComponent implements OnInit {
       }
     }
     if (type === 'chartLegendSelectChanged') {
-      let keySelected = '';
-      this.translationMap.forEach((value, key) => { if (value === event.name) keySelected = key; });
-      this.currentLegend = keySelected; //To Use Later
+      let legendSelected = '';
+      this.translationMap.forEach((value, key) => { if (value === event.name) legendSelected = key; });
+      this.currentLegend = legendSelected; //To Use Later
       this.chartInstance.dispatchAction({
         type: 'legendUnSelect',
-        name: (keySelected === 'accounted_application') ? this.translationMap.get('active_application') : this.translationMap.get('accounted_application')
+        name: (legendSelected === 'accounted_application') ? this.translationMap.get('active_application') : this.translationMap.get('accounted_application')
       })
       this.chartInstance.dispatchAction({
         type: 'legendSelect',
-        name: (keySelected === 'accounted_application') ? this.translationMap.get('accounted_application') : this.translationMap.get('active_application')
+        name: (legendSelected === 'accounted_application') ? this.translationMap.get('accounted_application') : this.translationMap.get('active_application')
       })
       this.setSeriesData(this.currentLegend);
     }
   }
   chartSettings() {
     this.chartOption = {
+      textStyle: {
+        fontFamily: this.fontFamily,
+        fontSize: 15,
+        fontWeight: 500
+      },
       grid: {
         top: '15%',
-        left: '5%',
-        right: '5%',
-        bottom: '20%',
+        left: '15%',
+        right: '15%',
+        bottom: '15%',
         containLabel: true
       },
       xAxis: [
         {
-          name: 'Application Categories',
-          nameLocation: 'center',
-          nameGap: 35,
-          nameTextStyle: {
-            fontWeight: 'bold'
-          },
           type: 'category',
           triggerEvent: false,
-          offset: 0
+          offset: 0,
+          axisLabel: {
+            fontFamily: this.fontFamily,
+            fontSize: 15,
+            formatter: (params: string) => {
+              return params.split(' ').join('\n');
+            }
+          }
         },
         {
-          name: 'IP Categories',
-          nameLocation: 'center',
-          nameGap: 35,
-          nameTextStyle: {
-            fontWeight: 'bold'
-          },
           type: 'category',
           triggerEvent: true,
           position: 'bottom',
-          offset: 80
+          offset: 80,
+          axisLabel: {
+            fontFamily: this.fontFamily,
+            fontSize: 15
+          }
         }
       ],
       yAxis: {
@@ -194,7 +174,11 @@ export class StatisticsComponent implements OnInit {
         type: 'value',
         min: 0,
         max: 0,
-        interval: 0
+        interval: 0,
+        axisLabel: {
+          fontFamily: this.fontFamily,
+          fontSize: 15
+        }
       },
       legend: {
         data: [],
@@ -204,13 +188,18 @@ export class StatisticsComponent implements OnInit {
       label: {
         show: true,
         position: 'top',
-        fontSize: 12,
+        fontFamily: this.fontFamily,
+        fontSize: 15,
         color: '#000'
       },
       tooltip: {
         trigger: 'item',
+        textStyle: {
+          fontFamily: this.fontFamily,
+          fontSize: 15
+        },
         formatter: function (params: any) {
-          return `<span style="font-size:12px;">${params.value[0]}: ${params.value[1]}</span>`
+          return `<span style="font-size:14px;">${params.value[0]}: ${params.value[1]}</span>`
         }
       },
       series: [
@@ -226,6 +215,7 @@ export class StatisticsComponent implements OnInit {
     };
   }
   chartHeightFunc() { return this.chartHeight; }
+  chartWidthFunc() { return 1100; }
 
   ngOnInit() {
     this.layout = {
@@ -255,6 +245,10 @@ export class StatisticsComponent implements OnInit {
       }
     ];
 
+    this.chartService.setChartID(0);
+    this.chartService.setChartTheme('STATISTICS OVERVIEW');
+
+    this.fontFamily = this.getGlobalFont();
     this.chartSettings();
     this.translate.get([
       'charts.statistics.application_count.ID-ND',
@@ -307,6 +301,7 @@ export class StatisticsComponent implements OnInit {
   transformApplications(inputData, type: string) {
     for (let IP of inputData.applicationBag) {
       this.IPCategory.set(IP.ipCategory, this.translationMap.get(IP.ipCategory));
+      this.IPCategoryCount.set(IP.ipCategory, IP.dataBag.length);
       for (let applications of IP.dataBag) {
         if (type === 'accounted_application') this.accountedDataMap.set(applications.applicationCategory, applications.count);
         if (type === 'active_application') this.activeDataMap.set(applications.applicationCategory, applications.count);
@@ -319,32 +314,61 @@ export class StatisticsComponent implements OnInit {
   setSeriesData(seriesCode: string) {
     //CHART SERIES
     this.seriesData = [];
-    let chartDataMap = (seriesCode === 'accounted_application') ? this.accountedDataMap : this.activeDataMap;
-    for (let key of chartDataMap.keys()) this.seriesData.push([this.translationMap.get(key), chartDataMap.get(key)]);
-    //CHART LEGEND
-    this.chartLegendSelected = {
-      [this.translationMap.get('accounted_application')]: (seriesCode === 'accounted_application') ? true : false,
-      [this.translationMap.get('active_application')]: (seriesCode === 'active_application') ? true : false
+    let seriesData1 = [], seriesData2 = [];
+    if (this.currentIPCategory.length === 0) {
+      let chartDataMap = (seriesCode === 'accounted_application') ? this.accountedDataMap : this.activeDataMap;
+      for (let key of chartDataMap.keys()) this.seriesData.push([this.translationMap.get(key), chartDataMap.get(key)]);
     }
+    else {
+      this.accountedData?.applicationBag.forEach((item: any) => {
+        if (item.ipCategory === this.currentIPCategory) {
+          for (let items of item.dataBag) {
+            seriesData1.push([this.translationMap.get(items.applicationCategory), this.accountedDataMap.get(items.applicationCategory)]);
+          }
+        }
+      });
+      this.activeData?.applicationBag.forEach((item: any) => {
+        if (item.ipCategory === this.currentIPCategory) {
+          for (let items of item.dataBag) {
+            seriesData2.push([this.translationMap.get(items.applicationCategory), this.activeDataMap.get(items.applicationCategory)]);
+          }
+        }
+      });
+    }
+
+    //CHART LEGEND
+    if (seriesCode === 'accounted_active_application') {
+      this.chartLegendSelected = {
+        [this.translationMap.get('accounted_application')]: true,
+        [this.translationMap.get('active_application')]: true
+      }
+    }
+    else {
+      this.chartLegendSelected = {
+        [this.translationMap.get('accounted_application')]: (seriesCode === 'accounted_application') ? true : false,
+        [this.translationMap.get('active_application')]: (seriesCode === 'active_application') ? true : false
+      }
+    }
+
     //DYNAMIC CHART HEIGHT
     this.chartHeight = 500;
     this.chartHeightFunc();
-    setTimeout(() => { this.chartInstance.resize(); }, 100);
+    setTimeout(() => { this.chartInstance.resize(); }, 1000);
 
     setTimeout(() => {
       //2DBAR
       this.chartInstance.setOption({
         xAxis: [
           {
-            data: this.seriesData.map(d => d[0])
+            data: (this.currentIPCategory.length === 0) ? this.seriesData.map(d => d[0]) : seriesData1.map(d => d[0])
           },
           {
             data: Array.from(this.IPCategory.values())
           }
         ],
         yAxis: {
-          max: this.calculateSpacing((this.seriesData.map(d => d[1]))).max,
-          interval: this.calculateSpacing((this.seriesData.map(d => d[1]))).interval
+          max: (this.currentIPCategory.length === 0) ? this.calculateSpacing((this.seriesData.map(d => d[1]))).max : this.calculateSpacing((seriesData1.map(d => d[1]))).max,
+          interval: (this.currentIPCategory.length === 0) ? this.calculateSpacing((this.seriesData.map(d => d[1]))).interval : this.calculateSpacing((seriesData1.map(d => d[1]))).interval
         },
         legend: {
           data: [this.translationMap.get('accounted_application'), this.translationMap.get('active_application')],
@@ -353,11 +377,11 @@ export class StatisticsComponent implements OnInit {
         series: [
           {
             name: this.translationMap.get('accounted_application'),
-            data: (seriesCode === 'accounted_application') ? this.seriesData : []
+            data: (seriesCode === 'accounted_active_application') ? seriesData1 : (seriesCode === 'accounted_application' && this.currentIPCategory.length !== 0) ? seriesData1 : this.seriesData
           },
           {
             name: this.translationMap.get('active_application'),
-            data: (seriesCode === 'active_application') ? this.seriesData : []
+            data: (seriesCode === 'accounted_active_application') ? seriesData2 : (seriesCode === 'active_application' && this.currentIPCategory.length !== 0) ? seriesData2 : this.seriesData
           }
         ],
         notMerge: false

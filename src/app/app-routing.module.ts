@@ -38,6 +38,14 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'platform-selection',
+    loadComponent: () =>
+      import(
+        './components/platform-selection/platform-selection.component'
+      ).then((m) => m.PlatformSelectionComponent),
+    canActivate: [AuthGuard],
+  },
+  {
     path: ':officeCode/:langCode/signup',
     loadComponent: () =>
       import('./pages/signup/signup.component').then((m) => m.SignupComponent),
@@ -76,8 +84,11 @@ const routes: Routes = [
   },
   {
     path: ':officeCode/:langCode/statistics',
-    loadChildren: () => import('./pages/statistics/statistics.module').then((m) => m.StatisticsModule),
-    canActivate: [AuthGuard]
+    loadChildren: () =>
+      import('./pages/statistics/statistics.module').then(
+        (m) => m.StatisticsModule
+      ),
+    canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/user-management',
@@ -121,9 +132,9 @@ const routes: Routes = [
   {
     path: ':officeCode/:langCode/acknowledge-notifications',
     loadChildren: () =>
-      import('./pages/acknowledge-notifications/acknowledge-notifications.module').then(
-        (m) => m.AcknowledgeNotificationsModule
-      ),
+      import(
+        './pages/acknowledge-notifications/acknowledge-notifications.module'
+      ).then((m) => m.AcknowledgeNotificationsModule),
     canActivate: [AuthGuard],
   },
   {
@@ -207,4 +218,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

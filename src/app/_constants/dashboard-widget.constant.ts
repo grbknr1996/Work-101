@@ -40,7 +40,7 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
       {
         icon: 'pi-bell',
         label: 'Notifications',
-        link: '/notifications/aripo-incoming',
+        link: '/notifications/aripo-dashboard',
         requiredPermissions: [],
       },
     ],

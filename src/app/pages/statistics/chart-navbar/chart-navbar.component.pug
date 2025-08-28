@@ -1,0 +1,27 @@
+//- Title and Filters
+.mb-4.flex.justify-between.items-center.gap-3.p-3.rounded(style="background: #e5f3f7")
+    h3.text-lg.font-semibold {{ currentTheme }}
+
+    .flex.items-center.gap-3
+        app-configurable-filter(
+            #configurableFilter,
+            [filters]="filters"
+        )
+        button.p-button-text(
+            pButton,
+            icon="pi pi-refresh",
+            style="color: var(--p-button-outlined-secondary-color)",
+            (click)="reset()"
+        )
+
+//- Chart Topics Tab
+.mb-8.mt-1.w-full
+    .col-span-6
+        p-tabs([value]="currentID")
+            p-tablist
+                | @for (item of chartTopics; track item.id) {
+                p-tab([value]="item.id", (click)="setChartCommons(item.route)")
+                    .flex.items-center.gap-2
+                        i([class]="item.icon")
+                        .category-label {{ item.title }}
+                | }
