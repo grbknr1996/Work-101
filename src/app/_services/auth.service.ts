@@ -199,6 +199,8 @@ export class AuthService {
               const { MechanicsService } = await import('./mechanics.service');
               const mechanicsService = this.injector.get(MechanicsService);
               mechanicsService.setCurrentOfficeFromAuth(officeCode);
+              // Also set the user's actual office to preserve WIPO admin status
+              mechanicsService.setUserActualOffice(officeCode);
             } catch (error) {
               console.warn('Could not update MechanicsService:', error);
             }
@@ -227,6 +229,8 @@ export class AuthService {
               const { MechanicsService } = await import('./mechanics.service');
               const mechanicsService = this.injector.get(MechanicsService);
               mechanicsService.setCurrentOfficeFromAuth(officeCode);
+              // Also set the user's actual office to preserve WIPO admin status
+              mechanicsService.setUserActualOffice(officeCode);
             } catch (error) {
               console.warn('Could not update MechanicsService:', error);
             }

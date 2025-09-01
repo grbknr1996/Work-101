@@ -41,7 +41,7 @@ export class AuthGuard {
 
         if (isAuthenticated) {
           // User is authenticated - always use their office code
-          const userOfficeCode = this.authService.getCurrentOfficeCode();
+          const userOfficeCode = this.ms.getCurrentOffice();
           const officeConfig =
             configuration[userOfficeCode] || configuration['default'];
           const userLangCode = officeConfig?.defaultLanguage || 'en';

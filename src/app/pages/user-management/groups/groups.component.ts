@@ -17,17 +17,10 @@ import {
   FilterValue,
 } from '../../../components/configurable-filter/configurable-filter.component';
 import { FilterChipsComponent } from '../../../components/filter-chips/filter-chips.component';
-import {
-  UserService,
-  UserGroup,
-  UserGroupQueryParams,
-} from 'src/app/_services/user.service';
+import { UserService, UserGroup, UserGroupQueryParams } from 'src/app/_services/user.service';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import {
-  TableComponent,
-  ColumnDefinition,
-} from '../../../components/table/table.component';
+import { TableComponent, ColumnDefinition } from '../../../components/table/table.component';
 
 @Component({
   selector: 'app-groups',
@@ -78,17 +71,20 @@ export class GroupsComponent implements OnInit, OnDestroy {
   get currentPageInfo(): string {
     if (this.totalRecords === 0) return 'No groups';
     const start = this.currentPage * this.pageSize + 1;
-    const end = Math.min(
-      (this.currentPage + 1) * this.pageSize,
+    const end = Math.min((this.currentPage + 1) * this.pageSize, this.totalRecords);
+    return `Page ${this.currentPage + 1} of ${this.totalPages} (${start}-${end} of ${
       this.totalRecords
-    );
-    return `Page ${this.currentPage + 1} of ${
-      this.totalPages
-    } (${start}-${end} of ${this.totalRecords})`;
+    })`;
   }
 
   // Table column definitions for app-table
   tableColumns: ColumnDefinition[] = [
+    {
+      field: 'groupId',
+      header: 'Group ID',
+      sortable: true,
+      display: 'text',
+    },
     {
       field: 'groupName',
       header: 'Group Name',
@@ -231,9 +227,8 @@ export class GroupsComponent implements OnInit, OnDestroy {
     const menuItems = this.menuService.generateUserManagementMenu(currentPath);
     this.menuService.updateMenuItems(menuItems);
 
-    this.route.params.subscribe((params) => {
-      const officeCode =
-        params['officeCode'] || this.ms.getCurrentOffice() || 'default';
+    this.route.params.subscribe(params => {
+      const officeCode = params['officeCode'] || this.ms.getCurrentOffice() || 'default';
       const langCode = params['langCode'] || 'en';
 
       this.breadcrumbItems = [
@@ -267,7 +262,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
    */
   onTableAction(action: { action: string; item: any }): void {
     const { action: actionType, item } = action;
-
+    console.log('item', action);
     switch (actionType) {
       case 'edit':
         this.openEditGroupDialog(item);
@@ -351,13 +346,8 @@ export class GroupsComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe({
-        next: (response) => {
-          if (
-            response &&
-            response.query &&
-            response.result &&
-            response.result.userGroups
-          ) {
+        next: response => {
+          if (response && response.query && response.result && response.result.userGroups) {
             this.groups = response.result.userGroups;
             this.filteredGroups = response.result.userGroups;
             // Use totalUserGroupQuantity from the API response for proper pagination
@@ -368,7 +358,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
             this.totalRecords = 0;
           }
         },
-        error: (error) => {
+        error: error => {
           console.error('Error loading groups:', error);
           this.groups = [];
           this.filteredGroups = [];
@@ -409,6 +399,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   openEditGroupDialog(group: UserGroup) {
     const officeCode = this.ms.getCurrentOffice() || 'default';
     const langCode = this.route.snapshot.params['langCode'] || 'en';
+    console.log('sdfjhbshdfgsdgfshdjgfhjsdgfhjsdfgshjdfghj', group);
     this.router.navigate([
       officeCode,
       langCode,
@@ -445,7 +436,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
           // Reload groups after deletion
           this.loadGroups();
         },
-        error: (error) => {
+        error: error => {
           console.error('Error deleting group:', error);
         },
       });
@@ -481,12 +472,10 @@ export class GroupsComponent implements OnInit, OnDestroy {
   // Remove individual filter chip
   removeFilterChip(filterKey: string): void {
     // Find the filter config to get the display value
-    const filterConfig = this.filterConfigs.find((f) => f.key === filterKey);
+    const filterConfig = this.filterConfigs.find(f => f.key === filterKey);
     if (filterConfig) {
       // Remove the filter from applied filters
-      this.appliedFilters = this.appliedFilters.filter(
-        (f) => f.key !== filterKey
-      );
+      this.appliedFilters = this.appliedFilters.filter(f => f.key !== filterKey);
 
       // Also remove the filter from the configurable filter component to sync state
       this.configurableFilter.removeFilterChip(filterKey);
@@ -509,7 +498,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     if (filter.key === 'search') {
       return `Search: "${filter.value}"`;
     }
-    const filterConfig = this.filterConfigs.find((f) => f.key === filter.key);
+    const filterConfig = this.filterConfigs.find(f => f.key === filter.key);
     if (!filterConfig) return filter.key;
 
     switch (filterConfig.type) {

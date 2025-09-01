@@ -98,6 +98,10 @@ export class MechanicsService {
   private wipoPlatformSubject = new BehaviorSubject<string | null>(null);
   public wipoPlatform$ = this.wipoPlatformSubject.asObservable();
 
+  // Track the user's actual office from authentication (should not change when switching platforms)
+  private userActualOfficeSubject = new BehaviorSubject<string>('xx');
+  public userActualOffice$ = this.userActualOfficeSubject.asObservable();
+
   getLogo(): string {
     const officeConfig = this.getCurrentOfficeConfig();
     return officeConfig?.logo || configuration['default']?.logo || '';
@@ -179,6 +183,10 @@ export class MechanicsService {
         'MechanicsService - Constructor - No valid WIPO platform found in localStorage'
       );
     }
+
+    // Initialize user's actual office (this will be updated by AuthService)
+    // Default to 'xx' for WIPO Central, will be updated when user authenticates
+    this.userActualOfficeSubject.next('xx');
 
     // Set available languages based on current office
     this.updateAvailableLangs();
@@ -595,7 +603,7 @@ export class MechanicsService {
 
   // Office context methods - SIMPLIFIED to use only getCurrentOffice()
   getCurrentOffice(): string {
-    // If WIPO admin has selected a platform, use that
+    // If WIPO admin has selected a platform, use that for routing/display
     if (this.isCurrentUserWipoAdmin() && this.wipoPlatformSubject.value) {
       return this.wipoPlatformSubject.value;
     }
@@ -645,6 +653,29 @@ export class MechanicsService {
   }
 
   /**
+   * Set the user's actual office from authentication (this should not change when switching platforms)
+   */
+  setUserActualOffice(officeCode: string): void {
+    console.log(
+      'MechanicsService - setUserActualOffice called with:',
+      officeCode
+    );
+
+    if (officeCode && officeCode !== 'default') {
+      console.log(
+        'MechanicsService - Setting user actual office to:',
+        officeCode
+      );
+      this.userActualOfficeSubject.next(officeCode);
+    } else {
+      console.log(
+        'MechanicsService - Invalid office code for user actual office, using xx'
+      );
+      this.userActualOfficeSubject.next('xx');
+    }
+  }
+
+  /**
    * Get WIPO admin selected platform code
    */
   getWipoPlatform(): string | null {
@@ -666,13 +697,13 @@ export class MechanicsService {
       this.wipoPlatformSubject.next(platformCode);
       localStorage.setItem('wipoPlatform', platformCode);
 
-      // For WIPO admins, when they select a platform, also set it as the current office
+      // For WIPO admins, when they select a platform, DO NOT change the current office
+      // This preserves their WIPO admin status while allowing them to view different platforms
       if (this.isCurrentUserWipoAdmin()) {
         console.log(
-          'MechanicsService - WIPO admin selected platform, updating current office to:',
-          platformCode
+          'MechanicsService - WIPO admin selected platform, keeping current office unchanged to preserve admin status'
         );
-        this.setCurrentOffice(platformCode);
+        // Don't call setCurrentOffice here - just keep the platform selection
       }
 
       console.log(
@@ -694,9 +725,12 @@ export class MechanicsService {
 
   /**
    * Check if current user is WIPO admin
+   * WIPO admin status is determined by the user's actual office, not the currently selected platform
    */
   isCurrentUserWipoAdmin(): boolean {
-    return this.currentOfficeSubject.value === 'xx';
+    // Check if the user's actual office (from auth) is 'xx' (WIPO Central)
+    // This should not change when switching between platforms
+    return this.userActualOfficeSubject.value === 'xx';
   }
 
   /**
@@ -768,6 +802,7 @@ export class MechanicsService {
     this.currentOfficeSubject.next('default');
     this.wipoPlatformSubject.next(null);
     localStorage.removeItem('wipoPlatform');
+    // Note: Do NOT reset userActualOfficeSubject as it preserves WIPO admin status
   }
 
   /**
@@ -776,6 +811,7 @@ export class MechanicsService {
   debugPlatformState(): void {
     console.log('=== MechanicsService Debug State ===');
     console.log('Current Office:', this.getCurrentOffice());
+    console.log('User Actual Office:', this.userActualOfficeSubject.value);
     console.log('WIPO Platform:', this.getWipoPlatform());
     console.log('Is WIPO Admin:', this.isCurrentUserWipoAdmin());
     console.log('Has Platform Selected:', this.hasWipoPlatformSelected());
