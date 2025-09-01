@@ -18,11 +18,7 @@ import {
 } from 'src/app/components/configurable-filter/configurable-filter.component';
 import { FilterChipsComponent } from 'src/app/components/filter-chips/filter-chips.component';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
-import {
-  UserService,
-  UserAccount,
-  UserQueryParams,
-} from 'src/app/_services/user.service';
+import { UserService, UserAccount, UserQueryParams } from 'src/app/_services/user.service';
 import { catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
@@ -157,15 +153,18 @@ export class UserAccountsComponent implements OnInit {
     { field: 'email', header: 'Email', sortable: true },
     { field: 'loginId', header: 'Login ID', sortable: true },
     {
-      field: 'isActive',
+      field: 'computedStatus',
       header: 'Status',
       display: 'chip',
       sortable: true,
       severity: (value: string) => {
-        return value === 'true' ? 'success' : 'danger';
+        if (value === 'Unverified') {
+          return 'info';
+        }
+        return value === 'Active' ? 'success' : 'danger';
       },
       value: (value: string) => {
-        return value.toLowerCase() === 'true' ? 'Active' : 'Inactive';
+        return value;
       },
     },
     { field: 'createdByName', header: 'Created By', sortable: true },
@@ -181,6 +180,13 @@ export class UserAccountsComponent implements OnInit {
           icon: 'pi pi-pencil',
           action: 'edit',
           severity: 'info',
+        },
+        {
+          label: 'Resend Verification Email',
+          icon: 'pi pi-envelope',
+          action: 'resendVerification',
+          severity: 'warning',
+          visible: (item: UserAccount) => item.cognitoStatus === 'FCP',
         },
         {
           label: 'Deactivate User',
@@ -219,16 +225,19 @@ export class UserAccountsComponent implements OnInit {
       sortable: true,
     },
     {
-      field: 'isActive',
+      field: 'computedStatus',
       label: 'Status',
       display: 'tag',
       section: 'header',
       sortable: true,
       severity: (value: string) => {
-        return value === 'true' ? 'success' : 'danger';
+        if (value === 'Unverified') {
+          return 'info';
+        }
+        return value === 'Active' ? 'success' : 'danger';
       },
       value: (value: string) => {
-        return value.toLowerCase() === 'true' ? 'Active' : 'Inactive';
+        return value;
       },
     },
 
@@ -285,6 +294,13 @@ export class UserAccountsComponent implements OnInit {
           severity: 'info',
         },
         {
+          label: 'Resend Verification Email',
+          icon: 'pi pi-envelope',
+          action: 'resendVerification',
+          severity: 'warning',
+          visible: (item: UserAccount) => item.cognitoStatus === 'FCP',
+        },
+        {
           label: 'Deactivate User',
           icon: 'pi pi-ban',
           action: 'deactivate',
@@ -316,9 +332,8 @@ export class UserAccountsComponent implements OnInit {
     const menuItems = this.menuService.generateUserManagementMenu(currentPath);
     this.menuService.updateMenuItems(menuItems);
 
-    this.route.params.subscribe((params) => {
-      const officeCode =
-        params['officeCode'] || this.ms.getCurrentOffice() || 'default';
+    this.route.params.subscribe(params => {
+      const officeCode = params['officeCode'] || this.ms.getCurrentOffice() || 'default';
       const langCode = params['langCode'] || 'en';
 
       this.breadcrumbItems = [
@@ -356,8 +371,8 @@ export class UserAccountsComponent implements OnInit {
           this.cdr.markForCheck();
         })
       )
-      .subscribe((response) => {
-        this.tableData = response.userAccounts.map((user) => ({
+      .subscribe(response => {
+        this.tableData = response.userAccounts.map(user => ({
           ...user,
           // Map API fields to table fields and handle missing values
           userName: user.userName || '-',
@@ -368,9 +383,10 @@ export class UserAccountsComponent implements OnInit {
           createdByName: user.createdByName || '-',
           creationDate: user.creationDate || '-',
           // Add computed fields - provide fallback for avatar
-          imageUrl:
-            user.imageUrl || this.getInitialsForAvatar(user.userName || 'User'),
+          imageUrl: user.imageUrl || this.getInitialsForAvatar(user.userName || 'User'),
           id: user.loginId || user.userName || 'unknown',
+          // Add computed status field that combines isActive and cognitoStatus
+          computedStatus: this.getComputedStatus(user.isActive, user.cognitoStatus),
         }));
 
         // Update pagination info from API response
@@ -382,12 +398,8 @@ export class UserAccountsComponent implements OnInit {
 
   updateUserStats() {
     this.totalUsers = this.tableData.length;
-    this.activeUsers = this.tableData.filter(
-      (user) => user.isActive === 'true'
-    ).length;
-    this.inactiveUsers = this.tableData.filter(
-      (user) => user.isActive === 'false'
-    ).length;
+    this.activeUsers = this.tableData.filter(user => user.isActive === 'true').length;
+    this.inactiveUsers = this.tableData.filter(user => user.isActive === 'false').length;
     this.unconfirmedUsers = 0; // API doesn't provide this info, set to 0
   }
 
@@ -431,9 +443,7 @@ export class UserAccountsComponent implements OnInit {
 
   onFilterChipRemoved(filterKey: string): void {
     // Remove the specific filter from applied filters
-    this.appliedFilters = this.appliedFilters.filter(
-      (f) => f.key !== filterKey
-    );
+    this.appliedFilters = this.appliedFilters.filter(f => f.key !== filterKey);
     this.hasActiveFilters = this.appliedFilters.length > 0;
 
     // If no filters left, clear all and reload
@@ -456,6 +466,9 @@ export class UserAccountsComponent implements OnInit {
     switch (action) {
       case 'edit':
         this.editUser(item);
+        break;
+      case 'resendVerification':
+        this.resendVerificationEmail(item);
         break;
       case 'deactivate':
         this.deactivateUser(item);
@@ -481,6 +494,13 @@ export class UserAccountsComponent implements OnInit {
   activateUser(user: UserAccount) {
     this.userService.toggleUserStatus(user.loginId, true).subscribe(() => {
       this.loadUserAccounts();
+    });
+  }
+
+  resendVerificationEmail(user: UserAccount) {
+    this.userService.resendVerificationEmail(user.loginId).subscribe(() => {
+      // Optionally reload data or show success message
+      console.log('Verification email sent successfully');
     });
   }
 
@@ -516,12 +536,7 @@ export class UserAccountsComponent implements OnInit {
       this.pageSize = event.rows;
     }
 
-    console.log(
-      'Calculated - currentPage:',
-      this.currentPage,
-      'pageSize:',
-      this.pageSize
-    );
+    console.log('Calculated - currentPage:', this.currentPage, 'pageSize:', this.pageSize);
 
     // Convert applied filters to API parameters
     const apiParams = this.convertFiltersToApiParams(this.appliedFilters);
@@ -533,12 +548,10 @@ export class UserAccountsComponent implements OnInit {
   }
 
   // Helper method to convert filters to API parameters
-  private convertFiltersToApiParams(
-    filters: FilterValue[]
-  ): Partial<UserQueryParams> {
+  private convertFiltersToApiParams(filters: FilterValue[]): Partial<UserQueryParams> {
     const apiParams: Partial<UserQueryParams> = {};
 
-    filters.forEach((filter) => {
+    filters.forEach(filter => {
       switch (filter.key) {
         case 'loginId':
           apiParams.loginId = filter.value;
@@ -573,15 +586,13 @@ export class UserAccountsComponent implements OnInit {
       return `Search: "${filter.value}"`;
     }
 
-    const filterConfig = this.filterConfigs.find((f) => f.key === filter.key);
+    const filterConfig = this.filterConfigs.find(f => f.key === filter.key);
     if (!filterConfig) {
       return `${filter.key}: ${filter.value}`;
     }
 
     if (filter.type === 'dropdown' && filterConfig.options) {
-      const option = filterConfig.options.find(
-        (opt) => opt.value === filter.value
-      );
+      const option = filterConfig.options.find(opt => opt.value === filter.value);
       return `${filterConfig.label}: ${option ? option.label : filter.value}`;
     }
 
@@ -596,9 +607,13 @@ export class UserAccountsComponent implements OnInit {
     if (names.length === 0) {
       return name.charAt(0);
     }
-    return (
-      names[0].charAt(0) +
-      (names.length > 1 ? names[names.length - 1].charAt(0) : '')
-    );
+    return names[0].charAt(0) + (names.length > 1 ? names[names.length - 1].charAt(0) : '');
+  }
+
+  private getComputedStatus(isActive: string, cognitoStatus: string): string {
+    if (cognitoStatus === 'FCP') {
+      return 'Unverified';
+    }
+    return isActive === 'true' ? 'Active' : 'Inactive';
   }
 }
