@@ -7,8 +7,8 @@
     <form [formGroup]="userForm">
       <div class="step-content">
         <ng-container [ngSwitch]="activeStep">
-          <app-basic-info-form *ngSwitchCase="0" [formGroup]="userForm.get('basicInfo')"></app-basic-info-form>
-          <app-group-assignment *ngSwitchCase="1" [availableGroups]="availableGroups" [assignedGroups]="userForm.get('assignedGroups').value" [currentAvailablePage]="currentGroupsPage" [totalAvailablePages]="totalGroupsPages" [totalAvailableGroups]="totalGroupsCount" (assignedGroupsChange)="onAssignedGroupsChange($event)" (availablePageChange)="onGroupsPageChange($event)">
+          <app-basic-info-form *ngSwitchCase="0" [formGroup]="userForm.get('basicInfo')" [isEditMode]="isEditMode"></app-basic-info-form>
+          <app-group-assignment *ngSwitchCase="1" [availableGroups]="filteredAvailableGroups" [assignedGroups]="userForm.get('assignedGroups').value" [currentAvailablePage]="currentGroupsPage" [totalAvailablePages]="totalGroupsPages" [totalAvailableGroups]="totalGroupsCount" [currentSearchTerm]="groupsSearchTerm" [currentFilterType]="groupsFilterType" [currentSortBy]="groupsSortBy" [currentSortOrder]="groupsSortOrder" (assignedGroupsChange)="onAssignedGroupsChange($event)" (availablePageChange)="onGroupsPageChange($event)" (searchChange)="onGroupsSearch($event)" (filterTypeChange)="onGroupsFilter($event)" (sortChange)="onGroupsSort($event.sortBy, $event.sortOrder)">
             <div class="loading-groups" *ngIf="isLoadingGroups" style="text-align: center; padding: 20px; color: #666;">
               <p>Loading available groups...</p>
             </div>
@@ -16,33 +16,12 @@
               <p>Failed to load groups. Please try again later.</p>
               <button class="p-button-sm" pButton type="button" label="Retry" icon="pi pi-refresh" (click)="retryLoadGroups()"></button>
             </div>
-            <div class="groups-search" *ngIf="!isLoadingGroups &amp;&amp; !groupsLoadError &amp;&amp; totalGroupsCount &gt; 0" style="text-align: center; padding: 10px; color: #666; font-size: 0.9em;">
-              <input type="text" placeholder="Search groups..." [(ngModel)]="groupsSearchTerm" (keyup.enter)="onGroupsSearch(groupsSearchTerm)" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; width: 250px; margin-right: 10px;">
-              <button class="p-button-sm" pButton type="button" label="Search" icon="pi pi-search" (click)="onGroupsSearch(groupsSearchTerm)"></button>
-              <button class="p-button-sm p-button-outlined" pButton type="button" label="Clear" icon="pi pi-times" (click)="onGroupsSearch('')" style="margin-left: 5px;" *ngIf="groupsSearchTerm"></button>
-            </div>
           </app-group-assignment>
-          <div class="unit-step-card" *ngSwitchCase="2">
-            <div class="card-header">
-              <h2>Unit Assignment</h2>
-            </div>
-            <div class="card-content">
-              <div class="form-field">
-                <label for="unit">Select Unit</label>
-                <input type="text" id="unit" formControlName="unit" placeholder="Enter unit name">
-              </div>
-            </div>
-          </div>
-          <div class="security-step-card" *ngSwitchCase="3" [formGroup]="userForm.get('security')">
+          <div class="security-step-card" *ngSwitchCase="2" [formGroup]="userForm.get('security')">
             <div class="card-header">
               <h2>Security Settings</h2>
             </div>
             <div class="card-content">
-              <div class="form-field">
-                <label class="checkbox-label">
-                  <input type="checkbox" formControlName="requirePasswordChange"><span class="checkbox-text">Require password change on first login</span>
-                </label>
-              </div>
               <div class="form-field">
                 <label class="checkbox-label">
                   <input type="checkbox" formControlName="enableTwoFactor"><span class="checkbox-text">Enable two-factor authentication</span>
@@ -50,7 +29,7 @@
               </div>
             </div>
           </div>
-          <app-review-step *ngSwitchCase="4" [basicInfo]="userForm.get('basicInfo').value" [assignedGroups]="userForm.get('assignedGroups').value" [unit]="userForm.get('unit').value" [security]="userForm.get('security').value"></app-review-step>
+          <app-review-step *ngSwitchCase="3" [basicInfo]="userForm.get('basicInfo').value" [assignedGroups]="userForm.get('assignedGroups').value" [security]="userForm.get('security').value"></app-review-step>
         </ng-container>
       </div>
       <div class="step-actions">

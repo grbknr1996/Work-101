@@ -1271,8 +1271,8 @@ app-user-accounts
     .user-profile .user-name
       display none
     // Optionally shrink/hide language selector if space is tight
-   
-    
+ 
+
     // Mobile menu toggle always last
     .mobile-menu-toggle
       order 99
@@ -1889,8 +1889,8 @@ app-group-assignment
     border-radius: 12px
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07)
     margin: 2rem auto
-    max-width: 900px
-    overflow: hidden
+    max-width: 1400px
+    width: 100%
 
     .card-header
       padding: 1.5rem 2rem 1rem 2rem
@@ -1908,21 +1908,22 @@ app-group-assignment
 
       .group-assignment-container
         display: flex
-        gap: 1.5rem
+        gap: 3rem
         justify-content: center
         align-items: stretch
+       
 
       .group-list
         background: #fff
         border-radius: 8px
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05)
         padding: 1rem 0.75rem 0.75rem 0.75rem
-        min-width: 300px
-        max-width: 350px
+        min-width: 500px
+        max-width: 600px
         flex: 1 1 0
         display: flex
         flex-direction: column
-        min-height: 380px
+        
 
       .group-list h3
         color: #1976d2
@@ -1937,12 +1938,12 @@ app-group-assignment
 
       .group-list-body
         flex: 1 1 0
-        overflow-y: auto
         border: 1px solid #e0e0e0
         border-radius: 6px
         background: #fafbfc
         padding: 0.4rem 0
         margin-bottom: 0.5rem
+        
 
       .group-item
         display: flex
@@ -1995,15 +1996,15 @@ app-group-assignment
         justify-content: center
         align-items: center
         height: 100%
-        min-width: 40px
+        min-width: 60px
 
       .move-btn
         background: #1976d2
         color: #fff
         border: none
         border-radius: 50%
-        width: 36px
-        height: 36px
+        width: 44px
+        height: 44px
         font-size: 1.2rem
         cursor: pointer
         box-shadow: 0 2px 6px rgba(25, 118, 210, 0.08)
@@ -2014,28 +2015,394 @@ app-group-assignment
         color: #bdbdbd
         cursor: not-allowed
 
-      .pagination
-        display: flex
-        align-items: center
-        gap: 0.4rem
-        justify-content: center
-        margin-top: 0.4rem
+      // Enhanced Pagination Styles
+      
 
-      .pagination button
-        background: #e3f2fd
-        border: none
-        border-radius: 50%
-        width: 24px
-        height: 24px
-        color: #1976d2
-        font-size: 0.9rem
-        cursor: pointer
-        transition: background 0.2s
+      .p-paginator
+        margin-top: 1rem
+        padding: 0.75rem 0
+        border-radius: 6px
+        border: 1px solid #e9ecef
 
-      .pagination button:disabled
-        background: #f5f5f5
-        color: #bdbdbd
-        cursor: not-allowed
+        .p-paginator-first,
+        .p-paginator-prev,
+        .p-paginator-next,
+        .p-paginator-last
+          width: 2.5rem
+          height: 2.5rem
+          border-radius: 6px
+          border: 1px solid #dee2e6
+          background: #fff
+          
+          margin: 0 0.25rem
+          transition: all 0.2s ease
+          
+
+        .p-paginator-pages
+          display: flex
+          gap: 0.25rem
+          margin: 0 0.5rem
+
+          .p-paginator-page
+            width: 2.5rem
+            height: 2.5rem
+            border-radius: 6px
+            border: 1px solid #dee2e6
+            transition: all 0.2s ease
+            display: flex
+            align-items: center
+            justify-content: center
+
+            &:hover
+              background: #e9ecef
+              border-color: #adb5bd
+              color: #495057
+
+            &.p-highlight
+              background: #1976d2
+              border-color: #1976d2
+              color: #fff
+
+        .p-dropdown
+          height: 2.5rem
+          border: 1px solid #dee2e6
+          border-radius: 6px
+          background: #fff
+          color: #495057
+
+          &:focus
+            border-color: #1976d2
+            box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25)
+
+        // Responsive Design for Group Assignment
+  @media (max-width: 1400px)
+    max-width: 95%
+    margin: 1.5rem auto
+
+    .card-content
+      padding: 1rem 1.5rem 1.5rem 1.5rem
+
+    .group-assignment-container
+      gap: 2rem
+
+    .group-list
+      min-width: 400px
+      max-width: 500px
+
+  @media (max-width: 900px)
+    max-width: 98%
+    margin: 1rem auto
+   
+      
+    .card-content
+      padding: 1rem
+
+    .group-assignment-container
+      flex-direction: column
+      gap: 1rem
+
+    .group-list
+      min-width: 100%
+      max-width: 100%
+      
+
+    
+   
+
+    .group-list-controls.center-controls
+      transform: rotate(90deg);
+      flex-direction: column
+      min-width: auto
+      gap: 1rem
+
+    .move-btn
+      width: 40px
+      height: 40px
+
+  @media (max-width: 768px)
+    max-width: 100%
+    margin: 0.5rem auto
+
+    .card-header
+      padding: 1rem 1rem 0.75rem 1rem
+
+    .card-content
+      padding: 0.75rem
+
+    .group-list
+      padding: 0.75rem 0.5rem 0.5rem 0.5rem
+     
+
+   
+
+    .group-item
+      padding: 0.5rem
+
+    // Filter and sort controls responsive layout
+    .filter-sort-controls
+      padding: 0.75rem !important
+      margin-bottom: 0.75rem !important
+
+      .flex.flex-wrap.gap-3.items-center
+        flex-direction: column
+        align-items: stretch
+        gap: 0.75rem
+
+        // Search control full width on mobile
+        .flex-1
+          min-width: 100% !important
+          width: 100%
+
+        // Button group for search
+        .flex.gap-2
+          display: flex
+          gap: 0.5rem
+          width: 100%
+
+          .p-button
+            flex: 1
+            min-width: auto
+
+      // Second row of controls
+      .flex.flex-wrap.gap-3.items-center.mt-2
+        flex-direction: column
+        align-items: stretch
+        gap: 0.75rem
+        margin-top: 0.75rem !important
+
+        // Filter and sort controls full width
+        .flex.items-center.gap-2
+          min-width: 100% !important
+          width: 100%
+          justify-content: space-between
+
+          label
+            font-size: 0.8rem
+            min-width: 80px
+
+          .p-dropdown
+            flex: 1
+            min-width: 120px
+
+          .p-button
+            min-width: 40px
+            height: 2.5rem
+
+    // Pagination responsive
+    .p-paginator
+      .p-paginator-first,
+      .p-paginator-prev,
+      .p-paginator-next,
+      .p-paginator-last,
+      .p-paginator-page
+        width: 2rem
+        height: 2rem
+        font-size: 0.875rem
+
+      .p-paginator-pages
+        gap: 0.125rem
+
+  @media (max-width: 600px)
+    margin: 0.25rem auto
+
+    .card-header
+      padding: 0.75rem 0.75rem 0.5rem 0.75rem
+
+    .card-content
+      padding: 0.5rem
+
+    .group-list
+      padding: 0.5rem 0.25rem 0.25rem 0.25rem
+      
+
+    
+
+    .group-item
+      padding: 0.375rem
+
+    // Even more compact filter controls
+    .filter-sort-controls
+      padding: 0.5rem !important
+      margin-bottom: 0.5rem !important
+
+      .flex.flex-wrap.gap-3.items-center
+        gap: 0.5rem
+
+        .flex.gap-2
+          gap: 0.25rem
+
+          .p-button
+            padding: 0.5rem 0.75rem
+            font-size: 0.8rem
+
+      .flex.flex-wrap.gap-3.items-center.mt-2
+        gap: 0.5rem
+        margin-top: 0.5rem !important
+
+        .flex.items-center.gap-2
+          gap: 0.25rem
+
+          label
+            font-size: 0.75rem
+            min-width: 70px
+
+          .p-dropdown
+            min-width: 100px
+
+    // Improve mobile layout for group items
+    .group-item
+      flex-direction: column
+      align-items: flex-start
+      gap: 0.5rem
+      padding: 0.75rem
+
+      .flex.items-center.space-x-3.flex-1
+        width: 100%
+        justify-content: space-between
+
+      .group-info
+        flex: 1
+        min-width: 0
+
+      .group-name
+        font-size: 0.8rem
+        word-break: break-word
+
+      .group-type
+        font-size: 0.7rem
+
+      input[type="checkbox"]
+        align-self: flex-end
+        margin-top: 0.5rem
+
+    // Compact pagination
+    .p-paginator
+      .p-paginator-first,
+      .p-paginator-prev,
+      .p-paginator-next,
+      .p-paginator-last,
+      .p-paginator-page
+        width: 1.75rem
+        height: 1.75rem
+        font-size: 0.8rem
+
+      .p-paginator-pages
+        gap: 0.1rem
+
+  @media (max-width: 480px)
+    margin: 0.125rem auto
+
+    .card-header
+      padding: 0.5rem 0.5rem 0.375rem 0.5rem
+
+      h2
+        font-size: 1rem
+
+    .card-content
+      padding: 0.375rem
+
+    .group-list
+      padding: 0.375rem 0.125rem 0.125rem 0.125rem
+      min-height: 180px
+
+    .group-list-body
+      min-height: 120px
+
+    .group-item
+      padding: 0.25rem
+
+    // Ultra compact filter controls
+    .filter-sort-controls
+      padding: 0.375rem !important
+      margin-bottom: 0.375rem !important
+
+      .flex.flex-wrap.gap-3.items-center
+        gap: 0.375rem
+
+        .flex.gap-2
+          gap: 0.125rem
+
+          .p-button
+            padding: 0.375rem 0.5rem
+            font-size: 0.75rem
+
+      .flex.flex-wrap.gap-3.items-center.mt-2
+        gap: 0.375rem
+        margin-top: 0.375rem !important
+
+        .flex.items-center.gap-2
+          gap: 0.125rem
+
+          label
+            font-size: 0.7rem
+            min-width: 60px
+
+          .p-dropdown
+            min-width: 80px
+
+    // Ultra compact pagination
+    .p-paginator
+      .p-paginator-first,
+      .p-paginator-prev,
+      .p-paginator-next,
+      .p-paginator-last,
+      .p-paginator-page
+        width: 1.5rem
+        height: 1.5rem
+        font-size: 0.75rem
+
+      .p-paginator-pages
+        gap: 0.05rem
+
+  /* Responsive PrimeNG Components for Group Assignment */
+  @media (max-width: 768px)
+    :host ::ng-deep .p-dropdown
+      font-size: 0.875rem
+      
+      .p-dropdown-label
+        padding: 0.5rem 0.75rem
+        font-size: 0.875rem
+
+    :host ::ng-deep .p-button
+      font-size: 0.875rem
+      padding: 0.5rem 0.75rem
+
+    :host ::ng-deep .p-inputtext
+      font-size: 0.875rem
+      padding: 0.5rem 0.75rem
+
+  @media (max-width: 600px)
+    :host ::ng-deep .p-dropdown
+      font-size: 0.8rem
+      
+      .p-dropdown-label
+        padding: 0.375rem 0.5rem
+        font-size: 0.8rem
+
+    :host ::ng-deep .p-button
+      font-size: 0.8rem
+      padding: 0.375rem 0.5rem
+
+    :host ::ng-deep .p-inputtext
+      font-size: 0.8rem
+      padding: 0.375rem 0.5rem
+
+  @media (max-width: 480px)
+    :host ::ng-deep .p-dropdown
+      font-size: 0.75rem
+      
+      .p-dropdown-label
+        padding: 0.25rem 0.375rem
+        font-size: 0.75rem
+
+    :host ::ng-deep .p-button
+      font-size: 0.75rem
+      padding: 0.25rem 0.375rem
+
+    :host ::ng-deep .p-inputtext
+      font-size: 0.75rem
+      padding: 0.25rem 0.375rem
+
 // =========================================
 // End of Group assignment Component Styles
 // =========================================
@@ -4421,7 +4788,7 @@ app-configurable-filter
       opacity 1 !important
 
   /* Error Styles */
-  .error-message
+.error-message
     color #dc2626
     font-size 0.75rem
     margin-top 0.25rem
@@ -4792,3 +5159,23 @@ app-chart-navbar
         p-tab
           .category-label
             font-size 1.1 rem
+
+// User Type Toggle Switch Styling
+.user-type-toggle-container
+  display flex
+  align-items center
+  gap 10px
+  
+  .toggle-label
+    font-size 0.9rem
+    color #495057
+    font-weight 500
+    
+  .user-type-toggle
+    .p-togglebutton
+      min-width 60px
+      
+    // Disabled state styling
+    &.p-disabled
+      opacity 0.6
+      cursor not-allowed

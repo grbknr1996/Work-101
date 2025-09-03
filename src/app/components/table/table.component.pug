@@ -201,7 +201,9 @@
           // Text Display
           ng-container(*ngIf="col.display === 'text' || !col.display") {{ getValue(rowData, col.field) }}
           // Date Display
-          ng-container(*ngIf="col.display === 'date'") {{ getValue(rowData, col.field) | date : col.dateFormat || 'MM/dd/yyyy' }}
+          ng-container(*ngIf="col.display === 'date'")
+            span(*ngIf="getValue(rowData, col.field) === '-' || !getValue(rowData, col.field)") -
+            span(*ngIf="getValue(rowData, col.field) !== '-' && getValue(rowData, col.field)") {{ getValue(rowData, col.field) | date : col.dateFormat || 'MM/dd/yyyy' }}
           // Currency Display
           ng-container(*ngIf="col.display === 'currency'") {{ getValue(rowData, col.field) | currency : col.currency || 'USD' : 'symbol' }}
           // Avatar Display with PrimeNG Avatar

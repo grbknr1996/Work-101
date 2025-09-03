@@ -1,17 +1,82 @@
 .group-assignment-card.bg-white.rounded-lg.shadow-lg.p-6(class="min-h-[600px]")
   .card-header.mb-6
     h2.text-2xl.font-bold.text-blue-600 Group Assignment
-
+  
   .card-content
     .group-assignment-container.flex.gap-8
-      //- Available Groups Panel
+      // Available Groups Panel
       .group-list.available.flex-1
         h3.text-lg.font-semibold.text-blue-600.mb-4 {{ availableLabel }}
+
+        // Available Groups Filter and Sort Controls
+        .filter-sort-controls.mb-4.p-3.bg-gray-50.rounded-lg.border.border-gray-200
+          .flex.flex-wrap.gap-3.items-center
+            // Search Control
+            .flex-1
+              input(
+                placeholder="Search groups by name...",
+                [(ngModel)]="searchTerm",
+                (keyup.enter)="onSearchChange(searchTerm)",
+                class="w-full",
+                pInputText
+              )
+            
+            p-button(
+              (onClick)="onSearchChange(searchTerm)",
+              icon="pi pi-search",
+              label="Search",
+              styleClass="p-button-primary p-button-sm"
+            )
+            
+            p-button(
+              *ngIf="searchTerm",
+              (onClick)="clearSearch()",
+              icon="pi pi-times",
+              label="Clear",
+              styleClass="p-button-secondary p-button-sm"
+            )
+
+          .flex.flex-wrap.gap-3.items-center.mt-2
+            // Filter by Type
+            .flex.items-center.gap-2(class="min-w-[180px]")
+              label.text-sm.font-medium.text-gray-700 Filter by Type:
+              
+              p-dropdown(
+                [(ngModel)]="filterType",
+                (onChange)="onFilterTypeChange($event.value)",
+                [options]="[{ label: 'All Types', value: 'all' }, { label: 'User Groups', value: 'user' }, { label: 'Business Groups', value: 'business' }]",
+                optionLabel="label",
+                optionValue="value",
+                placeholder="Select Type",
+                styleClass="min-w-[120px]"
+              )
+
+            // Sort Controls
+            .flex.items-center.gap-2(class="min-w-[180px]")
+              label.text-sm.font-medium.text-gray-700 Sort by:
+              
+              p-dropdown(
+                [(ngModel)]="sortBy",
+                (onChange)="onSortChange($event.value, sortOrder)",
+                [options]="[{ label: 'Name', value: 'groupName' }, { label: 'Type', value: 'groupType' }]",
+                optionLabel="label",
+                optionValue="value",
+                placeholder="Select Sort",
+                styleClass="min-w-[100px]"
+              )
+              
+              p-button(
+                (onClick)="onSortChange(sortBy, sortOrder === 'asc' ? 'desc' : 'asc')",
+                [icon]="sortOrder === 'asc' ? 'pi pi-sort-up' : 'pi pi-sort-down'",
+                [title]="sortOrder === 'asc' ? 'Sort Descending' : 'Sort Ascending'",
+                styleClass="p-button-outlined p-button-sm"
+              )
+
         .group-list-header.mb-4
           label.flex.items-center.space-x-2.cursor-pointer
             input.w-4.h-4.text-blue-600.rounded(
-              type="checkbox",
               class="focus:ring-blue-500",
+              type="checkbox",
               [checked]="isAllAvailableSelected()",
               (change)="toggleSelectAllAvailable($event.target.checked)"
             )
@@ -19,8 +84,8 @@
 
         .group-list-body.bg-gray-50.rounded-lg.p-4.overflow-y-auto.border(class="min-h-[400px] max-h-[400px]")
           .group-item.flex.items-center.justify-between.p-3.mb-2.bg-white.rounded-lg.shadow-sm.border.border-gray-200.transition-colors(
-            *ngFor="let group of pagedAvailableGroups",
-            class="hover:border-blue-300"
+            class="hover:border-blue-300",
+            *ngFor="let group of pagedAvailableGroups"
           )
             .flex.items-center.space-x-3.flex-1
               span.drag-handle.text-gray-400.cursor-move.text-lg ⋮⋮
@@ -28,50 +93,116 @@
                 .group-name.font-medium.text-gray-900 {{ group.name }}
                 .group-type
                   span.inline-flex.items-center.rounded-full.text-xs.font-medium.bg-blue-100.text-blue-800(class="px-2.5 py-0.5") {{ group.type }}
+            
             input.w-4.h-4.text-blue-600.rounded(
-              type="checkbox",
               class="focus:ring-blue-500",
+              type="checkbox",
               [checked]="availableSelected.has(group.id)",
               (change)="availableSelected.has(group.id) ? availableSelected.delete(group.id) : availableSelected.add(group.id)"
             )
 
-        //- PrimeNG Paginator for Available Groups
         .mt-4
           p-paginator(
             [rows]="pageSize",
+            [alwaysShow]="true",
             [totalRecords]="totalAvailableGroups",
             [first]="(currentAvailablePage - 1) * pageSize",
             (onPageChange)="onAvailablePageChange($event)",
             [showFirstLastIcon]="true",
             [showPageLinks]="true",
-            [showCurrentPageReport]="false",
-            styleClass="text-xs"
-            [rowsPerPageOptions]="[10, 25, 50]"
+            [showCurrentPageReport]="true",
+            styleClass="[10, 25, 50]"
           )
 
-      //- Action Buttons
-      .group-list-controls.center-controls.flex.flex-col.justify-center.space-y-4
-        button.move-btn.w-12.h-12.bg-blue-500.text-white.rounded-full.flex.items-center.justify-center.shadow-lg(
+      // Action Buttons
+      .group-list-controls.center-controls.flex.flex-col.justify-center
+        button.move-btn.w-12.h-12.bg-blue-500.text-white.rounded-full.flex.items-center.justify-center.shadow-lg.transition-colors(
+          class="hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed",
           (click)="moveToAssigned()",
-          [disabled]="availableSelected.size === 0",
-          class="hover:bg-blue-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+          [disabled]="availableSelected.size === 0"
         )
           i.pi.pi-angle-right.text-lg
-        button.move-btn.w-12.h-12.bg-red-500.text-white.rounded-full.flex.items-center.justify-center.shadow-lg(
+        
+        button.move-btn.w-12.h-12.bg-red-500.text-white.rounded-full.flex.items-center.justify-center.shadow-lg.transition-colors(
+          class="hover:bg-red-600 disabled:bg-gray-300 disabled:cursor-not-allowed",
           (click)="moveToAvailable()",
-          [disabled]="assignedSelected.size === 0",
-          class="hover:bg-red-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+          [disabled]="assignedSelected.size === 0"
         )
           i.pi.pi-angle-left.text-lg
 
-      //- Assigned Groups Panel
+      // Assigned Groups Panel
       .group-list.assigned.flex-1
         h3.text-lg.font-semibold.text-blue-600.mb-4 {{ assignedLabel }}
+
+        // Assigned Groups Filter and Sort Controls
+        .filter-sort-controls.mb-4.p-3.bg-gray-50.rounded-lg.border.border-gray-200
+          .flex.flex-wrap.gap-3.items-center
+            // Search Control
+            .flex-1(class="min-w-[200px]")
+              input(
+                placeholder="Search assigned groups...",
+                [(ngModel)]="assignedSearchTerm",
+                (keyup.enter)="onAssignedSearchChange(assignedSearchTerm)",
+                class="w-full",
+                pInputText
+              )
+            
+            p-button(
+              (onClick)="onAssignedSearchChange(assignedSearchTerm)",
+              icon="pi pi-search",
+              label="Search",
+              styleClass="p-button-primary p-button-sm"
+            )
+            
+            p-button(
+              *ngIf="assignedSearchTerm",
+              (onClick)="clearAssignedSearch()",
+              icon="pi pi-times",
+              label="Clear",
+              styleClass="p-button-secondary p-button-sm"
+            )
+
+          .flex.flex-wrap.gap-3.items-center.mt-2
+            // Filter by Type
+            .flex.items-center.gap-2(class="min-w-[180px]")
+              label.text-sm.font-medium.text-gray-700 Filter by Type:
+              
+              p-dropdown(
+                [(ngModel)]="assignedFilterType",
+                (onChange)="onAssignedFilterTypeChange($event.value)",
+                [options]="[{ label: 'All Types', value: 'all' }, { label: 'User Groups', value: 'user' }, { label: 'Business Groups', value: 'business' }]",
+                optionLabel="label",
+                optionValue="value",
+                placeholder="Select Type",
+                styleClass="min-w-[120px]"
+              )
+
+            // Sort Controls
+            .flex.items-center.gap-2(class="min-w-[180px]")
+              label.text-sm.font-medium.text-gray-700 Sort by:
+              
+              p-dropdown(
+                [(ngModel)]="assignedSortBy",
+                (onChange)="onAssignedSortChange($event.value, assignedSortOrder)",
+                [options]="[{ label: 'Name', value: 'groupName' }, { label: 'Type', value: 'groupType' }]",
+                optionLabel="label",
+                optionValue="value",
+                placeholder="Select Sort",
+                styleClass="min-w-[100px]"
+              )
+              
+              p-button(
+                (onClick)="onAssignedSortChange(assignedSortBy, assignedSortOrder === 'asc' ? 'desc' : 'asc')",
+                [icon]="assignedSortOrder === 'asc' ? 'pi pi-sort-up' : 'pi pi-sort-down'",
+                [title]="assignedSortOrder === 'asc' ? 'Sort Descending' : 'Sort Ascending'",
+                styleClass="p-button-outlined p-button-sm"
+              )
+
         .group-list-header.mb-4
           label.flex.items-center.space-x-2.cursor-pointer
             input.w-4.h-4.text-blue-600.rounded(
-              type="checkbox",
               class="focus:ring-blue-500",
+              type="checkbox",
               [checked]="isAllAssignedSelected()",
               (change)="toggleSelectAllAssigned($event.target.checked)"
             )
@@ -79,9 +210,9 @@
 
         .group-list-body.bg-gray-50.rounded-lg.p-4.overflow-y-auto.border(class="min-h-[400px] max-h-[400px]")
           .group-item.flex.items-center.justify-between.p-3.mb-2.bg-white.rounded-lg.shadow-sm.border.border-gray-200.transition-colors(
+            class="hover:border-green-300",
             *ngFor="let group of pagedAssignedGroups",
-            [class.selected]="assignedSelected.has(group.id)",
-            class="hover:border-green-300"
+            [class.selected]="assignedSelected.has(group.id)"
           )
             .flex.items-center.space-x-3.flex-1
               span.drag-handle.text-gray-400.cursor-move.text-lg ⋮⋮
@@ -89,24 +220,25 @@
                 .group-name.font-medium.text-gray-900 {{ group.name }}
                 .group-type
                   span.inline-flex.items-center.rounded-full.text-xs.font-medium.bg-green-100.text-green-800(class="px-2.5 py-0.5") {{ group.type }}
+            
             input.w-4.h-4.text-blue-600.rounded(
-              type="checkbox",
               class="focus:ring-blue-500",
+              type="checkbox",
               [checked]="assignedSelected.has(group.id)",
               (change)="assignedSelected.has(group.id) ? assignedSelected.delete(group.id) : assignedSelected.add(group.id)"
             )
 
-          //- Empty state when no groups assigned
-          .flex.flex-col.items-center.justify-center.text-gray-500(*ngIf="pagedAssignedGroups.length === 0", class="h-64")
+          .flex.flex-col.items-center.justify-center.text-gray-500.h-64(
+            *ngIf="pagedAssignedGroups.length === 0"
+          )
             i.pi.pi-users.text-4xl.mb-2
             p.text-sm No groups assigned yet
             p.text-xs.text-gray-400 Select groups from the left panel to assign
 
-        //- PrimeNG Paginator for Assigned Groups
         .mt-4
           p-paginator(
             [rows]="pageSize",
-            [totalRecords]="assignedGroups.length",
+            [totalRecords]="totalFilteredAssignedGroups",
             [first]="assignedFirst",
             (onPageChange)="onAssignedPageChange($event)",
             [showFirstLastIcon]="true",

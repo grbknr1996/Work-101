@@ -10,14 +10,17 @@ export interface UserAccount {
   userName: string;
   loginId: string;
   email: string;
-  isActive: string;
+  mfaRequired: boolean;
+  mfaValidationDone: boolean;
+  creationUserId: number;
+  lastUpdateUserId: number;
+  lastUpdateUserName: string;
+  creationUserName: string;
+  creationDate: string;
+  lastUpdateDate: string;
   cognitoStatus: 'CNF' | 'FCP';
-  updatedById: number;
-  updatedDate: string;
-  updatedByName?: string;
-  createdById?: number;
-  createdByName?: string;
-  creationDate?: string;
+  active: boolean;
+  locked: boolean;
   id?: string;
   imageUrl?: string;
 }
@@ -27,30 +30,33 @@ export interface DetailedUserAccount {
   userName: string;
   loginId: string;
   email: string;
-  active: boolean;
-  createdBy: number;
+  creationUserId: number;
   creationDate: string;
-  locked: boolean;
   mfaRequired: boolean;
   mfaValidationDone: boolean;
-  lastUpdatedBy: number;
+  lastUpdateUserId: number;
   lastUpdateDate: string;
   cognitoStatus: string;
-  userGroupsBag: UserGroupBag[];
+  userGroupBag?: UserGroupBag[];
+  active: boolean;
+  locked: boolean;
+  indExternal: boolean;
 }
 
 // New interface for update payload
 export interface UserUpdatePayload {
   userName: string;
   loginId: string;
-  signaturePicture: string;
+  signaturePicture?: string;
   userEmail: string;
-  signatureType: string;
-  status: string;
+  signatureType?: string;
   mfaRequired: boolean;
   mfaValidationDone: boolean;
-  userGroupsBag: {
-    groupId: string;
+  active: boolean;
+  locked: boolean;
+  indExternal: boolean;
+  userGroupBag?: {
+    groupId: number;
     groupName: string;
     iimsGroupId: string;
     groupType: string;
@@ -60,7 +66,7 @@ export interface UserUpdatePayload {
 export interface UserGroupBag {
   groupId: number;
   groupName: string;
-  iimsGroupId?: string;
+  iimsGroupId: string;
   groupType: string;
 }
 
@@ -70,13 +76,14 @@ export interface UserCreationPayload {
   clientAppId?: string | null;
   signaturePicture?: string;
   signatureType?: string;
+  indExternal: boolean;
   userGroupsBag: UserGroupBag[];
 }
 
 export interface UserQueryResponse {
   query: {
     platformCode: string;
-    isActive: string;
+    active: boolean;
     exactMatchIndicator: boolean;
     offset: number;
     limit: number;
@@ -224,7 +231,7 @@ export class UserService {
 
   /**
    * Get user accounts with filter criteria
-   * Based on the API endpoint: {{baseUrl}}/queries?loginId=vc_gkonardf730&isActive=true&exactMatchIndicator=true&limit=10&offset=10&sort=userName&order=asc&wipo-platform-code=vc
+   * Based on the API endpoint: {{baseUrl}}/queries?loginId=vc_gkonardf730&active=true&exactMatchIndicator=true&limit=10&offset=10&sort=userName&order=asc&wipo-platform-code=vc
    */
   getUserAccounts(params: UserQueryParams = {}): Observable<UserQueryResponse> {
     let httpParams = new HttpParams();
@@ -280,7 +287,7 @@ export class UserService {
         })
       ),
       switchMap(response => {
-        if (response && response.userGroupsBag) {
+        if (response && response.userGroupBag) {
           return of(response);
         } else {
           return throwError(() => new Error(`User account with login ID ${loginId} not found`));
@@ -371,7 +378,7 @@ export class UserService {
         switchMap(headers =>
           this.http.patch<UserAccount>(
             `${environment.backendUrl}/users/${loginId}/status`,
-            { isActive },
+            { active: isActive },
             { headers: headers }
           )
         ),

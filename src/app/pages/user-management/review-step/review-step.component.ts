@@ -12,6 +12,5 @@ import { GroupAssignmentComponent } from 'src/app/components/group-assignment/gr
 export class ReviewStepComponent {
   @Input() basicInfo: any;
   @Input() assignedGroups: any[] = [];
-  @Input() unit: string = '';
   @Input() security: any;
 }

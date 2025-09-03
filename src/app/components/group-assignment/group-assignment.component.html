@@ -5,8 +5,33 @@
   </div>
   <div class="card-content">
     <div class="group-assignment-container flex gap-8">
+      <!-- Available Groups Panel-->
       <div class="group-list available flex-1">
         <h3 class="text-lg font-semibold text-blue-600 mb-4">{{ availableLabel }}</h3>
+        <!-- Available Groups Filter and Sort Controls-->
+        <div class="filter-sort-controls mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+          <div class="flex flex-wrap gap-3 items-center">
+            <!-- Search Control-->
+            <div class="flex-1">
+              <input class="w-full" placeholder="Search groups by name..." [(ngModel)]="searchTerm" (keyup.enter)="onSearchChange(searchTerm)" pInputText>
+            </div>
+            <p-button (onClick)="onSearchChange(searchTerm)" icon="pi pi-search" label="Search" styleClass="p-button-primary p-button-sm"></p-button>
+            <p-button *ngIf="searchTerm" (onClick)="clearSearch()" icon="pi pi-times" label="Clear" styleClass="p-button-secondary p-button-sm"></p-button>
+          </div>
+          <div class="flex flex-wrap gap-3 items-center mt-2">
+            <!-- Filter by Type-->
+            <div class="flex items-center gap-2 min-w-[180px]">
+              <label class="text-sm font-medium text-gray-700">Filter by Type:</label>
+              <p-dropdown [(ngModel)]="filterType" (onChange)="onFilterTypeChange($event.value)" [options]="[{ label: 'All Types', value: 'all' }, { label: 'User Groups', value: 'user' }, { label: 'Business Groups', value: 'business' }]" optionLabel="label" optionValue="value" placeholder="Select Type" styleClass="min-w-[120px]"></p-dropdown>
+            </div>
+            <!-- Sort Controls-->
+            <div class="flex items-center gap-2 min-w-[180px]">
+              <label class="text-sm font-medium text-gray-700">Sort by:</label>
+              <p-dropdown [(ngModel)]="sortBy" (onChange)="onSortChange($event.value, sortOrder)" [options]="[{ label: 'Name', value: 'groupName' }, { label: 'Type', value: 'groupType' }]" optionLabel="label" optionValue="value" placeholder="Select Sort" styleClass="min-w-[100px]"></p-dropdown>
+              <p-button (onClick)="onSortChange(sortBy, sortOrder === 'asc' ? 'desc' : 'asc')" [icon]="sortOrder === 'asc' ? 'pi pi-sort-up' : 'pi pi-sort-down'" [title]="sortOrder === 'asc' ? 'Sort Descending' : 'Sort Ascending'" styleClass="p-button-outlined p-button-sm"></p-button>
+            </div>
+          </div>
+        </div>
         <div class="group-list-header mb-4">
           <label class="flex items-center space-x-2 cursor-pointer">
             <input class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" type="checkbox" [checked]="isAllAvailableSelected()" (change)="toggleSelectAllAvailable($event.target.checked)"><span class="text-sm font-medium text-gray-700">Select All</span>
@@ -24,15 +49,41 @@
           </div>
         </div>
         <div class="mt-4">
-          <p-paginator [rows]="pageSize" [totalRecords]="totalAvailableGroups" [first]="(currentAvailablePage - 1) * pageSize" (onPageChange)="onAvailablePageChange($event)" [showFirstLastIcon]="true" [showPageLinks]="true" [showCurrentPageReport]="false" styleClass="[10, 25, 50]"></p-paginator>
+          <p-paginator [rows]="pageSize" [alwaysShow]="true" [totalRecords]="totalAvailableGroups" [first]="(currentAvailablePage - 1) * pageSize" (onPageChange)="onAvailablePageChange($event)" [showFirstLastIcon]="true" [showPageLinks]="true" [showCurrentPageReport]="true" styleClass="[10, 25, 50]"></p-paginator>
         </div>
       </div>
-      <div class="group-list-controls center-controls flex flex-col justify-center space-y-4">
-        <button class="move-btn w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-blue-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed" (click)="moveToAssigned()" [disabled]="availableSelected.size === 0"><i class="pi pi-angle-right text-lg"></i></button>
-        <button class="move-btn w-12 h-12 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed" (click)="moveToAvailable()" [disabled]="assignedSelected.size === 0"><i class="pi pi-angle-left text-lg"></i></button>
+      <!-- Action Buttons-->
+      <div class="group-list-controls center-controls flex flex-col justify-center">
+        <button class="move-btn w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg transition-colors hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed" (click)="moveToAssigned()" [disabled]="availableSelected.size === 0"><i class="pi pi-angle-right text-lg"></i></button>
+        <button class="move-btn w-12 h-12 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg transition-colors hover:bg-red-600 disabled:bg-gray-300 disabled:cursor-not-allowed" (click)="moveToAvailable()" [disabled]="assignedSelected.size === 0"><i class="pi pi-angle-left text-lg"></i></button>
       </div>
+      <!-- Assigned Groups Panel-->
       <div class="group-list assigned flex-1">
         <h3 class="text-lg font-semibold text-blue-600 mb-4">{{ assignedLabel }}</h3>
+        <!-- Assigned Groups Filter and Sort Controls-->
+        <div class="filter-sort-controls mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+          <div class="flex flex-wrap gap-3 items-center">
+            <!-- Search Control-->
+            <div class="flex-1 min-w-[200px]">
+              <input class="w-full" placeholder="Search assigned groups..." [(ngModel)]="assignedSearchTerm" (keyup.enter)="onAssignedSearchChange(assignedSearchTerm)" pInputText>
+            </div>
+            <p-button (onClick)="onAssignedSearchChange(assignedSearchTerm)" icon="pi pi-search" label="Search" styleClass="p-button-primary p-button-sm"></p-button>
+            <p-button *ngIf="assignedSearchTerm" (onClick)="clearAssignedSearch()" icon="pi pi-times" label="Clear" styleClass="p-button-secondary p-button-sm"></p-button>
+          </div>
+          <div class="flex flex-wrap gap-3 items-center mt-2">
+            <!-- Filter by Type-->
+            <div class="flex items-center gap-2 min-w-[180px]">
+              <label class="text-sm font-medium text-gray-700">Filter by Type:</label>
+              <p-dropdown [(ngModel)]="assignedFilterType" (onChange)="onAssignedFilterTypeChange($event.value)" [options]="[{ label: 'All Types', value: 'all' }, { label: 'User Groups', value: 'user' }, { label: 'Business Groups', value: 'business' }]" optionLabel="label" optionValue="value" placeholder="Select Type" styleClass="min-w-[120px]"></p-dropdown>
+            </div>
+            <!-- Sort Controls-->
+            <div class="flex items-center gap-2 min-w-[180px]">
+              <label class="text-sm font-medium text-gray-700">Sort by:</label>
+              <p-dropdown [(ngModel)]="assignedSortBy" (onChange)="onAssignedSortChange($event.value, assignedSortOrder)" [options]="[{ label: 'Name', value: 'groupName' }, { label: 'Type', value: 'groupType' }]" optionLabel="label" optionValue="value" placeholder="Select Sort" styleClass="min-w-[100px]"></p-dropdown>
+              <p-button (onClick)="onAssignedSortChange(assignedSortBy, assignedSortOrder === 'asc' ? 'desc' : 'asc')" [icon]="assignedSortOrder === 'asc' ? 'pi pi-sort-up' : 'pi pi-sort-down'" [title]="assignedSortOrder === 'asc' ? 'Sort Descending' : 'Sort Ascending'" styleClass="p-button-outlined p-button-sm"></p-button>
+            </div>
+          </div>
+        </div>
         <div class="group-list-header mb-4">
           <label class="flex items-center space-x-2 cursor-pointer">
             <input class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" type="checkbox" [checked]="isAllAssignedSelected()" (change)="toggleSelectAllAssigned($event.target.checked)"><span class="text-sm font-medium text-gray-700">Select All</span>
@@ -54,7 +105,7 @@
           </div>
         </div>
         <div class="mt-4">
-          <p-paginator [rows]="pageSize" [totalRecords]="assignedGroups.length" [first]="assignedFirst" (onPageChange)="onAssignedPageChange($event)" [showFirstLastIcon]="true" [showPageLinks]="true" [showCurrentPageReport]="false" [rowsPerPageOptions]="[10, 25, 50]"></p-paginator>
+          <p-paginator [rows]="pageSize" [totalRecords]="totalFilteredAssignedGroups" [first]="assignedFirst" (onPageChange)="onAssignedPageChange($event)" [showFirstLastIcon]="true" [showPageLinks]="true" [showCurrentPageReport]="false" [rowsPerPageOptions]="[10, 25, 50]"></p-paginator>
         </div>
       </div>
     </div>

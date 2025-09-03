@@ -89,7 +89,9 @@
                   // Text Display
                   ng-container(*ngIf="col.display === 'text' || !col.display") {{ getValue(item, col.field) }}
                   // Date Display
-                  ng-container(*ngIf="col.display === 'date'") {{ getValue(item, col.field) | date : col.dateFormat || 'MM/dd/yyyy' }}
+                  ng-container(*ngIf="col.display === 'date'")
+                    span(*ngIf="getValue(item, col.field) === '-' || !getValue(item, col.field)") -
+                    span(*ngIf="getValue(item, col.field) !== '-' && getValue(item, col.field)") {{ getValue(item, col.field) | date : col.dateFormat || 'MM/dd/yyyy' }}
                   // Currency Display
                   ng-container(*ngIf="col.display === 'currency'") {{ getValue(item, col.field) | currency : col.currency || 'USD' : 'symbol' }}
                   // Tag Display
@@ -134,7 +136,9 @@
                   // Text Display
                   ng-container(*ngIf="col.display === 'text' || !col.display") {{ getValue(item, col.field) }}
                   // Date Display
-                  ng-container(*ngIf="col.display === 'date'") {{ getValue(item, col.field) | date : col.dateFormat || 'MM/dd/yyyy' }}
+                  ng-container(*ngIf="col.display === 'date'")
+                    span(*ngIf="getValue(item, col.field) === '-' || !getValue(item, col.field)") -
+                    span(*ngIf="getValue(item, col.field) !== '-' && getValue(item, col.field)") {{ getValue(item, col.field) | date : col.dateFormat || 'MM/dd/yyyy' }}
                   // Currency Display
                   ng-container(*ngIf="col.display === 'currency'") {{ getValue(item, col.field) | currency : col.currency || 'USD' : 'symbol' }}
                   // Tag Display

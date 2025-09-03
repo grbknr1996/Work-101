@@ -66,7 +66,7 @@
           <!-- Text Display-->
           <ng-container *ngIf="col.display === 'text' || !col.display">{{ getValue(rowData, col.field) }}</ng-container>
           <!-- Date Display-->
-          <ng-container *ngIf="col.display === 'date'">{{ getValue(rowData, col.field) | date : col.dateFormat || 'MM/dd/yyyy' }}</ng-container>
+          <ng-container *ngIf="col.display === 'date'"><span *ngIf="getValue(rowData, col.field) === '-' || !getValue(rowData, col.field)">-</span><span *ngIf="getValue(rowData, col.field) !== '-' &amp;&amp; getValue(rowData, col.field)">{{ getValue(rowData, col.field) | date : col.dateFormat || 'MM/dd/yyyy' }}</span></ng-container>
           <!-- Currency Display-->
           <ng-container *ngIf="col.display === 'currency'">{{ getValue(rowData, col.field) | currency : col.currency || 'USD' : 'symbol' }}</ng-container>
           <!-- Avatar Display with PrimeNG Avatar-->

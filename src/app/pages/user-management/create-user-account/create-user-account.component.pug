@@ -6,64 +6,42 @@ app-layout
     form([formGroup]="userForm")
       .step-content
         ng-container([ngSwitch]="activeStep")
-          app-basic-info-form(*ngSwitchCase="0", [formGroup]="userForm.get('basicInfo')")
+          app-basic-info-form(*ngSwitchCase="0", [formGroup]="userForm.get('basicInfo')", [isEditMode]="isEditMode")
           app-group-assignment(
             *ngSwitchCase="1",
-            [availableGroups]="availableGroups",
+            [availableGroups]="filteredAvailableGroups",
             [assignedGroups]="userForm.get('assignedGroups').value",
             [currentAvailablePage]="currentGroupsPage",
             [totalAvailablePages]="totalGroupsPages",
             [totalAvailableGroups]="totalGroupsCount",
+            [currentSearchTerm]="groupsSearchTerm",
+            [currentFilterType]="groupsFilterType",
+            [currentSortBy]="groupsSortBy",
+            [currentSortOrder]="groupsSortOrder",
             (assignedGroupsChange)="onAssignedGroupsChange($event)",
-            (availablePageChange)="onGroupsPageChange($event)"
+            (availablePageChange)="onGroupsPageChange($event)",
+            (searchChange)="onGroupsSearch($event)",
+            (filterTypeChange)="onGroupsFilter($event)",
+            (sortChange)="onGroupsSort($event.sortBy, $event.sortOrder)"
           )
             .loading-groups(*ngIf="isLoadingGroups", style="text-align: center; padding: 20px; color: #666;")
               p Loading available groups...
             .error-groups(*ngIf="groupsLoadError", style="text-align: center; padding: 20px; color: #dc3545;")
               p Failed to load groups. Please try again later.
               button.p-button-sm(pButton, type="button", label="Retry", icon="pi pi-refresh", (click)="retryLoadGroups()")
-            .groups-search(*ngIf="!isLoadingGroups && !groupsLoadError && totalGroupsCount > 0", style="text-align: center; padding: 10px; color: #666; font-size: 0.9em;")
-              input(
-                type="text",
-                placeholder="Search groups...",
-                [(ngModel)]="groupsSearchTerm",
-                (keyup.enter)="onGroupsSearch(groupsSearchTerm)",
-                style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; width: 250px; margin-right: 10px;"
-              )
-              button.p-button-sm(pButton, type="button", label="Search", icon="pi pi-search", (click)="onGroupsSearch(groupsSearchTerm)")
-              button.p-button-sm.p-button-outlined(
-                pButton,
-                type="button",
-                label="Clear",
-                icon="pi pi-times",
-                (click)="onGroupsSearch('')",
-                style="margin-left: 5px;",
-                *ngIf="groupsSearchTerm"
-              )
-          .unit-step-card(*ngSwitchCase="2")
-            .card-header
-              h2 Unit Assignment
-            .card-content
-              .form-field
-                label(for="unit") Select Unit
-                input(type="text", id="unit", formControlName="unit", placeholder="Enter unit name")
-          .security-step-card(*ngSwitchCase="3", [formGroup]="userForm.get('security')")
+
+          .security-step-card(*ngSwitchCase="2", [formGroup]="userForm.get('security')")
             .card-header
               h2 Security Settings
             .card-content
               .form-field
                 label.checkbox-label
-                  input(type="checkbox", formControlName="requirePasswordChange")
-                  span.checkbox-text Require password change on first login
-              .form-field
-                label.checkbox-label
                   input(type="checkbox", formControlName="enableTwoFactor")
                   span.checkbox-text Enable two-factor authentication
           app-review-step(
-            *ngSwitchCase="4",
+            *ngSwitchCase="3",
             [basicInfo]="userForm.get('basicInfo').value",
             [assignedGroups]="userForm.get('assignedGroups').value",
-            [unit]="userForm.get('unit').value",
             [security]="userForm.get('security').value"
           )
       .step-actions

@@ -55,9 +55,8 @@ export class CreateUserAccountComponent implements OnInit {
   steps: StepperStep[] = [
     { value: 0, icon: 'pi pi-user', label: 'Basic Info' },
     { value: 1, icon: 'pi pi-users', label: 'Groups' },
-    { value: 2, icon: 'pi pi-building', label: 'Unit' },
-    { value: 3, icon: 'pi pi-shield', label: 'Security' },
-    { value: 4, icon: 'pi pi-check-circle', label: 'Review' },
+    { value: 2, icon: 'pi pi-shield', label: 'Security' },
+    { value: 3, icon: 'pi pi-check-circle', label: 'Review' },
   ];
   activeStep = 0;
   isEditMode = false;
@@ -72,6 +71,9 @@ export class CreateUserAccountComponent implements OnInit {
   currentGroupsPage = 1;
   groupsPageSize = 10;
   groupsSearchTerm = '';
+  groupsFilterType = 'all'; // 'all', 'user', 'business'
+  groupsSortBy = 'groupName';
+  groupsSortOrder = 'asc';
 
   breadcrumbItems = [];
 
@@ -150,6 +152,7 @@ export class CreateUserAccountComponent implements OnInit {
   private initForm() {
     this.userForm = this.fb.group({
       basicInfo: this.fb.group({
+        userType: [false, [Validators.required]], // Default to 'office' user (false = office, true = external)
         username: ['', [Validators.required, Validators.minLength(3)]],
         email: ['', [Validators.required, Validators.email]],
         telephone: ['', [Validators.pattern('^[0-9-+() ]*$')]],
@@ -160,7 +163,6 @@ export class CreateUserAccountComponent implements OnInit {
         signatureImage: [null],
       }),
       assignedGroups: [[]],
-      unit: [''],
       security: this.fb.group({
         requirePasswordChange: [false],
         enableTwoFactor: [false],
@@ -175,14 +177,34 @@ export class CreateUserAccountComponent implements OnInit {
     });
   }
 
-  private loadAvailableGroups(page: number = 1, searchTerm: string = '') {
-    console.log('loadAvailableGroups called with page:', page, 'searchTerm:', searchTerm);
+  private loadAvailableGroups(
+    page: number = 1,
+    searchTerm: string = '',
+    filterType: string = 'all',
+    sortBy: string = 'groupName',
+    sortOrder: string = 'asc'
+  ) {
+    console.log(
+      'loadAvailableGroups called with page:',
+      page,
+      'searchTerm:',
+      searchTerm,
+      'filterType:',
+      filterType,
+      'sortBy:',
+      sortBy,
+      'sortOrder:',
+      sortOrder
+    );
     console.log('Call stack:', new Error().stack);
     console.log('Current active step when loading groups:', this.activeStep);
     this.isLoadingGroups = true;
     this.groupsLoadError = false;
     this.currentGroupsPage = page;
     this.groupsSearchTerm = searchTerm;
+    this.groupsFilterType = filterType;
+    this.groupsSortBy = sortBy;
+    this.groupsSortOrder = sortOrder;
 
     const platformCode = this.mechanicsService.getCurrentOffice() || 'default';
     console.log('Platform code:', platformCode);
@@ -204,8 +226,8 @@ export class CreateUserAccountComponent implements OnInit {
       isActive: true,
       limit: this.groupsPageSize,
       offset: offset,
-      sort: 'groupName',
-      order: 'asc',
+      sort: sortBy,
+      order: sortOrder,
       wipoPlatformCode: platformCode,
     };
 
@@ -213,6 +235,11 @@ export class CreateUserAccountComponent implements OnInit {
     if (searchTerm && searchTerm.trim()) {
       queryParams.groupName = searchTerm.trim();
       queryParams.exactMatchIndicator = false; // Allow partial matches
+    }
+
+    // Add filter by group type if specified
+    if (filterType && filterType !== 'all') {
+      queryParams.groupType = filterType;
     }
 
     console.log('API query parameters:', queryParams);
@@ -269,17 +296,45 @@ export class CreateUserAccountComponent implements OnInit {
   }
 
   retryLoadGroups() {
-    this.loadAvailableGroups(this.currentGroupsPage, this.groupsSearchTerm);
+    this.loadAvailableGroups(
+      this.currentGroupsPage,
+      this.groupsSearchTerm,
+      this.groupsFilterType,
+      this.groupsSortBy,
+      this.groupsSortOrder
+    );
   }
 
   onGroupsPageChange(page: number) {
     console.log('onGroupsPageChange called with page:', page);
-    this.loadAvailableGroups(page, this.groupsSearchTerm);
+    this.loadAvailableGroups(
+      page,
+      this.groupsSearchTerm,
+      this.groupsFilterType,
+      this.groupsSortBy,
+      this.groupsSortOrder
+    );
   }
 
   onGroupsSearch(searchTerm: string) {
     // Reset to first page when searching
-    this.loadAvailableGroups(1, searchTerm);
+    this.loadAvailableGroups(
+      1,
+      searchTerm,
+      this.groupsFilterType,
+      this.groupsSortBy,
+      this.groupsSortOrder
+    );
+  }
+
+  onGroupsFilter(filterType: string) {
+    this.loadAvailableGroups(
+      1,
+      this.groupsSearchTerm,
+      filterType,
+      this.groupsSortBy,
+      this.groupsSortOrder
+    );
   }
 
   get totalGroupsPages(): number {
@@ -301,6 +356,26 @@ export class CreateUserAccountComponent implements OnInit {
     return isOnGroups;
   }
 
+  // Add computed property to filter out assigned groups from available groups
+  get filteredAvailableGroups(): GroupItem[] {
+    const assignedGroupIds = this.userForm
+      .get('assignedGroups')
+      .value.map((group: GroupItem) => group.id);
+
+    // Filter out assigned groups from the current page of available groups
+    const filtered = this.availableGroups.filter(group => !assignedGroupIds.includes(group.id));
+
+    console.log('Filtered available groups:', {
+      total: this.availableGroups.length,
+      assigned: assignedGroupIds.length,
+      filtered: filtered.length,
+      currentPage: this.currentGroupsPage,
+      assignedGroups: this.userForm.get('assignedGroups').value,
+    });
+
+    return filtered;
+  }
+
   private loadUserData() {
     if (!this.userId) {
       console.error('No userId provided for edit mode');
@@ -317,6 +392,7 @@ export class CreateUserAccountComponent implements OnInit {
         // Map DetailedUserAccount to form structure
         const userData = {
           basicInfo: {
+            userType: userAccount.indExternal, // Map indExternal to userType (boolean)
             username: userAccount.userName || '',
             email: userAccount.email || '',
             telephone: '', // Not available in DetailedUserAccount interface
@@ -325,11 +401,12 @@ export class CreateUserAccountComponent implements OnInit {
             profilePicture: null, // Not available in DetailedUserAccount interface
             signatureImage: null, // Not available in DetailedUserAccount interface
           },
-          assignedGroups: userAccount.userGroupsBag
-            ? userAccount.userGroupsBag.map(group => ({
+          assignedGroups: userAccount.userGroupBag
+            ? userAccount.userGroupBag.map(group => ({
                 id: group.groupId.toString(),
                 name: group.groupName,
                 type: group.groupType,
+                iimsGroupId: group.iimsGroupId, // Include iimsGroupId from new response
               }))
             : [], // Map userGroupsBag to GroupItem format
           unit: '', // Not available in DetailedUserAccount interface
@@ -356,6 +433,16 @@ export class CreateUserAccountComponent implements OnInit {
 
   onAssignedGroupsChange(groups: GroupItem[]) {
     this.userForm.get('assignedGroups').setValue(groups);
+    // Trigger change detection to update filteredAvailableGroups
+    this.cdr.detectChanges();
+
+    // Log the change for debugging
+    console.log('Assigned groups changed:', {
+      previous: this.userForm.get('assignedGroups').value,
+      current: groups,
+      availableGroupsCount: this.availableGroups.length,
+      filteredAvailableGroupsCount: this.filteredAvailableGroups.length,
+    });
   }
 
   onStepChange(stepValue: number) {
@@ -488,13 +575,15 @@ export class CreateUserAccountComponent implements OnInit {
           signaturePicture: formData.basicInfo.signature || '',
           userEmail: formData.basicInfo.email,
           signatureType: formData.basicInfo.signature ? 'jpg' : '',
-          status: 'active',
+          active: true,
+          locked: false,
           mfaRequired: formData.security.enableTwoFactor || false,
           mfaValidationDone: false,
-          userGroupsBag: formData.assignedGroups.map((group: GroupItem) => ({
-            groupId: group.id,
+          indExternal: formData.basicInfo.userType, // Set indExternal based on userType (boolean)
+          userGroupBag: formData.assignedGroups.map((group: GroupItem) => ({
+            groupId: parseInt(group.id),
             groupName: group.name,
-            iimsGroupId: group.id,
+            iimsGroupId: group.iimsGroupId || group.id, // Use iimsGroupId if available, fallback to group.id
             groupType: group.type,
           })),
         };
@@ -527,11 +616,12 @@ export class CreateUserAccountComponent implements OnInit {
           clientAppId: formData.basicInfo.clientId || null,
           signaturePicture: formData.basicInfo.signature || null,
           signatureType: formData.basicInfo.signature ? 'jpg' : undefined, // Default to jpg if signature exists
+          indExternal: formData.basicInfo.userType, // Set indExternal based on userType (boolean)
           userGroupsBag: formData.assignedGroups.map((group: GroupItem) => ({
             groupId: parseInt(group.id),
             groupName: group.name,
             groupType: group.type,
-            iimsGroupId: undefined, // This would need to be provided if available
+            iimsGroupId: group.iimsGroupId || group.id, // Use iimsGroupId if available, fallback to group.id
           })),
         };
 
@@ -553,5 +643,25 @@ export class CreateUserAccountComponent implements OnInit {
     } else {
       this.userForm.markAllAsTouched();
     }
+  }
+
+  onGroupsSort(sortBy: string, sortOrder: string) {
+    this.loadAvailableGroups(1, this.groupsSearchTerm, this.groupsFilterType, sortBy, sortOrder);
+  }
+
+  // Assigned groups filtering and sorting (client-side)
+  onAssignedGroupsSearch(searchTerm: string) {
+    // This is handled client-side in the group-assignment component
+    console.log('Assigned groups search:', searchTerm);
+  }
+
+  onAssignedGroupsFilter(filterType: string) {
+    // This is handled client-side in the group-assignment component
+    console.log('Assigned groups filter:', filterType);
+  }
+
+  onAssignedGroupsSort(sortBy: string, sortOrder: string) {
+    // This is handled client-side in the group-assignment component
+    console.log('Assigned groups sort:', { sortBy, sortOrder });
   }
 }

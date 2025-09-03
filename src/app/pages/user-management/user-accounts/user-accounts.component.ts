@@ -168,8 +168,20 @@ export class UserAccountsComponent implements OnInit {
       },
     },
     { field: 'createdByName', header: 'Created By', sortable: true },
-    { field: 'creationDate', header: 'Created On', sortable: true },
-    { field: 'updatedDate', header: 'Updated On', sortable: true },
+    {
+      field: 'creationDate',
+      header: 'Created On',
+      sortable: true,
+      display: 'date',
+      dateFormat: 'MMM dd, yyyy',
+    },
+    {
+      field: 'updatedDate',
+      header: 'Updated On',
+      sortable: true,
+      display: 'date',
+      dateFormat: 'MMM dd, yyyy',
+    },
     {
       field: 'actions',
       header: 'Actions',
@@ -193,14 +205,14 @@ export class UserAccountsComponent implements OnInit {
           icon: 'pi pi-ban',
           action: 'deactivate',
           severity: 'warning',
-          visible: (item: UserAccount) => item.isActive === 'true',
+          visible: (item: UserAccount) => item.active === true,
         },
         {
           label: 'Activate User',
           icon: 'pi pi-check',
           action: 'activate',
           severity: 'success',
-          visible: (item: UserAccount) => item.isActive === 'false',
+          visible: (item: UserAccount) => item.active === false,
         },
       ],
     },
@@ -268,14 +280,16 @@ export class UserAccountsComponent implements OnInit {
     {
       field: 'creationDate',
       label: 'Created On',
-      display: 'text',
+      display: 'date',
+      dateFormat: 'MMM dd, yyyy',
       section: 'body',
       sortable: true,
     },
     {
       field: 'updatedDate',
       label: 'Updated On',
-      display: 'text',
+      display: 'date',
+      dateFormat: 'MMM dd, yyyy',
       section: 'body',
       sortable: true,
     },
@@ -305,14 +319,14 @@ export class UserAccountsComponent implements OnInit {
           icon: 'pi pi-ban',
           action: 'deactivate',
           severity: 'warning',
-          visible: (item: UserAccount) => item.isActive === 'true',
+          visible: (item: UserAccount) => item.active === true,
         },
         {
           label: 'Activate User',
           icon: 'pi pi-check',
           action: 'activate',
           severity: 'success',
-          visible: (item: UserAccount) => item.isActive === 'false',
+          visible: (item: UserAccount) => item.active === false,
         },
       ],
     },
@@ -378,15 +392,15 @@ export class UserAccountsComponent implements OnInit {
           userName: user.userName || '-',
           email: user.email || '-',
           loginId: user.loginId || '-',
-          isActive: user.isActive || 'false', // Keep original isActive value
-          updatedDate: user.updatedDate || '-',
-          createdByName: user.createdByName || '-',
+          isActive: user.active ? 'true' : 'false', // Map active boolean to string for compatibility
+          updatedDate: user.lastUpdateDate || '-',
+          createdByName: user.creationUserName || '-',
           creationDate: user.creationDate || '-',
           // Add computed fields - provide fallback for avatar
           imageUrl: user.imageUrl || this.getInitialsForAvatar(user.userName || 'User'),
           id: user.loginId || user.userName || 'unknown',
           // Add computed status field that combines isActive and cognitoStatus
-          computedStatus: this.getComputedStatus(user.isActive, user.cognitoStatus),
+          computedStatus: this.getComputedStatus(user.active, user.cognitoStatus),
         }));
 
         // Update pagination info from API response
@@ -398,8 +412,8 @@ export class UserAccountsComponent implements OnInit {
 
   updateUserStats() {
     this.totalUsers = this.tableData.length;
-    this.activeUsers = this.tableData.filter(user => user.isActive === 'true').length;
-    this.inactiveUsers = this.tableData.filter(user => user.isActive === 'false').length;
+    this.activeUsers = this.tableData.filter(user => user.active === true).length;
+    this.inactiveUsers = this.tableData.filter(user => user.active === false).length;
     this.unconfirmedUsers = 0; // API doesn't provide this info, set to 0
   }
 
@@ -610,10 +624,10 @@ export class UserAccountsComponent implements OnInit {
     return names[0].charAt(0) + (names.length > 1 ? names[names.length - 1].charAt(0) : '');
   }
 
-  private getComputedStatus(isActive: string, cognitoStatus: string): string {
+  private getComputedStatus(isActive: boolean, cognitoStatus: string): string {
     if (cognitoStatus === 'FCP') {
       return 'Unverified';
     }
-    return isActive === 'true' ? 'Active' : 'Inactive';
+    return isActive === true ? 'Active' : 'Inactive';
   }
 }
