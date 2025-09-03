@@ -18,7 +18,11 @@ import {
 } from 'src/app/components/configurable-filter/configurable-filter.component';
 import { FilterChipsComponent } from 'src/app/components/filter-chips/filter-chips.component';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
-import { UserService, UserAccount, UserQueryParams } from 'src/app/_services/user.service';
+import {
+  UserService,
+  UserAccount,
+  UserQueryParams,
+} from 'src/app/_services/user.service';
 import { catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
@@ -167,10 +171,16 @@ export class UserAccountsComponent implements OnInit {
         return value;
       },
     },
-    { field: 'createdByName', header: 'Created By', sortable: true },
     {
       field: 'creationDate',
       header: 'Created On',
+      sortable: true,
+      display: 'date',
+      dateFormat: 'MMM dd, yyyy',
+    },
+    {
+      field: 'updatedDate',
+      header: 'Updated On',
       sortable: true,
       display: 'date',
       dateFormat: 'MMM dd, yyyy',
@@ -273,23 +283,23 @@ export class UserAccountsComponent implements OnInit {
     {
       field: 'createdByName',
       label: 'Created By',
-      display: 'text',
-      section: 'body',
+      display: 'date',
+      dateFormat: 'MMM dd, yyyy',
       sortable: true,
     },
     {
       field: 'creationDate',
       label: 'Created On',
+
       display: 'date',
-      dateFormat: 'MMM dd, yyyy',
-      section: 'body',
+      dateFormat: 'dd-mm-yyyy',
       sortable: true,
     },
     {
       field: 'updatedDate',
+      value: (date: Date) => date.toLocaleString('dd-mm-yyyy'),
       label: 'Updated On',
-      display: 'date',
-      dateFormat: 'MMM dd, yyyy',
+      display: 'text',
       section: 'body',
       sortable: true,
     },
@@ -346,8 +356,9 @@ export class UserAccountsComponent implements OnInit {
     const menuItems = this.menuService.generateUserManagementMenu(currentPath);
     this.menuService.updateMenuItems(menuItems);
 
-    this.route.params.subscribe(params => {
-      const officeCode = params['officeCode'] || this.ms.getCurrentOffice() || 'default';
+    this.route.params.subscribe((params) => {
+      const officeCode =
+        params['officeCode'] || this.ms.getCurrentOffice() || 'default';
       const langCode = params['langCode'] || 'en';
 
       this.breadcrumbItems = [
@@ -385,8 +396,8 @@ export class UserAccountsComponent implements OnInit {
           this.cdr.markForCheck();
         })
       )
-      .subscribe(response => {
-        this.tableData = response.userAccounts.map(user => ({
+      .subscribe((response) => {
+        this.tableData = response.userAccounts.map((user) => ({
           ...user,
           // Map API fields to table fields and handle missing values
           userName: user.userName || '-',
@@ -397,10 +408,14 @@ export class UserAccountsComponent implements OnInit {
           createdByName: user.creationUserName || '-',
           creationDate: user.creationDate || '-',
           // Add computed fields - provide fallback for avatar
-          imageUrl: user.imageUrl || this.getInitialsForAvatar(user.userName || 'User'),
+          imageUrl:
+            user.imageUrl || this.getInitialsForAvatar(user.userName || 'User'),
           id: user.loginId || user.userName || 'unknown',
           // Add computed status field that combines isActive and cognitoStatus
-          computedStatus: this.getComputedStatus(user.active, user.cognitoStatus),
+          computedStatus: this.getComputedStatus(
+            user.active,
+            user.cognitoStatus
+          ),
         }));
 
         // Update pagination info from API response
@@ -412,8 +427,12 @@ export class UserAccountsComponent implements OnInit {
 
   updateUserStats() {
     this.totalUsers = this.tableData.length;
-    this.activeUsers = this.tableData.filter(user => user.active === true).length;
-    this.inactiveUsers = this.tableData.filter(user => user.active === false).length;
+    this.activeUsers = this.tableData.filter(
+      (user) => user.active === true
+    ).length;
+    this.inactiveUsers = this.tableData.filter(
+      (user) => user.active === false
+    ).length;
     this.unconfirmedUsers = 0; // API doesn't provide this info, set to 0
   }
 
@@ -457,7 +476,9 @@ export class UserAccountsComponent implements OnInit {
 
   onFilterChipRemoved(filterKey: string): void {
     // Remove the specific filter from applied filters
-    this.appliedFilters = this.appliedFilters.filter(f => f.key !== filterKey);
+    this.appliedFilters = this.appliedFilters.filter(
+      (f) => f.key !== filterKey
+    );
     this.hasActiveFilters = this.appliedFilters.length > 0;
 
     // If no filters left, clear all and reload
@@ -550,7 +571,12 @@ export class UserAccountsComponent implements OnInit {
       this.pageSize = event.rows;
     }
 
-    console.log('Calculated - currentPage:', this.currentPage, 'pageSize:', this.pageSize);
+    console.log(
+      'Calculated - currentPage:',
+      this.currentPage,
+      'pageSize:',
+      this.pageSize
+    );
 
     // Convert applied filters to API parameters
     const apiParams = this.convertFiltersToApiParams(this.appliedFilters);
@@ -562,10 +588,12 @@ export class UserAccountsComponent implements OnInit {
   }
 
   // Helper method to convert filters to API parameters
-  private convertFiltersToApiParams(filters: FilterValue[]): Partial<UserQueryParams> {
+  private convertFiltersToApiParams(
+    filters: FilterValue[]
+  ): Partial<UserQueryParams> {
     const apiParams: Partial<UserQueryParams> = {};
 
-    filters.forEach(filter => {
+    filters.forEach((filter) => {
       switch (filter.key) {
         case 'loginId':
           apiParams.loginId = filter.value;
@@ -600,13 +628,15 @@ export class UserAccountsComponent implements OnInit {
       return `Search: "${filter.value}"`;
     }
 
-    const filterConfig = this.filterConfigs.find(f => f.key === filter.key);
+    const filterConfig = this.filterConfigs.find((f) => f.key === filter.key);
     if (!filterConfig) {
       return `${filter.key}: ${filter.value}`;
     }
 
     if (filter.type === 'dropdown' && filterConfig.options) {
-      const option = filterConfig.options.find(opt => opt.value === filter.value);
+      const option = filterConfig.options.find(
+        (opt) => opt.value === filter.value
+      );
       return `${filterConfig.label}: ${option ? option.label : filter.value}`;
     }
 
@@ -621,7 +651,10 @@ export class UserAccountsComponent implements OnInit {
     if (names.length === 0) {
       return name.charAt(0);
     }
-    return names[0].charAt(0) + (names.length > 1 ? names[names.length - 1].charAt(0) : '');
+    return (
+      names[0].charAt(0) +
+      (names.length > 1 ? names[names.length - 1].charAt(0) : '')
+    );
   }
 
   private getComputedStatus(isActive: boolean, cognitoStatus: string): string {

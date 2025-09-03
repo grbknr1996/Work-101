@@ -11,9 +11,9 @@ export interface BasicInfo {
   telephone: string;
   clientId: string;
   loginAlias: string;
-  signature: string;
   profilePicture: string | ArrayBuffer | null;
-  signatureImage: string | ArrayBuffer | null;
+  signaturePicture: string | ArrayBuffer | null;
+  signatureType: string;
   userType: boolean; // true = external user, false = office user
 }
 
@@ -39,7 +39,7 @@ export class BasicInfoFormComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const reader = new FileReader();
-      reader.onload = e => {
+      reader.onload = (e) => {
         this.formGroup.get('profilePicture').setValue(e.target?.result);
         this.cdr.detectChanges(); // Force change detection
       };
@@ -50,12 +50,16 @@ export class BasicInfoFormComponent {
   onSignatureChange(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
+      const file = input.files[0];
       const reader = new FileReader();
-      reader.onload = e => {
-        this.formGroup.get('signatureImage').setValue(e.target?.result);
-        this.cdr.detectChanges(); // Force change detection
+      reader.onload = (e) => {
+        this.formGroup.get('signaturePicture').setValue(e.target?.result);
+        const fileExtension =
+          file.name.split('.').pop()?.toLowerCase() || 'jpg';
+        this.formGroup.get('signatureType').setValue(fileExtension);
+        this.cdr.detectChanges();
       };
-      reader.readAsDataURL(input.files[0]);
+      reader.readAsDataURL(file);
     }
   }
 }

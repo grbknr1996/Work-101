@@ -158,9 +158,9 @@ export class CreateUserAccountComponent implements OnInit {
         telephone: ['', [Validators.pattern('^[0-9-+() ]*$')]],
         clientId: [''],
         loginAlias: ['', [Validators.minLength(3)]],
-        signature: [''],
+        signatureType: [null],
         profilePicture: [null],
-        signatureImage: [null],
+        signaturePicture: [null],
       }),
       assignedGroups: [[]],
       security: this.fb.group({
@@ -399,7 +399,8 @@ export class CreateUserAccountComponent implements OnInit {
             clientId: '', // Not available in DetailedUserAccount interface
             loginAlias: userAccount.loginId || '',
             profilePicture: null, // Not available in DetailedUserAccount interface
-            signatureImage: null, // Not available in DetailedUserAccount interface
+            signaturePicture: userAccount.signaturePicture,
+            signatureType: userAccount.signatureType || '',
           },
           assignedGroups: userAccount.userGroupBag
             ? userAccount.userGroupBag.map(group => ({
@@ -572,10 +573,10 @@ export class CreateUserAccountComponent implements OnInit {
         const updatePayload: UserUpdatePayload = {
           userName: formData.basicInfo.username,
           loginId: formData.basicInfo.loginAlias || '',
-          signaturePicture: formData.basicInfo.signature || '',
+          signaturePicture: formData.basicInfo.signaturePicture || '',
           userEmail: formData.basicInfo.email,
-          signatureType: formData.basicInfo.signature ? 'jpg' : '',
-          active: true,
+          signatureType: formData.basicInfo.signatureType ?? '',
+          status: true,
           locked: false,
           mfaRequired: formData.security.enableTwoFactor || false,
           mfaValidationDone: false,
@@ -614,14 +615,14 @@ export class CreateUserAccountComponent implements OnInit {
           userName: formData.basicInfo.username,
           email: formData.basicInfo.email,
           clientAppId: formData.basicInfo.clientId || null,
-          signaturePicture: formData.basicInfo.signature || null,
-          signatureType: formData.basicInfo.signature ? 'jpg' : undefined, // Default to jpg if signature exists
-          indExternal: formData.basicInfo.userType, // Set indExternal based on userType (boolean)
+          signaturePicture: formData.basicInfo.signaturePicture || null,
+          signatureType: formData.basicInfo.signatureType ?? null,
+          indExternal: formData.basicInfo.userType,
           userGroupsBag: formData.assignedGroups.map((group: GroupItem) => ({
             groupId: parseInt(group.id),
             groupName: group.name,
             groupType: group.type,
-            iimsGroupId: group.iimsGroupId || group.id, // Use iimsGroupId if available, fallback to group.id
+            iimsGroupId: group.iimsGroupId || group.id,
           })),
         };
 

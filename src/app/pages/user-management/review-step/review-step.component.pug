@@ -28,12 +28,9 @@
           | {{ group.name }}
           span.group-type ({{ group.type }})
 
-   
-
     .review-section
       h3 Security Settings
       .review-grid
-       
         .review-item
           label Two-Factor Authentication
           span {{ security?.enableTwoFactor ? 'Enabled' : 'Disabled' }}

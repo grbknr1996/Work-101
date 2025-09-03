@@ -35,7 +35,7 @@
   </div>
   <div class="mb-8 mt-1 w-full">
     <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="true" [clearAllLabel]="'Clear All'" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-filter-chips>
-    <div class="col-span-6" *ngIf="isCardView">
+    <div class="col-span-6">
       <p-tabs value="trademark">
         <p-tablist>@for (category of categories; track category.ipType) {
           <p-tab [value]="category.ipType">
@@ -45,7 +45,7 @@
         </p-tablist>
         <p-tabpanels>@for (category of categories; track category.ipType) {
           <p-tabpanel class="grid grid-cols-12 gap-3" [value]="category.ipType">@for (service of category.data; track service.name) {
-            <div class="col-span-3 mt-3">
+            <div class="col-span-3 mt-3" *ngIf="isCardView">
               <p-card class="w-full">
                 <ng-template #header="">
                   <h1 class="flex">
@@ -58,18 +58,18 @@
                 <div class="text-sm mb-3">Files: {{ service.files }}</div>
                 <ng-template #footer="">
                   <div class="flex gap-4 mt-1">
-                    <p-button class="w-full" size="small" severity="secondary" [outlined]="true" styleClass="w-full">Basic Fee {{ service.basicFee }}$</p-button>
-                    <p-button class="w-full" size="small" styleClass="w-full">Variable Fee {{ service.variableFee }}$</p-button>
+                    <p-button class="w-full" size="small" icon="pi pi-eye" label="View" severity="secondary" [outlined]="true" styleClass="w-full"></p-button>
+                    <p-button class="w-full" size="small" icon="pi pi-lock" styleClass="w-full" label="Close"></p-button>
                   </div>
                 </ng-template>
               </p-card>
             </div>}
+            <div class="col-span-12" *ngIf="!isCardView">
+              <app-table [columns]="tableColumns" [data]="category.data" [globalFilterFields]="globalFilterFields" [showSearchButton]="false" [showClearButton]="false" [paginator]="true" [lazy]="true" [rows]="pageSize" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} users'" (actionClick)="onActionClick($event.action, $event.item)" (onLazyLoad)="onLazyLoad($event)"></app-table>
+            </div>
           </p-tabpanel>}
         </p-tabpanels>
       </p-tabs>
-    </div>
-    <div class="col-span-6" *ngIf="!isCardView">
-      <app-table [columns]="tableColumns" [data]="tableData" [globalFilterFields]="globalFilterFields" [showSearchButton]="false" [showClearButton]="false" [paginator]="true" [lazy]="true" [rows]="pageSize" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} users'" (actionClick)="onActionClick($event.action, $event.item)" (onLazyLoad)="onLazyLoad($event)"></app-table>
     </div>
   </div>
 </app-layout>

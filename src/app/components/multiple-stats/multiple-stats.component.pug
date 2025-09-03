@@ -1,0 +1,24 @@
+.user-stats-container
+  .user-stat-card(
+    *ngFor="let stat of multipleStats"
+    "[class.selected]"="selectedStat === stat.label"
+    "(click)"="selectStat(stat.label)"
+  )
+    div(*ngFor="let display of stat.displayLabel")
+      .stat-header
+        span.stat-label("[style.color]"="stat.color") {{ display }}
+        i("[class]"="stat.icon", "[style.color]"="stat.color")
+    
+    .stat-content
+      span.stat-count("[style.color]"="stat.color") {{ stat.count }}
+      
+      span.stat-change("[style]"="stat.percentChange!=null ? '' : 'display:none;'")
+        i(
+          "[class]"="stat.percentChange!=null ? (stat.percentChange >= 0 ? 'pi pi-arrow-up' : 'pi pi-arrow-down') : ''"
+          "[style.color]"="stat.percentChange >= 0 ? '#16a34a' : '#dc2626'"
+        )
+        span("[style.color]"="stat.percentChange >= 0 ? '#16a34a' : '#dc2626'") {{ stat.percentChange }}%
+
+    .stat-countLabel {{ stat.countLabel }}
+    
+    .stat-period {{ stat.period }}

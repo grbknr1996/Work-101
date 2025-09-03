@@ -237,7 +237,7 @@ export class TableComponent implements OnInit, OnChanges {
     // Create a cache key based on actions and row data
     const cacheKey = JSON.stringify({
       actions: actions.map((a) => ({ label: a.label, action: a.action })),
-      rowId: rowData.id || rowData.username || 'unknown',
+      rowId: rowData.id || rowData.username || rowData,
     });
 
     // Check if we have cached menu items

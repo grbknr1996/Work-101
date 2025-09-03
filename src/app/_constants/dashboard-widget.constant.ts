@@ -86,7 +86,7 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
       {
         icon: 'pi-pencil',
         label: 'Pending Data Capture',
-        link: '/data-capture/pending',
+        link: '/data-capture/dashboard',
         requiredPermissions: ['pending_data_capture_view'],
       },
       {

@@ -32,7 +32,6 @@ import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs
 
 import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
-import { Fee } from 'src/app/schemas/fee-schema';
 import { CapitalizeWordsPipe } from 'src/app/_pipes/capitalize-words.pipe';
 import { JournalPublicationService } from 'src/app/_services/journal-publication.service';
 import {
@@ -62,7 +61,7 @@ enum IpTypes {
 }
 
 @Component({
-  selector: 'app-journal-publication',
+  selector: 'app-online-publication-journal',
   standalone: true,
   imports: [
     CardModule,
@@ -89,9 +88,9 @@ enum IpTypes {
     DragDropModule,
   ],
   providers: [JournalPublicationService, CapitalizeWordsPipe],
-  templateUrl: './journal-publication.component.html',
+  templateUrl: './online-publication-journal.component.html',
 })
-export class JournalPublicationComponent implements OnInit, OnChanges {
+export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
   @ViewChild(ConfigurableFilterComponent)
   configurableFilter!: ConfigurableFilterComponent;
   @Input() totalUsers: number = 591;
@@ -128,6 +127,8 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
   checked: boolean = false;
 
   categories!: TabData[];
+
+  toggleSwitch = false;
 
   loading: boolean = true;
 
@@ -279,8 +280,8 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
           routerLink: `/${officeCode}/${langCode}/publication`,
         },
         {
-          label: 'Pending Publication',
-          routerLink: `/${officeCode}/${langCode}/publication/pending`,
+          label: 'Online Publication',
+          routerLink: `/${officeCode}/${langCode}/publication/online`,
         },
       ];
 
@@ -314,36 +315,28 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
   initUserStats(): void {
     this.userStats = [
       {
-        label: 'LAST PUBLICATION',
-        count: this.inactiveUsers,
-        percentChange: this.inactiveUsersPercentChange,
-        period: this.inactiveUsersPeriod,
-        color: '#3949AB',
-        icon: 'pi pi-calendar',
-      },
-      {
-        label: 'TOTAL PENDING FILES',
+        label: 'TOTAL PUBLICATIONS',
         count: this.totalUsers,
         percentChange: this.totalUsersPercentChange,
         period: this.totalUsersPeriod,
-        color: '#D32F2F', // Indigo color
+        color: '#0288D1', // Indigo color
         icon: 'pi pi-file',
       },
       {
-        label: 'ACTIVE JOURNALS',
+        label: 'PENDING JOURNALS',
         count: this.activeUsers,
         percentChange: this.activeUsersPercentChange,
         period: this.activeUsersPeriod,
-        color: '#2E7D32',
-        icon: 'pi pi-users',
+        color: '#D32F2F',
+        icon: 'pi pi-clock',
       },
       {
-        label: 'SFTP UPLOADS',
+        label: 'PUBLISHED',
         count: this.unconfirmedUsers,
         percentChange: this.unconfirmedUsersPercentChange,
         period: this.unconfirmedUsersPeriod,
-        color: '#0288D1',
-        icon: 'pi pi-database',
+        color: '#2E7D32',
+        icon: 'pi pi-check-circle',
       },
     ];
   }

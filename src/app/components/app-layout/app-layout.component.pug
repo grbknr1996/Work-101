@@ -20,7 +20,7 @@ div.layout-main([style]="config.showSidebar ? 'margin-left: 3rem' : 'margin-left
     (click)="sidebarVisible = false")
   
   // Content area
-  div.layout-content([ngStyle]="{'margin-left': sidebarVisible ? '3rem' : '0'}")
+  div.layout-content([ngStyle]="{'margin-left': sidebarVisible ? '3rem' : '1rem'}")
     app-toast
     // Breadcrumbs
     div.breadcrumbs-container(*ngIf="ms.breadcrumbs")

@@ -1,0 +1,42 @@
+app-layout([config]="layoutConfig")
+  app-breadcrumbs([items]="breadcrumbItems")
+  .user-accounts-header
+    h1 Data Capture
+  app-multiple-stats([multipleStats]="packageStats",
+    (statSelected)="onStatSelect($event)",
+    [selectedStat]="statSelected")
+  app-configurable-filter-bar(
+          [filters]="filterConfigs",
+          [showClearAll]="true",
+          [showApplyButton]="true",
+          [showFilterSelector]="true",
+          [filterSelectorPlaceholder]="'Select filters to display'",
+          (filterChange)="onFilterChange($event)",
+          (filterCleared)="onFilterCleared()",
+          (filterApplied)="onFilterApplied($event)",
+          (appliedFiltersChange)="onAppliedFiltersChange($event)",
+          [showSearchBar]="true",
+          [searchBar]="searchBar",
+          (filterSearch)="filterSearch($event)",
+          [searchLabel]="'Search File Id/ Document Id'",
+          [showDownloadIcon]="false",
+          [appliedFilters]="appliedFilters",
+          [clearAllLabel]="'Clear All'",
+          [getDisplayValue]="getFilterDisplayValue.bind(this)",
+          (chipRemove)="removeFilterChip($event)",
+          (clearAll)="clearAllFilters()",
+        )
+  p-tabs([(value)]="selectedTab")
+    p-tablist
+      | @for (category of categories; track category.ipType) {
+      p-tab([value]="category.ipType")
+        div((click)="onHeaderClick($event, category.ipType)")
+          .category-label {{ category.display | capitalizeWords }}
+            p-badge([value]="category.count")
+      | }
+    
+    p-tabpanels
+      | @for (category of categories; track category.ipType) {
+      p-tabpanel([value]="category.ipType")
+          app-table([columns]="tableColumns", [data]="tableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false")
+      | }

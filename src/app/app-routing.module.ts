@@ -138,6 +138,14 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: ':officeCode/:langCode/data-capture/dashboard',
+    loadChildren: () =>
+      import('./pages/data-capture/data-capture.module').then(
+        (m) => m.DataCaptureModule
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
     path: ':officeCode/:langCode/system-configuration/fee-config',
     loadComponent: () =>
       import('./pages/fee-config/fee-config.component').then(
@@ -158,6 +166,14 @@ const routes: Routes = [
     loadComponent: () =>
       import('./pages/journal-publication/journal-publication.component').then(
         (m) => m.JournalPublicationComponent
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: ':officeCode/:langCode/publication/online',
+    loadComponent: () =>
+      import('./pages/online-publication-journal/online-publication-journal.component').then(
+        (m) => m.OnlinePublicationJournalComponent
       ),
     canActivate: [AuthGuard],
   },

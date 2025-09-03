@@ -183,7 +183,45 @@ export class SidebarMenuService {
             icon: 'pi pi-bell',
             routerLink: this.getRouterLink('/notifications/madrid-dashboard'),
           },
+          {
+            id: 'office-notifications',
+            label: 'Office',
+            icon: 'pi pi-bell',
+            routerLink: this.getRouterLink('/notifications/office-dashboard'),
+          },
         ],
+      },
+    ];
+  }
+
+  generateDataCaptureMenu(currentPath: string): MenuItem[] {
+    console.log('current path:', currentPath);
+    const lastPart = currentPath.split('/').pop();
+    console.log(lastPart);
+    return [
+      {
+        id: 'dashboard',
+        label: 'Home',
+        icon: 'pi pi-home',
+        routerLink: this.getRouterLink('/dashboard'),
+      },
+      {
+        id: 'data-capture',
+        label: 'Pending Data Capture',
+        icon: 'pi pi-pencil',
+        routerLink: this.getRouterLink('/data-capture/dashboard'),
+      },
+      {
+        id: 'document-capture',
+        label: 'Pending Document Capture',
+        icon: 'pi pi-file',
+        routerLink: this.getRouterLink(`/data-capture/documents`),
+      },
+      {
+        id: 'daily-pending',
+        label: 'Pending Daily Logs',
+        icon: 'pi pi-calendar',
+        routerLink: this.getRouterLink(`/data-capture/daily-logs`),
       },
     ];
   }

@@ -407,6 +407,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   // Edit group
   openEditGroupDialog(group: UserGroup) {
+    console.log(group);
     const officeCode = this.ms.getCurrentOffice() || 'default';
     const langCode = this.route.snapshot.params['langCode'] || 'en';
     this.router.navigate([

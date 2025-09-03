@@ -888,6 +888,10 @@ $transition-duration = 0.3s
       i
         font-size 0.75rem
 
+  .stat-countLabel
+      font-size 1rem
+      font-weight 400
+      
   .stat-period
     margin-top 0.5rem
     font-size 0.8rem
@@ -1206,9 +1210,7 @@ app-user-accounts
     height 100vh
   .sidebar-overlay
     display none
-  .layout-content
-    margin-left 240px !important
-    margin 2rem !important
+
 
 // Sidebar overlay and content margin for mobile/tablet
 @media (max-width: 1024px)
@@ -1271,8 +1273,8 @@ app-user-accounts
     .user-profile .user-name
       display none
     // Optionally shrink/hide language selector if space is tight
- 
-
+   
+    
     // Mobile menu toggle always last
     .mobile-menu-toggle
       order 99
@@ -1493,14 +1495,12 @@ app-create-user-account
         align-items: center
         gap: 0.75rem
 
-    // Unit and Security Steps Cards
-    .unit-step-card,
+    // Unit and Security Steps Card
     .security-step-card
       background: #fff
       border-radius: 12px
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07)
       margin: 2rem auto
-      max-width: 700px
       overflow: hidden
 
       .card-header
@@ -1568,7 +1568,6 @@ app-review-step
     border-radius: 12px
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07)
     margin: 2rem auto
-    max-width: 700px
     overflow: hidden
 
     .card-header
@@ -1650,7 +1649,6 @@ app-basic-info-form
     border-radius: 12px
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07)
     margin: 2rem auto
-    max-width: 700px
     overflow: hidden
 
     .card-header
@@ -1807,7 +1805,6 @@ app-basic-info-form
     height: 40px
     object-fit: contain
     border-radius: 6px
-    border: 2px solid #1976d2
     background: #f7fafd
     box-shadow: 0 2px 8px rgba(25, 118, 210, 0.1)
     transition: box-shadow 0.2s
@@ -1884,7 +1881,7 @@ app-basic-info-form
 // Group assignment Component Styles
 // =========================================
 app-group-assignment
-  .group-assignment-card
+   .group-assignment-card
     background: #fff
     border-radius: 12px
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07)
@@ -1904,22 +1901,22 @@ app-group-assignment
         font-weight: 600
 
     .card-content
-      padding: 1.5rem 2rem 2rem 2rem
+      
 
       .group-assignment-container
         display: flex
         gap: 3rem
         justify-content: center
         align-items: stretch
-       
+        
 
       .group-list
         background: #fff
         border-radius: 8px
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05)
         padding: 1rem 0.75rem 0.75rem 0.75rem
-        min-width: 500px
-        max-width: 600px
+        
+       
         flex: 1 1 0
         display: flex
         flex-direction: column
@@ -1938,6 +1935,7 @@ app-group-assignment
 
       .group-list-body
         flex: 1 1 0
+        overflow-y: auto
         border: 1px solid #e0e0e0
         border-radius: 6px
         background: #fafbfc
@@ -2085,9 +2083,7 @@ app-group-assignment
     .group-assignment-container
       gap: 2rem
 
-    .group-list
-      min-width: 400px
-      max-width: 500px
+    
 
   @media (max-width: 900px)
     max-width: 98%
@@ -2104,10 +2100,9 @@ app-group-assignment
     .group-list
       min-width: 100%
       max-width: 100%
-      
+     
 
-    
-   
+
 
     .group-list-controls.center-controls
       transform: rotate(90deg);
@@ -2131,9 +2126,10 @@ app-group-assignment
 
     .group-list
       padding: 0.75rem 0.5rem 0.5rem 0.5rem
-     
+      
 
-   
+    .group-list-body
+      min-height: 200px
 
     .group-item
       padding: 0.5rem
@@ -2213,9 +2209,9 @@ app-group-assignment
 
     .group-list
       padding: 0.5rem 0.25rem 0.25rem 0.25rem
-      
+ 
 
-    
+
 
     .group-item
       padding: 0.375rem
@@ -2249,32 +2245,6 @@ app-group-assignment
           .p-dropdown
             min-width: 100px
 
-    // Improve mobile layout for group items
-    .group-item
-      flex-direction: column
-      align-items: flex-start
-      gap: 0.5rem
-      padding: 0.75rem
-
-      .flex.items-center.space-x-3.flex-1
-        width: 100%
-        justify-content: space-between
-
-      .group-info
-        flex: 1
-        min-width: 0
-
-      .group-name
-        font-size: 0.8rem
-        word-break: break-word
-
-      .group-type
-        font-size: 0.7rem
-
-      input[type="checkbox"]
-        align-self: flex-end
-        margin-top: 0.5rem
-
     // Compact pagination
     .p-paginator
       .p-paginator-first,
@@ -2303,10 +2273,9 @@ app-group-assignment
 
     .group-list
       padding: 0.375rem 0.125rem 0.125rem 0.125rem
-      min-height: 180px
+    
 
-    .group-list-body
-      min-height: 120px
+   
 
     .group-item
       padding: 0.25rem
@@ -2388,21 +2357,136 @@ app-group-assignment
       padding: 0.375rem 0.5rem
 
   @media (max-width: 480px)
-    :host ::ng-deep .p-dropdown
-      font-size: 0.75rem
       
-      .p-dropdown-label
-        padding: 0.25rem 0.375rem
+
+      .group-assignment-container
+        display: flex
+        gap: 3rem
+        justify-content: center
+        align-items: stretch
+
+      .group-list
+        background: #fff
+        border-radius: 8px
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05)
+        padding: 1rem 0.75rem 0.75rem 0.75rem
+        flex: 1 1 0
+        display: flex
+        flex-direction: column
+       
+
+      .group-list h3
+        color: #1976d2
+        font-size: 1rem
+        font-weight: 600
+        margin-bottom: 0.5rem
+
+      .group-list-header
+        margin-bottom: 0.5rem
+        font-size: 0.85rem
+        color: #333
+
+      .group-list-body
+        flex: 1 1 0
+        overflow-y: auto
+        border: 1px solid #e0e0e0
+        border-radius: 6px
+        background: #fafbfc
+        padding: 0.4rem 0
+        margin-bottom: 0.5rem
+
+      .group-item
+        display: flex
+        align-items: center
+        gap: 0.5rem
+        padding: 0.4rem 0.75rem
+        border-radius: 6px
+        margin-bottom: 0.25rem
+        background: #fff
+        border: 1px solid #e0e0e0
+        transition: background 0.2s, box-shadow 0.2s
+
+      .group-item.selected
+        background: #e3f2fd
+        border-color: #90caf9
+
+      .group-info
+        flex: 1 1 0
+        display: flex
+        flex-direction: column
+
+      .group-name
+        font-weight: 500
+        color: #222
+        font-size: 0.85rem
+
+      .group-type
         font-size: 0.75rem
+        color: #1976d2
+        font-weight: 500
+        letter-spacing: 0.02em
 
-    :host ::ng-deep .p-button
-      font-size: 0.75rem
-      padding: 0.25rem 0.375rem
+      .drag-handle
+        color: #bdbdbd
+        font-size: 1rem
+        cursor: grab
+        user-select: none
 
-    :host ::ng-deep .p-inputtext
-      font-size: 0.75rem
-      padding: 0.25rem 0.375rem
+      .group-list-controls
+        display: flex
+        flex-direction: column
+        gap: 0.75rem
+        justify-content: center
+        align-items: center
 
+      .group-list-controls.center-controls
+        display: flex
+        flex-direction: column
+        gap: 0.75rem
+        justify-content: center
+        align-items: center
+        height: 100%
+        min-width: 40px
+
+      .move-btn
+        background: #1976d2
+        color: #fff
+        border: none
+        border-radius: 50%
+        width: 36px
+        height: 36px
+        font-size: 1.2rem
+        cursor: pointer
+        box-shadow: 0 2px 6px rgba(25, 118, 210, 0.08)
+        transition: background 0.2s, box-shadow 0.2s
+
+      .move-btn:disabled
+        background: #e0e0e0
+        color: #bdbdbd
+        cursor: not-allowed
+
+      .pagination
+        display: flex
+        align-items: center
+        gap: 0.4rem
+        justify-content: center
+        margin-top: 0.4rem
+
+      .pagination button
+        background: #e3f2fd
+        border: none
+        border-radius: 50%
+        width: 24px
+        height: 24px
+        color: #1976d2
+        font-size: 0.9rem
+        cursor: pointer
+        transition: background 0.2s
+
+      .pagination button:disabled
+        background: #f5f5f5
+        color: #bdbdbd
+        cursor: not-allowed
 // =========================================
 // End of Group assignment Component Styles
 // =========================================
@@ -2521,6 +2605,32 @@ app-journal-publication
 
 // =============================
 // End of Journal Publication Page
+// =============================
+
+// =============================
+// Start of Online Publication Journal Page
+// =============================
+
+app-online-publication-journal
+  .filter
+    padding 0.4rem;
+    background-color #e5f3f7;
+    border-radius var(--p-inputtext-border-radius, 6px);
+    .filter-icons
+      .p-button-text
+        color var(--p-button-outlined-secondary-color)
+      p-button
+        button.p-button-outlined
+          background transparent
+         
+  p-tabs
+    p-tablist
+      p-tab
+        .category-label
+          font-size 1rem
+
+// =============================
+// End of Online Publication Journal Page
 // =============================
   
 // =============================
@@ -2898,6 +3008,46 @@ app-madrid-notifications
 
 // ================================
 // End of Madrid Notifications Styles
+// ================================
+
+// ================================
+// My Office Notifications Styles
+// ================================
+
+app-office-notifications
+  .filter
+    padding 0.4rem;
+    background-color #e5f3f7;
+    border-radius var(--p-inputtext-border-radius, 6px);
+    .filter-icons
+      .p-button-text
+        color var(--p-button-outlined-secondary-color)
+      p-button
+        button.p-button-outlined
+          background transparent
+
+// ================================
+// End of My Office Notifications Styles
+// ================================
+
+// ================================
+// Data Capture Styles
+// ================================
+
+app-data-capture
+  .filter
+    padding 0.4rem;
+    background-color #e5f3f7;
+    border-radius var(--p-inputtext-border-radius, 6px);
+    .filter-icons
+      .p-button-text
+        color var(--p-button-outlined-secondary-color)
+      p-button
+        button.p-button-outlined
+          background transparent
+
+// ================================
+// End of Data Capture Styles
 // ================================
 
 // ================================
@@ -4400,7 +4550,7 @@ app-configurable-filter
     width 400px
     max-width 90vw
     max-height 80vh
-    z-index 9999
+    z-index 100
     margin-top 8px
 
   /* Ensure overlay doesn't go off-screen on mobile devices only */
@@ -4409,7 +4559,7 @@ app-configurable-filter
       right 0 !important
       width 280px !important
       max-width 90vw !important
-      z-index 9999
+      z-index 100
 
   .filter-panel
     background white
@@ -4716,7 +4866,7 @@ app-configurable-filter
       width 350px
       max-width 90vw
       right 0
-      z-index 9999
+      z-index 100
 
     .filter-panel
       max-height 60vh
@@ -4737,7 +4887,7 @@ app-configurable-filter
       width 280px
       max-width 90vw
       right -50px !important
-      z-index 9999
+      z-index 100
 
     .filter-panel
       max-height 60vh
@@ -4782,13 +4932,13 @@ app-configurable-filter
       height 8px !important
       background-color #ef4444 !important
       border-radius 50% !important
-      z-index 9999 !important
+      z-index 100 !important
       display block !important
       visibility visible !important
       opacity 1 !important
 
   /* Error Styles */
-.error-message
+  .error-message
     color #dc2626
     font-size 0.75rem
     margin-top 0.25rem
@@ -5159,23 +5309,3 @@ app-chart-navbar
         p-tab
           .category-label
             font-size 1.1 rem
-
-// User Type Toggle Switch Styling
-.user-type-toggle-container
-  display flex
-  align-items center
-  gap 10px
-  
-  .toggle-label
-    font-size 0.9rem
-    color #495057
-    font-weight 500
-    
-  .user-type-toggle
-    .p-togglebutton
-      min-width 60px
-      
-    // Disabled state styling
-    &.p-disabled
-      opacity 0.6
-      cursor not-allowed

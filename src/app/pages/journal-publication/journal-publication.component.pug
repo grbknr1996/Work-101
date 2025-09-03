@@ -85,7 +85,7 @@ app-layout
       (clearAll)="clearAllFilters()"
     )
     
-    .col-span-6(*ngIf="isCardView")
+    .col-span-6
       p-tabs(value="trademark")
         p-tablist
           | @for (category of categories; track category.ipType) {
@@ -98,7 +98,7 @@ app-layout
           | @for (category of categories; track category.ipType) {
           p-tabpanel.grid.grid-cols-12.gap-3([value]="category.ipType")
             | @for (service of category.data; track service.name) {
-            .col-span-3.mt-3
+            .col-span-3.mt-3(*ngIf="isCardView")
               p-card.w-full
                 ng-template(#header="")
                   h1.flex
@@ -119,31 +119,34 @@ app-layout
                   .flex.gap-4.mt-1
                     p-button.w-full(
                       size="small",
+                      icon="pi pi-eye",
+                      label="View"
                       severity="secondary",
                       [outlined]="true",
                       styleClass="w-full"
-                    ) Basic Fee {{ service.basicFee }}$
+                    )
                     p-button.w-full(
                       size="small",
-                      styleClass="w-full"
-                    ) Variable Fee {{ service.variableFee }}$
+                      icon="pi pi-lock"
+                      styleClass="w-full",
+                      label="Close"
+                    )
             | }
+            .col-span-12(*ngIf="!isCardView")
+              app-table(
+                [columns]="tableColumns",
+                [data]="category.data",
+                [globalFilterFields]="globalFilterFields",
+                [showSearchButton]="false",
+                [showClearButton]="false",
+                [paginator]="true",
+                [lazy]="true",
+                [rows]="pageSize",
+                [totalRecords]="totalRecords",
+                [rowsPerPageOptions]="[10, 25, 50, 100]",
+                [showCurrentPageReport]="true",
+                [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} users'",
+                (actionClick)="onActionClick($event.action, $event.item)",
+                (onLazyLoad)="onLazyLoad($event)"
+              )
           | }
-
-    .col-span-6(*ngIf="!isCardView")
-      app-table(
-        [columns]="tableColumns",
-        [data]="tableData",
-        [globalFilterFields]="globalFilterFields",
-        [showSearchButton]="false",
-        [showClearButton]="false",
-        [paginator]="true",
-        [lazy]="true",
-        [rows]="pageSize",
-        [totalRecords]="totalRecords",
-        [rowsPerPageOptions]="[10, 25, 50, 100]",
-        [showCurrentPageReport]="true",
-        [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} users'",
-        (actionClick)="onActionClick($event.action, $event.item)",
-        (onLazyLoad)="onLazyLoad($event)"
-      )

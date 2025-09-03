@@ -217,17 +217,10 @@ export class MechanicsService {
       this.initDateFormatter(localesMapping[event.lang]);
       this.initNumberFormatter(localesMapping[event.lang]);
 
-      // Signal that translations are loaded
       this.translationsLoaded$.next(true);
     });
 
-    // Initialize language
     this.switchLang();
-
-    // Debug initial state
-    setTimeout(() => {
-      this.debugPlatformState();
-    }, 1000);
   }
 
   private updateAvailableLangs(): void {
@@ -802,36 +795,5 @@ export class MechanicsService {
     this.currentOfficeSubject.next('default');
     this.wipoPlatformSubject.next(null);
     localStorage.removeItem('wipoPlatform');
-    // Note: Do NOT reset userActualOfficeSubject as it preserves WIPO admin status
-  }
-
-  /**
-   * Debug method to check current state
-   */
-  debugPlatformState(): void {
-    console.log('=== MechanicsService Debug State ===');
-    console.log('Current Office:', this.getCurrentOffice());
-    console.log('User Actual Office:', this.userActualOfficeSubject.value);
-    console.log('WIPO Platform:', this.getWipoPlatform());
-    console.log('Is WIPO Admin:', this.isCurrentUserWipoAdmin());
-    console.log('Has Platform Selected:', this.hasWipoPlatformSelected());
-    console.log(
-      'Should Show Platform Selection:',
-      this.shouldShowPlatformSelection()
-    );
-    console.log(
-      'LocalStorage wipoPlatform:',
-      localStorage.getItem('wipoPlatform')
-    );
-    console.log('=====================================');
-  }
-
-  /**
-   * Debug method to manually set WIPO platform for testing
-   */
-  debugSetWipoPlatform(platformCode: string): void {
-    console.log('=== Debug: Manually setting WIPO platform to:', platformCode);
-    this.setWipoPlatform(platformCode);
-    this.debugPlatformState();
   }
 }

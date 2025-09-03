@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AripoNotificationsComponent } from './aripo-notifications.component';
 import { HagueNotificationsComponent } from './hague-notifications.component';
 import { MadridNotificationsComponent } from './madrid-notifications.component';
+import { OfficeNotificationsComponent } from './office-notifications.component';
 import { provideHttpClient } from '@angular/common/http';
 
 const routes: Routes = [
@@ -46,6 +47,10 @@ const routes: Routes = [
   {
     path: 'madrid-dashboard',
     component: MadridNotificationsComponent,
+  },
+  {
+    path: 'office-dashboard',
+    component: OfficeNotificationsComponent,
   },
 ];
 

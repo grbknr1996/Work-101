@@ -248,10 +248,7 @@ export class AuthService {
               error: null,
               attributes: {},
               officeCode: officeCode,
-              // Removed: currentDevice, deviceList
             });
-
-            // Removed: fetchCurrentDevice() after partial auth
             return true;
           }
         } catch (error) {

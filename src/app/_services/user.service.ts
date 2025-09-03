@@ -41,18 +41,20 @@ export interface DetailedUserAccount {
   active: boolean;
   locked: boolean;
   indExternal: boolean;
+  signaturePicture?: string;
+  signatureType?: string;
 }
 
 // New interface for update payload
 export interface UserUpdatePayload {
   userName: string;
   loginId: string;
-  signaturePicture?: string;
+  signaturePicture?: string | ArrayBuffer | null;
   userEmail: string;
   signatureType?: string;
   mfaRequired: boolean;
   mfaValidationDone: boolean;
-  active: boolean;
+  status: boolean;
   locked: boolean;
   indExternal: boolean;
   userGroupBag?: {

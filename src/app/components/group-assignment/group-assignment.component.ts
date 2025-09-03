@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PaginatorModule } from 'primeng/paginator';
 import { InputTextModule } from 'primeng/inputtext';
@@ -46,10 +53,16 @@ export class GroupAssignmentComponent implements OnChanges {
   @Output() availablePageChange = new EventEmitter<number>();
   @Output() searchChange = new EventEmitter<string>();
   @Output() filterTypeChange = new EventEmitter<string>();
-  @Output() sortChange = new EventEmitter<{ sortBy: string; sortOrder: string }>();
+  @Output() sortChange = new EventEmitter<{
+    sortBy: string;
+    sortOrder: string;
+  }>();
   @Output() assignedSearchChange = new EventEmitter<string>();
   @Output() assignedFilterTypeChange = new EventEmitter<string>();
-  @Output() assignedSortChange = new EventEmitter<{ sortBy: string; sortOrder: string }>();
+  @Output() assignedSortChange = new EventEmitter<{
+    sortBy: string;
+    sortOrder: string;
+  }>();
 
   // Selection
   availableSelected: Set<string> = new Set();
@@ -99,12 +112,16 @@ export class GroupAssignmentComponent implements OnChanges {
     // Apply search filter
     if (this.assignedSearchTerm && this.assignedSearchTerm.trim()) {
       const searchLower = this.assignedSearchTerm.toLowerCase();
-      filtered = filtered.filter(group => group.name.toLowerCase().includes(searchLower));
+      filtered = filtered.filter((group) =>
+        group.name.toLowerCase().includes(searchLower)
+      );
     }
 
     // Apply type filter
     if (this.assignedFilterType && this.assignedFilterType !== 'all') {
-      filtered = filtered.filter(group => group.type === this.assignedFilterType);
+      filtered = filtered.filter(
+        (group) => group.type === this.assignedFilterType
+      );
     }
 
     // Apply sorting
@@ -144,39 +161,49 @@ export class GroupAssignmentComponent implements OnChanges {
 
   toggleSelectAllAvailable(checked: boolean) {
     if (checked) {
-      this.pagedAvailableGroups.forEach(g => this.availableSelected.add(g.id));
+      this.pagedAvailableGroups.forEach((g) =>
+        this.availableSelected.add(g.id)
+      );
     } else {
-      this.pagedAvailableGroups.forEach(g => this.availableSelected.delete(g.id));
+      this.pagedAvailableGroups.forEach((g) =>
+        this.availableSelected.delete(g.id)
+      );
     }
   }
 
   toggleSelectAllAssigned(checked: boolean) {
     if (checked) {
-      this.pagedAssignedGroups.forEach(g => this.assignedSelected.add(g.id));
+      this.pagedAssignedGroups.forEach((g) => this.assignedSelected.add(g.id));
     } else {
-      this.pagedAssignedGroups.forEach(g => this.assignedSelected.delete(g.id));
+      this.pagedAssignedGroups.forEach((g) =>
+        this.assignedSelected.delete(g.id)
+      );
     }
   }
 
   isAllAvailableSelected() {
     return (
       this.pagedAvailableGroups.length > 0 &&
-      this.pagedAvailableGroups.every(g => this.availableSelected.has(g.id))
+      this.pagedAvailableGroups.every((g) => this.availableSelected.has(g.id))
     );
   }
 
   isAllAssignedSelected() {
     return (
       this.pagedAssignedGroups.length > 0 &&
-      this.pagedAssignedGroups.every(g => this.assignedSelected.has(g.id))
+      this.pagedAssignedGroups.every((g) => this.assignedSelected.has(g.id))
     );
   }
 
   moveToAssigned() {
-    const toAssign = this.availableGroups.filter(g => this.availableSelected.has(g.id));
+    const toAssign = this.availableGroups.filter((g) =>
+      this.availableSelected.has(g.id)
+    );
     this.assignedGroups = [
       ...this.assignedGroups,
-      ...toAssign.filter(g => !this.assignedGroups.some(ag => ag.id === g.id)),
+      ...toAssign.filter(
+        (g) => !this.assignedGroups.some((ag) => ag.id === g.id)
+      ),
     ];
     // Don't remove from available groups since they're managed by server pagination
     this.availableSelected.clear();
@@ -184,8 +211,12 @@ export class GroupAssignmentComponent implements OnChanges {
   }
 
   moveToAvailable() {
-    const toRemove = this.assignedGroups.filter(g => this.assignedSelected.has(g.id));
-    this.assignedGroups = this.assignedGroups.filter(g => !this.assignedSelected.has(g.id));
+    const toRemove = this.assignedGroups.filter((g) =>
+      this.assignedSelected.has(g.id)
+    );
+    this.assignedGroups = this.assignedGroups.filter(
+      (g) => !this.assignedSelected.has(g.id)
+    );
     this.assignedSelected.clear();
     this.assignedGroupsChange.emit(this.assignedGroups);
   }
@@ -206,7 +237,11 @@ export class GroupAssignmentComponent implements OnChanges {
 
   // Legacy pagination methods for backward compatibility
   setAvailablePage(page: number) {
-    if (page >= 1 && page <= this.totalAvailablePages && page !== this.currentAvailablePage) {
+    if (
+      page >= 1 &&
+      page <= this.totalAvailablePages &&
+      page !== this.currentAvailablePage
+    ) {
       this.availablePageChange.emit(page);
     }
   }

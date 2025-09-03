@@ -30,7 +30,14 @@
       </div>
     </div>
   </div>
-  <div class="distribution-rules-header">
+  <div class="filter-section" style="background: #e5f3f7; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center">    
+    <div class="filter-controls"></div>
+    <div class="filter-actions" style="display: flex; gap: 0.5rem; align-items: center">
+      <app-configurable-filter #configurableFilter [filters]="filterConfigs()" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'Select filters to display'" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)" (hasActiveFiltersChange)="onHasActiveFiltersChange($event)"></app-configurable-filter>
+    </div>
+  </div>
+  <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="true" [clearAllLabel]="'Clear All'" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="onFilterChipRemoved($event)" (clearAll)="onFilterChipsClearAll()"></app-filter-chips>
+  <div class="distribution-rules-header mt-3">
     <h2>Distribution Rules</h2>
     <button class="add-rule-btn" type="button" (click)="addRule()"><i class="pi pi-plus"></i> Add Rule</button>
   </div>
@@ -38,7 +45,7 @@
     <p-table #dt [value]="distributionRulesData()" [rowHover]="true" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [resizableColumns]="false" [reorderableColumns]="false" responsiveLayout="scroll" styleClass="p-datatable-sm">
       <ng-template pTemplate="header">
         <tr>
-          <th pSortableColumn="originatingOfficeName" style="width: 12%">
+          <th pSortableColumn="originatingOfficeName" style="width: 12%" *ngIf="isWipoAdmin">
             <div class="flex items-center">Originating Office
               <p-sortIcon field="originatingOfficeName"></p-sortIcon>
             </div>
@@ -57,10 +64,10 @@
       </ng-template>
       <ng-template pTemplate="body" let-rowData>
         <tr>
-          <td>{{ rowData.originatingOfficeName }}</td>
+          <td *ngIf="isWipoAdmin">{{ rowData.originatingOfficeName }}</td>
           <td>{{ rowData.recipientName }}</td>
           <td><span class="exclusion-chip" style="background: #e3f2fd; color: #1976d2; padding: 4px 12px; border-radius: 16px; font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"><i class="pi pi-file" style="font-size: 10px"></i>{{ rowData.ipCategory }}</span></td>
-          <td><span class="status-badge" [class.status-active]="rowData.unpublishedApplication" [class.status-inactive]="!rowData.unpublishedApplication" [style.background-color]="rowData.unpublishedApplication ? '#fff3e0' : '#e8f5e8'" [style.color]="rowData.unpublishedApplication ? '#e65100' : '#2e7d32'" style="padding: 4px 12px; border-radius: 16px; font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"><i [class]="rowData.unpublishedApplication ? 'pi pi-exclamation-triangle' : 'pi pi-eye'" style="font-size: 10px"></i>{{ rowData.unpublishedApplication ? 'Unpublished' : 'Published' }}</span></td>
+          <td><span class="status-badge" [class.status-active]="rowData.unpublishedApplication" [class.status-inactive]="!rowData.unpublishedApplication" [style.background-color]="rowData.unpublishedApplication ? '#ffebee' : '#e8f5e8'" [style.color]="rowData.unpublishedApplication ? '#c62828' : '#2e7d32'" style="padding: 4px 12px; border-radius: 16px; font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"><i [class]="rowData.unpublishedApplication ? 'pi pi-exclamation-triangle' : 'pi pi-eye'" style="font-size: 10px"></i>{{ rowData.unpublishedApplication ? 'Unpublished' : 'Published' }}</span></td>
           <td>
             <div class="document-list" style="display: flex; flex-wrap: wrap; gap: 4px"><span class="document-item" *ngFor="let doc of rowData.documentList" style="background: #e3f2fd; color: #1976d2; padding: 4px 12px; border-radius: 16px; font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"><i class="pi pi-file-text" style="font-size: 10px"></i>{{ doc }}</span><span class="no-documents" *ngIf="!rowData.documentList || rowData.documentList.length === 0" style="color: #757575; font-style: italic; font-size: 11px">No documents included</span></div>
           </td>
