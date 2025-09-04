@@ -19,8 +19,8 @@ export interface UserAccount {
   creationDate: string;
   lastUpdateDate: string;
   cognitoStatus: 'CNF' | 'FCP';
-  active: boolean;
-  locked: boolean;
+  isActive: boolean;
+  isLocked: boolean;
   id?: string;
   imageUrl?: string;
 }
@@ -38,8 +38,8 @@ export interface DetailedUserAccount {
   lastUpdateDate: string;
   cognitoStatus: string;
   userGroupBag?: UserGroupBag[];
-  active: boolean;
-  locked: boolean;
+  isActive: boolean;
+  isLocked: boolean;
   indExternal: boolean;
   signaturePicture?: string;
   signatureType?: string;
@@ -54,8 +54,8 @@ export interface UserUpdatePayload {
   signatureType?: string;
   mfaRequired: boolean;
   mfaValidationDone: boolean;
-  status: boolean;
-  locked: boolean;
+  isActive: boolean;
+  isLocked: boolean;
   indExternal: boolean;
   userGroupBag?: {
     groupId: number;
@@ -79,6 +79,7 @@ export interface UserCreationPayload {
   signaturePicture?: string;
   signatureType?: string;
   indExternal: boolean;
+  isActive?: boolean; // Add status field for active/inactive
   userGroupsBag: UserGroupBag[];
 }
 
@@ -100,6 +101,8 @@ export interface UserQueryParams {
   loginId?: string;
   email?: string;
   isActive?: boolean;
+  isLocked?: boolean;
+  cognitoStatus?: 'CNF' | 'FCP';
   exactMatchIndicator?: boolean;
   limit?: number;
   offset?: number;
@@ -162,6 +165,13 @@ export interface UserGroupQueryParams {
   sort?: string;
   order?: 'asc' | 'desc';
   wipoPlatformCode?: string;
+}
+
+export interface UserStats {
+  activeUsers: number;
+  inactiveUsers: number;
+  totalUsers: number;
+  unVerifiedUsers: number;
 }
 
 @Injectable({
@@ -248,6 +258,12 @@ export class UserService {
     if (params.isActive !== undefined) {
       httpParams = httpParams.set('isActive', params.isActive.toString());
     }
+    if (params.cognitoStatus) {
+      httpParams = httpParams.set('cognitoStatus', params.cognitoStatus);
+    }
+    if (params.isLocked) {
+      httpParams = httpParams.set('isLocked', params.isLocked.toString());
+    }
     if (params.exactMatchIndicator !== undefined) {
       httpParams = httpParams.set('exactMatchIndicator', params.exactMatchIndicator.toString());
     }
@@ -328,24 +344,31 @@ export class UserService {
   /**
    * Update an existing user account
    */
-  updateUserAccount(loginId: string, userData: UserUpdatePayload): Observable<DetailedUserAccount> {
+  updateUserAccount(loginId: string, userData: UserUpdatePayload): Observable<any> {
     return this.getAuthHeaders()
       .pipe(
         switchMap(headers =>
-          this.http.put<DetailedUserAccount>(
-            `${environment.backendUrl}?userId=${loginId}`,
-            userData,
-            {
-              headers: headers,
-            }
-          )
+          this.http.put<any>(`${environment.backendUrl}`, userData, {
+            headers: headers,
+            observe: 'response', // This ensures we get the full response including status
+          })
         ),
         catchError(error => this.handleError(error, `Updating user account ${loginId}`))
       )
       .pipe(
-        switchMap(user => {
+        switchMap(response => {
+          // Handle both 200 (with body) and 204 (no content) responses
+          if (response.status === 204 || response.status === 200) {
+            this.toastService.showSuccess(
+              'Success',
+              `User account ${loginId} updated successfully`
+            );
+            // Return the response body if available, otherwise return a success indicator
+            return of(response.body || { success: true, status: response.status });
+          }
+          // For other success status codes, still treat as success
           this.toastService.showSuccess('Success', `User account ${loginId} updated successfully`);
-          return of(user);
+          return of(response.body || { success: true, status: response.status });
         })
       );
   }
@@ -380,7 +403,7 @@ export class UserService {
         switchMap(headers =>
           this.http.patch<UserAccount>(
             `${environment.backendUrl}/users/${loginId}/status`,
-            { active: isActive },
+            { isActive: isActive },
             { headers: headers }
           )
         ),
@@ -573,5 +596,20 @@ export class UserService {
           return of(response);
         })
       );
+  }
+
+  /**
+   * Get user statistics
+   * Based on the API endpoint: {{baseUrl}}/stats
+   */
+  getUserStats(): Observable<UserStats> {
+    return this.getAuthHeaders().pipe(
+      switchMap(headers =>
+        this.http.get<UserStats>(`${environment.backendUrl}/stats`, {
+          headers: headers,
+        })
+      ),
+      catchError(error => this.handleError(error, 'Loading user statistics'))
+    );
   }
 }

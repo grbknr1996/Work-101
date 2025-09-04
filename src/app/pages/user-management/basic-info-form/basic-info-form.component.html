@@ -43,14 +43,22 @@
             <input pInputText id="loginAlias" formControlName="loginAlias" [ngClass]="{ 'ng-invalid': formGroup.get('loginAlias')?.invalid &amp;&amp; formGroup.get('loginAlias')?.touched }">
             <app-validation-errors [control]="formGroup.get('loginAlias')"></app-validation-errors>
           </div>
-          <div class="form-field-row">
-            <label for="userType"><i class="pi pi-user-edit input-label-icon"></i>User Type</label>
-            <div class="user-type-toggle-container">
-              <p-toggleSwitch formControlName="userType" [trueValue]="true" [falseValue]="false" [disabled]="isEditMode" [style.pointer-events]="isEditMode ? 'none' : 'auto'" styleClass="user-type-toggle"></p-toggleSwitch><span class="toggle-label">{{ formGroup.get('userType')?.value ? 'External User' : 'Office User' }}</span>
+          <div class="toggle-row">
+            <div class="toggle-field">
+              <label for="userType"><i class="pi pi-user-edit input-label-icon"></i>User Type</label>
+              <div class="flex items-center gap-3">
+                <p-toggleSwitch formControlName="userType" [trueValue]="true" [falseValue]="false" [disabled]="isEditMode" [style.pointer-events]="isEditMode ? 'none' : 'auto'" styleClass="user-type-toggle"></p-toggleSwitch><span class="text-sm font-medium text-gray-700">{{ formGroup.get('userType')?.value ? 'External User' : 'Office User' }}</span>
+              </div>
+              <app-validation-errors [control]="formGroup.get('userType')"></app-validation-errors>
             </div>
-            <app-validation-errors [control]="formGroup.get('userType')"></app-validation-errors>
+            <div class="toggle-field">
+              <label for="isActive"><i class="pi pi-check-circle input-label-icon"></i>Status</label>
+              <div class="flex items-center gap-3">
+                <p-toggleSwitch formControlName="isActive" [trueValue]="true" [falseValue]="false" styleClass="formGroup.get('isActive')?.value ? 'toggle-active' : 'toggle-inactive'"></p-toggleSwitch><span class="text-sm font-medium" [ngClass]="formGroup.get('isActive')?.value ? 'text-green-600' : 'text-red-600'">{{ formGroup.get('isActive')?.value ? 'Active' : 'Inactive' }}</span>
+              </div>
+              <app-validation-errors [control]="formGroup.get('isActive')"></app-validation-errors>
+            </div>
           </div>
-          <div class="form-field-row empty-row"></div>
         </div>
       </div>
       <div class="signature-section">

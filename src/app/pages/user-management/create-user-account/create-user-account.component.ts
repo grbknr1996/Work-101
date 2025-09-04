@@ -152,7 +152,7 @@ export class CreateUserAccountComponent implements OnInit {
   private initForm() {
     this.userForm = this.fb.group({
       basicInfo: this.fb.group({
-        userType: [false, [Validators.required]], // Default to 'office' user (false = office, true = external)
+        userType: [''], // Default to 'office' user (false = office, true = external)
         username: ['', [Validators.required, Validators.minLength(3)]],
         email: ['', [Validators.required, Validators.email]],
         telephone: ['', [Validators.pattern('^[0-9-+() ]*$')]],
@@ -161,8 +161,9 @@ export class CreateUserAccountComponent implements OnInit {
         signatureType: [null],
         profilePicture: [null],
         signaturePicture: [null],
+        isActive: [true], // Add active/inactive toggle, default to true (active)
       }),
-      assignedGroups: [[]],
+      assignedGroups: [],
       security: this.fb.group({
         requirePasswordChange: [false],
         enableTwoFactor: [false],
@@ -184,20 +185,6 @@ export class CreateUserAccountComponent implements OnInit {
     sortBy: string = 'groupName',
     sortOrder: string = 'asc'
   ) {
-    console.log(
-      'loadAvailableGroups called with page:',
-      page,
-      'searchTerm:',
-      searchTerm,
-      'filterType:',
-      filterType,
-      'sortBy:',
-      sortBy,
-      'sortOrder:',
-      sortOrder
-    );
-    console.log('Call stack:', new Error().stack);
-    console.log('Current active step when loading groups:', this.activeStep);
     this.isLoadingGroups = true;
     this.groupsLoadError = false;
     this.currentGroupsPage = page;
@@ -207,9 +194,6 @@ export class CreateUserAccountComponent implements OnInit {
     this.groupsSortOrder = sortOrder;
 
     const platformCode = this.mechanicsService.getCurrentOffice() || 'default';
-    console.log('Platform code:', platformCode);
-    console.log('Current office:', this.mechanicsService.getCurrentOffice());
-    console.log('Effective office:', this.mechanicsService.getCurrentOffice());
 
     if (!platformCode) {
       console.error('No platform code available');
@@ -265,9 +249,10 @@ export class CreateUserAccountComponent implements OnInit {
         if (response && response.result && response.result.userGroups) {
           // Transform UserGroup to GroupItem for the component
           this.availableGroups = response.result.userGroups.map(group => ({
-            id: group.groupId.toString(),
+            id: group.groupId,
             name: group.groupName,
             type: group.groupType,
+            iimsGroupId: group.iimsGroupId,
           }));
 
           // Update total count from API response
@@ -401,6 +386,7 @@ export class CreateUserAccountComponent implements OnInit {
             profilePicture: null, // Not available in DetailedUserAccount interface
             signaturePicture: userAccount.signaturePicture,
             signatureType: userAccount.signatureType || '',
+            isActive: userAccount.isActive, // Use active flag from user details API
           },
           assignedGroups: userAccount.userGroupBag
             ? userAccount.userGroupBag.map(group => ({
@@ -427,7 +413,6 @@ export class CreateUserAccountComponent implements OnInit {
       },
       error: error => {
         console.error('Error loading user account:', error);
-        this.toastService.showError('Error', 'Failed to load user data');
       },
     });
   }
@@ -576,8 +561,8 @@ export class CreateUserAccountComponent implements OnInit {
           signaturePicture: formData.basicInfo.signaturePicture || '',
           userEmail: formData.basicInfo.email,
           signatureType: formData.basicInfo.signatureType ?? '',
-          status: true,
-          locked: false,
+          isActive: formData.basicInfo.isActive, // Use isActive from form for status field
+          isLocked: false,
           mfaRequired: formData.security.enableTwoFactor || false,
           mfaValidationDone: false,
           indExternal: formData.basicInfo.userType, // Set indExternal based on userType (boolean)
@@ -592,11 +577,13 @@ export class CreateUserAccountComponent implements OnInit {
         console.log('Updating user with payload:', updatePayload);
 
         this.userService.updateUserAccount(this.userId, updatePayload).subscribe({
-          next: updatedUser => {
-            console.log('User updated successfully:', updatedUser);
-            this.toastService.showSuccess('Success', 'User updated successfully');
+          next: response => {
+            console.log('User updated successfully:', response);
+            // The success message is already shown in the service
             // Navigate back to user accounts list
-            this.router.navigate(['../'], { relativeTo: this.route });
+            const officeCode = this.route.snapshot.params['officeCode'];
+            const langCode = this.route.snapshot.params['langCode'];
+            this.router.navigate([`/${officeCode}/${langCode}/user-management/user-accounts`]);
           },
           error: error => {
             console.error('Error updating user:', error);
@@ -618,6 +605,7 @@ export class CreateUserAccountComponent implements OnInit {
           signaturePicture: formData.basicInfo.signaturePicture || null,
           signatureType: formData.basicInfo.signatureType ?? null,
           indExternal: formData.basicInfo.userType,
+          isActive: formData.basicInfo.isActive, // Use isActive from form for status field
           userGroupsBag: formData.assignedGroups.map((group: GroupItem) => ({
             groupId: parseInt(group.id),
             groupName: group.name,
@@ -633,7 +621,9 @@ export class CreateUserAccountComponent implements OnInit {
             console.log('User created successfully:', createdUser);
             this.toastService.showSuccess('Success', 'User created successfully');
             // Navigate back to user accounts list
-            this.router.navigate(['../'], { relativeTo: this.route });
+            const officeCode = this.route.snapshot.params['officeCode'];
+            const langCode = this.route.snapshot.params['langCode'];
+            this.router.navigate([`/${officeCode}/${langCode}/user-management/user-accounts`]);
           },
           error: error => {
             console.error('Error creating user:', error);
@@ -648,21 +638,5 @@ export class CreateUserAccountComponent implements OnInit {
 
   onGroupsSort(sortBy: string, sortOrder: string) {
     this.loadAvailableGroups(1, this.groupsSearchTerm, this.groupsFilterType, sortBy, sortOrder);
-  }
-
-  // Assigned groups filtering and sorting (client-side)
-  onAssignedGroupsSearch(searchTerm: string) {
-    // This is handled client-side in the group-assignment component
-    console.log('Assigned groups search:', searchTerm);
-  }
-
-  onAssignedGroupsFilter(filterType: string) {
-    // This is handled client-side in the group-assignment component
-    console.log('Assigned groups filter:', filterType);
-  }
-
-  onAssignedGroupsSort(sortBy: string, sortOrder: string) {
-    // This is handled client-side in the group-assignment component
-    console.log('Assigned groups sort:', { sortBy, sortOrder });
   }
 }

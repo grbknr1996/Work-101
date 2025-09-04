@@ -7,7 +7,11 @@ import {
 } from '@angular/core';
 import { SidebarMenuService } from '../../../_services/sidebar-menu.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { UserStatsComponent } from 'src/app/components/user-stats/user-stats.component';
+import {
+  UserStatsComponent,
+  UserStatsConfig,
+  StatItem,
+} from 'src/app/components/user-stats/user-stats.component';
 import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
 import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
 import { TableComponent } from 'src/app/components/table/table.component';
@@ -22,6 +26,7 @@ import {
   UserService,
   UserAccount,
   UserQueryParams,
+  UserStats,
 } from 'src/app/_services/user.service';
 import { catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -53,6 +58,9 @@ export class UserAccountsComponent implements OnInit {
   @ViewChild(ConfigurableFilterComponent)
   configurableFilter!: ConfigurableFilterComponent;
 
+  @ViewChild(UserStatsComponent)
+  userStatsComponent!: UserStatsComponent;
+
   layoutConfig = {
     appTitle: 'WIPO IPAS Central',
     showHeader: true,
@@ -74,6 +82,21 @@ export class UserAccountsComponent implements OnInit {
   activeUsers = 0;
   inactiveUsers = 0;
   unconfirmedUsers = 0;
+
+  // Default selected stat for user-stats component
+  defaultSelectedStat = 'TOTAL_USERS';
+
+  // User stats configuration
+  userStatsConfig: UserStatsConfig = {
+    stats: [],
+    defaultSelectedStat: 'TOTAL_USERS',
+    showIcons: true,
+    showCounts: true,
+  };
+
+  // Flag to prevent API calls when clearing filters from stat selection
+  private isClearingFiltersFromStat = false;
+
   globalFilterFields = ['userName', 'email', 'loginId'];
 
   // Pagination properties
@@ -118,13 +141,13 @@ export class UserAccountsComponent implements OnInit {
       section: 'STATUS',
     },
     {
-      key: 'isActive',
+      key: 'isLocked',
       label: 'Inactive',
       type: 'checkbox',
       section: 'STATUS',
     },
     {
-      key: 'isActive',
+      key: 'cognitoStatus',
       label: 'Unverified',
       type: 'checkbox',
       section: 'STATUS',
@@ -186,11 +209,10 @@ export class UserAccountsComponent implements OnInit {
       dateFormat: 'MMM dd, yyyy',
     },
     {
-      field: 'updatedDate',
-      header: 'Updated On',
+      field: 'lastUpdateUserName',
+      header: 'Last Updated By',
       sortable: true,
-      display: 'date',
-      dateFormat: 'MMM dd, yyyy',
+      display: 'text',
     },
     {
       field: 'actions',
@@ -209,20 +231,6 @@ export class UserAccountsComponent implements OnInit {
           action: 'resendVerification',
           severity: 'warning',
           visible: (item: UserAccount) => item.cognitoStatus === 'FCP',
-        },
-        {
-          label: 'Deactivate User',
-          icon: 'pi pi-ban',
-          action: 'deactivate',
-          severity: 'warning',
-          visible: (item: UserAccount) => item.active === true,
-        },
-        {
-          label: 'Activate User',
-          icon: 'pi pi-check',
-          action: 'activate',
-          severity: 'success',
-          visible: (item: UserAccount) => item.active === false,
         },
       ],
     },
@@ -324,20 +332,6 @@ export class UserAccountsComponent implements OnInit {
           severity: 'warning',
           visible: (item: UserAccount) => item.cognitoStatus === 'FCP',
         },
-        {
-          label: 'Deactivate User',
-          icon: 'pi pi-ban',
-          action: 'deactivate',
-          severity: 'warning',
-          visible: (item: UserAccount) => item.active === true,
-        },
-        {
-          label: 'Activate User',
-          icon: 'pi pi-check',
-          action: 'activate',
-          severity: 'success',
-          visible: (item: UserAccount) => item.active === false,
-        },
       ],
     },
   ];
@@ -356,9 +350,8 @@ export class UserAccountsComponent implements OnInit {
     const menuItems = this.menuService.generateUserManagementMenu(currentPath);
     this.menuService.updateMenuItems(menuItems);
 
-    this.route.params.subscribe((params) => {
-      const officeCode =
-        params['officeCode'] || this.ms.getCurrentOffice() || 'default';
+    this.route.params.subscribe(params => {
+      const officeCode = params['officeCode'] || this.ms.getCurrentOffice() || 'default';
       const langCode = params['langCode'] || 'en';
 
       this.breadcrumbItems = [
@@ -375,6 +368,101 @@ export class UserAccountsComponent implements OnInit {
       // Trigger change detection after updating breadcrumbs
       this.cdr.markForCheck();
     });
+
+    // Load user stats and user accounts
+    this.loadUserStats();
+    // Don't load user accounts here - let the user-stats component trigger it
+  }
+
+  loadUserStats() {
+    this.userService
+      .getUserStats()
+      .pipe(
+        finalize(() => {
+          this.cdr.markForCheck();
+        })
+      )
+      .subscribe({
+        next: (stats: UserStats) => {
+          this.totalUsers = stats.totalUsers;
+          this.activeUsers = stats.activeUsers;
+          this.inactiveUsers = stats.inactiveUsers;
+          this.unconfirmedUsers = stats.unVerifiedUsers;
+
+          // Update the user stats configuration
+          this.updateUserStatsConfig();
+        },
+        error: error => {
+          console.error('Error loading user stats:', error);
+          // Fallback to default values if API fails
+          this.totalUsers = 0;
+          this.activeUsers = 0;
+          this.inactiveUsers = 0;
+          this.unconfirmedUsers = 0;
+
+          // Update the user stats configuration with fallback values
+          this.updateUserStatsConfig();
+        },
+      });
+  }
+
+  private updateUserStatsConfig(): void {
+    this.userStatsConfig = {
+      stats: [
+        {
+          key: 'TOTAL_USERS',
+          label: 'TOTAL USERS',
+          count: this.totalUsers,
+          color: '#3949AB',
+          icon: 'pi pi-users',
+        },
+        {
+          key: 'ACTIVE_USERS',
+          label: 'ACTIVE USERS',
+          count: this.activeUsers,
+          color: '#2E7D32',
+          icon: 'pi pi-check-circle',
+        },
+        {
+          key: 'INACTIVE_USERS',
+          label: 'INACTIVE USERS',
+          count: this.inactiveUsers,
+          color: '#D32F2F',
+          icon: 'pi pi-times-circle',
+        },
+        {
+          key: 'UNVERIFIED_USERS',
+          label: 'UNVERIFIED USERS',
+          count: this.unconfirmedUsers,
+          color: '#0288D1',
+          icon: 'pi pi-user-plus',
+        },
+      ],
+      defaultSelectedStat: this.defaultSelectedStat,
+      showIcons: true,
+      showCounts: true,
+    };
+  }
+
+  loadUserAccountsBasedOnDefaultStat() {
+    // Load user accounts based on the default selected stat
+    switch (this.defaultSelectedStat) {
+      case 'TOTAL_USERS':
+        this.loadUserAccounts();
+        break;
+      case 'ACTIVE_USERS':
+        this.loadUserAccounts({ isActive: true });
+        break;
+      case 'INACTIVE_USERS':
+        this.loadUserAccounts({ isActive: false, isLocked: true });
+        break;
+      case 'UNVERIFIED_USERS':
+        this.loadUserAccounts({ cognitoStatus: 'FCP' });
+        break;
+      default:
+        this.loadUserAccounts();
+        break;
+    }
   }
 
   loadUserAccounts(params: Partial<UserQueryParams> = {}) {
@@ -387,7 +475,7 @@ export class UserAccountsComponent implements OnInit {
       ...params,
     };
 
-    console.log('API call parameters:', queryParams);
+    console.log('🔍 loadUserAccounts called with params:', queryParams);
 
     this.userService
       .getUserAccounts(queryParams)
@@ -396,44 +484,27 @@ export class UserAccountsComponent implements OnInit {
           this.cdr.markForCheck();
         })
       )
-      .subscribe((response) => {
-        this.tableData = response.userAccounts.map((user) => ({
+      .subscribe(response => {
+        this.tableData = response.userAccounts.map(user => ({
           ...user,
           // Map API fields to table fields and handle missing values
           userName: user.userName || '-',
           email: user.email || '-',
           loginId: user.loginId || '-',
-          isActive: user.active ? 'true' : 'false', // Map active boolean to string for compatibility
+          isActive: user.isActive ? true : false, // Map isActive boolean to string for compatibility
           updatedDate: user.lastUpdateDate || '-',
           createdByName: user.creationUserName || '-',
           creationDate: user.creationDate || '-',
           // Add computed fields - provide fallback for avatar
-          imageUrl:
-            user.imageUrl || this.getInitialsForAvatar(user.userName || 'User'),
+          imageUrl: user.imageUrl || this.getInitialsForAvatar(user.userName || 'User'),
           id: user.loginId || user.userName || 'unknown',
           // Add computed status field that combines isActive and cognitoStatus
-          computedStatus: this.getComputedStatus(
-            user.active,
-            user.cognitoStatus
-          ),
+          computedStatus: this.getComputedStatus(user.isActive, user.cognitoStatus),
         }));
 
         // Update pagination info from API response
         this.totalRecords = response.query.totalUserAccountQuantity;
-
-        this.updateUserStats();
       });
-  }
-
-  updateUserStats() {
-    this.totalUsers = this.tableData.length;
-    this.activeUsers = this.tableData.filter(
-      (user) => user.active === true
-    ).length;
-    this.inactiveUsers = this.tableData.filter(
-      (user) => user.active === false
-    ).length;
-    this.unconfirmedUsers = 0; // API doesn't provide this info, set to 0
   }
 
   // Filter event handlers (matching groups component)
@@ -442,17 +513,28 @@ export class UserAccountsComponent implements OnInit {
   }
 
   onFilterApplied(filters: FilterValue[]): void {
-    this.appliedFilters = filters;
+    // Clear existing applied filters first
+    this.appliedFilters = [];
+    this.hasActiveFilters = false;
+
+    // Update with new filters
+    this.appliedFilters = [...filters]; // Create new array reference to trigger change detection
     this.hasActiveFilters = filters.length > 0;
 
     // Reset to first page when applying filters
     this.currentPage = 0;
+
+    // Update stat selection based on applied filters (without API call)
+    this.updateStatSelectionFromFilters(filters);
 
     // Convert filters to API parameters using helper method
     const apiParams = this.convertFiltersToApiParams(filters);
 
     // Reload data with filters
     this.loadUserAccounts(apiParams);
+
+    // Force change detection to ensure filter chips are updated
+    this.cdr.markForCheck();
     this.cdr.detectChanges();
   }
 
@@ -461,13 +543,24 @@ export class UserAccountsComponent implements OnInit {
     this.hasActiveFilters = false;
     // Reset to first page when clearing filters
     this.currentPage = 0;
-    // Reload data without filters
-    this.loadUserAccounts();
+
+    // Only reload data if not clearing filters from stat selection
+    if (!this.isClearingFiltersFromStat) {
+      // Update stat selection to TOTAL_USERS when filters are cleared (without API call)
+      if (this.userStatsComponent) {
+        this.userStatsComponent.updateSelectedStat('TOTAL_USERS');
+      }
+      // Reload data without filters
+      this.loadUserAccounts();
+    }
   }
 
   onAppliedFiltersChange(filters: FilterValue[]): void {
-    this.appliedFilters = filters;
-    this.cdr.detectChanges();
+    // Only update if the filters are actually different to avoid unnecessary updates
+    if (JSON.stringify(this.appliedFilters) !== JSON.stringify(filters)) {
+      this.appliedFilters = [...filters]; // Create new array reference
+      this.cdr.markForCheck();
+    }
   }
 
   onSearchChange(searchTerm: string): void {
@@ -476,16 +569,19 @@ export class UserAccountsComponent implements OnInit {
 
   onFilterChipRemoved(filterKey: string): void {
     // Remove the specific filter from applied filters
-    this.appliedFilters = this.appliedFilters.filter(
-      (f) => f.key !== filterKey
-    );
+    this.appliedFilters = this.appliedFilters.filter(f => f.key !== filterKey);
     this.hasActiveFilters = this.appliedFilters.length > 0;
+
+    // Force change detection
+    this.cdr.markForCheck();
 
     // If no filters left, clear all and reload
     if (this.appliedFilters.length === 0) {
+      // Reset the flag to ensure proper clearing behavior
+      this.isClearingFiltersFromStat = false;
       // Clear the configurable filter component completely
       this.configurableFilter.clearAllFilters();
-      this.onFilterCleared();
+      // Don't call onFilterCleared() here - it will be triggered by the filterCleared event from configurable filter
     } else {
       // Reapply remaining filters
       this.onFilterApplied(this.appliedFilters);
@@ -493,8 +589,10 @@ export class UserAccountsComponent implements OnInit {
   }
 
   onFilterChipsClearAll(): void {
+    // Reset the flag to ensure proper clearing behavior
+    this.isClearingFiltersFromStat = false;
     this.configurableFilter.clearAllFilters();
-    this.onFilterCleared();
+    // Don't call onFilterCleared() here - it will be triggered by the filterCleared event from configurable filter
   }
 
   onActionClick(action: string, item: UserAccount) {
@@ -505,30 +603,12 @@ export class UserAccountsComponent implements OnInit {
       case 'resendVerification':
         this.resendVerificationEmail(item);
         break;
-      case 'deactivate':
-        this.deactivateUser(item);
-        break;
-      case 'activate':
-        this.activateUser(item);
-        break;
     }
   }
 
   editUser(user: UserAccount) {
     this.router.navigate(['edit-user-account', user.loginId], {
       relativeTo: this.route,
-    });
-  }
-
-  deactivateUser(user: UserAccount) {
-    this.userService.toggleUserStatus(user.loginId, false).subscribe(() => {
-      this.loadUserAccounts();
-    });
-  }
-
-  activateUser(user: UserAccount) {
-    this.userService.toggleUserStatus(user.loginId, true).subscribe(() => {
-      this.loadUserAccounts();
     });
   }
 
@@ -571,12 +651,7 @@ export class UserAccountsComponent implements OnInit {
       this.pageSize = event.rows;
     }
 
-    console.log(
-      'Calculated - currentPage:',
-      this.currentPage,
-      'pageSize:',
-      this.pageSize
-    );
+    console.log('Calculated - currentPage:', this.currentPage, 'pageSize:', this.pageSize);
 
     // Convert applied filters to API parameters
     const apiParams = this.convertFiltersToApiParams(this.appliedFilters);
@@ -588,12 +663,10 @@ export class UserAccountsComponent implements OnInit {
   }
 
   // Helper method to convert filters to API parameters
-  private convertFiltersToApiParams(
-    filters: FilterValue[]
-  ): Partial<UserQueryParams> {
+  private convertFiltersToApiParams(filters: FilterValue[]): Partial<UserQueryParams> {
     const apiParams: Partial<UserQueryParams> = {};
 
-    filters.forEach((filter) => {
+    filters.forEach(filter => {
       switch (filter.key) {
         case 'loginId':
           apiParams.loginId = filter.value;
@@ -606,7 +679,25 @@ export class UserAccountsComponent implements OnInit {
           apiParams.email = filter.value;
           break;
         case 'isActive':
-          apiParams.isActive = filter.value;
+          // Handle Active users filter
+          if (filter.value === true) {
+            apiParams.isActive = true;
+          }
+          break;
+        case 'isLocked':
+          // Handle Inactive users filter
+          if (filter.value === true) {
+            apiParams.isActive = false;
+            apiParams.isLocked = true;
+          }
+          break;
+        case 'cognitoStatus':
+          // Handle Unverified users filter
+          if (filter.value === true) {
+            apiParams.cognitoStatus = 'FCP';
+            apiParams.isActive = true;
+            apiParams.isLocked = false;
+          }
           break;
         case 'wipoPlatformCode':
           apiParams.wipoPlatformCode = filter.value;
@@ -628,15 +719,18 @@ export class UserAccountsComponent implements OnInit {
       return `Search: "${filter.value}"`;
     }
 
-    const filterConfig = this.filterConfigs.find((f) => f.key === filter.key);
+    const filterConfig = this.filterConfigs.find(f => f.key === filter.key);
     if (!filterConfig) {
       return `${filter.key}: ${filter.value}`;
     }
 
+    // For checkboxes, only show the label (e.g., "Active" instead of "Active: true")
+    if (filter.type === 'checkbox') {
+      return filterConfig.label;
+    }
+
     if (filter.type === 'dropdown' && filterConfig.options) {
-      const option = filterConfig.options.find(
-        (opt) => opt.value === filter.value
-      );
+      const option = filterConfig.options.find(opt => opt.value === filter.value);
       return `${filterConfig.label}: ${option ? option.label : filter.value}`;
     }
 
@@ -651,10 +745,7 @@ export class UserAccountsComponent implements OnInit {
     if (names.length === 0) {
       return name.charAt(0);
     }
-    return (
-      names[0].charAt(0) +
-      (names.length > 1 ? names[names.length - 1].charAt(0) : '')
-    );
+    return names[0].charAt(0) + (names.length > 1 ? names[names.length - 1].charAt(0) : '');
   }
 
   private getComputedStatus(isActive: boolean, cognitoStatus: string): string {
@@ -662,5 +753,99 @@ export class UserAccountsComponent implements OnInit {
       return 'Unverified';
     }
     return isActive === true ? 'Active' : 'Inactive';
+  }
+
+  onStatSelected(stat: string) {
+    console.log('🎯 Stat selected:', stat);
+
+    // Set flag to prevent API call from onFilterCleared
+    this.isClearingFiltersFromStat = true;
+
+    // Clear existing filters first (without triggering API call)
+    this.configurableFilter.clearAllFilters();
+    this.appliedFilters = [];
+    this.hasActiveFilters = false;
+
+    // Reset flag
+    this.isClearingFiltersFromStat = false;
+
+    // Reset to first page when applying stat filter
+    this.currentPage = 0;
+
+    // Apply filters based on selected stat and update appliedFilters for pagination
+    switch (stat) {
+      case 'TOTAL_USERS':
+        // No filters applied - show all users
+        this.appliedFilters = [];
+        this.hasActiveFilters = false;
+        this.loadUserAccounts();
+        break;
+
+      case 'ACTIVE_USERS':
+        this.appliedFilters = [{ key: 'isActive', value: true, type: 'checkbox' }];
+        this.hasActiveFilters = true;
+        this.loadUserAccounts({ isActive: true });
+        break;
+
+      case 'INACTIVE_USERS':
+        this.appliedFilters = [{ key: 'isLocked', value: true, type: 'checkbox' }];
+        this.hasActiveFilters = true;
+        this.loadUserAccounts({ isActive: false, isLocked: true });
+        break;
+
+      case 'UNVERIFIED_USERS':
+        this.appliedFilters = [{ key: 'cognitoStatus', value: true, type: 'checkbox' }];
+        this.hasActiveFilters = true;
+        this.loadUserAccounts({ cognitoStatus: 'FCP', isActive: true, isLocked: false });
+        break;
+    }
+
+    // Force change detection to update filter chips
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Method to change the default selected stat dynamically
+   * This can be useful for different scenarios or user preferences
+   */
+  setDefaultSelectedStat(stat: string) {
+    this.defaultSelectedStat = stat;
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Update stat selection based on applied filters (without triggering API call)
+   */
+  updateStatSelectionFromFilters(filters: FilterValue[]): void {
+    console.log('🔄 Updating stat selection from filters:', filters);
+
+    // Check if there are any status-related filters
+    const activeFilter =
+      filters.find(f => f.key === 'isActive' && f.value === true) && filters.length === 1;
+    const inactiveFilter =
+      filters.find(f => f.key === 'isLocked' && f.value === true) && filters.length === 1;
+    const cognitoStatusFilter =
+      filters.find(f => f.key === 'cognitoStatus' && f.value === true) && filters.length === 1;
+
+    let selectedStat = 'TOTAL_USERS';
+
+    if (activeFilter) {
+      console.log('📊 Setting stat to ACTIVE_USERS based on filter');
+      selectedStat = 'ACTIVE_USERS';
+    } else if (inactiveFilter) {
+      console.log('📊 Setting stat to INACTIVE_USERS based on filter');
+      selectedStat = 'INACTIVE_USERS';
+    } else if (cognitoStatusFilter) {
+      console.log('📊 Setting stat to UNVERIFIED_USERS based on filter');
+      selectedStat = 'UNVERIFIED_USERS';
+    } else {
+      console.log('📊 Setting stat to TOTAL_USERS (no specific status filters)');
+      selectedStat = 'TOTAL_USERS';
+    }
+
+    // Update the stat component visually without triggering API call
+    if (this.userStatsComponent) {
+      this.userStatsComponent.updateSelectedStat(selectedStat);
+    }
   }
 }

@@ -15,6 +15,7 @@ export interface BasicInfo {
   signaturePicture: string | ArrayBuffer | null;
   signatureType: string;
   userType: boolean; // true = external user, false = office user
+  isActive: boolean; // true = active, false = inactive
 }
 
 @Component({
@@ -39,7 +40,7 @@ export class BasicInfoFormComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = e => {
         this.formGroup.get('profilePicture').setValue(e.target?.result);
         this.cdr.detectChanges(); // Force change detection
       };
@@ -52,10 +53,9 @@ export class BasicInfoFormComponent {
     if (input.files && input.files[0]) {
       const file = input.files[0];
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = e => {
         this.formGroup.get('signaturePicture').setValue(e.target?.result);
-        const fileExtension =
-          file.name.split('.').pop()?.toLowerCase() || 'jpg';
+        const fileExtension = file.name.split('.').pop()?.toLowerCase() || 'jpg';
         this.formGroup.get('signatureType').setValue(fileExtension);
         this.cdr.detectChanges();
       };

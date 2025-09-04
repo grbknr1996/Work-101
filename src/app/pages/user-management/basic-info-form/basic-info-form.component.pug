@@ -52,16 +52,39 @@ form([formGroup]="formGroup")
             input(pInputText, id="loginAlias", formControlName="loginAlias", [ngClass]="{ 'ng-invalid': formGroup.get('loginAlias')?.invalid && formGroup.get('loginAlias')?.touched }")
             app-validation-errors([control]="formGroup.get('loginAlias')")
           
-          .form-field-row
-            label(for="userType")
-              i.pi.pi-user-edit.input-label-icon
-              | User Type
-            .user-type-toggle-container
-              p-toggleSwitch(formControlName="userType", [trueValue]="true", [falseValue]="false", [disabled]="isEditMode", [style.pointer-events]="isEditMode ? 'none' : 'auto'", styleClass="user-type-toggle")
-              span.toggle-label {{ formGroup.get('userType')?.value ? 'External User' : 'Office User' }}
-            app-validation-errors([control]="formGroup.get('userType')")
-          
-          .form-field-row.empty-row
+          .toggle-row
+            .toggle-field
+              label(for="userType")
+                i.pi.pi-user-edit.input-label-icon
+                | User Type
+              .flex.items-center.gap-3
+                p-toggleSwitch(
+                  formControlName="userType", 
+                  [trueValue]="true", 
+                  [falseValue]="false", 
+                  [disabled]="isEditMode", 
+                  [style.pointer-events]="isEditMode ? 'none' : 'auto'", 
+                  styleClass="user-type-toggle"
+                )
+                span.text-sm.font-medium.text-gray-700 {{ formGroup.get('userType')?.value ? 'External User' : 'Office User' }}
+              app-validation-errors([control]="formGroup.get('userType')")
+            
+            .toggle-field
+              label(for="isActive")
+                i.pi.pi-check-circle.input-label-icon
+                | Status
+              .flex.items-center.gap-3
+                p-toggleSwitch(
+                  formControlName="isActive", 
+                  [trueValue]="true", 
+                  [falseValue]="false", 
+                  styleClass="status-toggle"
+                  [ngClass]="formGroup.get('isActive')?.value ? 'toggle-active' : 'toggle-inactive'"
+                )
+                span.text-sm.font-medium(
+                  [ngClass]="formGroup.get('isActive')?.value ? 'text-green-600' : 'text-red-600'"
+                ) {{ formGroup.get('isActive')?.value ? 'Active' : 'Inactive' }}
+              app-validation-errors([control]="formGroup.get('isActive')")
       
       .signature-section
         label.section-title Signature Upload

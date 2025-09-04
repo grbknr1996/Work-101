@@ -11,13 +11,19 @@ import {
 import { CommonModule } from '@angular/common';
 import { PrimeIcons } from 'primeng/api';
 
-interface UserStat {
+export interface StatItem {
+  key: string;
   label: string;
   count: number;
-  percentChange: number;
-  period: string;
   color: string;
   icon: string;
+}
+
+export interface UserStatsConfig {
+  stats: StatItem[];
+  defaultSelectedStat?: string;
+  showIcons?: boolean;
+  showCounts?: boolean;
 }
 
 @Component({
@@ -27,74 +33,63 @@ interface UserStat {
   imports: [CommonModule],
 })
 export class UserStatsComponent implements OnInit, OnChanges {
-  @Input() totalUsers: number = 0;
-  @Input() activeUsers: number = 0;
-  @Input() inactiveUsers: number = 0;
-  @Input() unconfirmedUsers: number = 0;
-
-  @Input() totalUsersPercentChange: number = 0;
-  @Input() activeUsersPercentChange: number = 0;
-  @Input() inactiveUsersPercentChange: number = 0;
-  @Input() unconfirmedUsersPercentChange: number = 0;
-
-  @Input() totalUsersPeriod: string = 'last month';
-  @Input() activeUsersPeriod: string = 'last week';
-  @Input() inactiveUsersPeriod: string = 'last month';
-  @Input() unconfirmedUsersPeriod: string = 'last week';
+  @Input() config: UserStatsConfig = { stats: [] };
+  @Input() defaultSelectedStat: string = '';
 
   @Output() statSelected = new EventEmitter<string>();
 
   selectedStat: string | null = null;
-  userStats: UserStat[] = [];
+  userStats: StatItem[] = [];
+
+  private hasEmittedInitialStat = false;
 
   ngOnInit(): void {
+    console.log('🚀 UserStats: ngOnInit called with config:', this.config);
     this.initUserStats();
+
+    // Set default selected stat from config or input
+    const defaultStat = this.config.defaultSelectedStat || this.defaultSelectedStat;
+    this.selectedStat = defaultStat;
+
+    // Emit the default stat selection only once during initialization
+    if (!this.hasEmittedInitialStat && defaultStat) {
+      console.log('📤 UserStats: Emitting initial stat selection:', defaultStat);
+      this.statSelected.emit(defaultStat);
+      this.hasEmittedInitialStat = true;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // Re-initialize stats if any input changes
-    this.initUserStats();
+    // Re-initialize stats if config changes
+    if (changes['config']) {
+      this.initUserStats();
+    }
+
+    // Update selected stat if defaultSelectedStat changes, but only after initialization
+    if (changes['defaultSelectedStat'] && !changes['defaultSelectedStat'].firstChange) {
+      this.selectedStat = this.defaultSelectedStat;
+      // Only emit if this is a programmatic change after initialization
+      this.statSelected.emit(this.defaultSelectedStat);
+    }
   }
 
   initUserStats(): void {
-    this.userStats = [
-      {
-        label: 'TOTAL USERS',
-        count: this.totalUsers,
-        percentChange: this.totalUsersPercentChange,
-        period: this.totalUsersPeriod,
-        color: '#3949AB', // Indigo color
-        icon: 'pi pi-users',
-      },
-      {
-        label: 'ACTIVE USERS',
-        count: this.activeUsers,
-        percentChange: this.activeUsersPercentChange,
-        period: this.activeUsersPeriod,
-        color: '#2E7D32',
-        icon: 'pi pi-check-circle',
-      },
-      {
-        label: 'INACTIVE USERS',
-        count: this.inactiveUsers,
-        percentChange: this.inactiveUsersPercentChange,
-        period: this.inactiveUsersPeriod,
-        color: '#D32F2F',
-        icon: 'pi pi-times-circle',
-      },
-      {
-        label: 'UNVERIFIED USERS',
-        count: this.unconfirmedUsers,
-        percentChange: this.unconfirmedUsersPercentChange,
-        period: this.unconfirmedUsersPeriod,
-        color: '#0288D1',
-        icon: 'pi pi-user-plus',
-      },
-    ];
+    this.userStats = this.config.stats || [];
   }
 
-  selectStat(statLabel: string): void {
-    this.selectedStat = statLabel;
-    this.statSelected.emit(statLabel);
+  selectStat(statKey: string): void {
+    console.log('🎯 UserStats: selectStat called with:', statKey);
+    this.selectedStat = statKey;
+    this.statSelected.emit(statKey);
+  }
+
+  /**
+   * Update the selected stat visually without emitting events
+   * This is used when filters are applied/cleared to show the current state
+   */
+  updateSelectedStat(statKey: string): void {
+    console.log('🔄 UserStats: Updating selected stat to:', statKey);
+    this.selectedStat = statKey;
+    // Don't emit - this is just a visual update
   }
 }

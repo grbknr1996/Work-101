@@ -8,12 +8,7 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  FormBuilder,
-  FormGroup,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextModule } from 'primeng/inputtext';
@@ -157,7 +152,7 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
   private initializeForm(): void {
     const formControls: { [key: string]: any } = {};
 
-    this.filters.forEach((filter) => {
+    this.filters.forEach(filter => {
       formControls[filter.key] = [filter.defaultValue || null];
     });
 
@@ -166,7 +161,7 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
 
   private initializeFilterSelector(): void {
     // Initially select all filters
-    this.selectedFilters = this.filters.map((filter) => filter.key);
+    this.selectedFilters = this.filters.map(filter => filter.key);
     this.emitVisibleFiltersChange();
   }
 
@@ -177,7 +172,7 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
         debounceTime(0), // Immediate response for apply button
         distinctUntilChanged()
       )
-      .subscribe((values) => {
+      .subscribe(values => {
         console.log('Form value changes detected:', values);
         const filterValues = this.convertToFilterValues(values);
         console.log('Converted filter values:', filterValues);
@@ -189,23 +184,27 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
   private convertToFilterValues(values: any): FilterValue[] {
     const filterValues: FilterValue[] = [];
 
-    Object.keys(values).forEach((key) => {
+    Object.keys(values).forEach(key => {
       const value = values[key];
-      if (value !== null && value !== undefined && value !== '') {
-        const filterConfig = this.filters.find((f) => f.key === key);
-        if (filterConfig) {
+      const filterConfig = this.filters.find(f => f.key === key);
+
+      if (filterConfig) {
+        // For checkboxes, only include if they are true (checked)
+        if (filterConfig.type === 'checkbox') {
+          if (value === true) {
+            filterValues.push({
+              key,
+              value,
+              type: filterConfig.type,
+            });
+          }
+        }
+        // For other types, use the existing logic
+        else if (value !== null && value !== undefined && value !== '') {
           // Validate date ranges
-          if (
-            filterConfig.type === 'dateRange' &&
-            Array.isArray(value) &&
-            value.length === 2
-          ) {
+          if (filterConfig.type === 'dateRange' && Array.isArray(value) && value.length === 2) {
             const [startDate, endDate] = value;
-            if (
-              startDate &&
-              endDate &&
-              this.isValidDateRange(startDate, endDate)
-            ) {
+            if (startDate && endDate && this.isValidDateRange(startDate, endDate)) {
               filterValues.push({
                 key,
                 value,
@@ -284,7 +283,7 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
   }
 
   onSelectAll(): void {
-    this.selectedFilters = this.filters.map((filter) => filter.key);
+    this.selectedFilters = this.filters.map(filter => filter.key);
     this.emitVisibleFiltersChange();
   }
 
@@ -294,9 +293,7 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
   }
 
   private emitVisibleFiltersChange(): void {
-    const visibleFilters = this.filters.filter((filter) =>
-      this.selectedFilters.includes(filter.key)
-    );
+    const visibleFilters = this.filters.filter(filter => this.selectedFilters.includes(filter.key));
     this.visibleFiltersChange.emit(visibleFilters);
   }
 
@@ -323,11 +320,9 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
     const sections: { [key: string]: FilterConfig[] } = {};
 
     // Only show selected filters
-    const visibleFilters = this.filters.filter((filter) =>
-      this.selectedFilters.includes(filter.key)
-    );
+    const visibleFilters = this.filters.filter(filter => this.selectedFilters.includes(filter.key));
 
-    visibleFilters.forEach((filter) => {
+    visibleFilters.forEach(filter => {
       const section = filter.section || 'General';
       if (!sections[section]) {
         sections[section] = [];
@@ -347,9 +342,7 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
     console.log('Applied filters before removal:', this.appliedFilters);
 
     // Remove from applied filters
-    this.appliedFilters = this.appliedFilters.filter(
-      (f) => f.key !== filterKey
-    );
+    this.appliedFilters = this.appliedFilters.filter(f => f.key !== filterKey);
 
     console.log('Applied filters after removal:', this.appliedFilters);
 
@@ -377,7 +370,7 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
   }
 
   getFilterLabel(key: string): string {
-    const filter = this.filters.find((f) => f.key === key);
+    const filter = this.filters.find(f => f.key === key);
     return filter ? filter.label : key;
   }
 
@@ -389,24 +382,20 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
       displayValue = filter.value ? filterLabel : '';
     } else if (filter.type === 'radio' && filter.value) {
       // Get the filter config to access options for radio
-      const filterConfig = this.filters.find((f) => f.key === filter.key);
+      const filterConfig = this.filters.find(f => f.key === filter.key);
       if (filterConfig && filterConfig.options) {
-        const option = filterConfig.options.find(
-          (opt) => opt.value === filter.value
-        );
+        const option = filterConfig.options.find(opt => opt.value === filter.value);
         displayValue = option ? option.label : filter.value;
       } else {
         displayValue = filter.value?.toString() || '';
       }
     } else if (filter.type === 'multiSelect' && Array.isArray(filter.value)) {
       // Get the filter config to access options
-      const filterConfig = this.filters.find((f) => f.key === filter.key);
+      const filterConfig = this.filters.find(f => f.key === filter.key);
       if (filterConfig && filterConfig.options) {
         // Map values to their display labels
-        const displayLabels = filter.value.map((value) => {
-          const option = filterConfig.options?.find(
-            (opt) => opt.value === value
-          );
+        const displayLabels = filter.value.map(value => {
+          const option = filterConfig.options?.find(opt => opt.value === value);
           return option ? option.label : value;
         });
         displayValue = displayLabels.join(', ');
@@ -414,18 +403,14 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
         displayValue = filter.value.join(', ');
       }
     } else if (filter.type === 'dateRange' && Array.isArray(filter.value)) {
-      displayValue = filter.value
-        .map((date: Date) => date.toLocaleDateString())
-        .join(' - ');
+      displayValue = filter.value.map((date: Date) => date.toLocaleDateString()).join(' - ');
     } else if (filter.type === 'date' && filter.value) {
       displayValue = new Date(filter.value).toLocaleDateString();
     } else if (filter.type === 'dropdown' && filter.value) {
       // Get the filter config to access options for dropdown
-      const filterConfig = this.filters.find((f) => f.key === filter.key);
+      const filterConfig = this.filters.find(f => f.key === filter.key);
       if (filterConfig && filterConfig.options) {
-        const option = filterConfig.options.find(
-          (opt) => opt.value === filter.value
-        );
+        const option = filterConfig.options.find(opt => opt.value === filter.value);
         displayValue = option ? option.label : filter.value;
       } else {
         displayValue = filter.value?.toString() || '';
@@ -435,13 +420,11 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
     }
 
     // Return label with value for all filter types except checkbox (which already includes the label)
-    return filter.type === 'checkbox'
-      ? displayValue
-      : `${filterLabel}: ${displayValue}`;
+    return filter.type === 'checkbox' ? displayValue : `${filterLabel}: ${displayValue}`;
   }
 
   getFilterSelectorOptions(): Array<{ label: string; value: string }> {
-    return this.filters.map((filter) => ({
+    return this.filters.map(filter => ({
       label: filter.label,
       value: filter.key,
     }));
