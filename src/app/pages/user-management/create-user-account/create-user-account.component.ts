@@ -163,7 +163,7 @@ export class CreateUserAccountComponent implements OnInit {
         signaturePicture: [null],
         isActive: [true], // Add active/inactive toggle, default to true (active)
       }),
-      assignedGroups: [],
+      assignedGroups: [[]],
       security: this.fb.group({
         requirePasswordChange: [false],
         enableTwoFactor: [false],
@@ -343,9 +343,8 @@ export class CreateUserAccountComponent implements OnInit {
 
   // Add computed property to filter out assigned groups from available groups
   get filteredAvailableGroups(): GroupItem[] {
-    const assignedGroupIds = this.userForm
-      .get('assignedGroups')
-      .value.map((group: GroupItem) => group.id);
+    const assignedGroups = this.userForm.get('assignedGroups').value || [];
+    const assignedGroupIds = assignedGroups.map((group: GroupItem) => group.id);
 
     // Filter out assigned groups from the current page of available groups
     const filtered = this.availableGroups.filter(group => !assignedGroupIds.includes(group.id));
@@ -355,7 +354,8 @@ export class CreateUserAccountComponent implements OnInit {
       assigned: assignedGroupIds.length,
       filtered: filtered.length,
       currentPage: this.currentGroupsPage,
-      assignedGroups: this.userForm.get('assignedGroups').value,
+      assignedGroups: assignedGroups,
+      availableGroups: this.availableGroups,
     });
 
     return filtered;
