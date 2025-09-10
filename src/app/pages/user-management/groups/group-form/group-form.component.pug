@@ -38,11 +38,12 @@ app-layout
           div
             .field.mb-4
               label.font-semibold.mb-1.block(for="description") Description
-              input#description(
-                type="text",
-                pInputText,
+              textarea#description(
+                pInputTextarea,
                 [(ngModel)]="formData.description",
-                class="w-full"
+                class="w-full",
+                rows="4",
+                placeholder="Enter group description..."
               )
             .field.mb-4
               label.font-semibold.mb-1.block Status
@@ -68,71 +69,6 @@ app-layout
           p.text-sm.text-gray-600 Select users to add to or remove from this group. Both username and email are displayed for easy identification.
         
         .grid.grid-cols-2.gap-4
-          // Current Members
-          div
-            h4.font-semibold.mb-2 Current Members
-            .mb-3
-              input(
-                pInputText,
-                type="text",
-                [(ngModel)]="membersSearchTerm",
-                placeholder="Search members...",
-                class="w-full"
-              )
-            .space-y-2
-              .flex.justify-between.items-center.p-2.bg-gray-50.rounded-t
-                .flex.gap-4
-                  button.text-sm.font-medium.flex.items-center.gap-1(
-                    class="hover:text-primary",
-                    (click)="sortMembers('username')"
-                  )
-                    | Username
-                    i.pi.pi-sort-alt(
-                      [ngClass]='{' +
-                        '"pi-sort-amount-up": membersSortField === "username" && membersSortOrder === 1,' +
-                        '"pi-sort-amount-down": membersSortField === "username" && membersSortOrder === -1' +
-                      '}'
-                    )
-                  button.text-sm.font-medium.flex.items-center.gap-1(
-                    class="hover:text-primary",
-                    (click)="sortMembers('email')"
-                  )
-                    | Email
-                    i.pi.pi-sort-alt(
-                      [ngClass]='{' +
-                        '"pi-sort-amount-up": membersSortField === "email" && membersSortOrder === 1,' +
-                        '"pi-sort-amount-down": membersSortField === "email" && membersSortOrder === -1' +
-                      '}'
-                    )
-              .p-2.bg-blue-50.rounded.flex.justify-between.items-center(*ngIf="selectedMembers.length > 0")
-                span.text-sm.text-blue-700 {{ selectedMembers.length }} selected
-                button(
-                  pButton,
-                  label="Remove Selected",
-                  icon="pi pi-times",
-                  class="p-button-danger p-button-sm",
-                  (click)="removeSelectedMembers()"
-                )
-              .p-3.bg-white.rounded-lg.shadow-sm.flex.justify-between.items-center(*ngFor="let member of filterMembers()")
-                .flex.items-center.gap-3
-                  p-checkbox(
-                    [value]="member",
-                    [(ngModel)]="selectedMembers",
-                    [multiple]="true"
-                  )
-                  div
-                    .font-medium {{ member.username }}
-                    .flex.items-center.gap-2.text-sm.text-gray-600
-                      i.pi.pi-envelope.text-gray-400
-                      span {{ member.email }}
-                button(
-                  pButton,
-                  icon="pi pi-times",
-                  class="p-button-rounded p-button-danger p-button-text",
-                  (click)="removeMember(member)",
-                  pTooltip="Remove Member"
-                )
-
           // Available Users
           div
             h4.font-semibold.mb-2 Available Users
@@ -179,23 +115,26 @@ app-layout
                         '"pi-sort-amount-down": availableUsersSortField === "email" && availableUsersSortOrder === -1' +
                       '}'
                     )
-              .p-2.bg-blue-50.rounded.flex.justify-between.items-center(*ngIf="selectedUsers.length > 0")
-                span.text-sm.text-blue-700 {{ selectedUsers.length }} selected
+              .p-2.bg-blue-50.rounded.flex.justify-between.items-center
+                .flex.items-center.gap-2
+                  button(
+                    pButton,
+                    [label]="areAllAvailableUsersSelected() ? 'Deselect All' : 'Select All'",
+                    [icon]="areAllAvailableUsersSelected() ? 'pi pi-times' : 'pi pi-check'",
+                    class="p-button-text p-button-sm",
+                    (click)="areAllAvailableUsersSelected() ? deselectAllAvailableUsers() : selectAllAvailableUsers()"
+                  )
+                  span.text-sm.text-blue-700(*ngIf="selectedUsers.length > 0") {{ selectedUsers.length }} selected
                 button(
                   pButton,
                   label="Add Selected",
                   icon="pi pi-plus",
                   class="p-button-success p-button-sm",
+                  [disabled]="selectedUsers.length === 0",
                   (click)="addSelectedMembers()"
                 )
             // Users list
             .space-y-2
-              // Loading state
-              .text-center.p-3(*ngIf="isLoadingUsers")
-                i.pi.pi-spin.pi-spinner(style="font-size: 1.5rem")
-                .text-sm.text-gray-500.mt-2 Loading users...
-              
-              // Users list
               .p-3.bg-white.rounded-lg.shadow-sm.flex.justify-between.items-center(*ngFor="let user of filterAvailableUsers()")
                 .flex.items-center.gap-3
                   p-checkbox(
@@ -204,7 +143,7 @@ app-layout
                     [multiple]="true"
                   )
                   div
-                    .font-medium {{ user.username }}
+                    .font-medium {{ user.userName }}
                     .flex.items-center.gap-2.text-sm.text-gray-600
                       i.pi.pi-envelope.text-gray-400
                       span {{ user.email }}
@@ -217,7 +156,7 @@ app-layout
                 )
               
               // Empty state
-              .text-center.p-3.text-gray-500(*ngIf="availableUsers.length === 0 && !isLoadingUsers")
+              .text-center.p-3.text-gray-500(*ngIf="availableUsers.length === 0")
                 | No users found
             
             // Pagination
@@ -229,6 +168,91 @@ app-layout
                 (onPageChange)="onPageChange($event)",
                 [showCurrentPageReport]="true",
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
+              )
+
+          // Current Members
+          div
+            h4.font-semibold.mb-2 Current Members
+            .mb-3
+              input(
+                pInputText,
+                type="text",
+                [(ngModel)]="membersSearchTerm",
+                placeholder="Search members...",
+                class="w-full"
+              )
+            .space-y-2
+              .flex.justify-between.items-center.p-2.bg-gray-50.rounded-t
+                .flex.gap-4
+                  button.text-sm.font-medium.flex.items-center.gap-1(
+                    class="hover:text-primary",
+                    (click)="sortMembers('username')"
+                  )
+                    | Username
+                    i.pi.pi-sort-alt(
+                      [ngClass]='{' +
+                        '"pi-sort-amount-up": membersSortField === "username" && membersSortOrder === 1,' +
+                        '"pi-sort-amount-down": membersSortField === "username" && membersSortOrder === -1' +
+                      '}'
+                    )
+                  button.text-sm.font-medium.flex.items-center.gap-1(
+                    class="hover:text-primary",
+                    (click)="sortMembers('email')"
+                  )
+                    | Email
+                    i.pi.pi-sort-alt(
+                      [ngClass]='{' +
+                        '"pi-sort-amount-up": membersSortField === "email" && membersSortOrder === 1,' +
+                        '"pi-sort-amount-down": membersSortField === "email" && membersSortOrder === -1' +
+                      '}'
+                    )
+              .p-2.bg-blue-50.rounded.flex.justify-between.items-center
+                .flex.items-center.gap-2
+                  button(
+                    pButton,
+                    [label]="areAllCurrentMembersSelected() ? 'Deselect All' : 'Select All'",
+                    [icon]="areAllCurrentMembersSelected() ? 'pi pi-times' : 'pi pi-check'",
+                    class="p-button-text p-button-sm",
+                    (click)="areAllCurrentMembersSelected() ? deselectAllCurrentMembers() : selectAllCurrentMembers()"
+                  )
+                  span.text-sm.text-blue-700(*ngIf="selectedMembers.length > 0") {{ selectedMembers.length }} selected
+                button(
+                  pButton,
+                  label="Remove Selected",
+                  icon="pi pi-times",
+                  class="p-button-danger p-button-sm",
+                  [disabled]="selectedMembers.length === 0",
+                  (click)="removeSelectedMembers()"
+                )
+              .p-3.bg-white.rounded-lg.shadow-sm.flex.justify-between.items-center(*ngFor="let member of filterMembers()")
+                .flex.items-center.gap-3
+                  p-checkbox(
+                    [value]="member",
+                    [(ngModel)]="selectedMembers",
+                    [multiple]="true"
+                  )
+                  div
+                    .font-medium {{ member.userName }}
+                    .flex.items-center.gap-2.text-sm.text-gray-600
+                      i.pi.pi-envelope.text-gray-400
+                      span {{ member.email }}
+                button(
+                  pButton,
+                  icon="pi pi-times",
+                  class="p-button-rounded p-button-danger p-button-text",
+                  (click)="removeMember(member)",
+                  pTooltip="Remove Member"
+                )
+            
+            // Pagination for Current Members
+            .mt-4(*ngIf="totalMembers > membersRowsPerPage")
+              p-paginator(
+                [rows]="membersRowsPerPage",
+                [totalRecords]="totalMembers",
+                [rowsPerPageOptions]="membersRowsPerPageOptions",
+                (onPageChange)="onMembersPageChange($event)",
+                [showCurrentPageReport]="true",
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} members"
               )
 
       // Review Step
@@ -263,7 +287,7 @@ app-layout
                   .p-2.bg-gray-50.rounded(*ngFor="let member of groupMembers")
                     .flex.items-center.gap-2.mb-1
                       i.pi.pi-user.text-gray-400
-                      span.font-medium {{ member.username }}
+                      span.font-medium {{ member.userName }}
                     .text-sm.text-gray-500.ml-6 {{ member.email }}
               .mt-3(*ngIf="groupMembers.length === 0")
                 .text-sm.text-gray-500 No members added to this group
@@ -277,7 +301,7 @@ app-layout
           pRipple,
           label="Cancel",
           icon="pi pi-times",
-          (click)="router.navigate(['../'], { relativeTo: route })"
+          (click)="onCancel()"
         )
         button(
           *ngIf="activeIndex > 0",
@@ -302,7 +326,7 @@ app-layout
           *ngIf="activeIndex === 2",
           pButton,
           pRipple,
-          label="Save",
+          [label]="isEditMode ? 'Save' : 'Create Group'",
           icon="pi pi-save",
           class="p-button-primary",
           (click)="onSave()"

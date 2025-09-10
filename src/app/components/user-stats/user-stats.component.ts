@@ -44,16 +44,15 @@ export class UserStatsComponent implements OnInit, OnChanges {
   private hasEmittedInitialStat = false;
 
   ngOnInit(): void {
-    console.log('🚀 UserStats: ngOnInit called with config:', this.config);
     this.initUserStats();
 
     // Set default selected stat from config or input
-    const defaultStat = this.config.defaultSelectedStat || this.defaultSelectedStat;
+    const defaultStat =
+      this.config.defaultSelectedStat || this.defaultSelectedStat;
     this.selectedStat = defaultStat;
 
     // Emit the default stat selection only once during initialization
     if (!this.hasEmittedInitialStat && defaultStat) {
-      console.log('📤 UserStats: Emitting initial stat selection:', defaultStat);
       this.statSelected.emit(defaultStat);
       this.hasEmittedInitialStat = true;
     }
@@ -66,7 +65,10 @@ export class UserStatsComponent implements OnInit, OnChanges {
     }
 
     // Update selected stat if defaultSelectedStat changes, but only after initialization
-    if (changes['defaultSelectedStat'] && !changes['defaultSelectedStat'].firstChange) {
+    if (
+      changes['defaultSelectedStat'] &&
+      !changes['defaultSelectedStat'].firstChange
+    ) {
       this.selectedStat = this.defaultSelectedStat;
       // Only emit if this is a programmatic change after initialization
       this.statSelected.emit(this.defaultSelectedStat);
@@ -78,7 +80,6 @@ export class UserStatsComponent implements OnInit, OnChanges {
   }
 
   selectStat(statKey: string): void {
-    console.log('🎯 UserStats: selectStat called with:', statKey);
     this.selectedStat = statKey;
     this.statSelected.emit(statKey);
   }
@@ -88,8 +89,6 @@ export class UserStatsComponent implements OnInit, OnChanges {
    * This is used when filters are applied/cleared to show the current state
    */
   updateSelectedStat(statKey: string): void {
-    console.log('🔄 UserStats: Updating selected stat to:', statKey);
     this.selectedStat = statKey;
-    // Don't emit - this is just a visual update
   }
 }

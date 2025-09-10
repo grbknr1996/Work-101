@@ -7,6 +7,14 @@
             input.w-full#on_label(pInputText='', [(ngModel)]='searchBar', (input)="onFilterSearch(searchBar)", autocomplete='off')
           label(for='on_label') {{ searchLabel }}
       .col-span-8.flex.justify-end.gap-2.filter-icons
+        p-button(
+          *ngFor="let act of actions",
+          [icon]="act.icon",
+          [outlined]="true",
+          [text]="true",
+          [pTooltip]="act.label",
+          (click)="onActionClick(act.action)",
+        )
         app-configurable-filter(
           [filters]="filters",
           [showClearAll]="true",
@@ -30,10 +38,11 @@
           [text]="true",
           (click)="onInfoDetails()",
         )
+
 .mb-8.mt-1.w-full([style]="disabled? 'display:none' : '' ")
   app-filter-chips(
     [appliedFilters]="appliedFilters",
-    [showClearAll]="true",
+    [showClearAll]="filterClearAll",
     [clearAllLabel]="'Clear All'",
     [getDisplayValue]="getFilterDisplayValue.bind(this)",
     (chipRemove)="removeFilterChip($event)",

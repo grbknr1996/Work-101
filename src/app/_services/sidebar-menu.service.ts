@@ -226,6 +226,44 @@ export class SidebarMenuService {
     ];
   }
 
+  generateAnnuityMenu(currentPath: string): MenuItem[] {
+    console.log('current path:', currentPath);
+    const lastPart = currentPath.split('/').pop();
+    console.log(lastPart);
+    return [
+      {
+        id: 'dashboard',
+        label: 'Home',
+        icon: 'pi pi-home',
+        routerLink: this.getRouterLink('/dashboard'),
+      },
+      {
+        id: 'annuities-reminder',
+        label: 'Annuities',
+        icon: 'pi pi-calendar-plus',
+        routerLink: this.getRouterLink('/annuities'),
+      },
+      {
+        id: 'renewal-reminder',
+        label: 'Renewals',
+        icon: 'pi pi-refresh',
+        routerLink: this.getRouterLink(`/renewal-reminder`),
+      },
+      {
+        id: 'annuity-performance',
+        label: 'Performance',
+        icon: 'pi pi-chart-bar',
+        routerLink: this.getRouterLink(`/performance`),
+      },
+      {
+        id: 'statistics',
+        label: 'Statistics',
+        icon: 'pi pi-chart-line',
+        routerLink: this.getRouterLink(`/statistics`),
+      },
+    ];
+  }
+
   generateFeeConfigurationMenu(currentPath: string): MenuItem[] {
     console.log('current path:', currentPath);
     const lastPart = currentPath.split('/').pop();

@@ -168,7 +168,7 @@ export class HagueNotificationsComponent implements OnInit {
       label: 'Notified On',
       type: 'dateRange',
       placeholder: 'Select date range',
-      dateFormat: 'yy/mm/dd',
+      dateFormat: 'yy-mm-dd',
       section: 'DATE FILTERS',
     },
     {
@@ -176,7 +176,7 @@ export class HagueNotificationsComponent implements OnInit {
       label: 'Imported On',
       type: 'dateRange',
       placeholder: 'Select date range',
-      dateFormat: 'yy/mm/dd',
+      dateFormat: 'yy-mm-dd',
       section: 'DATE FILTERS',
     },
     {
@@ -211,7 +211,7 @@ export class HagueNotificationsComponent implements OnInit {
       label: 'Notified On',
       type: 'dateRange',
       placeholder: 'Select date range',
-      dateFormat: 'yy/mm/dd',
+      dateFormat: 'yy-mm-dd',
       section: 'DATE FILTERS',
     },
     {
@@ -219,7 +219,7 @@ export class HagueNotificationsComponent implements OnInit {
       label: 'Recorded On',
       type: 'dateRange',
       placeholder: 'Select date range',
-      dateFormat: 'yy/mm/dd',
+      dateFormat: 'yy-mm-dd',
       section: 'DATE FILTERS',
     },
     {
@@ -227,7 +227,7 @@ export class HagueNotificationsComponent implements OnInit {
       label: 'Sent On',
       type: 'dateRange',
       placeholder: 'Select date range',
-      dateFormat: 'yy/mm/dd',
+      dateFormat: 'yy-mm-dd',
       section: 'DATE FILTERS',
     },
     {
@@ -391,7 +391,15 @@ export class HagueNotificationsComponent implements OnInit {
           const [startDate, endDate] = filter.value;
           return `${
             filterConfig.label
-          }: ${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`;
+          }: ${startDate?.toLocaleDateString('en-CA', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit'
+            })} - ${endDate?.toLocaleDateString('en-CA', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit'
+            })}`;
         }
         return filterConfig.label;
       default:

@@ -5,7 +5,9 @@
       <div class="stat-header"><span class="stat-label" [style.color]="stat.color">{{ display }}</span><i [class]="stat.icon" [style.color]="stat.color"></i></div>
     </div>
     <div class="stat-content"><span class="stat-count" [style.color]="stat.color">{{ stat.count }}</span><span class="stat-change" [style]="stat.percentChange!=null ? '' : 'display:none;'"><i [class]="stat.percentChange!=null ? (stat.percentChange &gt;= 0 ? 'pi pi-arrow-up' : 'pi pi-arrow-down') : ''" [style.color]="stat.percentChange &gt;= 0 ? '#16a34a' : '#dc2626'"></i><span [style.color]="stat.percentChange &gt;= 0 ? '#16a34a' : '#dc2626'">{{ stat.percentChange }}%</span></span></div>
-    <div class="stat-countLabel">{{ stat.countLabel }}</div>
-    <div class="stat-period">{{ stat.period }}</div>
+    <div class="stat-countLabel" [style.color]="stat.color">{{ stat.countLabel }}</div>
+    <div *ngFor="let period of stat.periodList">
+      <div class="stat-period">{{ period }}</div>
+    </div>
   </div>
 </div>

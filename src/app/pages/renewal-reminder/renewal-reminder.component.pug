@@ -1,0 +1,29 @@
+app-layout([config]="layoutConfig")
+  app-breadcrumbs([items]="breadcrumbItems")
+  .user-accounts-header
+    h1 Renewal Reminder
+  app-package-stats([packageStats]="packageStats",
+    (statSelected)="onStatSelect($event)",
+    [selectedStat]="'TOTAL IN MONTH'")
+  app-configurable-filter-bar(
+          [filters]="filterConfigs",
+          [showClearAll]="true",
+          [showApplyButton]="true",
+          [showFilterSelector]="true",
+          [filterSelectorPlaceholder]="'Select filters to display'",
+          (filterChange)="onFilterChange($event)",
+          (filterCleared)="onFilterCleared()",
+          (filterApplied)="onFilterApplied($event)",
+          (appliedFiltersChange)="onAppliedFiltersChange($event)",
+          [showSearchBar]="true",
+          [searchBar]="searchBar",
+          (filterSearch)="filterSearch($event)",
+          [searchLabel]="'Search File Name'",
+          [showDownloadIcon]="false",
+          [appliedFilters]="appliedFilters",
+          [clearAllLabel]="'Clear All'",
+          [getDisplayValue]="getFilterDisplayValue.bind(this)",
+          (chipRemove)="removeFilterChip($event)",
+          (clearAll)="clearAllFilters()",
+        )
+  app-table([columns]="tableColumns", [data]="tableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false") 

@@ -138,6 +138,14 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: ':officeCode/:langCode/renewal-reminder',
+    loadChildren: () =>
+      import(
+        './pages/renewal-reminder/renewal-reminder.module'
+      ).then((m) => m.RenewalReminderModule),
+    canActivate: [AuthGuard],
+  },
+  {
     path: ':officeCode/:langCode/data-capture/dashboard',
     loadChildren: () =>
       import('./pages/data-capture/data-capture.module').then(

@@ -1,22 +1,6 @@
 app-layout([config]="layoutConfig")
   app-breadcrumbs([items]="breadcrumbItems")
 
-  .floating-file(
-    cdkDrag="",
-    pToolTip="Definition File",
-    toolTipPosition="left",
-    (click)="downloadDetails()"
-  )
-    i.pi.pi-book
-  
-  .floating-doc(
-    cdkDrag="",
-    pToolTip="Authority File",
-    toolTipPosition="left",
-    (click)="downloadDetails()"
-  )
-    i.pi.pi-file
-  
   .user-accounts-header
     h1 Authority Files
   
@@ -45,6 +29,8 @@ app-layout([config]="layoutConfig")
           [getDisplayValue]="getFilterDisplayValue.bind(this)",
           (chipRemove)="removeFilterChip($event)",
           (clearAll)="clearAllFilters()",
+          [actions]="filterActions",
+          (actionClick)="onFilterActionClick($event.action)",
         )
 
   app-table(

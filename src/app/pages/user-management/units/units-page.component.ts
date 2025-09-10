@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UnitsTreeComponent } from './units-tree.component';
-import { UnitDetailsComponent } from './units-details.component';
+import { UnitsTreeComponent } from './units-tree/units-tree.component';
+import { UnitDetailsComponent } from './units-details/units-details.component';
 import { UnitNode } from 'src/app/_services/units.service';
 import {
   AppLayoutComponent,
@@ -15,6 +15,7 @@ import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
 import { UnitsService } from 'src/app/_services/units.service';
+import { CreateUnitStateService } from 'src/app/_services/create-unit-state.service';
 
 @Component({
   selector: 'app-units-page',
@@ -33,6 +34,7 @@ import { UnitsService } from 'src/app/_services/units.service';
 export class UnitsPageComponent implements OnInit {
   @ViewChild('unitsTree') unitsTree!: UnitsTreeComponent;
   selectedUnit: UnitNode | null = null;
+  selectedUnitCategory: string = '';
   showTree = true;
   searchText = '';
   breadcrumbItems: MenuItem[] = [];
@@ -43,7 +45,8 @@ export class UnitsPageComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     public ms: MechanicsService,
-    private unitsService: UnitsService
+    private unitsService: UnitsService,
+    private createUnitStateService: CreateUnitStateService
   ) {}
 
   ngOnInit() {
@@ -72,20 +75,15 @@ export class UnitsPageComponent implements OnInit {
     });
   }
 
-  onNodeSelected(unit: UnitNode) {
-    console.log('UnitsPageComponent: node selected', unit);
-    this.selectedUnit = unit;
+  onNodeSelected(event: { unit: UnitNode; category: string }) {
+    console.log('UnitsPageComponent: node selected', event);
+    this.selectedUnit = event.unit;
+    this.selectedUnitCategory = event.category;
   }
 
   createNewRootUnit() {
-    const unitName = prompt('Enter name for new root unit:');
-    if (unitName && unitName.trim()) {
-      this.unitsService.addUnit(null, unitName.trim()).subscribe((newUnit) => {
-        console.log('New root unit created:', newUnit);
-        if (this.unitsTree) {
-          this.unitsTree.refresh();
-        }
-      });
-    }
+    // Clear any existing state before creating a new unit
+    this.createUnitStateService.clearState();
+    this.router.navigate(['create'], { relativeTo: this.route });
   }
 }

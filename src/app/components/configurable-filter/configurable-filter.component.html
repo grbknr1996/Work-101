@@ -2,18 +2,18 @@
 <!-- Filter Component Container-->
 <div class="filter-component-container">
   <!-- Filter Button - Right Side-->
-  <button class="p-button-outlined p-button-secondary filter-button" pButton type="button" icon="pi pi-sliders-h" [class.has-active-filters]="hasActiveFilters" (click)="toggleFilter()" pTooltip="Open Filter" tooltipStyleClass="text-xs px-2 py-1"></button>
+  <button class="p-button-outlined p-button-secondary filter-button" pButton type="button" icon="pi pi-sliders-h" [class.has-active-filters]="hasActiveFilters" (click)="toggleFilter()" pTooltip="Open Filter" tooltipPosition="bottom" tooltipStyleClass="text-xs px-2 py-1"></button>
   <!-- Filter Overlay-->
   <div class="filter-overlay" *ngIf="visible">
     <div class="filter-panel filter-panel-left">
       <!-- Close Button - Positioned at top right corner-->
-      <button class="p-button-text p-button-sm close-button-overlay" pButton type="button" icon="pi pi-times" pTooltip="Close" (click)="onClose()"></button>
+      <button class="p-button-text p-button-sm close-button-overlay" pButton type="button" icon="pi pi-times" pTooltip="Close" tooltipPosition="bottom" tooltipStyleClass="text-xs px-2 py-1" (click)="onClose()"></button>
       <!-- Header with Filter Selector and Icons-->
       <div class="filter-header">
         <div class="filter-selector-section">
           <label class="filter-selector-label">Display Filters:</label>
           <div class="filter-selector-controls">
-            <p-multiSelect class="filter-selector" [options]="getFilterSelectorOptions()" [(ngModel)]="selectedFilters" [placeholder]="filterSelectorPlaceholder" [showClear]="false" [showFilter]="true" (onChange)="onFilterSelectorChange()" optionLabel="label" optionValue="value"></p-multiSelect>
+            <p-multiSelect class="filter-selector" [options]="getFilterSelectorOptions()" [(ngModel)]="selectedFilters" [placeholder]="filterSelectorPlaceholder" [showClear]="false" [showFilter]="true" (onChange)="onFilterSelectorChange()" optionLabel="label" optionValue="value" appendTo="body"></p-multiSelect>
           </div>
         </div>
       </div>
@@ -43,12 +43,12 @@
                   <!-- Multi-Select Type-->
                   <div class="multiselect-option" *ngIf="filter.type === 'multiSelect'">
                     <label class="filter-label">{{ filter.label }}</label>
-                    <p-multiSelect class="w-full" [formControlName]="filter.key" [options]="filter.options || []" [placeholder]="filter.placeholder || 'Select options'" [showClear]="filter.showClear !== false" [showFilter]="filter.showFilter !== false" [filterBy]="filter.filterBy || 'label'" [optionLabel]="filter.optionLabel || 'label'" [optionValue]="filter.optionValue || 'value'"></p-multiSelect>
+                    <p-multiSelect class="w-full" [formControlName]="filter.key" [options]="filter.options || []" [placeholder]="filter.placeholder || 'Select options'" [showClear]="filter.showClear !== false" [showFilter]="filter.showFilter !== false" [filterBy]="filter.filterBy || 'label'" [optionLabel]="filter.optionLabel || 'label'" [optionValue]="filter.optionValue || 'value'" appendTo="body"></p-multiSelect>
                   </div>
                   <!-- Dropdown Type-->
                   <div class="dropdown-option" *ngIf="filter.type === 'dropdown'">
                     <label class="filter-label">{{ filter.label }}</label>
-                    <p-dropdown class="w-full" [formControlName]="filter.key" [options]="filter.options || []" [placeholder]="filter.placeholder || 'Select option'" [showClear]="filter.showClear !== false" [filter]="filter.showFilter !== false" [filterBy]="filter.filterBy || 'label'" [optionLabel]="filter.optionLabel || 'label'" [optionValue]="filter.optionValue || 'value'"></p-dropdown>
+                    <p-dropdown class="w-full" [formControlName]="filter.key" [options]="filter.options || []" [placeholder]="filter.placeholder || 'Select option'" [showClear]="filter.showClear !== false" [filter]="filter.showFilter !== false" [filterBy]="filter.filterBy || 'label'" [optionLabel]="filter.optionLabel || 'label'" [optionValue]="filter.optionValue || 'value'" appendTo="body"></p-dropdown>
                   </div>
                   <!-- Text Input Type-->
                   <div class="text-option" *ngIf="filter.type === 'text'">
@@ -63,12 +63,12 @@
                   <!-- Date Input Type-->
                   <div class="date-option" *ngIf="filter.type === 'date'">
                     <label class="filter-label">{{ filter.label }}</label>
-                    <p-calendar class="w-full date-calendar" [formControlName]="filter.key" [placeholder]="filter.placeholder || 'Select date'" [dateFormat]="filter.dateFormat || 'dd/mm/yy'" [showClear]="filter.showClear !== false" [showIcon]="true" [showButtonBar]="true" [touchUI]="false"></p-calendar>
+                    <p-calendar class="w-full date-calendar" [formControlName]="filter.key" [placeholder]="filter.placeholder || 'Select date'" [dateFormat]="filter.dateFormat || 'dd/mm/yy'" [showClear]="filter.showClear !== false" [showIcon]="true" [showButtonBar]="true" [touchUI]="false" appendTo="body"></p-calendar>
                   </div>
                   <!-- Date Range Input Type-->
                   <div class="daterange-option" *ngIf="filter.type === 'dateRange'">
                     <label class="filter-label">{{ filter.label }}</label>
-                    <p-calendar class="w-full date-range-calendar" [formControlName]="filter.key" [placeholder]="filter.placeholder || 'Select date range'" [dateFormat]="filter.dateFormat || 'dd/mm/yy'" [showClear]="filter.showClear !== false" selectionMode="range" [showIcon]="true" [showButtonBar]="true" [touchUI]="false" [class.error]="hasDateRangeError(filter.key)"></p-calendar><small class="error-message" *ngIf="hasDateRangeError(filter.key)">{{ getDateRangeError(filter.key) }}</small>
+                    <p-calendar class="w-full date-range-calendar" [formControlName]="filter.key" [placeholder]="filter.placeholder || 'Select date range'" [dateFormat]="filter.dateFormat || 'dd/mm/yy'" [showClear]="filter.showClear !== false" selectionMode="range" [showIcon]="true" [showButtonBar]="true" [touchUI]="false" [class.error]="hasDateRangeError(filter.key)" appendTo="body"></p-calendar><small class="error-message" *ngIf="hasDateRangeError(filter.key)">{{ getDateRangeError(filter.key) }}</small>
                   </div>
                 </div>
               </div>

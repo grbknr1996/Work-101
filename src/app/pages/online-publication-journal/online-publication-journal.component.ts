@@ -264,12 +264,14 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     const currentPath = this.router.url;
-    const menuItems = this.menuService.generateFeeConfigurationMenu(currentPath);
+    const menuItems =
+      this.menuService.generateFeeConfigurationMenu(currentPath);
     this.menuService.updateMenuItems(menuItems);
     this.initUserStats();
     // Optionally, dynamically set menu items here
-    this.route.params.subscribe(params => {
-      const officeCode = params['officeCode'] || this.ms.getCurrentOffice() || 'default';
+    this.route.params.subscribe((params) => {
+      const officeCode =
+        params['officeCode'] || this.ms.getCurrentOffice() || 'default';
       const langCode = params['langCode'] || 'en';
 
       this.breadcrumbItems = [
@@ -286,16 +288,23 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
       // Trigger change detection after updating breadcrumbs
       this.cdr.markForCheck();
     });
-    this.journalPublicationService.getJournalPublicationServices().then(journalPublicationData => {
-      this.journalPublicationServices = journalPublicationData.map(item => ({
-        ...item,
-        checked: false,
-      }));
-      this.loading = false;
-      console.log('journalPublicationServices: ', this.journalPublicationServices);
-      this.categories = this.getTabData(this.journalPublicationServices);
-      this.tableData = this.journalPublicationServices;
-    });
+    this.journalPublicationService
+      .getJournalPublicationServices()
+      .then((journalPublicationData) => {
+        this.journalPublicationServices = journalPublicationData.map(
+          (item) => ({
+            ...item,
+            checked: false,
+          })
+        );
+        this.loading = false;
+        console.log(
+          'journalPublicationServices: ',
+          this.journalPublicationServices
+        );
+        this.categories = this.getTabData(this.journalPublicationServices);
+        this.tableData = this.journalPublicationServices;
+      });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -351,7 +360,7 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
     if (filter.key === 'search') {
       return `Search: "${filter.value}"`;
     }
-    const filterConfig = this.filterConfigs.find(f => f.key === filter.key);
+    const filterConfig = this.filterConfigs.find((f) => f.key === filter.key);
     if (!filterConfig) return filter.key;
 
     switch (filterConfig.type) {
@@ -371,10 +380,12 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
   }
   removeFilterChip(filterKey: string): void {
     // Find the filter config to get the display value
-    const filterConfig = this.filterConfigs.find(f => f.key === filterKey);
+    const filterConfig = this.filterConfigs.find((f) => f.key === filterKey);
     if (filterConfig) {
       // Remove the filter from applied filters
-      this.appliedFilters = this.appliedFilters.filter(f => f.key !== filterKey);
+      this.appliedFilters = this.appliedFilters.filter(
+        (f) => f.key !== filterKey
+      );
 
       // Also remove the filter from the configurable filter component to sync state
       this.configurableFilter.removeFilterChip(filterKey);
@@ -397,11 +408,13 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
     }
 
     // Creating TabData from the map
-    let tabData: TabData[] = Array.from(map.entries()).map(([ipType, data]) => ({
-      ipType,
-      data,
-      count: data.length,
-    }));
+    let tabData: TabData[] = Array.from(map.entries()).map(
+      ([ipType, data]) => ({
+        ipType,
+        data,
+        count: data.length,
+      })
+    );
 
     const orderedTypes = [
       IpTypes.TRADEMARK,
@@ -412,7 +425,7 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
       IpTypes.GEOGRAPHICAL_INDICATIONS,
     ];
 
-    tabData = orderedTypes.map(ipType => ({
+    tabData = orderedTypes.map((ipType) => ({
       ipType,
       data: map.get(ipType) || [],
       count: map.get(ipType)?.length || 0,
@@ -436,33 +449,37 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
   private applyFilters(filters: FilterValue[]): void {
     let filtered = [...this.groups];
 
-    filters.forEach(filter => {
+    filters.forEach((filter) => {
       switch (filter.key) {
         case 'active':
           if (filter.value === true) {
-            filtered = filtered.filter(item => item.isActive === true);
+            filtered = filtered.filter((item) => item.isActive === true);
           }
           break;
         case 'inactive':
           if (filter.value === true) {
-            filtered = filtered.filter(item => item.isActive === false);
+            filtered = filtered.filter((item) => item.isActive === false);
           }
           break;
         case 'business':
           if (filter.value === true) {
-            filtered = filtered.filter(item => item.groupType === 'business');
+            filtered = filtered.filter((item) => item.groupType === 'business');
           }
           break;
         case 'user':
           if (filter.value === true) {
-            filtered = filtered.filter(item => item.groupType === 'user');
+            filtered = filtered.filter((item) => item.groupType === 'user');
           }
           break;
         case 'createdOnRange':
-          if (filter.value && Array.isArray(filter.value) && filter.value.length === 2) {
+          if (
+            filter.value &&
+            Array.isArray(filter.value) &&
+            filter.value.length === 2
+          ) {
             const [startDate, endDate] = filter.value;
             if (startDate && endDate) {
-              filtered = filtered.filter(item => {
+              filtered = filtered.filter((item) => {
                 const itemDate = new Date(item.createdOn);
                 return itemDate >= startDate && itemDate <= endDate;
               });
@@ -470,10 +487,14 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
           }
           break;
         case 'updatedOnRange':
-          if (filter.value && Array.isArray(filter.value) && filter.value.length === 2) {
+          if (
+            filter.value &&
+            Array.isArray(filter.value) &&
+            filter.value.length === 2
+          ) {
             const [startDate, endDate] = filter.value;
             if (startDate && endDate) {
-              filtered = filtered.filter(item => {
+              filtered = filtered.filter((item) => {
                 const itemDate = new Date(item.updatedOn);
                 return itemDate >= startDate && itemDate <= endDate;
               });
@@ -499,8 +520,9 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
 
   openCalculator() {
     console.log('Calculator clicked!');
-    this.route.params.subscribe(params => {
-      const officeCode = params['officeCode'] || this.ms.getCurrentOffice() || 'default';
+    this.route.params.subscribe((params) => {
+      const officeCode =
+        params['officeCode'] || this.ms.getCurrentOffice() || 'default';
       const langCode = params['langCode'] || 'en';
       this.journalPublicationService.setSelectedItems(this.categories);
       this.router.navigate([
@@ -535,7 +557,12 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
       this.pageSize = event.rows;
     }
 
-    console.log('Calculated - currentPage:', this.currentPage, 'pageSize:', this.pageSize);
+    console.log(
+      'Calculated - currentPage:',
+      this.currentPage,
+      'pageSize:',
+      this.pageSize
+    );
   }
 
   // Toggle between table and card view

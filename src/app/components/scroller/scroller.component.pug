@@ -1,0 +1,15 @@
+// Scroll to Top Button
+.scroller-container(
+  [class.show]="showScroller",
+  [class.hide]="!showScroller",
+  (click)="scrollToTop()",
+  role="button",
+  tabindex="0",
+  [attr.aria-label]="'Scroll to top'",
+  (keydown.enter)="scrollToTop()",
+  (keydown.space)="scrollToTop()"
+)
+  i.pi.pi-chevron-up.scroller-icon
+  
+  .scroller-tooltip
+    span Back to top

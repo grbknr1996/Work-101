@@ -7,10 +7,11 @@
     icon="pi pi-sliders-h",
     [class.has-active-filters]="hasActiveFilters",
     (click)="toggleFilter()",
-    pTooltip="Open Filter"
-     tooltipStyleClass="text-xs px-2 py-1"
+    pTooltip="Open Filter",
+    tooltipPosition="bottom",
+    tooltipStyleClass="text-xs px-2 py-1"
   )
-  
+
   // Filter Overlay
   .filter-overlay(*ngIf="visible")
     .filter-panel.filter-panel-left
@@ -20,9 +21,11 @@
         type="button",
         icon="pi pi-times",
         pTooltip="Close",
+        tooltipPosition="bottom",
+        tooltipStyleClass="text-xs px-2 py-1",
         (click)="onClose()"
       )
-      
+
       // Header with Filter Selector and Icons
       .filter-header
         .filter-selector-section
@@ -36,9 +39,10 @@
               [showFilter]="true",
               (onChange)="onFilterSelectorChange()",
               optionLabel="label",
-              optionValue="value"
+              optionValue="value",
+              appendTo="body"
             )
-      
+
       // Filter Content
       .filter-content
         form.filter-form([formGroup]="filterForm")
@@ -47,7 +51,6 @@
               h3.section-title {{ sectionKey }}
               .filter-options
                 .filter-option(*ngFor="let filter of getFiltersBySection()[sectionKey]")
-                  
                   // Checkbox Type
                   .checkbox-option(*ngIf="filter.type === 'checkbox'")
                     p-checkbox(
@@ -56,7 +59,7 @@
                       [inputId]="filter.key"
                     )
                     label.checkbox-label([for]="filter.key") {{ filter.label }}
-                  
+
                   // Radio Type
                   .radio-option(*ngIf="filter.type === 'radio'")
                     label.filter-label {{ filter.label }}
@@ -69,7 +72,7 @@
                           [name]="filter.key"
                         )
                         label.radio-label([for]="filter.key + '_' + i") {{ option.label }}
-                  
+
                   // Multi-Select Type
                   .multiselect-option(*ngIf="filter.type === 'multiSelect'")
                     label.filter-label {{ filter.label }}
@@ -81,9 +84,10 @@
                       [showFilter]="filter.showFilter !== false",
                       [filterBy]="filter.filterBy || 'label'",
                       [optionLabel]="filter.optionLabel || 'label'",
-                      [optionValue]="filter.optionValue || 'value'"
+                      [optionValue]="filter.optionValue || 'value'",
+                      appendTo="body"
                     )
-                  
+
                   // Dropdown Type
                   .dropdown-option(*ngIf="filter.type === 'dropdown'")
                     label.filter-label {{ filter.label }}
@@ -95,9 +99,10 @@
                       [filter]="filter.showFilter !== false",
                       [filterBy]="filter.filterBy || 'label'",
                       [optionLabel]="filter.optionLabel || 'label'",
-                      [optionValue]="filter.optionValue || 'value'"
+                      [optionValue]="filter.optionValue || 'value'",
+                      appendTo="body"
                     )
-                  
+
                   // Text Input Type
                   .text-option(*ngIf="filter.type === 'text'")
                     label.filter-label {{ filter.label }}
@@ -106,7 +111,7 @@
                       [formControlName]="filter.key",
                       [placeholder]="filter.placeholder || 'Enter text'"
                     )
-                  
+
                   // Number Input Type
                   .number-option(*ngIf="filter.type === 'number'")
                     label.filter-label {{ filter.label }}
@@ -117,7 +122,7 @@
                       [max]="filter.max",
                       [step]="filter.step"
                     )
-                  
+
                   // Date Input Type
                   .date-option(*ngIf="filter.type === 'date'")
                     label.filter-label {{ filter.label }}
@@ -128,9 +133,10 @@
                       [showClear]="filter.showClear !== false",
                       [showIcon]="true",
                       [showButtonBar]="true",
-                      [touchUI]="false"
+                      [touchUI]="false",
+                      appendTo="body"
                     )
-                  
+
                   // Date Range Input Type
                   .daterange-option(*ngIf="filter.type === 'dateRange'")
                     label.filter-label {{ filter.label }}
@@ -143,10 +149,11 @@
                       [showIcon]="true",
                       [showButtonBar]="true",
                       [touchUI]="false",
-                      [class.error]="hasDateRangeError(filter.key)"
+                      [class.error]="hasDateRangeError(filter.key)",
+                      appendTo="body"
                     )
                     small.error-message(*ngIf="hasDateRangeError(filter.key)") {{ getDateRangeError(filter.key) }}
-      
+
       // Action Buttons
       .filter-actions(*ngIf="showClearAll || showApplyButton")
         .action-buttons

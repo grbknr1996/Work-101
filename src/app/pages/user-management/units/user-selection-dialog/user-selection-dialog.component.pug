@@ -1,0 +1,145 @@
+p-dialog(
+  [visible]="visible",
+  (visibleChange)="visibleChange.emit($event)",
+  [modal]="true",
+  [style]="{ width: '800px' }",
+  [closable]="true",
+  [draggable]="false",
+  [resizable]="false"
+)
+  ng-template(pTemplate="header")
+    .flex.align-items-center.gap-2
+      i.pi.pi-users(style="font-size: 1.2rem")
+      span Add {{ getRoleLabel() }} Members
+
+  .p-fluid
+    // Search Section
+    .mb-4
+      .flex.gap-2
+        input(
+          pInputText,
+          [(ngModel)]="searchText",
+          (input)="onSearch()",
+          placeholder="Search users by name, login, or email...",
+          style="flex: 1",
+          class="text-sm"
+        )
+        button.p-button-outlined(
+          pButton,
+          icon="pi pi-search",
+          (click)="onSearch()",
+          title="Search"
+        )
+
+    // Current Members Info
+    .mb-3(*ngIf="currentMembers.length > 0")
+      .flex.align-items-center.gap-2
+        i.pi.pi-info-circle.text-blue-500.text-xs
+        span.text-xs.text-gray-600 Currently {{ currentMembers.length }} member(s) assigned to {{ getRoleLabel() }} role
+
+    // Select All
+    .mb-3
+      .flex.align-items-center.gap-2
+        p-checkbox(
+          [binary]="true",
+          [ngModel]="isAllSelected()",
+          (onChange)="onSelectAll()",
+          [disabled]="filteredUsers.length === 0"
+        )
+        label.text-xs.font-medium
+          span(*ngIf="role === 'head'") Select One Head User ({{ selectedCount }} selected)
+          span(*ngIf="role !== 'head'") Select All ({{ selectedCount }} selected)
+
+    // Head User Limit Info
+    .mb-3(*ngIf="role === 'head'")
+      .flex.align-items-center.gap-2
+        i.pi.pi-info-circle.text-blue-500.text-xs
+        span.text-xs.text-gray-600 Only one head user can be assigned to this role
+
+    // Users List
+    .border-1.border-gray-200.border-round.user-list-container(
+      style="max-height: 400px; overflow-y: auto"
+    )
+      // Loading State
+      .loading-state(*ngIf="loading")
+        i.pi.pi-spin.pi-spinner
+        span Loading users...
+
+      // Empty State
+      .empty-state(*ngIf="!loading && filteredUsers.length === 0")
+        i.pi.pi-search.text-3xl.mb-3.block
+        .text-sm.font-medium.mb-2 No users found
+        .text-xs Try adjusting your search criteria
+
+      // User List Items
+      .p-2(*ngIf="!loading && filteredUsers.length > 0")
+        .user-list-item(
+          *ngFor="let user of filteredUsers; trackBy: trackByUserId",
+          [class.selected]="user.selected",
+          [class.disabled]="role === 'head' && !user.selected && selectedUserIds.size > 0",
+          (click)="toggleUserSelection(user)"
+        )
+          .flex.align-items-center.gap-3.p-3.border-round.cursor-pointer.transition-colors(
+            class="hover:bg-gray-50",
+            [class.bg-blue-50]="user.selected"
+          )
+            // User Avatar
+            .flex-shrink-0
+              .user-avatar
+                i.pi.pi-user.text-gray-400
+
+            // User Info
+            .flex-grow-1.min-w-0
+              .flex.align-items-center.gap-2.mb-1
+                h4.font-semibold.text-gray-900.m-0.text-sm {{ user.userName }}
+              .flex.flex-column.gap-1
+                .flex.align-items-center.gap-2.text-xs.text-gray-600
+                  i.pi.pi-at.text-xs
+                  span {{ user.loginId }}
+                .flex.align-items-center.gap-2.text-xs.text-gray-600
+                  i.pi.pi-envelope.text-xs
+                  span {{ user.email }}
+
+            // Selection Indicator
+            .flex-shrink-0(*ngIf="user.selected")
+              .selection-indicator
+                i.pi.pi-check-circle.text-blue-600
+
+    // Pagination Controls
+    .mt-3(*ngIf="totalPages > 1")
+      p-paginator(
+        [rows]="pageSize",
+        [totalRecords]="totalUsers",
+        [first]="currentPage * pageSize",
+        [showCurrentPageReport]="true",
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users",
+        (onPageChange)="onPageChange($event)",
+        [disabled]="loading",
+        styleClass="p-paginator-sm",
+        appendTo="body"
+      )
+
+    // Selection Summary
+    .mt-3(*ngIf="selectedCount > 0")
+      .bg-blue-50.border-1.border-blue-200.border-round.p-3
+        .flex.align-items-center.gap-2
+          i.pi.pi-check-circle.text-blue-600.text-sm
+          span.font-medium.text-blue-800.text-sm
+            span(*ngIf="role === 'head'") {{ selectedCount }} head user selected
+            span(*ngIf="role !== 'head'") {{ selectedCount }} user(s) selected for {{ getRoleLabel() }} role
+
+  ng-template(pTemplate="footer")
+    .flex.justify-content-end.gap-2
+      button.p-button-outlined(
+        pButton,
+        label="Cancel",
+        icon="pi pi-times",
+        (click)="onCancel()"
+      )
+      button.p-button-primary(
+        pButton,
+        label="Add Selected",
+        icon="pi pi-plus",
+        [disabled]="selectedCount === 0",
+        (click)="onAddSelected()"
+      )

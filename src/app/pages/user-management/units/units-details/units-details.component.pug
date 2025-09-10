@@ -1,0 +1,204 @@
+.unit-details-container(
+  style="max-width: 1100px; margin: 2rem auto; padding: 2rem; background: #fff; border-radius: 1rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);"
+)
+  // Unit Header
+  .unit-header(
+    *ngIf="unit",
+    style="margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #e0e0e0"
+  )
+    div(style="display: flex; justify-content: space-between; align-items: center")
+      div
+        // Unit Name Display/Edit
+        div(*ngIf="!isEditMode")
+          h2(style="margin: 0 0 0.5rem 0; color: #333; font-size: 1.5rem; font-weight: 600") {{ unit.name }}
+        
+        div(
+          *ngIf="isEditMode",
+          [formGroup]="unitForm"
+        )
+          input(
+            type="text",
+            formControlName="unitName",
+            placeholder="Enter unit name",
+            style="font-size: 1.5rem; font-weight: 600; background: transparent; border: none; border-bottom: 2px solid #1976d2; padding: 0.5rem 0; width: 100%; max-width: 400px; outline: none;",
+            [class.p-invalid]="unitForm.get('unitName')?.invalid && unitForm.get('unitName')?.touched"
+          )
+          small.p-error(
+            *ngIf="unitForm.get('unitName')?.invalid && unitForm.get('unitName')?.touched",
+            style="display: block; margin-top: 0.25rem"
+          ) Unit name is required and must be at least 2 characters
+        
+        div(style="display: flex; gap: 1rem; align-items: center")
+          span(style="background: #e3f2fd; color: #1976d2; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.875rem; font-weight: 500;") {{ unitCategory || 'Unit' }}
+          span(style="color: #666; font-size: 0.875rem") ID: {{ unit.id }}
+      
+      div(style="display: flex; gap: 0.5rem")
+        // View Mode Buttons
+        ng-container(*ngIf="!isEditMode")
+          button.p-button-outlined.p-button-sm(
+            pButton,
+            icon="pi pi-pencil",
+            (click)="editUnit()",
+            title="Edit Unit",
+            style="min-width: 40px; height: 40px"
+          )
+          button.p-button-outlined.p-button-sm(
+            *ngIf="unitCategory !== 'Section'",
+            pButton,
+            icon="pi pi-plus",
+            title="Add Sub-unit",
+            style="min-width: 40px; height: 40px",
+            (click)="createSubUnit()"
+          )
+        
+        // Edit Mode Buttons
+        ng-container(*ngIf="isEditMode")
+          button.p-button-success.p-button-sm(
+            pButton,
+            label="Save",
+            (click)="saveUnit()",
+            title="Save Changes",
+            style="min-width: 80px; height: 40px"
+          )
+          button.p-button-outlined.p-button-sm(
+            pButton,
+            label="Cancel",
+            (click)="cancelEdit()",
+            title="Cancel Edit",
+            style="min-width: 80px; height: 40px"
+          )
+
+  .role-selector(
+    style="display: flex; gap: 1rem; margin-bottom: 1.5rem; justify-content: flex-start"
+  )
+    p-buttonGroup
+      button(
+        pButton,
+        *ngFor="let role of roleLabels; let i = index",
+        [label]="role.label",
+        [class.p-button-outlined]="selectedRoleIndex !== i",
+        [class.p-button-primary]="selectedRoleIndex === i",
+        (click)="selectRole(i)",
+        style="min-width: 120px; font-weight: 500"
+      )
+
+  p-tabView([(activeIndex)]="selectedTabIndex")
+    p-tabPanel(header="Users")
+      button.p-button-sm.p-button-primary(
+        *ngIf="isEditMode",
+        pButton,
+        icon="pi pi-plus",
+        [label]="selectedRole === 'head' && getSelectedRoleUsers().length > 0 ? 'Change Head User' : 'Add User'",
+        style="margin-bottom: 1rem",
+        (click)="openAddUserDialog()"
+      )
+      
+      p-table(
+        [value]="getSelectedRoleUsers()",
+        *ngIf="unit"
+      )
+        ng-template(pTemplate="header")
+          tr
+            th Name
+            th Email
+            th(style="width: 60px") Actions
+        
+        ng-template(
+          pTemplate="body",
+          let-user,
+          let-i="rowIndex"
+        )
+          tr
+            td {{ user.userName }}
+            td {{ user.email || user.login }}
+            td
+              // View Mode: Show View button
+              button.p-button-text.p-button-sm(
+                *ngIf="!isEditMode",
+                pButton,
+                icon="pi pi-eye",
+                title="View User",
+                (click)="viewUser(user)"
+              )
+              
+              // Edit Mode: Show View and Delete buttons
+              div(
+                *ngIf="isEditMode",
+                style="display: flex; gap: 0.25rem"
+              )
+                button.p-button-text.p-button-sm(
+                  pButton,
+                  icon="pi pi-eye",
+                  title="View User",
+                  (click)="viewUser(user)"
+                )
+                button.p-button-text.p-button-sm.p-button-danger(
+                  pButton,
+                  icon="pi pi-times",
+                  title="Remove User",
+                  (click)="removeUser(selectedRole, i)"
+                )
+      
+      // User Selection Dialog
+      app-user-selection-dialog(
+        [(visible)]="userSelectionDialogVisible",
+        [currentMembers]="getSelectedRoleUsers()",
+        [role]="selectedRole",
+        (membersSelected)="onUsersSelected($event)"
+      )
+
+    p-tabPanel(header="Permissions")
+      .grid
+        .col-12
+          label.block.mb-2.font-medium Permission Sets
+          p-multiSelect.w-full(
+            [options]="availablePermissions",
+            [(ngModel)]="selectedPermissions",
+            optionLabel="label",
+            [filter]="true",
+            placeholder="Select Permission Sets",
+            [panelStyle]="{minWidth: '600px', width: '80vw', maxWidth: '700px', maxHeight: '400px', overflowX: 'auto'}",
+            [virtualScroll]="true",
+            [virtualScrollItemSize]="34",
+            [showToggleAll]="true",
+            appendTo="body"
+          )
+            ng-template(
+              let-permission,
+              pTemplate="item"
+            )
+              .flex.items-center.justify-between.p-2(style="min-width: 350px")
+                span.font-semibold {{ permission.label }}
+                span.text-gray-500.text-xs.ml-4.whitespace-nowrap {{ permission.permissions.length }} permission{{ permission.permissions.length > 1 ? 's' : '' }}
+        
+        .col-12.mt-4
+          .bg-gray-50.p-4.rounded-lg
+            h4.font-semibold.mb-4 Selected Permissions
+            .grid.grid-cols-1.gap-4(ckass="md:grid-cols-2.lg:grid-cols-3")
+              .p-4.bg-white.rounded-lg.shadow-sm(
+                *ngFor="let permission of selectedPermissions"
+              )
+                .font-medium.text-lg.mb-2 {{ permission.label }}
+                .text-sm.text-gray-600
+                  .flex.flex-wrap.gap-2
+                    span.inline-block.bg-blue-100.text-blue-800.px-2.py-1.rounded-full.text-xs(
+                      *ngFor="let perm of permission.permissions"
+                    ) {{ perm }}
+
+    p-tabPanel(header="Actions")
+      app-unit-actions-assignment(
+        [processes]="processes",
+        [selectedActions]="selectedActions",
+        (selectedActionsChange)="onSelectedActionsChange($event)"
+      )
+
+// No unit selected state
+.no-unit-selected(
+  *ngIf="!unit",
+  style="text-align: center; padding: 3rem; color: #666"
+)
+  i.pi.pi-building(
+    style="font-size: 3rem; color: #ccc; margin-bottom: 1rem; display: block"
+  )
+  h3(style="margin: 0 0 0.5rem 0; color: #888") No Unit Selected
+  p(style="margin: 0; font-size: 0.9rem") Select a unit from the tree to view its details

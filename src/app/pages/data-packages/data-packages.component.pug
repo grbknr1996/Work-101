@@ -4,7 +4,7 @@ app-layout([config]="layoutConfig")
     h1 Data Sharing
   app-package-stats([packageStats]="packageStats",
     (statSelected)="onStatSelect($event)",
-    [selectedStat]="'TOTAL IN MONTH'")
+    [selectedStat]="statSelected")
   app-configurable-filter-bar(
           [filters]="filterConfigs",
           [showClearAll]="true",
@@ -20,10 +20,11 @@ app-layout([config]="layoutConfig")
           (filterSearch)="filterSearch($event)",
           [searchLabel]="'Search File Name'",
           [showDownloadIcon]="false",
+          [filterClearAll]="false",
           [appliedFilters]="appliedFilters",
-          [clearAllLabel]="'Clear All'",
           [getDisplayValue]="getFilterDisplayValue.bind(this)",
           (chipRemove)="removeFilterChip($event)",
           (clearAll)="clearAllFilters()",
+          (removeDefaultFilter)="removeDefaultFilter($event)"
         )
   app-table([columns]="tableColumns", [data]="tableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false") 

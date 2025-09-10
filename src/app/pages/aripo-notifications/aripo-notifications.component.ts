@@ -190,7 +190,7 @@ export class AripoNotificationsComponent implements OnInit {
       label: 'Notified On',
       type: 'dateRange',
       placeholder: 'Select date range',
-      dateFormat: 'yy/mm/dd',
+      dateFormat: 'yy-mm-dd',
       section: 'DATE FILTERS',
     },
     {
@@ -231,7 +231,7 @@ export class AripoNotificationsComponent implements OnInit {
       label: 'Notified On',
       type: 'dateRange',
       placeholder: 'Select date range',
-      dateFormat: 'yy/mm/dd',
+      dateFormat: 'yy-mm-dd',
       section: 'DATE FILTERS',
     },
     {
@@ -389,7 +389,15 @@ export class AripoNotificationsComponent implements OnInit {
           const [startDate, endDate] = filter.value;
           return `${
             filterConfig.label
-          }: ${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`;
+          }: ${startDate?.toLocaleDateString('en-CA', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit'
+            })} - ${endDate?.toLocaleDateString('en-CA', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit'
+            })}`;
         }
         return filterConfig.label;
       default:

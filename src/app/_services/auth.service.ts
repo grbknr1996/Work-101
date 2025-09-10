@@ -190,16 +190,18 @@ export class AuthService {
           console.log('Current user:', currentUser);
 
           try {
+            const { MechanicsService } = await import('./mechanics.service');
+            const mechanicsService = this.injector.get(MechanicsService);
             const userAttributes = await fetchUserAttributes();
             const formattedUser = this.formatUserAttributes(userAttributes);
-            const officeCode = formattedUser.officeCode || 'xx';
+            const officeCode =
+              formattedUser.officeCode ||
+              mechanicsService.getCurrentOffice() ||
+              'default';
 
             // Update MechanicsService with the office code using injector to avoid circular dependency
             try {
-              const { MechanicsService } = await import('./mechanics.service');
-              const mechanicsService = this.injector.get(MechanicsService);
               mechanicsService.setCurrentOfficeFromAuth(officeCode);
-              // Also set the user's actual office to preserve WIPO admin status
               mechanicsService.setUserActualOffice(officeCode);
             } catch (error) {
               console.warn('Could not update MechanicsService:', error);

@@ -107,23 +107,29 @@ export class DataCaptureComponent implements OnInit {
   packageStats = [
     {
       label: 'Total Received Applications',
-      displayLabel:['Applications Awaiting Capture: 80'],
-      countLabel: 'Total Received Applications: 1200',
-      period: 'Since: March 24, 2025',
+      displayLabel:['Applications Awaiting Capture'],
+      count:80,
+      //countLabel: 'Total Received Applications: 1200',
+      //period: 'Since: March 24, 2025',
+      periodList:['Total Received Applications: 1200', 'Since: March 24, 2025'],
       color: '#3949AB', // Indigo color
     },
     {
       label: 'Total Received Post-Filings',
-      displayLabel:['Post-Filings Awaiting Capture: 12'],
-      countLabel: 'Total Received Post-Filings: 720',
-      period: 'Since: March 24, 2025',
+      displayLabel:['Post-Filings Awaiting Capture'],
+      count: 12,
+      //countLabel: 'Total Received Post-Filings: 720',
+      //period: 'Since: March 24, 2025',
+      periodList:['Total Received Post-Filings: 720', 'Since: March 24, 2025'],
       color: '#2E7D32', // Green color
     },
     {
       label: 'Total Received Documents',
-      displayLabel:['Documents Awaiting Digitalization: 120'],
-      countLabel: 'Total Received Documents: 560',
-      period: 'Since: March 24, 2025',
+      displayLabel:['Documents Awaiting Digitalization'],
+      count: 120,
+      //countLabel: 'Total Received Documents: 560',
+      //period: 'Since: March 24, 2025',
+      periodList:['Total Received Documents: 560', 'Since: March 24, 2025'],
       color: '#0662ccff', // Blue color
     },
   ];
@@ -180,7 +186,7 @@ export class DataCaptureComponent implements OnInit {
       label: 'Received On',
       type: 'dateRange',
       placeholder: 'Select date range',
-      dateFormat: 'yy/mm/dd',
+      dateFormat: 'yy-mm-dd',
       section: 'DATE FILTERS',
     },
     {
@@ -188,7 +194,7 @@ export class DataCaptureComponent implements OnInit {
       label: 'Certified On',
       type: 'dateRange',
       placeholder: 'Select date range',
-      dateFormat: 'yy/mm/dd',
+      dateFormat: 'yy-mm-dd',
       section: 'DATE FILTERS',
     },
     {
@@ -196,7 +202,7 @@ export class DataCaptureComponent implements OnInit {
       label: 'Digitalized On',
       type: 'dateRange',
       placeholder: 'Select date range',
-      dateFormat: 'yy/mm/dd',
+      dateFormat: 'yy-mm-dd',
       section: 'DATE FILTERS',
     },
     {
@@ -396,7 +402,15 @@ export class DataCaptureComponent implements OnInit {
           const [startDate, endDate] = filter.value;
           return `${
             filterConfig.label
-          }: ${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`;
+          }: ${startDate?.toLocaleDateString('en-CA', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit'
+            })} - ${endDate?.toLocaleDateString('en-CA', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit'
+            })}`;
         }
         return filterConfig.label;
       default:

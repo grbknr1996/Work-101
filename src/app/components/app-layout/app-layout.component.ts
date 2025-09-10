@@ -11,6 +11,7 @@ import { AppSidebarComponent } from '../app-sidebar/app-sidebar.component';
 import { MechanicsService } from '../../_services/mechanics.service';
 import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
 import { ToastComponent } from '../toast/toast.component';
+import { ScrollerComponent } from '../scroller/scroller.component';
 
 export interface LayoutConfig {
   appTitle?: string;
@@ -38,6 +39,7 @@ export interface LayoutConfig {
     MenuModule,
     AppNavbarComponent,
     AppSidebarComponent,
+    ScrollerComponent,
     ToastComponent,
   ],
   templateUrl: './app-layout.component.html',
@@ -78,7 +80,7 @@ export class AppLayoutComponent implements OnInit {
       fixedSidebar: false,
       sidebarCollapsed: false,
       theme: 'light',
-      logo: './assets/images/asean-logo.png',
+      logo: '',
     };
   }
 

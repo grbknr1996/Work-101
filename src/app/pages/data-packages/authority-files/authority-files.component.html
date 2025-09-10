@@ -1,12 +1,10 @@
 
 <app-layout [config]="layoutConfig">
   <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
-  <div class="floating-file" cdkDrag="" pToolTip="Definition File" toolTipPosition="left" (click)="downloadDetails()"><i class="pi pi-book"></i></div>
-  <div class="floating-doc" cdkDrag="" pToolTip="Authority File" toolTipPosition="left" (click)="downloadDetails()"><i class="pi pi-file"></i></div>
   <div class="user-accounts-header">
     <h1>Authority Files</h1>
   </div>
   <app-package-stats [packageStats]="packageStats" (statSelected)="onStatSelect($event)" [selectedStat]="'All'"></app-package-stats>
-  <app-configurable-filter-bar [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'Select filters to display'" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)" [showSearchBar]="true" [searchBar]="searchBar" (filterSearch)="filterSearch($event)" [searchLabel]="'Search Publication Number'" [appliedFilters]="appliedFilters" [clearAllLabel]="'Clear All'" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-configurable-filter-bar>
+  <app-configurable-filter-bar [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'Select filters to display'" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)" [showSearchBar]="true" [searchBar]="searchBar" (filterSearch)="filterSearch($event)" [searchLabel]="'Search Publication Number'" [appliedFilters]="appliedFilters" [clearAllLabel]="'Clear All'" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()" [actions]="filterActions" (actionClick)="onFilterActionClick($event.action)"></app-configurable-filter-bar>
   <app-table [columns]="tableColumns" [data]="tableData" [showClearButton]="false" [showSearch]="false"></app-table>
 </app-layout>

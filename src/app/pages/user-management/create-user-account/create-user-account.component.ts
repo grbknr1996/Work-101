@@ -1,4 +1,9 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  ChangeDetectorRef,
+} from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
@@ -126,7 +131,9 @@ export class CreateUserAccountComponent implements OnInit {
     ];
 
     this.initForm();
-    console.log('Form initialized, groups will be loaded when navigating to Groups step');
+    console.log(
+      'Form initialized, groups will be loaded when navigating to Groups step'
+    );
 
     if (this.isEditMode) {
       this.loadUserData();
@@ -173,7 +180,7 @@ export class CreateUserAccountComponent implements OnInit {
     console.log('Form initialized:', this.userForm);
 
     // Subscribe to form changes for debugging
-    this.userForm.get('assignedGroups').valueChanges.subscribe(value => {
+    this.userForm.get('assignedGroups').valueChanges.subscribe((value) => {
       console.log('Assigned groups form value changed:', value);
     });
   }
@@ -231,7 +238,7 @@ export class CreateUserAccountComponent implements OnInit {
     this.userService
       .getUserGroups(queryParams)
       .pipe(
-        catchError(error => {
+        catchError((error) => {
           console.error('Error loading groups:', error);
           this.groupsLoadError = true;
           // Fallback to empty array if API fails
@@ -244,11 +251,11 @@ export class CreateUserAccountComponent implements OnInit {
           this.isLoadingGroups = false;
         })
       )
-      .subscribe(response => {
+      .subscribe((response) => {
         console.log('API response received:', response);
         if (response && response.result && response.result.userGroups) {
           // Transform UserGroup to GroupItem for the component
-          this.availableGroups = response.result.userGroups.map(group => ({
+          this.availableGroups = response.result.userGroups.map((group) => ({
             id: group.groupId,
             name: group.groupName,
             type: group.groupType,
@@ -256,7 +263,10 @@ export class CreateUserAccountComponent implements OnInit {
           }));
 
           // Update total count from API response
-          if (response.query && response.query.totalUserGroupQuantity !== undefined) {
+          if (
+            response.query &&
+            response.query.totalUserGroupQuantity !== undefined
+          ) {
             this.totalGroupsCount = response.query.totalUserGroupQuantity;
           }
 
@@ -266,7 +276,10 @@ export class CreateUserAccountComponent implements OnInit {
 
           // If we're in edit mode and this is the first time loading groups,
           // make sure the assigned groups are still visible
-          if (this.isEditMode && this.userForm.get('assignedGroups').value.length > 0) {
+          if (
+            this.isEditMode &&
+            this.userForm.get('assignedGroups').value.length > 0
+          ) {
             console.log(
               'Edit mode: assigned groups preserved:',
               this.userForm.get('assignedGroups').value
@@ -337,7 +350,12 @@ export class CreateUserAccountComponent implements OnInit {
 
   get isOnGroupsStep(): boolean {
     const isOnGroups = this.activeStep === 1;
-    console.log('isOnGroupsStep check:', isOnGroups, 'activeStep:', this.activeStep);
+    console.log(
+      'isOnGroupsStep check:',
+      isOnGroups,
+      'activeStep:',
+      this.activeStep
+    );
     return isOnGroups;
   }
 
@@ -347,7 +365,9 @@ export class CreateUserAccountComponent implements OnInit {
     const assignedGroupIds = assignedGroups.map((group: GroupItem) => group.id);
 
     // Filter out assigned groups from the current page of available groups
-    const filtered = this.availableGroups.filter(group => !assignedGroupIds.includes(group.id));
+    const filtered = this.availableGroups.filter(
+      (group) => !assignedGroupIds.includes(group.id)
+    );
 
     console.log('Filtered available groups:', {
       total: this.availableGroups.length,
@@ -389,7 +409,7 @@ export class CreateUserAccountComponent implements OnInit {
             isActive: userAccount.isActive, // Use active flag from user details API
           },
           assignedGroups: userAccount.userGroupBag
-            ? userAccount.userGroupBag.map(group => ({
+            ? userAccount.userGroupBag.map((group) => ({
                 id: group.groupId.toString(),
                 name: group.groupName,
                 type: group.groupType,
@@ -409,9 +429,11 @@ export class CreateUserAccountComponent implements OnInit {
         this.userForm.patchValue(userData);
 
         // User groups are now loaded with the user data via userGroupsBag
-        console.log('User data and groups loaded and form populated from userGroupsBag.');
+        console.log(
+          'User data and groups loaded and form populated from userGroupsBag.'
+        );
       },
-      error: error => {
+      error: (error) => {
         console.error('Error loading user account:', error);
       },
     });
@@ -432,18 +454,27 @@ export class CreateUserAccountComponent implements OnInit {
   }
 
   onStepChange(stepValue: number) {
-    console.log('Step change requested to:', stepValue, 'current active step:', this.activeStep);
+    console.log(
+      'Step change requested to:',
+      stepValue,
+      'current active step:',
+      this.activeStep
+    );
     if (stepValue <= this.activeStep) {
       this.activeStep = stepValue;
       console.log('Step changed to:', this.activeStep);
 
       // If we're moving to the Groups step (step 1), ensure groups are loaded
       if (this.activeStep === 1) {
-        console.log('Moving to Groups step, checking if groups need to be loaded...');
+        console.log(
+          'Moving to Groups step, checking if groups need to be loaded...'
+        );
 
         // In edit mode, user groups are already loaded from userGroupsBag
         if (this.isEditMode) {
-          console.log('Edit mode: user groups already loaded from userGroupsBag');
+          console.log(
+            'Edit mode: user groups already loaded from userGroupsBag'
+          );
         }
 
         // Always load available groups for selection
@@ -509,11 +540,15 @@ export class CreateUserAccountComponent implements OnInit {
 
       // If we're moving to the Groups step (step 1), ensure groups are loaded
       if (this.activeStep === 1) {
-        console.log('Moving to Groups step via nextStep, checking if groups need to be loaded...');
+        console.log(
+          'Moving to Groups step via nextStep, checking if groups need to be loaded...'
+        );
 
         // In edit mode, user groups are already loaded from userGroupsBag
         if (this.isEditMode) {
-          console.log('Edit mode: user groups already loaded from userGroupsBag');
+          console.log(
+            'Edit mode: user groups already loaded from userGroupsBag'
+          );
         }
 
         // Always load available groups for selection
@@ -544,13 +579,19 @@ export class CreateUserAccountComponent implements OnInit {
       if (this.isEditMode) {
         // Update existing user
         if (!this.userId) {
-          this.toastService.showError('Error', 'No user ID available for update');
+          this.toastService.showError(
+            'Error',
+            'No user ID available for update'
+          );
           return;
         }
 
         // Validate required fields for update
         if (!formData.basicInfo.username || !formData.basicInfo.email) {
-          this.toastService.showError('Error', 'Username and Email are required for update');
+          this.toastService.showError(
+            'Error',
+            'Username and Email are required for update'
+          );
           return;
         }
 
@@ -576,24 +617,31 @@ export class CreateUserAccountComponent implements OnInit {
 
         console.log('Updating user with payload:', updatePayload);
 
-        this.userService.updateUserAccount(this.userId, updatePayload).subscribe({
-          next: response => {
-            console.log('User updated successfully:', response);
-            // The success message is already shown in the service
-            // Navigate back to user accounts list
-            const officeCode = this.route.snapshot.params['officeCode'];
-            const langCode = this.route.snapshot.params['langCode'];
-            this.router.navigate([`/${officeCode}/${langCode}/user-management/user-accounts`]);
-          },
-          error: error => {
-            console.error('Error updating user:', error);
-            this.toastService.showError('Error', 'Failed to update user');
-          },
-        });
+        this.userService
+          .updateUserAccount(this.userId, updatePayload)
+          .subscribe({
+            next: (response) => {
+              console.log('User updated successfully:', response);
+              // The success message is already shown in the service
+              // Navigate back to user accounts list
+              const officeCode = this.route.snapshot.params['officeCode'];
+              const langCode = this.route.snapshot.params['langCode'];
+              this.router.navigate([
+                `/${officeCode}/${langCode}/user-management/user-accounts`,
+              ]);
+            },
+            error: (error) => {
+              console.error('Error updating user:', error);
+              this.toastService.showError('Error', 'Failed to update user');
+            },
+          });
       } else {
         // Validate required fields
         if (!formData.basicInfo.username || !formData.basicInfo.email) {
-          this.toastService.showError('Error', 'Username and Email are required');
+          this.toastService.showError(
+            'Error',
+            'Username and Email are required'
+          );
           return;
         }
 
@@ -617,15 +665,20 @@ export class CreateUserAccountComponent implements OnInit {
         console.log('Creating user with payload:', userCreationPayload);
 
         this.userService.createUserAccount(userCreationPayload).subscribe({
-          next: createdUser => {
+          next: (createdUser) => {
             console.log('User created successfully:', createdUser);
-            this.toastService.showSuccess('Success', 'User created successfully');
+            this.toastService.showSuccess(
+              'Success',
+              'User created successfully'
+            );
             // Navigate back to user accounts list
             const officeCode = this.route.snapshot.params['officeCode'];
             const langCode = this.route.snapshot.params['langCode'];
-            this.router.navigate([`/${officeCode}/${langCode}/user-management/user-accounts`]);
+            this.router.navigate([
+              `/${officeCode}/${langCode}/user-management/user-accounts`,
+            ]);
           },
-          error: error => {
+          error: (error) => {
             console.error('Error creating user:', error);
             this.toastService.showError('Error', 'Failed to create user');
           },
@@ -637,6 +690,12 @@ export class CreateUserAccountComponent implements OnInit {
   }
 
   onGroupsSort(sortBy: string, sortOrder: string) {
-    this.loadAvailableGroups(1, this.groupsSearchTerm, this.groupsFilterType, sortBy, sortOrder);
+    this.loadAvailableGroups(
+      1,
+      this.groupsSearchTerm,
+      this.groupsFilterType,
+      sortBy,
+      sortOrder
+    );
   }
 }

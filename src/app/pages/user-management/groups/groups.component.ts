@@ -129,12 +129,6 @@ export class GroupsComponent implements OnInit, OnDestroy {
       display: 'actions',
       actions: [
         {
-          label: 'Toggle Status',
-          icon: 'pi pi-sync',
-          action: 'toggleStatus',
-          severity: 'secondary',
-        },
-        {
           label: 'Edit',
           icon: 'pi pi-pencil',
           action: 'edit',

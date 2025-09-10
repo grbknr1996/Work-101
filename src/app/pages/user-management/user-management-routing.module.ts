@@ -58,6 +58,14 @@ const routes: Routes = [
       import('./units/units-page.component').then((m) => m.UnitsPageComponent),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'units/create',
+    loadComponent: () =>
+      import('./units/create-unit/create-unit.component').then(
+        (m) => m.CreateUnitComponent
+      ),
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({

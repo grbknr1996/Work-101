@@ -72,6 +72,13 @@ export interface FilterValue {
   type: string;
 }
 
+export interface FilterAction {
+  label: string;
+  icon: string;
+  action: string;
+  severity: string;
+}
+
 
 @Component({
   selector: 'app-configurable-filter-bar',
@@ -108,6 +115,7 @@ export class ConfigurableFilterBarComponent {
   configurableFilter!: ConfigurableFilterComponent;
 
   @Input() filters: FilterConfig[] = [];
+  @Input() actions: FilterAction[] = [];
   @Input() showClearAll: boolean = true;
   @Input() showApplyButton: boolean = true;
   @Input() debounceTime: number = 300;
@@ -120,6 +128,7 @@ export class ConfigurableFilterBarComponent {
   @Input() showSearchBar: boolean = false;
   @Input() searchLabel: string = 'Search';
   @Input() disabled: boolean = false;
+  @Input() filterClearAll: boolean = true;
 
   @Output() filterChange = new EventEmitter<FilterValue[]>();
   @Output() filterCleared = new EventEmitter<void>();
@@ -131,6 +140,8 @@ export class ConfigurableFilterBarComponent {
   @Output() filterSearch = new EventEmitter<string>();
   @Output() downloadDetails = new EventEmitter<void>();
   @Output() infoDetails = new EventEmitter<void>();
+  @Output() actionClick = new EventEmitter<string>();
+  @Output() removeDefaultFilter = new EventEmitter<string>();
 
   
   @Input() appliedFilters: FilterValue[] = [];
@@ -160,6 +171,7 @@ export class ConfigurableFilterBarComponent {
   }
 
   removeFilterChip(filterKey: string): void {
+    this.removeDefaultFilter.emit(filterKey);
     this.configurableFilter.removeFilterChip(filterKey);
   }
 
@@ -196,6 +208,10 @@ export class ConfigurableFilterBarComponent {
   onInfoDetails(): void {
     console.log("onInfoDetails ");
     this.infoDetails.emit();
+  }
+
+  onActionClick(action: string): void{
+    this.actionClick.emit(action);
   }
 
   onChipRemove(filterKey: string): void {

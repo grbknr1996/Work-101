@@ -26,6 +26,7 @@ import { Table, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { AvatarModule } from 'primeng/avatar';
 import { ChipModule } from 'primeng/chip';
+import { TooltipModule } from 'primeng/tooltip';
 
 export interface ColumnDefinition {
   field: string;
@@ -73,6 +74,7 @@ export interface ColumnDefinition {
   showName?: boolean;
   nameField?: string;
   iconClass?: (value: any) => string;
+  tooltipText?: string;
 }
 
 export interface Action {
@@ -108,6 +110,7 @@ export interface Action {
     InputIconModule,
     AvatarModule,
     ChipModule,
+    TooltipModule,
   ],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -214,6 +217,30 @@ export class TableComponent implements OnInit, OnChanges {
       }
       value = value[prop];
     }
+
+    return value;
+  }
+
+  getTooltipValue(rowData: any, field: string): any {
+    if (!field) {
+      return null;
+    }
+
+    // Handle nested properties (e.g., 'user.name')
+    //const props = field.split('.');
+    let fieldTooltip = field+"_tooltip";
+    let value = rowData;
+
+    // for (const prop of props) {
+      if (
+        value === null ||
+        value === undefined ||
+        !value.hasOwnProperty(fieldTooltip)
+      ) {
+        return null;
+      }
+      value = value[fieldTooltip];
+    // }
 
     return value;
   }

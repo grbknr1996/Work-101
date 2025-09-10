@@ -122,7 +122,7 @@ export class AuthorityFilesComponent implements OnInit {
       label: 'Publication Date',
       type: 'dateRange',
       placeholder: 'Select date range',
-      dateFormat: 'yy/mm/dd',
+      dateFormat: 'yy-mm-dd',
       section: 'DATE FILTERS',
     },
     {
@@ -142,6 +142,33 @@ export class AuthorityFilesComponent implements OnInit {
       label: 'Claims',
       type: 'checkbox',
       section: 'STATUS',
+    },
+  ];
+
+  filterActions = [
+    {
+      label: 'Download Definition File',
+      icon: 'pi pi-file-pdf',
+      action: 'downloadDefinitionFile',
+      severity: 'info',
+    },
+    {
+      label: 'Download Full CSV',
+      icon: 'pi pi-file-excel',
+      action: 'downloadAuthorityFile',
+      severity: 'info',
+    },
+    {
+      label: 'Download Exception List',
+      icon: 'pi pi-download',
+      action: 'downloadExceptionList',
+      severity: 'info',
+    },
+    {
+      label: 'Upload Exception List',
+      icon: 'pi pi-upload',
+      action: 'uploadExceptionList',
+      severity: 'info',
     },
   ];
 
@@ -216,6 +243,16 @@ export class AuthorityFilesComponent implements OnInit {
 
   onActionClick(action: string, item: any) {
     console.log('Action clicked:', action, item);
+    switch (action) {
+      case 'showPdf':
+        //this.downloadDetails();
+        // this.downloadFileWithRedirect();
+        break;
+    }
+  }
+
+  onFilterActionClick(action: string) {
+    console.log('Action clicked:', action);
     switch (action) {
       case 'showPdf':
         //this.downloadDetails();
@@ -388,7 +425,15 @@ export class AuthorityFilesComponent implements OnInit {
           const [startDate, endDate] = filter.value;
           return `${
             filterConfig.label
-          }: ${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`;
+          }: ${startDate?.toLocaleDateString('en-CA', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit'
+            })} - ${endDate?.toLocaleDateString('en-CA', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit'
+            })}`;
         }
         return filterConfig.label;
       default:

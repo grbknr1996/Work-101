@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputTextarea } from 'primeng/inputtextarea';
 import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -30,10 +31,15 @@ import {
 } from '../../../../components/configurable-stepper/configurable-stepper.component';
 import {
   UserGroup,
+  GroupWithMembers,
+  GroupMember,
+  CreateGroupRequest,
+  UpdateGroupRequest,
   UserService,
   UserQueryParams,
 } from 'src/app/_services/user.service';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
+import { ToastService } from 'src/app/_services/toast.service';
 import {
   finalize,
   takeUntil,
@@ -48,7 +54,7 @@ interface FormData {
   description: string;
   isActive: boolean;
   status: 'active' | 'inactive';
-  users: any[];
+  users: GroupMember[];
 }
 
 @Component({
@@ -60,6 +66,7 @@ interface FormData {
     FormsModule,
     ButtonModule,
     InputTextModule,
+    InputTextarea,
     DropdownModule,
     MultiSelectModule,
     CheckboxModule,
@@ -105,25 +112,30 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
   ];
 
   // Members data
-  groupMembers: any[] = [];
-  availableUsers: any[] = [];
-  selectedUsers: any[] = [];
-  selectedMembers: any[] = [];
+  groupMembers: GroupMember[] = [];
+  availableUsers: GroupMember[] = [];
+  selectedUsers: GroupMember[] = [];
+  selectedMembers: GroupMember[] = [];
   membersSearchTerm: string = '';
   availableUsersSearchTerm: string = '';
   membersSortField: string = 'username';
   membersSortOrder: number = 1;
   availableUsersSortField: string = 'username';
   availableUsersSortOrder: number = 1;
-  isLoadingUsers: boolean = false;
   private usersLoaded: boolean = false;
 
-  // Pagination properties
+  // Pagination properties for available users
   totalUsers: number = 0;
   currentPage: number = 0;
   rowsPerPage: number = 10;
   rowsPerPageOptions: number[] = [5, 10, 20, 50];
   hasMoreUsers: boolean = true;
+
+  // Pagination properties for current members
+  totalMembers: number = 0;
+  currentMembersPage: number = 0;
+  membersRowsPerPage: number = 10;
+  membersRowsPerPageOptions: number[] = [5, 10, 20, 50];
 
   private destroy$ = new Subject<void>();
   private searchSubject$ = new Subject<string>();
@@ -132,7 +144,8 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
     public route: ActivatedRoute,
     public router: Router,
     public ms: MechanicsService,
-    private userService: UserService
+    private userService: UserService,
+    private toastService: ToastService
   ) {
     console.log(
       'GroupFormComponent constructor - UserService injected:',
@@ -223,11 +236,23 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private loadGroupData(groupId: string) {
-    // TODO: Load group data from service
-    // For now, we'll use mock data or the input group
-    if (this.group) {
-      this.populateFormData(this.group);
-    }
+    // Load group data with members from service
+    this.userService
+      .getGroupMembers(parseInt(groupId))
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (groupData: GroupWithMembers) => {
+          console.log('Group data loaded:', groupData);
+          this.populateFormDataFromAPI(groupData);
+        },
+        error: (error) => {
+          console.error('Error loading group data:', error);
+          // Fallback to input group if available
+          if (this.group) {
+            this.populateFormData(this.group);
+          }
+        },
+      });
   }
 
   private populateFormData(group: UserGroup) {
@@ -247,9 +272,34 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
       : [];
   }
 
+  private populateFormDataFromAPI(groupData: GroupWithMembers) {
+    const isActive = groupData.isActive === true;
+    this.formData = {
+      groupName: groupData.groupName,
+      groupType: groupData.groupType || 'USER', // Default to USER if not provided
+      description: groupData.description,
+      isActive: isActive,
+      status: isActive ? 'active' : 'inactive',
+      users: groupData.userIdBag || [],
+    };
+
+    // Map userIdBag to groupMembers format
+    this.groupMembers = (groupData.userIdBag || []).map((member) => ({
+      userId: member.userId,
+      userName: member.userName,
+      email: member.email,
+      login: member.login,
+    }));
+
+    // Set total members count for pagination
+    this.totalMembers = this.groupMembers.length;
+
+    console.log('Form data populated:', this.formData);
+    console.log('Group members populated:', this.groupMembers);
+  }
+
   loadAvailableUsers() {
     console.log('loadAvailableUsers called');
-    this.isLoadingUsers = true;
     const params: UserQueryParams = {
       isActive: true,
       limit: this.rowsPerPage,
@@ -263,22 +313,24 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
 
     this.userService
       .getUserAccounts(params)
-      .pipe(
-        takeUntil(this.destroy$),
-        finalize(() => {
-          this.isLoadingUsers = false;
-        })
-      )
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
           console.log('getUserAccounts response:', response);
           if (response && response.userAccounts) {
-            // Map UserAccount interface to the expected format
-            this.availableUsers = response.userAccounts.map((user) => ({
-              userIdentifier: user.loginId,
-              username: user.userName,
+            // Map UserAccount interface to GroupMember format
+            this.availableUsers = response.userAccounts.map((user, index) => ({
+              userId: user.userId, // Use loginId as unique identifier
+              userName: user.userName,
               email: user.email,
+              login: user.loginId,
             }));
+
+            // Filter out users who are already group members
+            this.availableUsers = this.availableUsers.filter(
+              (user) =>
+                !this.groupMembers.some((member) => member.login === user.login)
+            );
 
             // Update pagination info
             this.totalUsers =
@@ -303,19 +355,102 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
+  onCancel() {
+    // Navigate back to groups listing with proper officeCode and langCode
+    const officeCode =
+      this.route.snapshot.params['officeCode'] ||
+      this.ms.getCurrentOffice() ||
+      'default';
+    const langCode = this.route.snapshot.params['langCode'] || 'en';
+    this.router.navigate([
+      `/${officeCode}/${langCode}/user-management/user-accounts/groups`,
+    ]);
+  }
+
   onSave() {
-    const groupData: Partial<UserGroup> = {
-      groupName: this.formData.groupName,
-      groupType: this.formData.groupType,
-      description: this.formData.description,
-      isActive: this.formData.status === 'active',
-    };
+    const userIdBag = this.groupMembers.map((member) => ({
+      userId: member.userId,
+    }));
 
-    // TODO: Save group data via service
-    console.log('Saving group:', groupData);
+    if (this.isEditMode && this.groupId) {
+      // Update existing group
+      const groupData: UpdateGroupRequest = {
+        groupId: parseInt(this.groupId),
+        groupName: this.formData.groupName,
+        description: this.formData.description,
+        isActive: this.formData.status === 'active',
+        userIdBag: userIdBag,
+      };
 
-    // Navigate back to groups list
-    this.router.navigate(['../'], { relativeTo: this.route });
+      console.log('Updating group with members:', groupData);
+
+      this.userService
+        .updateUserGroup(groupData)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (response) => {
+            console.log('Group updated successfully:', response);
+            this.toastService.showSuccess(
+              'Success',
+              'Group updated successfully'
+            );
+            // Navigate back to groups listing with proper officeCode and langCode
+            const officeCode =
+              this.route.snapshot.params['officeCode'] ||
+              this.ms.getCurrentOffice() ||
+              'default';
+            const langCode = this.route.snapshot.params['langCode'] || 'en';
+            this.router.navigate([
+              `/${officeCode}/${langCode}/user-management/user-accounts/groups`,
+            ]);
+          },
+          error: (error) => {
+            console.error('Error updating group:', error);
+            this.toastService.showError(
+              'Error',
+              'Failed to update group. Please try again.'
+            );
+          },
+        });
+    } else {
+      // Create new group
+      const groupData: CreateGroupRequest = {
+        groupName: this.formData.groupName,
+        description: this.formData.description,
+        userIdBag: userIdBag,
+      };
+
+      console.log('Creating group with members:', groupData);
+
+      this.userService
+        .createUserGroup(groupData)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (response) => {
+            console.log('Group created successfully:', response);
+            this.toastService.showSuccess(
+              'Success',
+              'Group created successfully'
+            );
+            // Navigate back to groups listing with proper officeCode and langCode
+            const officeCode =
+              this.route.snapshot.params['officeCode'] ||
+              this.ms.getCurrentOffice() ||
+              'default';
+            const langCode = this.route.snapshot.params['langCode'] || 'en';
+            this.router.navigate([
+              `/${officeCode}/${langCode}/user-management/user-accounts/groups`,
+            ]);
+          },
+          error: (error) => {
+            console.error('Error creating group:', error);
+            this.toastService.showError(
+              'Error',
+              'Failed to create group. Please try again.'
+            );
+          },
+        });
+    }
   }
 
   onStepChange(stepValue: number): void {
@@ -385,17 +520,40 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
     this.loadAvailableUsers();
   }
 
+  // Handle members pagination changes
+  onMembersPageChange(event: any) {
+    console.log('Members page change event:', event);
+    this.currentMembersPage = event.page;
+    this.membersRowsPerPage = event.rows;
+    // No need to reload data since it's client-side pagination
+  }
+
   // Members management methods
   filterMembers() {
-    if (!this.membersSearchTerm) {
-      return this.groupMembers;
+    let filteredMembers = this.groupMembers;
+
+    if (this.membersSearchTerm) {
+      const searchTerm = this.membersSearchTerm.toLowerCase();
+      filteredMembers = this.groupMembers.filter(
+        (member) =>
+          member.userName.toLowerCase().includes(searchTerm) ||
+          member.email.toLowerCase().includes(searchTerm)
+      );
     }
-    const searchTerm = this.membersSearchTerm.toLowerCase();
-    return this.groupMembers.filter(
-      (member) =>
-        member.username.toLowerCase().includes(searchTerm) ||
-        member.email.toLowerCase().includes(searchTerm)
-    );
+
+    // Update total count for pagination
+    this.totalMembers = filteredMembers.length;
+
+    // Reset to first page when searching
+    if (this.membersSearchTerm && this.currentMembersPage > 0) {
+      this.currentMembersPage = 0;
+    }
+
+    // Apply pagination
+    const startIndex = this.currentMembersPage * this.membersRowsPerPage;
+    const endIndex = startIndex + this.membersRowsPerPage;
+
+    return filteredMembers.slice(startIndex, endIndex);
   }
 
   filterAvailableUsers() {
@@ -407,7 +565,7 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
     const searchTerm = this.availableUsersSearchTerm.toLowerCase();
     return this.availableUsers.filter(
       (user) =>
-        user.username.toLowerCase().includes(searchTerm) ||
+        user.userName.toLowerCase().includes(searchTerm) ||
         user.email.toLowerCase().includes(searchTerm)
     );
   }
@@ -418,7 +576,6 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   searchUsers(searchTerm: string) {
-    this.isLoadingUsers = true;
     // Reset pagination when searching
     this.currentPage = 0;
 
@@ -446,12 +603,19 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe({
         next: (response) => {
           if (response && response.userAccounts) {
-            // Map UserAccount interface to the expected format
-            this.availableUsers = response.userAccounts.map((user) => ({
-              userIdentifier: user.loginId,
-              username: user.userName,
+            // Map UserAccount interface to GroupMember format
+            this.availableUsers = response.userAccounts.map((user, index) => ({
+              userId: user.userId, // Use loginId as unique identifier
+              userName: user.userName,
               email: user.email,
+              login: user.loginId,
             }));
+
+            // Filter out users who are already group members
+            this.availableUsers = this.availableUsers.filter(
+              (user) =>
+                !this.groupMembers.some((member) => member.login === user.login)
+            );
 
             // Update pagination info
             this.totalUsers =
@@ -460,11 +624,9 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
             this.hasMoreUsers = response.userAccounts.length === params.limit;
             this.usersLoaded = true;
           }
-          this.isLoadingUsers = false;
         },
         error: (error) => {
           console.error('Error searching users:', error);
-          this.isLoadingUsers = false;
         },
       });
   }
@@ -478,8 +640,9 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.groupMembers.sort((a, b) => {
-      const valueA = a[field]?.toLowerCase() || '';
-      const valueB = b[field]?.toLowerCase() || '';
+      const fieldName = field === 'username' ? 'userName' : field;
+      const valueA = a[fieldName]?.toLowerCase() || '';
+      const valueB = b[fieldName]?.toLowerCase() || '';
       return valueA.localeCompare(valueB) * this.membersSortOrder;
     });
   }
@@ -493,8 +656,9 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.availableUsers.sort((a, b) => {
-      const valueA = a[field]?.toLowerCase() || '';
-      const valueB = b[field]?.toLowerCase() || '';
+      const fieldName = field === 'username' ? 'userName' : field;
+      const valueA = a[fieldName]?.toLowerCase() || '';
+      const valueB = b[fieldName]?.toLowerCase() || '';
       return valueA.localeCompare(valueB) * this.availableUsersSortOrder;
     });
   }
@@ -513,23 +677,83 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
     this.selectedMembers = [];
   }
 
-  removeMember(member: any) {
-    this.groupMembers = this.groupMembers.filter(
-      (m) => m.userIdentifier !== member.userIdentifier
-    );
-    this.availableUsers.push(member);
-    this.selectedMembers = this.selectedMembers.filter(
-      (m) => m.userIdentifier !== member.userIdentifieron
+  // Select all available users on current page
+  selectAllAvailableUsers() {
+    const currentPageUsers = this.filterAvailableUsers();
+    this.selectedUsers = [...currentPageUsers];
+  }
+
+  // Deselect all available users
+  deselectAllAvailableUsers() {
+    this.selectedUsers = [];
+  }
+
+  // Select all current members on current page
+  selectAllCurrentMembers() {
+    const currentPageMembers = this.filterMembers();
+    this.selectedMembers = [...currentPageMembers];
+  }
+
+  // Deselect all current members
+  deselectAllCurrentMembers() {
+    this.selectedMembers = [];
+  }
+
+  // Check if all available users on current page are selected
+  areAllAvailableUsersSelected(): boolean {
+    const currentPageUsers = this.filterAvailableUsers();
+    return (
+      currentPageUsers.length > 0 &&
+      currentPageUsers.every((user) =>
+        this.selectedUsers.some((selected) => selected.login === user.login)
+      )
     );
   }
 
-  addMember(member: any) {
+  // Check if all current members on current page are selected
+  areAllCurrentMembersSelected(): boolean {
+    const currentPageMembers = this.filterMembers();
+    return (
+      currentPageMembers.length > 0 &&
+      currentPageMembers.every((member) =>
+        this.selectedMembers.some((selected) => selected.login === member.login)
+      )
+    );
+  }
+
+  removeMember(member: GroupMember) {
+    this.groupMembers = this.groupMembers.filter(
+      (m) => m.login !== member.login
+    );
+    this.availableUsers.push(member);
+    this.selectedMembers = this.selectedMembers.filter(
+      (m) => m.login !== member.login
+    );
+
+    // Update total members count
+    this.totalMembers = this.groupMembers.length;
+
+    // Reload available users to ensure the list is up to date
+    if (this.usersLoaded) {
+      this.loadAvailableUsers();
+    }
+  }
+
+  addMember(member: GroupMember) {
     this.groupMembers.push(member);
     this.availableUsers = this.availableUsers.filter(
-      (m) => m.userIdentifier !== member.userIdentifier
+      (m) => m.login !== member.login
     );
     this.selectedUsers = this.selectedUsers.filter(
-      (u) => u.userIdentifier !== member.userIdentifier
+      (u) => u.login !== member.login
     );
+
+    // Update total members count
+    this.totalMembers = this.groupMembers.length;
+
+    // Reload available users to ensure the list is up to date
+    if (this.usersLoaded) {
+      this.loadAvailableUsers();
+    }
   }
 }

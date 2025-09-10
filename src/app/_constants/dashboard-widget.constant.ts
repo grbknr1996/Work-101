@@ -254,7 +254,7 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
       {
         icon: 'pi-refresh',
         label: 'Renewals',
-        link: '/renewals',
+        link: '/renewal-reminder',
         requiredPermissions: ['renewal_projection_view'],
       },
       {

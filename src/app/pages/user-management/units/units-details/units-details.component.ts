@@ -1,4 +1,11 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  OnInit,
+} from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { UnitNode, UserAssignment } from 'src/app/_services/units.service';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -6,7 +13,13 @@ import { CommonModule } from '@angular/common';
 import { TabViewModule } from 'primeng/tabview';
 import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
 import { ButtonGroupModule } from 'primeng/buttongroup';
-import { FormsModule } from '@angular/forms';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
@@ -16,7 +29,10 @@ import {
   GroupAssignmentComponent,
   GroupItem,
 } from 'src/app/components/group-assignment/group-assignment.component';
-import { UnitActionsAssignmentComponent } from './unit-actions-assignment.component';
+import { UnitActionsAssignmentComponent } from '../units-actions-asssignment/unit-actions-assignment.component';
+import { UserSelectionDialogComponent } from '../user-selection-dialog/user-selection-dialog.component';
+import { CreateUnitStateService } from 'src/app/_services/create-unit-state.service';
+import { ToastService } from 'src/app/_services/toast.service';
 
 @Component({
   selector: 'app-unit-details',
@@ -28,16 +44,22 @@ import { UnitActionsAssignmentComponent } from './unit-actions-assignment.compon
     TabViewModule,
     ButtonGroupModule,
     FormsModule,
+    ReactiveFormsModule,
     TableModule,
     DialogModule,
     InputTextModule,
     MultiSelectModule,
     UnitActionsAssignmentComponent,
+    UserSelectionDialogComponent,
   ],
   templateUrl: './units-details.component.html',
 })
-export class UnitDetailsComponent implements OnChanges {
+export class UnitDetailsComponent implements OnChanges, OnInit {
   @Input() unit: UnitNode | null = null;
+  @Input() unitCategory: string = '';
+
+  // Form for editing unit name
+  unitForm: FormGroup;
 
   roleLabels = [
     { label: 'Head', value: 'head' },
@@ -49,6 +71,8 @@ export class UnitDetailsComponent implements OnChanges {
 
   addUserDialogVisible = false;
   newUser = { name: '', email: '' };
+  isEditMode = false;
+  userSelectionDialogVisible = false;
 
   // Permissions data
   availablePermissions: any[] = [];
@@ -69,8 +93,26 @@ export class UnitDetailsComponent implements OnChanges {
       | 'staff';
   }
 
-  constructor() {
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private createUnitStateService: CreateUnitStateService,
+    private fb: FormBuilder,
+    private toastService: ToastService
+  ) {
     this.loadMockPermissions();
+    this.unitForm = this.fb.group({
+      unitName: ['', [Validators.required, Validators.minLength(2)]],
+    });
+  }
+
+  ngOnInit() {
+    // Initialize form with unit data if available
+    if (this.unit) {
+      this.unitForm.patchValue({
+        unitName: this.unit.name,
+      });
+    }
   }
 
   loadMockPermissions() {
@@ -91,6 +133,10 @@ export class UnitDetailsComponent implements OnChanges {
         console.log('Roles:', this.unit.roles);
         // Load existing permissions for the unit
         this.selectedPermissions = this.unit.permissions || [];
+        // Update form with unit data
+        this.unitForm.patchValue({
+          unitName: this.unit.name,
+        });
         // For demo: mock available/assigned actions
         this.processes = mockActionProcesses;
         // Map unit.actions (array of actionIds) to selectedActions
@@ -119,16 +165,32 @@ export class UnitDetailsComponent implements OnChanges {
     return this.unit.roles[this.selectedRole];
   }
 
+  getRoleUserCount(role: 'head' | 'deputy' | 'staff'): number {
+    if (!this.unit) return 0;
+    return this.unit.roles[role].length;
+  }
+
   openAddUserDialog() {
-    this.newUser = { name: '', email: '' };
-    this.addUserDialogVisible = true;
+    // For head role, if there's already a user, clear it first to allow changing
+    if (
+      this.selectedRole === 'head' &&
+      this.getSelectedRoleUsers().length > 0
+    ) {
+      // Clear the existing head user to allow selection of a new one
+      if (this.unit) {
+        this.unit.roles.head = [];
+      }
+    }
+
+    this.userSelectionDialogVisible = true;
   }
 
   addUserConfirm() {
     if (!this.unit) return;
     const user: UserAssignment = {
-      userId: Math.random().toString(36).substr(2, 9),
-      name: this.newUser.name,
+      userId: Math.floor(Math.random() * 1000000), // Generate a random number
+      login: this.newUser.email, // Use email as login
+      userName: this.newUser.name,
       email: this.newUser.email,
     };
     this.unit.roles[this.selectedRole].push(user);
@@ -156,5 +218,77 @@ export class UnitDetailsComponent implements OnChanges {
     if (this.unit) {
       this.unit.actions = newSelected.map((sel) => sel.actionId);
     }
+  }
+
+  createSubUnit() {
+    // Check if we can add sub-units (Section is the final level)
+    if (this.unitCategory === 'Section') {
+      // Show message that Section is the final level
+      this.toastService.showWarn(
+        'Warning',
+        'Section is the final level. Cannot add sub-units below Section.'
+      );
+      return;
+    }
+
+    // Clear any existing state before creating a new unit
+    this.createUnitStateService.clearState();
+    this.router.navigate(['create'], {
+      relativeTo: this.route,
+      queryParams: {
+        parentId: this.unit?.id,
+        parentCategory: this.unitCategory,
+      },
+    });
+  }
+
+  // Edit mode methods
+  editUnit() {
+    this.isEditMode = true;
+  }
+
+  saveUnit() {
+    if (this.unitForm.valid && this.unit) {
+      // Update the unit name with form data
+      this.unit.name = this.unitForm.get('unitName')?.value;
+      console.log('Saving unit with updated name:', this.unit.name);
+      // TODO: Call API to save the unit
+      this.toastService.showSuccess('Success', 'Unit updated successfully');
+      this.isEditMode = false;
+    }
+  }
+
+  cancelEdit() {
+    this.isEditMode = false;
+    // Reset form to original unit name
+    if (this.unit) {
+      this.unitForm.patchValue({
+        unitName: this.unit.name,
+      });
+    }
+  }
+
+  viewUser(user: UserAssignment) {
+    // TODO: Implement view user functionality
+    console.log('Viewing user:', user);
+  }
+
+  onUsersSelected(selectedUsers: UserAssignment[]) {
+    if (!this.unit) return;
+
+    // For head role, replace existing users (should only be one)
+    // For other roles, add to existing users
+    if (this.selectedRole === 'head') {
+      this.unit.roles[this.selectedRole] = selectedUsers;
+    } else {
+      this.unit.roles[this.selectedRole].push(...selectedUsers);
+    }
+
+    this.toastService.showSuccess(
+      'Success',
+      `${this.selectedRole === 'head' ? 'Set' : 'Added'} ${
+        selectedUsers.length
+      } user(s) to ${this.selectedRole} role`
+    );
   }
 }

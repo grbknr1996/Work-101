@@ -10,6 +10,7 @@ import {
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { PrimeIcons } from "primeng/api";
+import { AnyTxtRecord } from "dns";
 
 interface MultipleStat {
   label: string;
@@ -18,6 +19,7 @@ interface MultipleStat {
   countLabel: string;
   percentChange: number;
   period: string;
+  periodList: any;
   color: string;
   icon: string;
 }
