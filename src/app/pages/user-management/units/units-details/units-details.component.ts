@@ -24,6 +24,7 @@ import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { DropdownModule } from 'primeng/dropdown';
 import { mockGroupPermissions, mockActionProcesses } from 'src/assets/data';
 import {
   GroupAssignmentComponent,
@@ -49,6 +50,7 @@ import { ToastService } from 'src/app/_services/toast.service';
     DialogModule,
     InputTextModule,
     MultiSelectModule,
+    DropdownModule,
     UnitActionsAssignmentComponent,
     UserSelectionDialogComponent,
   ],
@@ -68,6 +70,7 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
   ];
   selectedRoleIndex = 0;
   selectedTabIndex = 0;
+  selectedRoleLabel: any = null;
 
   addUserDialogVisible = false;
   newUser = { name: '', email: '' };
@@ -113,6 +116,8 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
         unitName: this.unit.name,
       });
     }
+    // Initialize selected role label for mobile dropdown
+    this.selectedRoleLabel = this.roleLabels[this.selectedRoleIndex];
   }
 
   loadMockPermissions() {
@@ -128,6 +133,8 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
     if (changes['unit']) {
       this.selectedRoleIndex = 0;
       this.selectedTabIndex = 0;
+      // Update mobile dropdown selection
+      this.selectedRoleLabel = this.roleLabels[this.selectedRoleIndex];
       if (this.unit) {
         console.log('UnitDetailsComponent: unit input changed', this.unit);
         console.log('Roles:', this.unit.roles);
@@ -158,6 +165,17 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
   selectRole(index: number) {
     this.selectedRoleIndex = index;
     this.selectedTabIndex = 0;
+    // Update mobile dropdown selection
+    this.selectedRoleLabel = this.roleLabels[index];
+  }
+
+  onRoleDropdownChange(event: any) {
+    const selectedIndex = this.roleLabels.findIndex(
+      (role) => role.value === event.value.value
+    );
+    if (selectedIndex !== -1) {
+      this.selectRole(selectedIndex);
+    }
   }
 
   getSelectedRoleUsers() {

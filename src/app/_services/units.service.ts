@@ -5,6 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.service';
 import { ToastService } from './toast.service';
+import { MechanicsService } from './mechanics.service';
 
 export interface UserAssignment {
   userId: number;
@@ -112,7 +113,8 @@ export class UnitsService {
   constructor(
     private http: HttpClient,
     private authService: AuthService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private mechanicsService: MechanicsService
   ) {}
 
   /**
@@ -419,14 +421,30 @@ export class UnitsService {
     return throwError(() => error);
   }
 
-  deleteUnit(id: string): Observable<boolean> {
-    // This method should be implemented to call a delete API endpoint
-    // For now, return an error indicating it needs to be implemented
-    const error = new Error(
-      'deleteUnit method needs to be implemented with proper API call'
+  deleteUnit(unitId: string, unitCategory: UnitCategory): Observable<boolean> {
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) =>
+        this.http.delete(`${environment.backendUrl}/units`, {
+          headers: headers,
+          params: {
+            unitId: unitId,
+            unitCategory: unitCategory,
+          },
+        })
+      ),
+      switchMap(() => {
+        this.toastService.showSuccess('Success', 'Unit deleted successfully');
+        return of(true);
+      }),
+      catchError((error) => {
+        console.error('Error deleting unit:', error);
+        this.toastService.showError(
+          'Error',
+          'Failed to delete unit. Please try again.'
+        );
+        return of(false);
+      })
     );
-    console.error('deleteUnit called but not implemented:', { id });
-    return throwError(() => error);
   }
 
   updateUnit(unit: UnitNode): Observable<UnitNode> {

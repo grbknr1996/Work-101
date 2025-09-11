@@ -39,6 +39,7 @@ export class UnitsPageComponent implements OnInit {
   searchText = '';
   breadcrumbItems: MenuItem[] = [];
   layoutConfig: LayoutConfig;
+  isMobile = false;
 
   constructor(
     private menuService: SidebarMenuService,
@@ -50,6 +51,9 @@ export class UnitsPageComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.checkMobileView();
+    this.setupResizeListener();
+
     this.route.params.subscribe((params) => {
       const officeCode =
         params['officeCode'] || this.ms.getCurrentOffice() || 'default';
@@ -85,5 +89,28 @@ export class UnitsPageComponent implements OnInit {
     // Clear any existing state before creating a new unit
     this.createUnitStateService.clearState();
     this.router.navigate(['create'], { relativeTo: this.route });
+  }
+
+  checkMobileView() {
+    this.isMobile = window.innerWidth <= 768;
+    if (this.isMobile) {
+      this.showTree = false; // Hide tree by default on mobile
+    }
+  }
+
+  setupResizeListener() {
+    window.addEventListener('resize', () => {
+      this.checkMobileView();
+    });
+  }
+
+  toggleMobileMenu() {
+    this.showTree = !this.showTree;
+  }
+
+  closeMobileMenu() {
+    if (this.isMobile) {
+      this.showTree = false;
+    }
   }
 }

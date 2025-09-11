@@ -1,5 +1,5 @@
 .unit-details-container(
-  style="max-width: 1100px; margin: 2rem auto; padding: 2rem; background: #fff; border-radius: 1rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);"
+  style="border-radius: 1rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);"
 )
   // Unit Header
   .unit-header(
@@ -71,7 +71,8 @@
   .role-selector(
     style="display: flex; gap: 1rem; margin-bottom: 1.5rem; justify-content: flex-start"
   )
-    p-buttonGroup
+    // Desktop: Button Group
+    p-buttonGroup.role-buttons-desktop
       button(
         pButton,
         *ngFor="let role of roleLabels; let i = index",
@@ -80,6 +81,18 @@
         [class.p-button-primary]="selectedRoleIndex === i",
         (click)="selectRole(i)",
         style="min-width: 120px; font-weight: 500"
+      )
+    
+    // Mobile: Dropdown
+    .role-dropdown-mobile
+      p-dropdown(
+        [options]="roleLabels",
+        [(ngModel)]="selectedRoleLabel",
+        optionLabel="label",
+        (onChange)="onRoleDropdownChange($event)",
+        placeholder="Select Role",
+        styleClass="w-full",
+        [style]="{ width: '100%' }"
       )
 
   p-tabView([(activeIndex)]="selectedTabIndex")
@@ -202,3 +215,31 @@
   )
   h3(style="margin: 0 0 0.5rem 0; color: #888") No Unit Selected
   p(style="margin: 0; font-size: 0.9rem") Select a unit from the tree to view its details
+
+style.
+  /* Mobile responsive styles for role selector */
+  @media (max-width: 768px) {
+    .role-buttons-desktop {
+      display: none !important;
+    }
+    
+    .role-dropdown-mobile {
+      display: block !important;
+      width: 100% !important;
+    }
+    
+    .role-selector {
+      flex-direction: column !important;
+      gap: 0.5rem !important;
+    }
+  }
+  
+  @media (min-width: 769px) {
+    .role-buttons-desktop {
+      display: block !important;
+    }
+    
+    .role-dropdown-mobile {
+      display: none !important;
+    }
+  }

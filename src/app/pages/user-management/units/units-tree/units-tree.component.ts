@@ -4,6 +4,8 @@ import { TreeNode } from 'primeng/api';
 import { TreeModule } from 'primeng/tree';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 import {
   UnitsService,
   UnitNode,
@@ -15,8 +17,9 @@ import { ToastService } from 'src/app/_services/toast.service';
 @Component({
   selector: 'app-units-tree',
   standalone: true,
-  imports: [TreeModule, ButtonModule, CommonModule],
+  imports: [TreeModule, ButtonModule, CommonModule, ConfirmDialogModule],
   templateUrl: './units-tree.component.html',
+  providers: [ConfirmationService],
 })
 export class UnitsTreeComponent implements OnInit {
   @Input() searchText: string = '';
@@ -38,7 +41,8 @@ export class UnitsTreeComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private createUnitStateService: CreateUnitStateService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit() {
@@ -96,6 +100,7 @@ export class UnitsTreeComponent implements OnInit {
 
   getLevelChipInfo(node: TreeNode): {
     label: string;
+    iconClass: string;
     class: string;
     color: string;
     gradient: string;
@@ -106,6 +111,7 @@ export class UnitsTreeComponent implements OnInit {
       case 'Division':
         return {
           label: 'Division',
+          iconClass: 'pi pi-building',
           class: 'division-chip',
           color: '#1976d2',
           gradient: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
@@ -113,6 +119,7 @@ export class UnitsTreeComponent implements OnInit {
       case 'Department':
         return {
           label: 'Department',
+          iconClass: 'pi pi-users',
           class: 'department-chip',
           color: '#388e3c',
           gradient: 'linear-gradient(135deg, #388e3c 0%, #2e7d32 100%)',
@@ -120,6 +127,7 @@ export class UnitsTreeComponent implements OnInit {
       case 'Section':
         return {
           label: 'Section',
+          iconClass: 'pi pi-list',
           class: 'section-chip',
           color: '#f57c00',
           gradient: 'linear-gradient(135deg, #f57c00 0%, #ef6c00 100%)',
@@ -127,6 +135,7 @@ export class UnitsTreeComponent implements OnInit {
       default:
         return {
           label: 'Unit',
+          iconClass: 'pi pi-folder',
           class: 'unit-chip',
           color: '#666',
           gradient: 'linear-gradient(135deg, #666 0%, #555 100%)',
@@ -235,7 +244,12 @@ export class UnitsTreeComponent implements OnInit {
     // Handle node unselection if needed
   }
 
-  addNode(parentNode: TreeNode) {
+  addNode(parentNode: TreeNode, event?: Event) {
+    // Prevent event propagation to parent elements
+    if (event) {
+      event.stopPropagation();
+    }
+
     // Check if we can add sub-units (Section is the final level)
     const parentCategory = this.determineUnitCategory(parentNode);
     if (parentCategory === 'Section') {
@@ -259,25 +273,46 @@ export class UnitsTreeComponent implements OnInit {
     });
   }
 
-  deleteNode(node: TreeNode) {
-    if (confirm(`Delete unit '${node.label}'?`)) {
-      this.unitsService.deleteUnit(node.key).subscribe({
-        next: (success) => {
-          if (success) {
-            this.removeNodeByKey(node.key, this.treeNodes);
-            this.treeNodes = [...this.treeNodes];
-            this.toastService.showSuccess(
-              'Success',
-              `Unit '${node.label}' deleted successfully`
-            );
-          }
-        },
-        error: (error) => {
-          console.error('Error deleting unit:', error);
-          this.toastService.showError('Error', 'Failed to delete unit');
-        },
-      });
+  deleteNode(node: TreeNode, event?: Event) {
+    // Prevent event propagation to parent elements
+    if (event) {
+      event.stopPropagation();
     }
+
+    this.confirmationService.confirm({
+      message: `Are you sure you want to delete the unit ${node.label}? This action cannot be undone.`,
+      header: 'Confirm Delete',
+      icon: 'pi pi-exclamation-triangle',
+      acceptButtonStyleClass: 'p-button-danger',
+      acceptLabel: 'Delete',
+      rejectLabel: 'Cancel',
+      accept: () => {
+        const unitCategory = this.determineUnitCategory(node);
+        this.unitsService.deleteUnit(node.key, unitCategory).subscribe({
+          next: (success) => {
+            if (success) {
+              this.removeNodeByKey(node.key, this.treeNodes);
+              this.treeNodes = [...this.treeNodes];
+              // Clear selection if the deleted node was selected
+              if (this.selectedNode?.key === node.key) {
+                this.selectedNode = null;
+                this.nodeSelected.emit({
+                  unit: null as any,
+                  category: 'Division',
+                });
+              }
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting unit:', error);
+            // Error handling is already done in the service
+          },
+        });
+      },
+      reject: () => {
+        // User cancelled the deletion
+      },
+    });
   }
 
   removeNodeByKey(key: string, nodes: TreeNode[]): boolean {

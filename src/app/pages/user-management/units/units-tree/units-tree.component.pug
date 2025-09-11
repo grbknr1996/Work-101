@@ -1,22 +1,14 @@
 .units-tree-container
-  h1 Units Tree
-  
-  .loading-indicator(
-    *ngIf="loadingUnitDetails",
-    style="padding: 1rem; text-align: center; color: #666"
-  )
-    i.pi.pi-spin.pi-spinner(style="margin-right: 0.5rem")
-    | Loading unit details...
-  
   p-tree(
     [value]="treeNodes",
     selectionMode="single",
     [(selection)]="selectedNode",
     (onNodeSelect)="onNodeSelect($event)",
     (onNodeUnselect)="onNodeUnselect($event)",
-    [style]="{ width: '350px' }",
+    [style]="{ width: '100%', height: '80vh' }",
     [filter]="true",
-    filterPlaceholder="Search units..."
+    filterPlaceholder="Search units...",
+    styleClass="units-tree-scrollable"
   )
     ng-template(pTemplate="header")
       button(
@@ -36,29 +28,26 @@
       div(style="display: flex; align-items: center; gap: 0.5rem; width: 100%")
         // Main Content Area
         div(style="flex: 1; display: flex; flex-direction: column; gap: 0.25rem")
-          // Unit Name
-          span(style="font-weight: 500; font-size: 0.9rem") {{ node.label }}
-          
-          // Chip and Sub-text Row
+          // Unit Name with Icon
           div(style="display: flex; align-items: center; gap: 0.5rem")
-            // Level Chip
+            i.pi([ngClass]="getLevelChipInfo(node).iconClass", style="font-size: 0.8rem; color: var(--p-primary-color)")
             span(
-              [style.background]="getLevelChipInfo(node).gradient",
-              [style.color]="'white'",
-              style="padding: 0.05rem 0.3rem; border-radius: 0.25rem; font-size: 0.5rem; font-weight: bold; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.02em; line-height: 1.1; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);"
-            ) {{ getLevelChipInfo(node).label }}
-            
-            // Sub-text with count
+              [style.font-weight]="selectedNode?.key === node.key ? '700' : '500'",
+              style="font-size: 0.8rem; color: var(--p-primary-color)"
+            ) {{ node.label }}
+          
+          // Sub-text with count
+          div(style="display: flex; align-items: center; gap: 0.5rem")
             span(style="font-size: 0.7rem; color: #666; font-style: italic") {{ getSubUnitCountText(node) }}
         
         // Action Buttons
         div(style="display: flex; gap: 0.25rem")
           // Add Button (only show if not Section level)
           button.p-button-text.p-button-sm(
-            *ngIf="getLevelChipInfo(node).label !== 'Section'",
+            *ngIf="getLevelChipInfo(node).iconClass !== 'pi pi-list'",
             pButton,
             icon="pi pi-plus",
-            (click)="addNode(node)",
+            (click)="addNode(node, $event)",
             title="Add Sub-unit",
             style="min-width: 24px; height: 24px"
           )
@@ -67,7 +56,29 @@
           button.p-button-text.p-button-sm(
             pButton,
             icon="pi pi-trash",
-            (click)="deleteNode(node)",
+            (click)="deleteNode(node, $event)",
             title="Delete Unit",
             style="min-width: 24px; height: 24px;color:red"
           )
+
+style.
+  .units-tree-scrollable {
+    height: 80vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+  
+  .units-tree-scrollable .p-tree {
+    height: 100% !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+  
+          .units-tree-scrollable .p-tree-container {
+            height: 100% !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+          }
+
+// Confirmation Dialog
+p-confirmDialog

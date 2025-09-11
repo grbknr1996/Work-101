@@ -1,5 +1,5 @@
 
-<div class="unit-details-container" style="max-width: 1100px; margin: 2rem auto; padding: 2rem; background: #fff; border-radius: 1rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);">
+<div class="unit-details-container" style="border-radius: 1rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);">
   <!-- Unit Header-->
   <div class="unit-header" *ngIf="unit" style="margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #e0e0e0">
     <div style="display: flex; justify-content: space-between; align-items: center">
@@ -28,9 +28,14 @@
     </div>
   </div>
   <div class="role-selector" style="display: flex; gap: 1rem; margin-bottom: 1.5rem; justify-content: flex-start">
-    <p-buttonGroup>
+    <!-- Desktop: Button Group-->
+    <p-buttonGroup class="role-buttons-desktop">
       <button pButton *ngFor="let role of roleLabels; let i = index" [label]="role.label" [class.p-button-outlined]="selectedRoleIndex !== i" [class.p-button-primary]="selectedRoleIndex === i" (click)="selectRole(i)" style="min-width: 120px; font-weight: 500"></button>
     </p-buttonGroup>
+    <!-- Mobile: Dropdown-->
+    <div class="role-dropdown-mobile">
+      <p-dropdown [options]="roleLabels" [(ngModel)]="selectedRoleLabel" optionLabel="label" (onChange)="onRoleDropdownChange($event)" placeholder="Select Role" styleClass="w-full" [style]="{ width: '100%' }"></p-dropdown>
+    </div>
   </div>
   <p-tabView [(activeIndex)]="selectedTabIndex">
     <p-tabPanel header="Users">
@@ -97,3 +102,31 @@
   <h3 style="margin: 0 0 0.5rem 0; color: #888">No Unit Selected</h3>
   <p style="margin: 0; font-size: 0.9rem">Select a unit from the tree to view its details</p>
 </div>
+<style>
+  /* Mobile responsive styles for role selector */
+  @media (max-width: 768px) {
+    .role-buttons-desktop {
+      display: none !important;
+    }
+    
+    .role-dropdown-mobile {
+      display: block !important;
+      width: 100% !important;
+    }
+    
+    .role-selector {
+      flex-direction: column !important;
+      gap: 0.5rem !important;
+    }
+  }
+  
+  @media (min-width: 769px) {
+    .role-buttons-desktop {
+      display: block !important;
+    }
+    
+    .role-dropdown-mobile {
+      display: none !important;
+    }
+  }
+</style>
