@@ -4,13 +4,13 @@ app-layout
     // Header Section
     .mb-4.flex.justify-between.items-center
       div
-        h1.text-2xl.font-bold.text-gray-800 User Groups
+        h1.text-2xl.font-bold.text-gray-800 {{ 'userManagement.groups.title' | translate }}
         p.text-gray-600
-          | Manage and view all user groups in the system
+          | {{ 'userManagement.groups.manageGroups' | translate }}
       button(
         class="p-button-primary",
         pButton,
-        label="Create Group",
+        [label]="'userManagement.groups.createGroup' | translate",
         icon="pi pi-plus",
         (click)="openCreateGroupDialog()"
       )
@@ -22,7 +22,7 @@ app-layout
           #configurableFilter,
           [filters]="filterConfigs",
           [showFilterSelector]="true",
-          [filterSelectorPlaceholder]="'Select filters to display'",
+          [filterSelectorPlaceholder]="'notifications.acknowledge.filter.placeHolder'|translate",
           (filterChange)="onFilterChange($event)",
           (filterCleared)="onFilterCleared()",
           (filterApplied)="onFilterApplied($event)",
@@ -32,7 +32,6 @@ app-layout
           pButton,
           icon="pi pi-download",
           class="p-button-text"
-          style="color:var(--p-button-outlined-secondary-color)"
         )
 
     // Filter Chips Section with Gradient Background
@@ -40,7 +39,7 @@ app-layout
       app-filter-chips(
         [appliedFilters]="appliedFilters",
         [showClearAll]="true",
-        [clearAllLabel]="'Clear All'",
+        [clearAllLabel]="'userManagement.groups.clearAll' | translate",
         [getDisplayValue]="getFilterDisplayValue.bind(this)",
         (chipRemove)="removeFilterChip($event)",
         (clearAll)="clearAllFilters()"
@@ -55,9 +54,9 @@ app-layout
         [rows]="pageSize",
         [totalRecords]="totalRecords",
         [showCurrentPageReport]="true",
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} groups",
+        [currentPageReportTemplate]="'userManagement.groups.showingGroups' | translate",
         [rowsPerPageOptions]="[10, 25, 50]",      
-        emptyMessage="No groups found",
+        [emptyMessage]="'userManagement.groups.noGroupsFound' | translate",
         [lazy]="true",
         (actionClick)="onTableAction($event)",
         (onLazyLoad)="onLazyLoad($event)"
@@ -65,24 +64,24 @@ app-layout
 
       // Delete Group Confirmation Dialog
       p-dialog(
-        header="Delete Group",
+        [header]="'userManagement.groups.deleteGroup' | translate",
         [(visible)]="deleteGroupDialog",
-        [style]="{ width: '450px' }",
+        class="delete-dialog",
         [modal]="true"
       )
         .p-fluid(*ngIf="selectedGroup")
           .mb-4
             p.text-lg
-              | Are you sure you want to delete the group "{{ selectedGroup.groupName }}"?
+              | {{ 'userManagement.groups.deleteGroupConfirm' | translate: {groupName: selectedGroup.groupName} }}
             p.text-red-600.mt-2
-              | This action cannot be undone. All members will be removed from this group.
+              | {{ 'userManagement.groups.deleteGroupWarning' | translate }}
 
         ng-template(pTemplate="footer")
           button(
             class="p-button-text",
             pButton,
             pRipple,
-            label="Cancel",
+            [label]="'userManagement.groups.cancel' | translate",
             icon="pi pi-times",
             (click)="deleteGroupDialog = false"
           )
@@ -90,7 +89,7 @@ app-layout
             class="p-button-danger",
             pButton,
             pRipple,
-            label="Delete",
+            [label]="'userManagement.groups.delete' | translate",
             icon="pi pi-trash",
             (click)="deleteGroup()"
           )

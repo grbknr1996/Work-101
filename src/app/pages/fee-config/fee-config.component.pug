@@ -9,7 +9,16 @@ app-layout
   )
     i.pi.pi-calculator
   
-  h1.text-xl.ml-4.mb-1.col-span-3 Filling Fees
+  .flex.flex-row.gap-2
+    h1.text-xl.mt-2.ml-4.col-span-3 Filling Fees
+    p-select(
+      (onChange)="onLocationChange($event.value.code)",
+      [options]="docOrigins",
+      [(ngModel)]="selectedLocation", 
+      optionLabel="name", 
+      placeholder="Select Location/Office",
+      class="w-full md:w-56"
+    )
   
   .grid.grid-cols-6.mt-2
     .col-span-6.grid.grid-cols-12.filter
@@ -61,31 +70,25 @@ app-layout
     )
     
     .col-span-6
-      p-tabs(value="trademark")
+      p-tabs(value="trademarks")
         p-tablist
-          | @for (category of categories; track category.ipType) {
-          p-tab([value]="category.ipType")
-            .category-label {{ category.ipType | capitalizeWords }}
+          | @for (category of categories; track category.ipRightCategory) {
+          p-tab([value]="category.ipRightCategory")
+            .category-label {{ category.ipRightCategory | capitalizeWords }}
             p-badge([value]="category.count")
           | }
         
         p-tabpanels
-          | @for (category of categories; track category.ipType) {
-          p-tabpanel.grid.grid-cols-12.gap-3([value]="category.ipType")
-            | @for (service of category.data; track service.name) {
+          | @for (category of categories; track category.ipRightCategory) {
+          p-tabpanel.grid.grid-cols-12.gap-3([value]="category.ipRightCategory")
+            | @for (service of category.data; track service.feeId + service.documentOriginCode) {
             .col-span-3.mt-3
               p-card.w-full
                 ng-template(#header="")
-                  h1.flex
-                    p-checkbox(
-                      inputId="service",
-                      [(ngModel)]="service.checked",
-                      [binary]="true"
-                    )
-                    label.flex-1(for="service") {{ service.name }}
+                  h1 {{ service.feeDescription }}
                 
-                .text-base.font-bold.mb-2 New Application
-                .text-xs Regular fees IP
+                .text-base.font-bold.mb-2 {{ service.feeCategory }}
+                .text-xs {{ service.documentOriginName }}
                 
                 ng-template(#footer="")
                   .flex.gap-4.mt-1
@@ -94,10 +97,10 @@ app-layout
                       severity="secondary",
                       [outlined]="true",
                       styleClass="w-full"
-                    ) Basic Fee {{ service.basicFee }}$
+                    ) Basic Fee {{ service.basicFeeUnitAmount }}$
                     p-button.w-full(
                       size="small",
                       styleClass="w-full"
-                    ) Variable Fee {{ service.variableFee }}$
+                    ) Variable Fee {{ service.additionalFeeUnitAmount }}$
             | }
           | }

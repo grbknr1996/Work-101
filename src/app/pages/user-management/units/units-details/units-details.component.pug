@@ -26,7 +26,7 @@
           small.p-error(
             *ngIf="unitForm.get('unitName')?.invalid && unitForm.get('unitName')?.touched",
             style="display: block; margin-top: 0.25rem"
-          ) Unit name is required and must be at least 2 characters
+          ) {{ 'userManagement.units.unitNameRequired' | translate }}
         
         div(style="display: flex; gap: 1rem; align-items: center")
           span(style="background: #e3f2fd; color: #1976d2; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.875rem; font-weight: 500;") {{ unitCategory || 'Unit' }}
@@ -39,14 +39,14 @@
             pButton,
             icon="pi pi-pencil",
             (click)="editUnit()",
-            title="Edit Unit",
+            [title]="'userManagement.units.editUnit' | translate",
             style="min-width: 40px; height: 40px"
           )
           button.p-button-outlined.p-button-sm(
             *ngIf="unitCategory !== 'Section'",
             pButton,
             icon="pi pi-plus",
-            title="Add Sub-unit",
+            [title]="'userManagement.units.addSubUnit' | translate",
             style="min-width: 40px; height: 40px",
             (click)="createSubUnit()"
           )
@@ -55,14 +55,14 @@
         ng-container(*ngIf="isEditMode")
           button.p-button-success.p-button-sm(
             pButton,
-            label="Save",
+            [label]="'userManagement.units.save' | translate",
             (click)="saveUnit()",
             title="Save Changes",
             style="min-width: 80px; height: 40px"
           )
           button.p-button-outlined.p-button-sm(
             pButton,
-            label="Cancel",
+            [label]="'userManagement.units.cancel' | translate",
             (click)="cancelEdit()",
             title="Cancel Edit",
             style="min-width: 80px; height: 40px"
@@ -96,12 +96,12 @@
       )
 
   p-tabView([(activeIndex)]="selectedTabIndex")
-    p-tabPanel(header="Users")
+    p-tabPanel([header]="'userManagement.units.users' | translate")
       button.p-button-sm.p-button-primary(
         *ngIf="isEditMode",
         pButton,
         icon="pi pi-plus",
-        [label]="selectedRole === 'head' && getSelectedRoleUsers().length > 0 ? 'Change Head User' : 'Add User'",
+        [label]="selectedRole === 'head' && getSelectedRoleUsers().length > 0 ? ('userManagement.units.changeHeadUser' | translate) : ('userManagement.units.addUser' | translate)",
         style="margin-bottom: 1rem",
         (click)="openAddUserDialog()"
       )
@@ -112,9 +112,9 @@
       )
         ng-template(pTemplate="header")
           tr
-            th Name
-            th Email
-            th(style="width: 60px") Actions
+            th {{ 'userManagement.units.name' | translate }}
+            th {{ 'userManagement.units.email' | translate }}
+            th(style="width: 60px") {{ 'userManagement.units.actions' | translate }}
         
         ng-template(
           pTemplate="body",
@@ -130,7 +130,7 @@
                 *ngIf="!isEditMode",
                 pButton,
                 icon="pi pi-eye",
-                title="View User",
+                [title]="'userManagement.units.viewUser' | translate",
                 (click)="viewUser(user)"
               )
               
@@ -142,13 +142,13 @@
                 button.p-button-text.p-button-sm(
                   pButton,
                   icon="pi pi-eye",
-                  title="View User",
+                  [title]="'userManagement.units.viewUser' | translate",
                   (click)="viewUser(user)"
                 )
                 button.p-button-text.p-button-sm.p-button-danger(
                   pButton,
                   icon="pi pi-times",
-                  title="Remove User",
+                  [title]="'userManagement.units.removeUser' | translate",
                   (click)="removeUser(selectedRole, i)"
                 )
       
@@ -160,10 +160,10 @@
         (membersSelected)="onUsersSelected($event)"
       )
 
-    p-tabPanel(header="Permissions")
+    p-tabPanel([header]="'userManagement.units.permissions' | translate")
       .grid
         .col-12
-          label.block.mb-2.font-medium Permission Sets
+          label.block.mb-2.font-medium {{ 'userManagement.units.permissionSets' | translate }}
           // View mode: chips only
           div(*ngIf="!isEditMode")
             .flex.flex-wrap.gap-2
@@ -178,7 +178,7 @@
             (onChange)="onPermissionSelectionChange($event)",
             optionLabel="label",
             [filter]="true",
-            placeholder="Select Permission Sets",
+            [placeholder]="'userManagement.units.selectPermissionSets' | translate",
             [panelStyle]="{minWidth: '600px', width: '80vw', maxWidth: '700px', maxHeight: '400px', overflowX: 'auto'}",
             [virtualScroll]="true",
             [virtualScrollItemSize]="34",
@@ -194,13 +194,13 @@
         
         .col-12.mt-4
           .bg-gray-50.p-4.rounded-lg
-            h4.font-semibold.mb-4 Selected Permissions
+            h4.font-semibold.mb-4 {{ 'userManagement.units.selectedPermissions' | translate }}
             .flex.flex-wrap.gap-2
               span.inline-block.bg-blue-100.text-blue-800.px-2.py-1.rounded-full.text-xs(
                 *ngFor="let permission of isEditMode ? selectedPermissions : cleanSelectedRolePermissions"
               ) {{ permission.label }}
 
-    p-tabPanel(header="Actions")
+    p-tabPanel([header]="'userManagement.units.actions' | translate")
       app-process-actions(
         [selectedRole]="selectedRole",
         [selectedActions]="getSelectedRoleActions()",
@@ -217,7 +217,7 @@
   i.pi.pi-building(
     style="font-size: 3rem; color: #ccc; margin-bottom: 1rem; display: block"
   )
-  h3(style="margin: 0 0 0.5rem 0; color: #888") No Unit Selected
-  p(style="margin: 0; font-size: 0.9rem") Select a unit from the tree to view its details
+  h3(style="margin: 0 0 0.5rem 0; color: #888") {{ 'userManagement.units.noUnitSelected' | translate }}
+  p(style="margin: 0; font-size: 0.9rem") {{ 'userManagement.units.selectUnitFromTree' | translate }}
 
   

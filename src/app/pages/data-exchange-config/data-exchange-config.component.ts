@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import {
   LayoutConfig,
 } from '../../components/app-layout/app-layout.component';
-
+import { MechanicsService } from 'src/app/_services/mechanics.service';
 
 @Component({
   selector: 'app-data-exchange-config',
@@ -48,7 +48,8 @@ export class DataExchangeConfigComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public ms: MechanicsService
   ) {
     this.officeCode = this.route.snapshot.params['officeCode'] || 'default';
     this.langCode = this.route.snapshot.params['langCode'] || 'en';

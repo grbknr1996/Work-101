@@ -2,7 +2,10 @@
 <app-layout>
   <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
   <div class="floating-calculator" cdkDrag="" pToolTip="Calculator" toolTipPosition="left" (click)="openCalculator()"><i class="pi pi-calculator"></i></div>
-  <h1 class="text-xl ml-4 mb-1 col-span-3">Filling Fees</h1>
+  <div class="flex flex-row gap-2">
+    <h1 class="text-xl mt-2 ml-4 col-span-3">Filling Fees</h1>
+    <p-select class="w-full md:w-56" (onChange)="onLocationChange($event.value.code)" [options]="docOrigins" [(ngModel)]="selectedLocation" optionLabel="name" placeholder="Select Location/Office"></p-select>
+  </div>
   <div class="grid grid-cols-6 mt-2">
     <div class="col-span-6 grid grid-cols-12 filter">
       <div class="col-span-4">
@@ -24,29 +27,26 @@
   <div class="mb-8 mt-1 w-full">
     <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="true" [clearAllLabel]="'Clear All'" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-filter-chips>
     <div class="col-span-6">
-      <p-tabs value="trademark">
-        <p-tablist>@for (category of categories; track category.ipType) {
-          <p-tab [value]="category.ipType">
-            <div class="category-label">{{ category.ipType | capitalizeWords }}</div>
+      <p-tabs value="trademarks">
+        <p-tablist>@for (category of categories; track category.ipRightCategory) {
+          <p-tab [value]="category.ipRightCategory">
+            <div class="category-label">{{ category.ipRightCategory | capitalizeWords }}</div>
             <p-badge [value]="category.count"></p-badge>
           </p-tab>}
         </p-tablist>
-        <p-tabpanels>@for (category of categories; track category.ipType) {
-          <p-tabpanel class="grid grid-cols-12 gap-3" [value]="category.ipType">@for (service of category.data; track service.name) {
+        <p-tabpanels>@for (category of categories; track category.ipRightCategory) {
+          <p-tabpanel class="grid grid-cols-12 gap-3" [value]="category.ipRightCategory">@for (service of category.data; track service.feeId + service.documentOriginCode) {
             <div class="col-span-3 mt-3">
               <p-card class="w-full">
                 <ng-template #header="">
-                  <h1 class="flex">
-                    <p-checkbox inputId="service" [(ngModel)]="service.checked" [binary]="true"></p-checkbox>
-                    <label class="flex-1" for="service">{{ service.name }}</label>
-                  </h1>
+                  <h1>{{ service.feeDescription }}</h1>
                 </ng-template>
-                <div class="text-base font-bold mb-2">New Application</div>
-                <div class="text-xs">Regular fees IP</div>
+                <div class="text-base font-bold mb-2">{{ service.feeCategory }}</div>
+                <div class="text-xs">{{ service.documentOriginName }}</div>
                 <ng-template #footer="">
                   <div class="flex gap-4 mt-1">
-                    <p-button class="w-full" size="small" severity="secondary" [outlined]="true" styleClass="w-full">Basic Fee {{ service.basicFee }}$</p-button>
-                    <p-button class="w-full" size="small" styleClass="w-full">Variable Fee {{ service.variableFee }}$</p-button>
+                    <p-button class="w-full" size="small" severity="secondary" [outlined]="true" styleClass="w-full">Basic Fee {{ service.basicFeeUnitAmount }}$</p-button>
+                    <p-button class="w-full" size="small" styleClass="w-full">Variable Fee {{ service.additionalFeeUnitAmount }}$</p-button>
                   </div>
                 </ng-template>
               </p-card>

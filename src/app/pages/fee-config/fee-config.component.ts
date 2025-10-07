@@ -2,8 +2,8 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
-import { FeeService } from 'src/app/_services/FeeService';
-import { Fee } from 'src/app/schemas/fee-schema';
+import { FeeService } from 'src/app/_services/fee.service';
+import { FeeBag } from 'src/app/schemas/fee-schema';
 import {
   ConfigurableFilterComponent,
   FilterConfig,
@@ -11,39 +11,40 @@ import {
 } from 'src/app/components/configurable-filter/configurable-filter.component';
 
 interface TabData {
-  ipType: string;
-  data?: Fee[] | [];
+  ipRightCategory: string;
+  data?: FeeBag[] | [];
   count?: number | 0;
   checked?: boolean;
 }
 
 enum IpTypes {
-  TRADEMARK = 'trademark',
-  PATENT = 'patent',
-  COPYRIGHT = 'copyright',
+  TRADEMARKS = 'trademarks',
+  PATENTS = 'patents',
+  COPYRIGHTS = 'copyrights',
   POST_FILINGS = 'post filings',
-  INDUSTRIAL_DESIGN = 'industrial design',
+  INDUSTRIAL_DESIGNS = 'designs',
   GEOGRAPHICAL_INDICATIONS = 'geographical indications',
 }
 
 @Component({
   selector: 'app-fee-config',
   standalone: false,
-  providers: [FeeService],
   templateUrl: './fee-config.component.html',
 })
 export class FeeConfigComponent implements OnInit {
   @ViewChild(ConfigurableFilterComponent)
   configurableFilter!: ConfigurableFilterComponent;
-  feeServices!: Fee[];
+  feeBag!: FeeBag[];
+
+  docOrigins: any[];
+
+  selectedLocation: any;
 
   breadcrumbItems = [];
 
   checked: boolean = false;
 
   categories!: TabData[];
-
-  loading: boolean = true;
 
   searchBar: string;
 
@@ -115,15 +116,16 @@ export class FeeConfigComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit() {
+    let officeCode;
     const currentPath = this.router.url;
     const menuItems = this.menuService.generateFeeConfigurationMenu(currentPath);
     this.menuService.updateMenuItems(menuItems);
     // Optionally, dynamically set menu items here
     this.route.params.subscribe((params) => {
-      const officeCode =
+      officeCode =
         params['officeCode'] || this.ms.getCurrentOffice() || 'default';
       const langCode = params['langCode'] || 'en';
 
@@ -141,20 +143,17 @@ export class FeeConfigComponent implements OnInit {
       // Trigger change detection after updating breadcrumbs
       this.cdr.markForCheck();
     });
-    this.feeService.getFeesConditions().subscribe((data) => {
-      console.log("Fee conditions data: ", data);
-      return data;
-    })
-    this.feeService.getFeeServices().then((feeServices) => {
-      this.feeServices = feeServices.map(item => ({
-        ...item,
-        checked: false
+    this.onLocationChange(officeCode);
+    this.feeService.getDocumentOrigins().subscribe((documentOrigins) => {
+      console.log('document origins: ', documentOrigins);
+      this.docOrigins = Object.entries(documentOrigins.map).map(([code, name]) => ({
+        name,
+        code
       }));
-      this.loading = false;
-      console.log('feeServices: ', this.feeServices);
-      this.categories = this.getTabData(this.feeServices);
+      this.selectedLocation = this.docOrigins.filter(value => value.code === officeCode.toUpperCase())[0];
     });
   }
+
   clearAllFilters(): void {
     this.appliedFilters = [];
     this.filteredGroups = this.groups;
@@ -174,9 +173,8 @@ export class FeeConfigComponent implements OnInit {
       case 'dateRange':
         if (Array.isArray(filter.value) && filter.value.length === 2) {
           const [startDate, endDate] = filter.value;
-          return `${
-            filterConfig.label
-          }: ${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`;
+          return `${filterConfig.label
+            }: ${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`;
         }
         return filterConfig.label;
       default:
@@ -200,12 +198,12 @@ export class FeeConfigComponent implements OnInit {
       this.cdr.detectChanges();
     }
   }
-  getTabData(feeServicesData: Fee[]): TabData[] {
-    const map = new Map<string, Fee[]>();
+  getTabData(feeServicesData: FeeBag[]): TabData[] {
+    const map = new Map<string, FeeBag[]>();
 
     // Grouping items by category
     for (const item of feeServicesData) {
-      const category = item.category;
+      const category = item.ipRightCategory ? item.ipRightCategory.toLowerCase() : IpTypes.POST_FILINGS;
       if (!map.has(category)) {
         map.set(category, []);
       }
@@ -214,26 +212,26 @@ export class FeeConfigComponent implements OnInit {
 
     // Creating TabData from the map
     let tabData: TabData[] = Array.from(map.entries()).map(
-      ([ipType, data]) => ({
-        ipType,
+      ([ipRightCategory, data]) => ({
+        ipRightCategory,
         data,
         count: data.length,
       })
     );
 
     const orderedTypes = [
-      IpTypes.TRADEMARK,
-      IpTypes.PATENT,
-      IpTypes.INDUSTRIAL_DESIGN,
-      IpTypes.COPYRIGHT,
+      IpTypes.TRADEMARKS,
+      IpTypes.PATENTS,
+      IpTypes.INDUSTRIAL_DESIGNS,
+      IpTypes.COPYRIGHTS,
       IpTypes.POST_FILINGS,
       IpTypes.GEOGRAPHICAL_INDICATIONS,
     ];
 
-    tabData = orderedTypes.map((ipType) => ({
-      ipType,
-      data: map.get(ipType) || [],
-      count: map.get(ipType)?.length || 0,
+    tabData = orderedTypes.map((ipRightCategory) => ({
+      ipRightCategory,
+      data: map.get(ipRightCategory) || [],
+      count: map.get(ipRightCategory)?.length || 0,
     }));
 
     console.log('TabData: ', tabData);
@@ -329,10 +327,26 @@ export class FeeConfigComponent implements OnInit {
       const officeCode =
         params['officeCode'] || this.ms.getCurrentOffice() || 'default';
       const langCode = params['langCode'] || 'en';
-      this.feeService.setSelectedItems(this.categories);
+      this.feeService.setSelectedItems({ docOrigins: this.docOrigins, feeBag: this.feeBag });
       this.router.navigate([
         `/${officeCode}/${langCode}/system-configuration/fee-config/calculator`,
       ]);
+    });
+  }
+
+  onLocationChange(officeCode) {
+    console.log(officeCode);
+    this.feeService.getFeesConditions(null, officeCode).subscribe((feeServices) => {
+      this.feeBag = feeServices.requestBag[0].feeBag.map(fee => {
+        if ("ipRightCategory" in fee)
+          return fee;
+        return {
+          ...fee,
+          ipRightCategory: IpTypes.POST_FILINGS
+        }
+      });
+      console.log('feeBag: ', this.feeBag);
+      this.categories = this.getTabData(this.feeBag);
     });
   }
 }

@@ -1,10 +1,10 @@
 form([formGroup]="formGroup")
   .basic-info-card
     .card-header
-      h2 Basic Information
+      h2 {{ 'userManagement.basicInfoForm.basicInformation' | translate }}
     .card-content
       .profile-upload-section
-        label.section-title Profile Picture
+        label.section-title {{ 'userManagement.basicInfoForm.profilePicture' | translate }}
         .profile-upload-wrapper
           label.profile-upload-label(for="profilePicture")
             img.profile-picture-preview(*ngIf="formGroup.get('profilePicture').value; else placeholder", [src]="formGroup.get('profilePicture').value", alt="Profile Picture Preview")
@@ -17,7 +17,7 @@ form([formGroup]="formGroup")
           .form-field-row
             label(for="username")
               i.pi.pi-user.input-label-icon
-              | Username
+              | {{ 'userManagement.basicInfoForm.username' | translate }}
               span.required *
             input(pInputText, id="username", formControlName="username", [ngClass]="{ 'ng-invalid': formGroup.get('username')?.invalid && formGroup.get('username')?.touched }")
             app-validation-errors([control]="formGroup.get('username')")
@@ -25,7 +25,7 @@ form([formGroup]="formGroup")
           .form-field-row
             label(for="email")
               i.pi.pi-envelope.input-label-icon
-              | Email
+              | {{ 'userManagement.basicInfoForm.email' | translate }}
               span.required *
             input(pInputText, id="email", formControlName="email", [ngClass]="{ 'ng-invalid': formGroup.get('email')?.invalid && formGroup.get('email')?.touched }")
             app-validation-errors([control]="formGroup.get('email')")
@@ -33,7 +33,7 @@ form([formGroup]="formGroup")
           .form-field-row
             label(for="telephone")
               i.pi.pi-phone.input-label-icon
-              | Telephone
+              | {{ 'userManagement.basicInfoForm.telephone' | translate }}
             input(pInputText, id="telephone", formControlName="telephone", [ngClass]="{ 'ng-invalid': formGroup.get('telephone')?.invalid && formGroup.get('telephone')?.touched }")
             app-validation-errors([control]="formGroup.get('telephone')")
         
@@ -41,14 +41,14 @@ form([formGroup]="formGroup")
           .form-field-row
             label(for="clientId")
               i.pi.pi-id-card.input-label-icon
-              | Client ID
+              | {{ 'userManagement.basicInfoForm.clientId' | translate }}
             input(pInputText, id="clientId", formControlName="clientId", [ngClass]="{ 'ng-invalid': formGroup.get('clientId')?.invalid && formGroup.get('clientId')?.touched }")
             app-validation-errors([control]="formGroup.get('clientId')")
           
           .form-field-row
             label(for="loginAlias")
               i.pi.pi-user-edit.input-label-icon
-              | Login Alias
+              | {{ 'userManagement.basicInfoForm.loginAlias' | translate }}
             input(pInputText, id="loginAlias", formControlName="loginAlias", [ngClass]="{ 'ng-invalid': formGroup.get('loginAlias')?.invalid && formGroup.get('loginAlias')?.touched }")
             app-validation-errors([control]="formGroup.get('loginAlias')")
           
@@ -56,7 +56,7 @@ form([formGroup]="formGroup")
             .toggle-field
               label(for="userType")
                 i.pi.pi-user-edit.input-label-icon
-                | User Type
+                | {{ 'userManagement.basicInfoForm.userType' | translate }}
               .flex.items-center.gap-3
                 p-toggleSwitch(
                   formControlName="userType", 
@@ -66,13 +66,13 @@ form([formGroup]="formGroup")
                   [style.pointer-events]="isEditMode ? 'none' : 'auto'", 
                   styleClass="user-type-toggle"
                 )
-                span.text-sm.font-medium.text-gray-700 {{ formGroup.get('userType')?.value ? 'External User' : 'Office User' }}
+                span.text-sm.font-medium.text-gray-700 {{ formGroup.get('userType')?.value ? ('userManagement.basicInfoForm.externalUser' | translate) : ('userManagement.basicInfoForm.officeUser' | translate) }}
               app-validation-errors([control]="formGroup.get('userType')")
             
             .toggle-field
               label(for="isActive")
                 i.pi.pi-check-circle.input-label-icon
-                | Status
+                | {{ 'userManagement.basicInfoForm.status' | translate }}
               .flex.items-center.gap-3
                 p-toggleSwitch(
                   formControlName="isActive", 
@@ -83,11 +83,11 @@ form([formGroup]="formGroup")
                 )
                 span.text-sm.font-medium(
                   [ngClass]="formGroup.get('isActive')?.value ? 'text-green-600' : 'text-red-600'"
-                ) {{ formGroup.get('isActive')?.value ? 'Active' : 'Inactive' }}
+                ) {{ formGroup.get('isActive')?.value ? ('userManagement.basicInfoForm.active' | translate) : ('userManagement.basicInfoForm.inactive' | translate) }}
               app-validation-errors([control]="formGroup.get('isActive')")
       
       .signature-section
-        label.section-title Signature Upload
+        label.section-title {{ 'userManagement.basicInfoForm.signatureUpload' | translate }}
         .signature-upload-wrapper
           label.signature-upload-label(for="signaturePicture")
             span.signature-upload-icon.pi.pi-upload

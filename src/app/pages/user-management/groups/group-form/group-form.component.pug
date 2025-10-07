@@ -3,9 +3,9 @@ app-layout
   .p-4
     // Header Section
     .mb-6
-      h1.text-3xl.font-bold.text-gray-800 {{ isEditMode ? 'Edit Group' : 'Create Group' }}
+      h1.text-3xl.font-bold.text-gray-800 {{ isEditMode ? ('userManagement.groupForm.editGroup' | translate) : ('userManagement.groupForm.createGroup' | translate) }}
       p.text-gray-600
-        | {{ isEditMode ? 'Update group information and settings' : 'Create a new user group with members and permissions' }}
+        | {{ isEditMode ? ('userManagement.groupForm.updateGroupInfo' | translate) : ('userManagement.groupForm.createNewGroup' | translate) }}
 
     // Form Content
     .bg-white.rounded-lg.shadow-sm.p-6
@@ -20,7 +20,7 @@ app-layout
         .grid.grid-cols-1.gap-6(class="md:grid-cols-2")
           div
             .field.mb-4
-              label.font-semibold.mb-1.block(for="groupName") Group Name
+              label.font-semibold.mb-1.block(for="groupName") {{ 'userManagement.groupForm.groupName' | translate }}
               input#groupName(
                 type="text",
                 pInputText,
@@ -29,7 +29,7 @@ app-layout
                 class="w-full"
               )
             .field.mb-4
-              label.font-semibold.mb-1.block(for="groupType") Group Type
+              label.font-semibold.mb-1.block(for="groupType") {{ 'userManagement.groupForm.groupType' | translate }}
               p-dropdown#groupType(
                 [options]="groupTypes",
                 [(ngModel)]="formData.groupType",
@@ -37,7 +37,7 @@ app-layout
               )
           div
             .field.mb-4
-              label.font-semibold.mb-1.block(for="description") Description
+              label.font-semibold.mb-1.block(for="description") {{ 'userManagement.groupForm.description' | translate }}
               textarea#description(
                 pInputTextarea,
                 [(ngModel)]="formData.description",
@@ -46,32 +46,32 @@ app-layout
                 placeholder="Enter group description..."
               )
             .field.mb-4
-              label.font-semibold.mb-1.block Status
+              label.font-semibold.mb-1.block {{ 'userManagement.groupForm.status' | translate }}
               .flex.items-center.gap-4.mt-2
                 div(
                   (click)="formData.status = 'active'; formData.isActive = true",
                   [class]='"px-4 py-2 rounded-full text-sm cursor-pointer flex items-center gap-2 transition-colors duration-200 " + (formData.status === "active" ? "bg-green-100 text-green-800 font-medium" : "bg-gray-100 text-gray-600 hover:bg-gray-200")'
                 )
                   i.pi.pi-check.text-xs(*ngIf="formData.status === 'active'")
-                  | Active
+                  | {{ 'userManagement.groupForm.active' | translate }}
 
                 div(
                   (click)="formData.status = 'inactive'; formData.isActive = false",
                   [class]='"px-4 py-2 rounded-full text-sm cursor-pointer flex items-center gap-2 transition-colors duration-200 " + (formData.status === "inactive" ? "bg-red-100 text-red-800 font-medium" : "bg-gray-100 text-gray-600 hover:bg-gray-200")'
                 )
                   i.pi.pi-check.text-xs(*ngIf="formData.status === 'inactive'")
-                  | Inactive
+                  | {{ 'userManagement.groupForm.inactive' | translate }}
 
       // Members Step
       div(*ngIf="activeIndex === 1" class="mt-6")
         .mb-4
-          h3.font-semibold.text-lg.text-gray-800 Manage Group Members
-          p.text-sm.text-gray-600 Select users to add to or remove from this group. Both username and email are displayed for easy identification.
+          h3.font-semibold.text-lg.text-gray-800 {{ 'userManagement.groupForm.manageGroupMembers' | translate }}
+          p.text-sm.text-gray-600 {{ 'userManagement.groupForm.selectUsersDescription' | translate }}
         
         .grid.grid-cols-2.gap-4
           // Available Users
           div
-            h4.font-semibold.mb-2 Available Users
+            h4.font-semibold.mb-2 {{ 'userManagement.groupForm.availableUsers' | translate }}
             .mb-3
               .flex.gap-2
                 input(
@@ -79,7 +79,7 @@ app-layout
                   type="text",
                   [(ngModel)]="availableUsersSearchTerm",
                   (ngModelChange)="onAvailableUsersSearchChange()",
-                  placeholder="Search users...",
+                  [placeholder]="'userManagement.groupForm.searchUsers' | translate",
                   class="flex-1"
                 )
                 button(
@@ -88,7 +88,7 @@ app-layout
                   icon="pi pi-times",
                   class="p-button-text p-button-sm",
                   (click)="clearSearch()",
-                  pTooltip="Clear Search"
+                  [pTooltip]="'userManagement.groupForm.clearSearch' | translate"
                 )
             .space-y-2
               .flex.justify-between.items-center.p-2.bg-gray-50.rounded-t
@@ -97,7 +97,7 @@ app-layout
                     class="hover:text-primary",
                     (click)="sortAvailableUsers('username')"
                   )
-                    | Username
+                    | {{ 'userManagement.groupForm.username' | translate }}
                     i.pi.pi-sort-alt(
                       [ngClass]='{' +
                         '"pi-sort-amount-up": availableUsersSortField === "username" && availableUsersSortOrder === 1,' +
@@ -108,7 +108,7 @@ app-layout
                     class="hover:text-primary",
                     (click)="sortAvailableUsers('email')"
                   )
-                    | Email
+                    | {{ 'userManagement.groupForm.email' | translate }}
                     i.pi.pi-sort-alt(
                       [ngClass]='{' +
                         '"pi-sort-amount-up": availableUsersSortField === "email" && availableUsersSortOrder === 1,' +
@@ -119,15 +119,15 @@ app-layout
                 .flex.items-center.gap-2
                   button(
                     pButton,
-                    [label]="areAllAvailableUsersSelected() ? 'Deselect All' : 'Select All'",
+                    [label]="areAllAvailableUsersSelected() ? ('userManagement.groupForm.deselectAll' | translate) : ('userManagement.groupForm.selectAll' | translate)",
                     [icon]="areAllAvailableUsersSelected() ? 'pi pi-times' : 'pi pi-check'",
                     class="p-button-text p-button-sm",
                     (click)="areAllAvailableUsersSelected() ? deselectAllAvailableUsers() : selectAllAvailableUsers()"
                   )
-                  span.text-sm.text-blue-700(*ngIf="selectedUsers.length > 0") {{ selectedUsers.length }} selected
+                  span.text-sm.text-blue-700(*ngIf="selectedUsers.length > 0") {{ selectedUsers.length }} {{ 'userManagement.groupForm.selected' | translate }}
                 button(
                   pButton,
-                  label="Add Selected",
+                  [label]="'userManagement.groupForm.addSelected' | translate",
                   icon="pi pi-plus",
                   class="p-button-success p-button-sm",
                   [disabled]="selectedUsers.length === 0",
@@ -152,12 +152,12 @@ app-layout
                   icon="pi pi-plus",
                   class="p-button-rounded p-button-success p-button-text",
                   (click)="addMember(user)",
-                  pTooltip="Add Member"
+                  [pTooltip]="'userManagement.groupForm.addMember' | translate"
                 )
               
               // Empty state
               .text-center.p-3.text-gray-500(*ngIf="availableUsers.length === 0")
-                | No users found
+                | {{ 'userManagement.groupForm.noUsersFound' | translate }}
             
             // Pagination
             .mt-4(*ngIf="totalUsers > rowsPerPage")
@@ -167,18 +167,18 @@ app-layout
                 [rowsPerPageOptions]="rowsPerPageOptions",
                 (onPageChange)="onPageChange($event)",
                 [showCurrentPageReport]="true",
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
+                [currentPageReportTemplate]="'userManagement.groupForm.showingUsers' | translate"
               )
 
           // Current Members
           div
-            h4.font-semibold.mb-2 Current Members
+            h4.font-semibold.mb-2 {{ 'userManagement.groupForm.currentMembers' | translate }}
             .mb-3
               input(
                 pInputText,
                 type="text",
                 [(ngModel)]="membersSearchTerm",
-                placeholder="Search members...",
+                [placeholder]="'userManagement.groupForm.searchMembers' | translate",
                 class="w-full"
               )
             .space-y-2
@@ -188,7 +188,7 @@ app-layout
                     class="hover:text-primary",
                     (click)="sortMembers('username')"
                   )
-                    | Username
+                    | {{ 'userManagement.groupForm.username' | translate }}
                     i.pi.pi-sort-alt(
                       [ngClass]='{' +
                         '"pi-sort-amount-up": membersSortField === "username" && membersSortOrder === 1,' +
@@ -199,7 +199,7 @@ app-layout
                     class="hover:text-primary",
                     (click)="sortMembers('email')"
                   )
-                    | Email
+                    | {{ 'userManagement.groupForm.email' | translate }}
                     i.pi.pi-sort-alt(
                       [ngClass]='{' +
                         '"pi-sort-amount-up": membersSortField === "email" && membersSortOrder === 1,' +
@@ -210,15 +210,15 @@ app-layout
                 .flex.items-center.gap-2
                   button(
                     pButton,
-                    [label]="areAllCurrentMembersSelected() ? 'Deselect All' : 'Select All'",
+                    [label]="areAllCurrentMembersSelected() ? ('userManagement.groupForm.deselectAll' | translate) : ('userManagement.groupForm.selectAll' | translate)",
                     [icon]="areAllCurrentMembersSelected() ? 'pi pi-times' : 'pi pi-check'",
                     class="p-button-text p-button-sm",
                     (click)="areAllCurrentMembersSelected() ? deselectAllCurrentMembers() : selectAllCurrentMembers()"
                   )
-                  span.text-sm.text-blue-700(*ngIf="selectedMembers.length > 0") {{ selectedMembers.length }} selected
+                  span.text-sm.text-blue-700(*ngIf="selectedMembers.length > 0") {{ selectedMembers.length }} {{ 'userManagement.groupForm.selected' | translate }}
                 button(
                   pButton,
-                  label="Remove Selected",
+                  [label]="'userManagement.groupForm.removeSelected' | translate",
                   icon="pi pi-times",
                   class="p-button-danger p-button-sm",
                   [disabled]="selectedMembers.length === 0",
@@ -241,7 +241,7 @@ app-layout
                   icon="pi pi-times",
                   class="p-button-rounded p-button-danger p-button-text",
                   (click)="removeMember(member)",
-                  pTooltip="Remove Member"
+                  [pTooltip]="'userManagement.groupForm.removeMember' | translate"
                 )
             
             // Pagination for Current Members
@@ -252,37 +252,37 @@ app-layout
                 [rowsPerPageOptions]="membersRowsPerPageOptions",
                 (onPageChange)="onMembersPageChange($event)",
                 [showCurrentPageReport]="true",
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} members"
+                [currentPageReportTemplate]="'userManagement.groupForm.showingMembers' | translate"
               )
 
       // Review Step
       div(*ngIf="activeIndex === 2" class="mt-6")
         .bg-gray-50.p-6.rounded-lg
-          h3.font-bold.text-xl.mb-6 Review Group Information
+          h3.font-bold.text-xl.mb-6 {{ 'userManagement.groupForm.reviewGroupInfo' | translate }}
           
           // Basic Info Review
           .mb-6
-            h4.font-semibold.text-lg.mb-3.text-blue-600 Basic Information
+            h4.font-semibold.text-lg.mb-3.text-blue-600 {{ 'userManagement.groupForm.basicInformation' | translate }}
             .grid.grid-cols-1.gap-4(class="md:grid-cols-2")
               .bg-white.p-4.rounded-lg
-                .text-sm.text-gray-600 Group Name
+                .text-sm.text-gray-600 {{ 'userManagement.groupForm.groupName' | translate }}
                 .font-medium {{ formData.groupName }}
               .bg-white.p-4.rounded-lg
-                .text-sm.text-gray-600 Group Type
+                .text-sm.text-gray-600 {{ 'userManagement.groupForm.groupType' | translate }}
                 .font-medium {{ formData.groupType }}
               .bg-white.p-4.rounded-lg
-                .text-sm.text-gray-600 Description
-                .font-medium {{ formData.description || 'No description provided' }}
+                .text-sm.text-gray-600 {{ 'userManagement.groupForm.description' | translate }}
+                .font-medium {{ formData.description || ('userManagement.groupForm.noDescriptionProvided' | translate) }}
               .bg-white.p-4.rounded-lg
-                .text-sm.text-gray-600 Status
-                .font-medium([class]="formData.status === 'active' ? 'text-green-600' : 'text-red-600'") {{ formData.status === 'active' ? 'Active' : 'Inactive' }}
+                .text-sm.text-gray-600 {{ 'userManagement.groupForm.status' | translate }}
+                .font-medium([class]="formData.status === 'active' ? 'text-green-600' : 'text-red-600'") {{ formData.status === 'active' ? ('userManagement.groupForm.active' | translate) : ('userManagement.groupForm.inactive' | translate) }}
           
           // Members Review
           .mb-6
-            h4.font-semibold.text-lg.mb-3.text-blue-600 Members
+            h4.font-semibold.text-lg.mb-3.text-blue-600 {{ 'userManagement.groupForm.members' | translate }}
             .bg-white.p-4.rounded-lg
               .mt-3(*ngIf="groupMembers.length > 0")
-                .text-sm.text-gray-600.mb-2 Added Members:
+                .text-sm.text-gray-600.mb-2 {{ 'userManagement.groupForm.addedMembers' | translate }}
                 .space-y-1
                   .p-2.bg-gray-50.rounded(*ngFor="let member of groupMembers")
                     .flex.items-center.gap-2.mb-1
@@ -290,7 +290,7 @@ app-layout
                       span.font-medium {{ member.userName }}
                     .text-sm.text-gray-500.ml-6 {{ member.email }}
               .mt-3(*ngIf="groupMembers.length === 0")
-                .text-sm.text-gray-500 No members added to this group
+                .text-sm.text-gray-500 {{ 'userManagement.groupForm.noMembersAdded' | translate }}
 
     // Action Buttons
     .mt-6.flex.justify-between.items-center
@@ -299,7 +299,7 @@ app-layout
           *ngIf="activeIndex === 0",
           pButton,
           pRipple,
-          label="Cancel",
+          [label]="'userManagement.groupForm.cancel' | translate",
           icon="pi pi-times",
           (click)="onCancel()"
         )
@@ -307,7 +307,7 @@ app-layout
           *ngIf="activeIndex > 0",
           pButton,
           pRipple,
-          label="Previous",
+          [label]="'userManagement.groupForm.previous' | translate",
           icon="pi pi-arrow-left",
           (click)="onPreviousStep()"
         )
@@ -316,7 +316,7 @@ app-layout
           *ngIf="activeIndex < 2",
           pButton,
           pRipple,
-          label="Next",
+          [label]="'userManagement.groupForm.next' | translate",
           icon="pi pi-arrow-right",
           iconPos="right",
           [disabled]="!canProceedToNext()",
@@ -326,7 +326,7 @@ app-layout
           *ngIf="activeIndex === 2",
           pButton,
           pRipple,
-          [label]="isEditMode ? 'Save' : 'Create Group'",
+          [label]="isEditMode ? ('userManagement.groupForm.save' | translate) : ('userManagement.groupForm.createGroup' | translate)",
           icon="pi pi-save",
           class="p-button-primary",
           (click)="onSave()"

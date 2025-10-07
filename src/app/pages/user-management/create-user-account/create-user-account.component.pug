@@ -1,7 +1,7 @@
 app-layout
   app-breadcrumbs([items]="breadcrumbItems")
   .create-user-container
-    h1.form-title {{ isEditMode ? 'Edit User' : 'Create User' }}
+    h1.form-title {{ isEditMode ? ('userManagement.createUserAccount.editUser' | translate) : ('userManagement.createUserAccount.createUser' | translate) }}
     app-configurable-stepper([steps]="steps", [activeStep]="activeStep", (stepChange)="onStepChange($event)")
     form([formGroup]="userForm")
       .step-content
@@ -24,20 +24,20 @@ app-layout
             (filterTypeChange)="onGroupsFilter($event)",
             (sortChange)="onGroupsSort($event.sortBy, $event.sortOrder)"
           )
-            .loading-groups(*ngIf="isLoadingGroups", style="text-align: center; padding: 20px; color: #666;")
-              p Loading available groups...
-            .error-groups(*ngIf="groupsLoadError", style="text-align: center; padding: 20px; color: #dc3545;")
-              p Failed to load groups. Please try again later.
-              button.p-button-sm(pButton, type="button", label="Retry", icon="pi pi-refresh", (click)="retryLoadGroups()")
+            .loading-groups(*ngIf="isLoadingGroups")
+              p {{ 'userManagement.createUserAccount.loadingGroups' | translate }}
+            .error-groups(*ngIf="groupsLoadError")
+              p {{ 'userManagement.createUserAccount.failedToLoadGroups' | translate }}
+              button.p-button-sm(pButton, type="button", [label]="'userManagement.createUserAccount.retry' | translate", icon="pi pi-refresh", (click)="retryLoadGroups()")
 
           .security-step-card(*ngSwitchCase="2", [formGroup]="userForm.get('security')")
             .card-header
-              h2 Security Settings
+              h2 {{ 'userManagement.createUserAccount.securitySettings' | translate }}
             .card-content
               .form-field
                 label.checkbox-label
                   input(type="checkbox", formControlName="enableTwoFactor")
-                  span.checkbox-text Enable two-factor authentication
+                  span.checkbox-text {{ 'userManagement.createUserAccount.enableTwoFactor' | translate }}
           app-review-step(
             *ngSwitchCase="3",
             [basicInfo]="userForm.get('basicInfo').value",
@@ -49,7 +49,7 @@ app-layout
           button.p-button-secondary(
             pButton,
             type="button",
-            label="Previous",
+            [label]="'userManagement.createUserAccount.previous' | translate",
             (click)="prevStep()",
             *ngIf="activeStep > 0"
           )
@@ -58,7 +58,7 @@ app-layout
           button.p-button-primary(
             pButton,
             type="button",
-            label="Next",
+            [label]="'userManagement.createUserAccount.next' | translate",
             (click)="nextStep()",
             *ngIf="activeStep < steps.length - 1",
             [disabled]="!canProceed()"
@@ -66,7 +66,7 @@ app-layout
           button.p-button-success(
             pButton,
             type="button",
-            [label]="isEditMode ? 'Update User' : 'Create User'",
+            [label]="isEditMode ? ('userManagement.createUserAccount.updateUser' | translate) : ('userManagement.createUserAccount.createUser' | translate)",
             (click)="saveUser()",
             *ngIf="activeStep === steps.length - 1"
           )

@@ -5,11 +5,11 @@ app-layout([config]="layoutConfig")
     // Header Section
     .mb-4.flex.justify-between.items-center
       div
-        h1.text-2xl.font-bold.text-gray-800 User Accounts
-        p.text-gray-600 Manage and view all user accounts in the system
+        h1.text-2xl.font-bold.text-gray-800 {{ 'userManagement.userAccounts.title' | translate }}
+        p.text-gray-600 {{ 'userManagement.userAccounts.manageUsers' | translate }}
       button.p-button-primary(
         pButton,
-        label="Create User",
+        [label]="'userManagement.userAccounts.createUser' | translate",
         icon="pi pi-plus",
         (click)="onCreateUser()"
       )
@@ -28,7 +28,7 @@ app-layout([config]="layoutConfig")
         type="button",
         [icon]="isCardView ? 'pi pi-list' : 'pi pi-th-large'",
         (click)="toggleView()",
-        pTooltip="Toggle between table and card view",
+        [pTooltip]="'userManagement.userAccounts.toggleView' | translate",
         style="color: var(--p-button-outlined-secondary-color)"
       )
       app-configurable-filter(
@@ -50,7 +50,7 @@ app-layout([config]="layoutConfig")
       app-filter-chips(
         [appliedFilters]="appliedFilters",
         [showClearAll]="true",
-        [clearAllLabel]="'Clear All'",
+        [clearAllLabel]="'userManagement.userAccounts.clearAll' | translate",
         [getDisplayValue]="getFilterDisplayValue.bind(this)",
         (chipRemove)="onFilterChipRemoved($event)",
         (clearAll)="onFilterChipsClearAll()"
@@ -72,7 +72,7 @@ app-layout([config]="layoutConfig")
           [totalRecords]="totalRecords",
           [rowsPerPageOptions]="[10, 25, 50, 100]",
           [showCurrentPageReport]="true",
-          [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} users'",
+          [currentPageReportTemplate]="'userManagement.userAccounts.showingUsers' | translate",
           (actionClick)="onActionClick($event.action, $event.item)",
           (onLazyLoad)="onLazyLoad($event)"
         )
@@ -87,7 +87,7 @@ app-layout([config]="layoutConfig")
           [totalRecords]="totalRecords",
           [rowsPerPageOptions]="[10, 25, 50, 100]",
           [showCurrentPageReport]="true",
-          [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} users'",
+          [currentPageReportTemplate]="'userManagement.userAccounts.showingUsers' | translate",
           (actionClick)="onActionClick($event.action, $event.item)",
           (onLazyLoad)="onLazyLoad($event)",
           (sortChange)="onSort($event)"

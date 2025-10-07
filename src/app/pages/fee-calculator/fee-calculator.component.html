@@ -7,7 +7,7 @@
       <h1 class="text-xl pb-4">Fee Calculator</h1>
       <div class="grid grid-cols-12 gap-4">
         <p-floatlabel class="col-span-4 mb-4" variant="on">
-          <p-select class="w-full" id="locations" [options]="locations" [(ngModel)]="selectedLocation"></p-select>
+          <p-select class="w-full" id="locations" [options]="docOrigins" [(ngModel)]="selectedLocation" optionLabel="name"></p-select>
           <label for="locations">Location/Offices</label>
         </p-floatlabel>
         <p-floatlabel class="col-span-4 mb-4" variant="on">

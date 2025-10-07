@@ -6,6 +6,11 @@ let l = `utils() - `;
 import path from 'path';
 import ObjectID from 'bson-objectid';
 import { environment } from 'src/environments/environment';
+import { Observable, of, switchMap, throwError } from 'rxjs';
+import { ToastService } from './_services/toast.service';
+import { MechanicsService } from './_services/mechanics.service';
+import { HttpHeaders } from '@angular/common/http';
+import { AuthService } from './_services/auth.service';
 
 export const instanceType = (): string => {
   // Get the current URL
@@ -232,3 +237,65 @@ export const resizeImage = async (
 
   return resizedBase64;
 };
+
+/**
+ * Handle HTTP errors and show appropriate toast messages
+ */
+export const handleError = (
+  error: any, 
+  operation: string, 
+  toastService: ToastService,
+  mechanicalService: MechanicsService): Observable<never> => {
+    let errorMessage = 'An unexpected error occurred';
+
+    if (error.status === 401) {
+        errorMessage = 'Authentication failed. Please log in again.';
+        toastService.showError('Authentication Error', errorMessage);
+    } else if (error.status === 403) {
+        errorMessage = "You don't have permission to perform this action.";
+        toastService.showError('Permission Denied', errorMessage);
+    } else if (error.status === 404) {
+        errorMessage = 'The requested resource was not found.';
+        toastService.showError('Not Found', errorMessage);
+    } else if (error.status === 0) {
+        errorMessage = 'Network error. Please check your connection.';
+        toastService.showError('Network Error', errorMessage);
+    } else if (error.status >= 500) {
+        errorMessage = 'Server error. Please try again later.';
+        toastService.showError('Server Error', errorMessage);
+    } else {
+        errorMessage =
+            error.message || error.error?.message || 'Unknown error occurred';
+        toastService.showError('Error', mechanicalService.translate(errorMessage));
+    }
+
+    console.error(`${operation} failed:`, error);
+    return throwError(() => new Error(mechanicalService.translate(errorMessage)));
+}
+
+/**
+ * Get the authorization headers with Bearer token
+ */
+export const getAuthHeaders = (authService: AuthService): Observable<HttpHeaders> => {
+    return authService.getEncodedTokens().pipe(
+        switchMap((tokens) => {
+            const officeCode = authService.getCurrentOfficeCode();
+            if (tokens && tokens.accessToken) {
+                const headers = new HttpHeaders({
+                    Authorization: `Bearer ${tokens.accessToken}`,
+                    'Content-Type': 'application/json',
+                    'wipo-platform-code': officeCode,
+                });
+                return of(headers);
+            } else {
+                console.error('No access token available');
+                // Return headers without authorization - this will likely result in a 401
+                const headers = new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'wipo-platform-code': officeCode,
+                });
+                return of(headers);
+            }
+        })
+    );
+}

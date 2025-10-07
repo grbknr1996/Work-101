@@ -129,6 +129,10 @@ app-table
       background-color inherit
       border none
 app-groups
+  .delete-dialog
+    width 450px
+  .p-button-text
+    color var(--p-button-outlined-secondary-color)
   .p-datatable-thead > tr > th p-columnfilter
       background-color inherit
       border none
@@ -1460,6 +1464,14 @@ app-configurable-stepper
 app-create-user-account
   .create-user-container
     padding: 2rem
+    .loading-groups
+      text-align: center
+      padding: 20px
+      color: #666
+    .error-groups
+      text-align: center
+      padding: 20px
+      color: #dc3545
 
     .form-title
       text-align: center
@@ -6103,6 +6115,193 @@ app-process-actions
 
     .pi-circle
       color: #d1d5db
+// ============================================
+// app-units-page Component Styles
+// ============================================
+app-units-page
+  // Breadcrumbs styling
+  app-breadcrumbs
+    margin-top: 1.5rem
+    margin-bottom: 1rem
+
+  // Mobile hamburger menu button
+  .mobile-menu-btn
+    display: none
+    margin: 1rem 0
+    background: var(--p-primary-color)
+    color: white
+    border: none
+    border-radius: 8px
+    padding: 0.75rem 1rem
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15)
+    cursor: pointer
+
+    i.pi.pi-bars
+      font-size: 1rem
+      margin-right: 0.5rem
+
+  // Mobile overlay
+  .mobile-overlay
+    position: fixed
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    background: rgba(0,0,0,0.5)
+    z-index: 999
+
+  // Main container
+  .units-page-container
+    display: flex
+    flex-direction: row
+    height: 100%
+    min-height: 80vh
+
+  // Units sidebar
+  .units-sidebar
+    flex-direction: column
+    min-width: 320px
+    max-width: 350px
+    position: relative
+    height: 100%
+    box-sizing: border-box
+
+    // Units Tree Title
+    h1
+      margin: 0 0 1rem 0
+      padding: 1rem 1rem 0 1rem
+      color: var(--p-primary-color)
+      font-size: 1.2rem
+      font-weight: 600
+
+    // Button container
+    .button-container
+      padding: 0 1rem 1rem 1rem
+      border-bottom: 1px solid #e5e7eb
+
+      button.p-button-sm.p-button-primary
+        width: 100%
+
+    // Tree container
+    .tree-container
+      flex: 1
+      overflow-y: auto
+      overflow-x: hidden
+      width: 100%
+      box-sizing: border-box
+
+  // Mobile close button
+  .mobile-close-btn
+    position: absolute
+    top: 1rem
+    right: 1rem
+    z-index: 1002
+    background: #f3f4f6
+    border: none
+    border-radius: 50%
+    width: 32px
+    height: 32px
+    display: flex
+    align-items: center
+    justify-content: center
+    cursor: pointer
+
+    i.pi.pi-times
+      font-size: 1rem
+      color: #6b7280
+
+  // Toggle button container
+  .toggle-container
+    position: relative
+    display: flex
+    align-items: center
+    flex-shrink: 0
+
+  // Sidebar toggle button
+  .sidebar-toggle-btn
+    position: absolute
+    left: 50%
+    top: 50%
+    transform: translate(-50%, -50%)
+    background: #fff
+    border: 1px solid #e5e7eb
+    border-radius: 50%
+    width: 32px
+    height: 32px
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04)
+    display: flex
+    align-items: center
+    justify-content: center
+    cursor: pointer
+    z-index: 2
+
+  // Main content area
+  .main-content
+    flex: 1
+    padding: 2.5rem 2rem 2rem 2.5rem
+    min-width: 0
+    align-items: center
+    justify-content: center
+
+    // No selection message
+    .no-selection-message
+      color: #888
+      font-size: 1.2rem
+      text-align: center
+
+  // Mobile responsive styles
+  @media (max-width: 768px)
+    .mobile-menu-btn
+      display: block !important
+    
+    .units-sidebar
+      display: none !important
+      
+      &.mobile-sidebar
+        display: flex !important
+        position: fixed !important
+        top: 0 !important
+        left: 0 !important
+        width: 280px !important
+        height: 100vh !important
+        z-index: 1001 !important
+        background: white !important
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1) !important
+        transform: translateX(0) !important
+        transition: transform 0.3s ease !important
+        
+        &:not(.show)
+          transform: translateX(-100%) !important
+    
+    .sidebar-toggle-btn
+      display: none !important
+    
+    p-divider
+      display: none !important
+    
+    .main-content
+      width: 100% !important
+      padding: 1rem !important
+
+  @media (min-width: 769px)
+    .mobile-menu-btn
+      display: none !important
+    
+    .mobile-overlay
+      display: none !important
+    
+    .sidebar-toggle-btn
+      display: flex !important
+    
+    p-divider
+      display: block !important
+
+// ============================================
+// End of app-units-page Component Styles
+// ============================================
+// ============================================
+// app-unit-details Component Styles
+// ============================================ 
 app-unit-details
   @media (max-width: 768px) 
     .role-buttons-desktop 

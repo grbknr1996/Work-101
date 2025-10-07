@@ -2,10 +2,9 @@ app-layout([config]="layoutConfig")
   app-breadcrumbs([items]="getBreadcrumbItems()")
   
   .data-exchange-config-heading.pb-10
-    h1 Data Exchange Configuration
+    h1 {{'Data Exchange Configuration' | translate }}
     p
-      | Click on any of the cards above to navigate to the respective
-      | configuration section.
+      {'Click on any of the cards above to navigate to the respective configuration section.' | translate }
   
   .summary-stats
     .stat-card(
@@ -20,4 +19,4 @@ app-layout([config]="layoutConfig")
           i([class]="card.icon")
         .stat-info
           .stat-number(*ngIf="card.count !== null") {{ card.count }}
-          .stat-label {{ card.title }}
+          .stat-label {{ card.title | translate }}

@@ -17,6 +17,7 @@ export const environment = {
   backendUrl: '/services/users',
   dataServicesApi: '/data-services/v1/shared-packages',
   feesConditionsUrl: '/services/fees/v1/conditions/all/application',
+  documentOriginsUrl: '/services/offices/configurations/document-origins',
   authApi: 'https://auth.iims.ipobs.dev.web1.wipo.int/oauth2/token',
   authApiUsername: '160dg69c2ekjev3fh80msmome9',
   authApiPassword: '1llb7572v5595lmkeb25ouv57mn435iumnr05vrmeo0oo19me43b',

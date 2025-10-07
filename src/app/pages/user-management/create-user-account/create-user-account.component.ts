@@ -1,22 +1,9 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectorRef,
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
-import {
-  StepperStep,
-} from '../../../components/configurable-stepper/configurable-stepper.component';
-import {
-
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { StepperStep } from '../../../components/configurable-stepper/configurable-stepper.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  GroupItem,
-} from 'src/app/components/group-assignment/group-assignment.component';
+import { GroupItem } from 'src/app/components/group-assignment/group-assignment.component';
 import { SidebarMenuService } from '../../../_services/sidebar-menu.service';
 import {
   UserService,
@@ -315,25 +302,13 @@ export class CreateUserAccountComponent implements OnInit {
 
   get totalGroupsPages(): number {
     const pages = Math.ceil(this.totalGroupsCount / this.groupsPageSize);
-    console.log(
-      'totalGroupsPages calculated:',
-      pages,
-      'from totalGroupsCount:',
-      this.totalGroupsCount,
-      'pageSize:',
-      this.groupsPageSize
-    );
+
     return pages;
   }
 
   get isOnGroupsStep(): boolean {
     const isOnGroups = this.activeStep === 1;
-    console.log(
-      'isOnGroupsStep check:',
-      isOnGroups,
-      'activeStep:',
-      this.activeStep
-    );
+
     return isOnGroups;
   }
 
@@ -401,15 +376,7 @@ export class CreateUserAccountComponent implements OnInit {
           },
         };
 
-        console.log('Mapped user data for form:', userData);
-        console.log('Original user account:', userAccount);
-
         this.userForm.patchValue(userData);
-
-        // User groups are now loaded with the user data via userGroupsBag
-        console.log(
-          'User data and groups loaded and form populated from userGroupsBag.'
-        );
       },
       error: (error) => {
         console.error('Error loading user account:', error);
@@ -432,15 +399,8 @@ export class CreateUserAccountComponent implements OnInit {
   }
 
   onStepChange(stepValue: number) {
-    console.log(
-      'Step change requested to:',
-      stepValue,
-      'current active step:',
-      this.activeStep
-    );
     if (stepValue <= this.activeStep) {
       this.activeStep = stepValue;
-      console.log('Step changed to:', this.activeStep);
 
       // If we're moving to the Groups step (step 1), ensure groups are loaded
       if (this.activeStep === 1) {
@@ -457,7 +417,6 @@ export class CreateUserAccountComponent implements OnInit {
 
         // Always load available groups for selection
         if (this.availableGroups.length === 0 && !this.isLoadingGroups) {
-          console.log('No available groups loaded yet, loading groups...');
           this.loadAvailableGroups();
         } else {
           console.log(
@@ -506,12 +465,6 @@ export class CreateUserAccountComponent implements OnInit {
   }
 
   nextStep() {
-    console.log(
-      'nextStep called, current step:',
-      this.activeStep,
-      'can proceed:',
-      this.canProceed()
-    );
     if (this.activeStep < this.steps.length - 1 && this.canProceed()) {
       this.activeStep++;
       console.log('Moved to next step:', this.activeStep);
@@ -559,7 +512,9 @@ export class CreateUserAccountComponent implements OnInit {
         if (!this.userId) {
           this.toastService.showError(
             'Error',
-            'No user ID available for update'
+            this.mechanicsService.translate(
+              'userManagement.userAccounts.noUserIdErrorMsg'
+            )
           );
           return;
         }
@@ -568,8 +523,11 @@ export class CreateUserAccountComponent implements OnInit {
         if (!formData.basicInfo.username || !formData.basicInfo.email) {
           this.toastService.showError(
             'Error',
-            'Username and Email are required for update'
+            this.mechanicsService.translate(
+              'userManagement.userAccounts.userNameEmailRequired'
+            )
           );
+
           return;
         }
 
@@ -610,7 +568,12 @@ export class CreateUserAccountComponent implements OnInit {
             },
             error: (error) => {
               console.error('Error updating user:', error);
-              this.toastService.showError('Error', 'Failed to update user');
+              this.toastService.showError(
+                'Error',
+                this.mechanicsService.translate(
+                  'userManagement.userAccounts.failedToUpdate'
+                )
+              );
             },
           });
       } else {
@@ -618,7 +581,9 @@ export class CreateUserAccountComponent implements OnInit {
         if (!formData.basicInfo.username || !formData.basicInfo.email) {
           this.toastService.showError(
             'Error',
-            'Username and Email are required'
+            this.mechanicsService.translate(
+              'userManagement.userAccounts.userNameEmailRequired'
+            )
           );
           return;
         }
@@ -647,7 +612,9 @@ export class CreateUserAccountComponent implements OnInit {
             console.log('User created successfully:', createdUser);
             this.toastService.showSuccess(
               'Success',
-              'User created successfully'
+              this.mechanicsService.translate(
+                'userManagement.userAccounts.userSuccesfulMsg'
+              )
             );
             // Navigate back to user accounts list
             const officeCode = this.route.snapshot.params['officeCode'];
@@ -658,7 +625,12 @@ export class CreateUserAccountComponent implements OnInit {
           },
           error: (error) => {
             console.error('Error creating user:', error);
-            this.toastService.showError('Error', 'Failed to create user');
+            this.toastService.showError(
+              'Error',
+              this.mechanicsService.translate(
+                'userManagement.userAccounts.userFailureMsg'
+              )
+            );
           },
         });
       }

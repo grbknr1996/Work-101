@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './_guards/auth.guard';
-import { PermissionGuard } from './_guards/permission.guard';
 
 const routes: Routes = [
   // Auth callback route - handles redirect from AWS Cognito
@@ -19,15 +18,15 @@ const routes: Routes = [
     path: 'sign-in',
     loadChildren: async () => (await import('./pages/sign-in/sign-in.module')).SignInComponentModule
   },
+  {
+    path: 'platform-selection',
+    loadChildren: async () => (await import('./pages/platform-selection/platform-selection.module')).PlatformSelectionComponentModule,
+    canActivate: [AuthGuard],
+  },
   // Auth routes with office and language parameters
   {
     path: ':officeCode/:langCode/sign-in',
     loadChildren: async () => (await import('./pages/sign-in/sign-in.module')).SignInComponentModule,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'platform-selection',
-    loadChildren: async () => (await import('./pages/platform-selection/platform-selection.module')).PlatformSelectionComponentModule,
     canActivate: [AuthGuard],
   },
   {
@@ -47,18 +46,17 @@ const routes: Routes = [
   {
     path: ':officeCode/:langCode/logged-out',
     loadChildren: async () => (await import('./pages/auth-signout/auth-signout.module')).AuthSignoutComponentModule
-  
   },
   // Main application routes with office and language parameters
   {
     path: ':officeCode/:langCode/dashboard',
-    loadChildren: async () => (await  import('./pages/dashboard/dashboard.module')).DashboardModule,
+    loadChildren: async () => (await import('./pages/dashboard/dashboard.module')).DashboardModule,
     canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/statistics',
     loadChildren: async () => (await import('./pages/statistics/statistics.module')).StatisticsModule,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard]
   },
   {
     path: ':officeCode/:langCode/user-management',
@@ -144,7 +142,7 @@ const routes: Routes = [
   },
   {
     path: ':officeCode/:langCode/task-management/work-monitor/tasks-distribution',
-      loadChildren: async () => (await import('./pages/task-management/work-monitor/tasks-distribution/tasks-distribution.module')).TasksDistributionComponentModule,
+    loadChildren: async () => (await import('./pages/task-management/work-monitor/tasks-distribution/tasks-distribution.module')).TasksDistributionComponentModule,
     canActivate: [AuthGuard],
   },
   {
@@ -152,7 +150,7 @@ const routes: Routes = [
     loadChildren: async () => (await import('./pages/task-management/work-monitor/view-content/view-content.module')).ViewContentComponentModule,
     canActivate: [AuthGuard],
   },
-    {
+  {
     path: ':officeCode/:langCode/task-management/work-monitor/task-assignment/:documentId/history',
     loadChildren: async () => (await import('./pages/task-management/work-monitor/view-content/history/task-history.module')).TaskHistoryComponentModule,
     canActivate: [AuthGuard],
@@ -208,4 +206,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

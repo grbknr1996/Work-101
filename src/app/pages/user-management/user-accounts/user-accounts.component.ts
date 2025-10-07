@@ -94,240 +94,14 @@ export class UserAccountsComponent implements OnInit {
   isCardView = false;
 
   // Filter configuration
-  filterConfigs: FilterConfig[] = [
-    {
-      key: 'loginId',
-      label: 'Login ID',
-      type: 'text',
-      placeholder: 'Enter login ID...',
-      showClear: true,
-    },
-    {
-      key: 'userName',
-      label: 'Username',
-      type: 'text',
-      placeholder: 'Enter username...',
-      showClear: true,
-    },
-    {
-      key: 'email',
-      label: 'Email',
-      type: 'text',
-      placeholder: 'Enter email...',
-      showClear: true,
-    },
-    {
-      key: 'isActive',
-      label: 'Active',
-      type: 'checkbox',
-      section: 'STATUS',
-    },
-    {
-      key: 'isInactive',
-      label: 'Inactive',
-      type: 'checkbox',
-      section: 'STATUS',
-    },
-    {
-      key: 'isUnverified',
-      label: 'Unverified',
-      type: 'checkbox',
-      section: 'STATUS',
-    },
-    {
-      key: 'creationDateRange',
-      label: 'Creation Date Range',
-      type: 'dateRange',
-      placeholder: 'From - To (yyyy-mm-dd)',
+  filterConfigs: FilterConfig[] = [];
 
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'lastUpdateDateRange',
-      label: 'Last Update Date Range',
-      type: 'dateRange',
-      placeholder: 'From - To (yyyy-mm-dd)',
-
-      section: 'DATE FILTERS',
-    },
-  ];
-
-  tableColumns = [
-    { field: 'imageUrl', header: 'Avatar', display: 'avatar' },
-    {
-      field: 'userName',
-      header: 'Username',
-      sortable: true,
-    },
-    { field: 'email', header: 'Email', sortable: true },
-    { field: 'loginId', header: 'Login ID', sortable: true },
-    {
-      field: 'computedStatus',
-      header: 'Status',
-      display: 'chip',
-      sortable: true,
-      severity: (value: string) => {
-        if (value === 'Unverified') {
-          return 'info';
-        }
-        return value === 'Active' ? 'success' : 'danger';
-      },
-      value: (value: string) => {
-        return value;
-      },
-    },
-    {
-      field: 'creationDate',
-      header: 'Created On',
-      sortable: true,
-      display: 'date',
-      dateFormat: 'MMM dd, yyyy',
-    },
-    {
-      field: 'updatedDate',
-      header: 'Updated On',
-      sortable: true,
-      display: 'date',
-      dateFormat: 'MMM dd, yyyy',
-    },
-    {
-      field: 'creationUserName',
-      header: 'Created By',
-      sortable: true,
-    },
-    {
-      field: 'lastUpdateUserName',
-      header: 'Last Updated By',
-      sortable: true,
-    },
-    {
-      field: 'actions',
-      header: 'Actions',
-      display: 'actions',
-      actions: [
-        {
-          label: 'Edit User',
-          icon: 'pi pi-pencil',
-          action: 'edit',
-          severity: 'info',
-        },
-        {
-          label: 'Resend Verification Email',
-          icon: 'pi pi-envelope',
-          action: 'resendVerification',
-          severity: 'warning',
-          visible: (item: UserAccount) => item.cognitoStatus === 'FCP',
-        },
-      ],
-    },
-  ];
+  tableColumns = [];
 
   tableData: UserAccount[] = [];
 
   // Card view column definitions with organized sections
-  cardColumns: CardColumnDefinition[] = [
-    // Card Header Section
-    {
-      field: 'imageUrl',
-      label: 'Avatar',
-      display: 'avatar',
-      section: 'header',
-    },
-    {
-      field: 'userName',
-      label: 'Username',
-      display: 'text',
-      section: 'header',
-      sortable: true,
-    },
-    {
-      field: 'computedStatus',
-      label: 'Status',
-      display: 'tag',
-      section: 'header',
-      sortable: true,
-      severity: (value: string) => {
-        if (value === 'Unverified') {
-          return 'info';
-        }
-        return value === 'Active' ? 'success' : 'danger';
-      },
-      value: (value: string) => {
-        return value;
-      },
-    },
-
-    // Card Body Section
-    {
-      field: 'email',
-      label: 'Email',
-      display: 'text',
-      section: 'body',
-      sortable: true,
-    },
-    {
-      field: 'loginId',
-      label: 'Login ID',
-      display: 'text',
-      section: 'body',
-      sortable: true,
-    },
-
-    // Card Info Section
-    {
-      field: 'creationDate',
-      label: 'Created On',
-      display: 'date',
-      dateFormat: 'dd-mm-yyyy',
-      section: 'info',
-      sortable: true,
-    },
-    {
-      field: 'updatedDate',
-      label: 'Updated On',
-      display: 'date',
-      dateFormat: 'dd-mm-yyyy',
-      section: 'info',
-      sortable: true,
-    },
-    {
-      field: 'creationUserName',
-      label: 'Created By',
-      display: 'text',
-      section: 'info',
-      sortable: true,
-    },
-    {
-      field: 'lastUpdateUserName',
-      label: 'Last Updated By',
-      display: 'text',
-      section: 'info',
-      sortable: true,
-    },
-
-    // Card Actions Section
-    {
-      field: 'actions',
-      label: 'Actions',
-      display: 'actions',
-      section: 'actions',
-      actions: [
-        {
-          label: 'Edit User',
-          icon: 'pi pi-pencil',
-          action: 'edit',
-          severity: 'info',
-        },
-        {
-          label: 'Resend Verification Email',
-          icon: 'pi pi-envelope',
-          action: 'resendVerification',
-          severity: 'warning',
-          visible: (item: UserAccount) => item.cognitoStatus === 'FCP',
-        },
-      ],
-    },
-  ];
+  cardColumns: CardColumnDefinition[] = [];
 
   constructor(
     private menuService: SidebarMenuService,
@@ -336,7 +110,292 @@ export class UserAccountsComponent implements OnInit {
     public ms: MechanicsService,
     private cdr: ChangeDetectorRef,
     private userService: UserService
-  ) {}
+  ) {
+    this.initializeConfigurations();
+  }
+
+  private initializeConfigurations(): void {
+    // Initialize filter configurations
+    this.filterConfigs = [
+      {
+        key: 'loginId',
+        label: this.ms.translate('userManagement.userAccounts.loginIdFilter'),
+        type: 'text',
+        placeholder: this.ms.translate(
+          'userManagement.userAccounts.enterLoginId'
+        ),
+        showClear: true,
+      },
+      {
+        key: 'userName',
+        label: this.ms.translate('userManagement.userAccounts.usernameFilter'),
+        type: 'text',
+        placeholder: this.ms.translate(
+          'userManagement.userAccounts.enterUsername'
+        ),
+        showClear: true,
+      },
+      {
+        key: 'email',
+        label: this.ms.translate('userManagement.userAccounts.emailFilter'),
+        type: 'text',
+        placeholder: this.ms.translate(
+          'userManagement.userAccounts.enterEmail'
+        ),
+        showClear: true,
+      },
+      {
+        key: 'isActive',
+        label: this.ms.translate('userManagement.userAccounts.activeFilter'),
+        type: 'checkbox',
+        section: this.ms.translate('userManagement.userAccounts.statusSection'),
+      },
+      {
+        key: 'isInactive',
+        label: this.ms.translate('userManagement.userAccounts.inactiveFilter'),
+        type: 'checkbox',
+        section: this.ms.translate('userManagement.userAccounts.statusSection'),
+      },
+      {
+        key: 'isUnverified',
+        label: this.ms.translate(
+          'userManagement.userAccounts.unverifiedFilter'
+        ),
+        type: 'checkbox',
+        section: this.ms.translate('userManagement.userAccounts.statusSection'),
+      },
+      {
+        key: 'creationDateRange',
+        label: this.ms.translate(
+          'userManagement.userAccounts.creationDateRange'
+        ),
+        type: 'dateRange',
+        placeholder: this.ms.translate(
+          'userManagement.userAccounts.fromToDate'
+        ),
+        section: this.ms.translate(
+          'userManagement.userAccounts.dateFiltersSection'
+        ),
+      },
+      {
+        key: 'lastUpdateDateRange',
+        label: this.ms.translate(
+          'userManagement.userAccounts.lastUpdateDateRange'
+        ),
+        type: 'dateRange',
+        placeholder: this.ms.translate(
+          'userManagement.userAccounts.fromToDate'
+        ),
+        section: this.ms.translate(
+          'userManagement.userAccounts.dateFiltersSection'
+        ),
+      },
+    ];
+
+    // Initialize table columns
+    this.tableColumns = [
+      {
+        field: 'imageUrl',
+        header: this.ms.translate('userManagement.userAccounts.avatar'),
+        display: 'avatar',
+      },
+      {
+        field: 'userName',
+        header: this.ms.translate('userManagement.userAccounts.username'),
+        sortable: true,
+      },
+      {
+        field: 'email',
+        header: this.ms.translate('userManagement.userAccounts.email'),
+        sortable: true,
+      },
+      {
+        field: 'loginId',
+        header: this.ms.translate('userManagement.userAccounts.loginId'),
+        sortable: true,
+      },
+      {
+        field: 'computedStatus',
+        header: this.ms.translate('userManagement.userAccounts.status'),
+        display: 'chip',
+        sortable: true,
+        severity: (value: string) => {
+          if (
+            value ===
+            this.ms.translate('userManagement.userAccounts.unverified')
+          ) {
+            return 'info';
+          }
+          return value ===
+            this.ms.translate('userManagement.userAccounts.active')
+            ? 'success'
+            : 'danger';
+        },
+        value: (value: string) => {
+          return value;
+        },
+      },
+      {
+        field: 'creationDate',
+        header: this.ms.translate('userManagement.userAccounts.createdOn'),
+        sortable: true,
+        display: 'date',
+        dateFormat: 'MMM dd, yyyy',
+      },
+      {
+        field: 'updatedDate',
+        header: this.ms.translate('userManagement.userAccounts.updatedOn'),
+        sortable: true,
+        display: 'date',
+        dateFormat: 'MMM dd, yyyy',
+      },
+      {
+        field: 'creationUserName',
+        header: this.ms.translate('userManagement.userAccounts.createdBy'),
+        sortable: true,
+      },
+      {
+        field: 'lastUpdateUserName',
+        header: this.ms.translate('userManagement.userAccounts.lastUpdatedBy'),
+        sortable: true,
+      },
+      {
+        field: 'actions',
+        header: this.ms.translate('userManagement.userAccounts.actions'),
+        display: 'actions',
+        actions: [
+          {
+            label: this.ms.translate('userManagement.userAccounts.editUser'),
+            icon: 'pi pi-pencil',
+            action: 'edit',
+            severity: 'info',
+          },
+          {
+            label: this.ms.translate(
+              'userManagement.userAccounts.resendVerificationEmail'
+            ),
+            icon: 'pi pi-envelope',
+            action: 'resendVerification',
+            severity: 'warning',
+            visible: (item: UserAccount) => item.cognitoStatus === 'FCP',
+          },
+        ],
+      },
+    ];
+
+    // Initialize card columns
+    this.cardColumns = [
+      // Card Header Section
+      {
+        field: 'imageUrl',
+        label: this.ms.translate('userManagement.userAccounts.avatar'),
+        display: 'avatar',
+        section: 'header',
+      },
+      {
+        field: 'userName',
+        label: this.ms.translate('userManagement.userAccounts.username'),
+        display: 'text',
+        section: 'header',
+        sortable: true,
+      },
+      {
+        field: 'computedStatus',
+        label: this.ms.translate('userManagement.userAccounts.status'),
+        display: 'tag',
+        section: 'header',
+        sortable: true,
+        severity: (value: string) => {
+          if (
+            value ===
+            this.ms.translate('userManagement.userAccounts.unverified')
+          ) {
+            return 'info';
+          }
+          return value ===
+            this.ms.translate('userManagement.userAccounts.active')
+            ? 'success'
+            : 'danger';
+        },
+        value: (value: string) => {
+          return value;
+        },
+      },
+
+      // Card Body Section
+      {
+        field: 'email',
+        label: this.ms.translate('userManagement.userAccounts.email'),
+        display: 'text',
+        section: 'body',
+        sortable: true,
+      },
+      {
+        field: 'loginId',
+        label: this.ms.translate('userManagement.userAccounts.loginId'),
+        display: 'text',
+        section: 'body',
+        sortable: true,
+      },
+
+      // Card Info Section
+      {
+        field: 'creationDate',
+        label: this.ms.translate('userManagement.userAccounts.createdOn'),
+        display: 'date',
+        dateFormat: 'dd-mm-yyyy',
+        section: 'info',
+        sortable: true,
+      },
+      {
+        field: 'updatedDate',
+        label: this.ms.translate('userManagement.userAccounts.updatedOn'),
+        display: 'date',
+        dateFormat: 'dd-mm-yyyy',
+        section: 'info',
+        sortable: true,
+      },
+      {
+        field: 'creationUserName',
+        label: this.ms.translate('userManagement.userAccounts.createdBy'),
+        display: 'text',
+        section: 'info',
+        sortable: true,
+      },
+      {
+        field: 'lastUpdateUserName',
+        label: this.ms.translate('userManagement.userAccounts.lastUpdatedBy'),
+        display: 'text',
+        section: 'info',
+        sortable: true,
+      },
+
+      // Card Actions Section
+      {
+        field: 'actions',
+        label: this.ms.translate('userManagement.userAccounts.actions'),
+        display: 'actions',
+        section: 'actions',
+        actions: [
+          {
+            label: this.ms.translate('userManagement.userAccounts.editUser'),
+            icon: 'pi pi-pencil',
+            action: 'edit',
+            severity: 'info',
+          },
+          {
+            label: this.ms.translate(
+              'userManagement.userAccounts.resendVerificationEmail'
+            ),
+            icon: 'pi pi-envelope',
+            action: 'resendVerification',
+            severity: 'warning',
+            visible: (item: UserAccount) => item.cognitoStatus === 'FCP',
+          },
+        ],
+      },
+    ];
+  }
 
   ngOnInit(): void {
     const currentPath = this.router.url;
@@ -350,11 +409,11 @@ export class UserAccountsComponent implements OnInit {
 
       this.breadcrumbItems = [
         {
-          label: 'User Management',
+          label: this.ms.translate('userManagement.title'),
           routerLink: `/${officeCode}/${langCode}/user-management`,
         },
         {
-          label: 'User Accounts',
+          label: this.ms.translate('userManagement.userAccounts.title'),
           routerLink: `/${officeCode}/${langCode}/user-management/user-accounts`,
         },
       ];
@@ -405,28 +464,30 @@ export class UserAccountsComponent implements OnInit {
       stats: [
         {
           key: 'TOTAL_USERS',
-          label: 'TOTAL USERS',
+          label: this.ms.translate('userManagement.userAccounts.totalUsers'),
           count: this.totalUsers,
           color: '#3949AB',
           icon: 'pi pi-users',
         },
         {
           key: 'ACTIVE_USERS',
-          label: 'ACTIVE USERS',
+          label: this.ms.translate('userManagement.userAccounts.activeUsers'),
           count: this.activeUsers,
           color: '#2E7D32',
           icon: 'pi pi-check-circle',
         },
         {
           key: 'INACTIVE_USERS',
-          label: 'INACTIVE USERS',
+          label: this.ms.translate('userManagement.userAccounts.inactiveUsers'),
           count: this.inactiveUsers,
           color: '#D32F2F',
           icon: 'pi pi-times-circle',
         },
         {
           key: 'UNVERIFIED_USERS',
-          label: 'UNVERIFIED USERS',
+          label: this.ms.translate(
+            'userManagement.userAccounts.unverifiedUsers'
+          ),
           count: this.unconfirmedUsers,
           color: '#0288D1',
           icon: 'pi pi-user-plus',
@@ -900,9 +961,11 @@ export class UserAccountsComponent implements OnInit {
 
   private getComputedStatus(isActive: boolean, cognitoStatus: string): string {
     if (cognitoStatus === 'FCP') {
-      return 'Unverified';
+      return this.ms.translate('userManagement.userAccounts.unverified');
     }
-    return isActive === true ? 'Active' : 'Inactive';
+    return isActive === true
+      ? this.ms.translate('userManagement.userAccounts.active')
+      : this.ms.translate('userManagement.userAccounts.inactive');
   }
 
   /**

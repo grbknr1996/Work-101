@@ -5,10 +5,10 @@
     <!-- Header Section-->
     <div class="mb-4 flex justify-between items-center">
       <div>
-        <h1 class="text-2xl font-bold text-gray-800">User Accounts</h1>
-        <p class="text-gray-600">Manage and view all user accounts in the system</p>
+        <h1 class="text-2xl font-bold text-gray-800">{{ 'userManagement.userAccounts.title' | translate }}</h1>
+        <p class="text-gray-600">{{ 'userManagement.userAccounts.manageUsers' | translate }}</p>
       </div>
-      <button class="p-button-primary" pButton label="Create User" icon="pi pi-plus" (click)="onCreateUser()"></button>
+      <button class="p-button-primary" pButton [label]="'userManagement.userAccounts.createUser' | translate" icon="pi pi-plus" (click)="onCreateUser()"></button>
     </div>
     <!-- User Stats-->
     <div class="mb-4">
@@ -16,23 +16,23 @@
     </div>
     <!-- Filter Section with Button and View Toggle-->
     <div class="mb-4 flex justify-end items-center gap-3 p-3 rounded" style="background: #e5f3f7">
-      <button class="p-button-text p-button-sm" pButton type="button" [icon]="isCardView ? 'pi pi-list' : 'pi pi-th-large'" (click)="toggleView()" pTooltip="Toggle between table and card view" style="color: var(--p-button-outlined-secondary-color)"></button>
+      <button class="p-button-text p-button-sm" pButton type="button" [icon]="isCardView ? 'pi pi-list' : 'pi pi-th-large'" (click)="toggleView()" [pTooltip]="'userManagement.userAccounts.toggleView' | translate" style="color: var(--p-button-outlined-secondary-color)"></button>
       <app-configurable-filter #configurableFilter [filters]="filterConfigs" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>
       <button class="p-button-text" pButton icon="pi pi-download" style="color: var(--p-button-outlined-secondary-color)"></button>
     </div>
     <!-- Filter Chips Section-->
     <div class="mb-4">
-      <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="true" [clearAllLabel]="'Clear All'" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="onFilterChipRemoved($event)" (clearAll)="onFilterChipsClearAll()"></app-filter-chips>
+      <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="true" [clearAllLabel]="'userManagement.userAccounts.clearAll' | translate" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="onFilterChipRemoved($event)" (clearAll)="onFilterChipsClearAll()"></app-filter-chips>
     </div>
     <!-- User Accounts Views-->
     <div class="relative">
       <!-- Table View-->
       <div *ngIf="!isCardView">
-        <app-table [columns]="tableColumns" [data]="tableData" [globalFilterFields]="globalFilterFields" [showSearchButton]="false" [showClearButton]="false" [paginator]="true" [lazy]="true" [rows]="pageSize" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} users'" (actionClick)="onActionClick($event.action, $event.item)" (onLazyLoad)="onLazyLoad($event)"></app-table>
+        <app-table [columns]="tableColumns" [data]="tableData" [globalFilterFields]="globalFilterFields" [showSearchButton]="false" [showClearButton]="false" [paginator]="true" [lazy]="true" [rows]="pageSize" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [currentPageReportTemplate]="'userManagement.userAccounts.showingUsers' | translate" (actionClick)="onActionClick($event.action, $event.item)" (onLazyLoad)="onLazyLoad($event)"></app-table>
       </div>
       <!-- Card View-->
       <div *ngIf="isCardView">
-        <app-table-card [columns]="cardColumns" [data]="tableData" [paginator]="true" [rows]="10" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} users'" (actionClick)="onActionClick($event.action, $event.item)" (onLazyLoad)="onLazyLoad($event)" (sortChange)="onSort($event)"></app-table-card>
+        <app-table-card [columns]="cardColumns" [data]="tableData" [paginator]="true" [rows]="10" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [currentPageReportTemplate]="'userManagement.userAccounts.showingUsers' | translate" (actionClick)="onActionClick($event.action, $event.item)" (onLazyLoad)="onLazyLoad($event)" (sortChange)="onSort($event)"></app-table-card>
       </div>
     </div>
   </div>

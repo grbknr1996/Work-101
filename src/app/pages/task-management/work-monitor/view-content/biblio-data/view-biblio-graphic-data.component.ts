@@ -10,7 +10,7 @@ import { BibliographicData } from 'src/app/schemas/taskManageMent-schema';
   selector: 'app-biblio-data',
   standalone: false,
   providers: [TaskManagementService],
-  templateUrl: './view-biblio-graphic-data.html',
+  templateUrl: './view-biblio-graphic-data.component.html',
 })
 export class ViewBiblioGraphicData implements OnInit {
   officeCode = 'default';

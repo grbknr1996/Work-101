@@ -2,29 +2,29 @@
 <app-layout>
   <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
   <div class="create-user-container">
-    <h1 class="form-title">{{ isEditMode ? 'Edit User' : 'Create User' }}</h1>
+    <h1 class="form-title">{{ isEditMode ? ('userManagement.createUserAccount.editUser' | translate) : ('userManagement.createUserAccount.createUser' | translate) }}</h1>
     <app-configurable-stepper [steps]="steps" [activeStep]="activeStep" (stepChange)="onStepChange($event)"></app-configurable-stepper>
     <form [formGroup]="userForm">
       <div class="step-content">
         <ng-container [ngSwitch]="activeStep">
           <app-basic-info-form *ngSwitchCase="0" [formGroup]="userForm.get('basicInfo')" [isEditMode]="isEditMode"></app-basic-info-form>
           <app-group-assignment *ngSwitchCase="1" [availableGroups]="filteredAvailableGroups" [assignedGroups]="userForm.get('assignedGroups').value" [currentAvailablePage]="currentGroupsPage" [totalAvailablePages]="totalGroupsPages" [totalAvailableGroups]="totalGroupsCount" [currentSearchTerm]="groupsSearchTerm" [currentFilterType]="groupsFilterType" [currentSortBy]="groupsSortBy" [currentSortOrder]="groupsSortOrder" (assignedGroupsChange)="onAssignedGroupsChange($event)" (availablePageChange)="onGroupsPageChange($event)" (searchChange)="onGroupsSearch($event)" (filterTypeChange)="onGroupsFilter($event)" (sortChange)="onGroupsSort($event.sortBy, $event.sortOrder)">
-            <div class="loading-groups" *ngIf="isLoadingGroups" style="text-align: center; padding: 20px; color: #666;">
-              <p>Loading available groups...</p>
+            <div class="loading-groups" *ngIf="isLoadingGroups">
+              <p>{{ 'userManagement.createUserAccount.loadingGroups' | translate }}</p>
             </div>
-            <div class="error-groups" *ngIf="groupsLoadError" style="text-align: center; padding: 20px; color: #dc3545;">
-              <p>Failed to load groups. Please try again later.</p>
-              <button class="p-button-sm" pButton type="button" label="Retry" icon="pi pi-refresh" (click)="retryLoadGroups()"></button>
+            <div class="error-groups" *ngIf="groupsLoadError">
+              <p>{{ 'userManagement.createUserAccount.failedToLoadGroups' | translate }}</p>
+              <button class="p-button-sm" pButton type="button" [label]="'userManagement.createUserAccount.retry' | translate" icon="pi pi-refresh" (click)="retryLoadGroups()"></button>
             </div>
           </app-group-assignment>
           <div class="security-step-card" *ngSwitchCase="2" [formGroup]="userForm.get('security')">
             <div class="card-header">
-              <h2>Security Settings</h2>
+              <h2>{{ 'userManagement.createUserAccount.securitySettings' | translate }}</h2>
             </div>
             <div class="card-content">
               <div class="form-field">
                 <label class="checkbox-label">
-                  <input type="checkbox" formControlName="enableTwoFactor"><span class="checkbox-text">Enable two-factor authentication</span>
+                  <input type="checkbox" formControlName="enableTwoFactor"><span class="checkbox-text">{{ 'userManagement.createUserAccount.enableTwoFactor' | translate }}</span>
                 </label>
               </div>
             </div>
@@ -34,12 +34,12 @@
       </div>
       <div class="step-actions">
         <div class="step-actions-left">
-          <button class="p-button-secondary" pButton type="button" label="Previous" (click)="prevStep()" *ngIf="activeStep &gt; 0"></button>
+          <button class="p-button-secondary" pButton type="button" [label]="'userManagement.createUserAccount.previous' | translate" (click)="prevStep()" *ngIf="activeStep &gt; 0"></button>
         </div>
         <div class="step-actions-divider" *ngIf="activeStep &gt; 0 &amp;&amp; activeStep &lt; steps.length - 1"></div>
         <div class="step-actions-right">
-          <button class="p-button-primary" pButton type="button" label="Next" (click)="nextStep()" *ngIf="activeStep &lt; steps.length - 1" [disabled]="!canProceed()"></button>
-          <button class="p-button-success" pButton type="button" [label]="isEditMode ? 'Update User' : 'Create User'" (click)="saveUser()" *ngIf="activeStep === steps.length - 1"></button>
+          <button class="p-button-primary" pButton type="button" [label]="'userManagement.createUserAccount.next' | translate" (click)="nextStep()" *ngIf="activeStep &lt; steps.length - 1" [disabled]="!canProceed()"></button>
+          <button class="p-button-success" pButton type="button" [label]="isEditMode ? ('userManagement.createUserAccount.updateUser' | translate) : ('userManagement.createUserAccount.createUser' | translate)" (click)="saveUser()" *ngIf="activeStep === steps.length - 1"></button>
         </div>
       </div>
     </form>

@@ -2,7 +2,17 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router,  } from '@angular/router';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
 import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
-import { FeeService } from 'src/app/_services/FeeService';
+import { FeeService } from 'src/app/_services/fee.service';
+import { FeeBag } from 'src/app/schemas/fee-schema';
+
+enum IpTypes {
+  TRADEMARKS = 'trademarks',
+  PATENTS = 'patents',
+  COPYRIGHTS = 'copyrights',
+  POST_FILINGS = 'post filings',
+  INDUSTRIAL_DESIGNS = 'designs',
+  GEOGRAPHICAL_INDICATIONS = 'geographical indications',
+}
 
 @Component({
   selector: 'app-fee-calculator',
@@ -16,10 +26,15 @@ export class FeeCalculatorComponent implements OnInit {
 
   breadcrumbItems = [];
 
-    categories = [
-    { label: 'Patent', value: 'patent' },
-    { label: 'Trademark', value: 'trademark' },
+  categories = [
+    { label: IpTypes.TRADEMARKS, value: IpTypes.TRADEMARKS },
+    { label: IpTypes.PATENTS, value: IpTypes.PATENTS },
+    { label: IpTypes.INDUSTRIAL_DESIGNS, value: IpTypes.INDUSTRIAL_DESIGNS },
+    { label: IpTypes.COPYRIGHTS, value: IpTypes.COPYRIGHTS },
+    { label: IpTypes.POST_FILINGS, value: IpTypes.POST_FILINGS },
+    { label: IpTypes.GEOGRAPHICAL_INDICATIONS, value: IpTypes.GEOGRAPHICAL_INDICATIONS },
   ];
+
   selectedCategory: string | null = null;
 
   services = [
@@ -28,10 +43,10 @@ export class FeeCalculatorComponent implements OnInit {
   ];
   selectedService: string | null = null;
 
-  locations = [
-    { label: 'USA', value: 'usa' },
-    { label: 'Canada', value: 'canada' },
-  ];
+  docOrigins;
+
+  feeBag!: FeeBag[];
+
   selectedLocation: string | null = null;
 
   discountOptions = [
@@ -117,7 +132,18 @@ export class FeeCalculatorComponent implements OnInit {
       // Trigger change detection after updating breadcrumbs
       this.cdr.markForCheck();
     });
-    console.log("Selected Items: ", this.feeService.selectedItems())
+
+    this.feeService.getFeesConditions().subscribe((feeServices) => {
+      console.log('feeBag: ', this.feeBag);
+    });
+
+    this.feeService.getDocumentOrigins().subscribe((documentOrigins) => {
+      console.log('document origins: ', documentOrigins);
+      this.docOrigins = Object.entries(documentOrigins.map).map(([code, name]) => ({
+        name,
+        code
+      }));
+    });
   }
 
 }
