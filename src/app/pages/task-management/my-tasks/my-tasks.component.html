@@ -1,0 +1,71 @@
+
+<app-layout>
+  <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+    <p-card class="w-full text-center">
+      <div class="font-semibold text-sm mb-2">My Tasks</div>
+      <div class="text-3xl font-bold text-orange-600">42</div>
+    </p-card>
+    <p-card class="w-full text-center">
+      <div class="font-semibold text-sm mb-2">Overdue Tasks</div>
+      <div class="text-3xl font-bold text-red-600">5</div>
+    </p-card>
+    <p-card class="w-full text-center">
+      <div class="font-semibold text-sm mb-2">Overdue Soon</div>
+      <div class="text-3xl font-bold text-yellow-600">2</div>
+    </p-card>
+    <p-card class="w-full text-center">
+      <div class="font-semibold text-sm mb-2">Average age</div>
+      <div class="text-3xl font-bold text-purple-600">45</div>
+    </p-card>
+  </div>
+  <div class="grid grid-cols-6 mt-2">
+    <div class="col-span-6 grid grid-cols-12 filter">
+      <div class="col-span-4">
+        <p-floatlabel variant="on">
+          <p-iconfield>
+            <p-inputicon class="pi pi-search"></p-inputicon>
+            <input class="w-full" id="on_label" pInputText [(ngModel)]="searchBar" (ngModelChange)="applyFilters(appliedFilters)" autocomplete="off">
+          </p-iconfield>
+          <label for="on_label">Search</label>
+        </p-floatlabel>
+      </div>
+      <div class="col-span-8 flex justify-end gap-5 filter-icons">
+        <p-button icon="pi pi-list" [outlined]="true" [text]="true" (click)="myTasksList()" pTooltip="My Tasks" tooltipPosition="bottom"></p-button>
+        <div class="relative inline-block">
+          <p-button icon="pi pi-cart-plus" [outlined]="true" [text]="true" (click)="approvalbucketList()" pTooltip="Approval Bucket" tooltipPosition="bottom"></p-button>
+          <p-badge *ngIf="approvalBucket.length &gt; 0" [value]="approvalBucket.length" severity="danger" styleClass="absolute -top-2 -right-2 rounded-full"></p-badge>
+        </div>
+        <app-configurable-filter [filters]="filterConfigs" [showClearAll]="false" [showApplyButton]="true" [showFilterSelector]="false" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>
+      </div>
+    </div>
+  </div>
+  <div class="mb-8 mt-1 w-full">
+    <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="true" [clearAllLabel]="'Clear All'" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-filter-chips>
+    <h3 class="text-lg font-semibold mb-3" *ngIf="showApprovalBucket"  style="margin-top: 1.5rem;">Approval Bucket List</h3>
+    <app-table [columns]="tableColumns" [paginator]="true" [rows]="10" [totalRecords]="showApprovalBucket ? approvalBucket.length : tableData.length" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} tasks'" [dataKey]="'documentId'" [data]="showApprovalBucket ? approvalBucket : tableData" (selectionChange)="onSelectionChange($event)" (actionClick)="onActionClick($event.action, $event.item)"></app-table>
+    <p-sidebar class="custom-sidebar" [(visible)]="showSlider" position="right" [showCloseIcon]="false" [dismissible]="false" [ngClass]="{ 'sidebar-maximized': isMaximized }" [appendTo]="'app-layout'">
+      <div class="sidebar-header flex items-center justify-between p-3">
+        <h2 class="text-lg font-semibold">{{ sliderTitle }}</h2>
+        <div class="flex gap-2">
+          <p-button [icon]="isMaximized ? 'pi pi-window-minimize' : 'pi pi-window-maximize'" [rounded]="true" [outlined]="true" severity="secondary" (onClick)="toggleMaximize()" styleClass="p-button-text p-button-sm"></p-button>
+          <p-button icon="pi pi-times" [rounded]="true" [outlined]="true" severity="secondary" (onClick)="closeSlider()" styleClass="p-button-text p-button-sm"></p-button>
+        </div>
+      </div>
+      <div class="sidebar-content p-4">
+        <ng-container [ngSwitch]="sliderAction">
+          <div *ngSwitchCase="'approve'">
+            <app-record-actions [taskId]="selectedTask?.documentId" [showLayout]="false" (close)="closeSlider()"></app-record-actions>
+          </div>
+          <div *ngSwitchCase="'history'">
+            <app-task-history [taskId]="selectedTask?.documentId" [showLayout]="false" (close)="closeSlider()"></app-task-history>
+          </div>
+          <div *ngSwitchDefault>No action selected.</div>
+        </ng-container>
+      </div>
+    </p-sidebar>
+  </div>
+  <div class="flex justify-end mt-2">
+    <p-button *ngIf="selectedTasks.length &gt; 0 &amp;&amp; showApprovalBucket &amp;&amp; !showSlider" label="Bulk Approve" icon="pi pi-check-circle" styleClass="p-button-success" (onClick)="bulkApprove()"></p-button>
+  </div>
+</app-layout>

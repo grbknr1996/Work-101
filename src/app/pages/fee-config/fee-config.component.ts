@@ -1,35 +1,14 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
-
-import { ButtonModule } from 'primeng/button';
-import { BadgeModule } from 'primeng/badge';
-import { TabsModule } from 'primeng/tabs';
-import { CardModule } from 'primeng/card';
-import { PopoverModule } from 'primeng/popover';
-import { CheckboxModule } from 'primeng/checkbox';
-import { FormsModule } from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { TooltipModule } from 'primeng/tooltip';
-
-import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
-import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
-
 import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
 import { FeeService } from 'src/app/_services/FeeService';
 import { Fee } from 'src/app/schemas/fee-schema';
-import { CapitalizeWordsPipe } from 'src/app/_pipes/capitalize-words.pipe';
 import {
   ConfigurableFilterComponent,
   FilterConfig,
   FilterValue,
 } from 'src/app/components/configurable-filter/configurable-filter.component';
-import { FilterChipsComponent } from 'src/app/components/filter-chips/filter-chips.component';
 
 interface TabData {
   ipType: string;
@@ -49,29 +28,7 @@ enum IpTypes {
 
 @Component({
   selector: 'app-fee-config',
-  standalone: true,
-  imports: [
-    CardModule,
-    ButtonModule,
-    BadgeModule,
-    CheckboxModule,
-    CommonModule,
-    FormsModule,
-    AppLayoutComponent,
-    BreadcrumbsComponent,
-    CapitalizeWordsPipe,
-    PopoverModule,
-    InputTextModule,
-    FloatLabelModule,
-    IconFieldModule,
-    InputIconModule,
-    TabsModule,
-    TooltipModule,
-    ConfigurableFilterComponent,
-    FilterChipsComponent,
-    RouterModule,
-    DragDropModule,
-  ],
+  standalone: false,
   providers: [FeeService],
   templateUrl: './fee-config.component.html',
 })
@@ -184,6 +141,10 @@ export class FeeConfigComponent implements OnInit {
       // Trigger change detection after updating breadcrumbs
       this.cdr.markForCheck();
     });
+    this.feeService.getFeesConditions().subscribe((data) => {
+      console.log("Fee conditions data: ", data);
+      return data;
+    })
     this.feeService.getFeeServices().then((feeServices) => {
       this.feeServices = feeServices.map(item => ({
         ...item,

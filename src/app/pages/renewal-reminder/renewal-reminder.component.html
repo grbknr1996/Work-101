@@ -2,9 +2,18 @@
 <app-layout [config]="layoutConfig">
   <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
   <div class="user-accounts-header">
-    <h1>Renewal Reminder</h1>
+    <h1>{{"renewal.title"|translate}}</h1>
   </div>
-  <app-package-stats [packageStats]="packageStats" (statSelected)="onStatSelect($event)" [selectedStat]="'TOTAL IN MONTH'"></app-package-stats>
-  <app-configurable-filter-bar [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'Select filters to display'" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)" [showSearchBar]="true" [searchBar]="searchBar" (filterSearch)="filterSearch($event)" [searchLabel]="'Search File Name'" [showDownloadIcon]="false" [appliedFilters]="appliedFilters" [clearAllLabel]="'Clear All'" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-configurable-filter-bar>
-  <app-table [columns]="tableColumns" [data]="tableData" (actionClick)="onActionClick($event.action, $event.item)" [showClearButton]="false" [showSearch]="false"> </app-table>
+  <app-multiple-stats [multipleStats]="packageStats" (statSelected)="onStatSelect($event)" [selectedStat]="statSelected"></app-multiple-stats>
+  <app-configurable-filter-bar [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)" [showDateSearchBar]="true" (filterDateSearch)="filterSearch($event)" [appliedFilters]="appliedFilters" [clearAllLabel]="'common.components.filter.clearAll'|translate" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()" (removeDefaultFilter)="removeDefaultFilter($event)"></app-configurable-filter-bar>
+  <div class="flex justify-between items-center" style="padding:5px 5px 0 0">
+    <div></div>
+    <button class="p-button-primary" pButton [disabled]="'renewal.button.sendNotification'|translate" icon="pi pi-envelope" (click)="onSendMail()"></button>
+  </div>
+  <div [style]="tableData.length &gt; 0 ? '' : 'display:none;'">
+    <app-table [columns]="tableColumns" [data]="tableData" (selectionChange)="onSelectionChange($event)" (actionClick)="onActionClick($event.action, $event.item)" [showClearButton]="false" [showSearch]="false"> </app-table>
+  </div>
+  <div [style]="tableData.length == 0 ? 'align-self:center' : 'display:none;'">
+    <h5>{{"renewal.table.emptyMessage"|translate}}</h5>
+  </div>
 </app-layout>

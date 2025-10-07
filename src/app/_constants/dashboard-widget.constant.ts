@@ -53,14 +53,14 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
     items: [
       {
         icon: 'pi-calendar-clock',
-        label: 'Pending Requests',
-        link: '/requests',
+        label: 'Work Monitor',
+        link: 'task-management/work-monitor',
         requiredPermissions: ['pending_request_view'],
       },
       {
         icon: 'pi-list-check',
-        label: 'Pending Tasks',
-        link: '/tasks/pending',
+        label: 'My Tasks',
+        link: '/task-management/my-tasks',
         requiredPermissions: ['pending_task_allocation'],
       },
       {
@@ -168,14 +168,20 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
     ],
   },
   {
-    id: 'publication-workflow',
-    title: 'Publication Workflow',
+    id: 'publication',
+    title: 'Publication',
     icon: 'pi-book',
     requiredPermissions: ['publication_dashboard_view'],
     items: [
       {
+        icon: 'pi-clock',
+        label: 'Pending Journals',
+        link: '/publication/journals',
+        requiredPermissions: ['publication_dashboard_view'],
+      },
+      {
         icon: 'pi-file-edit',
-        label: 'Pending Publication',
+        label: 'Pending Publications',
         link: '/publication/pending',
         requiredPermissions: ['publication_dashboard_view'],
       },
@@ -247,13 +253,7 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
     items: [
       {
         icon: 'pi-calendar-plus',
-        label: 'Annuities',
-        link: '/annuities',
-        requiredPermissions: ['annuity_projection_view'],
-      },
-      {
-        icon: 'pi-refresh',
-        label: 'Renewals',
+        label: 'Annuities or Renewals',
         link: '/renewal-reminder',
         requiredPermissions: ['renewal_projection_view'],
       },

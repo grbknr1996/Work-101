@@ -1,30 +1,20 @@
 import {
   Component,
   OnInit,
-  AfterViewInit,
   ChangeDetectorRef,
 } from '@angular/core';
 
-import { ButtonModule } from 'primeng/button';
-import { CommonModule } from '@angular/common';
-import { BasicInfoFormComponent } from '../basic-info-form/basic-info-form.component';
-import { AppLayoutComponent } from '../../../components/app-layout/app-layout.component';
-import { BreadcrumbsComponent } from '../../../components/breadcrumbs/breadcrumbs.component';
-import { ReviewStepComponent } from '../review-step/review-step.component';
 import {
-  ConfigurableStepperComponent,
   StepperStep,
 } from '../../../components/configurable-stepper/configurable-stepper.component';
 import {
-  FormsModule,
-  ReactiveFormsModule,
+
   FormBuilder,
   FormGroup,
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  GroupAssignmentComponent,
   GroupItem,
 } from 'src/app/components/group-assignment/group-assignment.component';
 import { SidebarMenuService } from '../../../_services/sidebar-menu.service';
@@ -41,19 +31,7 @@ import { of } from 'rxjs';
 
 @Component({
   selector: 'app-create-user-account',
-  imports: [
-    GroupAssignmentComponent,
-    ConfigurableStepperComponent,
-    ButtonModule,
-    CommonModule,
-    BasicInfoFormComponent,
-    AppLayoutComponent,
-    BreadcrumbsComponent,
-    ReviewStepComponent,
-    FormsModule,
-    ReactiveFormsModule,
-  ],
-  standalone: true,
+  standalone: false,
   templateUrl: './create-user-account.component.html',
 })
 export class CreateUserAccountComponent implements OnInit {

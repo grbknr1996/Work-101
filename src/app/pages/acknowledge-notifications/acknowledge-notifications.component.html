@@ -1,25 +1,23 @@
 
-<app-layout [config]="layoutConfig">
+<app-layout>
   <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
   <div class="user-accounts-header">
-    <h1>Acknowledge Notifications</h1>
+    <h1>{{"notifications.acknowledge.title"|translate}}</h1>
   </div>
-  <app-configurable-filter-bar [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'Select filters to display'" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)" [showSearchBar]="true" [searchBar]="searchBar" (filterSearch)="filterSearch($event)" [searchLabel]="'Search File Id'" [showDownloadIcon]="false" [appliedFilters]="appliedFilters" [clearAllLabel]="'Clear All'" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-configurable-filter-bar>
+  <app-configurable-filter-bar [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'notifications.acknowledge.filter.placeHolder'|translate" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)" [showSearchBar]="true" [searchBar]="searchBar" (filterSearch)="filterSearch($event)" [searchLabel]="'notifications.acknowledge.filter.search'|translate" [showDownloadIcon]="false" [appliedFilters]="appliedFilters" [clearAllLabel]="'common.components.filter.clearAll'|translate" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-configurable-filter-bar>
   <app-table [columns]="tableColumns" [data]="acknowledgeData" (actionClick)="onActionClick($event.action, $event.item)" [showClearButton]="false" [showSearch]="false"></app-table>
-  <p-dialog header="Acknowledge Notification" [(visible)]="showEditDialog" [modal]="true" [style]="{ width: '400px' }" [draggable]="false" [resizable]="false">
+  <p-dialog [header]="'notifications.acknowledge.dialog.header'|translate" [(visible)]="showEditDialog" [modal]="true" [style]="{ width: '400px' }" [draggable]="false" [resizable]="false">
     <form class="office-form" [formGroup]="acknowledgeForm">
       <div class="form-grid">
         <div class="form-field">
-          <label for="acknowledge">Acknowledgement Date *</label>
-          <p-calendar class="w-full date-calendar" id="'Select date'" [dateFormat]="'yy/mm/dd'" [showClear]="true" [showIcon]="true" [showButtonBar]="true" [touchUI]="false"></p-calendar>
+          <label for="acknowledge">{{"notifications.acknowledge.dialog.date"|translate}}</label>
+          <p-calendar class="w-full date-calendar" id="'notifications.acknowledge.dialog.placeHolder'|translate" [dateFormat]="'yy/mm/dd'" [showClear]="true" [showIcon]="true" [showButtonBar]="true" [touchUI]="false"></p-calendar>
         </div>
       </div>
     </form>
     <ng-template pTemplate="footer">
-      <button class="p-button-text" pButton type="button" label="Cancel" (click)="onCancel()"></button>
-      <button pButton type="button" label="Update" (click)="onSaveOffice()"></button>
+      <button class="p-button-text" pButton type="button" [label]="'common.components.modal.cancel'|translate" (click)="onCancel()"></button>
+      <button pButton type="button" [label]="'common.components.modal.update'|translate" (click)="onSaveOffice()"></button>
     </ng-template>
   </p-dialog>
-  <!-- Confirmation Dialog-->
-  <p-confirmDialog> </p-confirmDialog>
 </app-layout>

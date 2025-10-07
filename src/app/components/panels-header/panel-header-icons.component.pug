@@ -1,0 +1,10 @@
+.panel-header
+  span.panel-title {{ panelName }}
+  span.icon-group
+    ng-container(*ngFor="let pt of panelTypes")
+      i.pi.clickable-icon(
+        [ngClass]="pt.type === 'Expand Panel' ? (isExpanded ? 'pi-window-minimize' : 'pi-window-maximize') : pt.icon",
+        [pTooltip]="pt.type === 'Expand Panel' ? (isExpanded ? 'Minimize Panel' : 'Expand Panel') : pt.tooltip",
+        tooltipPosition="bottom",
+        (click)="changePanelView(pt.type)"
+      )

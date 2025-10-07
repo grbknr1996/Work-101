@@ -1,0 +1,7 @@
+app-layout([config]="layout")
+    app-breadcrumbs([autoGenerate]="false", [home]="home", [items]="items")
+    app-chart-navbar((onReset)="onReset()")
+
+    //- Center the Chart
+    div(style="display: flex; align-items: center; justify-content: center;")
+        div(echarts, [(options)]="chartOption", (chartInit)="onChartEvent($event, 'chartInit')", (chartClick)="onChartEvent($event, 'chartClick')", (chartLegendSelectChanged)="onChartEvent($event, 'chartLegendSelectChanged')", [ngStyle]="{'height.px' : chartHeightFunc(), 'width.px' : chartWidthFunc() }")

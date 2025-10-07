@@ -1,34 +1,21 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UnitsTreeComponent } from './units-tree/units-tree.component';
-import { UnitDetailsComponent } from './units-details/units-details.component';
+
 import { UnitNode } from 'src/app/_services/units.service';
 import {
   AppLayoutComponent,
   LayoutConfig,
 } from 'src/app/components/app-layout/app-layout.component';
-import { CommonModule } from '@angular/common';
-import { DividerModule } from 'primeng/divider';
-import { ButtonModule } from 'primeng/button';
-import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
 import { MenuItem } from 'primeng/api';
 import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
 import { UnitsService } from 'src/app/_services/units.service';
 import { CreateUnitStateService } from 'src/app/_services/create-unit-state.service';
+import { UnitsTreeComponent } from './units-tree/units-tree.component';
 
 @Component({
   selector: 'app-units-page',
-  standalone: true,
-  imports: [
-    AppLayoutComponent,
-    UnitsTreeComponent,
-    UnitDetailsComponent,
-    CommonModule,
-    DividerModule,
-    ButtonModule,
-    BreadcrumbsComponent,
-  ],
+  standalone: false,
   templateUrl: './units-page.component.html',
 })
 export class UnitsPageComponent implements OnInit {

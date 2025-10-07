@@ -12,7 +12,7 @@ import { PermissionService } from '../_services/permission.service';
 
 @Directive({
   selector: '[appPermission]',
-  standalone: true,
+  standalone: false,
 })
 export class PermissionDirective implements OnInit, OnDestroy {
   @Input() appPermission: string | string[] = '';

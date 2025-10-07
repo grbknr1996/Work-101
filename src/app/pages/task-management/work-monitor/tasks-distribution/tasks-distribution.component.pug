@@ -1,0 +1,89 @@
+app-layout
+  app-breadcrumbs([items]="breadcrumbItems")
+
+  //- Top Stat Cards
+  .grid.grid-cols-1(class="md:grid-cols-4 gap-4 mb-6")
+    p-card.w-full
+      .font-semibold.text-lg.mb-2 Process
+      .text-sm {{ selectedProcessName }}
+
+    p-card.w-full
+      .font-semibold.text-lg.mb-2 Status
+      .text-sm {{ stageLabel }}
+
+    p-card.w-full
+      .font-semibold.text-lg.mb-2 Pending Tasks
+      .text-sm {{ tasksToDistribute }}
+
+    p-card.w-full
+      .font-semibold.text-lg.mb-2 Total Tasks
+      .text-sm {{ totalTasks }}
+
+  //- Distribution Controls
+  .flex.flex-wrap.items-start.gap-8
+    .flex.flex-col.w-64
+      label.block.text-sm.font-medium.mb-1 Select User Unit
+      p-dropdown(
+        [options]="unitWithMembers",
+        [(ngModel)]="selectedUnitId",
+        optionLabel="unitName",
+        optionValue="id",
+        placeholder="Select Unit",
+        (onChange)="onUnitChange($event.value)",
+        class="w-full border rounded-md"
+      )
+
+    ng-container(*ngIf="selectedUnit")
+      .flex.flex-col.w-64
+        label.block.text-sm.font-medium.mb-1 Average Work Quantity
+        .w-full.px-3.py-2.border.rounded-md.bg-blue-50.text-blue-600.text-sm.font-medium.text-center
+          span {{ avgWorkQuantity }} tasks/member
+
+    .flex.flex-col.w-64
+      .flex.items-center.justify-between.h-5.mb-1
+        label.text-sm.font-medium Distribution Threshold
+        p-toggleswitch.scale-75(
+          [(ngModel)]="thresholdEnabled",
+          [ngStyle]="{ transform: 'scale(0.8)' }",
+          (onChange)="onThresholdChange()"
+        )
+
+      div(*ngIf="thresholdEnabled; else equalDist")
+        p-inputNumber(
+          [(ngModel)]="distributionThreshold",
+          (ngModelChange)="onThresholdChange()",
+          [min]="1",
+          [max]="maxThreshold",
+          [showButtons]="true",
+          [disabled]="!thresholdEnabled",
+          inputId="distributionThreshold",
+          [buttonLayout]="'stacked'",
+          style="width: 100%; min-width: 100px;"
+          inputStyle="width: 100%; height: 20px;"
+        )
+        .text-xs.text-gray-400.text-right.mt-1 tasks per member
+
+      ng-template(#equalDist)
+        .w-full.px-3.py-2.border.rounded-md.bg-gray-50.text-gray-600.text-sm.text-center
+          span Equal Distribution
+
+    .flex.flex-col.w-64
+      label.block.text-sm.font-medium.mb-1 Tasks to Assign
+      .w-full.px-3.py-2.border.rounded-md.bg-green-50.text-green-600.text-sm.font-medium.text-center
+        span {{ getAssignedTaskTotal() }}/{{ tasksToDistribute }}
+
+  //- Members Table
+  app-table(
+    [columns]="tableColumns",
+    [data]="members",
+    [showClearButton]="false",
+    (selectionChange)="onSelectionChange($event)",
+  )
+
+  .text-xs.text-gray-600.mt-3
+    | {{ tasksToDistribute }} tasks will be distributed to {{ members.length }} members
+
+  //- Action Buttons
+  .flex.justify-end.gap-2.mt-5
+    p-button(label="Cancel", [outlined]="true", (onClick)="onCancel()")
+    p-button(label="Confirm Distribution", (onClick)="onConfirm()")

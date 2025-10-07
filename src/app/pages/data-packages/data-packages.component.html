@@ -1,10 +1,10 @@
 
-<app-layout [config]="layoutConfig">
+<app-layout>
   <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
   <div class="user-accounts-header">
-    <h1>Data Sharing</h1>
+    <h1>{{"dataService.dataSharing.title"|translate}}</h1>
   </div>
   <app-package-stats [packageStats]="packageStats" (statSelected)="onStatSelect($event)" [selectedStat]="statSelected"></app-package-stats>
-  <app-configurable-filter-bar [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'Select filters to display'" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)" [showSearchBar]="true" [searchBar]="searchBar" (filterSearch)="filterSearch($event)" [searchLabel]="'Search File Name'" [showDownloadIcon]="false" [filterClearAll]="false" [appliedFilters]="appliedFilters" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()" (removeDefaultFilter)="removeDefaultFilter($event)"></app-configurable-filter-bar>
+  <app-configurable-filter-bar [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'dataService.dataSharing.filter.placeHolder'|translate" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)" [showSearchBar]="true" [searchBar]="searchBar" (filterSearch)="filterSearch($event)" [searchLabel]="'dataService.dataSharing.filter.search'|translate" [showDownloadIcon]="false" [filterClearAll]="false" [appliedFilters]="appliedFilters" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()" (removeDefaultFilter)="removeDefaultFilter($event)"></app-configurable-filter-bar>
   <app-table [columns]="tableColumns" [data]="tableData" (actionClick)="onActionClick($event.action, $event.item)" [showClearButton]="false" [showSearch]="false"> </app-table>
 </app-layout>

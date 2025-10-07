@@ -10,15 +10,6 @@ import {
   inject,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { DropdownModule } from 'primeng/dropdown';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { TabViewModule } from 'primeng/tabview';
-import { CheckboxModule } from 'primeng/checkbox';
-import { AccordionModule } from 'primeng/accordion';
-import { ButtonModule } from 'primeng/button';
-import { MessageModule } from 'primeng/message';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DataExchangeConfigService } from 'src/app/_services/data-exchange-config.service';
 import { ToastService } from 'src/app/_services/toast.service';
 import { ExclusionRule } from 'src/app/interfaces';
@@ -27,12 +18,10 @@ import { MechanicsService } from 'src/app/_services/mechanics.service';
 import { AuthService } from 'src/app/_services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import {
-  AppLayoutComponent,
   LayoutConfig,
 } from '../../../components/app-layout/app-layout.component';
 import { BreadcrumbsComponent } from '../../../components/breadcrumbs/breadcrumbs.component';
 import {
-  ConfigurableStepperComponent,
   StepperStep,
 } from '../../../components/configurable-stepper/configurable-stepper.component';
 
@@ -40,22 +29,7 @@ import {
   selector: 'app-add-exclusion-rule',
   templateUrl: './add-exclusion-rule.component.html',
   styles: [``],
-  standalone: true,
-  imports: [
-    CommonModule,
-    DropdownModule,
-    MultiSelectModule,
-    TabViewModule,
-    CheckboxModule,
-    AccordionModule,
-    ButtonModule,
-    MessageModule,
-    FormsModule,
-    ReactiveFormsModule,
-    AppLayoutComponent,
-    BreadcrumbsComponent,
-    ConfigurableStepperComponent,
-  ],
+  standalone: false,
 })
 export class AddExclusionRuleComponent implements OnChanges, OnInit {
   // Remove modal-specific inputs since this is now a standalone page

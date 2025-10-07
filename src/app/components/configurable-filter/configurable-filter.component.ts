@@ -14,21 +14,8 @@ import {
   FormBuilder,
   FormGroup,
 } from '@angular/forms';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { CalendarModule } from 'primeng/calendar';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { DropdownModule } from 'primeng/dropdown';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { DividerModule } from 'primeng/divider';
-import { TooltipModule } from 'primeng/tooltip';
-import { CheckboxModule } from 'primeng/checkbox';
-import { OverlayPanelModule } from 'primeng/overlaypanel';
-import { ChipModule } from 'primeng/chip';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
 import { HostListener } from '@angular/core';
-import { RadioButtonModule } from 'primeng/radiobutton';
 
 export interface FilterConfig {
   key: string;
@@ -67,25 +54,7 @@ export interface FilterValue {
 @Component({
   selector: 'app-configurable-filter',
   templateUrl: './configurable-filter.component.html',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MultiSelectModule,
-    CalendarModule,
-    InputTextModule,
-    InputNumberModule,
-    RadioButtonModule,
-    DropdownModule,
-    ButtonModule,
-    CardModule,
-    DividerModule,
-    TooltipModule,
-    CheckboxModule,
-    OverlayPanelModule,
-    ChipModule,
-  ],
+  standalone: false,
   styles: [
     `
       .radio-option {

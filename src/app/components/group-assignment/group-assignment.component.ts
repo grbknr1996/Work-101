@@ -6,13 +6,6 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { PaginatorModule } from 'primeng/paginator';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
-import { DropdownModule } from 'primeng/dropdown';
-import { CheckboxModule } from 'primeng/checkbox';
-import { FormsModule } from '@angular/forms';
 
 export interface GroupItem {
   id: string;
@@ -23,16 +16,7 @@ export interface GroupItem {
 
 @Component({
   selector: 'app-group-assignment',
-  standalone: true,
-  imports: [
-    CommonModule,
-    PaginatorModule,
-    InputTextModule,
-    ButtonModule,
-    DropdownModule,
-    CheckboxModule,
-    FormsModule,
-  ],
+  standalone: false,
   templateUrl: './group-assignment.component.html',
 })
 export class GroupAssignmentComponent implements OnChanges {

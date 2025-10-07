@@ -238,15 +238,9 @@ export class SidebarMenuService {
         routerLink: this.getRouterLink('/dashboard'),
       },
       {
-        id: 'annuities-reminder',
-        label: 'Annuities',
-        icon: 'pi pi-calendar-plus',
-        routerLink: this.getRouterLink('/annuities'),
-      },
-      {
         id: 'renewal-reminder',
-        label: 'Renewals',
-        icon: 'pi pi-refresh',
+        label: 'Annuities or Renewals',
+        icon: 'pi pi-calendar-plus',
         routerLink: this.getRouterLink(`/renewal-reminder`),
       },
       {
@@ -298,6 +292,66 @@ export class SidebarMenuService {
             styleClass: lastPart.includes('calculator') ? 'active' : '',
           },
         ],
+      },
+    ];
+  }
+
+  generatePublicationJournalMenu(currentPath: string): MenuItem[] {
+    console.log('current path:', currentPath);
+    const lastPart = currentPath.split('/').pop();
+    console.log(lastPart);
+    return [
+      {
+        id: 'dashboard',
+        label: 'Home',
+        icon: 'pi pi-home',
+        routerLink: this.getRouterLink('/dashboard'),
+      },
+      {
+        id: 'pending-journals',
+        label: 'Pending Journals',
+        icon: 'pi pi-clock',
+        routerLink: this.getRouterLink('/publication/journals'),
+        styleClass: lastPart.includes('journals') ? 'active' : '',
+      },
+      {
+        id: 'pending-publications',
+        label: 'Pending Publications',
+        icon: 'pi pi-list-check',
+        routerLink: this.getRouterLink(
+          '/publication/pending'
+        ),
+        styleClass: lastPart.includes('pending') ? 'active' : '',
+      }
+    ];
+  }
+
+  generateTaskManagementMenu(currentPath: string): MenuItem[] {
+    console.log('current path:', currentPath);
+    const lastPart = currentPath.split('/').pop();
+    console.log(lastPart);
+    return [
+      {
+        id: 'dashboard',
+        label: 'Home',
+        icon: 'pi pi-home',
+        routerLink: this.getRouterLink('/dashboard'),
+      },
+      {
+        id: 'work-monitor',
+        label: 'Work Monitor',
+        icon: 'pi pi-calendar-clock',
+        routerLink: this.getRouterLink('/task-management/work-monitor'),
+        styleClass: lastPart.includes('work-monitor') ? 'active' : '',
+      },
+      {
+        id: 'my-tasks',
+        label: 'My Tasks',
+        icon: 'pi pi-list-check',
+        routerLink: this.getRouterLink(
+          '/task-management/my-tasks'
+        ),
+        styleClass: lastPart.includes('my-tasks') ? 'active' : '',
       },
     ];
   }

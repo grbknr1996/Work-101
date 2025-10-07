@@ -1,5 +1,4 @@
 // table.component.ts - Fixed version with cached menu items
-import { CommonModule } from '@angular/common';
 import {
   Component,
   EventEmitter,
@@ -13,24 +12,12 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { Signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { MenuItem } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
-import { DataViewModule } from 'primeng/dataview';
-import { DropdownModule } from 'primeng/dropdown';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
-import { InputTextModule } from 'primeng/inputtext';
-import { MenuModule } from 'primeng/menu';
-import { Table, TableModule } from 'primeng/table';
-import { TagModule } from 'primeng/tag';
-import { AvatarModule } from 'primeng/avatar';
-import { ChipModule } from 'primeng/chip';
-import { TooltipModule } from 'primeng/tooltip';
+import { Table } from 'primeng/table';
 
 export interface ColumnDefinition {
-  field: string;
-  header: string;
+  field?: string;
+  header?: string;
   filterType?:
     | 'text'
     | 'numeric'
@@ -54,7 +41,8 @@ export interface ColumnDefinition {
     | 'boolean'
     | 'custom'
     | 'actions'
-    | 'chip';
+    | 'chip'
+    | 'checkbox';
   filterDisplay?: 'menu' | 'row';
   filterMatchMode?: string;
   dateFormat?: string;
@@ -66,7 +54,14 @@ export interface ColumnDefinition {
   filterOptions?: any;
   severity?: (
     value: any
-  ) => 'success' | 'info' | 'warn' | 'danger' | 'secondary' | undefined;
+  ) =>
+    | 'success'
+    | 'info'
+    | 'warn'
+    | 'danger'
+    | 'secondary'
+    | undefined
+    | string;
   value?: (value: any) => string; // Custom value formatter for display
   customTemplate?: boolean;
   actions?: Action[];
@@ -75,6 +70,7 @@ export interface ColumnDefinition {
   nameField?: string;
   iconClass?: (value: any) => string;
   tooltipText?: string;
+  headerDisplay?: string;
 }
 
 export interface Action {
@@ -96,23 +92,7 @@ export interface Action {
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
-  imports: [
-    CommonModule,
-    TableModule,
-    DataViewModule,
-    ButtonModule,
-    DropdownModule,
-    MenuModule,
-    TagModule,
-    InputTextModule,
-    FormsModule,
-    IconFieldModule,
-    InputIconModule,
-    AvatarModule,
-    ChipModule,
-    TooltipModule,
-  ],
-  standalone: true,
+  standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TableComponent implements OnInit, OnChanges {
@@ -138,20 +118,24 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() dataKey: string = 'id';
   @Input() showClearButton: boolean = false;
   @Input() showSearch: boolean = true;
-  @Input() emptyMessage: string = 'No records found.';
+  @Input() emptyMessage: string = 'common.components.table.noRecordsFound';
   @Input() showActionsColumn: boolean = false;
   @Input() customCellTemplate: any;
   @Input() actionTemplate: any;
   @Input() locale: string = 'en';
   @Input() showSearchButton: boolean = false;
-  @Input() searchPlaceHolder: string = 'Search keyword';
-  @Input() clearButton: string = 'Clear';
+  @Input() searchPlaceHolder: string = 'common.components.table.search';
+  @Input() clearButton: string = 'common.components.table.clear';
   @Input() onLazyLoadEvent: EventEmitter<any> = new EventEmitter();
 
   @Output() actionClick = new EventEmitter<{ action: string; item: any }>();
   @Output() onLazyLoad = new EventEmitter<any>();
+  @Output() selectionChange = new EventEmitter<any>();
+  @Input() selection: any[] = [];
 
   @Input() showPdf: string = '';
+
+  selectedRows: Signal<any[]> | any[] = [];
 
   // Cache for menu items to prevent regeneration
   private menuItemsCache = new Map<string, MenuItem[]>();
@@ -198,6 +182,11 @@ export class TableComponent implements OnInit, OnChanges {
     this.actionClick.emit({ action, item });
   }
 
+  onSelectionChange(event: Event) {
+    //console.log(this.selectedRows);
+    this.selectionChange.emit(this.selectedRows);
+  }
+
   getValue(rowData: any, field: string): any {
     if (!field) {
       return null;
@@ -228,19 +217,38 @@ export class TableComponent implements OnInit, OnChanges {
 
     // Handle nested properties (e.g., 'user.name')
     //const props = field.split('.');
-    let fieldTooltip = field+"_tooltip";
+    let fieldTooltip = field + '_tooltip';
     let value = rowData;
 
     // for (const prop of props) {
-      if (
-        value === null ||
-        value === undefined ||
-        !value.hasOwnProperty(fieldTooltip)
-      ) {
-        return null;
-      }
-      value = value[fieldTooltip];
+    if (
+      value === null ||
+      value === undefined ||
+      !value.hasOwnProperty(fieldTooltip)
+    ) {
+      return null;
+    }
+    value = value[fieldTooltip];
     // }
+
+    return value;
+  }
+
+  getDisabled(rowData: any, field: string): any {
+    if (!field) {
+      return null;
+    }
+
+    let value = rowData;
+
+    if (
+      value === null ||
+      value === undefined ||
+      !value.hasOwnProperty('disabled')
+    ) {
+      return null;
+    }
+    value = value['disabled'];
 
     return value;
   }

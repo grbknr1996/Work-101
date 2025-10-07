@@ -1,28 +1,14 @@
 import { Component, OnInit, signal, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule, Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import {
-  AppLayoutComponent,
   LayoutConfig,
 } from '../../components/app-layout/app-layout.component';
-import { BreadcrumbsComponent } from '../../components/breadcrumbs/breadcrumbs.component';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { ProgressBarModule } from 'primeng/progressbar';
+
 
 @Component({
   selector: 'app-data-exchange-config',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    AppLayoutComponent,
-    BreadcrumbsComponent,
-    CardModule,
-    ButtonModule,
-    ProgressBarModule,
-  ],
+  standalone: false,
   templateUrl: './data-exchange-config.component.html',
 })
 export class DataExchangeConfigComponent implements OnInit {

@@ -3,40 +3,17 @@ import {
   Input,
   Output,
   EventEmitter,
-  OnInit,
-  OnDestroy,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   ViewChild,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import {
-  FormsModule,
-  ReactiveFormsModule,
-  FormBuilder,
   FormGroup,
 } from '@angular/forms';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { CalendarModule } from 'primeng/calendar';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { DropdownModule } from 'primeng/dropdown';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { DividerModule } from 'primeng/divider';
-import { TooltipModule } from 'primeng/tooltip';
-import { CheckboxModule } from 'primeng/checkbox';
-import { OverlayPanelModule } from 'primeng/overlaypanel';
-import { ChipModule } from 'primeng/chip';
-import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
+
 import {
   ConfigurableFilterComponent,
 } from '../../components/configurable-filter/configurable-filter.component';
-import { FilterChipsComponent } from '../../components/filter-chips/filter-chips.component';
 
 export interface FilterConfig {
   key: string;
@@ -79,34 +56,10 @@ export interface FilterAction {
   severity: string;
 }
 
-
 @Component({
   selector: 'app-configurable-filter-bar',
   templateUrl: './configurable-filter-bar.component.html',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MultiSelectModule,
-    CalendarModule,
-    InputTextModule,
-    InputNumberModule,
-    RadioButtonModule,
-    DropdownModule,
-    ButtonModule,
-    CardModule,
-    DividerModule,
-    TooltipModule,
-    CheckboxModule,
-    OverlayPanelModule,
-    ChipModule,
-    FloatLabelModule,
-    IconFieldModule,
-    InputIconModule,
-    ConfigurableFilterComponent,
-    FilterChipsComponent,
-  ],
+  standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfigurableFilterBarComponent {
@@ -123,10 +76,14 @@ export class ConfigurableFilterBarComponent {
   @Input() filterSelectorPlaceholder: string = 'Select filters to display';
   @Input() visible: boolean = false;
   @Input() searchBar: string = '';
+  @Input() searchBarDate;
   @Input() showDownloadIcon: boolean = false;
   @Input() showInfoIcon: boolean = false;
   @Input() showSearchBar: boolean = false;
+  @Input() showDateSearchBar: boolean = false;
   @Input() searchLabel: string = 'Search';
+  @Input() dateSearchLabel: string = 'Select date range';
+  @Input() searchDateFormat: string = 'yy-mm-dd'
   @Input() disabled: boolean = false;
   @Input() filterClearAll: boolean = true;
 
@@ -138,6 +95,7 @@ export class ConfigurableFilterBarComponent {
   @Output() appliedFiltersChange = new EventEmitter<FilterValue[]>();
   @Output() visibleFiltersChange = new EventEmitter<FilterConfig[]>(); // Optional output
   @Output() filterSearch = new EventEmitter<string>();
+  @Output() filterDateSearch = new EventEmitter<any>();
   @Output() downloadDetails = new EventEmitter<void>();
   @Output() infoDetails = new EventEmitter<void>();
   @Output() actionClick = new EventEmitter<string>();
@@ -198,6 +156,22 @@ export class ConfigurableFilterBarComponent {
   onFilterSearch(searchBar: string): void {
     console.log("onFilterSearch "+this.searchBar);
     this.filterSearch.emit(this.searchBar);
+  }
+
+  onCalenderSelect(val: any): void {
+    console.log(this.searchBarDate);
+    this.filterDateSearch.emit(this.searchBarDate);
+  }
+
+  onCalenderBlur(val: any): void {
+    if(this.searchBarDate == null) {
+      this.filterDateSearch.emit(this.searchBarDate);
+    }
+  }
+
+  onClearEvent(val: any): void {
+    console.log('Date cleared!');
+    this.filterDateSearch.emit(this.searchBarDate);
   }
 
   onDownloadDetails(): void {

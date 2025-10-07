@@ -1,13 +1,13 @@
-app-layout([config]="layoutConfig")
+app-layout
   app-breadcrumbs([items]="breadcrumbItems")
   .user-accounts-header
-    h1 Acknowledge Notifications
+    h1 {{"notifications.acknowledge.title"|translate}}
   app-configurable-filter-bar(
           [filters]="filterConfigs",
           [showClearAll]="true",
           [showApplyButton]="true",
           [showFilterSelector]="true",
-          [filterSelectorPlaceholder]="'Select filters to display'",
+          [filterSelectorPlaceholder]="'notifications.acknowledge.filter.placeHolder'|translate",
           (filterChange)="onFilterChange($event)",
           (filterCleared)="onFilterCleared()",
           (filterApplied)="onFilterApplied($event)",
@@ -15,10 +15,10 @@ app-layout([config]="layoutConfig")
           [showSearchBar]="true",
           [searchBar]="searchBar",
           (filterSearch)="filterSearch($event)",
-          [searchLabel]="'Search File Id'",
+          [searchLabel]="'notifications.acknowledge.filter.search'|translate",
           [showDownloadIcon]="false",
           [appliedFilters]="appliedFilters",
-          [clearAllLabel]="'Clear All'",
+          [clearAllLabel]="'common.components.filter.clearAll'|translate",
           [getDisplayValue]="getFilterDisplayValue.bind(this)",
           (chipRemove)="removeFilterChip($event)",
           (clearAll)="clearAllFilters()",
@@ -26,7 +26,7 @@ app-layout([config]="layoutConfig")
   app-table([columns]="tableColumns", [data]="acknowledgeData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false")
   
   p-dialog(
-    header="Acknowledge Notification",
+    [header]="'notifications.acknowledge.dialog.header'|translate",
     [(visible)]="showEditDialog",
     [modal]="true",
     [style]="{ width: '400px' }",
@@ -36,11 +36,11 @@ app-layout([config]="layoutConfig")
     form([formGroup]="acknowledgeForm", class="office-form")
       .form-grid
         .form-field
-          label(for="acknowledge") Acknowledgement Date *
+          label(for="acknowledge") {{"notifications.acknowledge.dialog.date"|translate}}
           p-calendar.w-full.date-calendar(
                       id="acknowledge"
                       [formControlName]="acknowledgeDate"
-                      [placeholder]="'Select date'",
+                      [placeholder]="'notifications.acknowledge.dialog.placeHolder'|translate",
                       [dateFormat]="'yy/mm/dd'",
                       [showClear]="true",
                       [showIcon]="true",
@@ -51,16 +51,13 @@ app-layout([config]="layoutConfig")
       button(
         pButton,
         type="button",
-        label="Cancel",
+        [label]="'common.components.modal.cancel'|translate",
         class="p-button-text",
         (click)="onCancel()"
       )
       button(
         pButton,
         type="button",
-        label="Update",
+        [label]="'common.components.modal.update'|translate",
         (click)="onSaveOffice()",
       )
-
-  // Confirmation Dialog
-  p-confirmDialog 

@@ -145,3 +145,29 @@ export interface ExclusionRuleFilters {
   ipCategory?: string;
   originatingOfficeCode?: string;
 }
+export interface GlobalZipResponse {
+  message: any;
+  data: any[];
+}
+export interface StatisticsResponse {
+  totalCount: number;
+  lastYearCount: number;
+  lastWeekCount: number;
+  lastMonthCount: number;
+}
+export interface SharedPackageResponse {
+  globalZipId: string;
+  ipTypeCategory: string;
+  ipOfficeCode: string;
+  receivedDate: string;
+  updateDate: string;
+  status: string;
+  statusMessage: StatusMessage;
+}
+export interface StatusMessage {
+  totalChildRecords: number;
+  failedRetryCount: number;
+  processingCount: number;
+  failedNonRetryCount: number;
+  successCount: number;
+}

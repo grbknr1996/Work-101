@@ -1,23 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { TooltipModule } from 'primeng/tooltip';
-import { DividerModule } from 'primeng/divider';
+
+
 
 @Component({
   selector: 'app-widget',
   templateUrl: './app-widget.component.html',
-  standalone: true,
-  imports: [
-    CommonModule,
-    CardModule,
-    ButtonModule,
-    RouterModule,
-    TooltipModule,
-    DividerModule,
-  ],
+  standalone: false,
 })
 export class AppWidgetComponent {
   @Input() icon: string = '';

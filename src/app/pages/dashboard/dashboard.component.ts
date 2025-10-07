@@ -1,17 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule, ActivatedRoute } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { TableModule } from 'primeng/table';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
 import { MechanicsService } from '../../_services/mechanics.service';
 import {
   AppLayoutComponent,
   LayoutConfig,
 } from '../../components/app-layout/app-layout.component';
-import { BreadcrumbsComponent } from '../../components/breadcrumbs/breadcrumbs.component';
-import { AppWidgetComponent } from 'src/app/components/app-widget/app-widget.component';
 import { PermissionService } from 'src/app/_services/permission.service';
 import { DashboardWidgetService } from 'src/app/_services/dashboard-widget.service';
 import { DashboardWidget } from 'src/app/interfaces';
@@ -20,26 +14,15 @@ import { of } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    TranslateModule,
-    CardModule,
-    ButtonModule,
-    AppLayoutComponent,
-    TableModule,
-    BreadcrumbsComponent,
-    AppWidgetComponent,
-  ],
+  standalone: false,
+  encapsulation: ViewEncapsulation.None,
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit {
   layoutConfig: LayoutConfig;
   widgets: DashboardWidget[] = [];
   permissionError: boolean = false;
-  errorMessage: string =
-    'The requested operation could not be performed due to missing permissions in the user profile.';
+  errorMessage: string = 'dashboard.permissionError.message';
 
   constructor(
     public ms: MechanicsService,
@@ -48,7 +31,7 @@ export class DashboardComponent implements OnInit {
     private dashboardWidgetService: DashboardWidgetService
   ) {
     this.layoutConfig = {
-      appTitle: 'IPAS Central',
+      appTitle: this.ms.translate('common.components.app.title'),
       showHeader: true,
       showSidebar: false,
       headerItems: [

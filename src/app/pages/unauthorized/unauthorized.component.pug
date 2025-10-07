@@ -15,20 +15,18 @@
         i.pi.pi-shield-exclamation.text-6xl.text-red-500.animate-pulse
     
     ng-template(pTemplate="title")
-      h1.text-2xl.font-bold.text-gray-800.m-0 Access Denied
+      h1.text-2xl.font-bold.text-gray-800.m-0 {{ 'unauthorized.title' | translate }}
     
     ng-template(pTemplate="content")
       .text-gray-600.line-height-2.mb-3
-        p.text-base.mb-2
-          | Sorry, you don't have permission to access this page.
-        p.text-base
-          | Please contact your administrator if you believe this is an error.
+        p.text-base.mb-2 {{ 'unauthorized.message1' | translate }}
+        p.text-base {{ 'unauthorized.message2' | translate }}
       
       p-divider
       
       .flex.justify-center.mb-3
         p-chip(
-          label="Error 403",
+          [label]="'unauthorized.chip' | translate",
           severity="danger",
           styleClass="text-sm"
         )
@@ -37,7 +35,7 @@
       .flex.flex-column.gap-2.sm: flex-row.sm: justify-content-center
         p-button(
           icon="pi pi-arrow-left",
-          label="Go Back",
+          [label]="'unauthorized.back' | translate",
           severity="primary",
           (onClick)="goBack()",
           styleClass="w-full sm:w-auto text-sm"

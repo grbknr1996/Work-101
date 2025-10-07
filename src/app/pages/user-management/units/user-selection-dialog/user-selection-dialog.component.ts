@@ -6,14 +6,6 @@ import {
   OnInit,
   OnChanges,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { DialogModule } from 'primeng/dialog';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { TableModule } from 'primeng/table';
-import { CheckboxModule } from 'primeng/checkbox';
-import { PaginatorModule } from 'primeng/paginator';
 import { UserService } from 'src/app/_services/user.service';
 import { UserAssignment } from 'src/app/_services/units.service';
 
@@ -27,19 +19,8 @@ export interface UserSelectionItem {
 
 @Component({
   selector: 'app-user-selection-dialog',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    DialogModule,
-    ButtonModule,
-    InputTextModule,
-    TableModule,
-    CheckboxModule,
-    PaginatorModule,
-  ],
+  standalone: false,
   templateUrl: './user-selection-dialog.component.html',
-  styleUrls: ['./user-selection-dialog.component.css'],
 })
 export class UserSelectionDialogComponent implements OnInit, OnChanges {
   @Input() visible = false;

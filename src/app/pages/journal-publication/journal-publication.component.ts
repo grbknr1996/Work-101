@@ -10,29 +10,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
 
-import { ButtonModule } from 'primeng/button';
-import { BadgeModule } from 'primeng/badge';
-import { TabsModule } from 'primeng/tabs';
-import { CardModule } from 'primeng/card';
-import { PopoverModule } from 'primeng/popover';
-import { CheckboxModule } from 'primeng/checkbox';
-import { FormsModule } from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { TooltipModule } from 'primeng/tooltip';
-import { TagModule } from 'primeng/tag';
-
-import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
-import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
 
 import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
-import { Fee } from 'src/app/schemas/fee-schema';
 import { CapitalizeWordsPipe } from 'src/app/_pipes/capitalize-words.pipe';
 import { JournalPublicationService } from 'src/app/_services/journal-publication.service';
 import {
@@ -40,14 +21,13 @@ import {
   FilterConfig,
   FilterValue,
 } from 'src/app/components/configurable-filter/configurable-filter.component';
-import { FilterChipsComponent } from 'src/app/components/filter-chips/filter-chips.component';
 import { UserAccount } from 'src/app/_services/user.service';
-import { TableComponent } from 'src/app/components/table/table.component';
-import { JournalPublication } from 'src/app/schemas/journal-publication-schema';
+import { ColumnDefinition, TableComponent } from 'src/app/components/table/table.component';
+import { JournalPublication, PendingPublication } from 'src/app/schemas/journal-publication-schema';
 
 interface TabData {
   ipType: string;
-  data?: JournalPublication[] | [];
+  data?: PendingPublication[] | [];
   count?: number | 0;
   checked?: boolean;
 }
@@ -63,51 +43,18 @@ enum IpTypes {
 
 @Component({
   selector: 'app-journal-publication',
-  standalone: true,
-  imports: [
-    CardModule,
-    ButtonModule,
-    BadgeModule,
-    CheckboxModule,
-    CommonModule,
-    FormsModule,
-    AppLayoutComponent,
-    BreadcrumbsComponent,
-    CapitalizeWordsPipe,
-    PopoverModule,
-    InputTextModule,
-    FloatLabelModule,
-    IconFieldModule,
-    InputIconModule,
-    TabsModule,
-    TagModule,
-    TooltipModule,
-    ConfigurableFilterComponent,
-    FilterChipsComponent,
-    TableComponent,
-    RouterModule,
-    DragDropModule,
-  ],
-  providers: [JournalPublicationService, CapitalizeWordsPipe],
+  standalone:false,
+  providers: [CapitalizeWordsPipe],
   templateUrl: './journal-publication.component.html',
 })
 export class JournalPublicationComponent implements OnInit, OnChanges {
   @ViewChild(ConfigurableFilterComponent)
   configurableFilter!: ConfigurableFilterComponent;
   @Input() totalUsers: number = 591;
-  @Input() activeUsers: number = 12;
-  @Input() inactiveUsers: string = 'JUL 15';
   @Input() unconfirmedUsers: number = 4;
 
-  @Input() totalUsersPercentChange: number = 12;
-  @Input() activeUsersPercentChange: number = 3;
-  @Input() inactiveUsersPercentChange: string = 'Patent Q4';
-  @Input() unconfirmedUsersPercentChange: number = 25;
-
-  @Input() totalUsersPeriod: string = 'Across all IP Types';
-  @Input() activeUsersPeriod: string = 'Ready for publication';
-  @Input() inactiveUsersPeriod: string = 'Most recent';
-  @Input() unconfirmedUsersPeriod: string = 'This Month';
+  @Input() totalUsersPeriod: string = 'Next Publication: 29-10-2025';
+  @Input() unconfirmedUsersPeriod: string = 'Next Publication: 12-11-2025';
 
   @Output() statSelected = new EventEmitter<string>();
 
@@ -121,7 +68,9 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
   selectedStat: string | null = null;
   userStats: any[] = [];
 
-  journalPublicationServices!: JournalPublication[];
+  journalPublicationServices!: PendingPublication[];
+
+  journalData: JournalPublication[];
 
   breadcrumbItems = [];
 
@@ -129,19 +78,29 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
 
   categories!: TabData[];
 
-  loading: boolean = true;
-
   searchBar: string;
 
   groups: any[] = [];
 
   isCardView = false;
 
-  tableColumns = [
-    { field: 'journalCode', header: 'Journal code', sortable: false },
+  showFilesList = false;
+
+  selectedJournal?: JournalPublication;
+
+  selectedFileId;
+
+  selectedRows;
+
+  journalCode: string;
+
+  tableColumns: ColumnDefinition[] = [
+    { display: 'checkbox', headerDisplay: 'headerCheckbox' },
+    { field: 'publicationName', header: 'Publication Name', sortable: true },
+    { field: 'fileId', header: 'File Id', sortable: false },
     {
-      field: 'name',
-      header: 'Name',
+      field: 'templateName',
+      header: 'Template Name',
       sortable: true,
     },
     {
@@ -158,39 +117,26 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
         return this.capitalizeWordsPipe.transform(tag?.value ?? value);
       },
     },
-    { field: 'creationDate', header: 'Created Date', sortable: true },
-    { field: 'publicationDate', header: 'Publication Date', sortable: true },
-    { field: 'files', header: 'Files', sortable: true },
+    { field: 'lastAction', header: 'Last Action', sortable: true },
+    { field: 'lastActionDate', header: 'Last Action Date', sortable: true },
+    { field: 'lastResponsibleUser', header: 'Last Responsible User', sortable: true },
+    { field: 'ageDays', header: 'Age (Days)', sortable: true },
     {
       field: 'actions',
       header: 'Actions',
       display: 'actions',
       actions: [
         {
-          label: 'Edit User',
-          icon: 'pi pi-pencil',
-          action: 'edit',
+          label: 'View',
+          icon: 'pi pi-eye',
+          action: 'view',
           severity: 'info',
-        },
-        {
-          label: 'Deactivate User',
-          icon: 'pi pi-ban',
-          action: 'deactivate',
-          severity: 'warning',
-          visible: (item: UserAccount) => item.isActive === true,
-        },
-        {
-          label: 'Activate User',
-          icon: 'pi pi-check',
-          action: 'activate',
-          severity: 'success',
-          visible: (item: UserAccount) => item.isActive === false,
-        },
+        }
       ],
     },
   ];
 
-  tableData: JournalPublication[] = [];
+  tableData: PendingPublication[] = [];
 
   filterConfigs: FilterConfig[] = [
     {
@@ -259,12 +205,26 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
     private router: Router,
     private route: ActivatedRoute,
     private capitalizeWordsPipe: CapitalizeWordsPipe
-  ) {}
+  ) { }
 
   ngOnInit() {
+    let val = this.journalPublicationService.selectedItems();
+
+    // fallback if service was reset
+    if (typeof val !== 'string' || !val) {
+      val = this.router.getCurrentNavigation()?.extras.state?.['backup'] ?? '';
+      this.journalPublicationService.setSelectedItems(val);
+    }
+
+    // safe assignment
+    if (typeof val === 'string' && val.length) {
+      this.journalCode = val;
+      this.showFilesList = true;
+    }
+    console.log('Final string:', this.journalCode);
     const currentPath = this.router.url;
     const menuItems =
-      this.menuService.generateFeeConfigurationMenu(currentPath);
+      this.menuService.generatePublicationJournalMenu(currentPath);
     this.menuService.updateMenuItems(menuItems);
     this.initUserStats();
     // Optionally, dynamically set menu items here
@@ -275,7 +235,7 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
 
       this.breadcrumbItems = [
         {
-          label: 'Publication Workflow',
+          label: 'Publication',
           routerLink: `/${officeCode}/${langCode}/publication`,
         },
         {
@@ -289,6 +249,13 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
     });
     this.journalPublicationService
       .getJournalPublicationServices()
+      .then((journalData) => {
+        this.journalData = journalData
+        console.log('journalData: ', this.journalData);
+        this.selectedJournal = this.journalData.filter(item => item.journalCode === this.journalCode)[0];
+      });
+    this.journalPublicationService
+      .getPendingPublicationServices()
       .then((journalPublicationData) => {
         this.journalPublicationServices = journalPublicationData.map(
           (item) => ({
@@ -296,7 +263,6 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
             checked: false,
           })
         );
-        this.loading = false;
         console.log(
           'journalPublicationServices: ',
           this.journalPublicationServices
@@ -314,36 +280,18 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
   initUserStats(): void {
     this.userStats = [
       {
-        label: 'LAST PUBLICATION',
-        count: this.inactiveUsers,
-        percentChange: this.inactiveUsersPercentChange,
-        period: this.inactiveUsersPeriod,
-        color: '#3949AB',
-        icon: 'pi pi-calendar',
+        label: 'TOTAL PENDING ACTIONS',
+        count: this.totalUsers,
+        period: this.totalUsersPeriod,
+        color: '#D32F2F', // Indigo color
+        icon: 'pi pi-list-check',
       },
       {
         label: 'TOTAL PENDING FILES',
-        count: this.totalUsers,
-        percentChange: this.totalUsersPercentChange,
-        period: this.totalUsersPeriod,
-        color: '#D32F2F', // Indigo color
-        icon: 'pi pi-file',
-      },
-      {
-        label: 'ACTIVE JOURNALS',
-        count: this.activeUsers,
-        percentChange: this.activeUsersPercentChange,
-        period: this.activeUsersPeriod,
-        color: '#2E7D32',
-        icon: 'pi pi-users',
-      },
-      {
-        label: 'SFTP UPLOADS',
         count: this.unconfirmedUsers,
-        percentChange: this.unconfirmedUsersPercentChange,
         period: this.unconfirmedUsersPeriod,
         color: '#0288D1',
-        icon: 'pi pi-database',
+        icon: 'pi pi-file-edit',
       },
     ];
   }
@@ -376,9 +324,8 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
       case 'dateRange':
         if (Array.isArray(filter.value) && filter.value.length === 2) {
           const [startDate, endDate] = filter.value;
-          return `${
-            filterConfig.label
-          }: ${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`;
+          return `${filterConfig.label
+            }: ${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`;
         }
         return filterConfig.label;
       default:
@@ -402,8 +349,8 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
       this.cdr.detectChanges();
     }
   }
-  getTabData(feeServicesData: JournalPublication[]): TabData[] {
-    const map = new Map<string, JournalPublication[]>();
+  getTabData(feeServicesData: PendingPublication[]): TabData[] {
+    const map = new Map<string, PendingPublication[]>();
 
     // Grouping items by category
     for (const item of feeServicesData) {
@@ -525,19 +472,6 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
     // Don't apply filters or show red dot on change - only track changes
   }
 
-  openCalculator() {
-    console.log('Calculator clicked!');
-    this.route.params.subscribe((params) => {
-      const officeCode =
-        params['officeCode'] || this.ms.getCurrentOffice() || 'default';
-      const langCode = params['langCode'] || 'en';
-      this.journalPublicationService.setSelectedItems(this.categories);
-      this.router.navigate([
-        `/${officeCode}/${langCode}/system-configuration/fee-config/calculator`,
-      ]);
-    });
-  }
-
   onActionClick(action: string, item: UserAccount) {
     switch (action) {
       case 'edit':
@@ -547,6 +481,15 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
       case 'activate':
         break;
     }
+  }
+
+  onJournalChange() {
+    this.selectedJournal = this.journalData
+    .filter(item => item.journalCode === this.journalCode)[0];
+  }
+
+  onAddFileIdToJournal($event) {
+    console.log("$event: ", $event);
   }
 
   onLazyLoad(event: any) {
@@ -576,6 +519,18 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
   toggleView() {
     this.isCardView = !this.isCardView;
     this.cdr.markForCheck();
+  }
+
+  toggleFilesList() {
+    this.showFilesList = !this.showFilesList;
+  }
+
+  deleteItem(item: any) {
+    this.selectedJournal.files = this.selectedJournal.files
+      .filter(i => i.fileId !== item.fileId);
+    if (this.selectedFileId.fileId === item.fileId) {
+      this.selectedFileId = null; // clear selection if deleted
+    }
   }
 
   getTagColorValue = (value: string) => {

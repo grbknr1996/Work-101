@@ -1,24 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { AccordionModule } from 'primeng/accordion';
-import { CheckboxModule } from 'primeng/checkbox';
-import { InputTextModule } from 'primeng/inputtext';
-import { ChipModule } from 'primeng/chip';
-import { ButtonModule } from 'primeng/button';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-unit-actions-assignment',
-  standalone: true,
-  imports: [
-    CommonModule,
-    AccordionModule,
-    CheckboxModule,
-    InputTextModule,
-    ChipModule,
-    ButtonModule,
-    FormsModule,
-  ],
+  standalone: false,
   templateUrl: './units-actions-assignment.component.html',
 })
 export class UnitActionsAssignmentComponent implements OnInit {

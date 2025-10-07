@@ -11,28 +11,12 @@ import {
   FormBuilder,
   FormGroup,
   Validators,
-  ReactiveFormsModule,
 } from '@angular/forms';
 import { officeNotificationsData } from '../../../assets/data';
 import { SidebarMenuService } from '../../_services/sidebar-menu.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PackageStatsComponent } from 'src/app/components/package-stats/package-stats.component';
-import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
-import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
-import { TableComponent } from 'src/app/components/table/table.component';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
-import { TabsModule } from 'primeng/tabs';
-// import { TabViewModule } from 'primeng/tabview';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
-import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService } from 'primeng/api';
-import { CalendarModule } from 'primeng/calendar';
-import { CapitalizeWordsPipe } from 'src/app/_pipes/capitalize-words.pipe';
-import { BadgeModule } from 'primeng/badge';
+
 import {
   FilterConfig,
   FilterValue,
@@ -63,27 +47,7 @@ interface TabData {
 @Component({
   selector: 'app-office-notifications',
   templateUrl: './office-notifications.component.html',
-  imports: [
-    BreadcrumbsComponent,
-    AppLayoutComponent,
-    TableComponent,
-    ConfigurableFilterBarComponent,
-    FloatLabelModule,
-    IconFieldModule,
-    InputIconModule,
-    ButtonModule,
-    TabsModule,
-    //TabViewModule,
-    DialogModule,
-    ConfirmDialogModule,
-    ReactiveFormsModule,
-    CalendarModule,
-    PackageStatsComponent,
-    CapitalizeWordsPipe,
-    BadgeModule,
-  ],
-  providers: [ConfirmationService],
-  standalone: true,
+  standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OfficeNotificationsComponent implements OnInit {

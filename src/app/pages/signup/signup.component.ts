@@ -7,12 +7,6 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { CheckboxModule } from 'primeng/checkbox';
-import { CardModule } from 'primeng/card';
-import { MessageModule } from 'primeng/message';
 import { MechanicsService } from '../../_services/mechanics.service';
 import { AuthService } from '../../_services/auth.service';
 
@@ -23,17 +17,7 @@ interface RoleOption {
 
 @Component({
   selector: 'app-signup',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    ButtonModule,
-    InputTextModule,
-    DropdownModule,
-    CheckboxModule,
-    CardModule,
-    MessageModule,
-  ],
+  standalone: false,
   templateUrl: './signup.component.html',
 })
 export class SignupComponent implements OnInit {

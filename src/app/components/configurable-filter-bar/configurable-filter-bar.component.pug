@@ -1,11 +1,25 @@
 .grid.grid-cols-6.mt-2([style]="disabled? 'display:none' : '' ")
     .col-span-6.grid.grid-cols-12.filter
-      .col-span-4
-        p-floatlabel(variant='on', [style]="showSearchBar? '' :'display:none' ")
+      .col-span-4([style]="showSearchBar? '' :'display:none' ")
+        p-floatlabel(variant='on')
           p-iconfield
             p-inputicon.pi.pi-search
             input.w-full#on_label(pInputText='', [(ngModel)]='searchBar', (input)="onFilterSearch(searchBar)", autocomplete='off')
           label(for='on_label') {{ searchLabel }}
+      .col-span-4([style]="showDateSearchBar? '' :'display:none' ")
+          p-datePicker.w-full.date-calendar(
+            [(ngModel)]="searchBarDate",
+            [placeholder]="dateSearchLabel || 'Select date'",
+            [dateFormat]="searchDateFormat || 'yy-mm-dd'",
+            selectionMode="range",
+            [showIcon]="true",
+            [showButtonBar]="true",
+            [touchUI]="false",
+            [readonlyInput]="true",
+            appendTo="body",
+            (onSelect)="onCalenderSelect($event)",
+            (onClearClick)="onClearEvent($event)"
+          )
       .col-span-8.flex.justify-end.gap-2.filter-icons
         p-button(
           *ngFor="let act of actions",
@@ -38,8 +52,7 @@
           [text]="true",
           (click)="onInfoDetails()",
         )
-
-.mb-8.mt-1.w-full([style]="disabled? 'display:none' : '' ")
+.mt-1.w-full([style]="(disabled || appliedFilters.length == 0)? 'display:none' : '' ")
   app-filter-chips(
     [appliedFilters]="appliedFilters",
     [showClearAll]="filterClearAll",

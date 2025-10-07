@@ -19,6 +19,171 @@
       }
     }
   },
+  "validation": {
+    "errors": {
+      "required": "This field is required",
+      "email": "Please enter a valid email address",
+      "minlength": "This field must be at least {{requiredLength}} characters",
+      "pattern": "Please enter a valid format",
+      "maxlength": "This field must not exceed {{requiredLength}} characters",
+      "min": "Value must be at least {{min}}",
+      "max": "Value must not exceed {{max}}"
+    }
+  },
+  "unauthorized": {
+    "title": "Access Denied",
+    "message1": "Sorry, you don't have permission to access this page.",
+    "message2": "Please contact your administrator if you believe this is an error.",
+    "chip": "Error 403",
+    "back": "Go Back"
+  },
+  "common": {
+    "components": {
+      "modal": {
+        "close": "Close",
+        "information": "Information",
+        "confirm": "Confirm",
+        "cancel": "Cancel",
+        "update": "Update"
+      },
+      "table": {
+        "loading": "Loading...",
+        "noRecordsFound": "No records found",
+        "noDataFound": "No Data Found",
+        "sortBy": "Sort by:",
+        "selectFieldToSort": "Select field to sort",
+        "toggleSortOrder": "Toggle sort order",
+        "clear": "Clear",
+        "search": "Search",
+        "user": "User",
+        "paginationRecord": "Showing {first} to {last} of {totalRecords} entries"
+      },
+      "filter": {
+        "clearAll": "Clear All"
+      },
+      "navigation": {
+        "localHost": "LOCAL HOST"
+      },
+      "app": {
+        "title": "IPAS Central"
+      }
+    }
+  },
+  "dashboard": {
+    "title": "WELCOME TO WIPO IP OFFICE SUITE",
+    "subtitle": "WIPO IP ADMINISTRATION SYSTEM",
+    "permissionError": {
+      "title": "Permission Error",
+      "message": "The requested operation could not be performed due to missing permissions in the user profile.",
+      "retryButton": "TRY AGAIN"
+    }
+  },
+  "renewal": {
+    "title": "Renewal Reminder",
+    "button": {
+      "sendNotification": "Send Notification"
+    },
+    "table": {
+      "emptyMessage": "Please select one IP category"
+    }
+  },
+  "dataCapture": {
+      "title": "Data Capture",
+      "filter": {
+        "search": "Search File Id/ Document Id",
+        "placeHolder": "Select filters to display"
+      }
+    },
+  "notifications": {
+    "acknowledge": {
+      "title": "Acknowledge Notifications",
+      "filter": {
+        "search": "Search File Id",
+        "placeHolder": "Select filters to display"
+      },
+      "dialog": {
+        "header": "Acknowledge Notification",
+        "date": "Acknowledgement Date *",
+        "placeHolder": "Select date"
+      }
+    },
+    "office": {
+      "title": "Office Notifications",
+      "filter": {
+        "search": "Search Document Id OR Reference File/ Document",
+        "placeHolder": "Select filters to display"
+      },
+      "dialog": {
+        "header": "Acknowledge Notification",
+        "date": "Acknowledgement Date *",
+        "placeHolder": "Select date",
+        "information": "Information",
+        "message": "Notification Should be in Approved stage"
+      }
+    },
+    "aripo": {
+      "title": "ARIPO Notifications",
+      "filter": {
+        "search": "Search File Id",
+        "placeHolder": "Select filters to display"
+      },
+      "incoming": {
+        "header": "ARIPO Incoming Notifications"
+      },
+      "outgoing": {
+        "header": "ARIPO Outgoing Notifications"
+      }
+    },
+    "hague": {
+      "title": "Hague Notifications",
+      "filter": {
+        "incomingSearch": "Search IRN/ Bulletin",
+        "outgoingSearch": "Search IRN",
+        "placeHolder": "Select filters to display"
+      },
+      "incoming": {
+        "header": "Hague Incoming Notifications"
+      },
+      "outgoing": {
+        "header": "Hague Outgoing Notifications"
+      }
+    },
+    "madrid": {
+      "title": "Madrid Notifications",
+      "filter": {
+        "incomingSearch": "Search IRN/ Gazette",
+        "outgoingSearch": "Search IRN",        
+        "placeHolder": "Select filters to display"
+      },
+      "incoming": {
+        "header": "Madrid Incoming Notifications"
+      },
+      "outgoing": {
+        "header": "Madrid Outgoing Notifications"
+      }
+    }
+  },
+  "dataService": {
+    "dataSharing": {
+      "title": "Data Sharing",
+      "filter": {
+        "search": "Search File Name",
+        "placeHolder": "Select filters to display"
+      }
+    },
+    "authorityFiles": {
+      "title": "Authority Files",
+      "filter": {
+        "search": "Search Publication Number",
+        "placeHolder": "Select filters to display"
+      }
+    },
+    "selectOffice": {
+      "title": "Select Office",
+      "placeHolder": "Select Office",
+      "button": "Select Office"
+    }
+  },
   "user": {
     "profile": "Profile"
   },
@@ -1759,8 +1924,10 @@
         "D": "Industrial Designs",
         "P": "Patents",
         "T": "Trademarks",
-        "accounted_application": "Accounted Applications",
-        "active_application": "Active Applications"
+        "accounted_application": "ACCOUNTED APPLICATIONS",
+        "active_application": "ACTIVE APPLICATIONS",
+        "_R": "RESIDENTS [DOMESTIC]",
+        "_NR": "NON-RESIDENTS [FOREIGN]"
       }
     }
   }

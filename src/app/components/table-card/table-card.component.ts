@@ -1,5 +1,4 @@
 // table-card.component.ts
-import { CommonModule } from '@angular/common';
 import {
   Component,
   EventEmitter,
@@ -12,17 +11,7 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { MenuItem } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { DropdownModule } from 'primeng/dropdown';
-import { InputTextModule } from 'primeng/inputtext';
-import { MenuModule } from 'primeng/menu';
-import { PaginatorModule } from 'primeng/paginator';
-import { ProgressBarModule } from 'primeng/progressbar';
-import { TagModule } from 'primeng/tag';
-import { AvatarModule } from 'primeng/avatar';
 
 export interface CardColumnDefinition {
   field: string;
@@ -87,20 +76,7 @@ export interface PageEvent {
 @Component({
   selector: 'app-table-card',
   templateUrl: './table-card.component.html',
-  imports: [
-    CommonModule,
-    CardModule,
-    ButtonModule,
-    DropdownModule,
-    MenuModule,
-    TagModule,
-    InputTextModule,
-    FormsModule,
-    PaginatorModule,
-    ProgressBarModule,
-    AvatarModule,
-  ],
-  standalone: true,
+  standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TableCardComponent implements OnInit, OnChanges {
@@ -113,10 +89,10 @@ export class TableCardComponent implements OnInit, OnChanges {
   @Input() globalFilterFields: string[] = [];
   @Input() showCurrentPageReport: boolean = false;
   @Input() currentPageReportTemplate: string =
-    'Showing {first} to {last} of {totalRecords} entries';
+    'common.components.table.paginationRecord';
   @Input() totalRecords: number = 0;
   @Input() dataKey: string = 'id';
-  @Input() emptyMessage: string = 'No records found.';
+  @Input() emptyMessage: string = 'common.components.table.noRecordsFound';
   @Input() showActionsColumn: boolean = false;
   @Input() customCellTemplate: any;
   @Input() actionTemplate: any;
@@ -250,7 +226,6 @@ export class TableCardComponent implements OnInit, OnChanges {
 
   getCurrentData(): any[] {
     const data = this.isSignal(this.data) ? this.data() : this.data;
-    console.log('TableCard - Raw data received:', data);
 
     if (!data || !Array.isArray(data)) {
       console.log('TableCard - No data or invalid data format');
@@ -270,7 +245,6 @@ export class TableCardComponent implements OnInit, OnChanges {
       });
     }
 
-    console.log('TableCard - Processed data:', sortedData);
     return sortedData;
   }
 

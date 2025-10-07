@@ -8,9 +8,7 @@ import {
   SimpleChanges,
   Output,
 } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { PrimeIcons } from "primeng/api";
-import { AnyTxtRecord } from "dns";
+
 
 interface MultipleStat {
   label: string;
@@ -27,8 +25,7 @@ interface MultipleStat {
 @Component({
   selector: "app-multiple-stats",
   templateUrl: "./multiple-stats.component.html",
-  standalone: true,
-  imports: [CommonModule],
+  standalone: false,
 })
 export class MultipleStatsComponent implements OnInit, OnChanges {
 

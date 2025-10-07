@@ -1,0 +1,51 @@
+{
+  "platformCode": "jo",
+  "description": "Total Accounted Origins of active Applications",
+  "applicationStatus": "active",
+  "producedDateTime": "2025-06-19T19:15:00.000Z",
+  "totalQuantity": 185307,
+  "applicationBag": [
+    {
+      "ipCategory": "D",
+      "totalQuantity": 1911,
+      "dataBag": [
+        {
+          "applicationOrigin": "Residents",
+          "count": 1269
+        },
+        {
+          "applicationOrigin": "non-Resident",
+          "count": 642
+        }
+      ]
+    },
+    {
+      "ipCategory": "P",
+      "totalQuantity": 8043,
+      "dataBag": [
+        {
+          "applicationOrigin": "Residents",
+          "count": 956
+        },
+        {
+          "applicationOrigin": "non-Resident",
+          "count": 7087
+        }
+      ]
+    },
+    {
+      "ipCategory": "T",
+      "totalQuantity": 175353,
+      "dataBag": [
+        {
+          "applicationOrigin": "Residents",
+          "count": 72991
+        },
+        {
+          "applicationOrigin": "non-Resident",
+          "count": 102362
+        }
+      ]
+    }
+  ]
+}

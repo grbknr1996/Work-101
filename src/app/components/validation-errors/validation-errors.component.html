@@ -1,10 +1,10 @@
 
 <div class="validation-errors" *ngIf="control?.invalid &amp;&amp; (control?.dirty || control?.touched)">
-  <div class="error-message" *ngIf="control?.errors?.['required']">This field is required</div>
-  <div class="error-message" *ngIf="control?.errors?.['email']">Please enter a valid email address</div>
-  <div class="error-message" *ngIf="control?.errors?.['minlength']">
-    This field must be at least
-     {{ control?.errors?.['minlength'].requiredLength }} characters
-  </div>
-  <div class="error-message" *ngIf="control?.errors?.['pattern']">Please enter a valid format</div>
+  <div class="error-message" *ngIf="control?.errors?.['required']">{{ 'validation.errors.required' | translate }}</div>
+  <div class="error-message" *ngIf="control?.errors?.['email']">{{ 'validation.errors.email' | translate }}</div>
+  <div class="error-message" *ngIf="control?.errors?.['minlength']">{{ 'validation.errors.minlength' | translate: {requiredLength: control?.errors?.['minlength'].requiredLength} }}</div>
+  <div class="error-message" *ngIf="control?.errors?.['pattern']">{{ 'validation.errors.pattern' | translate }}</div>
+  <div class="error-message" *ngIf="control?.errors?.['maxlength']">{{ 'validation.errors.maxlength' | translate: {requiredLength: control?.errors?.['maxlength'].requiredLength} }}</div>
+  <div class="error-message" *ngIf="control?.errors?.['min']">{{ 'validation.errors.min' | translate: {min: control?.errors?.['min'].min} }}</div>
+  <div class="error-message" *ngIf="control?.errors?.['max']">{{ 'validation.errors.max' | translate: {max: control?.errors?.['max'].max} }}</div>
 </div>

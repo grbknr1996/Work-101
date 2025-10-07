@@ -16,8 +16,7 @@ import { ToastService } from 'src/app/_services/toast.service';
 
 @Component({
   selector: 'app-units-tree',
-  standalone: true,
-  imports: [TreeModule, ButtonModule, CommonModule, ConfirmDialogModule],
+  standalone: false,
   templateUrl: './units-tree.component.html',
   providers: [ConfirmationService],
 })
@@ -102,8 +101,6 @@ export class UnitsTreeComponent implements OnInit {
     label: string;
     iconClass: string;
     class: string;
-    color: string;
-    gradient: string;
   } {
     const category = node.data?.category || this.determineUnitCategory(node);
 
@@ -113,32 +110,24 @@ export class UnitsTreeComponent implements OnInit {
           label: 'Division',
           iconClass: 'pi pi-building',
           class: 'division-chip',
-          color: '#1976d2',
-          gradient: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
         };
       case 'Department':
         return {
           label: 'Department',
           iconClass: 'pi pi-users',
           class: 'department-chip',
-          color: '#388e3c',
-          gradient: 'linear-gradient(135deg, #388e3c 0%, #2e7d32 100%)',
         };
       case 'Section':
         return {
           label: 'Section',
           iconClass: 'pi pi-list',
           class: 'section-chip',
-          color: '#f57c00',
-          gradient: 'linear-gradient(135deg, #f57c00 0%, #ef6c00 100%)',
         };
       default:
         return {
           label: 'Unit',
           iconClass: 'pi pi-folder',
           class: 'unit-chip',
-          color: '#666',
-          gradient: 'linear-gradient(135deg, #666 0%, #555 100%)',
         };
     }
   }

@@ -1,10 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-review-step',
-  standalone: true,
-  imports: [CommonModule],
+  standalone: false,
   templateUrl: './review-step.component.html',
 })
 export class ReviewStepComponent {

@@ -7,7 +7,7 @@ import { configuration } from 'src/environments/environment';
 @Component({
   selector: 'app-auth-signout',
   templateUrl: './auth-signout.component.html',
-  imports: [RouterModule],
+  standalone: false
 })
 export class AuthSignoutComponent implements OnInit {
   officeCode = '';

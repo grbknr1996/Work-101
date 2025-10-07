@@ -27,7 +27,7 @@
       )
 
       // Header with Filter Selector and Icons
-      .filter-header
+      .filter-header(*ngIf="showFilterSelector")
         .filter-selector-section
           label.filter-selector-label Display Filters:
           .filter-selector-controls
@@ -126,7 +126,7 @@
                   // Date Input Type
                   .date-option(*ngIf="filter.type === 'date'")
                     label.filter-label {{ filter.label }}
-                    p-calendar.w-full.date-calendar(
+                    p-datePicker.w-full.date-calendar(
                       [formControlName]="filter.key",
                       [placeholder]="filter.placeholder || 'Select date'",
                       [dateFormat]="filter.dateFormat || 'dd/mm/yy'",
@@ -140,7 +140,7 @@
                   // Date Range Input Type
                   .daterange-option(*ngIf="filter.type === 'dateRange'")
                     label.filter-label {{ filter.label }}
-                    p-calendar.w-full.date-range-calendar(
+                    p-datePicker.w-full.date-range-calendar(
                       [formControlName]="filter.key",
                       [placeholder]="filter.placeholder || 'Select date range'",
                       [dateFormat]="filter.dateFormat || 'dd/mm/yy'",

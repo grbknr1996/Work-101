@@ -1,10 +1,5 @@
 import { Component, Input, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
-import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { ValidationErrorsComponent } from 'src/app/components/validation-errors/validation-errors.component';
-
 export interface BasicInfo {
   username: string;
   email: string;
@@ -15,19 +10,13 @@ export interface BasicInfo {
   signaturePicture: string | ArrayBuffer | null;
   signatureType: string;
   userType: boolean; // true = external user, false = office user
-  isActive: boolean; // true = active, false = inactive
+  isActive: boolean;
+  lean; // true = active, false = inactive
 }
 
 @Component({
   selector: 'app-basic-info-form',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    InputTextModule,
-    ToggleSwitchModule,
-    ValidationErrorsComponent,
-  ],
+  standalone: false,
   templateUrl: './basic-info-form.component.html',
 })
 export class BasicInfoFormComponent {

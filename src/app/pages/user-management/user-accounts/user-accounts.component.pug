@@ -89,5 +89,6 @@ app-layout([config]="layoutConfig")
           [showCurrentPageReport]="true",
           [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} users'",
           (actionClick)="onActionClick($event.action, $event.item)",
-          (onLazyLoad)="onLazyLoad($event)"
+          (onLazyLoad)="onLazyLoad($event)",
+          (sortChange)="onSort($event)"
         )

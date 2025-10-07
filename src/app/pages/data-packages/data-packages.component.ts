@@ -5,19 +5,11 @@ import {
   ChangeDetectorRef,
   ViewChild,
 } from '@angular/core';
-import { packagesData } from '../../../assets/data';
 import { SidebarMenuService } from '../../_services/sidebar-menu.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PackageStatsComponent } from 'src/app/components/package-stats/package-stats.component';
-import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
-import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
-import { TableComponent } from 'src/app/components/table/table.component';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
-import { FormsModule } from '@angular/forms';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
-import { ButtonModule } from 'primeng/button';
+import { DataExchangeService } from 'src/app/_services/data-sharing.service';
+
 import {
   FilterConfig,
   FilterValue,
@@ -27,19 +19,7 @@ import {
 @Component({
   selector: 'app-data-packages',
   templateUrl: './data-packages.component.html',
-  imports: [
-    PackageStatsComponent,
-    BreadcrumbsComponent,
-    AppLayoutComponent,
-    TableComponent,
-    FormsModule,
-    ConfigurableFilterBarComponent,
-    FloatLabelModule,
-    IconFieldModule,
-    InputIconModule,
-    ButtonModule,
-  ],
-  standalone: true,
+  standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataPackagesComponent implements OnInit {
@@ -64,55 +44,24 @@ export class DataPackagesComponent implements OnInit {
   breadcrumbItems = [];
 
   // Static Package stats for demo
-  totalPackages = 15420;
-  yearPackages = 1380;
-  monthPackages = 420;
-  weekPackages = 150;
+  monthPackages: string;
+  weekPackages: string;
+  totalPackages: string;
+  yearPackages: string;
   totalPackagesPeriod = "'Since 1999'";
   yearPackagesPeriod = "'Since 1 year'";
   monthPackagesPeriod = "'Since 1 month'";
   weekPackagesPeriod = "'Since 7 days'";
 
-  packageStats = [
-    {
-      label: 'TOTAL COUNT',
-      count: this.totalPackages,
-      period: this.totalPackagesPeriod,
-      color: '#3949AB', // Indigo color
-      icon: 'pi pi-thumbtack',
-    },
-    {
-      label: 'TOTAL IN YEAR',
-      count: this.yearPackages,
-      period: this.yearPackagesPeriod,
-      color: '#2E7D32', // Green color
-      icon: 'pi pi-check-circle',
-    },
-    {
-      label: 'TOTAL IN MONTH',
-      count: this.monthPackages,
-      period: this.monthPackagesPeriod,
-      color: '#022382', // Dark blue color
-      icon: 'pi pi-tag',
-    },
-    {
-      label: 'TOTAL IN WEEK',
-      count: this.weekPackages,
-      period: this.weekPackagesPeriod,
-      color: '#0288D1', // Blue color
-      icon: 'pi pi-spinner',
-    },
-  ];
-
   statSelected;
 
-  globalFilterFields = ['ipType', 'fileName', 'status'];
+  globalFilterFields = ['ipTypeCategory', 'globalZipId', 'status'];
 
   tableColumns = [
-    { field: 'fileName', header: 'File name', sortable: true, },
-    { field: 'ipType', header: 'IP Right Category', sortable: true },
-    { field: 'sharedDate', header: 'Shared Date' },
-    { field: 'processedDate', header: 'Processed Date' },
+    { field: 'globalZipId', header: 'File name', sortable: true, },
+    { field: 'ipTypeCategory', header: 'IP Right Category', sortable: true },
+    { field: 'receivedDate', header: 'Shared Date' },
+    { field: 'updateDate', header: 'Processed Date' },
     {
       field: 'status',
       header: 'Status',
@@ -129,8 +78,8 @@ export class DataPackagesComponent implements OnInit {
         }
       },
     },
-    { field: 'totalCount', header: 'Total Count' },
-    { field: 'processedCount', header: 'Processed Count' },
+    { field: 'statusMessage.totalChildRecords', header: 'Total Count' },
+    { field: 'statusMessage.successCount', header: 'Processed Count' },
     {
       field: 'actions',
       header: 'Actions',
@@ -163,8 +112,8 @@ export class DataPackagesComponent implements OnInit {
       ],
     },
   ];
-
-  tableData = packagesData;
+  packagesData: any;
+  tableData: any;
 
   //  date: Date | undefined;
 
@@ -176,20 +125,20 @@ export class DataPackagesComponent implements OnInit {
 
   officeCodeParam;
 
-  sortField: string = 'fileName';
+  sortField: string = 'globalZipId';
   sortOrder: number = 1;
 
   applicationOfficeCode = '';
 
   filterConfigs: FilterConfig[] = [
     {
-      key: 'fileName',
+      key: 'globalZipId',
       label: 'File Name',
       type: 'text',
       section: 'FILE NAME',
     },
     {
-      key: 'sharedDate',
+      key: 'receivedDate',
       label: 'Shared Date',
       type: 'dateRange',
       placeholder: 'Select date range',
@@ -197,7 +146,7 @@ export class DataPackagesComponent implements OnInit {
       section: 'DATE FILTERS',
     },
     {
-      key: 'processed',
+      key: 'updateDate',
       label: 'Processed',
       type: 'checkbox',
       section: 'STATUS',
@@ -231,13 +180,19 @@ export class DataPackagesComponent implements OnInit {
   partialFilterRemoved = false;
 
   failedFilterRemoved = false;
+  packageStats: {
+    label: string; count: string; period: string; color: string; // Indigo color
+    icon: string;
+  }[];
 
   constructor(
     private menuService: SidebarMenuService,
     private router: Router,
     private route: ActivatedRoute,
     public ms: MechanicsService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private dataService: DataExchangeService
+    
   ) {}
 
   ngOnInit(): void {
@@ -251,6 +206,7 @@ export class DataPackagesComponent implements OnInit {
       console.log('officeCodeParam ', this.officeCodeParam);
 
       this.officeCode = officeCode;
+      console.log('officeCode ', this.officeCode);
 
       if (
         officeCode == 'default' &&
@@ -287,6 +243,64 @@ export class DataPackagesComponent implements OnInit {
       this.cdr.markForCheck();
     });
 
+    this.dataService.getSharedPackages("ph", "2025-08-01", "2025-09-03").subscribe({
+    next: (response) => {
+      // Once the data is fetched, assign it to tableData
+      this.packagesData = response;
+      this.tableData = this.packagesData
+      this.cdr.detectChanges(); // Trigger change detection to update the view
+    },
+    error: (err) => {
+      console.error('Failed to fetch shared packages:', err);
+    }
+  });
+  this.dataService.getStatistics("ph").subscribe({
+    next: (response) => {
+    this.totalPackages= response.totalCount.toString();
+    this.monthPackages= response.lastMonthCount.toString();
+    this.weekPackages= response.lastWeekCount.toString();
+    this.yearPackages= response.lastYearCount.toString();
+    this.packageStats = [
+    {
+      label: 'TOTAL COUNT',
+      count: this.totalPackages,
+      period: this.totalPackagesPeriod,
+      color: '#3949AB', // Indigo color
+      icon: 'pi pi-thumbtack',
+    },
+    {
+      label: 'TOTAL IN YEAR',
+      count: this.yearPackages,
+      period: this.yearPackagesPeriod,
+      color: '#2E7D32', // Green color
+      icon: 'pi pi-check-circle',
+    },
+    {
+      label: 'TOTAL IN MONTH',
+      count: this.monthPackages,
+      period: this.monthPackagesPeriod,
+      color: '#022382', // Dark blue color
+      icon: 'pi pi-tag',
+    },
+    {
+      label: 'TOTAL IN WEEK',
+      count: this.weekPackages,
+      period: this.weekPackagesPeriod,
+      color: '#0288D1', // Blue color
+      icon: 'pi pi-spinner',
+    },
+  ];
+    console.log('response for statistics:', response );
+    this.cdr.detectChanges();
+    },
+    error: (err) => {
+      console.error('Failed to fetch shared packages:', err);
+    }
+
+  });
+
+  
+
     const currentPath = this.router.url;
     const menuItems = this.menuService.generateConfigurationMenu(
       currentPath,
@@ -305,8 +319,8 @@ export class DataPackagesComponent implements OnInit {
     this.permanentFilters();
 
     startDate.setDate(1);
-    this.tableData = packagesData.filter(
-      (item) => new Date(item.sharedDate) >= startDate
+    this.tableData = this.packagesData.filter(
+      (item) => new Date(item.receivedDate) >= startDate
     );
   }
 
@@ -326,7 +340,7 @@ export class DataPackagesComponent implements OnInit {
     }
 
     if(!this.dateFilterRemoved){
-      let dateFilter = {key: 'sharedDate', value: [startDate, today], type: 'dateRange' };
+      let dateFilter = {key: 'receivedDate', value: [startDate, today], type: 'dateRange' };
       this.appliedFilters = [...this.appliedFilters, dateFilter];
     }
 
@@ -394,10 +408,10 @@ export class DataPackagesComponent implements OnInit {
   onFilterApplied(filters: FilterValue[]): void {
     console.log('Filters applied:', filters);
     this.appliedFilters = [];
-    if (filters.some(user => user.key === 'sharedDate')) {
+    if (filters.some(user => user.key === 'receivedDate')) {
       this.dateFilterRemoved = true;
 
-      let dates= filters.filter(v=> v.key==='sharedDate').map(v => v.value);
+      let dates= filters.filter(v=> v.key==='receivedDate').map(v => v.value);
       let sDate = dates[0][0];
 
       let today = new Date();
@@ -448,7 +462,7 @@ export class DataPackagesComponent implements OnInit {
     //this.permanentFilters();
     this.searchBar = '';
     this.configurableFilter.searchBar = '';
-    this.tableData = packagesData;
+    this.tableData = this.packagesData;
     this.filterByStats();
     this.cdr.detectChanges();
   }
@@ -458,7 +472,7 @@ export class DataPackagesComponent implements OnInit {
     //this.permanentFilters();
     this.searchBar = '';
     this.configurableFilter.searchBar = '';
-    this.tableData = packagesData;
+    this.tableData = this.packagesData;
     this.configurableFilter.clearAllFilters();
     this.cdr.detectChanges();
   }
@@ -501,7 +515,7 @@ export class DataPackagesComponent implements OnInit {
       this.failedFilterRemoved = true;
     } else if (filterKey === 'partial') {
       this.partialFilterRemoved = true;
-    } else if (filterKey === 'sharedDate') {
+    } else if (filterKey === 'receivedDate') {
       this.dateFilterRemoved = true;
     }
   }
@@ -531,7 +545,7 @@ export class DataPackagesComponent implements OnInit {
 
   searchByFilter(): void{
     this.tableData = this.tableData.filter((item) =>
-      item.fileName?.toLowerCase().includes(this.searchBar)
+      item.globalZipId?.toLowerCase().includes(this.searchBar)
     );
   }
 
@@ -560,21 +574,21 @@ export class DataPackagesComponent implements OnInit {
     }
 
     if (startDate == null) {
-      this.tableData = packagesData;
+      this.tableData = this.packagesData;
       startDate = new Date(1991, 3, 20);
     } else {
-      this.tableData = packagesData.filter(
-        (item) => new Date(item.sharedDate) >= startDate
+      this.tableData = this.packagesData.filter(
+        (item) => new Date(item.receivedDate) >= startDate
       );
     }
 
-    if (this.appliedFilters.some(user => user.key === 'sharedDate')) {
+    if (this.appliedFilters.some(user => user.key === 'receivedDate')) {
       const updatedFilter = this.appliedFilters.map(item =>
-        item.key === 'sharedDate' ? { ...item, value: [startDate, endDate] } : item
+        item.key === 'receivedDate' ? { ...item, value: [startDate, endDate] } : item
       );
       this.appliedFilters = updatedFilter;
     } else if(!this.dateFilterRemoved) {
-      let dateFilter = {key: 'sharedDate', value: [startDate, endDate], type: 'dateRange' };
+      let dateFilter = {key: 'receivedDate', value: [startDate, endDate], type: 'dateRange' };
       this.appliedFilters = [...this.appliedFilters, dateFilter];
     }
 
@@ -598,7 +612,7 @@ export class DataPackagesComponent implements OnInit {
     if (this.searchBar && this.searchBar.trim()) {
       filtered = filtered.filter(
         (item) =>
-          item.fileName?.toLowerCase().includes(this.searchBar) ||
+          item.globalZipId?.toLowerCase().includes(this.searchBar) ||
           item.status?.toLowerCase().includes(this.searchBar)
       );
     }
@@ -610,19 +624,19 @@ export class DataPackagesComponent implements OnInit {
             const searchTerm = filter.value.toLowerCase().trim();
             filtered = filtered.filter(
               (item) =>
-                item.fileName.toLowerCase().includes(searchTerm) ||
+                item.globalZipId.toLowerCase().includes(searchTerm) ||
                 item.status?.toLowerCase().includes(searchTerm)
             );
           }
           break;
-        case 'fileName':
+        case 'globalZipId':
           if (filter.value != '') {
             filtered = filtered.filter((item) =>
-              item.fileName.includes(filter.value)
+              item.globalZipId.includes(filter.value)
             );
           }
           break;
-        case 'sharedDate':
+        case 'receivedDate':
           if (
             filter.value &&
             Array.isArray(filter.value) &&
@@ -631,7 +645,7 @@ export class DataPackagesComponent implements OnInit {
             const [startDate, endDate] = filter.value;
             if (startDate && endDate) {
               filtered = filtered.filter((item) => {
-                const itemDate = new Date(item.sharedDate);
+                const itemDate = new Date(item.receivedDate);
                 return itemDate >= startDate && itemDate <= endDate;
               });
             }

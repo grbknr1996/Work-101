@@ -3,14 +3,22 @@ div(
   class="validation-errors"
 )
   div(*ngIf="control?.errors?.['required']", class="error-message")
-    | This field is required
+    | {{ 'validation.errors.required' | translate }}
   
   div(*ngIf="control?.errors?.['email']", class="error-message")
-    | Please enter a valid email address
+    | {{ 'validation.errors.email' | translate }}
   
   div(*ngIf="control?.errors?.['minlength']", class="error-message")
-    | This field must be at least
-    |  {{ control?.errors?.['minlength'].requiredLength }} characters
+    | {{ 'validation.errors.minlength' | translate: {requiredLength: control?.errors?.['minlength'].requiredLength} }}
   
   div(*ngIf="control?.errors?.['pattern']", class="error-message")
-    | Please enter a valid format
+    | {{ 'validation.errors.pattern' | translate }}
+  
+  div(*ngIf="control?.errors?.['maxlength']", class="error-message")
+    | {{ 'validation.errors.maxlength' | translate: {requiredLength: control?.errors?.['maxlength'].requiredLength} }}
+  
+  div(*ngIf="control?.errors?.['min']", class="error-message")
+    | {{ 'validation.errors.min' | translate: {min: control?.errors?.['min'].min} }}
+  
+  div(*ngIf="control?.errors?.['max']", class="error-message")
+    | {{ 'validation.errors.max' | translate: {max: control?.errors?.['max'].max} }}

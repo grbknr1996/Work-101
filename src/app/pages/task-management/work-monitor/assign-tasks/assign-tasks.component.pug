@@ -1,0 +1,100 @@
+app-layout
+  app-breadcrumbs([items]="breadcrumbItems")
+
+  .grid.grid-cols-1(class="md:grid-cols-4 gap-4 mb-6")
+    p-card.w-full
+      .font-semibold.text-lg.mb-2 Process
+      .text-sm {{ selectedProcessName }}
+
+    //- Status
+    p-card.w-full
+      .font-semibold.text-lg.mb-2 Status
+      .text-sm {{ stageLabel }}
+
+    p-card.w-full
+      .font-semibold.text-lg.mb-2 Pending Tasks
+      .text-sm {{ tasksToDistribute }}
+
+    //- Total Tasks
+    p-card.w-full
+      .font-semibold.text-lg.mb-2 Total Tasks
+      .text-sm {{ totalTasks }}
+
+  .grid.grid-cols-6.mt-2
+    .col-span-6.grid.grid-cols-12.filter
+      .col-span-4
+        p-floatlabel(variant="on")
+          p-iconfield
+            p-inputicon(class="pi pi-search")
+            input.w-full#on_label(
+              pInputText
+              [(ngModel)]="searchBar",
+              (ngModelChange)="applyFilters(appliedFilters)",
+              autocomplete="off"
+            )
+          label(for="on_label") Search
+
+      .col-span-8.flex.justify-end.gap-2.filter-icons
+        app-configurable-filter(
+          [filters]="filterConfigs",
+          [showClearAll]="false",
+          [showApplyButton]="true",
+          [showFilterSelector]="false",
+          (filterChange)="onFilterChange($event)",
+          (filterCleared)="onFilterCleared()",
+          (filterApplied)="onFilterApplied($event)",
+          (appliedFiltersChange)="onAppliedFiltersChange($event)"
+        )
+
+  app-table(
+    [columns]="tableColumns",
+    [data]="filteredGroups",
+    [paginator]="true",
+    [rows]="10",
+    [totalRecords]="totalRecords",
+    [rowsPerPageOptions]="[10, 25, 50, 100]",
+    [showCurrentPageReport]="true",
+    [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} tasks'",
+    [showClearButton]="false",
+    [dataKey]="'documentId'",
+    (selectionChange)="onSelectionChange($event)",
+    (actionClick)="onActionClick($event.action, $event.item)"
+  )
+
+  div(*ngIf="selectedTasks.length > 0").flex.flex-wrap.items-start.gap-4
+    //- Select User Unit
+    .flex.flex-col.flex-1
+      label.block.text-sm.font-medium.mb-1 Select User Unit
+      p-dropdown.w-full.border.rounded-md(
+        [options]="unitWithMembers",
+        optionLabel="unitName",
+        optionValue="id",
+        placeholder="Select Unit",
+        (onChange)="onUnitChange($event.value)"
+      )
+
+    //- Select User
+    .flex.flex-col.flex-1
+      label.block.text-sm.font-medium.mb-1 Select User
+      p-dropdown.w-full.border.rounded-md(
+        [options]="members"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="Select User"
+        [(ngModel)]="selectedMemberId",
+        (onChange)="selectedMemberId = $event.value"
+      )
+
+    //- Actions
+    .flex.flex-col.flex-1
+      label.block.text-sm.font-medium.mb-1 Actions
+      .flex.gap-2
+        p-button(label="Confirm", (onClick)="Assign()", [disabled]="!selectedMemberId")
+        button.p-button-danger(
+          *ngIf="isAssignedView && selectedTasks.length > 0",
+          pButton,
+          type="button",
+          label="Unassign",
+          icon="pi pi-user-minus",
+          (click)="unassignTasks()"
+        )

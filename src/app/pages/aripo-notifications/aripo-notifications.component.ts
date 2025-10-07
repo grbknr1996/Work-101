@@ -9,17 +9,8 @@ import { aripoNotificationsData, aripoOutgoingNotificationsData,
  } from '../../../assets/data';
 import { SidebarMenuService } from '../../_services/sidebar-menu.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PackageStatsComponent } from 'src/app/components/package-stats/package-stats.component';
-import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
-import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
-import { TableComponent } from 'src/app/components/table/table.component';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
-import { FormsModule } from '@angular/forms';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
-import { ButtonModule } from 'primeng/button';
-import { TabViewModule } from 'primeng/tabview';
+
 import {
   FilterConfig,
   FilterValue,
@@ -29,21 +20,7 @@ import {
 @Component({
   selector: 'app-aripo-notifications',
   templateUrl: './aripo-notifications.component.html',
-  imports: [
-    PackageStatsComponent,
-    BreadcrumbsComponent,
-    AppLayoutComponent,
-    TableComponent,
-    FormsModule,
-    ConfigurableFilterBarComponent,
-    FloatLabelModule,
-    IconFieldModule,
-    InputIconModule,
-    ButtonModule,
-   // TabsModule,
-    TabViewModule,
-  ],
-  standalone: true,
+  standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AripoNotificationsComponent implements OnInit {

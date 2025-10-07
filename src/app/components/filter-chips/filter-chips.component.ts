@@ -1,14 +1,10 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ChipModule } from 'primeng/chip';
-import { ButtonModule } from 'primeng/button';
 import { FilterValue } from '../configurable-filter/configurable-filter.component';
 
 @Component({
   selector: 'app-filter-chips',
   templateUrl: './filter-chips.component.html',
-  standalone: true,
-  imports: [CommonModule, ChipModule, ButtonModule],
+  standalone: false,
 })
 export class FilterChipsComponent {
   @Input() appliedFilters: FilterValue[] = [];

@@ -21,14 +21,17 @@
     [scrollHeight]="scrollHeight",
     [dataKey]="dataKey",
     (onLazyLoad)="onLazyLoad.emit($event)",
-    styleClass="p-datatable-sm"
+    styleClass="p-datatable-sm",
+    selectionMode="multiple",
+    [(selection)]="selectedRows",
+    (selectionChange)="onSelectionChange($event)"
   )
     ng-template(pTemplate="caption")
       .flex-search-bar
         button.p-button-outlined(
           *ngIf="showClearButton",
           pButton,
-          [label]="clearButton",
+          [label]="clearButton|translate",
           icon="pi pi-filter-slash",
           (click)="clear(dt)"
         )
@@ -49,7 +52,7 @@
             pInputText,
             type="text",
             (input)="dt.filterGlobal($event.target.value, 'contains')",
-            [placeholder]="searchPlaceHolder",
+            [placeholder]="searchPlaceHolder|translate",
             *ngIf="showSearchButton"
           )
 
@@ -62,6 +65,9 @@
         )
           .flex.items-center
             | {{ col.header }}
+            p-tableHeaderCheckbox(
+              *ngIf="col.headerDisplay === 'headerCheckbox'"
+            )
             p-sortIcon(
               *ngIf="col.sortable",
               [field]="col.field"
@@ -196,9 +202,11 @@
       pTemplate="body",
       let-rowData
     )
-      tr
+      tr([pSelectableRow]="rowData")
         ng-container(*ngFor="let col of columns")
           td([pTooltip]="col.tooltipText")
+            ng-container(*ngIf="col.display === 'checkbox'")
+              p-tableCheckbox([value]="rowData", [disabled]="getDisabled(rowData, col.field)" )
             // Text Display
             ng-container(*ngIf="col.display === 'text' || !col.display") 
               div([pTooltip]="getTooltipValue(rowData, col.field)", [escape]="false") {{ getValue(rowData, col.field) }}
@@ -246,6 +254,12 @@
               i.pi(
                 [ngClass]="col.iconClass ? col.iconClass(getValue(rowData, col.field)) : ''",
                 style="font-size: 1.5rem"
+              )
+            // Image Display
+            ng-container(*ngIf="col.display === 'image'")
+              img(
+                [src]="getValue(rowData, col.field)",
+                [pTooltip]="getTooltipValue(rowData, col.field)"
               )
             // Boolean Display
             ng-container(*ngIf="col.display === 'boolean'")
@@ -297,4 +311,4 @@
     // Empty message template
     ng-template(pTemplate="emptymessage")
       tr
-        td(colspan="100") {{ emptyMessage }}
+        td(colspan="100") {{ emptyMessage | translate}}

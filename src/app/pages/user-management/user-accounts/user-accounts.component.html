@@ -32,7 +32,7 @@
       </div>
       <!-- Card View-->
       <div *ngIf="isCardView">
-        <app-table-card [columns]="cardColumns" [data]="tableData" [paginator]="true" [rows]="10" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} users'" (actionClick)="onActionClick($event.action, $event.item)" (onLazyLoad)="onLazyLoad($event)"></app-table-card>
+        <app-table-card [columns]="cardColumns" [data]="tableData" [paginator]="true" [rows]="10" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} users'" (actionClick)="onActionClick($event.action, $event.item)" (onLazyLoad)="onLazyLoad($event)" (sortChange)="onSort($event)"></app-table-card>
       </div>
     </div>
   </div>

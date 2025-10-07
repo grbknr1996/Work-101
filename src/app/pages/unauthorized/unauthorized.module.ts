@@ -1,9 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { UnauthorizedComponent } from './unauthorized.component';
+
+import { UnauthorizedComponentRoutingModule } from './unauthorized-routing.module';
+
 
 @NgModule({
-  imports: [CommonModule, RouterModule, UnauthorizedComponent],
+	declarations: [],
+	imports: [
+		CommonModule,
+		UnauthorizedComponentRoutingModule
+	]
 })
-export class UnauthorizedModule {}
+export class UnauthorizedComponentModule { }

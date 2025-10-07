@@ -1,0 +1,47 @@
+.bibliographic-grid
+  div
+    b Registration Number
+    div {{ data.registration.registrationNbr }} ({{ data.registration.registrationDate }})
+  div
+    b Entitlement Date
+    div {{ data.registration.entitlementDate }}
+  div
+    b Expiration Date
+    div {{ data.registration.expirationDate }}
+  div
+    b Expected Renewal
+    div {{ data.registration.expectedRenewalDate }}
+  div
+    b File Number
+    div {{ data.filingData.fileId }} ({{ data.filingData.filingDate }})
+  div
+    b Application Type
+    div {{ data.filingData.applicationType }} / {{ data.filingData.applicationSubtype }}
+  div
+    b Applicant
+    div (IN) IR. FLYMING LIKA : Komplek WAP Blok M/5, RT/RW. 003/007, Gunung Sahari Utara, Sawah Besar
+  div
+    b Status
+    div
+
+  div(*ngFor="let rep of data.representatives")
+    b Representative
+    div ({{ rep.residenceCountryCode }}) {{ rep.addressStreet }}, {{ rep.cityName }} {{ rep.zipCode }}, {{ rep.stateName }} {{ rep.personName }}
+
+  div
+    b Priority Details
+    div
+
+  div
+    b Nice Classes
+    div
+      | Non-medicated cosmetics and toiletry preparations; non-medicated dentifrices; perfumery, essential oils;
+      | bleaching preparations and other substances for laundry use; cleaning, polishing, scouring and abrasive
+      | preparations.
+
+  div
+    b Vienna Classes
+    div {{ data.viennaClasses || 'VCL' }}
+
+h3.notes-header Notes
+p {{ data.notes }}

@@ -3,6 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/_guards/auth.guard';
 import { UserAccountsComponent } from './user-accounts/user-accounts.component';
 import { GroupsComponent } from './groups/groups.component';
+import { CreateUserAccountComponent } from './create-user-account/create-user-account.component';
+import { GroupFormComponent } from './groups/group-form/group-form.component';
+import { UnitsPageComponent } from './units/units-page.component';
+import { CreateUnitComponent } from './units/create-unit/create-unit.component';
 
 const routes: Routes = [
   {
@@ -17,18 +21,12 @@ const routes: Routes = [
   },
   {
     path: 'user-accounts/create-user-account',
-    loadComponent: () =>
-      import('./create-user-account/create-user-account.component').then(
-        (m) => m.CreateUserAccountComponent
-      ),
+    component: CreateUserAccountComponent,
     canActivate: [AuthGuard],
   },
   {
     path: 'user-accounts/edit-user-account/:userId',
-    loadComponent: () =>
-      import('./create-user-account/create-user-account.component').then(
-        (m) => m.CreateUserAccountComponent
-      ),
+    component: CreateUserAccountComponent,
     canActivate: [AuthGuard],
   },
   {
@@ -38,32 +36,22 @@ const routes: Routes = [
   },
   {
     path: 'user-accounts/groups/create',
-    loadComponent: () =>
-      import('./groups/group-form/group-form.component').then(
-        (m) => m.GroupFormComponent
-      ),
+    component: GroupFormComponent,
     canActivate: [AuthGuard],
   },
   {
     path: 'user-accounts/groups/edit/:groupId',
-    loadComponent: () =>
-      import('./groups/group-form/group-form.component').then(
-        (m) => m.GroupFormComponent
-      ),
+    component: GroupFormComponent,
     canActivate: [AuthGuard],
   },
   {
     path: 'units',
-    loadComponent: () =>
-      import('./units/units-page.component').then((m) => m.UnitsPageComponent),
+    component: UnitsPageComponent,
     canActivate: [AuthGuard],
   },
   {
     path: 'units/create',
-    loadComponent: () =>
-      import('./units/create-unit/create-unit.component').then(
-        (m) => m.CreateUnitComponent
-      ),
+    component: CreateUnitComponent,
     canActivate: [AuthGuard],
   },
 ];

@@ -8,11 +8,24 @@ enum IpTypes {
 }
 
 export interface JournalPublication {
-    journalCode: string,
-    name: string,
-    category: `${IpTypes}`,
-    status: string,
-    creationDate: string,
-    publicationDate: string,
-    files: number
+  journalName: string,
+  journalCode: string,
+  templateName: string,
+  category: `${IpTypes}`,
+  status: string,
+  gazetteDate: string,
+  files: {fileId: string}[],
+  actions: string[]
+}
+
+export interface PendingPublication {
+  publicationName: string,
+  fileId: string,
+  category: `${IpTypes}`,
+  templateName: string,
+  lastAction: string,
+  lastActionDate: string,
+  lastResponsibleUser: string,
+  status: string,
+  ageDays: number
 }

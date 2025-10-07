@@ -1,22 +1,12 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { TooltipModule } from 'primeng/tooltip';
-import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { FormsModule } from '@angular/forms';
-import { AppLayoutComponent } from '../../../components/app-layout/app-layout.component';
 import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
-import { BreadcrumbsComponent } from '../../../components/breadcrumbs/breadcrumbs.component';
 import {
   ConfigurableFilterComponent,
   FilterConfig,
   FilterValue,
 } from '../../../components/configurable-filter/configurable-filter.component';
-import { FilterChipsComponent } from '../../../components/filter-chips/filter-chips.component';
 import {
   UserService,
   UserGroup,
@@ -25,30 +15,13 @@ import {
 import { finalize, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import {
-  TableComponent,
   ColumnDefinition,
 } from '../../../components/table/table.component';
 
 @Component({
   selector: 'app-groups',
   templateUrl: './groups.component.html',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ButtonModule,
-    DialogModule,
-    TooltipModule,
-    InputTextModule,
-    DropdownModule,
-
-    AppLayoutComponent,
-    RouterModule,
-    BreadcrumbsComponent,
-    ConfigurableFilterComponent,
-    FilterChipsComponent,
-    TableComponent,
-  ],
+  standalone: false,
 })
 export class GroupsComponent implements OnInit, OnDestroy {
   @ViewChild(ConfigurableFilterComponent)

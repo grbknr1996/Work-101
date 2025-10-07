@@ -2,16 +2,9 @@ import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
-  AppLayoutComponent,
   LayoutConfig,
 } from '../../../components/app-layout/app-layout.component';
-import { BreadcrumbsComponent } from '../../../components/breadcrumbs/breadcrumbs.component';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { TableModule } from 'primeng/table';
-import { TooltipModule } from 'primeng/tooltip';
 import {
-  ModalComponent,
   ModalConfig,
 } from '../../../components/modal/modal.component';
 import { HttpClient } from '@angular/common/http';
@@ -41,17 +34,7 @@ interface RecipientSystem {
 
 @Component({
   selector: 'app-recipient-systems',
-  standalone: true,
-  imports: [
-    CommonModule,
-    AppLayoutComponent,
-    BreadcrumbsComponent,
-    CardModule,
-    ButtonModule,
-    TableModule,
-    TooltipModule,
-    ModalComponent,
-  ],
+  standalone: false,
   providers: [],
   templateUrl: './recipient-systems.component.html',
 })

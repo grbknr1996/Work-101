@@ -8,23 +8,8 @@ import {
   SimpleChanges,
   OnDestroy,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputTextarea } from 'primeng/inputtextarea';
-import { DropdownModule } from 'primeng/dropdown';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { CheckboxModule } from 'primeng/checkbox';
-import { ScrollPanelModule } from 'primeng/scrollpanel';
-import { TooltipModule } from 'primeng/tooltip';
-import { DialogModule } from 'primeng/dialog';
-import { TableModule } from 'primeng/table';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { PaginatorModule } from 'primeng/paginator';
-import { RouterModule, ActivatedRoute, Router } from '@angular/router';
-import { AppLayoutComponent } from '../../../../components/app-layout/app-layout.component';
-import { BreadcrumbsComponent } from '../../../../components/breadcrumbs/breadcrumbs.component';
+
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   ConfigurableStepperComponent,
   StepperStep,
@@ -60,27 +45,7 @@ interface FormData {
 @Component({
   selector: 'app-group-form',
   templateUrl: './group-form.component.html',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ButtonModule,
-    InputTextModule,
-    InputTextarea,
-    DropdownModule,
-    MultiSelectModule,
-    CheckboxModule,
-    ScrollPanelModule,
-    TooltipModule,
-    DialogModule,
-    TableModule,
-    RadioButtonModule,
-    RouterModule,
-    AppLayoutComponent,
-    BreadcrumbsComponent,
-    ConfigurableStepperComponent,
-    PaginatorModule,
-  ],
+  standalone: false
 })
 export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
   @Input() group: UserGroup | null = null;

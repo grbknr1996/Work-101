@@ -6,23 +6,13 @@ import {
   OnInit,
   OnDestroy,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { Router } from '@angular/router';
 // PrimeNG imports
-import { MenubarModule } from 'primeng/menubar';
-import { ButtonModule } from 'primeng/button';
+
+
 import { MenuItem } from 'primeng/api';
-import { DropdownModule } from 'primeng/dropdown';
-import { FormsModule } from '@angular/forms';
-import { BadgeModule } from 'primeng/badge';
-import { OverlayPanelModule } from 'primeng/overlaypanel';
-import { MenuModule } from 'primeng/menu';
-import { instanceType } from '../../utils';
-import { configuration } from '../../../environments/environment';
-import { TranslateModule } from '@ngx-translate/core';
 
 // Components
-import { PlatformSelectionComponent } from '../platform-selection/platform-selection.component';
 
 // Services
 import { MechanicsService } from '../../_services/mechanics.service';
@@ -39,20 +29,7 @@ interface MobileMenuItem {
 
 @Component({
   selector: 'app-navbar',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    MenubarModule,
-    ButtonModule,
-    DropdownModule,
-    FormsModule,
-    BadgeModule,
-    OverlayPanelModule,
-    MenuModule,
-    TranslateModule,
-    PlatformSelectionComponent,
-  ],
+  standalone: false,
   templateUrl: './app-navbar.component.html',
 })
 export class AppNavbarComponent implements OnInit, OnDestroy {

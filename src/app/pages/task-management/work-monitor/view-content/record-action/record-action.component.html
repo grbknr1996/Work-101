@@ -1,0 +1,56 @@
+
+<ng-container *ngIf="showLayout">
+  <app-layout>
+    <ng-container *ngTemplateOutlet="mainContent"></ng-container>
+  </app-layout>
+</ng-container>
+<ng-container *ngIf="!showLayout">
+  <ng-container *ngTemplateOutlet="mainContent"></ng-container>
+</ng-container>
+<ng-template #mainContent>
+  <div class="mb-4">
+    <h2 class="text-lg font-semibold mb-2">Review Checklist</h2>
+    <p-tree [value]="checklistItems" selectionMode="checkbox" [(selection)]="selectedChecklistItems" [propagateSelectionUp]="true" [propagateSelectionDown]="true"></p-tree>
+  </div>
+  <div class="w-full p-4">
+    <h2 class="text-lg font-semibold mb-4">Review Assessment</h2>
+    <div class="grid grid-cols-1 gap-4 mb-4">
+      <div>
+        <label class="block text-sm font-medium mb-1">Technical Assessment</label>
+        <input class="w-full" pInputText [(ngModel)]="assessment" maxlength="200"><small class="text-gray-500">Max 200 characters</small>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Analysis</label>
+        <input class="w-full" pInputText [(ngModel)]="analysis" maxlength="200"><small class="text-gray-500">Max 200 characters</small>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 gap-6 mb-4">
+      <div>
+        <label class="block text-sm font-medium mb-1">Detailed Review Notes</label>
+        <p-editor [(ngModel)]="detailedReviewNotes" [style]="{height:'150px'}"></p-editor>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Recommendations & Next Steps</label>
+        <p-editor [(ngModel)]="recommendations" [style]="{height:'150px'}"></p-editor>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Additional Comments</label>
+        <p-editor [(ngModel)]="additionalComments" [style]="{height:'150px'}"></p-editor>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end mb-4">
+      <div>
+        <label class="block text-sm font-medium mb-1">Next Responsible User Unit</label>
+        <p-dropdown class="w-full" [options]="units" optionLabel="unitName" optionValue="id" [(ngModel)]="selectedUnitId" (onChange)="onUnitChange($event.value)" placeholder="Select Unit"></p-dropdown>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Next Responsible User</label>
+        <p-dropdown class="w-full" [options]="members" optionLabel="name" optionValue="id" [(ngModel)]="selectedMemberId" placeholder="Select User"></p-dropdown>
+      </div>
+      <div class="flex justify-end gap-3">
+        <p-button label="Cancel" icon="pi pi-times" (onClick)="cancelAction()"></p-button>
+        <p-button label="Record" icon="pi pi-check" (onClick)="assignAction()"></p-button>
+      </div>
+    </div>
+  </div>
+</ng-template>

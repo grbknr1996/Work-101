@@ -1,7 +1,7 @@
 app-layout([config]="layoutConfig")
   app-breadcrumbs([items]="breadcrumbItems")
   .user-accounts-header
-    h1 Data Capture
+    h1 {{"dataCapture.title"|translate}}
   app-multiple-stats([multipleStats]="packageStats",
     (statSelected)="onStatSelect($event)",
     [selectedStat]="statSelected")
@@ -10,7 +10,7 @@ app-layout([config]="layoutConfig")
           [showClearAll]="true",
           [showApplyButton]="true",
           [showFilterSelector]="true",
-          [filterSelectorPlaceholder]="'Select filters to display'",
+          [filterSelectorPlaceholder]="'dataCapture.filter.placeHolder'|translate",
           (filterChange)="onFilterChange($event)",
           (filterCleared)="onFilterCleared()",
           (filterApplied)="onFilterApplied($event)",
@@ -18,10 +18,10 @@ app-layout([config]="layoutConfig")
           [showSearchBar]="true",
           [searchBar]="searchBar",
           (filterSearch)="filterSearch($event)",
-          [searchLabel]="'Search File Id/ Document Id'",
+          [searchLabel]="'dataCapture.filter.search'|translate",
           [showDownloadIcon]="false",
           [appliedFilters]="appliedFilters",
-          [clearAllLabel]="'Clear All'",
+          [clearAllLabel]="'common.components.filter.clearAll'|translate",
           [getDisplayValue]="getFilterDisplayValue.bind(this)",
           (chipRemove)="removeFilterChip($event)",
           (clearAll)="clearAllFilters()",

@@ -134,7 +134,7 @@
                   // Text Display
                   ng-container(*ngIf="col.display === 'text' || !col.display") {{ getValue(item, col.field) }}
                   // Date Display
-                  ng-container(*ngIf="col.display === 'date'") {{ getValue(item, col.field) | date : col.dateFormat || 'MM/dd/yyyy' }}
+                  ng-container(*ngIf="col.display === 'date'&& getValue(item, col.field) && getValue(item, col.field) !== '-'") {{ getValue(item, col.field) | date : col.dateFormat || 'MM/dd/yyyy' }}
                   // Currency Display
                   ng-container(*ngIf="col.display === 'currency'") {{ getValue(item, col.field) | currency : col.currency || 'USD' : 'symbol' }}
                   // Tag Display
@@ -174,8 +174,8 @@
   // Empty State
   .empty-state.text-center.p-8(*ngIf="!loading && getCurrentData().length === 0")
     i.pi.pi-inbox(style="font-size: 3rem; color: #6c757d; margin-bottom: 1rem")
-    h3.text-lg.font-semibold.text-gray-700.mb-2 No data found
-    p.text-gray-500 {{ emptyMessage }}
+    h3.text-lg.font-semibold.text-gray-700.mb-2 {{"common.components.table.noDataFound"|translate}}
+    p.text-gray-500 {{ emptyMessage | translate }}
 
   // Pagination
   .pagination-container.mt-6(*ngIf="paginator && totalRecords > 0")
@@ -184,7 +184,7 @@
       [totalRecords]="totalRecords",
       [rowsPerPageOptions]="rowsPerPageOptions",
       [showCurrentPageReport]="showCurrentPageReport",
-      [currentPageReportTemplate]="currentPageReportTemplate",
+      [currentPageReportTemplate]="currentPageReportTemplate|translate",
       (onPageChange)="onPageChange($event)",
       (onLazyLoad)="onLazyLoad.emit($event)"
     )

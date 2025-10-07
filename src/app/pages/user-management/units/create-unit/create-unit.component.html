@@ -75,30 +75,23 @@
         <div class="grid">
           <div class="col-12">
             <label class="block mb-2 font-medium">Permission Sets</label>
-            <p-multiSelect class="w-full" [options]="availablePermissions" [(ngModel)]="selectedPermissions" optionLabel="label" [filter]="true" placeholder="Select Permission Sets" [panelStyle]="{minWidth: '600px', width: '80vw', maxWidth: '700px', maxHeight: '400px', overflowX: 'auto'}" [virtualScroll]="true" [virtualScrollItemSize]="34" [showToggleAll]="true" appendTo="body">
+            <p-multiSelect class="w-full" [options]="availablePermissions" [(ngModel)]="selectedPermissions" (onChange)="onRolePermissionChange($event.value)" optionLabel="label" [filter]="true" placeholder="Select Permission Sets" [panelStyle]="{minWidth: '600px', width: '80vw', maxWidth: '700px', maxHeight: '400px', overflowX: 'auto'}" [virtualScroll]="true" [virtualScrollItemSize]="34" [showToggleAll]="true" appendTo="body">
               <ng-template let-permission pTemplate="item">
-                <div class="flex items-center justify-between p-2" style="min-width: 350px"><span class="font-semibold">{{ permission.label }}</span><span class="text-gray-500 text-xs ml-4 whitespace-nowrap">{{ permission.permissions.length }} permission{{ permission.permissions.length > 1 ? 's' : '' }}</span></div>
+                <div class="flex items-center justify-between p-2" style="min-width: 350px"><span class="font-semibold">{{ permission.label }}</span></div>
               </ng-template>
             </p-multiSelect>
           </div>
           <div class="col-12 mt-4">
             <div class="bg-gray-50 p-4 rounded-lg">
               <h4 class="font-semibold mb-4">Selected Permissions</h4>
-              <div class="grid grid-cols-1 gap-4 md:grid-cols-2.lg:grid-cols-3">
-                <div class="p-4 bg-white rounded-lg shadow-sm" *ngFor="let permission of selectedPermissions">
-                  <div class="font-medium text-lg mb-2">{{ permission.label }}</div>
-                  <div class="text-sm text-gray-600">
-                    <div class="flex flex-wrap gap-2"><span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs" *ngFor="let perm of permission.permissions">{{ perm }}</span></div>
-                  </div>
-                </div>
-              </div>
+              <div class="flex flex-wrap gap-2"><span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs" *ngFor="let permission of selectedPermissions">{{ permission.label }}</span></div>
             </div>
           </div>
         </div>
       </p-tabPanel>
       <!-- Actions Tab-->
       <p-tabPanel header="Actions">
-        <app-unit-actions-assignment [processes]="processes" [selectedActions]="selectedActions" (selectedActionsChange)="onSelectedActionsChange($event)"></app-unit-actions-assignment>
+        <app-process-actions [selectedRole]="selectedRole" [selectedActions]="getSelectedRoleActions()" [isEditMode]="true" [showSummary]="true" (actionsChange)="onActionsChange($event)"></app-process-actions>
       </p-tabPanel>
     </p-tabView>
     <!-- User Selection Dialog-->

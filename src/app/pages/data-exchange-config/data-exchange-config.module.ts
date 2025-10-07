@@ -37,14 +37,6 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    DistributionRulesComponent,
-    AddExclusionRuleComponent,
-    OriginatingOfficesComponent,
-    RecipientSystemsComponent,
-  ],
   exports: [RouterModule],
   providers: [DataExchangeConfigService, provideHttpClient()],
 })

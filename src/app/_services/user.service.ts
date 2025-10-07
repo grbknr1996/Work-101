@@ -99,10 +99,16 @@ export interface UserQueryResponse {
 
 export interface UserQueryParams {
   loginId?: string;
+  userName?: string;
   email?: string;
   isActive?: boolean;
   isLocked?: boolean;
   cognitoStatus?: 'CNF' | 'FCP';
+  statuses?: Array<'active' | 'inactive' | 'unverified'>;
+  creationStartDate?: string;
+  creationEndDate?: string;
+  lastUpdateStartDate?: string;
+  lastUpdateEndDate?: string;
   exactMatchIndicator?: boolean;
   limit?: number;
   offset?: number;
@@ -169,6 +175,7 @@ export interface UserGroupQueryResponse {
 export interface UserGroupQueryParams {
   groupId?: number;
   groupName?: string;
+  status?: Array<string>;
   description?: string;
   isActive?: boolean;
   groupType?: string;
@@ -182,10 +189,10 @@ export interface UserGroupQueryParams {
 }
 
 export interface UserStats {
-  activeUsers: number;
-  inactiveUsers: number;
-  totalUsers: number;
-  unVerifiedUsers: number;
+  activeUserQuantity: number;
+  inactiveUserQuantity: number;
+  totalUserQuantity: number;
+  unverifiedUserQuantity: number;
 }
 
 @Injectable({
@@ -267,6 +274,9 @@ export class UserService {
     if (params.loginId) {
       httpParams = httpParams.set('loginId', params.loginId);
     }
+    if (params.userName) {
+      httpParams = httpParams.set('userName', params.userName);
+    }
     if (params.email) {
       httpParams = httpParams.set('email', params.email);
     }
@@ -301,6 +311,32 @@ export class UserService {
       httpParams = httpParams.set(
         'wipo-platform-code',
         params.wipoPlatformCode
+      );
+    }
+    if (params.statuses && params.statuses.length > 0) {
+      // Add status as comma-separated values: status=active,inactive
+      const statusString = params.statuses.join(',');
+      httpParams = httpParams.set('statuses', statusString);
+    }
+    if (params.creationStartDate) {
+      httpParams = httpParams.set(
+        'creationStartDate',
+        params.creationStartDate
+      );
+    }
+    if (params.creationEndDate) {
+      httpParams = httpParams.set('creationEndDate', params.creationEndDate);
+    }
+    if (params.lastUpdateStartDate) {
+      httpParams = httpParams.set(
+        'lastUpdateStartDate',
+        params.lastUpdateStartDate
+      );
+    }
+    if (params.lastUpdateEndDate) {
+      httpParams = httpParams.set(
+        'lastUpdateEndDate',
+        params.lastUpdateEndDate
       );
     }
 

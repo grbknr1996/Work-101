@@ -8,7 +8,7 @@ import { firstValueFrom } from 'rxjs';
 @Component({
   selector: 'app-sign-in',
   template: '', // Empty template since we're redirecting immediately
-  standalone: true,
+  standalone: false,
 })
 export class SignInComponent implements OnInit {
   officeCode: string;

@@ -1,23 +1,6 @@
 //ANGULAR CORE
 import { Component, OnInit, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router, ActivatedRoute } from '@angular/router';
-
-//ECHART MODULE
-import { EChartsModule } from '../../shared/echarts.module';
-//PRIME MODULE
-import { PrimeNGModule } from '../../shared/prime.module';
-
-//TRANSLATE
-import { TranslateService } from '@ngx-translate/core';
-
-//UTILITY
-import { UtilityService } from 'src/app/_services/utility.service';
-
-//CUSTOM COMPONENTS
-import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
-import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
-import { ChartNavbarComponent } from '../chart-navbar/chart-navbar.component';
+import { ActivatedRoute } from '@angular/router';
 
 //CUSTOM INTERFACES
 import { LayoutConfig } from 'src/app/components/app-layout/app-layout.component';
@@ -27,22 +10,20 @@ interface BreadcrumbItem extends MenuItem {
   label: string;
 }
 
+//SERVICE
+import { ChartService } from '../chart.service';
+
 @Component({
-  standalone: true,
+  standalone: false,
   selector: 'app-trends',
-  imports: [
-    EChartsModule,
-    PrimeNGModule,
-    AppLayoutComponent,
-    BreadcrumbsComponent,
-    ChartNavbarComponent
-  ],
   templateUrl: './trends.component.html'
 })
 export class TrendsComponent implements OnInit {
 
   //DI
   private route = inject(ActivatedRoute);
+  //SERVICE
+  private chartService = inject(ChartService);
 
   //Header | Footer
   layout: LayoutConfig;
@@ -147,6 +128,9 @@ export class TrendsComponent implements OnInit {
         routerLink: `/${officeCode}/${langCode}/statistics/trends`
       }
     ];
+
+    this.chartService.setChartID(1);
+    this.chartService.setChartTheme('TRADEMARKS - TOP 5 TECHNOLOGIES');
 
     this.chartSettings();
 

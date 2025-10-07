@@ -1,0 +1,70 @@
+ng-container(*ngIf="showLayout")
+  app-layout
+    ng-container(*ngTemplateOutlet="mainContent")
+
+ng-container(*ngIf="!showLayout")
+  ng-container(*ngTemplateOutlet="mainContent")
+
+ng-template(#mainContent)
+  .mb-4
+    h2.text-lg.font-semibold.mb-2 Review Checklist
+    p-tree(
+      [value]="checklistItems",
+      selectionMode="checkbox",
+      [(selection)]="selectedChecklistItems",
+      [propagateSelectionUp]="true",
+      [propagateSelectionDown]="true"
+    )
+
+  .w-full.p-4
+    h2.text-lg.font-semibold.mb-4 Review Assessment
+
+    .grid.grid-cols-1.gap-4.mb-4
+      div
+        label.block.text-sm.font-medium.mb-1 Technical Assessment
+        input.w-full(pInputText, [(ngModel)]="assessment", maxlength="200")
+        small.text-gray-500 Max 200 characters
+
+      div
+        label.block.text-sm.font-medium.mb-1 Analysis
+        input.w-full(pInputText, [(ngModel)]="analysis", maxlength="200")
+        small.text-gray-500 Max 200 characters
+
+    .grid.grid-cols-1.gap-6.mb-4
+      div
+        label.block.text-sm.font-medium.mb-1 Detailed Review Notes
+        p-editor([(ngModel)]="detailedReviewNotes", [style]="{height:'150px'}")
+
+      div
+        label.block.text-sm.font-medium.mb-1 Recommendations & Next Steps
+        p-editor([(ngModel)]="recommendations", [style]="{height:'150px'}")
+
+      div
+        label.block.text-sm.font-medium.mb-1 Additional Comments
+        p-editor([(ngModel)]="additionalComments", [style]="{height:'150px'}")
+
+    .grid.grid-cols-1(class="md:grid-cols-3 gap-4 items-end mb-4")
+      div
+        label.block.text-sm.font-medium.mb-1 Next Responsible User Unit
+        p-dropdown.w-full(
+          [options]="units",
+          optionLabel="unitName",
+          optionValue="id",
+          [(ngModel)]="selectedUnitId",
+          (onChange)="onUnitChange($event.value)",
+          placeholder="Select Unit"
+        )
+
+      div
+        label.block.text-sm.font-medium.mb-1 Next Responsible User
+        p-dropdown.w-full(
+          [options]="members",
+          optionLabel="name",
+          optionValue="id",
+          [(ngModel)]="selectedMemberId",
+          placeholder="Select User"
+        )
+
+      .flex.justify-end.gap-3
+        p-button(label="Cancel", icon="pi pi-times", (onClick)="cancelAction()")
+        p-button(label="Record", icon="pi pi-check", (onClick)="assignAction()")

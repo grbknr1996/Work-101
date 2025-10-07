@@ -164,9 +164,18 @@
       .grid
         .col-12
           label.block.mb-2.font-medium Permission Sets
+          // View mode: chips only
+          div(*ngIf="!isEditMode")
+            .flex.flex-wrap.gap-2
+              span.inline-block.bg-blue-100.text-blue-800.px-2.py-1.rounded-full.text-xs(
+                *ngFor="let permission of cleanSelectedRolePermissions"
+              ) {{ permission.label }}
+          // Edit mode: multiselect
           p-multiSelect.w-full(
+            *ngIf="isEditMode",
             [options]="availablePermissions",
             [(ngModel)]="selectedPermissions",
+            (onChange)="onPermissionSelectionChange($event)",
             optionLabel="label",
             [filter]="true",
             placeholder="Select Permission Sets",
@@ -182,27 +191,22 @@
             )
               .flex.items-center.justify-between.p-2(style="min-width: 350px")
                 span.font-semibold {{ permission.label }}
-                span.text-gray-500.text-xs.ml-4.whitespace-nowrap {{ permission.permissions.length }} permission{{ permission.permissions.length > 1 ? 's' : '' }}
         
         .col-12.mt-4
           .bg-gray-50.p-4.rounded-lg
             h4.font-semibold.mb-4 Selected Permissions
-            .grid.grid-cols-1.gap-4(ckass="md:grid-cols-2.lg:grid-cols-3")
-              .p-4.bg-white.rounded-lg.shadow-sm(
-                *ngFor="let permission of selectedPermissions"
-              )
-                .font-medium.text-lg.mb-2 {{ permission.label }}
-                .text-sm.text-gray-600
-                  .flex.flex-wrap.gap-2
-                    span.inline-block.bg-blue-100.text-blue-800.px-2.py-1.rounded-full.text-xs(
-                      *ngFor="let perm of permission.permissions"
-                    ) {{ perm }}
+            .flex.flex-wrap.gap-2
+              span.inline-block.bg-blue-100.text-blue-800.px-2.py-1.rounded-full.text-xs(
+                *ngFor="let permission of isEditMode ? selectedPermissions : cleanSelectedRolePermissions"
+              ) {{ permission.label }}
 
     p-tabPanel(header="Actions")
-      app-unit-actions-assignment(
-        [processes]="processes",
-        [selectedActions]="selectedActions",
-        (selectedActionsChange)="onSelectedActionsChange($event)"
+      app-process-actions(
+        [selectedRole]="selectedRole",
+        [selectedActions]="getSelectedRoleActions()",
+        [isEditMode]="isEditMode",
+        [showSummary]="true",
+        (actionsChange)="onActionsChange($event)"
       )
 
 // No unit selected state
@@ -216,30 +220,4 @@
   h3(style="margin: 0 0 0.5rem 0; color: #888") No Unit Selected
   p(style="margin: 0; font-size: 0.9rem") Select a unit from the tree to view its details
 
-style.
-  /* Mobile responsive styles for role selector */
-  @media (max-width: 768px) {
-    .role-buttons-desktop {
-      display: none !important;
-    }
-    
-    .role-dropdown-mobile {
-      display: block !important;
-      width: 100% !important;
-    }
-    
-    .role-selector {
-      flex-direction: column !important;
-      gap: 0.5rem !important;
-    }
-  }
   
-  @media (min-width: 769px) {
-    .role-buttons-desktop {
-      display: block !important;
-    }
-    
-    .role-dropdown-mobile {
-      display: none !important;
-    }
-  }

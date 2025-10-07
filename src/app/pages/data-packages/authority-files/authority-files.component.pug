@@ -2,7 +2,7 @@ app-layout([config]="layoutConfig")
   app-breadcrumbs([items]="breadcrumbItems")
 
   .user-accounts-header
-    h1 Authority Files
+    h1 {{"dataService.authorityFiles.title"|translate}}
   
   app-package-stats(
     [packageStats]="packageStats",
@@ -15,7 +15,7 @@ app-layout([config]="layoutConfig")
           [showClearAll]="true",
           [showApplyButton]="true",
           [showFilterSelector]="true",
-          [filterSelectorPlaceholder]="'Select filters to display'",
+          [filterSelectorPlaceholder]="'dataService.authorityFiles.filter.placeHolder'|translate",
           (filterChange)="onFilterChange($event)",
           (filterCleared)="onFilterCleared()",
           (filterApplied)="onFilterApplied($event)",
@@ -23,9 +23,9 @@ app-layout([config]="layoutConfig")
           [showSearchBar]="true",
           [searchBar]="searchBar",
           (filterSearch)="filterSearch($event)",
-          [searchLabel]="'Search Publication Number'",
+          [searchLabel]="'dataService.authorityFiles.filter.search'|translate",
           [appliedFilters]="appliedFilters",
-          [clearAllLabel]="'Clear All'",
+          [clearAllLabel]="'common.components.filter.clearAll'|translate",
           [getDisplayValue]="getFilterDisplayValue.bind(this)",
           (chipRemove)="removeFilterChip($event)",
           (clearAll)="clearAllFilters()",

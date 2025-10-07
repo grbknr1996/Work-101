@@ -1,0 +1,55 @@
+// Process Actions Component (Pug)
+.process-actions-wrapper
+  // Summary Section
+  .flex.items-center.justify-between.mb-4(*ngIf="showSummary")
+    label.block.font-medium Process Actions for {{ selectedRole | titlecase }} Role
+    .selected-actions-summary
+      .summary-container
+        span.summary-badge([class.no-selections]="cleanSelectedRoleActions.length === 0")
+          i.mr-1.pi([class.pi-check-circle]="cleanSelectedRoleActions.length > 0", [class.pi-circle]="cleanSelectedRoleActions.length === 0")
+          |  {{ cleanSelectedRoleActions.length }} action{{ cleanSelectedRoleActions.length === 1 ? '' : 's' }} selected
+
+  // Loading State (only in edit mode)
+  .loading-container(*ngIf="isEditMode && !actionsLoaded")
+    .loading-spinner
+      i.pi.pi-spin.pi-spinner(style="font-size: 2rem; color: #3b82f6")
+      p.loading-text Loading process actions...
+
+  // Process Types View/Edit
+  .process-actions-container(*ngIf="!isEditMode || actionsLoaded")
+    // Edit mode: full interactive list
+    ng-container(*ngIf="isEditMode; else readOnlyView")
+      .process-type-card(*ngFor="let processTypeId of getProcessTypeKeys()", [class.expanded]="isProcessTypeExpanded(processTypeId)")
+        .process-type-header((click)="toggleProcessType(processTypeId)")
+          .process-type-info
+            i.pi.mr-2([class.pi-chevron-right]="!isProcessTypeExpanded(processTypeId)", [class.pi-chevron-down]="isProcessTypeExpanded(processTypeId)")
+            span.process-type-name {{ getProcessTypeName(processTypeId) }}
+            span.process-type-count ({{ getProcessTypeActions(processTypeId).length }})
+            span.selected-count(*ngIf="getSelectedCountForProcessType(processTypeId) > 0") - {{ getSelectedCountForProcessType(processTypeId) }} selected
+          .process-type-actions
+            button.p-button-sm.p-button-outlined(pButton, label="Select All", (click)="selectAllActionsForProcessType(processTypeId); $event.stopPropagation()", style="margin-right: 0.5rem")
+            button.p-button-sm.p-button-outlined.p-button-danger(pButton, label="Deselect All", (click)="deselectAllActionsForProcessType(processTypeId); $event.stopPropagation()", style="margin-right: 0.5rem")
+
+        // Actions List
+        .actions-list(*ngIf="isProcessTypeExpanded(processTypeId)")
+          .action-item(*ngFor="let action of getProcessTypeActions(processTypeId)", [class.selected]="isActionSelected(action)", (click)="toggleAction(action)")
+            .action-info
+              span.action-name {{ action.actionTypeName }}
+              span.action-type ({{ action.actionType }})
+            .action-checkbox
+              i.pi([class.pi-check]="isActionSelected(action)", [class.pi-circle]="!isActionSelected(action)")
+
+    // Read-only view: show only selected actions grouped by process type
+    ng-template(#readOnlyView)
+      .process-type-card(*ngFor="let processTypeId of getReadOnlyProcessTypeKeys()")
+        .process-type-header
+          .process-type-info
+            span.process-type-name {{ getProcessTypeName(processTypeId) }}
+            span.selected-count {{ getReadOnlyActionsForProcessType(processTypeId).length }} selected
+        .actions-list
+          .action-item.selected(*ngFor="let action of getReadOnlyActionsForProcessType(processTypeId)")
+            .action-info
+              span.action-name {{ action.actionTypeName }}
+              span.action-type ({{ action.actionType }})
+
+

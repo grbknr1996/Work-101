@@ -12,6 +12,7 @@ export interface UserAssignment {
   login: string;
   userName: string;
   email?: string;
+  userGroup?: UserGroup[];
 }
 
 export interface Section {
@@ -45,6 +46,29 @@ export interface UnitsQueryResponse {
   result: Division[];
 }
 
+export interface Permission {
+  isSystem: boolean;
+  permissionSetId: number;
+  permissionSetName: string;
+}
+
+export interface UserGroup {
+  wipoPlatformCode: string | null;
+  groupId: number;
+  groupName: string;
+  description: string | null;
+  groupType: string;
+  isActive: boolean;
+  creationUserId: string | null;
+  userIdBag: any[];
+  permissions: Permission[] | null;
+  actionTypes?: any[];
+}
+
+export interface UserAssignmentWithGroups extends UserAssignment {
+  userGroup?: UserGroup[];
+}
+
 export interface UnitDetailsResponse {
   query: {
     wipoPlatformCode: string;
@@ -64,34 +88,62 @@ export interface UnitDetailsResponse {
     sectionId?: string;
     departmentUnitId?: string;
     // Common fields
-    headUser: UserAssignment;
-    deputyHeadUsers: UserAssignment[];
-    staffUsers: UserAssignment[];
+    headUser: UserAssignmentWithGroups;
+    deputyHeadUsers: UserAssignmentWithGroups[];
+    staffUsers: UserAssignmentWithGroups[];
+    headUserGroup: UserGroup;
+    deputyHeadGroup: UserGroup;
+    staffGroup: UserGroup;
     creationUserId: string;
     creationDate: string;
+    lastUpdateUserId?: string;
+    lastUpdateDate?: string;
   };
 }
 
 export type UnitCategory = 'Division' | 'Department' | 'Section';
 
 export interface CreateUnitRequest {
-  platformCode: string;
   unitName: string;
-  headUserID: number;
-  deputyHeadUsersId: number[];
-  staffUsersId: number[];
-  createdBy: number;
-  createdDate: string;
-  unitId: number;
   unitCategory: UnitCategory;
   departmentUnitId?: string;
   divisionUnitId?: string;
+  headUserGroupId?: number;
+  deputyHeadUsersGroupId?: number;
+  staffUsersGroupId?: number;
+  headUserID: string;
+  deputyHeadUsersId: string[];
+  staffUsersId: string[];
+  headUserPermissions: number[];
+  deputyHeadUserPermissions: number[];
+  staffUserPermissions: number[];
+  headUserActionType: string[];
+  deputyHeadUserActionType: string[];
+  staffUserActionType: string[];
 }
 
 export interface CreateUnitResponse {
   success: boolean;
   message: string;
   data?: any;
+}
+
+export interface UpdateUnitRequest {
+  unitName: string;
+  unitId: string;
+  unitCategory: UnitCategory;
+  headUserGroupId: number;
+  deputyHeadUsersGroupId: number;
+  staffUsersGroupId: number;
+  headUserID: string;
+  deputyHeadUsersId: string[];
+  staffUsersId: string[];
+  headUserPermissions: number[];
+  deputyHeadUserPermissions: number[];
+  staffUserPermissions: number[];
+  headUserActionType: string[];
+  deputyHeadUserActionType: string[];
+  staffUserActionType: string[];
 }
 
 export interface UnitNode {
@@ -106,6 +158,19 @@ export interface UnitNode {
   };
   permissions: string[];
   actions: string[];
+  rolePermissions: {
+    head: Permission[];
+    deputy: Permission[];
+    staff: Permission[];
+  };
+  roleActions?: {
+    head: any[];
+    deputy: any[];
+    staff: any[];
+  };
+  headUserGroupId?: number;
+  deputyHeadUsersGroupId?: number;
+  staffUsersGroupId?: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -291,16 +356,53 @@ export class UnitsService {
           '';
     }
 
+    // Map permissions from group permissions to individual users
+    const mapUserPermissions = (
+      user: UserAssignmentWithGroups,
+      groupPermissions: Permission[]
+    ): UserAssignment => {
+      return {
+        userId: user.userId,
+        login: user.login,
+        userName: user.userName,
+        email: user.email,
+        userGroup: user.userGroup || [],
+      };
+    };
+
     return {
       id: unitId,
       name: unitName,
       roles: {
-        head: result.headUser ? [result.headUser] : [],
-        deputy: result.deputyHeadUsers || [],
-        staff: result.staffUsers || [],
+        head: result.headUser
+          ? [
+              mapUserPermissions(
+                result.headUser,
+                result.headUserGroup?.permissions || []
+              ),
+            ]
+          : [],
+        deputy:
+          result.deputyHeadUsers?.map((user) =>
+            mapUserPermissions(user, result.deputyHeadGroup?.permissions || [])
+          ) || [],
+        staff:
+          result.staffUsers?.map((user) =>
+            mapUserPermissions(user, result.staffGroup?.permissions || [])
+          ) || [],
       },
       permissions: ['view'], // Default permissions
       actions: ['add', 'remove'], // Default actions
+      rolePermissions: {
+        head: result.headUserGroup?.permissions || [],
+        deputy: result.deputyHeadGroup?.permissions || [],
+        staff: result.staffGroup?.permissions || [],
+      },
+      roleActions: {
+        head: result.headUserGroup?.actionTypes || [],
+        deputy: result.deputyHeadGroup?.actionTypes || [],
+        staff: result.staffGroup?.actionTypes || [],
+      },
       children: [],
     };
   }
@@ -328,6 +430,11 @@ export class UnitsService {
         },
         permissions: ['view'], // Default permissions
         actions: ['add', 'remove'], // Default actions
+        rolePermissions: {
+          head: [],
+          deputy: [],
+          staff: [],
+        },
         children: [],
       };
 
@@ -353,6 +460,11 @@ export class UnitsService {
             },
             permissions: ['view'],
             actions: ['add'],
+            rolePermissions: {
+              head: [],
+              deputy: [],
+              staff: [],
+            },
             children: [],
           };
 
@@ -377,6 +489,11 @@ export class UnitsService {
               },
               permissions: ['view'],
               actions: [],
+              rolePermissions: {
+                head: [],
+                deputy: [],
+                staff: [],
+              },
               children: [],
             }));
           }
@@ -448,12 +565,65 @@ export class UnitsService {
   }
 
   updateUnit(unit: UnitNode): Observable<UnitNode> {
-    // This method should be implemented to call an update API endpoint
-    // For now, return an error indicating it needs to be implemented
-    const error = new Error(
-      'updateUnit method needs to be implemented with proper API call'
+    // Convert UnitNode to UpdateUnitRequest format
+    const updateRequest: UpdateUnitRequest = {
+      unitName: unit.name,
+      unitId: unit.id,
+      unitCategory: this.getUnitCategoryFromId(unit.id),
+      headUserGroupId: unit.headUserGroupId || 0,
+      deputyHeadUsersGroupId: unit.deputyHeadUsersGroupId || 0,
+      staffUsersGroupId: unit.staffUsersGroupId || 0,
+      headUserID: unit.roles.head[0]?.userId
+        ? String(unit.roles.head[0].userId)
+        : '',
+      deputyHeadUsersId: unit.roles.deputy.map((user) => String(user.userId)),
+      staffUsersId: unit.roles.staff.map((user) => String(user.userId)),
+      headUserPermissions: unit.rolePermissions.head.map(
+        (permission) => permission.permissionSetId
+      ),
+      deputyHeadUserPermissions: unit.rolePermissions.deputy.map(
+        (permission) => permission.permissionSetId
+      ),
+      staffUserPermissions: unit.rolePermissions.staff.map(
+        (permission) => permission.permissionSetId
+      ),
+      headUserActionType:
+        unit.roleActions?.head.map((action) => String(action.actionType)) || [],
+      deputyHeadUserActionType:
+        unit.roleActions?.deputy.map((action) => String(action.actionType)) ||
+        [],
+      staffUserActionType:
+        unit.roleActions?.staff.map((action) => String(action.actionType)) ||
+        [],
+    };
+
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) =>
+        this.http.put<CreateUnitResponse>(
+          `${environment.backendUrl}/units/update`,
+          updateRequest,
+          {
+            headers: headers,
+          }
+        )
+      ),
+      switchMap((response) => {
+        if (response.success) {
+          this.toastService.showSuccess('Success', 'Unit updated successfully');
+          // Return the updated unit
+          return of(unit);
+        } else {
+          throw new Error(response.message || 'Failed to update unit');
+        }
+      }),
+      catchError((error) => this.handleError(error, 'Updating unit'))
     );
-    console.error('updateUnit called but not implemented:', { unit });
-    return throwError(() => error);
+  }
+
+  private getUnitCategoryFromId(unitId: string): UnitCategory {
+    if (unitId.startsWith('DIV')) return 'Division';
+    if (unitId.startsWith('DEP')) return 'Department';
+    if (unitId.startsWith('SEC')) return 'Section';
+    return 'Department'; // Default fallback
   }
 }

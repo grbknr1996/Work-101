@@ -13,16 +13,11 @@ import {
 import { MechanicsService } from "../../_services/mechanics.service";
 import { Subscription } from "rxjs";
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
-import { CommonModule } from "@angular/common";
-import { DividerModule } from "primeng/divider";
-import { RouterModule } from "@angular/router";
-import { TranslateModule } from "@ngx-translate/core";
 
 @Component({
   selector: "app-sidebar",
   templateUrl: "./app-sidebar.component.html",
-  standalone: true,
-  imports: [CommonModule, DividerModule, RouterModule, TranslateModule],
+  standalone: false
 })
 export class AppSidebarComponent implements OnInit, OnDestroy {
   @Input() visible: boolean = true;

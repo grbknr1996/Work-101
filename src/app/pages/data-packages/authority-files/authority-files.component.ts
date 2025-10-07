@@ -8,17 +8,8 @@ import {
 import { authorityData } from '../../../../assets/data';
 import { SidebarMenuService } from '../../../_services/sidebar-menu.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
-import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
-import { TableComponent } from 'src/app/components/table/table.component';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
-import { FormsModule } from '@angular/forms';
-import { PackageStatsComponent } from 'src/app/components/package-stats/package-stats.component';
 import { HttpClient } from '@angular/common/http';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
-import { ButtonModule } from 'primeng/button';
 import {
   FilterConfig,
   FilterValue,
@@ -28,19 +19,7 @@ import {
 @Component({
   selector: 'app-authority-files',
   templateUrl: './authority-files.component.html',
-  imports: [
-    BreadcrumbsComponent,
-    AppLayoutComponent,
-    TableComponent,
-    FormsModule,
-    PackageStatsComponent,
-    ConfigurableFilterBarComponent,
-    FloatLabelModule,
-    IconFieldModule,
-    InputIconModule,
-    ButtonModule,
-  ],
-  standalone: true,
+  standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthorityFilesComponent implements OnInit {
@@ -83,6 +62,12 @@ export class AuthorityFilesComponent implements OnInit {
       period: 'Since 2025',
       color: '#0288D1', // Blue color
     },
+    {
+      label: 'Inconsistent Full-text Files',
+      count: 127,
+      period: 'Since 2025',
+      color: '#D32F2F', // Red color
+    },
   ];
 
   statSelected;
@@ -90,6 +75,7 @@ export class AuthorityFilesComponent implements OnInit {
   globalFilterFields = ['publicationNumber'];
 
   tableColumns = [
+    { field: 'image', header: '', display: 'image'},
     {
       field: 'publicationNumber',
       header: 'Publication Number',
@@ -146,6 +132,12 @@ export class AuthorityFilesComponent implements OnInit {
   ];
 
   filterActions = [
+    {
+      label: 'Download Table Data',
+      icon: 'pi pi-arrow-circle-down',
+      action: 'downloadTableData',
+      severity: 'info',
+    },
     {
       label: 'Download Definition File',
       icon: 'pi pi-file-pdf',
@@ -306,6 +298,10 @@ export class AuthorityFilesComponent implements OnInit {
     } else if (this.statSelected == 'Utility Models') {
       this.tableData = authorityData.filter(
         (item) => item.kindCode == 'U1' || item.kindCode == 'U3'
+      );
+    } else if (this.statSelected ==  'Inconsistent Full-text Files') {
+      this.tableData = authorityData.filter(
+        (item) => item.incomplete == 'true'
       );
     } else {
       this.tableData = authorityData;

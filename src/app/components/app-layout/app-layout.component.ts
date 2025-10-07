@@ -1,17 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { MenubarModule } from 'primeng/menubar';
-import { ButtonModule } from 'primeng/button';
-import { SidebarModule } from 'primeng/sidebar';
-import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
-import { AppNavbarComponent } from '../app-navbar/app-navbar.component';
-import { AppSidebarComponent } from '../app-sidebar/app-sidebar.component';
 import { MechanicsService } from '../../_services/mechanics.service';
 import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
-import { ToastComponent } from '../toast/toast.component';
-import { ScrollerComponent } from '../scroller/scroller.component';
+
 
 export interface LayoutConfig {
   appTitle?: string;
@@ -27,21 +18,10 @@ export interface LayoutConfig {
   logo?: string;
 }
 
+
 @Component({
   selector: 'app-layout',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    MenubarModule,
-    ButtonModule,
-    SidebarModule,
-    MenuModule,
-    AppNavbarComponent,
-    AppSidebarComponent,
-    ScrollerComponent,
-    ToastComponent,
-  ],
+  standalone: false,
   templateUrl: './app-layout.component.html',
 })
 export class AppLayoutComponent implements OnInit {

@@ -6,15 +6,11 @@ import {
   ElementRef,
   ViewChild,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-scroller',
-  standalone: true,
-  imports: [CommonModule, ButtonModule],
+  standalone: false,
   templateUrl: './scroller.component.html',
-  styleUrls: ['./scroller.component.css'],
 })
 export class ScrollerComponent implements OnInit, OnDestroy {
   @ViewChild('scrollerButton', { static: false }) scrollerButton!: ElementRef;

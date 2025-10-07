@@ -9,7 +9,7 @@
       <!-- Close Button - Positioned at top right corner-->
       <button class="p-button-text p-button-sm close-button-overlay" pButton type="button" icon="pi pi-times" pTooltip="Close" tooltipPosition="bottom" tooltipStyleClass="text-xs px-2 py-1" (click)="onClose()"></button>
       <!-- Header with Filter Selector and Icons-->
-      <div class="filter-header">
+      <div class="filter-header" *ngIf="showFilterSelector">
         <div class="filter-selector-section">
           <label class="filter-selector-label">Display Filters:</label>
           <div class="filter-selector-controls">
@@ -63,12 +63,12 @@
                   <!-- Date Input Type-->
                   <div class="date-option" *ngIf="filter.type === 'date'">
                     <label class="filter-label">{{ filter.label }}</label>
-                    <p-calendar class="w-full date-calendar" [formControlName]="filter.key" [placeholder]="filter.placeholder || 'Select date'" [dateFormat]="filter.dateFormat || 'dd/mm/yy'" [showClear]="filter.showClear !== false" [showIcon]="true" [showButtonBar]="true" [touchUI]="false" appendTo="body"></p-calendar>
+                    <p-datePicker class="w-full date-calendar" [formControlName]="filter.key" [placeholder]="filter.placeholder || 'Select date'" [dateFormat]="filter.dateFormat || 'dd/mm/yy'" [showClear]="filter.showClear !== false" [showIcon]="true" [showButtonBar]="true" [touchUI]="false" appendTo="body"></p-datePicker>
                   </div>
                   <!-- Date Range Input Type-->
                   <div class="daterange-option" *ngIf="filter.type === 'dateRange'">
                     <label class="filter-label">{{ filter.label }}</label>
-                    <p-calendar class="w-full date-range-calendar" [formControlName]="filter.key" [placeholder]="filter.placeholder || 'Select date range'" [dateFormat]="filter.dateFormat || 'dd/mm/yy'" [showClear]="filter.showClear !== false" selectionMode="range" [showIcon]="true" [showButtonBar]="true" [touchUI]="false" [class.error]="hasDateRangeError(filter.key)" appendTo="body"></p-calendar><small class="error-message" *ngIf="hasDateRangeError(filter.key)">{{ getDateRangeError(filter.key) }}</small>
+                    <p-datePicker class="w-full date-range-calendar" [formControlName]="filter.key" [placeholder]="filter.placeholder || 'Select date range'" [dateFormat]="filter.dateFormat || 'dd/mm/yy'" [showClear]="filter.showClear !== false" selectionMode="range" [showIcon]="true" [showButtonBar]="true" [touchUI]="false" [class.error]="hasDateRangeError(filter.key)" appendTo="body"></p-datePicker><small class="error-message" *ngIf="hasDateRangeError(filter.key)">{{ getDateRangeError(filter.key) }}</small>
                   </div>
                 </div>
               </div>

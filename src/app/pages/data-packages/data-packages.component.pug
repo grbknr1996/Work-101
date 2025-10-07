@@ -1,7 +1,7 @@
-app-layout([config]="layoutConfig")
+app-layout
   app-breadcrumbs([items]="breadcrumbItems")
   .user-accounts-header
-    h1 Data Sharing
+    h1 {{"dataService.dataSharing.title"|translate}}
   app-package-stats([packageStats]="packageStats",
     (statSelected)="onStatSelect($event)",
     [selectedStat]="statSelected")
@@ -10,7 +10,7 @@ app-layout([config]="layoutConfig")
           [showClearAll]="true",
           [showApplyButton]="true",
           [showFilterSelector]="true",
-          [filterSelectorPlaceholder]="'Select filters to display'",
+          [filterSelectorPlaceholder]="'dataService.dataSharing.filter.placeHolder'|translate",
           (filterChange)="onFilterChange($event)",
           (filterCleared)="onFilterCleared()",
           (filterApplied)="onFilterApplied($event)",
@@ -18,7 +18,7 @@ app-layout([config]="layoutConfig")
           [showSearchBar]="true",
           [searchBar]="searchBar",
           (filterSearch)="filterSearch($event)",
-          [searchLabel]="'Search File Name'",
+          [searchLabel]="'dataService.dataSharing.filter.search'|translate",
           [showDownloadIcon]="false",
           [filterClearAll]="false",
           [appliedFilters]="appliedFilters",

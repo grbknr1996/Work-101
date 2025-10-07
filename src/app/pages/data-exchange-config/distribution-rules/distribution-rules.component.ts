@@ -7,19 +7,12 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router, ActivatedRoute } from '@angular/router';
 import {
-  AppLayoutComponent,
+
   LayoutConfig,
 } from '../../../components/app-layout/app-layout.component';
-import { BreadcrumbsComponent } from '../../../components/breadcrumbs/breadcrumbs.component';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { TableModule } from 'primeng/table';
-import { InputTextModule } from 'primeng/inputtext';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
 import { DataExchangeConfigService } from '../../../_services/data-exchange-config.service';
 import { LoadingService } from '../../../_services/loading.service';
 import { ExclusionRule } from '../../../interfaces';
@@ -30,25 +23,11 @@ import {
   FilterValue,
 } from '../../../components/configurable-filter/configurable-filter.component';
 import { ConfigurableFilterComponent } from '../../../components/configurable-filter/configurable-filter.component';
-import { FilterChipsComponent } from '../../../components/filter-chips/filter-chips.component';
 
 @Component({
   selector: 'app-distribution-rules',
   templateUrl: './distribution-rules.component.html',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TableModule,
-    InputTextModule,
-    IconFieldModule,
-    InputIconModule,
-    AppLayoutComponent,
-    BreadcrumbsComponent,
-    CardModule,
-    ButtonModule,
-    ConfigurableFilterComponent,
-    FilterChipsComponent,
-  ],
+  standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DistributionRulesComponent implements OnInit {

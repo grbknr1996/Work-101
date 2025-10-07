@@ -3,10 +3,6 @@ import { Component, OnInit, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
-//ECHART MODULE
-import { EChartsModule } from '../shared/echarts.module';
-//PRIME MODULE
-import { PrimeNGModule } from '../shared/prime.module';
 
 //TRANSLATE
 import { TranslateService } from '@ngx-translate/core';
@@ -14,10 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 //UTILITY
 import { UtilityService } from 'src/app/_services/utility.service';
 
-//CUSTOM COMPONENTS
-import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
-import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
-import { ChartNavbarComponent } from './chart-navbar/chart-navbar.component';
+
 
 //CUSTOM INTERFACES
 import { LayoutConfig } from 'src/app/components/app-layout/app-layout.component';
@@ -31,15 +24,8 @@ interface BreadcrumbItem extends MenuItem {
 import { ChartService } from './chart.service';
 
 @Component({
-  standalone: true,
+  standalone: false,
   selector: 'app-statistics',
-  imports: [
-    EChartsModule,
-    PrimeNGModule,
-    AppLayoutComponent,
-    BreadcrumbsComponent,
-    ChartNavbarComponent
-  ],
   templateUrl: './statistics.component.html'
 })
 export class StatisticsComponent implements OnInit {
@@ -130,7 +116,6 @@ export class StatisticsComponent implements OnInit {
     this.chartOption = {
       textStyle: {
         fontFamily: this.fontFamily,
-        fontSize: 15,
         fontWeight: 500
       },
       grid: {
@@ -147,7 +132,7 @@ export class StatisticsComponent implements OnInit {
           offset: 0,
           axisLabel: {
             fontFamily: this.fontFamily,
-            fontSize: 15,
+            fontSize: 16,
             formatter: (params: string) => {
               return params.split(' ').join('\n');
             }
@@ -159,8 +144,9 @@ export class StatisticsComponent implements OnInit {
           position: 'bottom',
           offset: 80,
           axisLabel: {
+            fontWeight: 'bold',
             fontFamily: this.fontFamily,
-            fontSize: 15
+            fontSize: 18
           }
         }
       ],
@@ -169,7 +155,9 @@ export class StatisticsComponent implements OnInit {
         nameLocation: 'end',
         nameGap: 35,
         nameTextStyle: {
-          fontWeight: 'bold'
+          fontWeight: 'bold',
+          fontFamily: this.fontFamily,
+          fontSize: 16
         },
         type: 'value',
         min: 0,
@@ -177,13 +165,17 @@ export class StatisticsComponent implements OnInit {
         interval: 0,
         axisLabel: {
           fontFamily: this.fontFamily,
-          fontSize: 15
+          fontSize: 16
         }
       },
       legend: {
         data: [],
         selected: [],
-        itemGap: 40
+        itemGap: 40,
+        textStyle: {
+          fontWeight: 'bold',
+          fontSize: 15
+        }
       },
       label: {
         show: true,

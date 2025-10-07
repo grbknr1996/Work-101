@@ -1,13 +1,8 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
-  AppLayoutComponent,
   LayoutConfig,
 } from '../../../components/app-layout/app-layout.component';
-import { BreadcrumbsComponent } from '../../../components/breadcrumbs/breadcrumbs.component';
-import { TableComponent } from '../../../components/table/table.component';
-import { CardModule } from 'primeng/card';
 import { MechanicsService } from '../../../_services/mechanics.service';
 
 interface Office {
@@ -17,14 +12,7 @@ interface Office {
 
 @Component({
   selector: 'app-originating-offices',
-  standalone: true,
-  imports: [
-    CommonModule,
-    AppLayoutComponent,
-    BreadcrumbsComponent,
-    TableComponent,
-    CardModule,
-  ],
+  standalone: false,
   providers: [],
   templateUrl: './originating-offices.component.html',
 })

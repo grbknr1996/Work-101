@@ -9,27 +9,7 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
-
-import { ButtonModule } from 'primeng/button';
-import { BadgeModule } from 'primeng/badge';
-import { TabsModule } from 'primeng/tabs';
-import { CardModule } from 'primeng/card';
-import { PopoverModule } from 'primeng/popover';
-import { CheckboxModule } from 'primeng/checkbox';
-import { FormsModule } from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { TooltipModule } from 'primeng/tooltip';
-import { TagModule } from 'primeng/tag';
-
-import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
-import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
-
+import { ActivatedRoute, Router } from '@angular/router';
 import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
 import { CapitalizeWordsPipe } from 'src/app/_pipes/capitalize-words.pipe';
@@ -39,9 +19,6 @@ import {
   FilterConfig,
   FilterValue,
 } from 'src/app/components/configurable-filter/configurable-filter.component';
-import { FilterChipsComponent } from 'src/app/components/filter-chips/filter-chips.component';
-import { UserAccount } from 'src/app/_services/user.service';
-import { TableComponent } from 'src/app/components/table/table.component';
 import { JournalPublication } from 'src/app/schemas/journal-publication-schema';
 
 interface TabData {
@@ -62,51 +39,17 @@ enum IpTypes {
 
 @Component({
   selector: 'app-online-publication-journal',
-  standalone: true,
-  imports: [
-    CardModule,
-    ButtonModule,
-    BadgeModule,
-    CheckboxModule,
-    CommonModule,
-    FormsModule,
-    AppLayoutComponent,
-    BreadcrumbsComponent,
-    CapitalizeWordsPipe,
-    PopoverModule,
-    InputTextModule,
-    FloatLabelModule,
-    IconFieldModule,
-    InputIconModule,
-    TabsModule,
-    TagModule,
-    TooltipModule,
-    ConfigurableFilterComponent,
-    FilterChipsComponent,
-    TableComponent,
-    RouterModule,
-    DragDropModule,
-  ],
-  providers: [JournalPublicationService, CapitalizeWordsPipe],
+  standalone: false,
+  providers: [CapitalizeWordsPipe],
   templateUrl: './online-publication-journal.component.html',
 })
 export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
   @ViewChild(ConfigurableFilterComponent)
   configurableFilter!: ConfigurableFilterComponent;
-  @Input() totalUsers: number = 591;
-  @Input() activeUsers: number = 12;
-  @Input() inactiveUsers: string = 'JUL 15';
-  @Input() unconfirmedUsers: number = 4;
 
-  @Input() totalUsersPercentChange: number = 12;
-  @Input() activeUsersPercentChange: number = 3;
-  @Input() inactiveUsersPercentChange: string = 'Patent Q4';
-  @Input() unconfirmedUsersPercentChange: number = 25;
-
-  @Input() totalUsersPeriod: string = 'Across all IP Types';
-  @Input() activeUsersPeriod: string = 'Ready for publication';
-  @Input() inactiveUsersPeriod: string = 'Most recent';
-  @Input() unconfirmedUsersPeriod: string = 'This Month';
+  @Input() totalUsers: number = 25;
+  @Input() totalUsersPeriod: string = '2025-09-02';
+  @Input() totalUsersText: string = 'Next Publication: ';
 
   @Output() statSelected = new EventEmitter<string>();
 
@@ -139,10 +82,11 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
   isCardView = false;
 
   tableColumns = [
+    { field: 'journalName', header: 'Journal Name', sortable: false },
     { field: 'journalCode', header: 'Journal code', sortable: false },
     {
-      field: 'name',
-      header: 'Name',
+      field: 'templateName',
+      header: 'Template Name',
       sortable: true,
     },
     {
@@ -159,8 +103,7 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
         return this.capitalizeWordsPipe.transform(tag?.value ?? value);
       },
     },
-    { field: 'creationDate', header: 'Created Date', sortable: true },
-    { field: 'publicationDate', header: 'Publication Date', sortable: true },
+    { field: 'gazetteDate', header: 'Gazette Date', sortable: true },
     { field: 'files', header: 'Files', sortable: true },
     {
       field: 'actions',
@@ -168,30 +111,59 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
       display: 'actions',
       actions: [
         {
-          label: 'Edit User',
+          label: 'Add Publication',
+          icon: 'pi pi-plus',
+          action: 'add',
+          severity: 'info',
+          visible: (item: JournalPublication) => item.actions.includes("add"),
+        },
+        {
+          label: 'Edit Publication',
           icon: 'pi pi-pencil',
           action: 'edit',
           severity: 'info',
+          visible: (item: JournalPublication) => item.actions.includes("edit"),
         },
         {
-          label: 'Deactivate User',
-          icon: 'pi pi-ban',
-          action: 'deactivate',
-          severity: 'warning',
-          visible: (item: UserAccount) => item.isActive === true,
+          label: 'Download PDF',
+          icon: 'pi pi-download',
+          action: 'download',
+          severity: 'info',
+          visible: (item: JournalPublication) => item.actions.includes("download"),
         },
         {
-          label: 'Activate User',
-          icon: 'pi pi-check',
-          action: 'activate',
-          severity: 'success',
-          visible: (item: UserAccount) => item.isActive === false,
+          label: 'Freeze Modifications',
+          icon: 'pi pi-lock',
+          action: 'lock',
+          severity: 'info',
+          visible: (item: JournalPublication) => item.actions.includes("lock"),
         },
+        {
+          label: 'Publish Journal',
+          icon: 'pi pi-send',
+          action: 'send',
+          severity: 'info',
+          visible: (item: JournalPublication) => item.actions.includes("send"),
+        },
+        {
+          label: 'Publish Online',
+          icon: 'pi pi-globe',
+          action: 'globe',
+          severity: 'info',
+          visible: (item: JournalPublication) => item.actions.includes("globe"),
+        },
+        {
+          label: 'View Journal',
+          icon: 'pi pi-eye',
+          action: 'eye',
+          severity: 'info',
+          visible: (item: JournalPublication) => item.actions.includes("eye"),
+        }
       ],
     },
   ];
 
-  tableData: JournalPublication[] = [];
+  tableData: any[] = [];
 
   filterConfigs: FilterConfig[] = [
     {
@@ -265,7 +237,7 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
   ngOnInit() {
     const currentPath = this.router.url;
     const menuItems =
-      this.menuService.generateFeeConfigurationMenu(currentPath);
+      this.menuService.generatePublicationJournalMenu(currentPath);
     this.menuService.updateMenuItems(menuItems);
     this.initUserStats();
     // Optionally, dynamically set menu items here
@@ -276,12 +248,12 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
 
       this.breadcrumbItems = [
         {
-          label: 'Publication Workflow',
+          label: 'Publication',
           routerLink: `/${officeCode}/${langCode}/publication`,
         },
         {
-          label: 'Online Publication',
-          routerLink: `/${officeCode}/${langCode}/publication/online`,
+          label: 'Publication Journals',
+          routerLink: `/${officeCode}/${langCode}/publication/journals`,
         },
       ];
 
@@ -302,8 +274,11 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
           'journalPublicationServices: ',
           this.journalPublicationServices
         );
-        this.categories = this.getTabData(this.journalPublicationServices);
-        this.tableData = this.journalPublicationServices;
+        this.tableData = this.journalPublicationServices
+                  .map(item => ({
+                    ...item,
+                    files: Array.isArray(item.files) ? item.files.length : item.files
+                  }));
       });
   }
 
@@ -315,28 +290,12 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
   initUserStats(): void {
     this.userStats = [
       {
-        label: 'TOTAL PUBLICATIONS',
-        count: this.totalUsers,
-        percentChange: this.totalUsersPercentChange,
-        period: this.totalUsersPeriod,
-        color: '#0288D1', // Indigo color
-        icon: 'pi pi-file',
-      },
-      {
         label: 'PENDING JOURNALS',
-        count: this.activeUsers,
-        percentChange: this.activeUsersPercentChange,
-        period: this.activeUsersPeriod,
+        count: this.totalUsers,
+        periodText: this.totalUsersText,
+        period: this.totalUsersPeriod,
         color: '#D32F2F',
         icon: 'pi pi-clock',
-      },
-      {
-        label: 'PUBLISHED',
-        count: this.unconfirmedUsers,
-        percentChange: this.unconfirmedUsersPercentChange,
-        period: this.unconfirmedUsersPeriod,
-        color: '#2E7D32',
-        icon: 'pi pi-check-circle',
       },
     ];
   }
@@ -394,45 +353,6 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
       this.applyFilters(this.appliedFilters);
       this.cdr.detectChanges();
     }
-  }
-  getTabData(feeServicesData: JournalPublication[]): TabData[] {
-    const map = new Map<string, JournalPublication[]>();
-
-    // Grouping items by category
-    for (const item of feeServicesData) {
-      const category = item.category;
-      if (!map.has(category)) {
-        map.set(category, []);
-      }
-      map.get(category)?.push(item);
-    }
-
-    // Creating TabData from the map
-    let tabData: TabData[] = Array.from(map.entries()).map(
-      ([ipType, data]) => ({
-        ipType,
-        data,
-        count: data.length,
-      })
-    );
-
-    const orderedTypes = [
-      IpTypes.TRADEMARK,
-      IpTypes.PATENT,
-      IpTypes.INDUSTRIAL_DESIGN,
-      IpTypes.COPYRIGHT,
-      IpTypes.POST_FILINGS,
-      IpTypes.GEOGRAPHICAL_INDICATIONS,
-    ];
-
-    tabData = orderedTypes.map((ipType) => ({
-      ipType,
-      data: map.get(ipType) || [],
-      count: map.get(ipType)?.length || 0,
-    }));
-
-    console.log('TabData: ', tabData);
-    return tabData;
   }
 
   onFilterApplied(filters: FilterValue[]): void {
@@ -531,15 +451,28 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
     });
   }
 
-  onActionClick(action: string, item: UserAccount) {
-    switch (action) {
-      case 'edit':
-        break;
-      case 'deactivate':
-        break;
-      case 'activate':
-        break;
-    }
+  onActionClick(action: string, item: JournalPublication) {
+    console.log("action: ", action, " item: ", item);
+    console.log("onActionClick item: ", item);
+    this.route.params.subscribe((params) => {
+      const officeCode =
+        params['officeCode'] || this.ms.getCurrentOffice() || 'default';
+      const langCode = params['langCode'] || 'en';
+
+          switch (action) {
+            case 'edit':
+              this.journalPublicationService.setSelectedItems(item.journalCode);
+              this.router.navigate(
+                [`/${officeCode}/${langCode}/publication/pending`],
+                { state: { backup: item.journalCode } }
+              );
+              break;
+            case 'deactivate':
+              break;
+            case 'activate':
+              break;
+          }
+    });
   }
 
   onLazyLoad(event: any) {

@@ -8,8 +8,7 @@ import {
   SimpleChanges,
   Output,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { PrimeIcons } from 'primeng/api';
+
 
 export interface StatItem {
   key: string;
@@ -29,8 +28,7 @@ export interface UserStatsConfig {
 @Component({
   selector: 'app-user-stats',
   templateUrl: './user-stats.component.html',
-  standalone: true,
-  imports: [CommonModule],
+  standalone: false,
 })
 export class UserStatsComponent implements OnInit, OnChanges {
   @Input() config: UserStatsConfig = { stats: [] };

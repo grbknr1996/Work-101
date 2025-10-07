@@ -1,27 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { CalendarModule } from 'primeng/calendar';
-import { ToastModule } from 'primeng/toast';
-import { TabViewModule } from 'primeng/tabview';
-import { TableModule } from 'primeng/table';
-import { FormsModule } from '@angular/forms';
-import { ButtonGroupModule } from 'primeng/buttongroup';
 import { MessageService } from 'primeng/api';
-import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
-import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
 import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
 import {
   UnitsService,
@@ -32,32 +13,17 @@ import {
 import { UserService } from 'src/app/_services/user.service';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
 import { MenuItem } from 'primeng/api';
-import { UserSelectionDialogComponent } from '../user-selection-dialog/user-selection-dialog.component';
-import { UnitActionsAssignmentComponent } from '../units-actions-asssignment/unit-actions-assignment.component';
 import { CreateUnitStateService } from 'src/app/_services/create-unit-state.service';
+import { PermissionSetService } from 'src/app/_services/permission-set.service';
+import {
+  ProcessActionService,
+  ProcessType,
+  ProcessAction,
+} from 'src/app/_services/process-action.service';
 
 @Component({
   selector: 'app-create-unit',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    CardModule,
-    ButtonModule,
-    InputTextModule,
-    DropdownModule,
-    MultiSelectModule,
-    CalendarModule,
-    ToastModule,
-    TabViewModule,
-    TableModule,
-    ButtonGroupModule,
-    AppLayoutComponent,
-    BreadcrumbsComponent,
-    UserSelectionDialogComponent,
-    UnitActionsAssignmentComponent,
-  ],
+  standalone: false,
   templateUrl: './create-unit.component.html',
   providers: [MessageService],
 })
@@ -73,11 +39,6 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
     { label: 'Department', value: 'Department' },
     { label: 'Section', value: 'Section' },
   ];
-
-  // User options for dropdowns
-  headUserOptions: any[] = [];
-  deputyUserOptions: any[] = [];
-  staffUserOptions: any[] = [];
 
   // Parent unit info for sub-units
   parentUnitInfo: { name: string; category: string } | null = null;
@@ -107,6 +68,32 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
   processes: any[] = [];
   selectedActions: any[] = [];
 
+  // Role-specific permissions
+  rolePermissions = {
+    head: [] as any[],
+    deputy: [] as any[],
+    staff: [] as any[],
+  };
+  permissionsLoaded = false;
+
+  // Role-specific actions
+  roleActions = {
+    head: [] as any[],
+    deputy: [] as any[],
+    staff: [] as any[],
+  };
+  actionsLoaded = false;
+  processTypes: ProcessType | null = null;
+  groupedActions: { [processType: string]: ProcessAction[] } = {};
+  expandedProcessTypes: { [key: string]: boolean } = {};
+
+  // Selected actions display management
+  selectedActionsViewMode: 'summary' | 'detailed' = 'summary';
+  selectedActionsSearchTerm = '';
+  selectedActionsPage = 0;
+  selectedActionsPageSize = 20;
+  selectedActionsFiltered: any[] = [];
+
   // User selection dialog properties
   userSelectionDialogVisible = false;
 
@@ -122,7 +109,9 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
     private menuService: SidebarMenuService,
     private messageService: MessageService,
     private stateService: CreateUnitStateService,
-    private ms: MechanicsService
+    private ms: MechanicsService,
+    private permissionSetService: PermissionSetService,
+    private processActionService: ProcessActionService
   ) {
     this.unitForm = this.fb.group({
       unitName: ['', [Validators.required, Validators.minLength(2)]],
@@ -138,6 +127,9 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
     this.subscribeToState();
     this.restoreState();
     this.handleParentUnit(); // Call this last so it doesn't get overridden by state restoration
+    // Load permissions and actions immediately
+    this.loadPermissionSets();
+    this.loadProcessActions();
     // Don't load users immediately - load them only when user selection dialog is opened
   }
 
@@ -168,33 +160,6 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
       this.layoutConfig = {
         sidebarItems: menuItems,
       };
-    });
-  }
-
-  private loadUsers() {
-    // Load users for dropdowns
-    this.userService.getUserAccounts({ limit: 1000 }).subscribe({
-      next: (response) => {
-        const users = response.userAccounts.map((user) => ({
-          label: `${user.userName} (${user.loginId})`,
-          value: user.userId,
-          userId: user.userId,
-          userName: user.userName,
-          loginId: user.loginId,
-        }));
-
-        this.headUserOptions = [...users];
-        this.deputyUserOptions = [...users];
-        this.staffUserOptions = [...users];
-      },
-      error: (error) => {
-        console.error('Error loading users:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to load users',
-        });
-      },
     });
   }
 
@@ -315,32 +280,83 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
   private submitForm() {
     const formValue = this.unitForm.value;
 
-    // Format date as YYYY-DD-MM (matching API format)
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const day = String(currentDate.getDate()).padStart(2, '0');
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const formattedDate = `${year}-${day}-${month}`;
-
-    // Get platform code from mechanics service
-    const platformCode = this.ms.getCurrentOffice() || 'vc';
+    // Validate that we have at least one head user
+    if (!this.assignedUsers.head[0]?.userId) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Validation Error',
+        detail: 'Please select a head user for the unit',
+      });
+      return;
+    }
 
     const createRequest: CreateUnitRequest = {
-      platformCode: platformCode,
       unitName: formValue.unitName,
-      headUserID: this.assignedUsers.head[0]?.userId || 0,
-      deputyHeadUsersId: this.assignedUsers.deputy.map((user) => user.userId),
-      staffUsersId: this.assignedUsers.staff.map((user) => user.userId),
-      createdBy: 909, // This should come from current user service
-      createdDate: formattedDate,
-      unitId: Math.floor(Math.random() * 10000), // This should be generated by backend
       unitCategory: formValue.unitCategory,
-      departmentUnitId: formValue.departmentUnitId || undefined,
-      divisionUnitId: formValue.divisionUnitId || undefined,
+      departmentUnitId: formValue.departmentUnitId || '',
+      divisionUnitId: formValue.divisionUnitId || '',
+      // group IDs omitted for creation per requirement
+      headUserID: String(this.assignedUsers.head[0].userId),
+      deputyHeadUsersId: this.assignedUsers.deputy.map((user) =>
+        String(user.userId)
+      ),
+      staffUsersId: this.assignedUsers.staff.map((user) => String(user.userId)),
+      headUserPermissions: this.rolePermissions.head.map((p) =>
+        Number(p.value || p)
+      ),
+      deputyHeadUserPermissions: this.rolePermissions.deputy.map((p) =>
+        Number(p.value || p)
+      ),
+      staffUserPermissions: this.rolePermissions.staff.map((p) =>
+        Number(p.value || p)
+      ),
+      headUserActionType: this.roleActions.head.map((action) => {
+        console.log('Head action:', action);
+        const actionType = action?.actionType;
+        if (!actionType) {
+          console.error('Head action missing actionType:', action);
+          return '';
+        }
+        return String(actionType);
+      }),
+      deputyHeadUserActionType: this.roleActions.deputy.map((action) => {
+        console.log('Deputy action:', action);
+        const actionType = action?.actionType;
+        if (!actionType) {
+          console.error('Deputy action missing actionType:', action);
+          return '';
+        }
+        return String(actionType);
+      }),
+      staffUserActionType: this.roleActions.staff.map((action) => {
+        console.log('Staff action:', action);
+        const actionType = action?.actionType;
+        if (!actionType) {
+          console.error('Staff action missing actionType:', action);
+          return '';
+        }
+        return String(actionType);
+      }),
     };
+
+    // Validate the request data
+    if (!createRequest.headUserID || createRequest.headUserID === '0') {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Validation Error',
+        detail: 'Please select a valid head user for the unit',
+      });
+      return;
+    }
 
     // Log the request for debugging
     console.log('Creating unit with request:', createRequest);
+    console.log('Assigned users:', this.assignedUsers);
+    console.log('Role permissions:', this.rolePermissions);
+    console.log('Role actions:', this.roleActions);
+    console.log('Head role actions details:', this.roleActions.head);
+    console.log('Deputy role actions details:', this.roleActions.deputy);
+    console.log('Staff role actions details:', this.roleActions.staff);
 
     this.unitsService.createUnit(createRequest).subscribe({
       next: (response) => {
@@ -395,10 +411,385 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
   // Permission and action methods
   onSelectedPermissionsChange(permissions: any[]) {
     this.selectedPermissions = permissions;
+    this.onRolePermissionChange(permissions);
   }
 
   onSelectedActionsChange(actions: any[]) {
     this.selectedActions = actions;
+  }
+
+  loadPermissionSets() {
+    if (this.permissionsLoaded) {
+      console.log('Permission sets already loaded:', this.availablePermissions);
+      return; // Already loaded
+    }
+
+    console.log('Loading permission sets...');
+    // Load permission sets from API
+    this.permissionSetService.getPermissionSets().subscribe({
+      next: (permissionSets) => {
+        this.availablePermissions = permissionSets.map((ps) => ({
+          label: ps.permissionSetName,
+          value: ps.permissionSetId,
+        }));
+        this.permissionsLoaded = true;
+        console.log(
+          'Permission sets loaded from API:',
+          this.availablePermissions
+        );
+      },
+      error: (error) => {
+        console.error('Failed to load permission sets:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load permission sets',
+        });
+        this.permissionsLoaded = true;
+      },
+    });
+  }
+
+  onTabChange(event: any) {
+    this.selectedTabIndex = event.index;
+
+    // Load permission sets when Permissions tab is selected
+    if (event.index === 1) {
+      // Permissions tab is at index 1
+      this.loadPermissionSets();
+    }
+    // Load actions when Actions tab is selected
+    if (event.index === 2) {
+      // Actions tab is at index 2
+      this.loadProcessActions();
+    }
+  }
+
+  // Role-specific permission methods
+  getSelectedRolePermissions(): any[] {
+    return this.rolePermissions[this.selectedRole];
+  }
+
+  onRolePermissionChange(permissions: any[]) {
+    this.rolePermissions[this.selectedRole] = permissions;
+    console.log(`Updated ${this.selectedRole} permissions:`, permissions);
+    // Save to state service for persistence
+    this.stateService.updateRolePermissions(this.rolePermissions);
+  }
+
+  removeRolePermission(role: 'head' | 'deputy' | 'staff', index: number) {
+    if (index >= 0 && index < this.rolePermissions[role].length) {
+      const removedPermission = this.rolePermissions[role][index];
+      this.rolePermissions[role].splice(index, 1);
+      // Save to state service for persistence
+      this.stateService.updateRolePermissions(this.rolePermissions);
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: `Removed ${removedPermission.label} permission from ${role} role`,
+      });
+    }
+  }
+
+  get cleanSelectedRolePermissions(): any[] {
+    return this.rolePermissions[this.selectedRole].filter(
+      (permission) => permission != null && permission != undefined
+    );
+  }
+
+  // Process action methods
+  loadProcessActions() {
+    if (this.actionsLoaded) {
+      return; // Already loaded
+    }
+
+    // Load process types and actions
+    this.processActionService.getProcessTypes().subscribe({
+      next: (processTypes) => {
+        this.processTypes = processTypes;
+        console.log('Process types loaded:', processTypes);
+      },
+      error: (error) => {
+        console.error('Failed to load process types:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load process types',
+        });
+      },
+    });
+
+    this.processActionService.getGroupedActions().subscribe({
+      next: (groupedActions) => {
+        this.groupedActions = groupedActions;
+        this.actionsLoaded = true;
+        console.log('Grouped actions loaded:', groupedActions);
+      },
+      error: (error) => {
+        console.error('Failed to load process actions:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load process actions',
+        });
+        this.actionsLoaded = true;
+      },
+    });
+  }
+
+  getProcessTypeName(processTypeId: string): string {
+    // Handle null or empty process type
+    if (!processTypeId || processTypeId === 'null' || processTypeId === '') {
+      return 'Note Actions';
+    }
+
+    if (this.processTypes && this.processTypes.map) {
+      return this.processTypes.map[processTypeId] || processTypeId;
+    }
+    return processTypeId;
+  }
+
+  getProcessTypeActions(processTypeId: string): ProcessAction[] {
+    return this.groupedActions[processTypeId] || [];
+  }
+
+  getProcessTypeKeys(): string[] {
+    const keys = Object.keys(this.groupedActions);
+    // Sort keys to put null/empty process types at the end
+    return keys.sort((a, b) => {
+      if (!a || a === 'null' || a === '') return 1;
+      if (!b || b === 'null' || b === '') return -1;
+      return a.localeCompare(b);
+    });
+  }
+
+  toggleProcessType(processTypeId: string) {
+    this.expandedProcessTypes[processTypeId] =
+      !this.expandedProcessTypes[processTypeId];
+  }
+
+  isProcessTypeExpanded(processTypeId: string): boolean {
+    return this.expandedProcessTypes[processTypeId] || false;
+  }
+
+  // Role-specific action methods
+  getSelectedRoleActions(): any[] {
+    return this.roleActions[this.selectedRole];
+  }
+
+  onRoleActionChange(actions: any[]) {
+    this.roleActions[this.selectedRole] = actions;
+    console.log(`Updated ${this.selectedRole} actions:`, actions);
+    // Save to state service for persistence
+    this.stateService.updateRoleActions(this.roleActions);
+  }
+
+  removeRoleAction(role: 'head' | 'deputy' | 'staff', index: number) {
+    if (index >= 0 && index < this.roleActions[role].length) {
+      const removedAction = this.roleActions[role][index];
+      this.roleActions[role].splice(index, 1);
+      // Save to state service for persistence
+      this.stateService.updateRoleActions(this.roleActions);
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: `Removed ${removedAction.actionTypeName} action from ${role} role`,
+      });
+    }
+  }
+
+  get cleanSelectedRoleActions(): any[] {
+    return this.roleActions[this.selectedRole].filter(
+      (action) => action != null && action != undefined
+    );
+  }
+
+  // Selected actions display management methods
+  getSelectedActionsSummary(): {
+    total: number;
+    byProcessType: { [key: string]: number };
+  } {
+    const actions = this.cleanSelectedRoleActions;
+    const summary = {
+      total: actions.length,
+      byProcessType: {} as { [key: string]: number },
+    };
+
+    actions.forEach((action) => {
+      const processType = action.processType || 'null';
+      summary.byProcessType[processType] =
+        (summary.byProcessType[processType] || 0) + 1;
+    });
+
+    return summary;
+  }
+
+  getSelectedActionsForProcessType(processTypeId: string): any[] {
+    return this.cleanSelectedRoleActions.filter(
+      (action) => (action.processType || 'null') === processTypeId
+    );
+  }
+
+  getSelectedCountForProcessType(processTypeId: string): number {
+    const actions = this.getProcessTypeActions(processTypeId);
+    return actions.filter((action) => this.isActionSelected(action)).length;
+  }
+
+  // Handle actions change from the process actions component
+  onActionsChange(actions: any[]) {
+    this.roleActions[this.selectedRole] = actions;
+    console.log('Actions changed for', this.selectedRole, ':', actions);
+    // Save to state service for persistence
+    this.stateService.updateRoleActions(this.roleActions);
+  }
+
+  toggleSelectedActionsView() {
+    this.selectedActionsViewMode =
+      this.selectedActionsViewMode === 'summary' ? 'detailed' : 'summary';
+    if (this.selectedActionsViewMode === 'detailed') {
+      this.updateSelectedActionsFilter();
+    }
+  }
+
+  updateSelectedActionsFilter() {
+    const actions = this.cleanSelectedRoleActions;
+    if (!this.selectedActionsSearchTerm.trim()) {
+      this.selectedActionsFiltered = actions;
+    } else {
+      const searchTerm = this.selectedActionsSearchTerm.toLowerCase();
+      this.selectedActionsFiltered = actions.filter(
+        (action) =>
+          action.actionTypeName.toLowerCase().includes(searchTerm) ||
+          action.actionType.toLowerCase().includes(searchTerm)
+      );
+    }
+    this.selectedActionsPage = 0; // Reset to first page
+  }
+
+  onSelectedActionsSearch() {
+    this.updateSelectedActionsFilter();
+  }
+
+  getSelectedActionsPaginated(): any[] {
+    const start = this.selectedActionsPage * this.selectedActionsPageSize;
+    const end = start + this.selectedActionsPageSize;
+    return this.selectedActionsFiltered.slice(start, end);
+  }
+
+  getSelectedActionsTotalPages(): number {
+    return Math.ceil(
+      this.selectedActionsFiltered.length / this.selectedActionsPageSize
+    );
+  }
+
+  onSelectedActionsPageChange(page: number) {
+    this.selectedActionsPage = page;
+  }
+
+  getSelectedActionsPageNumbers(): number[] {
+    const totalPages = this.getSelectedActionsTotalPages();
+    const pages: number[] = [];
+    const maxVisible = 5;
+
+    if (totalPages <= maxVisible) {
+      for (let i = 0; i < totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      const start = Math.max(0, this.selectedActionsPage - 2);
+      const end = Math.min(totalPages - 1, start + maxVisible - 1);
+
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+    }
+
+    return pages;
+  }
+
+  removeActionFromChip(action: any) {
+    const index = this.cleanSelectedRoleActions.indexOf(action);
+    if (index > -1) {
+      this.removeRoleAction(this.selectedRole, index);
+      this.updateSelectedActionsFilter();
+    }
+  }
+
+  selectAllActionsForProcessType(processTypeId: string) {
+    const actions = this.getProcessTypeActions(processTypeId);
+    const currentActions = [...this.roleActions[this.selectedRole]];
+
+    // Add actions that aren't already selected
+    actions.forEach((action) => {
+      if (
+        !currentActions.some(
+          (existing) => existing.actionType === action.actionType
+        )
+      ) {
+        currentActions.push({
+          actionType: action.actionType,
+          actionTypeName: action.actionTypeName,
+          processType: action.processType,
+        });
+      }
+    });
+
+    this.roleActions[this.selectedRole] = currentActions;
+    this.stateService.updateRoleActions(this.roleActions);
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: `Added all actions for ${this.getProcessTypeName(processTypeId)}`,
+    });
+  }
+
+  deselectAllActionsForProcessType(processTypeId: string) {
+    const actions = this.getProcessTypeActions(processTypeId);
+    const actionTypes = actions.map((action) => action.actionType);
+
+    // Remove actions that belong to this process type
+    this.roleActions[this.selectedRole] = this.roleActions[
+      this.selectedRole
+    ].filter((action) => !actionTypes.includes(action.actionType));
+
+    this.stateService.updateRoleActions(this.roleActions);
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: `Removed all actions for ${this.getProcessTypeName(
+        processTypeId
+      )}`,
+    });
+  }
+
+  isActionSelected(action: ProcessAction): boolean {
+    return this.roleActions[this.selectedRole].some(
+      (selected) => selected.actionType === action.actionType
+    );
+  }
+
+  toggleAction(action: ProcessAction) {
+    const currentActions = [...this.roleActions[this.selectedRole]];
+    const existingIndex = currentActions.findIndex(
+      (existing) => existing.actionType === action.actionType
+    );
+
+    if (existingIndex > -1) {
+      // Remove action
+      currentActions.splice(existingIndex, 1);
+    } else {
+      // Add action
+      currentActions.push({
+        actionType: action.actionType,
+        actionTypeName: action.actionTypeName,
+        processType: action.processType,
+      });
+    }
+
+    this.roleActions[this.selectedRole] = currentActions;
+    this.stateService.updateRoleActions(this.roleActions);
   }
 
   onSubmit() {
@@ -485,8 +876,8 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
   // User assignment methods
   openUserSelectionDialog() {
-    // Load users only when dialog is opened (lazy loading)
-    this.loadUsersIfNeeded();
+    // User selection dialog handles its own user loading with correct limit
+    // No need to preload users here
 
     // For head role, if there's already a user, clear it first to allow changing
     if (this.selectedRole === 'head' && this.assignedUsers.head.length > 0) {
@@ -498,13 +889,6 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
     }
 
     this.userSelectionDialogVisible = true;
-  }
-
-  private loadUsersIfNeeded() {
-    // Only load users if not already loaded
-    if (this.headUserOptions.length === 0) {
-      this.loadUsers();
-    }
   }
 
   onUsersSelected(selectedUsers: UserAssignment[]) {
@@ -542,6 +926,8 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
       this.assignedUsers = { ...state.assignedUsers };
       this.parentUnitInfo = state.parentUnitInfo;
+      this.rolePermissions = { ...state.rolePermissions };
+      this.roleActions = { ...state.roleActions };
 
       console.log('Parent unit info after state update:', this.parentUnitInfo);
 
@@ -557,6 +943,8 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
     this.assignedUsers = { ...currentState.assignedUsers };
     this.parentUnitInfo = currentState.parentUnitInfo;
+    this.rolePermissions = { ...currentState.rolePermissions };
+    this.roleActions = { ...currentState.roleActions };
 
     console.log('Parent unit info after restore:', this.parentUnitInfo);
 

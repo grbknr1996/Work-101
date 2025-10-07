@@ -3,14 +3,10 @@ import { Component, OnInit, inject, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
-//PRIME MODULE
-import { PrimeNGModule } from '../../shared/prime.module';
 
 //TRANSLATE
 import { TranslateService } from '@ngx-translate/core';
-
 //CUSTOM COMPONENT
-import { ConfigurableFilterComponent } from 'src/app/components/configurable-filter/configurable-filter.component';
 
 //CUSTOM INTERFACE
 import { FilterConfig } from 'src/app/components/configurable-filter/configurable-filter.component';
@@ -19,12 +15,8 @@ import { FilterConfig } from 'src/app/components/configurable-filter/configurabl
 import { ChartService } from '../chart.service';
 
 @Component({
-  standalone: true,
+  standalone: false,
   selector: 'app-chart-navbar',
-  imports: [
-    PrimeNGModule,
-    ConfigurableFilterComponent
-  ],
   templateUrl: 'chart-navbar.component.html'
 })
 export class ChartNavbarComponent implements OnInit {
@@ -55,10 +47,7 @@ export class ChartNavbarComponent implements OnInit {
   setChartCommons(data: any) {
     this.chartTopics.forEach((item: any) => {
       this.router.navigate([data]);
-      if (data === item.route) {
-        this.chartService.setChartID(item.id);
-        this.chartService.setChartTheme('TRADEMARKS - TOP 5 TECHNOLOGIES');
-      }
+      //COMMONS SET IN CHART'S ngOnInit()
     })
   }
   reset() { this.onReset.emit(); }

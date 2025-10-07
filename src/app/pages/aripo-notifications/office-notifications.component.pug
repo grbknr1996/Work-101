@@ -1,7 +1,7 @@
 app-layout([config]="layoutConfig")
   app-breadcrumbs([items]="breadcrumbItems")
   .user-accounts-header
-    h1 Office Notifications
+    h1 {{"notifications.office.title"|translate}}
   app-package-stats([packageStats]="packageStats",
     (statSelected)="onStatSelect($event)",
     [selectedStat]="statSelected")
@@ -10,7 +10,7 @@ app-layout([config]="layoutConfig")
           [showClearAll]="true",
           [showApplyButton]="true",
           [showFilterSelector]="true",
-          [filterSelectorPlaceholder]="'Select filters to display'",
+          [filterSelectorPlaceholder]="'notifications.office.filter.placeHolder'|translate",
           (filterChange)="onFilterChange($event)",
           (filterCleared)="onFilterCleared()",
           (filterApplied)="onFilterApplied($event)",
@@ -18,10 +18,10 @@ app-layout([config]="layoutConfig")
           [showSearchBar]="true",
           [searchBar]="searchBar",
           (filterSearch)="filterSearch($event)",
-          [searchLabel]="'Search Document Id OR Reference File/ Document'",
+          [searchLabel]="'notifications.office.filter.search'|translate",
           [showDownloadIcon]="false",
           [appliedFilters]="appliedFilters",
-          [clearAllLabel]="'Clear All'",
+          [clearAllLabel]="'common.components.filter.clearAll'|translate",
           [getDisplayValue]="getFilterDisplayValue.bind(this)",
           (chipRemove)="removeFilterChip($event)",
           (clearAll)="clearAllFilters()",
@@ -42,7 +42,7 @@ app-layout([config]="layoutConfig")
       | }
   
   p-dialog(
-    header="Acknowledge Notification",
+    [header]="'notifications.office.dialog.header'|translate",
     [(visible)]="showEditDialog",
     [modal]="true",
     [style]="{ width: '400px' }",
@@ -51,11 +51,11 @@ app-layout([config]="layoutConfig")
   )
     form([formGroup]="acknowledgeForm", class="office-form")
       .form-field
-        label(for="acknowledge") Acknowledgement Date *
+        label(for="acknowledge") {{"notifications.office.dialog.date"|translate}}
         p-calendar.w-full.date-calendar(
                     id="acknowledge"
                     [formControlName]="acknowledgeDate"
-                    [placeholder]="'Select date'",
+                    [placeholder]="'notifications.acknowledge.dialog.placeHolder'|translate",
                     [dateFormat]="'yy/mm/dd'",
                     [showClear]="true",
                     [showIcon]="true",
@@ -66,34 +66,31 @@ app-layout([config]="layoutConfig")
       button(
         pButton,
         type="button",
-        label="Cancel",
+        [label]="'common.components.modal.cancel'|translate",
         class="p-button-text",
         (click)="onCancel()"
       )
       button(
         pButton,
         type="button",
-        label="Update",
+        [label]="'common.components.modal.update'|translate",
         (click)="onSaveOffice()",
       )
 
   p-dialog(
-    header="Information",
+    [header]="'notifications.office.dialog.information'|translate",
     [(visible)]="showInfoDialog",
     [modal]="true",
     [style]="{ width: '400px' }",
     [draggable]="false",
     [resizable]="false"
   )
-    div Notification Should be in Approved stage     
+    div {{"notifications.office.dialog.message"|translate}}     
     ng-template(pTemplate="footer")
       button(
         pButton,
         type="button",
-        label="Cancel",
+        [label]="'common.components.modal.cancel'|translate",
         class="p-button-text",
         (click)="onCancel()"
       )
-
-  // Confirmation Dialog
-  p-confirmDialog 

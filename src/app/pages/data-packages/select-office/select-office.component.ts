@@ -6,11 +6,7 @@ import {
 } from '@angular/core';
 import { SidebarMenuService } from '../../../_services/sidebar-menu.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
-import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
-import { Select } from 'primeng/select';
-import { FormsModule } from '@angular/forms';
 
 interface Office {
     name: string;
@@ -20,29 +16,10 @@ interface Office {
 @Component({
   selector: 'app-select-office',
   templateUrl: './select-office.component.html',
-  imports: [
-    BreadcrumbsComponent,
-    AppLayoutComponent,
-    FormsModule,
-    Select
-  ],
-  standalone: true,
+  standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectOfficeComponent implements OnInit {
-  layoutConfig = {
-    appTitle: 'WIPO IPAS Central',
-    showHeader: true,
-    showSidebar: true,
-    headerItems: [],
-    sidebarItems: [],
-    footerText: 'WIPO',
-    fixedHeader: true,
-    fixedSidebar: true,
-    sidebarCollapsed: false,
-    theme: 'light',
-    logo: '',
-  };
 
   breadcrumbItems = [];
 

@@ -2,15 +2,16 @@
 <app-layout>
   <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
   <div class="flex justify-between">
-    <h1 class="pt-4 text-xl ml-4 col-span-3">Online Publication Journal</h1>
-    <p-button class="mb-3" label="New Journal" icon="pi pi-plus"></p-button>
+    <h1 class="pt-4 text-xl ml-4 col-span-3">Publication Journals</h1>
   </div>
   <div class="mb-4">
     <div class="user-stats-container">
-      <div class="user-stat-card" *ngFor="let stat of userStats" [class.selected]="selectedStat === stat.label" (click)="selectStat(stat.label)">
+      <div class="user-stat-card fixed-width" *ngFor="let stat of userStats" [class.selected]="selectedStat === stat.label" (click)="selectStat(stat.label)">
         <div class="stat-header"><span class="stat-label" [style.color]="stat.color">{{ stat.label }}</span><i [class]="stat.icon" [style.color]="stat.color"></i></div>
-        <div class="stat-content"><span class="stat-count" [style.color]="stat.color">{{ stat.count }}</span><span class="stat-change"><i [class]="stat.percentChange &gt;= 0 ? 'pi pi-arrow-up' : isString(stat.percentChange) ? '' : 'pi pi-arrow-down'" [style.color]="stat.percentChange &gt;= 0 ? '#16a34a' : '#dc2626'"></i><span [style.color]="stat.percentChange &gt;= 0 ? '#16a34a' : isString(stat.percentChange) ? '#990efc' : '#dc2626'">{{ stat.percentChange }}{{ isString(stat.percentChange) ? '' : '%' }}</span></span></div>
-        <div class="stat-period">{{ stat.period }}</div>
+        <div class="stat-content"><span class="stat-count" [style.color]="stat.color">{{ stat.count }}</span></div>
+        <div class="flex justify-normal">
+          <div class="mr-1">{{ stat.periodText }} </div><b class="p-0">{{stat.period}}</b>
+        </div>
       </div>
     </div>
   </div>
@@ -26,92 +27,16 @@
         </p-floatlabel>
       </div>
       <div class="col-span-8 flex justify-end gap-2 filter-icons">
-        <button class="p-button-text p-button-sm" pButton type="button" [icon]="isCardView ? 'pi pi-list' : 'pi pi-th-large'" (click)="toggleView()" pTooltip="Toggle between table and card view" style="color: var(--p-button-outlined-secondary-color)"></button>
         <app-configurable-filter [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'Select filters to display'" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>
-        <p-button icon="pi pi-file-pdf" [outlined]="true" [text]="true" style="font-size: 1.5rem"></p-button>
-        <p-button icon="pi pi-info-circle" [outlined]="true" [text]="true" style="font-size: 1.5rem"></p-button>
       </div>
     </div>
   </div>
   <div class="mb-8 mt-1 w-full">
     <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="true" [clearAllLabel]="'Clear All'" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-filter-chips>
-    <div class="col-span-6">
-      <p-tabs value="trademark">
-        <p-tablist>@for (category of categories; track category.ipType) {
-          <p-tab [value]="category.ipType">
-            <div class="category-label">{{ category.ipType | capitalizeWords }}</div>
-            <p-badge [value]="category.count"></p-badge>
-          </p-tab>}
-        </p-tablist>
-        <p-tabpanels>@for (category of categories; track category.ipType) {
-          <p-tabpanel [value]="category.ipType">
-            <p-card class="w-full grid grid-cols-12">@for (service of category.data; track service.name) {
-              <div class="col-span-3 mt-3" *ngIf="isCardView">
-                <p-card class="w-full">
-                  <ng-template #title="">{{ service.name }}</ng-template>
-                  <div class="flex justify-between">
-                    <div class="mb-2"><i class="ml-1 mb-1 pi pi-clock" style="color: red">Next Publication:</i>
-                      <p-tag severity="warn" value="45 pending files"></p-tag>
-                    </div>
-                    <div class="mb-2"><i class="pi pi-calendar" style="color: green">Last Published:</i>
-                      <div class="font-bold">2024-01-15</div>
-                      <div class="text-base">Patent Gazette &#40;PG-2024-01&#41;</div>
-                    </div>
-                  </div>
-                </p-card>
-              </div>}
-              <div class="col-span-12">
-                <p-tabs value="pending">
-                  <p-tablist>
-                    <p-tab value="pending">Pending &#40;2&#41;</p-tab>
-                    <p-tab value="published">Published &#40;4&#41;</p-tab>
-                  </p-tablist>
-                  <p-tabpanels>
-                    <p-tabpanel class="grid grid-cols-12 gap-3" value="pending">@for (service of category.data; track service.name) {
-                      <div class="col-span-3 mt-3" *ngIf="isCardView">
-                        <p-card class="w-full">
-                          <ng-template #title="">Patent Gazette</ng-template>
-                          <div class="flex justify-between">
-                            <div class="mb-2"><i class="ml-1 mb-1 pi pi-clock" style="color: red">Next Publication:</i>
-                              <p-tag severity="warn" value="45 pending files"></p-tag>
-                            </div>
-                            <div class="mb-2"><i class="pi pi-calendar" style="color: green">Last Published:</i>
-                              <div class="font-bold">2024-01-15</div>
-                              <div class="text-base">Patent Gazette &#40;PG-2024-01&#41;</div>
-                            </div>
-                          </div>
-                        </p-card>
-                      </div>}
-                      <div class="col-span-12" *ngIf="!isCardView">
-                        <app-table [columns]="tableColumns" [data]="category.data" [globalFilterFields]="globalFilterFields" [showSearchButton]="false" [showClearButton]="false" [paginator]="true" [lazy]="true" [rows]="pageSize" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} users'" (actionClick)="onActionClick($event.action, $event.item)" (onLazyLoad)="onLazyLoad($event)"></app-table>
-                      </div>
-                    </p-tabpanel>
-                    <p-tabpanel value="published">@for (service of category.data; track service.name) {
-                      <div class="col-span-3 mt-3" *ngIf="isCardView">
-                        <p-card class="w-full">
-                          <ng-template #title="">{{ service.name }}</ng-template>
-                          <p-tag class="mb-2" [severity]="getTagColorValue(service.status).severity" [value]="getTagColorValue(service.status).value | capitalizeWords"></p-tag>
-                          <div class="text-sm mb-2">Code: {{ service.journalCode }}</div>
-                          <div class="text-sm mb-3">Files: {{ service.files }}</div>
-                          <ng-template #footer="">
-                            <div class="flex gap-4 mt-1">
-                              <p-button class="w-full" size="small" icon="pi pi-eye" label="View" severity="secondary" [outlined]="true" styleClass="w-full"></p-button>
-                              <p-button class="w-full" size="small" icon="pi pi-lock" styleClass="w-full" label="Close"></p-button>
-                            </div>
-                          </ng-template>
-                        </p-card>
-                      </div>}
-                      <div class="col-span-12" *ngIf="!isCardView">
-                        <app-table [columns]="tableColumns" [data]="category.data" [globalFilterFields]="globalFilterFields" [showSearchButton]="false" [showClearButton]="false" [paginator]="true" [lazy]="true" [rows]="pageSize" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} users'" (actionClick)="onActionClick($event.action, $event.item)" (onLazyLoad)="onLazyLoad($event)"></app-table>
-                      </div>
-                    </p-tabpanel>
-                  </p-tabpanels>
-                </p-tabs>
-              </div>
-            </p-card>
-          </p-tabpanel>}
-        </p-tabpanels>
-      </p-tabs>
+  </div>
+  <div class="grid grid-cols-6 mt-2">
+    <div class="col-span-12">
+      <app-table [columns]="tableColumns" [data]="tableData" [globalFilterFields]="globalFilterFields" [showSearchButton]="false" [showClearButton]="false" [paginator]="true" [lazy]="true" [rows]="pageSize" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} Journals'" (actionClick)="onActionClick($event.action, $event.item)" (onLazyLoad)="onLazyLoad($event)"></app-table>
     </div>
   </div>
 </app-layout>

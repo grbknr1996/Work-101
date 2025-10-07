@@ -1,5 +1,4 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 export interface StepperStep {
   value: number;
@@ -10,8 +9,7 @@ export interface StepperStep {
 
 @Component({
   selector: 'app-configurable-stepper',
-  standalone: true,
-  imports: [CommonModule],
+  standalone: false,
   templateUrl: './configurable-stepper.component.html',
 })
 export class ConfigurableStepperComponent {

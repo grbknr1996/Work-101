@@ -3,13 +3,12 @@ app-layout
   
   .flex.justify-between
     h1.pt-4.text-xl.ml-4.col-span-3 Pending Publication
-    p-button.mb-3(label="New Journal", icon="pi pi-plus")
 
   .mb-4
     .user-stats-container
-      .user-stat-card(
-        *ngFor="let stat of userStats"
-        "[class.selected]"="selectedStat === stat.label"
+      .user-stat-card.fixed-width(
+        *ngFor="let stat of userStats",
+        "[class.selected]"="selectedStat === stat.label",
         "(click)"="selectStat(stat.label)"
       )
         .stat-header
@@ -18,135 +17,182 @@ app-layout
         
         .stat-content
           span.stat-count("[style.color]"="stat.color") {{ stat.count }}
-          
-          span.stat-change
-            i(
-              "[class]"="stat.percentChange >= 0 ? 'pi pi-arrow-up' : isString(stat.percentChange) ? '' : 'pi pi-arrow-down'"
-              "[style.color]"="stat.percentChange >= 0 ? '#16a34a' : '#dc2626'"
-            )
-            span("[style.color]"="stat.percentChange >= 0 ? '#16a34a' : isString(stat.percentChange) ? '#990efc' : '#dc2626'") {{ stat.percentChange }}{{ isString(stat.percentChange) ? '' : '%' }}
         
         .stat-period {{ stat.period }}
   
-  .grid.grid-cols-6.mt-2
-    .col-span-6.grid.grid-cols-12.filter
-      .col-span-4
-        p-floatlabel(variant="on")
-          p-iconfield
-            p-inputicon.pi.pi-search
-            input.w-full(
-              id="on_label",
-              pInputText="",
-              [(ngModel)]="searchBar",
-              autocomplete="off"
+  .grid.grid-cols-12.gap-4
+    div([ngClass]="showFilesList ? 'col-span-9' : 'col-span-12'")
+
+      .grid.grid-cols-6.mt-2
+        .col-span-6.grid.grid-cols-12.filter
+          .col-span-4
+            p-floatlabel(variant="on")
+              p-iconfield
+                p-inputicon.pi.pi-search
+                input.w-full(
+                  id="on_label",
+                  pInputText="",
+                  [(ngModel)]="searchBar",
+                  autocomplete="off"
+                )
+              label(for="on_label") Search
+          
+          .col-span-8.flex.justify-end.gap-2.filter-icons
+            button.p-button-text.p-button-sm(
+              pButton,
+              type="button",
+              [icon]="isCardView ? 'pi pi-list' : 'pi pi-th-large'",
+              (click)="toggleView()",
+              pTooltip="Toggle between table and card view",
+              style="color: var(--p-button-outlined-secondary-color)"
             )
-          label(for="on_label") Search
+            app-configurable-filter(
+              [filters]="filterConfigs",
+              [showClearAll]="true",
+              [showApplyButton]="true",
+              [showFilterSelector]="true",
+              [filterSelectorPlaceholder]="'Select filters to display'",
+              (filterChange)="onFilterChange($event)",
+              (filterCleared)="onFilterCleared()",
+              (filterApplied)="onFilterApplied($event)",
+              (appliedFiltersChange)="onAppliedFiltersChange($event)"
+            )
+            p-button.forward-arrow-icon(
+              *ngIf="!showFilesList"
+              pTooltip="Show selected files list",
+              (click)="toggleFilesList()",
+              icon="pi pi-angle-right", 
+              [rounded]="true", 
+              severity="info")
       
-      .col-span-8.flex.justify-end.gap-2.filter-icons
-        button.p-button-text.p-button-sm(
-          pButton,
-          type="button",
-          [icon]="isCardView ? 'pi pi-list' : 'pi pi-th-large'",
-          (click)="toggleView()",
-          pTooltip="Toggle between table and card view",
-          style="color: var(--p-button-outlined-secondary-color)"
-        )
-        app-configurable-filter(
-          [filters]="filterConfigs",
+      .mb-8.mt-1.w-full
+        app-filter-chips(
+          [appliedFilters]="appliedFilters",
           [showClearAll]="true",
-          [showApplyButton]="true",
-          [showFilterSelector]="true",
-          [filterSelectorPlaceholder]="'Select filters to display'",
-          (filterChange)="onFilterChange($event)",
-          (filterCleared)="onFilterCleared()",
-          (filterApplied)="onFilterApplied($event)",
-          (appliedFiltersChange)="onAppliedFiltersChange($event)"
+          [clearAllLabel]="'Clear All'",
+          [getDisplayValue]="getFilterDisplayValue.bind(this)",
+          (chipRemove)="removeFilterChip($event)",
+          (clearAll)="clearAllFilters()"
         )
-        p-button(
-          icon="pi pi-file-pdf",
-          [outlined]="true",
-          [text]="true",
-          style="font-size: 1.5rem"
-        )
-        p-button(
-          icon="pi pi-info-circle",
-          [outlined]="true",
-          [text]="true",
-          style="font-size: 1.5rem"
-        )
-  
-  .mb-8.mt-1.w-full
-    app-filter-chips(
-      [appliedFilters]="appliedFilters",
-      [showClearAll]="true",
-      [clearAllLabel]="'Clear All'",
-      [getDisplayValue]="getFilterDisplayValue.bind(this)",
-      (chipRemove)="removeFilterChip($event)",
-      (clearAll)="clearAllFilters()"
-    )
-    
-    .col-span-6
-      p-tabs(value="trademark")
-        p-tablist
-          | @for (category of categories; track category.ipType) {
-          p-tab([value]="category.ipType")
-            .category-label {{ category.ipType | capitalizeWords }}
-            p-badge([value]="category.count")
-          | }
         
-        p-tabpanels
-          | @for (category of categories; track category.ipType) {
-          p-tabpanel.grid.grid-cols-12.gap-3([value]="category.ipType")
-            | @for (service of category.data; track service.name) {
-            .col-span-3.mt-3(*ngIf="isCardView")
-              p-card.w-full
-                ng-template(#header="")
-                  h1.flex
-                    p-checkbox(
-                      inputId="service",
-                      [(ngModel)]="service.checked",
-                      [binary]="true"
+        .col-span-6
+          p-tabs(value="trademark", scrollable="")
+            p-tablist
+              | @for (category of categories; track category.ipType) {
+              p-tab([value]="category.ipType")
+                .category-label {{ category.ipType | capitalizeWords }}
+                p-badge([value]="category.count")
+              | }
+            
+            p-tabpanels
+              | @for (category of categories; track category.ipType) {
+              p-tabpanel.grid.grid-cols-12.gap-3([value]="category.ipType")
+                .col-span-12.flex.justify-between.p-4.items-center.table-selections
+                  .text-base.font-bold Selected: 0
+                  .flex.items-center.gap-2
+                    .text-base.font-bold Journal Code:
+                    p-select(
+                      [options]="journalData", 
+                      [(ngModel)]="journalCode", 
+                      optionLabel="journalCode",
+                      optionValue="journalCode",
+                      (onChange)="onJournalChange($event)"
+                      class="w-full md:w-56"
                     )
-                    label.flex-1(for="service") {{ service.name }}
-                
-                p-tag(
-                  [severity]="getTagColorValue(service.status).severity", 
-                  [value]="getTagColorValue(service.status).value | capitalizeWords").mb-2
-                .text-sm.mb-2 Code: {{ service.journalCode }}
-                .text-sm.mb-3 Files: {{ service.files }}
-                
-                ng-template(#footer="")
-                  .flex.gap-4.mt-1
-                    p-button.w-full(
-                      size="small",
-                      icon="pi pi-eye",
-                      label="View"
-                      severity="secondary",
-                      [outlined]="true",
-                      styleClass="w-full"
-                    )
-                    p-button.w-full(
-                      size="small",
-                      icon="pi pi-lock"
-                      styleClass="w-full",
-                      label="Close"
-                    )
-            | }
-            .col-span-12(*ngIf="!isCardView")
-              app-table(
-                [columns]="tableColumns",
-                [data]="category.data",
-                [globalFilterFields]="globalFilterFields",
-                [showSearchButton]="false",
-                [showClearButton]="false",
-                [paginator]="true",
-                [lazy]="true",
-                [rows]="pageSize",
-                [totalRecords]="totalRecords",
-                [rowsPerPageOptions]="[10, 25, 50, 100]",
-                [showCurrentPageReport]="true",
-                [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} users'",
-                (actionClick)="onActionClick($event.action, $event.item)",
-                (onLazyLoad)="onLazyLoad($event)"
+                    p-button(label="Add", icon="pi pi-plus", severity="secondary")
+                    p-button(label="Create Journal", icon="pi pi-file")
+                | @for (service of category.data; track service.name) {
+                .col-span-3.mt-3(*ngIf="isCardView")
+                  p-card.w-full
+                    ng-template(#header="")
+                      h1.flex
+                        p-checkbox(
+                          inputId="service",
+                          [(ngModel)]="service.checked",
+                          [binary]="true"
+                        )
+                        label.flex-1(for="service") {{ service.name }}
+                    
+                    p-tag(
+                      [severity]="getTagColorValue(service.status).severity", 
+                      [value]="getTagColorValue(service.status).value | capitalizeWords").mb-2
+                    .text-sm.mb-2 Code: {{ service.journalCode }}
+                    .text-sm.mb-3 Files: {{ service.files }}
+                    
+                    ng-template(#footer="")
+                      .flex.gap-4.mt-1
+                        p-button.w-full(
+                          size="small",
+                          icon="pi pi-eye",
+                          label="View"
+                          severity="secondary",
+                          [outlined]="true",
+                          styleClass="w-full"
+                        )
+                        p-button.w-full(
+                          size="small",
+                          icon="pi pi-lock"
+                          styleClass="w-full",
+                          label="Close"
+                        )
+                | }
+                .col-span-12(*ngIf="!isCardView")
+                  app-table(
+                    [columns]="tableColumns",
+                    [data]="category.data",
+                    [globalFilterFields]="globalFilterFields",
+                    [showSearchButton]="false",
+                    [showClearButton]="false",
+                    [paginator]="true",
+                    [lazy]="true",
+                    [rows]="pageSize",
+                    [totalRecords]="totalRecords",
+                    [(selection)]="selectedRows",
+                    [rowsPerPageOptions]="[10, 25, 50, 100]",
+                    [showCurrentPageReport]="true",
+                    [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} publications'",
+                    (actionClick)="onActionClick($event.action, $event.item)",
+                    (onLazyLoad)="onLazyLoad($event)"
+                  )
+              | }
+
+    div(class="col-span-3")
+      .mt-2.transition-all.duration-200.ease-in-out.overflow-hidden(
+        [ngClass]=`showFilesList 
+      ? 'w-full opacity-100 translate-x-0' 
+      : 'w-0 opacity-0 translate-x-full'`)
+        p-card
+          .flex.justify-between
+            .mb-1
+              .text-base.font-bold {{showFilesList ? selectedJournal?.journalName : ''}} 
+              .text-sm.font-normal {{showFilesList ? selectedJournal?.journalCode: ''}}
+              .text-sm.font-normal Files in this journal &#40;{{showFilesList ? selectedJournal?.files?.length : ''}}&#41;
+            .mb-1
+              p-button(
+                icon="pi pi-angle-left",
+                (click)="toggleFilesList()",
+                [rounded]="true",
+                [text]="true"
               )
-          | }
+
+          .mt-4
+            p-listbox(
+              [options]="selectedJournal?.files",
+              [(ngModel)]="selectedFileId",
+              optionLabel="fileId"
+              [filter]="true",
+              class="w-full md:w-56",
+            ) 
+              ng-template(let-item='', pTemplate='item')
+                .flex.justify-between.items-center.w-full
+                  span {{ item.fileId }}
+                  button.p-button-text.p-button-danger.p-button-sm(
+                    type='button',
+                    pButton='', 
+                    icon='pi pi-trash', 
+                    (click)='deleteItem(item)'
+                  )
+
+
+
+          

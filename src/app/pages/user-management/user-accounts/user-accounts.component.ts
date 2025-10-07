@@ -10,17 +10,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {
   UserStatsComponent,
   UserStatsConfig,
-  StatItem,
 } from 'src/app/components/user-stats/user-stats.component';
-import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
-import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
-import { TableComponent } from 'src/app/components/table/table.component';
 import {
   ConfigurableFilterComponent,
   FilterConfig,
   FilterValue,
 } from 'src/app/components/configurable-filter/configurable-filter.component';
-import { FilterChipsComponent } from 'src/app/components/filter-chips/filter-chips.component';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
 import {
   UserService,
@@ -28,30 +23,13 @@ import {
   UserQueryParams,
   UserStats,
 } from 'src/app/_services/user.service';
-import { catchError, finalize } from 'rxjs/operators';
-import { of } from 'rxjs';
-import { ButtonModule } from 'primeng/button';
-import { TooltipModule } from 'primeng/tooltip';
-import { CommonModule } from '@angular/common';
-import { TableCardComponent } from 'src/app/components/table-card/table-card.component';
+import { finalize } from 'rxjs/operators';
 import { CardColumnDefinition } from 'src/app/components/table-card/table-card.component';
 
 @Component({
   selector: 'app-user-accounts',
   templateUrl: './user-accounts.component.html',
-  imports: [
-    UserStatsComponent,
-    BreadcrumbsComponent,
-    AppLayoutComponent,
-    TableComponent,
-    ConfigurableFilterComponent,
-    FilterChipsComponent,
-    ButtonModule,
-    TooltipModule,
-    CommonModule,
-    TableCardComponent,
-  ],
-  standalone: true,
+  standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserAccountsComponent implements OnInit {
@@ -104,6 +82,10 @@ export class UserAccountsComponent implements OnInit {
   pageSize = 10;
   totalRecords = 0;
 
+  // Sorting properties
+  currentSortField = 'userName';
+  currentSortOrder: 'asc' | 'desc' = 'asc';
+
   // Filter states
   hasActiveFilters = false;
   appliedFilters: FilterValue[] = [];
@@ -141,13 +123,13 @@ export class UserAccountsComponent implements OnInit {
       section: 'STATUS',
     },
     {
-      key: 'isLocked',
+      key: 'isInactive',
       label: 'Inactive',
       type: 'checkbox',
       section: 'STATUS',
     },
     {
-      key: 'cognitoStatus',
+      key: 'isUnverified',
       label: 'Unverified',
       type: 'checkbox',
       section: 'STATUS',
@@ -156,16 +138,16 @@ export class UserAccountsComponent implements OnInit {
       key: 'creationDateRange',
       label: 'Creation Date Range',
       type: 'dateRange',
-      placeholder: 'From - To (dd/mm/yy)',
-      dateFormat: 'dd/mm/yy',
+      placeholder: 'From - To (yyyy-mm-dd)',
+
       section: 'DATE FILTERS',
     },
     {
-      key: 'updatedDateRange',
-      label: 'Updated Date Range',
+      key: 'lastUpdateDateRange',
+      label: 'Last Update Date Range',
       type: 'dateRange',
-      placeholder: 'From - To (dd/mm/yy)',
-      dateFormat: 'dd/mm/yy',
+      placeholder: 'From - To (yyyy-mm-dd)',
+
       section: 'DATE FILTERS',
     },
   ];
@@ -209,11 +191,14 @@ export class UserAccountsComponent implements OnInit {
       dateFormat: 'MMM dd, yyyy',
     },
     {
-      field: 'updatedDate',
-      header: 'Updated On',
+      field: 'creationUserName',
+      header: 'Created By',
       sortable: true,
-      display: 'date',
-      dateFormat: 'MMM dd, yyyy',
+    },
+    {
+      field: 'lastUpdateUserName',
+      header: 'Last Updated By',
+      sortable: true,
     },
     {
       field: 'actions',
@@ -290,26 +275,33 @@ export class UserAccountsComponent implements OnInit {
 
     // Card Info Section
     {
-      field: 'createdByName',
-      label: 'Created By',
-      display: 'date',
-      dateFormat: 'MMM dd, yyyy',
-      sortable: true,
-    },
-    {
       field: 'creationDate',
       label: 'Created On',
-
       display: 'date',
       dateFormat: 'dd-mm-yyyy',
+      section: 'info',
       sortable: true,
     },
     {
       field: 'updatedDate',
-      value: (date: Date) => date.toLocaleString('dd-mm-yyyy'),
       label: 'Updated On',
+      display: 'date',
+      dateFormat: 'dd-mm-yyyy',
+      section: 'info',
+      sortable: true,
+    },
+    {
+      field: 'creationUserName',
+      label: 'Created By',
       display: 'text',
-      section: 'body',
+      section: 'info',
+      sortable: true,
+    },
+    {
+      field: 'lastUpdateUserName',
+      label: 'Last Updated By',
+      display: 'text',
+      section: 'info',
       sortable: true,
     },
 
@@ -386,10 +378,10 @@ export class UserAccountsComponent implements OnInit {
       )
       .subscribe({
         next: (stats: UserStats) => {
-          this.totalUsers = stats.totalUsers;
-          this.activeUsers = stats.activeUsers;
-          this.inactiveUsers = stats.inactiveUsers;
-          this.unconfirmedUsers = stats.unVerifiedUsers;
+          this.totalUsers = stats.totalUserQuantity;
+          this.activeUsers = stats.activeUserQuantity;
+          this.inactiveUsers = stats.inactiveUserQuantity;
+          this.unconfirmedUsers = stats.unverifiedUserQuantity;
 
           // Update the user stats configuration
           this.updateUserStatsConfig();
@@ -453,13 +445,13 @@ export class UserAccountsComponent implements OnInit {
         this.loadUserAccounts();
         break;
       case 'ACTIVE_USERS':
-        this.loadUserAccounts({ isActive: true });
+        this.loadUserAccounts({ statuses: ['active'] });
         break;
       case 'INACTIVE_USERS':
-        this.loadUserAccounts({ isActive: false, isLocked: true });
+        this.loadUserAccounts({ statuses: ['inactive'] });
         break;
       case 'UNVERIFIED_USERS':
-        this.loadUserAccounts({ cognitoStatus: 'FCP' });
+        this.loadUserAccounts({ statuses: ['unverified'] });
         break;
       default:
         this.loadUserAccounts();
@@ -471,8 +463,8 @@ export class UserAccountsComponent implements OnInit {
     const queryParams: UserQueryParams = {
       limit: this.pageSize,
       offset: this.currentPage * this.pageSize,
-      sort: 'userName',
-      order: 'asc',
+      sort: this.currentSortField,
+      order: this.currentSortOrder,
       wipoPlatformCode: this.ms.getCurrentOffice(), // Default platform code, can be made dynamic
       ...params,
     };
@@ -496,6 +488,8 @@ export class UserAccountsComponent implements OnInit {
           isActive: user.isActive ? true : false, // Map isActive boolean to string for compatibility
           updatedDate: user.lastUpdateDate || '-',
           createdByName: user.creationUserName || '-',
+          creationUserName: user.creationUserName || '-',
+          lastUpdateUserName: user.lastUpdateUserName || '-',
           creationDate: user.creationDate || '-',
           // Add computed fields - provide fallback for avatar
           imageUrl:
@@ -523,18 +517,30 @@ export class UserAccountsComponent implements OnInit {
     this.appliedFilters = [];
     this.hasActiveFilters = false;
 
-    // Update with new filters
-    this.appliedFilters = [...filters]; // Create new array reference to trigger change detection
-    this.hasActiveFilters = filters.length > 0;
+    // Only add filters that are actually applied (value === true for checkboxes)
+    const activeFilters = filters.filter((filter) => {
+      if (filter.type === 'checkbox') {
+        return filter.value === true;
+      }
+      // For other filter types, check if they have a meaningful value
+      return (
+        filter.value !== null &&
+        filter.value !== undefined &&
+        filter.value !== ''
+      );
+    });
+
+    this.appliedFilters = [...activeFilters]; // Create new array reference to trigger change detection
+    this.hasActiveFilters = activeFilters.length > 0;
 
     // Reset to first page when applying filters
     this.currentPage = 0;
 
     // Update stat selection based on applied filters (without API call)
-    this.updateStatSelectionFromFilters(filters);
+    this.updateStatSelectionFromFilters(activeFilters);
 
     // Convert filters to API parameters using helper method
-    const apiParams = this.convertFiltersToApiParams(filters);
+    const apiParams = this.convertFiltersToApiParams(activeFilters);
 
     // Reload data with filters
     this.loadUserAccounts(apiParams);
@@ -562,9 +568,23 @@ export class UserAccountsComponent implements OnInit {
   }
 
   onAppliedFiltersChange(filters: FilterValue[]): void {
+    // Filter out only the active filters (checkboxes with value === true)
+    const activeFilters = filters.filter((filter) => {
+      if (filter.type === 'checkbox') {
+        return filter.value === true;
+      }
+      // For other filter types, check if they have a meaningful value
+      return (
+        filter.value !== null &&
+        filter.value !== undefined &&
+        filter.value !== ''
+      );
+    });
+
     // Only update if the filters are actually different to avoid unnecessary updates
-    if (JSON.stringify(this.appliedFilters) !== JSON.stringify(filters)) {
-      this.appliedFilters = [...filters]; // Create new array reference
+    if (JSON.stringify(this.appliedFilters) !== JSON.stringify(activeFilters)) {
+      this.appliedFilters = [...activeFilters]; // Create new array reference
+      this.hasActiveFilters = activeFilters.length > 0;
       this.cdr.markForCheck();
     }
   }
@@ -644,6 +664,59 @@ export class UserAccountsComponent implements OnInit {
     this.loadUserAccounts();
   }
 
+  onSort(event: any) {
+    console.log('Sort event:', event);
+
+    // Handle different event structures from table and table-card components
+    let sortField: string;
+    let sortOrder: number;
+
+    if (event.sortField) {
+      // Event from table component
+      sortField = event.sortField;
+      sortOrder = event.sortOrder;
+    } else if (event.field) {
+      // Event from table-card component (SortEvent)
+      sortField = event.field;
+      sortOrder = event.order;
+    } else {
+      return; // Invalid event structure
+    }
+
+    // Map computed status field to actual API field
+    const apiSortField = this.mapSortFieldToAPI(sortField);
+
+    this.currentSortField = apiSortField;
+    this.currentSortOrder = sortOrder === 1 ? 'asc' : 'desc';
+
+    // Reset to first page when sorting
+    this.currentPage = 0;
+
+    // Convert applied filters to API parameters
+    const apiParams = this.convertFiltersToApiParams(this.appliedFilters);
+
+    // Load data with new sorting
+    this.loadUserAccounts(apiParams);
+  }
+
+  /**
+   * Map UI sort fields to API field names
+   */
+  private mapSortFieldToAPI(uiField: string): string {
+    const fieldMapping: { [key: string]: string } = {
+      computedStatus: 'isActive', // Map computed status to isActive for API
+      userName: 'userName',
+      email: 'email',
+      loginId: 'loginId',
+      creationDate: 'creationDate',
+      updatedDate: 'lastUpdateDate', // Map updatedDate to lastUpdateDate for API
+      creationUserName: 'creationUserName',
+      lastUpdateUserName: 'lastUpdateUserName',
+    };
+
+    return fieldMapping[uiField] || uiField;
+  }
+
   onLazyLoad(event: any) {
     // Handle lazy loading event from both table and card views
     console.log('Lazy load event:', event);
@@ -659,11 +732,24 @@ export class UserAccountsComponent implements OnInit {
       this.pageSize = event.rows;
     }
 
+    // Handle sorting
+    if (event.sortField) {
+      // Map UI sort field to API field name
+      this.currentSortField = this.mapSortFieldToAPI(event.sortField);
+      this.currentSortOrder = event.sortOrder === 1 ? 'asc' : 'desc';
+    }
+
     console.log(
       'Calculated - currentPage:',
       this.currentPage,
       'pageSize:',
       this.pageSize
+    );
+    console.log(
+      'Sort - field:',
+      this.currentSortField,
+      'order:',
+      this.currentSortOrder
     );
 
     // Convert applied filters to API parameters
@@ -671,7 +757,7 @@ export class UserAccountsComponent implements OnInit {
     console.log('Preserved filters:', this.appliedFilters);
     console.log('API params with filters:', apiParams);
 
-    // Load data with current pagination and preserved filters
+    // Load data with current pagination, sorting, and preserved filters
     this.loadUserAccounts(apiParams);
   }
 
@@ -680,6 +766,7 @@ export class UserAccountsComponent implements OnInit {
     filters: FilterValue[]
   ): Partial<UserQueryParams> {
     const apiParams: Partial<UserQueryParams> = {};
+    const statusArray: ('active' | 'inactive' | 'unverified')[] = [];
 
     filters.forEach((filter) => {
       switch (filter.key) {
@@ -687,6 +774,7 @@ export class UserAccountsComponent implements OnInit {
           apiParams.loginId = filter.value;
           break;
         case 'userName':
+          apiParams.userName = filter.value;
           // Note: API might not support userName filter directly
           // You may need to adjust based on actual API capabilities
           break;
@@ -694,24 +782,42 @@ export class UserAccountsComponent implements OnInit {
           apiParams.email = filter.value;
           break;
         case 'isActive':
-          // Handle Active users filter
           if (filter.value === true) {
-            apiParams.isActive = true;
+            statusArray.push('active');
           }
           break;
-        case 'isLocked':
-          // Handle Inactive users filter
+        case 'isInactive':
           if (filter.value === true) {
-            apiParams.isActive = false;
-            apiParams.isLocked = true;
+            statusArray.push('inactive');
           }
           break;
-        case 'cognitoStatus':
-          // Handle Unverified users filter
+        case 'isUnverified':
           if (filter.value === true) {
-            apiParams.cognitoStatus = 'FCP';
-            apiParams.isActive = true;
-            apiParams.isLocked = false;
+            statusArray.push('unverified');
+          }
+          break;
+        case 'creationDateRange':
+          // Handle creation date range filter
+          if (Array.isArray(filter.value) && filter.value.length === 2) {
+            const [fromDate, toDate] = filter.value;
+            if (fromDate) {
+              apiParams.creationStartDate = this.formatDateForAPI(fromDate);
+            }
+            if (toDate) {
+              apiParams.creationEndDate = this.formatDateForAPI(toDate);
+            }
+          }
+          break;
+        case 'lastUpdateDateRange':
+          // Handle last update date range filter
+          if (Array.isArray(filter.value) && filter.value.length === 2) {
+            const [fromDate, toDate] = filter.value;
+            if (fromDate) {
+              apiParams.lastUpdateStartDate = this.formatDateForAPI(fromDate);
+            }
+            if (toDate) {
+              apiParams.lastUpdateEndDate = this.formatDateForAPI(toDate);
+            }
           }
           break;
         case 'wipoPlatformCode':
@@ -724,6 +830,11 @@ export class UserAccountsComponent implements OnInit {
           break;
       }
     });
+
+    // Add status array if any status filters are applied
+    if (statusArray.length > 0) {
+      apiParams.statuses = statusArray;
+    }
 
     return apiParams;
   }
@@ -751,6 +862,25 @@ export class UserAccountsComponent implements OnInit {
       return `${filterConfig.label}: ${option ? option.label : filter.value}`;
     }
 
+    // For date range filters, show formatted date range
+    if (
+      filter.type === 'dateRange' &&
+      Array.isArray(filter.value) &&
+      filter.value.length === 2
+    ) {
+      const [fromDate, toDate] = filter.value;
+      const fromStr = fromDate ? this.formatDateForAPI(fromDate) : '';
+      const toStr = toDate ? this.formatDateForAPI(toDate) : '';
+
+      if (fromStr && toStr) {
+        return `${filterConfig.label}: ${fromStr} to ${toStr}`;
+      } else if (fromStr) {
+        return `${filterConfig.label}: From ${fromStr}`;
+      } else if (toStr) {
+        return `${filterConfig.label}: Until ${toStr}`;
+      }
+    }
+
     return `${filterConfig.label}: ${filter.value}`;
   }
 
@@ -773,6 +903,25 @@ export class UserAccountsComponent implements OnInit {
       return 'Unverified';
     }
     return isActive === true ? 'Active' : 'Inactive';
+  }
+
+  /**
+   * Format date for API (convert to YYYY-MM-DD format)
+   */
+  private formatDateForAPI(date: Date | string): string {
+    if (!date) return '';
+
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+
+    if (isNaN(dateObj.getTime())) {
+      return '';
+    }
+
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   }
 
   onStatSelected(stat: string) {
@@ -806,27 +955,23 @@ export class UserAccountsComponent implements OnInit {
           { key: 'isActive', value: true, type: 'checkbox' },
         ];
         this.hasActiveFilters = true;
-        this.loadUserAccounts({ isActive: true });
+        this.loadUserAccounts({ statuses: ['active'] });
         break;
 
       case 'INACTIVE_USERS':
         this.appliedFilters = [
-          { key: 'isLocked', value: true, type: 'checkbox' },
+          { key: 'isInactive', value: true, type: 'checkbox' },
         ];
         this.hasActiveFilters = true;
-        this.loadUserAccounts({ isActive: false, isLocked: true });
+        this.loadUserAccounts({ statuses: ['inactive'] });
         break;
 
       case 'UNVERIFIED_USERS':
         this.appliedFilters = [
-          { key: 'cognitoStatus', value: true, type: 'checkbox' },
+          { key: 'isUnverified', value: true, type: 'checkbox' },
         ];
         this.hasActiveFilters = true;
-        this.loadUserAccounts({
-          cognitoStatus: 'FCP',
-          isActive: true,
-          isLocked: false,
-        });
+        this.loadUserAccounts({ statuses: ['unverified'] });
         break;
     }
 
@@ -850,30 +995,39 @@ export class UserAccountsComponent implements OnInit {
     console.log('🔄 Updating stat selection from filters:', filters);
 
     // Check if there are any status-related filters
-    const activeFilter =
-      filters.find((f) => f.key === 'isActive' && f.value === true) &&
-      filters.length === 1;
-    const inactiveFilter =
-      filters.find((f) => f.key === 'isLocked' && f.value === true) &&
-      filters.length === 1;
-    const cognitoStatusFilter =
-      filters.find((f) => f.key === 'cognitoStatus' && f.value === true) &&
-      filters.length === 1;
+    const activeFilter = filters.find(
+      (f) => f.key === 'isActive' && f.value === true
+    );
+    const inactiveFilter = filters.find(
+      (f) => f.key === 'isInactive' && f.value === true
+    );
+    const unverifiedFilter = filters.find(
+      (f) => f.key === 'isUnverified' && f.value === true
+    );
 
     let selectedStat = 'TOTAL_USERS';
 
-    if (activeFilter) {
-      console.log('📊 Setting stat to ACTIVE_USERS based on filter');
-      selectedStat = 'ACTIVE_USERS';
-    } else if (inactiveFilter) {
-      console.log('📊 Setting stat to INACTIVE_USERS based on filter');
-      selectedStat = 'INACTIVE_USERS';
-    } else if (cognitoStatusFilter) {
-      console.log('📊 Setting stat to UNVERIFIED_USERS based on filter');
-      selectedStat = 'UNVERIFIED_USERS';
+    // If only one status filter is selected and it's the only filter, update the stat
+    const statusFilters = [
+      activeFilter,
+      inactiveFilter,
+      unverifiedFilter,
+    ].filter(Boolean);
+
+    if (statusFilters.length === 1 && filters.length === 1) {
+      if (activeFilter) {
+        console.log('📊 Setting stat to ACTIVE_USERS based on filter');
+        selectedStat = 'ACTIVE_USERS';
+      } else if (inactiveFilter) {
+        console.log('📊 Setting stat to INACTIVE_USERS based on filter');
+        selectedStat = 'INACTIVE_USERS';
+      } else if (unverifiedFilter) {
+        console.log('📊 Setting stat to UNVERIFIED_USERS based on filter');
+        selectedStat = 'UNVERIFIED_USERS';
+      }
     } else {
       console.log(
-        '📊 Setting stat to TOTAL_USERS (no specific status filters)'
+        '📊 Setting stat to TOTAL_USERS (multiple statuses or other filters)'
       );
       selectedStat = 'TOTAL_USERS';
     }

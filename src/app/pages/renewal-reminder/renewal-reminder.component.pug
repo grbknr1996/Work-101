@@ -1,29 +1,38 @@
 app-layout([config]="layoutConfig")
   app-breadcrumbs([items]="breadcrumbItems")
   .user-accounts-header
-    h1 Renewal Reminder
-  app-package-stats([packageStats]="packageStats",
+    h1 {{"renewal.title"|translate}}
+  app-multiple-stats([multipleStats]="packageStats",
     (statSelected)="onStatSelect($event)",
-    [selectedStat]="'TOTAL IN MONTH'")
+    [selectedStat]="statSelected")
   app-configurable-filter-bar(
           [filters]="filterConfigs",
           [showClearAll]="true",
           [showApplyButton]="true",
           [showFilterSelector]="true",
-          [filterSelectorPlaceholder]="'Select filters to display'",
           (filterChange)="onFilterChange($event)",
           (filterCleared)="onFilterCleared()",
           (filterApplied)="onFilterApplied($event)",
           (appliedFiltersChange)="onAppliedFiltersChange($event)",
-          [showSearchBar]="true",
-          [searchBar]="searchBar",
-          (filterSearch)="filterSearch($event)",
-          [searchLabel]="'Search File Name'",
-          [showDownloadIcon]="false",
+          [showDateSearchBar]="true",
+          (filterDateSearch)="filterSearch($event)",
           [appliedFilters]="appliedFilters",
-          [clearAllLabel]="'Clear All'",
+          [clearAllLabel]="'common.components.filter.clearAll'|translate",
           [getDisplayValue]="getFilterDisplayValue.bind(this)",
           (chipRemove)="removeFilterChip($event)",
           (clearAll)="clearAllFilters()",
+          (removeDefaultFilter)="removeDefaultFilter($event)",
         )
-  app-table([columns]="tableColumns", [data]="tableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false") 
+  div.flex.justify-between.items-center(style="padding:5px 5px 0 0")
+      div
+      button.p-button-primary(
+        pButton,
+        [disabled]="selectedItems.length == 0"
+        [label]="'renewal.button.sendNotification'|translate",
+        icon="pi pi-envelope",
+        (click)="onSendMail()"
+      )
+  div([style]="tableData.length > 0 ? '' : 'display:none;'")
+    app-table([columns]="tableColumns", [data]="tableData", (selectionChange)="onSelectionChange($event)", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false") 
+  div([style]="tableData.length == 0 ? 'align-self:center' : 'display:none;'")
+    h5 {{"renewal.table.emptyMessage"|translate}}

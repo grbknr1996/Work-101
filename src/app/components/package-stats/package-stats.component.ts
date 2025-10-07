@@ -8,8 +8,6 @@ import {
   SimpleChanges,
   Output,
 } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { PrimeIcons } from "primeng/api";
 
 interface PackageStat {
   label: string;
@@ -23,8 +21,7 @@ interface PackageStat {
 @Component({
   selector: "app-package-stats",
   templateUrl: "./package-stats.component.html",
-  standalone: true,
-  imports: [CommonModule],
+  standalone: false,
 })
 export class PackageStatsComponent implements OnInit, OnChanges {
 

@@ -1,9 +1,9 @@
 
 <div class="card">
-  <p-table #dt [value]="isSignal(data) ? data() : data" [columns]="columns" [rowHover]="true" [rows]="rows" [rowsPerPageOptions]="rowsPerPageOptions" [loading]="loading" [paginator]="paginator" paginatorPosition="both" [globalFilterFields]="globalFilterFields" [showCurrentPageReport]="showCurrentPageReport" [currentPageReportTemplate]="currentPageReportTemplate" [resizableColumns]="resizableColumns" [reorderableColumns]="reorderableColumns" [responsive]="responsive" [lazy]="lazy" [totalRecords]="totalRecords" [scrollable]="scrollable" [scrollHeight]="scrollHeight" [dataKey]="dataKey" (onLazyLoad)="onLazyLoad.emit($event)" styleClass="p-datatable-sm">
+  <p-table #dt [value]="isSignal(data) ? data() : data" [columns]="columns" [rowHover]="true" [rows]="rows" [rowsPerPageOptions]="rowsPerPageOptions" [loading]="loading" [paginator]="paginator" paginatorPosition="both" [globalFilterFields]="globalFilterFields" [showCurrentPageReport]="showCurrentPageReport" [currentPageReportTemplate]="currentPageReportTemplate" [resizableColumns]="resizableColumns" [reorderableColumns]="reorderableColumns" [responsive]="responsive" [lazy]="lazy" [totalRecords]="totalRecords" [scrollable]="scrollable" [scrollHeight]="scrollHeight" [dataKey]="dataKey" (onLazyLoad)="onLazyLoad.emit($event)" styleClass="p-datatable-sm" selectionMode="multiple" [(selection)]="selectedRows" (selectionChange)="onSelectionChange($event)">
     <ng-template pTemplate="caption">
       <div class="flex-search-bar">
-        <button class="p-button-outlined" *ngIf="showClearButton" pButton [label]="clearButton" icon="pi pi-filter-slash" (click)="clear(dt)"></button>
+        <button class="p-button-outlined" *ngIf="showClearButton" pButton [label]="clearButton|translate" icon="pi pi-filter-slash" (click)="clear(dt)"></button>
         <div class="ml-auto">
           <button [style]="showPdf == '' ? 'display:none;' : ''" (click)="onActionClick('showPdf', showPdf); $event.stopPropagation()">
             <p-iconField iconPosition="left"><i class="pi pi-file-pdf" style="font-size: 2em; color: red"></i></p-iconField>
@@ -11,7 +11,7 @@
         </div>
         <p-iconField iconPosition="left" *ngIf="showSearchButton">
           <p-inputIcon><i class="pi pi-search"></i></p-inputIcon>
-          <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" [placeholder]="searchPlaceHolder" *ngIf="showSearchButton">
+          <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" [placeholder]="searchPlaceHolder|translate" *ngIf="showSearchButton">
         </p-iconField>
       </div>
     </ng-template>
@@ -19,6 +19,7 @@
       <tr>
         <th *ngFor="let col of columns" [pSortableColumn]="col.sortable ? col.field : undefined" [style.width]="col.width || 'auto'">
           <div class="flex items-center">{{ col.header }}
+            <p-tableHeaderCheckbox *ngIf="col.headerDisplay === 'headerCheckbox'"></p-tableHeaderCheckbox>
             <p-sortIcon *ngIf="col.sortable" [field]="col.field"></p-sortIcon>
             <!-- Text Filter-->
             <p-columnFilter *ngIf="col.filterType === 'text'" type="text" [field]="col.filterField || col.field" [display]="col.filterDisplay || 'menu'"></p-columnFilter>
@@ -61,9 +62,12 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowData>
-      <tr>
+      <tr [pSelectableRow]="rowData">
         <ng-container *ngFor="let col of columns">
           <td [pTooltip]="col.tooltipText">
+            <ng-container *ngIf="col.display === 'checkbox'">
+              <p-tableCheckbox [value]="rowData" [disabled]="getDisabled(rowData, col.field)"></p-tableCheckbox>
+            </ng-container>
             <!-- Text Display-->
             <ng-container *ngIf="col.display === 'text' || !col.display"> 
               <div [pTooltip]="getTooltipValue(rowData, col.field)" [escape]="false">{{ getValue(rowData, col.field) }}</div>
@@ -92,6 +96,8 @@
             </ng-container>
             <!-- Icon Display-->
             <ng-container *ngIf="col.display === 'icon'"><i class="pi" [ngClass]="col.iconClass ? col.iconClass(getValue(rowData, col.field)) : ''" style="font-size: 1.5rem"></i></ng-container>
+            <!-- Image Display-->
+            <ng-container *ngIf="col.display === 'image'"><img [src]="getValue(rowData, col.field)" [pTooltip]="getTooltipValue(rowData, col.field)"></ng-container>
             <!-- Boolean Display-->
             <ng-container *ngIf="col.display === 'boolean'">
               <div class="text-center"><i class="pi" [ngClass]="{ 'text-green-500 pi-check-circle': getValue(rowData, col.field), 'text-red-500 pi-times-circle': !getValue(rowData, col.field) }"></i></div>
@@ -129,7 +135,7 @@
     <!-- Empty message template-->
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="100">{{ emptyMessage }}</td>
+        <td colspan="100">{{ emptyMessage | translate}}</td>
       </tr>
     </ng-template>
   </p-table>

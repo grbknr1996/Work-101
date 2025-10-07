@@ -1,12 +1,9 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
 import { LoadingService } from '../../_services/loading.service';
 
 @Component({
   selector: 'app-global-loader',
-  standalone: true,
-  imports: [CommonModule],
+  standalone: false,
   template: `
     <div *ngIf="(loading$ | async)?.isLoading" class="global-loader-overlay">
       <div class="global-loader-container">

@@ -18,6 +18,16 @@ export interface CreateUnitState {
     name: string;
     category: string;
   } | null;
+  rolePermissions: {
+    head: any[];
+    deputy: any[];
+    staff: any[];
+  };
+  roleActions: {
+    head: any[];
+    deputy: any[];
+    staff: any[];
+  };
 }
 
 @Injectable({
@@ -37,6 +47,16 @@ export class CreateUnitStateService {
       divisionUnitId: '',
     },
     parentUnitInfo: null,
+    rolePermissions: {
+      head: [],
+      deputy: [],
+      staff: [],
+    },
+    roleActions: {
+      head: [],
+      deputy: [],
+      staff: [],
+    },
   };
 
   private stateSubject = new BehaviorSubject<CreateUnitState>(
@@ -120,6 +140,24 @@ export class CreateUnitStateService {
     this.stateSubject.next({
       ...currentState,
       assignedUsers: this.initialState.assignedUsers,
+    });
+  }
+
+  updateRolePermissions(
+    rolePermissions: CreateUnitState['rolePermissions']
+  ): void {
+    const currentState = this.getCurrentState();
+    this.stateSubject.next({
+      ...currentState,
+      rolePermissions,
+    });
+  }
+
+  updateRoleActions(roleActions: CreateUnitState['roleActions']): void {
+    const currentState = this.getCurrentState();
+    this.stateSubject.next({
+      ...currentState,
+      roleActions,
     });
   }
 }

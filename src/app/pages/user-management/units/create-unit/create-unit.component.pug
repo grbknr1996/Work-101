@@ -125,6 +125,7 @@ app-layout
             p-multiSelect.w-full(
               [options]="availablePermissions",
               [(ngModel)]="selectedPermissions",
+              (onChange)="onRolePermissionChange($event.value)",
               optionLabel="label",
               [filter]="true",
               placeholder="Select Permission Sets",
@@ -140,28 +141,23 @@ app-layout
               )
                 .flex.items-center.justify-between.p-2(style="min-width: 350px")
                   span.font-semibold {{ permission.label }}
-                  span.text-gray-500.text-xs.ml-4.whitespace-nowrap {{ permission.permissions.length }} permission{{ permission.permissions.length > 1 ? 's' : '' }}
           
           .col-12.mt-4
             .bg-gray-50.p-4.rounded-lg
               h4.font-semibold.mb-4 Selected Permissions
-              .grid.grid-cols-1.gap-4(class="md:grid-cols-2.lg:grid-cols-3")
-                .p-4.bg-white.rounded-lg.shadow-sm(
+              .flex.flex-wrap.gap-2
+                span.inline-block.bg-blue-100.text-blue-800.px-2.py-1.rounded-full.text-xs(
                   *ngFor="let permission of selectedPermissions"
-                )
-                  .font-medium.text-lg.mb-2 {{ permission.label }}
-                  .text-sm.text-gray-600
-                    .flex.flex-wrap.gap-2
-                      span.inline-block.bg-blue-100.text-blue-800.px-2.py-1.rounded-full.text-xs(
-                        *ngFor="let perm of permission.permissions"
-                      ) {{ perm }}
+                ) {{ permission.label }}
 
       // Actions Tab
       p-tabPanel(header="Actions")
-        app-unit-actions-assignment(
-          [processes]="processes",
-          [selectedActions]="selectedActions",
-          (selectedActionsChange)="onSelectedActionsChange($event)"
+        app-process-actions(
+          [selectedRole]="selectedRole",
+          [selectedActions]="getSelectedRoleActions()",
+          [isEditMode]="true",
+          [showSummary]="true",
+          (actionsChange)="onActionsChange($event)"
         )
 
     // User Selection Dialog

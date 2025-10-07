@@ -5,21 +5,11 @@ import {
   ChangeDetectorRef,
   ViewChild,
 } from '@angular/core';
-import { packagesData } from '../../../assets/data';
+import { renewalData } from '../../../assets/data';
 import { SidebarMenuService } from '../../_services/sidebar-menu.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PackageStatsComponent } from 'src/app/components/package-stats/package-stats.component';
-import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
-import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
-import { TableComponent } from 'src/app/components/table/table.component';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
-//import { Select } from 'primeng/select';
-import { FormsModule } from '@angular/forms';
-//import { DatePickerModule } from 'primeng/datepicker';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
-import { ButtonModule } from 'primeng/button';
+
 import {
   FilterConfig,
   FilterValue,
@@ -29,24 +19,11 @@ import {
 @Component({
   selector: 'app-renewal-reminder',
   templateUrl: './renewal-reminder.component.html',
-  imports: [
-    PackageStatsComponent,
-    BreadcrumbsComponent,
-    AppLayoutComponent,
-    TableComponent,
-    FormsModule,
-    ConfigurableFilterBarComponent,
-    //    Select,
-    //    DatePickerModule,
-    FloatLabelModule,
-    IconFieldModule,
-    InputIconModule,
-    ButtonModule,
-  ],
-  standalone: true,
+   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RenewalReminderComponent implements OnInit {
+
   @ViewChild(ConfigurableFilterBarComponent)
   configurableFilter!: ConfigurableFilterBarComponent;
 
@@ -64,169 +41,110 @@ export class RenewalReminderComponent implements OnInit {
     logo: '',
   };
 
-  breadcrumbItems = [];
+  breadcrumbItems = []; 
+  
+  currentDate: Date = new Date();
 
-  // Static Package stats for demo
-  totalPackages = 1580;
-  yearPackages = 1180;
-  monthPackages = 480;
-  weekPackages = 300;
-  totalPackagesPercentChange = '39';
-  yearPackagesPercentChange = '40';
-  monthPackagesPercentChange = '41';
-  weekPackagesPercentChange = '42';
-  totalPackagesPeriod = "'Since 1999'";
-  yearPackagesPeriod = "'Since 1 year'";
-  monthPackagesPeriod = "'Since 1 month'";
-  weekPackagesPeriod = "'Since 7 days'";
+  renewalMonth = this.currentDate.toLocaleString('default', { month: 'short' });
+  renewalYear = this.currentDate.getFullYear()+1;
 
   packageStats = [
     {
-      label: 'TOTAL COUNT',
-      count: this.totalPackages,
-      percentChange: this.totalPackagesPercentChange,
-      period: this.totalPackagesPeriod,
+      label: 'trademarks',
+      displayLabel:['Trademarks'],
+      //count:80,
+      countLabel: 'Next Renewals: '+this.renewalMonth+' '+this.renewalYear,
+      //period: 'Since: March 24, 2025',
+      periodList:['Files: 145000', 'Expected Fees: 89`000 USD'],
       color: '#3949AB', // Indigo color
-      icon: 'pi pi-thumbtack',
     },
     {
-      label: 'TOTAL IN YEAR',
-      count: this.yearPackages,
-      percentChange: this.yearPackagesPercentChange,
-      period: this.yearPackagesPeriod,
+      label: 'patents',
+      displayLabel:['Patents'],
+      //count: 12,
+      countLabel: 'Next Renewals: '+this.renewalMonth+' '+this.renewalYear,
+      //period: 'Since: March 24, 2025',
+      periodList:['Files: 5674', 'Expected Fees: 145`000 USD'],
       color: '#2E7D32', // Green color
-      icon: 'pi pi-check-circle',
     },
     {
-      label: 'TOTAL IN MONTH',
-      count: this.monthPackages,
-      percentChange: this.monthPackagesPercentChange,
-      period: this.monthPackagesPeriod,
-      color: '#022382', // Dark blue color
-      icon: 'pi pi-tag',
+      label: 'designs',
+      displayLabel:['Designs'],
+      //count: 120,
+      countLabel: 'Next Renewals: '+this.renewalMonth+' '+this.renewalYear,
+      //period: 'Since: March 24, 2025',
+      periodList:['Files: 8467', 'Expected Fees: 78`000 USD'],
+      color: '#0662ccff', // Blue color
     },
     {
-      label: 'TOTAL IN WEEK',
-      count: this.weekPackages,
-      percentChange: this.weekPackagesPercentChange,
-      period: this.weekPackagesPeriod,
-      color: '#0288D1', // Blue color
-      icon: 'pi pi-spinner',
+      label: 'others',
+      displayLabel:['Others'],
+      //count: 120,
+      countLabel: 'Next Renewals: '+this.renewalMonth+' '+this.renewalYear,
+      //period: 'Since: March 24, 2025',
+      periodList:['Files: 234', 'Expected Fees: 2`000 USD'],
+      color: '#023a7aff', // Blue color
     },
   ];
 
   statSelected;
 
-  globalFilterFields = ['ipType', 'fileName', 'status'];
-
   tableColumns = [
-    { field: 'ipType', header: 'IP Right Category', sortable: true },
-    {
-      field: 'fileName',
-      header: 'File name',
-      sortable: true,
-    },
-    { field: 'sharedDate', header: 'Shared Date' },
-    { field: 'processedDate', header: 'Processed Date' },
-    {
-      field: 'status',
-      header: 'Status',
-      display: 'chip',
-      //      filterType: 'dropdown',
-      severity: (value) => {
-        if (value === 'Processed') {
-          return 'success';
-        } else if (value === 'Failed') {
-          return 'danger';
-        } else if (value === 'Partial') {
-          return 'warn';
-        } else {
-          return 'info';
-        }
-      },
-    },
-    { field: 'totalCount', header: 'Total Count' },
-    { field: 'processedCount', header: 'Processed Count' },
-    {
-      field: 'actions',
-      header: 'Actions',
-      display: 'actions',
-      actions: [
-        {
-          label: 'Download Details',
-          icon: 'pi pi-download',
-          action: 'download',
-          severity: 'info',
-        },
-      ],
-    },
+    { field: 'selected', header: 'Select', display: 'checkbox' },
+    { field: 'fileId', header: 'File Id' },
+    { field: 'expiryDate', header: 'Expiry Date' },
+    { field: 'renewalDueDate', header: 'Renewal Due Date' },
+    { field: 'expectedFee', header: 'Expected Fee' },
+    { field: 'fileSummary', header: 'File Summary' },
+    { field: 'fileOwners', header: 'File Owners' },
+    { field: 'notificationEmails', header: 'Notified By' },
+    { field: 'mailSentDate', header: 'Notified On' },
   ];
 
-  tableData = packagesData;
+  tableData = renewalData;
 
-  //  ipTypes: IpType[] | undefined;
-
-  //  selectedIpType: IpType | undefined;
-
-  //  date: Date | undefined;
-
-  //  maxDate: Date;
-
-  //  defaultMaxDate: Date;
-
-  officeCode;
-
-  officeCodeParam;
-
-  sortField: string = 'fileName';
-  sortOrder: number = 1;
-
-  applicationOfficeCode = '';
+  selectedItems: any[] = [];
 
   filterConfigs: FilterConfig[] = [
+//    {
+//      key: 'fileId',
+//      label: 'File Id',
+//      type: 'text',
+//      section: 'FILE',
+//    },
     {
-      key: 'fileName',
-      label: 'File Name',
-      type: 'text',
-      section: 'FILE NAME',
-    },
-    {
-      key: 'sharedDate',
-      label: 'Shared Date',
+      key: 'renewalDueDate',
+      label: 'Renewal Due Date',
       type: 'dateRange',
       placeholder: 'Select date range',
       dateFormat: 'yy-mm-dd',
       section: 'DATE FILTERS',
     },
     {
-      key: 'processed',
-      label: 'Processed',
-      type: 'checkbox',
-      section: 'STATUS',
+      key: 'expiryDate',
+      label: 'Expiry Date',
+      type: 'dateRange',
+      placeholder: 'Select date range',
+      dateFormat: 'yy-mm-dd',
+      section: 'DATE FILTERS',
     },
     {
-      key: 'failed',
-      label: 'Failed',
+      key: 'mail_sent',
+      label: 'Notified',
       type: 'checkbox',
-      section: 'STATUS',
+      section: 'NOTIFIED',
     },
     {
-      key: 'partial',
-      label: 'Partial',
+      key: 'mail_not_sent',
+      label: 'Not Notified',
       type: 'checkbox',
-      section: 'STATUS',
-    },
-    {
-      key: 'inProgress',
-      label: 'In Progress',
-      type: 'checkbox',
-      section: 'STATUS',
+      section: 'NOTIFIED',
     },
   ];
 
   appliedFilters: FilterValue[] = [];
 
-  searchBar: string;
+  searchDateBar: any = [];
 
   constructor(
     private menuService: SidebarMenuService,
@@ -242,109 +160,58 @@ export class RenewalReminderComponent implements OnInit {
         params['officeCode'] || this.ms.getCurrentOffice() || 'default';
       const langCode = params['langCode'] || 'en';
 
-      this.officeCodeParam = this.route.snapshot.params['office'];
-
-      console.log('officeCodeParam ', this.officeCodeParam);
-
-      this.officeCode = officeCode;
-
-      if (
-        officeCode == 'default' &&
-        (this.officeCodeParam == null ||
-          this.officeCodeParam == undefined ||
-          this.officeCodeParam == '')
-      ) {
-        this.router.navigate(['select-office'], { relativeTo: this.route });
-      }
-
-      if (officeCode == 'default') {
-        this.applicationOfficeCode = this.officeCodeParam;
-        this.breadcrumbItems = [
-          {
-            label: 'Offices',
-            routerLink: `/${officeCode}/${langCode}/data-packages/select-office`,
-          },
-          {
-            label: 'Data Sharing',
-            routerLink: `/${officeCode}/${langCode}/data-packages`,
-          },
-        ];
-      } else {
-        this.applicationOfficeCode = this.officeCode;
-        this.breadcrumbItems = [
-          {
-            label: 'Data Sharing',
-            routerLink: `/${officeCode}/${langCode}/data-packages`,
-          },
-        ];
-      }
+      this.breadcrumbItems = [
+        {
+          label: 'Renewals',
+          routerLink: `/${officeCode}/${langCode}/renewal-reminder`,
+        },
+      ];
 
       // Trigger change detection after updating breadcrumbs
       this.cdr.markForCheck();
     });
 
     const currentPath = this.router.url;
-    const menuItems = this.menuService.generateConfigurationMenu(
-      currentPath,
-      this.applicationOfficeCode
-    );
+    const menuItems = this.menuService.generateAnnuityMenu(currentPath);
     this.menuService.updateMenuItems(menuItems);
 
-    //    this.ipTypes = [
-    //      { name: 'Trademarks', code: 'trademarks' },
-    //      { name: 'Patents', code: 'patents' },
-    //      { name: 'Industrial Designs', code: 'designs' },
-    //      { name: 'Copyright', code: 'copyright' },
-    //      { name: 'Geographical Indications', code: 'gi' },
-    //    ];
-
-    let today = new Date();
-
-    //    this.maxDate = new Date();
-    //    this.maxDate.setDate(today.getDate() + 1);
-    //    this.defaultMaxDate = this.maxDate;
-
-    let startDate = new Date();
-    startDate.setMonth(today.getMonth() - 1);
-    this.tableData = packagesData.filter(
-      (item) => new Date(item.sharedDate) >= startDate
+    this.statSelected = 'trademarks';
+    this.tableData = renewalData.filter(
+      (item) => item.ipType === 'trademarks'
     );
+
+    let statsFilter = {key: 'stats', value: this.statSelected, type: 'text' };
+    this.appliedFilters = [...this.appliedFilters, statsFilter];
+
   }
 
-  //  onDateSelect(event: any) {
-  //    console.log('Selected Date:', this.date);
-  //
-  //    if(this.date[0]!=null){
-  //      let newStartDate = this.date[0];
-  //      let dateToSet = newStartDate.getDate();
-  //      dateToSet = dateToSet + 90;
-  //      this.maxDate.setFullYear(newStartDate.getFullYear());
-  //      this.maxDate.setMonth(newStartDate.getMonth());
-  //      this.maxDate.setDate(dateToSet);
-  //
-  //      //if(this.maxDate>this.defaultMaxDate){
-  //      //  this.maxDate = this.defaultMaxDate;
-  //      //}
-  //    }
-  //
-  //    if(this.date[0]!=null && this.date[1]!=null){
-  //       this.tableData = packagesData.filter(item => new Date(item.sharedDate) >= this.date[0] && new Date(item.sharedDate) <= this.date[1]);
-  //    }
-  //
-  //  }
+  onSelectionChange(item: any) {
+    //console.log("any "+item[0].id);
+    this.selectedItems = item;
+    if(item === undefined || item.length == 0) {
+      this.tableData.forEach(
+        d => { if(d.notificationEmails != 'online' && d.notificationEmails != 'paper' ) {d.disabled = false;} }
+      );
+    } else {
+      item.forEach(
+        i => {
+          i.notificationEmails.split(',').forEach(
+            e => {
+                this.tableData = this.tableData.map(
+                  d => d.notificationEmails.includes(e) ?
+                  d :
+                  { ...d, disabled: true }
+                );
+            }
+          );
+        }
+      );
+    }
+  }
 
-  //  onIpTypeChange(event: any) {
-  //    console.log('Selected IpType:', this.selectedIpType);
-  //    this.filtering();
-  //  }
-
-  //  filtering(){
-  //    let tempData = packagesData;
-  //    if(this.selectedIpType!=null && this.selectedIpType!=undefined&& this.selectedIpType.name!=null && this.selectedIpType.name!='') {
-  //      tempData = tempData.filter(item => item.ipType == this.selectedIpType.name);
-  //    }
-  //    this.tableData = tempData;
-  //  }
+  onSendMail() {
+    console.log('Send Mail notificationEmails in selected ', this.tableData);
+  }
 
   onActionClick(action: string, item: any) {
     console.log('Action clicked:', action, item);
@@ -356,16 +223,7 @@ export class RenewalReminderComponent implements OnInit {
   }
 
   downloadDetails(user: any) {
-    // this.router.navigate(['edit-user-account', user.id], {
-    //   relativeTo: this.route,
-    // });
-    // TODO: Implement edit user functionality
     console.log('Download details:', user);
-    /*if(this.officeCode=='default'){
-      this.router.navigate(['../authority-files',this.officeCodeParam], { relativeTo: this.route });
-    }else{
-      this.router.navigate(['authority-files'], { relativeTo: this.route });
-    }*/
   }
 
   onFilterChange(filters: FilterValue[]): void {
@@ -376,9 +234,9 @@ export class RenewalReminderComponent implements OnInit {
   onFilterCleared(): void {
     console.log('Filters cleared');
     this.appliedFilters = [];
-    this.searchBar = '';
-    this.configurableFilter.searchBar = '';
-    this.tableData = packagesData;
+    this.searchDateBar = [];
+    this.statSelected = '';
+//    this.configurableFilter.searchDateBar = [];
     this.filterByStats();
     this.cdr.detectChanges();
   }
@@ -398,57 +256,46 @@ export class RenewalReminderComponent implements OnInit {
   onStatSelect(statLabel: string) {
     console.log('Stats Selected:', statLabel);
     this.statSelected = statLabel;
+
+    if (this.appliedFilters.some(user => user.key === 'stats')) {
+      const updatedFilter = this.appliedFilters.map(item =>
+        item.key === 'stats' ? { ...item, value: this.statSelected } : item
+      );
+      this.appliedFilters = updatedFilter;
+    } else {
+      let statsFilter = {key: 'stats', value: this.statSelected, type: 'text' };
+      this.appliedFilters = [...this.appliedFilters, statsFilter];
+    }
+
     this.applyFilters();
+    this.onSelectionChange(this.selectedItems);
   }
 
   private filterByStats(): void {
-    let endDate = new Date();
-
-    let startDate = new Date();
-    if (this.statSelected == 'TOTAL IN YEAR') {
-      startDate.setFullYear(endDate.getFullYear() - 1);
-    } else if (this.statSelected == 'TOTAL IN MONTH') {
-      startDate.setMonth(endDate.getMonth() - 1);
-    } else if (this.statSelected == 'TOTAL IN WEEK') {
-      startDate.setDate(endDate.getDate() - 7);
-    } else {
-      //TOTAL COUNT
-      startDate = null;
-    }
-
-    if (startDate == null) {
-      this.tableData = packagesData;
-    } else {
-      this.tableData = packagesData.filter(
-        (item) => new Date(item.sharedDate) >= startDate
-      );
-    }
-  }
-
-  filterSearch(value: string) {
-    console.log(value);
-    this.searchBar = value;
-    this.searchByFilter();
-  }
-
-  searchByFilter(): void{
-    this.tableData = this.tableData.filter((item) =>
-      item.fileName?.toLowerCase().includes(this.searchBar)
+    this.tableData = renewalData.filter(
+      (item) => item.ipType === this.statSelected
     );
+  }
+
+  filterSearch(value: any) {
+    console.log(value);
+    this.searchDateBar = value;
+    this.applyFilters();
   }
 
   private applyFilters(): void {
     this.filterByStats();
-    //this.searchByFilter();
     let filtered = [...this.tableData];
 
-    console.log("searchBar "+this.searchBar)
-    if (this.searchBar && this.searchBar.trim()) {
-      filtered = filtered.filter(
-        (item) =>
-          item.fileName?.toLowerCase().includes(this.searchBar) ||
-          item.status?.toLowerCase().includes(this.searchBar)
-      );
+    console.log("searchBar "+this.searchDateBar)
+    if (this.searchDateBar && Array.isArray(this.searchDateBar) && this.searchDateBar.length === 2) {
+      const [startDate, endDate] = this.searchDateBar;
+      if (startDate && endDate) {
+        filtered = filtered.filter((item) => {
+          const itemDate = new Date(item.expiryDate);
+          return itemDate >= startDate && itemDate <= endDate;
+        });
+      }
     }
 
     this.appliedFilters.forEach((filter) => {
@@ -458,39 +305,32 @@ export class RenewalReminderComponent implements OnInit {
             const searchTerm = filter.value.toLowerCase().trim();
             filtered = filtered.filter(
               (item) =>
-                item.fileName.toLowerCase().includes(searchTerm) ||
-                item.status?.toLowerCase().includes(searchTerm)
+                item.fileId.toLowerCase().includes(searchTerm)
             );
           }
           break;
-        case 'fileName':
+        case 'fileId':
           if (filter.value != '') {
             filtered = filtered.filter((item) =>
-              item.fileName.includes(filter.value)
+              item.fileId.includes(filter.value)
             );
           }
           break;
-        case 'processed':
-          if (filter.value === true) {
-            filtered = filtered.filter((item) => item.status == 'Processed');
+        case 'fileOwners':
+          if (filter.value != '') {
+            filtered = filtered.filter((item) =>
+              item.fileOwners.includes(filter.value)
+            );
           }
           break;
-        case 'failed':
-          if (filter.value === true) {
-            filtered = filtered.filter((item) => item.status == 'Failed');
+        case 'notificationEmails':
+          if (filter.value != '') {
+            filtered = filtered.filter((item) =>
+              item.notificationEmails.includes(filter.value)
+            );
           }
           break;
-        case 'partial':
-          if (filter.value === true) {
-            filtered = filtered.filter((item) => item.status == 'Partial');
-          }
-          break;
-        case 'inProgress':
-          if (filter.value === true) {
-            filtered = filtered.filter((item) => item.status == 'In Progress');
-          }
-          break;
-        case 'sharedDate':
+        case 'expiryDate':
           if (
             filter.value &&
             Array.isArray(filter.value) &&
@@ -499,10 +339,35 @@ export class RenewalReminderComponent implements OnInit {
             const [startDate, endDate] = filter.value;
             if (startDate && endDate) {
               filtered = filtered.filter((item) => {
-                const itemDate = new Date(item.sharedDate);
+                const itemDate = new Date(item.expiryDate);
                 return itemDate >= startDate && itemDate <= endDate;
               });
             }
+          }
+          break;
+        case 'renewalDueDate':
+          if (
+            filter.value &&
+            Array.isArray(filter.value) &&
+            filter.value.length === 2
+          ) {
+            const [startDate, endDate] = filter.value;
+            if (startDate && endDate) {
+              filtered = filtered.filter((item) => {
+                const itemDate = new Date(item.renewalDueDate);
+                return itemDate >= startDate && itemDate <= endDate;
+              });
+            }
+          }
+          break;
+        case 'mail_sent':
+          if (filter.value === true) {
+            filtered = filtered.filter((item) => item.mailSentDate != '');
+          }
+          break;
+        case 'mail_not_sent':
+          if (filter.value === true) {
+            filtered = filtered.filter((item) => item.mailSentDate == '');
           }
           break;
       }
@@ -511,22 +376,26 @@ export class RenewalReminderComponent implements OnInit {
     this.tableData = filtered;
   }
 
-  onSort(event: any) {
-    this.sortField = event.field;
-    this.sortOrder = event.order;
-  }
-
   clearAllFilters(): void {
     this.appliedFilters = [];
-    this.searchBar = '';
-    this.configurableFilter.searchBar = '';
-    this.tableData = packagesData;
+    this.searchDateBar = [];
+//    this.configurableFilter.searchBar = '';
+    this.tableData = renewalData;
     this.configurableFilter.clearAllFilters();
     this.cdr.detectChanges();
   }
 
+  getLabelForStats(): string {
+    const statsConfig = this.packageStats.find(f => f.label === this.statSelected);
+    return statsConfig.displayLabel[0];
+  }
+
   getFilterDisplayValue(filter: FilterValue): string {
     const filterConfig = this.filterConfigs.find((f) => f.key === filter.key);
+
+    if(filter.key == 'stats'){
+      return `IpType: ${this.getLabelForStats()}`
+    }
 
     if(filter.key == 'search'){
       return `${filter.key}: ${filter.value}`
@@ -542,7 +411,15 @@ export class RenewalReminderComponent implements OnInit {
           const [startDate, endDate] = filter.value;
           return `${
             filterConfig.label
-          }: ${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`;
+          }: ${startDate?.toLocaleDateString('en-CA', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit'
+            })} - ${endDate?.toLocaleDateString('en-CA', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit'
+            })}`;
         }
         return filterConfig.label;
       default:
@@ -552,6 +429,10 @@ export class RenewalReminderComponent implements OnInit {
 
   removeFilterChip(filterKey: string): void {
     console.log('removeFilterChip ' + filterKey);
+
+    if(filterKey == 'stats'){
+      this.statSelected = 'NA';
+    }
 
     // Find the filter config to get the display value
     const filterConfig = this.filterConfigs.find((f) => f.key === filterKey);
@@ -564,6 +445,13 @@ export class RenewalReminderComponent implements OnInit {
       // Update the filtered groups
       this.applyFilters();
       this.cdr.detectChanges();
+    }
+  }
+
+  removeDefaultFilter(filterKey: string): void {
+    console.log("removeDefaultFilter "+filterKey);
+    if (filterKey === 'stats') {
+      this.statSelected = '';
     }
   }
 }

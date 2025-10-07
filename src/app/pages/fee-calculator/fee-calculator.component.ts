@@ -1,40 +1,12 @@
-import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { DropdownModule } from 'primeng/dropdown';
-import { InputTextModule } from 'primeng/inputtext';
-import { TableModule } from 'primeng/table';
-import { SelectModule } from 'primeng/select';
-import { FloatLabelModule } from "primeng/floatlabel"
-
+import { ActivatedRoute, Router,  } from '@angular/router';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
 import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
-import { AppLayoutComponent } from 'src/app/components/app-layout/app-layout.component';
-import { BreadcrumbsComponent } from 'src/app/components/breadcrumbs/breadcrumbs.component';
 import { FeeService } from 'src/app/_services/FeeService';
 
 @Component({
   selector: 'app-fee-calculator',
-  standalone: true,
-  imports: [
-    CommonModule,
-    DropdownModule, 
-    TableModule,
-    CardModule,
-    ButtonModule,
-    FormsModule,
-    RouterModule,
-    SelectModule,
-    FloatLabelModule,
-    InputTextModule,
-    CurrencyPipe,
-    AppLayoutComponent,
-    BreadcrumbsComponent,
-  ],
+  standalone: false,
   providers: [
     FeeService
   ],

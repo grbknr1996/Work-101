@@ -1,12 +1,9 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import {
   Router,
   NavigationEnd,
   ActivatedRoute,
-  RouterModule,
 } from '@angular/router';
-import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { MenuItem } from 'primeng/api';
 import { filter } from 'rxjs/operators';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
@@ -20,8 +17,7 @@ interface BreadcrumbItem extends MenuItem {
 @Component({
   selector: 'app-breadcrumbs',
   templateUrl: './breadcrumbs.component.html',
-  standalone: true,
-  imports: [CommonModule, BreadcrumbModule, RouterModule],
+  standalone: false,
 })
 export class BreadcrumbsComponent implements OnInit, OnDestroy {
   @Input() home: MenuItem = { icon: 'pi pi-home', routerLink: '/' };

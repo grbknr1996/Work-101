@@ -1,14 +1,17 @@
 
 <div class="grid grid-cols-6 mt-2" [style]="disabled? 'display:none' : '' ">
   <div class="col-span-6 grid grid-cols-12 filter">
-    <div class="col-span-4">
-      <p-floatlabel variant="on" [style]="showSearchBar? '' :'display:none' ">
+    <div class="col-span-4" [style]="showSearchBar? '' :'display:none' ">
+      <p-floatlabel variant="on">
         <p-iconfield>
           <p-inputicon class="pi pi-search"></p-inputicon>
           <input class="w-full" id="on_label" pInputText="" [(ngModel)]="searchBar" (input)="onFilterSearch(searchBar)" autocomplete="off">
         </p-iconfield>
         <label for="on_label">{{ searchLabel }}</label>
       </p-floatlabel>
+    </div>
+    <div class="col-span-4" [style]="showDateSearchBar? '' :'display:none' ">
+      <p-datePicker class="w-full date-calendar" [(ngModel)]="searchBarDate" [placeholder]="dateSearchLabel || 'Select date'" [dateFormat]="searchDateFormat || 'yy-mm-dd'" selectionMode="range" [showIcon]="true" [showButtonBar]="true" [touchUI]="false" [readonlyInput]="true" appendTo="body" (onSelect)="onCalenderSelect($event)" (onClearClick)="onClearEvent($event)"></p-datePicker>
     </div>
     <div class="col-span-8 flex justify-end gap-2 filter-icons">
       <p-button *ngFor="let act of actions" [icon]="act.icon" [outlined]="true" [text]="true" [pTooltip]="act.label" (click)="onActionClick(act.action)"></p-button>
@@ -18,6 +21,6 @@
     </div>
   </div>
 </div>
-<div class="mb-8 mt-1 w-full" [style]="disabled? 'display:none' : '' ">
+<div class="mt-1 w-full" [style]="(disabled || appliedFilters.length == 0)? 'display:none' : '' ">
   <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="filterClearAll" [clearAllLabel]="'Clear All'" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-filter-chips>
 </div>
