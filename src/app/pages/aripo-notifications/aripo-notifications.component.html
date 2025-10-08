@@ -5,17 +5,17 @@
   <app-configurable-filter-bar [filters]="aripoIncomingFilterConfigs" [disabled]="aripoActiveIndex==0? false: true" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'notifications.aripo.filter.placeHolder'|translate" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)" [showSearchBar]="true" [searchBar]="searchBar" (filterSearch)="filterSearch($event)" [searchLabel]="'notifications.aripo.filter.search'|translate" [showDownloadIcon]="false" [appliedFilters]="appliedFilters" [clearAllLabel]="'common.components.filter.clearAll'|translate" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-configurable-filter-bar>
   <app-configurable-filter-bar [filters]="aripoOutgoingFilterConfigs" [disabled]="aripoActiveIndex==0? true: false" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'notifications.aripo.filter.placeHolder'|translate" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)" [showSearchBar]="true" [searchBar]="searchBar" (filterSearch)="filterSearch($event)" [searchLabel]="'notifications.aripo.filter.search'|translate" [showDownloadIcon]="false" [appliedFilters]="appliedFilters" [clearAllLabel]="'common.components.filter.clearAll'|translate" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-configurable-filter-bar>
   <p-tabView [(activeIndex)]="aripoActiveIndex">
-    <p-tabpanel value="aripo-incoming">
+    <p-tabPanel value="aripo-incoming">
       <ng-template pTemplate="header">
         <div (click)="onHeaderClick($event, 'aripo-incoming')">{{"notifications.aripo.incoming.header"|translate}}</div>
       </ng-template>
       <app-table [columns]="aripoIncomingTableColumns" [data]="aripoIncomingTableData" (actionClick)="onActionClick($event.action, $event.item)" [showClearButton]="false" [showSearch]="false"> </app-table>
-    </p-tabpanel>
-    <p-tabpanel value="aripo-outgoing">
+    </p-tabPanel>
+    <p-tabPanel value="aripo-outgoing">
       <ng-template pTemplate="header">
         <div (click)="onHeaderClick($event, 'aripo-outgoing')">{{"notifications.aripo.outgoing.header"|translate}} </div>
       </ng-template>
       <app-table [columns]="aripoOutgoingTableColumns" [data]="aripoOutgoingTableData" (actionClick)="onActionClick($event.action, $event.item)" [showClearButton]="false" [showSearch]="false">       </app-table>
-    </p-tabpanel>
+    </p-tabPanel>
   </p-tabView>
 </app-layout>

@@ -23,52 +23,16 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthorityFilesComponent implements OnInit {
+
   @ViewChild(ConfigurableFilterBarComponent)
   configurableFilter!: ConfigurableFilterBarComponent;
 
-  layoutConfig = {
-    appTitle: 'WIPO IPAS Central',
-    showHeader: true,
-    showSidebar: true,
-    headerItems: [],
-    sidebarItems: [],
-    footerText: 'WIPO',
-    fixedHeader: true,
-    fixedSidebar: true,
-    sidebarCollapsed: false,
-    logo: '',
-  };
-
+  layoutConfig;
   breadcrumbItems = [];
 
   // Static Package stats for demo
 
-  packageStats = [
-    {
-      label: 'All',
-      count: 3222929,
-      period: 'Since 2025',
-      color: '#3949AB', // Indigo color
-    },
-    {
-      label: 'Patents',
-      count: 292929,
-      period: 'Since 2025',
-      color: '#2E7D32', // Green color
-    },
-    {
-      label: 'Utility Models',
-      count: 1288239,
-      period: 'Since 2025',
-      color: '#0288D1', // Blue color
-    },
-    {
-      label: 'Inconsistent Full-text Files',
-      count: 127,
-      period: 'Since 2025',
-      color: '#D32F2F', // Red color
-    },
-  ];
+  packageStats = [];
 
   statSelected;
 
@@ -178,6 +142,48 @@ export class AuthorityFilesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    this.packageStats = [
+      {
+        label: 'All',
+        count: 3222929,
+        period: 'Since 2025',
+        color: '#3949AB', // Indigo color
+      },
+      {
+        label: 'Patents',
+        count: 292929,
+        period: 'Since 2025',
+        color: '#2E7D32', // Green color
+      },
+      {
+        label: 'Utility Models',
+        count: 1288239,
+        period: 'Since 2025',
+        color: '#0288D1', // Blue color
+      },
+      {
+        label: 'Inconsistent Full-text Files',
+        count: 127,
+        period: 'Since 2025',
+        color: '#D32F2F', // Red color
+      },
+    ];
+
+    this.layoutConfig = {
+      appTitle: this.ms.translate('common.components.app.title'),
+      showHeader: true,
+      showSidebar: true,
+      headerItems: [],
+      sidebarItems: [],
+      footerText: '© WIPO ' + new Date().getFullYear(),
+      fixedHeader: true,
+      fixedSidebar: true,
+      sidebarCollapsed: false,
+      theme: 'light',
+      logo: '',
+    };
+
     this.route.params.subscribe((params) => {
       const officeCode =
         params['officeCode'] || this.ms.getCurrentOffice() || 'default';

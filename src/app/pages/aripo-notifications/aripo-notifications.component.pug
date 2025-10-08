@@ -48,11 +48,11 @@ app-layout([config]="layoutConfig")
           (clearAll)="clearAllFilters()",
         )
   p-tabView([(activeIndex)]="aripoActiveIndex")
-      p-tabpanel(value="aripo-incoming")
+      p-tabPanel(value="aripo-incoming")
           ng-template(pTemplate="header")
             div((click)="onHeaderClick($event, 'aripo-incoming')") {{"notifications.aripo.incoming.header"|translate}}
           app-table([columns]="aripoIncomingTableColumns", [data]="aripoIncomingTableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false") 
-      p-tabpanel(value="aripo-outgoing")
+      p-tabPanel(value="aripo-outgoing")
           ng-template(pTemplate="header")
             div((click)="onHeaderClick($event, 'aripo-outgoing')") {{"notifications.aripo.outgoing.header"|translate}} 
           app-table([columns]="aripoOutgoingTableColumns", [data]="aripoOutgoingTableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false")        

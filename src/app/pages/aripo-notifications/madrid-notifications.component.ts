@@ -24,245 +24,26 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MadridNotificationsComponent implements OnInit {
+  
   @ViewChild(ConfigurableFilterBarComponent)
   configurableFilter!: ConfigurableFilterBarComponent;
 
-  layoutConfig = {
-    appTitle: 'WIPO IPAS Central',
-    showHeader: true,
-    showSidebar: true,
-    headerItems: [],
-    sidebarItems: [],
-    footerText: 'WIPO',
-    fixedHeader: true,
-    fixedSidebar: true,
-    sidebarCollapsed: false,
-    theme: 'light',
-    logo: '',
-  };
-
+  layoutConfig;
   breadcrumbItems = [];
 
   selectedTab = 'madrid-incoming';
 
-  madridStats = [
-    {
-      label: 'Total Received Applications',
-      count: 1880,
-      period: 'Last Received Gazette: 202530',
-      color: '#3949AB', // Indigo color
-    },
-    {
-      label: 'Total Processed Transactions',
-      count: 4320,
-      period: 'Last Gazette: 202530',
-      color: '#2E7D32', // Green color
-    },
-    {
-      label: 'Failed Transactions',
-      count: 12,
-      period: 'Last Gazette: 202525',
-      color: '#d30101ff', // Blue color
-    },
-  ];
-
+  madridStats = [];
   madridStatSelected;
 
-  madridIncomingTableColumns = [
-    { field: 'gazette', header: 'Gazette'},
-    { field: 'irn', header: 'IRN' },
-    { field: 'transaction', header: 'Transaction' },
-    { field: 'notifiedDate', header: 'Notified On' },
-    { field: 'importedDate', header: 'Imported On' },
-    {
-      field: 'status',
-      header: 'Import Status',
-      display: 'chip',
-      severity: (value) => {
-        if (value === 'Success') {
-          return 'success';
-        } else if (value === 'Error') {
-          return 'danger';
-        } else {
-          return 'info';
-        }
-      },
-    },
-    {
-      field: 'correctionRequired',
-      header: 'Correction Required',
-      display: 'chip',
-      severity: (value) => {
-        if (value === 'true') {
-          return 'success';
-        } else if (value === 'false') {
-          return 'danger';
-        } else {
-          return 'info';
-        }
-      },
-    },
-    { field: 'correctedDate', header: 'Corrected On' },
-    {
-      field: 'actions',
-      header: 'Actions',
-      display: 'actions',
-      actions: [
-        {
-          label: 'Download',
-          icon: 'pi pi-file-plus',
-          action: 'download',
-          severity: 'info',
-        },
-      ],
-    },
-  ];
-
-  madridOutgoingTableColumns = [
-    { field: 'irn', header: 'IRN' },
-    { field: 'transaction', header: 'Transaction' },
-    { field: 'notifiedDate', header: 'Notified On' },
-    { field: 'dueDate', header: 'Due On' },
-    { field: 'responsibleUser', header: 'Responsible User'},
-    { field: 'lastAction', header: 'Last Action'},
-    { field: 'recordedDate', header: 'Recorded On' },
-    {
-      field: 'decision',
-      header: 'Decision',
-      display: 'chip',
-      severity: (value) => {
-        if (value === 'Granted') {
-          return 'success';
-        } else if (value === 'Final_Refusal') {
-          return 'danger';
-        } else if (value === 'Provisional_Refusal') {
-          return 'warn';
-        } else {
-          return 'info';
-        }
-      },
-    },
-    { field: 'sentDate', header: 'Sent On' },
-  ];
+  madridIncomingTableColumns = [];
+  madridOutgoingTableColumns = [];
 
   madridIncomingTableData = madridIncomingNotificationData;
   madridOutgoingTableData = madridOutgoingNotificationData;
 
-  madridIncomingFilterConfigs: FilterConfig[] = [
-    {
-      key: 'transaction',
-      label: 'Transaction',
-      type: 'text',
-      section: 'FILE',
-    },
-    {
-      key: 'notifiedDate',
-      label: 'Notified On',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'importedDate',
-      label: 'Imported On',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'correctedDate',
-      label: 'Corrected On',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'Success',
-      label: 'Success',
-      type: 'checkbox',
-      section: 'STATUS',
-    },
-    {
-      key: 'Error',
-      label: 'Error',
-      type: 'checkbox',
-      section: 'STATUS',
-    },
-    {
-      key: 'Correction_Required',
-      label: 'Correction Required',
-      type: 'checkbox',
-      section: 'Correction Required',
-    },
-  ];
-
-  madridOutgoingFilterConfigs: FilterConfig[] = [
-    {
-      key: 'transaction',
-      label: 'Transaction',
-      type: 'text',
-      section: 'FILE',
-    },
-    {
-      key: 'responsibleUser',
-      label: 'Responsible User',
-      type: 'text',
-      section: 'FILE',
-    },
-    {
-      key: 'notifiedDate',
-      label: 'Notified On',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'recordedDate',
-      label: 'Recorded On',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'sentDate',
-      label: 'Sent On',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'dueDate',
-      label: 'Due On',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'Granted',
-      label: 'Granted',
-      type: 'checkbox',
-      section: 'DECISION',
-    },
-    {
-      key: 'Provisional_Refusal',
-      label: 'Provisional Refusal',
-      type: 'checkbox',
-      section: 'DECISION',
-    },
-    {
-      key: 'Final_Refusal',
-      label: 'Final Refusal',
-      type: 'checkbox',
-      section: 'DECISION',
-    },
-  ];
+  madridIncomingFilterConfigs: FilterConfig[] = [];
+  madridOutgoingFilterConfigs: FilterConfig[] = [];
 
   appliedFilters: FilterValue[] = [];
 
@@ -279,6 +60,238 @@ export class MadridNotificationsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    this.madridStats = [
+      {
+        label: 'Total Received Applications',
+        display: this.ms.translate('notifications.aripo.stats.total'),
+        count: 1880,
+        period: this.ms.translate('notifications.aripo.stats.lastReceivedGazette')+': 202530',
+        color: '#3949AB', // Indigo color
+      },
+      {
+        label: 'Total Processed Transactions',
+        display: this.ms.translate('notifications.aripo.stats.processed'),
+        count: 4320,
+        period: this.ms.translate('notifications.aripo.stats.lastGazette')+': 202530',
+        color: '#2E7D32', // Green color
+      },
+      {
+        label: 'Failed Transactions',
+        display: this.ms.translate('notifications.aripo.stats.failed'),
+        count: 12,
+        period: this.ms.translate('notifications.aripo.stats.lastGazette')+': 202525',
+        color: '#d30101ff', // Blue color
+      },
+    ];
+
+    this.madridIncomingTableColumns = [
+      { field: 'gazette', header: this.ms.translate('notifications.madrid.table.gazette') },
+      { field: 'irn', header: this.ms.translate('notifications.madrid.table.irn') },
+      { field: 'transaction', header: this.ms.translate('notifications.madrid.table.transaction') },
+      { field: 'notifiedDate', header: this.ms.translate('notifications.madrid.table.notifiedOn') },
+      { field: 'importedDate', header: this.ms.translate('notifications.madrid.table.importedOn') },
+      {
+        field: 'status',
+        header: this.ms.translate('notifications.madrid.table.status'),
+        display: 'chip',
+        severity: (value) => {
+          if (value === 'Success') {
+            return 'success';
+          } else if (value === 'Error') {
+            return 'danger';
+          } else {
+            return 'info';
+          }
+        },
+      },
+      {
+        field: 'correctionRequired',
+        header: this.ms.translate('notifications.madrid.table.correctionRequired'),
+        display: 'chip',
+        severity: (value) => {
+          if (value === 'true') {
+            return 'success';
+          } else if (value === 'false') {
+            return 'danger';
+          } else {
+            return 'info';
+          }
+        },
+      },
+      { field: 'correctedDate', header: this.ms.translate('notifications.madrid.table.correctedOn') },
+      {
+        field: 'actions',
+        header: this.ms.translate('notifications.madrid.table.actions'),
+        display: 'actions',
+        actions: [
+          {
+            label: this.ms.translate('notifications.madrid.table.download'),
+            icon: 'pi pi-file-plus',
+            action: 'download',
+            severity: 'info',
+          },
+        ],
+      },
+    ];
+
+    this.madridOutgoingTableColumns = [
+      { field: 'irn', header: this.ms.translate('notifications.madrid.table.irn') },
+      { field: 'transaction', header: this.ms.translate('notifications.madrid.table.transaction') },
+      { field: 'notifiedDate', header: this.ms.translate('notifications.madrid.table.notifiedOn') },
+      { field: 'dueDate', header: this.ms.translate('notifications.madrid.table.dueOn') },
+      { field: 'responsibleUser', header: this.ms.translate('notifications.madrid.table.responsibleUser') },
+      { field: 'lastAction', header: this.ms.translate('notifications.madrid.table.lastAction') },
+      { field: 'recordedDate', header: this.ms.translate('notifications.madrid.table.recordedOn') },
+      {
+        field: 'decision',
+        header: this.ms.translate('notifications.madrid.table.decision'),
+        display: 'chip',
+        severity: (value) => {
+          if (value === 'Granted') {
+            return 'success';
+          } else if (value === 'Final_Refusal') {
+            return 'danger';
+          } else if (value === 'Provisional_Refusal') {
+            return 'warn';
+          } else {
+            return 'info';
+          }
+        },
+      },
+      { field: 'sentDate', header: this.ms.translate('notifications.madrid.table.sentOn') },
+    ];
+
+    this.madridIncomingFilterConfigs = [
+      {
+        key: 'transaction',
+        label: this.ms.translate('notifications.madrid.table.transaction'),
+        type: 'text',
+        section: this.ms.translate('common.components.filter.section.file'),
+      },
+      {
+        key: 'notifiedDate',
+        label: this.ms.translate('notifications.madrid.table.notifiedOn'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
+        dateFormat: 'yy-mm-dd',
+        section: this.ms.translate('common.components.filter.section.dateFilters'),
+      },
+      {
+        key: 'importedDate',
+        label: this.ms.translate('notifications.madrid.table.importedOn'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
+        dateFormat: 'yy-mm-dd',
+        section: this.ms.translate('common.components.filter.section.dateFilters'),
+      },
+      {
+        key: 'correctedDate',
+        label: this.ms.translate('notifications.madrid.table.correctedOn'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
+        dateFormat: 'yy-mm-dd',
+        section: this.ms.translate('common.components.filter.section.dateFilters'),
+      },
+      {
+        key: 'Success',
+        label: this.ms.translate('notifications.madrid.filter.status.success'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.status'),
+      },
+      {
+        key: 'Error',
+        label: this.ms.translate('notifications.madrid.filter.status.error'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.status'),
+      },
+      {
+        key: 'Correction_Required',
+        label: this.ms.translate('notifications.madrid.filter.status.correctionRequired'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.correctionRequired'),
+      },
+    ];
+
+    this.madridOutgoingFilterConfigs = [
+      {
+        key: 'transaction',
+        label: this.ms.translate('notifications.madrid.table.transaction'),
+        type: 'text',
+        section: this.ms.translate('common.components.filter.section.file'),
+      },
+      {
+        key: 'responsibleUser',
+        label: this.ms.translate('notifications.madrid.table.responsibleUser'),
+        type: 'text',
+        section: this.ms.translate('common.components.filter.section.file'),
+      },
+      {
+        key: 'notifiedDate',
+        label: this.ms.translate('notifications.madrid.table.notifiedOn'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
+        dateFormat: 'yy-mm-dd',
+        section: this.ms.translate('common.components.filter.section.dateFilters'),
+      },
+      {
+        key: 'recordedDate',
+        label: this.ms.translate('notifications.madrid.table.recordedOn'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
+        dateFormat: 'yy-mm-dd',
+        section: this.ms.translate('common.components.filter.section.dateFilters'),
+      },
+      {
+        key: 'sentDate',
+        label: this.ms.translate('notifications.madrid.table.sentOn'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
+        dateFormat: 'yy-mm-dd',
+        section: this.ms.translate('common.components.filter.section.dateFilters'),
+      },
+      {
+        key: 'dueDate',
+        label: this.ms.translate('notifications.madrid.table.dueOn'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
+        dateFormat: 'yy-mm-dd',
+        section: this.ms.translate('common.components.filter.section.dateFilters'),
+      },
+      {
+        key: 'Granted',
+        label: this.ms.translate('notifications.madrid.filter.status.granted'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.decision'),
+      },
+      {
+        key: 'Provisional_Refusal',
+        label: this.ms.translate('notifications.madrid.filter.status.provisionalRefusal'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.decision'),
+      },
+      {
+        key: 'Final_Refusal',
+        label: this.ms.translate('notifications.madrid.filter.status.finalRefusal'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.decision'),
+      },
+    ];
+
+    this.layoutConfig = {
+      appTitle: this.ms.translate('common.components.app.title'),
+      showHeader: true,
+      showSidebar: true,
+      headerItems: [],
+      sidebarItems: [],
+      footerText: '© WIPO ' + new Date().getFullYear(),
+      fixedHeader: true,
+      fixedSidebar: true,
+      sidebarCollapsed: false,
+      theme: 'light',
+      logo: '',
+    };
+
     this.route.params.subscribe((params) => {
       const officeCode =
         params['officeCode'] || this.ms.getCurrentOffice() || 'default';
@@ -287,13 +300,13 @@ export class MadridNotificationsComponent implements OnInit {
       this.selectedTab = this.route.snapshot.params['option'];
 
       console.log("this.selectedTab "+this.selectedTab);
-      if(this.selectedTab == undefined){
+      if (this.selectedTab == undefined) {
         this.selectedTab = 'madrid-incoming';
       }
 
       this.breadcrumbItems = [
         {
-          label: 'Notifications',
+          label: this.ms.translate('notifications.header'),
           routerLink: `/${officeCode}/${langCode}/notifications/madrid-incoming`,
         },
       ];

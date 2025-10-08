@@ -24,208 +24,26 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HagueNotificationsComponent implements OnInit {
+
   @ViewChild(ConfigurableFilterBarComponent)
   configurableFilter!: ConfigurableFilterBarComponent;
 
-  layoutConfig = {
-    appTitle: 'WIPO IPAS Central',
-    showHeader: true,
-    showSidebar: true,
-    headerItems: [],
-    sidebarItems: [],
-    footerText: 'WIPO',
-    fixedHeader: true,
-    fixedSidebar: true,
-    sidebarCollapsed: false,
-    theme: 'light',
-    logo: '',
-  };
-
+  layoutConfig;
   breadcrumbItems = [];
 
   selectedTab = 'hague-incoming';
 
-  hagueStats = [
-    {
-      label: 'Total Received Applications',
-      count: 1520,
-      period: 'Last Received Bulletin: 30/2025',
-      color: '#3949AB', // Indigo color
-    },
-    {
-      label: 'Total Processed Transactions',
-      count: 3320,
-      period: 'Last Bulletin: 30/2025',
-      color: '#2E7D32', // Green color
-    },
-    {
-      label: 'Failed Transactions',
-      count: 8,
-      period: 'Last Gazette: ',
-      color: '#d30101ff', // Blue color
-    },
-  ];
-
+  hagueStats = [];
   hagueStatSelected;
 
-  hagueIncomingTableColumns = [
-    { field: 'bulletin', header: 'Bullet in'},
-    { field: 'irn', header: 'IRN' },
-    { field: 'transaction', header: 'Transaction' },
-    { field: 'notifiedDate', header: 'Notified On' },
-    { field: 'importedDate', header: 'Imported On' },
-    {
-      field: 'status',
-      header: 'Import Status',
-      display: 'chip',
-      severity: (value) => {
-        if (value === 'Success') {
-          return 'success';
-        } else if (value === 'Error') {
-          return 'danger';
-        } else {
-          return 'info';
-        }
-      },
-    },
-    {
-      field: 'actions',
-      header: 'Actions',
-      display: 'actions',
-      actions: [
-        {
-          label: 'Download',
-          icon: 'pi pi-file-plus',
-          action: 'download',
-          severity: 'info',
-        },
-      ],
-    },
-  ];
+  hagueIncomingTableColumns = [];
+  hagueOutgoingTableColumns = [];
 
-  hagueOutgoingTableColumns = [
-    { field: 'irn', header: 'IRN' },
-    { field: 'transaction', header: 'Transaction' },
-    { field: 'notifiedDate', header: 'Notified On' },
-    { field: 'responsibleUser', header: 'Responsible User'},
-    { field: 'lastAction', header: 'Last Action'},
-    { field: 'recordedDate', header: 'Recorded On' },
-    {
-      field: 'decision',
-      header: 'Decision',
-      display: 'chip',
-      severity: (value) => {
-        if (value === 'Granted') {
-          return 'success';
-        } else if (value === 'Final_Refusal') {
-          return 'danger';
-        } else if (value === 'Provisional_Refusal') {
-          return 'warn';
-        } else {
-          return 'info';
-        }
-      },
-    },
-    { field: 'sentDate', header: 'Sent On' },
-  ];
-
-  
   hagueIncomingTableData = hagueIncomingNotificationData;
   hagueOutgoingTableData = hagueOutgoingNotificationData;
   
-  hagueIncomingFilterConfigs: FilterConfig[] = [
-    {
-      key: 'transaction',
-      label: 'Transaction',
-      type: 'text',
-      section: 'FILE',
-    },
-    {
-      key: 'notifiedDate',
-      label: 'Notified On',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'importedDate',
-      label: 'Imported On',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'Success',
-      label: 'Success',
-      type: 'checkbox',
-      section: 'STATUS',
-    },
-    {
-      key: 'Error',
-      label: 'Error',
-      type: 'checkbox',
-      section: 'STATUS',
-    },
-  ];
-
-  hagueOutgoingFilterConfigs: FilterConfig[] = [
-    {
-      key: 'transaction',
-      label: 'Transaction',
-      type: 'text',
-      section: 'FILE',
-    },
-    {
-      key: 'responsibleUser',
-      label: 'Responsible User',
-      type: 'text',
-      section: 'FILE',
-    },
-    {
-      key: 'notifiedDate',
-      label: 'Notified On',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'recordedDate',
-      label: 'Recorded On',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'sentDate',
-      label: 'Sent On',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'Granted',
-      label: 'Granted',
-      type: 'checkbox',
-      section: 'DECISION',
-    },
-    {
-      key: 'Provisional_Refusal',
-      label: 'Provisional Refusal',
-      type: 'checkbox',
-      section: 'DECISION',
-    },
-    {
-      key: 'Final_Refusal',
-      label: 'Final Refusal',
-      type: 'checkbox',
-      section: 'DECISION',
-    },
-  ];
+  hagueIncomingFilterConfigs: FilterConfig[] = [];
+  hagueOutgoingFilterConfigs: FilterConfig[] = [];
 
   appliedFilters: FilterValue[] = [];
 
@@ -242,6 +60,200 @@ export class HagueNotificationsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    this.hagueStats = [
+      {
+        label: 'Total Received Applications',
+        display: this.ms.translate('notifications.hague.stats.total'),
+        count: 1520,
+        period: this.ms.translate('notifications.hague.stats.lastReceivedBulletin')+' 30/2025',
+        color: '#3949AB', // Indigo color
+      },
+      {
+        label: 'Total Processed Transactions',
+        display: this.ms.translate('notifications.hague.stats.processed'),
+        count: 3320,
+        period: this.ms.translate('notifications.hague.stats.lastBulletin')+': 30/2025',
+        color: '#2E7D32', // Green color
+      },
+      {
+        label: 'Failed Transactions',
+        display: this.ms.translate('notifications.hague.stats.failed'),
+        count: 8,
+        period: this.ms.translate('notifications.hague.stats.lastGazette')+': ',
+        color: '#d30101ff', // Blue color
+      },
+    ];
+
+    this.hagueIncomingTableColumns = [
+      { field: 'bulletin', header: this.ms.translate('notifications.hague.table.bulletin') },
+      { field: 'irn', header: this.ms.translate('notifications.hague.table.irn') },
+      { field: 'transaction', header: this.ms.translate('notifications.hague.table.transaction') },
+      { field: 'notifiedDate', header: this.ms.translate('notifications.hague.table.notifiedOn') },
+      { field: 'importedDate', header: this.ms.translate('notifications.hague.table.importedOn') },
+      {
+        field: 'status',
+        header: this.ms.translate('notifications.hague.table.status'),
+        display: 'chip',
+        severity: (value) => {
+          if (value === 'Success') {
+            return 'success';
+          } else if (value === 'Error') {
+            return 'danger';
+          } else {
+            return 'info';
+          }
+        },
+      },
+      {
+        field: 'actions',
+        header: this.ms.translate('notifications.hague.table.actions'),
+        display: 'actions',
+        actions: [
+          {
+            label: this.ms.translate('notifications.hague.table.download'),
+            icon: 'pi pi-file-plus',
+            action: 'download',
+            severity: 'info',
+          },
+        ],
+      },
+    ];
+
+    this.hagueOutgoingTableColumns = [
+      { field: 'irn', header: this.ms.translate('notifications.hague.table.irn') },
+      { field: 'transaction', header: this.ms.translate('notifications.hague.table.transaction') },
+      { field: 'notifiedDate', header: this.ms.translate('notifications.hague.table.notifiedOn') },
+      { field: 'responsibleUser', header: this.ms.translate('notifications.hague.table.responsibleUser') },
+      { field: 'lastAction', header: this.ms.translate('notifications.hague.table.lastAction') },
+      { field: 'recordedDate', header: this.ms.translate('notifications.hague.table.recordedOn') },
+      {
+        field: 'decision',
+        header: this.ms.translate('notifications.hague.table.decision'),
+        display: 'chip',
+        severity: (value) => {
+          if (value === 'Granted') {
+            return 'success';
+          } else if (value === 'Final_Refusal') {
+            return 'danger';
+          } else if (value === 'Provisional_Refusal') {
+            return 'warn';
+          } else {
+            return 'info';
+          }
+        },
+      },
+      { field: 'sentDate', header: this.ms.translate('notifications.hague.table.sentOn') },
+    ];
+
+    this.hagueIncomingFilterConfigs = [
+      {
+        key: 'transaction',
+        label: this.ms.translate('notifications.hague.table.transaction'),
+        type: 'text',
+        section: this.ms.translate('common.components.filter.section.file'),
+      },
+      {
+        key: 'notifiedDate',
+        label: this.ms.translate('notifications.hague.table.notifiedOn'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
+        dateFormat: 'yy-mm-dd',
+        section: this.ms.translate('common.components.filter.section.dateFilters'),
+      },
+      {
+        key: 'importedDate',
+        label: this.ms.translate('notifications.hague.table.importedOn'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
+        dateFormat: 'yy-mm-dd',
+        section: this.ms.translate('common.components.filter.section.dateFilters'),
+      },
+      {
+        key: 'Success',
+        label: this.ms.translate('notifications.hague.filter.status.success'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.status'),
+      },
+      {
+        key: 'Error',
+        label: this.ms.translate('notifications.hague.filter.status.error'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.status'),
+      },
+    ];
+
+    this.hagueOutgoingFilterConfigs = [
+      {
+        key: 'transaction',
+        label: this.ms.translate('notifications.hague.table.transaction'),
+        type: 'text',
+        section: this.ms.translate('common.components.filter.section.file'),
+      },
+      {
+        key: 'responsibleUser',
+        label: this.ms.translate('notifications.hague.table.responsibleUser'),
+        type: 'text',
+        section: this.ms.translate('common.components.filter.section.file'),
+      },
+      {
+        key: 'notifiedDate',
+        label: this.ms.translate('notifications.hague.table.notifiedOn'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
+        dateFormat: 'yy-mm-dd',
+        section: this.ms.translate('common.components.filter.section.dateFilters'),
+      },
+      {
+        key: 'recordedDate',
+        label: this.ms.translate('notifications.hague.table.recordedOn'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
+        dateFormat: 'yy-mm-dd',
+        section: this.ms.translate('common.components.filter.section.dateFilters'),
+      },
+      {
+        key: 'sentDate',
+        label: this.ms.translate('notifications.hague.table.sentOn'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
+        dateFormat: 'yy-mm-dd',
+        section: this.ms.translate('common.components.filter.section.dateFilters'),
+      },
+      {
+        key: 'Granted',
+        label: this.ms.translate('notifications.hague.filter.status.granted'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.decision'),
+      },
+      {
+        key: 'Provisional_Refusal',
+        label: this.ms.translate('notifications.hague.filter.status.provisionalRefusal'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.decision'),
+      },
+      {
+        key: 'Final_Refusal',
+        label: this.ms.translate('notifications.hague.filter.status.finalRefusal'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.decision'),
+      },
+    ];
+
+    this.layoutConfig = {
+      appTitle: this.ms.translate('common.components.app.title'),
+      showHeader: true,
+      showSidebar: true,
+      headerItems: [],
+      sidebarItems: [],
+      footerText: '© WIPO ' + new Date().getFullYear(),
+      fixedHeader: true,
+      fixedSidebar: true,
+      sidebarCollapsed: false,
+      theme: 'light',
+      logo: '',
+    };
+
     this.route.params.subscribe((params) => {
       const officeCode =
         params['officeCode'] || this.ms.getCurrentOffice() || 'default';
@@ -256,7 +268,7 @@ export class HagueNotificationsComponent implements OnInit {
 
       this.breadcrumbItems = [
         {
-          label: 'Notifications',
+          label: this.ms.translate('notifications.header'),
           routerLink: `/${officeCode}/${langCode}/notifications/hague-incoming`,
         },
       ];

@@ -51,157 +51,25 @@ interface TabData {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OfficeNotificationsComponent implements OnInit {
+
   @ViewChild(ConfigurableFilterBarComponent)
   configurableFilter!: ConfigurableFilterBarComponent;
 
-  layoutConfig = {
-    appTitle: 'WIPO IPAS Central',
-    showHeader: true,
-    showSidebar: true,
-    headerItems: [],
-    sidebarItems: [],
-    footerText: 'WIPO',
-    fixedHeader: true,
-    fixedSidebar: true,
-    sidebarCollapsed: false,
-    theme: 'light',
-    logo: '',
-  };
-
+  layoutConfig;
   breadcrumbItems = [];
 
-  packageStats = [
-    {
-      label: 'Total Documents',
-      count: 4800,
-      period: 'Last 90 days: 2000',
-      color: '#3949AB', // Indigo color
-    },
-    {
-      label: 'Pending Approvals',
-      count: 1220,
-      period: 'Since: July 20, 2025',
-      color: '#2E7D32', // Green color
-    },
-    {
-      label: 'Pending Acknowledgements',
-      count: 210,
-      period: 'Since: June 20, 2025',
-      color: '#d30101ff', // Blue color
-    },
-  ];
-
+  packageStats = [];
   statSelected;
 
   selectedTab;
-
   categories!: TabData[];
 
-  tableColumns = [
-    { field: 'documentName', header: 'Document Name' },
-    { field: 'documentId', header: 'Document Id', sortable: true },
-    { field: 'fileId', header: 'File/ Document (Reference)', sortable: true },
-    { field: 'printedDate', header: 'Printed On', sortable: true },
-    { field: 'approvedDate', header: 'Approved On' },
-    {
-      field: 'method',
-      header: 'Transmittal Methods',
-      display: 'chip',
-      severity: (value) => {
-        if (value === 'paper') {
-          return 'secondary';
-        } else if (value === 'email') {
-          return 'info';
-        } else if (value === 'online') {
-          return 'default';
-        } else {
-          return 'warn';
-        }
-      },
-    },
-    { field: 'acknowledgeDate', header: 'Acknowledged On' },
-    { field: 'responsibleUser', header: 'Responsible User' },
-    {
-      field: 'actions',
-      header: 'Actions',
-      display: 'actions',
-      actions: [
-        {
-          label: 'Acknowledge',
-          icon: 'pi pi-thumbs-up',
-          action: 'acknowledge',
-          severity: 'info',
-        },
-      ],
-    },
-  ];
-
+  tableColumns = [];
   //tableData = officeNotificationsData;
   acknowledgeData = signal<Notification[]>([]);
   filteredAcknowledges = computed(() => this.acknowledgeData());
 
-  filterConfigs: FilterConfig[] = [
-    {
-      key: 'documentId',
-      label: 'Document Id',
-      type: 'text',
-      section: 'FILE',
-    },
-    {
-      key: 'fileId',
-      label: 'File Id',
-      type: 'text',
-      section: 'FILE',
-    },
-    {
-      key: 'responsibleUser',
-      label: 'Responsible User',
-      type: 'text',
-      section: 'FILE',
-    },
-    {
-      key: 'paper',
-      label: 'Paper',
-      type: 'checkbox',
-      section: 'Transmittal Methods',
-    },
-    {
-      key: 'email',
-      label: 'Email',
-      type: 'checkbox',
-      section: 'Transmittal Methods',
-    },
-    {
-      key: 'online',
-      label: 'Online',
-      type: 'checkbox',
-      section: 'Transmittal Methods',
-    },
-    {
-      key: 'printedDate',
-      label: 'Printed On',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'approvedDate',
-      label: 'Approved On',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'acknowledgeDate',
-      label: 'Acknowledged On',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-  ];
+  filterConfigs: FilterConfig[] = [];
 
   appliedFilters: FilterValue[] = [];
 
@@ -224,6 +92,147 @@ export class OfficeNotificationsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.packageStats = [
+      {
+        label: 'Total Documents',
+        display: this.ms.translate('notifications.office.stats.total'),
+        count: 4800,
+        period: this.ms.translate('notifications.office.stats.lastDays')+': 2000',
+        color: '#3949AB', // Indigo color
+      },
+      {
+        label: 'Pending Approvals',
+        display: this.ms.translate('notifications.office.stats.approvals'),
+        count: 1220,
+        period: this.ms.translate('notifications.office.stats.since')+': July 20, 2025',
+        color: '#2E7D32', // Green color
+      },
+      {
+        label: 'Pending Acknowledgements',
+        display: this.ms.translate('notifications.office.stats.acknowledgements'),
+        count: 210,
+        period: this.ms.translate('notifications.office.stats.since')+': June 20, 2025',
+        color: '#d30101ff', // Blue color
+      },
+    ];
+
+    this.tableColumns = [
+      { field: 'documentName', header: this.ms.translate('notifications.office.table.documentName') },
+      { field: 'documentId', header: this.ms.translate('notifications.office.table.documentId'), sortable: true },
+      { field: 'fileId', header: this.ms.translate('notifications.office.table.fileId'), sortable: true },
+      { field: 'printedDate', header: this.ms.translate('notifications.office.table.printedOn'), sortable: true },
+      { field: 'approvedDate', header: this.ms.translate('notifications.office.table.approvedOn') },
+      {
+        field: 'method',
+        header: this.ms.translate('notifications.office.table.transmittalMethods'),
+        display: 'chip',
+        severity: (value) => {
+          if (value === 'paper') {
+            return 'secondary';
+          } else if (value === 'email') {
+            return 'info';
+          } else if (value === 'online') {
+            return 'default';
+          } else {
+            return 'warn';
+          }
+        },
+      },
+      { field: 'acknowledgeDate', header: this.ms.translate('notifications.office.table.acknowledgedOn') },
+      { field: 'responsibleUser', header: this.ms.translate('notifications.office.table.responsibleUser') },
+      {
+        field: 'actions',
+        header: this.ms.translate('notifications.office.table.actions'),
+        display: 'actions',
+        actions: [
+          {
+            label: this.ms.translate('notifications.office.table.acknowledge'),
+            icon: 'pi pi-thumbs-up',
+            action: 'acknowledge',
+            severity: 'info',
+          },
+        ],
+      },
+    ];
+
+    this.filterConfigs = [
+      {
+        key: 'documentId',
+        label: this.ms.translate('notifications.office.table.documentId'),
+        type: 'text',
+        section: this.ms.translate('common.components.filter.section.file'),
+      },
+      {
+        key: 'fileId',
+        label: this.ms.translate('notifications.office.table.fileId'),
+        type: 'text',
+        section: this.ms.translate('common.components.filter.section.file'),
+      },
+      {
+        key: 'responsibleUser',
+        label: this.ms.translate('notifications.office.table.responsibleUser'),
+        type: 'text',
+        section: this.ms.translate('common.components.filter.section.file'),
+      },
+      {
+        key: 'paper',
+        label: this.ms.translate('notifications.office.filter.methods.paper'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.transmittalMethods'),
+      },
+      {
+        key: 'email',
+        label: this.ms.translate('notifications.office.filter.methods.email'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.transmittalMethods'),
+      },
+      {
+        key: 'online',
+        label: this.ms.translate('notifications.office.filter.methods.online'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.transmittalMethods'),
+      },
+      {
+        key: 'printedDate',
+        label: this.ms.translate('notifications.office.table.printedOn'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
+        dateFormat: 'yy-mm-dd',
+        section: this.ms.translate('common.components.filter.section.dateFilters'),
+      },
+      {
+        key: 'approvedDate',
+        label: this.ms.translate('notifications.office.table.approvedOn'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
+        dateFormat: 'yy-mm-dd',
+        section: this.ms.translate('common.components.filter.section.dateFilters'),
+      },
+      {
+        key: 'acknowledgeDate',
+        label: this.ms.translate('notifications.office.table.acknowledgedOn'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
+        dateFormat: 'yy-mm-dd',
+        section: this.ms.translate('common.components.filter.section.dateFilters'),
+      },
+    ];
+
+    this.layoutConfig = {
+      appTitle: this.ms.translate('common.components.app.title'),
+      showHeader: true,
+      showSidebar: true,
+      headerItems: [],
+      sidebarItems: [],
+      footerText: '© WIPO ' + new Date().getFullYear(),
+      fixedHeader: true,
+      fixedSidebar: true,
+      sidebarCollapsed: false,
+      theme: 'light',
+      logo: '',
+    };
+
     this.route.params.subscribe((params) => {
       const officeCode =
         params['officeCode'] || this.ms.getCurrentOffice() || 'default';
@@ -231,7 +240,7 @@ export class OfficeNotificationsComponent implements OnInit {
 
         this.breadcrumbItems = [
           {
-            label: 'Office Notifications',
+            label: this.ms.translate('notifications.office.header'),
             routerLink: `/${officeCode}/${langCode}/office-dashboard`,
           },
         ];
@@ -284,49 +293,49 @@ export class OfficeNotificationsComponent implements OnInit {
     let tabData: TabData[] = [
       {
         ipType:'designs',
-        display: 'Industrial Design',
+        display: this.ms.translate('notifications.office.tab.designs'),
         count:2,
         checked: false
       },
       {
         ipType:'patents',
-        display: 'Patent',
+        display: this.ms.translate('notifications.office.tab.patents'),
         count:3,
         checked: false
       },
       {
         ipType:'trademarks',
-        display: 'Trademark',
+        display: this.ms.translate('notifications.office.tab.trademarks'),
         count:3,
         checked: true
       },
       {
         ipType:'copyright',
-        display: 'Copyright',
+        display: this.ms.translate('notifications.office.tab.copyright'),
         count:1,
         checked: false
       },
       {
         ipType:'gi',
-        display: 'Geographical Indication',
+        display: this.ms.translate('notifications.office.tab.gi'),
         count:1,
         checked: false
       },
       {
         ipType:'post-filing',
-        display: 'Post-filing',
+        display: this.ms.translate('notifications.office.tab.postfiling'),
         count:1,
         checked: false
       },
       {
         ipType:'office-documents',
-        display: 'Office Documents',
+        display: this.ms.translate('notifications.office.tab.officedocuments'),
         count:2,
         checked: false
       },
       {
         ipType:'others',
-        display: 'Other',
+        display: this.ms.translate('notifications.office.tab.others'),
         count:1,
         checked: false
       },

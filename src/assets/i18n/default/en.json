@@ -39,6 +39,9 @@
   },
   "common": {
     "components": {
+      "scroller": {
+        "backToTop": "Back to top"
+      },
       "modal": {
         "close": "Close",
         "information": "Information",
@@ -59,8 +62,20 @@
         "paginationRecord": "Showing {first} to {last} of {totalRecords} entries"
       },
       "filter": {
-        "clearAll": "Clear All"
+        "clearAll": "Clear All",
+        "date": {
+          "placeHolder": "Select date range"
+        },
+        "section": {
+          "file": "FILE",
+          "dateFilters": "DATE FILTERS",
+          "status": "STATUS",
+          "decision": "DECISION",
+          "correctionRequired": "Correction Required",
+          "transmittalMethods": "Transmittal Methods"
+        }
       },
+
       "navigation": {
         "localHost": "LOCAL HOST"
       },
@@ -72,11 +87,127 @@
   "dashboard": {
     "title": "WELCOME TO WIPO IP OFFICE SUITE",
     "subtitle": "WIPO IP ADMINISTRATION SYSTEM",
+    "widgets": {
+      "workspace": {
+        "title": "My Workspace",
+        "items": {
+          "filingDashboard": "Filing Dashboard",
+          "newFilings": "New filings",
+          "notifications": "Notifications"
+        }
+      },
+      "taskManagement": {
+        "title": "Task Management",
+        "items": {
+          "workMonitor": "Work Monitor",
+          "myTasks": "My Tasks",
+          "physicalDeliveries": "Physical Deliveries",
+          "processGroups": "Process Groups"
+        }
+      },
+      "dataCapture": {
+        "title": "Data Capture",
+        "items": {
+          "pendingDataCapture": "Pending Data Capture",
+          "pendingDocumentCapture": "Pending Document Capture",
+          "pendingDailyLogs": "Pending Daily Logs"
+        }
+      },
+      "receptionOperations": {
+        "title": "Reception Operations",
+        "items": {
+          "newReception": "New Reception",
+          "pendingReception": "Pending Reception",
+          "dashboard": "Dashboard",
+          "configurations": "Configurations",
+          "efilingReview": "e Filing Review"
+        }
+      },
+      "stakeholdersRegistry": {
+        "title": "Stakeholders Registry",
+        "items": {
+          "stakeholders": "Stakeholders",
+          "registerView": "Register View",
+          "emailRegister": "Email Register"
+        }
+      },
+      "publication": {
+        "title": "Publication",
+        "items": {
+          "pendingJournals": "Pending Journals",
+          "pendingPublications": "Pending Publications",
+          "notifications": "Notifications"
+        }
+      },
+      "dataServices": {
+        "title": "Data Services",
+        "items": {
+          "dataExchangeConfiguration": "Data Exchange Configuration",
+          "dataSharing": "Data Sharing"
+        }
+      },
+      "systemSettings": {
+        "title": "System Settings",
+        "items": {
+          "systemConfiguration": "System Configuration",
+          "feeConfiguration": "Fee Configuration",
+          "mailmergeConfiguration": "Mailmerge Configuration",
+          "customContent": "Custom Content"
+        }
+      },
+      "annuityMonitoring": {
+        "title": "Annuity Monitoring",
+        "items": {
+          "annuitiesOrRenewals": "Annuities or Renewals",
+          "performance": "Performance",
+          "statistics": "Statistics"
+        }
+      },
+      "administrativeTools": {
+        "title": "Administrative Tools",
+        "items": {
+          "userManagement": "User Management",
+          "jobScheduler": "Job Scheduler",
+          "healthCheck": "Health Check"
+        }
+      },
+      "paymentManagement": {
+        "title": "Payment Management",
+        "items": {
+          "transactions": "Transactions",
+          "bankDetails": "Bank Details",
+          "paymentStatus": "Payment Status"
+        }
+      }
+    },
     "permissionError": {
       "title": "Permission Error",
       "message": "The requested operation could not be performed due to missing permissions in the user profile.",
       "retryButton": "TRY AGAIN"
     }
+  },
+  "platformSelection": {
+    "title": "Office Platform",
+    "subtitle": "Select an Office Platform.",
+    "officesAvailable": "offices available",
+    "search": {
+      "label": "Office Platform",
+      "placeholder": "Type to search offices..."
+    },
+    "continue": "Continue"
+  },
+  "configurableFilter": {
+    "openFilter": "Open Filter",
+    "close": "Close",
+    "displayFilters": "Display Filters",
+    "selectOptions": "Select options",
+    "selectOption": "Select option",
+    "enterText": "Enter text",
+    "enterNumber": "Enter number",
+    "selectDate": "Select date",
+    "selectDateRange": "Select date range",
+    "clearAll": "CLEAR ALL",
+    "apply": "APPLY"
   },
   "renewal": {
     "title": "Renewal Reminder",
@@ -89,12 +220,14 @@
   },
   "dataCapture": {
     "title": "Data Capture",
+    "header": "Data Capture",
     "filter": {
       "search": "Search File Id/ Document Id",
       "placeHolder": "Select filters to display"
     }
   },
   "notifications": {
+    "header": "Notifications",
     "acknowledge": {
       "title": "Acknowledge Notifications",
       "filter": {
@@ -105,13 +238,31 @@
         "header": "Acknowledge Notification",
         "date": "Acknowledgement Date *",
         "placeHolder": "Select date"
+      },
+      "stats": {
+        "total": "Total Received Applications",
+        "processed": "Processed Notifications",
+        "failed": "Failed Notifications"
+      },
+      "table": {
+        "documentId": "Document Id",
+        "fileId": "File Id",
+        "transmissionDate": "Transmission Date",
+        "actions": "Actions",
+        "acknowledge": "Acknowledge"
       }
     },
     "office": {
+      "header": "Office Notifications",
       "title": "Office Notifications",
       "filter": {
         "search": "Search Document Id OR Reference File/ Document",
-        "placeHolder": "Select filters to display"
+        "placeHolder": "Select filters to display",
+        "methods": {
+          "paper": "Paper",
+          "email": "Email",
+          "online": "Online"
+        }
       },
       "dialog": {
         "header": "Acknowledge Notification",
@@ -119,19 +270,72 @@
         "placeHolder": "Select date",
         "information": "Information",
         "message": "Notification Should be in Approved stage"
+      },
+      "stats": {
+        "total": "Total Documents",
+        "approvals": "Pending Approvals",
+        "acknowledgements": "Pending Acknowledgements",
+        "lastDays": "Last 90 days",
+        "since": "Since"
+      },
+      "table": {
+        "documentName": "Document Name",
+        "documentId": "Document Id",
+        "fileId": "File/ Document (Reference)",
+        "printedOn": "Printed On",
+        "approvedOn": "Approved On",
+        "transmittalMethods": "Transmittal Methods",
+        "acknowledgedOn": "Acknowledged On",
+        "responsibleUser": "Responsible User",
+        "actions": "Actions",
+        "acknowledge": "Acknowledge"
+      },
+      "tab": {
+        "designs": "Industrial Design",
+        "patents": "Patent",
+        "trademarks": "Trademark",
+        "copyright": "Copyright",
+        "gi": "Geographical Indication",
+        "postfiling": "Post-filing",
+        "officedocuments": "Office Documents",
+        "others": "Other"
       }
     },
     "aripo": {
       "title": "ARIPO Notifications",
       "filter": {
         "search": "Search File Id",
-        "placeHolder": "Select filters to display"
+        "placeHolder": "Select filters to display",
+        "status": {
+          "granted": "Granted",
+          "refused": "Refused",
+          "processed": "Processed",
+          "failed": "Failed"
+        }
       },
       "incoming": {
         "header": "ARIPO Incoming Notifications"
       },
       "outgoing": {
         "header": "ARIPO Outgoing Notifications"
+      },
+      "stats": {
+        "total": "Total Received Applications",
+        "processed": "Processed Notifications",
+        "failed": "Failed Notifications",
+        "lastFile": "Last File"
+      },
+      "table": {
+        "batchId": "Batch Id",
+        "fileId": "File Id",
+        "formType": "Form Type",
+        "aripoSeq": "ARIPO-File Sequence",
+        "notifiedOn": "Notified On",
+        "processedOn": "Processed On",
+        "receivedOn": "Received On",
+        "status": "Status",
+        "actions": "Actions",
+        "download": "Download"
       }
     },
     "hague": {
@@ -139,13 +343,43 @@
       "filter": {
         "incomingSearch": "Search IRN/ Bulletin",
         "outgoingSearch": "Search IRN",
-        "placeHolder": "Select filters to display"
+        "placeHolder": "Select filters to display",
+        "status": {
+          "success": "Success",
+          "error": "Error",
+          "granted": "Granted",
+          "provisionalRefusal": "Provisional Refusal",
+          "finalRefusal": "Final Refusal"
+        }
       },
       "incoming": {
         "header": "Hague Incoming Notifications"
       },
       "outgoing": {
         "header": "Hague Outgoing Notifications"
+      },
+      "stats": {
+        "total": "Total Received Applications",
+        "processed": "Total Processed Transactions",
+        "failed": "Failed Transactions",
+        "lastReceivedBulletin": "Last Received Bulletin",
+        "lastBulletin": "Last Bulletin",
+        "lastGazette": "Last Gazette"
+      },
+      "table": {
+        "bulletin": "Bullet in",
+        "irn": "IRN",
+        "transaction": "Transaction",
+        "notifiedOn": "Notified On",
+        "importedOn": "Imported On",
+        "status": "Import Status",
+        "actions": "Actions",
+        "download": "Download",
+        "responsibleUser": "Responsible User",
+        "lastAction": "Last Action",
+        "recordedOn": "Recorded On",
+        "decision": "Decision",
+        "sentOn": "Sent On"
       }
     },
     "madrid": {
@@ -153,13 +387,46 @@
       "filter": {
         "incomingSearch": "Search IRN/ Gazette",
         "outgoingSearch": "Search IRN",
-        "placeHolder": "Select filters to display"
+        "placeHolder": "Select filters to display",
+        "status": {
+          "success": "Success",
+          "error": "Error",
+          "correctionRequired": "Correction Required",
+          "granted": "Granted",
+          "provisionalRefusal": "Provisional Refusal",
+          "finalRefusal": "Final Refusal"
+        }
       },
       "incoming": {
         "header": "Madrid Incoming Notifications"
       },
       "outgoing": {
         "header": "Madrid Outgoing Notifications"
+      },
+      "stats": {
+        "total": "Total Received Applications",
+        "processed": "Total Processed Transactions",
+        "failed": "Failed Transactions",
+        "lastReceivedGazette": "Last Received Gazette",
+        "lastGazette": "Last Gazette"
+      },
+      "table": {
+        "gazette": "Gazette",
+        "irn": "IRN",
+        "transaction": "Transaction",
+        "notifiedOn": "Notified On",
+        "importedOn": "Imported On",
+        "status": "Import Status",
+        "correctedOn": "Corrected On",
+        "correctionRequired": "Correction Required",
+        "dueOn": "Due On",
+        "responsibleUser": "Responsible User",
+        "lastAction": "Last Action",
+        "recordedOn": "Recorded On",
+        "decision": "Decision",
+        "sentOn": "Sent On",
+        "actions": "Actions",
+        "download": "Download"
       }
     }
   },

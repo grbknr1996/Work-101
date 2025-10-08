@@ -35,8 +35,8 @@ app-layout([config]="layoutConfig")
             p-badge([value]="category.count")
       | }
     
-    p-tabpanels
+    p-tabView
       | @for (category of categories; track category.ipType) {
-      p-tabpanel([value]="category.ipType")
+      p-tabPanel([value]="category.ipType")
           app-table([columns]="tableColumns", [data]="tableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false")
       | }

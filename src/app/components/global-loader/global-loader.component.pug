@@ -1,0 +1,9 @@
+div(*ngIf="(loading$ | async)?.isLoading" class="global-loader-overlay")
+  .global-loader-container
+    .global-loader-spinner
+      .spinner
+    div(*ngIf="(loading$ | async)?.message" class="global-loader-message")
+      | {{ (loading$ | async)?.message }}
+
+
+

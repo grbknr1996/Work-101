@@ -7,7 +7,7 @@ import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-sign-in',
-  template: '', // Empty template since we're redirecting immediately
+  template: '', // Empty template since we're redirecting immediately to HOSTED UI
   standalone: false,
 })
 export class SignInComponent implements OnInit {

@@ -5,17 +5,17 @@
   <app-configurable-filter-bar [filters]="hagueIncomingFilterConfigs" [disabled]="hagueActiveIndex==0? false: true" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'notifications.hague.filter.placeHolder'|translate" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)" [showSearchBar]="true" [searchBar]="searchBar" (filterSearch)="filterSearch($event)" [searchLabel]="'notifications.hague.filter.incomingSearch'|translate" [showDownloadIcon]="false" [appliedFilters]="appliedFilters" [clearAllLabel]="'common.components.filter.clearAll'|translate" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-configurable-filter-bar>
   <app-configurable-filter-bar [filters]="hagueOutgoingFilterConfigs" [disabled]="hagueActiveIndex==0? true: false" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'notifications.hague.filter.placeHolder'|translate" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)" [showSearchBar]="true" [searchBar]="searchBar" (filterSearch)="filterSearch($event)" [searchLabel]="'notifications.hague.filter.outgoingSearch'|translate" [showDownloadIcon]="false" [appliedFilters]="appliedFilters" [clearAllLabel]="'common.components.filter.clearAll'|translate" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-configurable-filter-bar>
   <p-tabView [(activeIndex)]="hagueActiveIndex">
-    <p-tabpanel value="hague-incoming">
+    <p-tabPanel value="hague-incoming">
       <ng-template pTemplate="header">
         <div (click)="onHeaderClick($event, 'hague-incoming')">{{"notifications.hague.incoming.header"|translate}}</div>
       </ng-template>
       <app-table [columns]="hagueIncomingTableColumns" [data]="hagueIncomingTableData" (actionClick)="onActionClick($event.action, $event.item)" [showClearButton]="false" [showSearch]="false"> </app-table>
-    </p-tabpanel>
-    <p-tabpanel value="hague-outgoing">
+    </p-tabPanel>
+    <p-tabPanel value="hague-outgoing">
       <ng-template pTemplate="header">
         <div (click)="onHeaderClick($event, 'hague-outgoing')">{{"notifications.hague.outgoing.header"|translate}}</div>
       </ng-template>
       <app-table [columns]="hagueOutgoingTableColumns" [data]="hagueOutgoingTableData" (actionClick)="onActionClick($event.action, $event.item)" [showClearButton]="false" [showSearch]="false"></app-table>
-    </p-tabpanel>
+    </p-tabPanel>
   </p-tabView>
 </app-layout>

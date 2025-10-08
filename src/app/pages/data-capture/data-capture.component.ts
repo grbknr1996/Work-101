@@ -52,140 +52,25 @@ interface TabData {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataCaptureComponent implements OnInit {
+  
   @ViewChild(ConfigurableFilterBarComponent)
   configurableFilter!: ConfigurableFilterBarComponent;
 
-  layoutConfig = {
-    appTitle: 'WIPO IPAS Central',
-    showHeader: true,
-    showSidebar: true,
-    headerItems: [],
-    sidebarItems: [],
-    footerText: 'WIPO',
-    fixedHeader: true,
-    fixedSidebar: true,
-    sidebarCollapsed: false,
-    theme: 'light',
-    logo: '',
-  };
-
+  layoutConfig;
   breadcrumbItems = [];
 
-  packageStats = [
-    {
-      label: 'Total Received Applications',
-      displayLabel:['Applications Awaiting Capture'],
-      count:80,
-      //countLabel: 'Total Received Applications: 1200',
-      //period: 'Since: March 24, 2025',
-      periodList:['Total Received Applications: 1200', 'Since: March 24, 2025'],
-      color: '#3949AB', // Indigo color
-    },
-    {
-      label: 'Total Received Post-Filings',
-      displayLabel:['Post-Filings Awaiting Capture'],
-      count: 12,
-      //countLabel: 'Total Received Post-Filings: 720',
-      //period: 'Since: March 24, 2025',
-      periodList:['Total Received Post-Filings: 720', 'Since: March 24, 2025'],
-      color: '#2E7D32', // Green color
-    },
-    {
-      label: 'Total Received Documents',
-      displayLabel:['Documents Awaiting Digitalization'],
-      count: 120,
-      //countLabel: 'Total Received Documents: 560',
-      //period: 'Since: March 24, 2025',
-      periodList:['Total Received Documents: 560', 'Since: March 24, 2025'],
-      color: '#0662ccff', // Blue color
-    },
-  ];
-
+  packageStats = [];
   statSelected;
 
   selectedTab;
-
   categories!: TabData[];
 
-  tableColumns = [
-    { field: 'documentName', header: 'Application/ Document Name' },
-    { field: 'fileId', header: 'File Id', sortable: true },
-    { field: 'documentId', header: 'Document Id', sortable: true },
-    { field: 'receivedDate', header: 'Received On' },
-    { field: 'certifiedDate', header: 'Certified On' },
-    { field: 'certifiedBy', header: 'Certified By' },
-    { field: 'digitalizedDate', header: 'Digitalized On' },
-    { field: 'digitalizedBy', header: 'Digitalized By' },
-    {
-      field: 'actions',
-      header: 'Actions',
-      display: 'actions',
-      actions: [
-        {
-          label: 'Bibliographic Editing',
-          icon: 'pi pi-external-link',
-          action: 'edit',
-          severity: 'info',
-        },
-        {
-          label: 'Document Indexation',
-          icon: 'pi pi-external-link',
-          action: 'index',
-          severity: 'info',
-        },
-      ],
-    },
-  ];
-
+  tableColumns = [];
   //tableData = officeNotificationsData;
   tableData = signal<Notification[]>([]);
   filteredAcknowledges = computed(() => this.tableData());
 
-  filterConfigs: FilterConfig[] = [
-    {
-      key: 'documentName',
-      label: 'Application or Document Name',
-      type: 'text',
-      section: 'FILE',
-    },
-    {
-      key: 'receivedDate',
-      label: 'Received On',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'certifiedDate',
-      label: 'Certified On',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'digitalizedDate',
-      label: 'Digitalized On',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'certifiedBy',
-      label: 'Certified By',
-      type: 'text',
-      section: 'USER NAME',
-    },
-    {
-      key: 'digitalizedBy',
-      label: 'Digitalized By',
-      type: 'text',
-      section: 'USER NAME',
-    },
-
-  ];
+  filterConfigs: FilterConfig[] = [];
 
   appliedFilters: FilterValue[] = [];
 
@@ -203,6 +88,127 @@ export class DataCaptureComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.packageStats = [
+      {
+        label: 'Total Received Applications',
+        displayLabel:['Applications Awaiting Capture'],
+        count:80,
+        //countLabel: 'Total Received Applications: 1200',
+        //period: 'Since: March 24, 2025',
+        periodList:['Total Received Applications: 1200', 'Since: March 24, 2025'],
+        color: '#3949AB', // Indigo color
+      },
+      {
+        label: 'Total Received Post-Filings',
+        displayLabel:['Post-Filings Awaiting Capture'],
+        count: 12,
+        //countLabel: 'Total Received Post-Filings: 720',
+        //period: 'Since: March 24, 2025',
+        periodList:['Total Received Post-Filings: 720', 'Since: March 24, 2025'],
+        color: '#2E7D32', // Green color
+      },
+      {
+        label: 'Total Received Documents',
+        displayLabel:['Documents Awaiting Digitalization'],
+        count: 120,
+        //countLabel: 'Total Received Documents: 560',
+        //period: 'Since: March 24, 2025',
+        periodList:['Total Received Documents: 560', 'Since: March 24, 2025'],
+        color: '#0662ccff', // Blue color
+      },
+    ];
+
+    this.tableColumns = [
+      { field: 'documentName', header: 'Application/ Document Name' },
+      { field: 'fileId', header: 'File Id', sortable: true },
+      { field: 'documentId', header: 'Document Id', sortable: true },
+      { field: 'receivedDate', header: 'Received On' },
+      { field: 'certifiedDate', header: 'Certified On' },
+      { field: 'certifiedBy', header: 'Certified By' },
+      { field: 'digitalizedDate', header: 'Digitalized On' },
+      { field: 'digitalizedBy', header: 'Digitalized By' },
+      {
+        field: 'actions',
+        header: 'Actions',
+        display: 'actions',
+        actions: [
+          {
+            label: 'Bibliographic Editing',
+            icon: 'pi pi-external-link',
+            action: 'edit',
+            severity: 'info',
+          },
+          {
+            label: 'Document Indexation',
+            icon: 'pi pi-external-link',
+            action: 'index',
+            severity: 'info',
+          },
+        ],
+      },
+    ];
+
+    this.filterConfigs = [
+      {
+        key: 'documentName',
+        label: 'Application or Document Name',
+        type: 'text',
+        section: 'FILE',
+      },
+      {
+        key: 'receivedDate',
+        label: 'Received On',
+        type: 'dateRange',
+        placeholder: 'Select date range',
+        dateFormat: 'yy-mm-dd',
+        section: 'DATE FILTERS',
+      },
+      {
+        key: 'certifiedDate',
+        label: 'Certified On',
+        type: 'dateRange',
+        placeholder: 'Select date range',
+        dateFormat: 'yy-mm-dd',
+        section: 'DATE FILTERS',
+      },
+      {
+        key: 'digitalizedDate',
+        label: 'Digitalized On',
+        type: 'dateRange',
+        placeholder: 'Select date range',
+        dateFormat: 'yy-mm-dd',
+        section: 'DATE FILTERS',
+      },
+      {
+        key: 'certifiedBy',
+        label: 'Certified By',
+        type: 'text',
+        section: 'USER NAME',
+      },
+      {
+        key: 'digitalizedBy',
+        label: 'Digitalized By',
+        type: 'text',
+        section: 'USER NAME',
+      },
+
+    ];
+
+    this.layoutConfig = {
+      appTitle: this.ms.translate('common.components.app.title'),
+      showHeader: true,
+      showSidebar: true,
+      headerItems: [],
+      sidebarItems: [],
+      footerText: '© WIPO ' + new Date().getFullYear(),
+      fixedHeader: true,
+      fixedSidebar: true,
+      sidebarCollapsed: false,
+      theme: 'light',
+      logo: '',
+    };
+
     this.route.params.subscribe((params) => {
       const officeCode =
         params['officeCode'] || this.ms.getCurrentOffice() || 'default';
@@ -210,7 +216,7 @@ export class DataCaptureComponent implements OnInit {
 
         this.breadcrumbItems = [
           {
-            label: 'Data Capture',
+            label: this.ms.translate('dataCapture.header'),
             routerLink: `/${officeCode}/${langCode}/data-capture/dashboard`,
           },
         ];

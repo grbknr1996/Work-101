@@ -2,7 +2,7 @@ div(class="widget-container")
   div(class="widget-header")
     div(class="widget-title-row")
       i([class]="'pi ' + icon + ' widget-icon'") 
-      span(class="widget-title") {{title}}
+      span(class="widget-title") {{ title | translate }}
       span(class="widget-badge", *ngIf="showBadge") {{badge}}
     p-divider  
     
@@ -15,5 +15,5 @@ div(class="widget-container")
           (click)="logLink(item.link)"
         )
           i([class]="'pi ' + item.icon + ' mr-2 text-primary text-sm'")
-          span(class="text-color text-sm") {{item.label}}
+          span(class="text-color text-sm") {{ item.label | translate }}
 

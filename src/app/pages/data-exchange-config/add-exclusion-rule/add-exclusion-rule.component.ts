@@ -1,7 +1,5 @@
 import {
   Component,
-  Input,
-  WritableSignal,
   computed,
   signal,
   OnChanges,
@@ -17,18 +15,13 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
 import { AuthService } from 'src/app/_services/auth.service';
 import { HttpClient } from '@angular/common/http';
-import {
-  LayoutConfig,
-} from '../../../components/app-layout/app-layout.component';
+import { LayoutConfig } from '../../../components/app-layout/app-layout.component';
 import { BreadcrumbsComponent } from '../../../components/breadcrumbs/breadcrumbs.component';
-import {
-  StepperStep,
-} from '../../../components/configurable-stepper/configurable-stepper.component';
+import { StepperStep } from '../../../components/configurable-stepper/configurable-stepper.component';
 
 @Component({
   selector: 'app-add-exclusion-rule',
   templateUrl: './add-exclusion-rule.component.html',
-  styles: [``],
   standalone: false,
 })
 export class AddExclusionRuleComponent implements OnChanges, OnInit {

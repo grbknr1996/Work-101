@@ -7,7 +7,7 @@
     icon="pi pi-sliders-h",
     [class.has-active-filters]="hasActiveFilters",
     (click)="toggleFilter()",
-    pTooltip="Open Filter",
+    [pTooltip]="'configurableFilter.openFilter' | translate",
     tooltipPosition="bottom",
     tooltipStyleClass="text-xs px-2 py-1"
   )
@@ -20,7 +20,7 @@
         pButton,
         type="button",
         icon="pi pi-times",
-        pTooltip="Close",
+        [pTooltip]="'configurableFilter.close' | translate",
         tooltipPosition="bottom",
         tooltipStyleClass="text-xs px-2 py-1",
         (click)="onClose()"
@@ -29,7 +29,7 @@
       // Header with Filter Selector and Icons
       .filter-header(*ngIf="showFilterSelector")
         .filter-selector-section
-          label.filter-selector-label Display Filters:
+          label.filter-selector-label {{ 'configurableFilter.displayFilters' | translate }}:
           .filter-selector-controls
             p-multiSelect.filter-selector(
               [options]="getFilterSelectorOptions()",
@@ -58,11 +58,11 @@
                       [binary]="true",
                       [inputId]="filter.key"
                     )
-                    label.checkbox-label([for]="filter.key") {{ filter.label }}
+                    label.checkbox-label([for]="filter.key") {{ filter.label | translate }}
 
                   // Radio Type
                   .radio-option(*ngIf="filter.type === 'radio'")
-                    label.filter-label {{ filter.label }}
+                    label.filter-label {{ filter.label | translate }}
                     .radio-group
                       .radio-item(*ngFor="let option of filter.options; let i = index")
                         p-radioButton(
@@ -71,15 +71,15 @@
                           [inputId]="filter.key + '_' + i",
                           [name]="filter.key"
                         )
-                        label.radio-label([for]="filter.key + '_' + i") {{ option.label }}
+                        label.radio-label([for]="filter.key + '_' + i") {{ option.label | translate }}
 
                   // Multi-Select Type
                   .multiselect-option(*ngIf="filter.type === 'multiSelect'")
-                    label.filter-label {{ filter.label }}
+                    label.filter-label {{ filter.label | translate }}
                     p-multiSelect.w-full(
                       [formControlName]="filter.key",
                       [options]="filter.options || []",
-                      [placeholder]="filter.placeholder || 'Select options'",
+                      [placeholder]="filter.placeholder || ('configurableFilter.selectOptions' | translate)",
                       [showClear]="filter.showClear !== false",
                       [showFilter]="filter.showFilter !== false",
                       [filterBy]="filter.filterBy || 'label'",
@@ -90,11 +90,11 @@
 
                   // Dropdown Type
                   .dropdown-option(*ngIf="filter.type === 'dropdown'")
-                    label.filter-label {{ filter.label }}
+                    label.filter-label {{ filter.label | translate }}
                     p-dropdown.w-full(
                       [formControlName]="filter.key",
                       [options]="filter.options || []",
-                      [placeholder]="filter.placeholder || 'Select option'",
+                      [placeholder]="filter.placeholder || ('configurableFilter.selectOption' | translate)",
                       [showClear]="filter.showClear !== false",
                       [filter]="filter.showFilter !== false",
                       [filterBy]="filter.filterBy || 'label'",
@@ -105,19 +105,19 @@
 
                   // Text Input Type
                   .text-option(*ngIf="filter.type === 'text'")
-                    label.filter-label {{ filter.label }}
+                    label.filter-label {{ filter.label | translate }}
                     input.w-full(
                       pInputText,
                       [formControlName]="filter.key",
-                      [placeholder]="filter.placeholder || 'Enter text'"
+                      [placeholder]="filter.placeholder || ('configurableFilter.enterText' | translate)"
                     )
 
                   // Number Input Type
                   .number-option(*ngIf="filter.type === 'number'")
-                    label.filter-label {{ filter.label }}
+                    label.filter-label {{ filter.label | translate }}
                     p-inputNumber.w-full(
                       [formControlName]="filter.key",
-                      [placeholder]="filter.placeholder || 'Enter number'",
+                      [placeholder]="filter.placeholder || ('configurableFilter.enterNumber' | translate)",
                       [min]="filter.min",
                       [max]="filter.max",
                       [step]="filter.step"
@@ -125,10 +125,10 @@
 
                   // Date Input Type
                   .date-option(*ngIf="filter.type === 'date'")
-                    label.filter-label {{ filter.label }}
+                    label.filter-label {{ filter.label | translate }}
                     p-datePicker.w-full.date-calendar(
                       [formControlName]="filter.key",
-                      [placeholder]="filter.placeholder || 'Select date'",
+                      [placeholder]="filter.placeholder || ('configurableFilter.selectDate' | translate)",
                       [dateFormat]="filter.dateFormat || 'dd/mm/yy'",
                       [showClear]="filter.showClear !== false",
                       [showIcon]="true",
@@ -139,10 +139,10 @@
 
                   // Date Range Input Type
                   .daterange-option(*ngIf="filter.type === 'dateRange'")
-                    label.filter-label {{ filter.label }}
+                    label.filter-label {{ filter.label | translate }}
                     p-datePicker.w-full.date-range-calendar(
                       [formControlName]="filter.key",
-                      [placeholder]="filter.placeholder || 'Select date range'",
+                      [placeholder]="filter.placeholder || ('configurableFilter.selectDateRange' | translate)",
                       [dateFormat]="filter.dateFormat || 'dd/mm/yy'",
                       [showClear]="filter.showClear !== false",
                       selectionMode="range",
@@ -161,13 +161,13 @@
             *ngIf="showClearAll",
             pButton,
             type="button",
-            label="CLEAR ALL",
+            [label]="'configurableFilter.clearAll' | translate",
             (click)="onClearAll()"
           )
           button.p-button-primary(
             *ngIf="showApplyButton",
             pButton,
             type="button",
-            label="APPLY",
+            [label]="'configurableFilter.apply' | translate",
             (click)="onApplyFilters()"
           )

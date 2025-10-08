@@ -8,22 +8,7 @@ import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-auth-callback',
-  template: `
-    <div class="auth-callback-container">
-      <!-- Global loader will be shown automatically by the LoadingService -->
-    </div>
-  `,
-  styles: [
-    `
-      .auth-callback-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background-color: #f5f5f5;
-      }
-    `,
-  ],
+  templateUrl: './auth-callback.component.html',
   standalone: false,
 })
 export class AuthCallbackComponent implements OnInit, OnDestroy {

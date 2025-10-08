@@ -14,9 +14,7 @@ import {
 } from 'src/app/_services/user.service';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import {
-  ColumnDefinition,
-} from '../../../components/table/table.component';
+import { ColumnDefinition } from '../../../components/table/table.component';
 
 @Component({
   selector: 'app-groups',
@@ -43,136 +41,11 @@ export class GroupsComponent implements OnInit, OnDestroy {
   sortField: string = 'groupName';
   sortOrder: number = 1;
 
-  // Computed pagination properties
-  get totalPages(): number {
-    return Math.ceil(this.totalRecords / this.pageSize);
-  }
-
-  get currentPageInfo(): string {
-    if (this.totalRecords === 0) return 'No groups';
-    const start = this.currentPage * this.pageSize + 1;
-    const end = Math.min(
-      (this.currentPage + 1) * this.pageSize,
-      this.totalRecords
-    );
-    return `Page ${this.currentPage + 1} of ${
-      this.totalPages
-    } (${start}-${end} of ${this.totalRecords})`;
-  }
-
   // Table column definitions for app-table
-  tableColumns: ColumnDefinition[] = [
-    {
-      field: 'groupName',
-      header: 'Group Name',
-      sortable: true,
-
-      display: 'text',
-    },
-    {
-      field: 'groupType',
-      header: 'Type',
-      sortable: true,
-
-      display: 'chip',
-      severity: (value: any) => {
-        return value === 'BUSINESS' ? 'info' : 'success';
-      },
-    },
-    {
-      field: 'description',
-      header: 'Description',
-      sortable: true,
-      display: 'text',
-    },
-    {
-      field: 'isActive',
-      header: 'Status',
-      sortable: true,
-
-      display: 'chip',
-      severity: (value: any) => {
-        return value ? 'success' : 'danger';
-      },
-      value: (value: any) => (value ? 'Active' : 'Inactive'),
-    },
-    {
-      field: 'actions',
-      header: 'Actions',
-      display: 'actions',
-      actions: [
-        {
-          label: 'Edit',
-          icon: 'pi pi-pencil',
-          action: 'edit',
-          severity: 'info',
-        },
-        {
-          label: 'Delete',
-          icon: 'pi pi-trash',
-          action: 'delete',
-          severity: 'danger',
-        },
-      ],
-    },
-  ];
+  tableColumns: ColumnDefinition[] = [];
 
   // Filter configuration for groups
-  filterConfigs: FilterConfig[] = [
-    {
-      key: 'active',
-      label: 'Active',
-      type: 'checkbox',
-      section: 'STATUS',
-    },
-    {
-      key: 'inactive',
-      label: 'Inactive',
-      type: 'checkbox',
-      section: 'STATUS',
-    },
-    {
-      key: 'business',
-      label: 'Business',
-      type: 'checkbox',
-      section: 'GROUP TYPE',
-    },
-    {
-      key: 'user',
-      label: 'User',
-      type: 'checkbox',
-      section: 'GROUP TYPE',
-    },
-    {
-      key: 'createdOnRange',
-      label: 'Created Date Range',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'dd/mm/yy',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'updatedOnRange',
-      label: 'Updated Date Range',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'dd/mm/yy',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'groupCategory',
-      label: 'Group Category',
-      type: 'radio',
-      options: [
-        { label: 'All Categories', value: 'all' },
-        { label: 'System Groups', value: 'system' },
-        { label: 'Custom Groups', value: 'custom' },
-        { label: 'Department Groups', value: 'department' },
-      ],
-      defaultValue: 'all',
-      section: 'GROUP CATEGORY',
-    },
-  ];
+  filterConfigs: FilterConfig[] = [];
 
   filteredGroups: UserGroup[] = [];
 
@@ -194,6 +67,132 @@ export class GroupsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    // Build translated columns and filters after services are available
+    this.tableColumns = [
+      {
+        field: 'groupName',
+        header: this.ms.translate('userManagement.groups.groupName'),
+        sortable: true,
+        display: 'text',
+      },
+      {
+        field: 'groupType',
+        header: this.ms.translate('userManagement.groups.type'),
+        sortable: true,
+        display: 'chip',
+        severity: (value: any) => {
+          return value === 'BUSINESS' ? 'info' : 'success';
+        },
+      },
+      {
+        field: 'description',
+        header: this.ms.translate('userManagement.groups.description'),
+        sortable: true,
+        display: 'text',
+      },
+      {
+        field: 'isActive',
+        header: this.ms.translate('userManagement.groups.status'),
+        sortable: true,
+        display: 'chip',
+        severity: (value: any) => {
+          return value ? 'success' : 'danger';
+        },
+        value: (value: any) =>
+          value
+            ? this.ms.translate('userManagement.groups.active')
+            : this.ms.translate('userManagement.groups.inactive'),
+      },
+      {
+        field: 'actions',
+        header: this.ms.translate('userManagement.groups.actions'),
+        display: 'actions',
+        actions: [
+          {
+            label: this.ms.translate('userManagement.groups.edit'),
+            icon: 'pi pi-pencil',
+            action: 'edit',
+            severity: 'info',
+          },
+          {
+            label: this.ms.translate('userManagement.groups.delete'),
+            icon: 'pi pi-trash',
+            action: 'delete',
+            severity: 'danger',
+          },
+        ],
+      },
+    ];
+
+    this.filterConfigs = [
+      {
+        key: 'active',
+        label: this.ms.translate('userManagement.groups.active'),
+        type: 'checkbox',
+        section: this.ms.translate('userManagement.groups.statusSection'),
+      },
+      {
+        key: 'inactive',
+        label: this.ms.translate('userManagement.groups.inactive'),
+        type: 'checkbox',
+        section: this.ms.translate('userManagement.groups.statusSection'),
+      },
+      {
+        key: 'business',
+        label: this.ms.translate('userManagement.groups.business'),
+        type: 'checkbox',
+        section: this.ms.translate('userManagement.groups.groupTypeSection'),
+      },
+      {
+        key: 'user',
+        label: this.ms.translate('userManagement.groups.user'),
+        type: 'checkbox',
+        section: this.ms.translate('userManagement.groups.groupTypeSection'),
+      },
+      {
+        key: 'createdOnRange',
+        label: this.ms.translate('userManagement.groups.createdDateRange'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('userManagement.groups.selectDateRange'),
+        dateFormat: 'dd/mm/yy',
+        section: this.ms.translate('userManagement.groups.dateFiltersSection'),
+      },
+      {
+        key: 'updatedOnRange',
+        label: this.ms.translate('userManagement.groups.updatedDateRange'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('userManagement.groups.selectDateRange'),
+        dateFormat: 'dd/mm/yy',
+        section: this.ms.translate('userManagement.groups.dateFiltersSection'),
+      },
+      {
+        key: 'groupCategory',
+        label: this.ms.translate('userManagement.groups.groupCategory'),
+        type: 'radio',
+        options: [
+          {
+            label: this.ms.translate('userManagement.groups.allCategories'),
+            value: 'all',
+          },
+          {
+            label: this.ms.translate('userManagement.groups.systemGroups'),
+            value: 'system',
+          },
+          {
+            label: this.ms.translate('userManagement.groups.customGroups'),
+            value: 'custom',
+          },
+          {
+            label: this.ms.translate('userManagement.groups.departmentGroups'),
+            value: 'department',
+          },
+        ],
+        defaultValue: 'all',
+        section: this.ms.translate(
+          'userManagement.groups.groupCategorySection'
+        ),
+      },
+    ];
     const currentPath = this.router.url;
     const menuItems = this.menuService.generateUserManagementMenu(currentPath);
     this.menuService.updateMenuItems(menuItems);
@@ -205,15 +204,15 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
       this.breadcrumbItems = [
         {
-          label: 'User Management',
+          label: this.ms.translate('userManagement.title'),
           routerLink: `/${officeCode}/${langCode}/user-management`,
         },
         {
-          label: 'User Accounts',
+          label: this.ms.translate('userManagement.userAccounts.title'),
           routerLink: `/${officeCode}/${langCode}/user-management/user-accounts`,
         },
         {
-          label: 'Groups',
+          label: this.ms.translate('userManagement.groups.title'),
           routerLink: `/${officeCode}/${langCode}/user-management/user-accounts/groups`,
         },
       ];

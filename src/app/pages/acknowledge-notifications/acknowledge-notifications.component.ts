@@ -37,50 +37,13 @@ export class AcknowledgeNotificationsComponent implements OnInit {
   @ViewChild(ConfigurableFilterBarComponent)
   configurableFilter!: ConfigurableFilterBarComponent;
 
+  layoutConfig;
   breadcrumbItems = [];
 
-  packageStats = [
-    {
-      label: 'Total Received Applications',
-      count: 4800,
-      period: '2025',
-      color: '#3949AB', // Indigo color
-    },
-    {
-      label: 'Processed Notifications',
-      count: 320,
-      period: '2025',
-      color: '#2E7D32', // Green color
-    },
-    {
-      label: 'Failed Notifications',
-      count: 110,
-      period: '2025',
-      color: '#d30101ff', // Blue color
-    },
-  ];
-
+  packageStats = [];
   statSelected;
 
-  tableColumns = [
-    { field: 'documentId', header: 'Document Id', sortable: true},
-    { field: 'fileId', header: 'File Id', sortable: true },
-    { field: 'transmissionDate', header: 'Transmission Date', sortable: true },
-    {
-      field: 'actions',
-      header: 'Actions',
-      display: 'actions',
-      actions: [
-        {
-          label: 'Acknowledge',
-          icon: 'pi pi-thumbs-up',
-          action: 'acknowledge',
-          severity: 'info',
-        },
-      ],
-    },
-  ];
-
+  tableColumns = [];
   tableData = acknowledgeNotificationsData;
   acknowledgeData = signal<Acknowledge[]>([]);
   filteredAcknowledges = computed(() => this.acknowledgeData());
@@ -88,20 +51,7 @@ export class AcknowledgeNotificationsComponent implements OnInit {
   sortField: string = 'fileId';
   sortOrder: number = 1;
 
-  filterConfigs: FilterConfig[] = [
-    {
-      key: 'documentId',
-      label: 'Document Id',
-      type: 'text',
-      section: 'FILE',
-    },
-    {
-      key: 'fileId',
-      label: 'File Id',
-      type: 'text',
-      section: 'FILE',
-    },
-  ];
+  filterConfigs: FilterConfig[] = [];
 
   appliedFilters: FilterValue[] = [];
 
@@ -124,6 +74,79 @@ export class AcknowledgeNotificationsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.packageStats = [
+      {
+        label: 'Total Received Applications',
+        display: this.ms.translate('notifications.acknowledge.stats.total'),
+        count: 4800,
+        period: '2025',
+        color: '#3949AB', // Indigo color
+      },
+      {
+        label: 'Processed Notifications',
+        display: this.ms.translate('notifications.acknowledge.stats.processed'),
+        count: 320,
+        period: '2025',
+        color: '#2E7D32', // Green color
+      },
+      {
+        label: 'Failed Notifications',
+        display: this.ms.translate('notifications.acknowledge.stats.failed'),
+        count: 110,
+        period: '2025',
+        color: '#d30101ff', // Blue color
+      },
+    ];
+
+    this.tableColumns = [
+      { field: 'documentId', header: this.ms.translate('notifications.acknowledge.table.documentId'), sortable: true},
+      { field: 'fileId', header: this.ms.translate('notifications.acknowledge.table.fileId'), sortable: true },
+      { field: 'transmissionDate', header: this.ms.translate('notifications.acknowledge.table.transmissionDate'), sortable: true },
+      {
+        field: 'actions',
+        header: this.ms.translate('notifications.acknowledge.table.actions'),
+        display: 'actions',
+        actions: [
+          {
+            label: this.ms.translate('notifications.acknowledge.table.acknowledge'),
+            icon: 'pi pi-thumbs-up',
+            action: 'acknowledge',
+            severity: 'info',
+          },
+        ],
+      },
+    ];
+
+    this.filterConfigs = [
+      {
+        key: 'documentId',
+        label: this.ms.translate('notifications.acknowledge.table.documentId'),
+        type: 'text',
+        section: this.ms.translate('common.components.filter.section.file'),
+      },
+      {
+        key: 'fileId',
+        label: this.ms.translate('notifications.acknowledge.table.fileId'),
+        type: 'text',
+        section: this.ms.translate('common.components.filter.section.file'),
+      },
+    ];
+
+    this.layoutConfig = {
+      appTitle: this.ms.translate('common.components.app.title'),
+      showHeader: true,
+      showSidebar: true,
+      headerItems: [],
+      sidebarItems: [],
+      footerText: '© WIPO ' + new Date().getFullYear(),
+      fixedHeader: true,
+      fixedSidebar: true,
+      sidebarCollapsed: false,
+      theme: 'light',
+      logo: '',
+    };
+
     this.route.params.subscribe((params) => {
       const officeCode =
         params['officeCode'] || this.ms.getCurrentOffice() || 'default';
@@ -131,7 +154,7 @@ export class AcknowledgeNotificationsComponent implements OnInit {
 
         this.breadcrumbItems = [
           {
-            label: 'Acknowledge Notifications',
+            label: this.ms.translate('notifications.acknowledge.title'),
             routerLink: `/${officeCode}/${langCode}/acknowledge-notifications`,
           },
         ];

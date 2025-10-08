@@ -4,7 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS, HttpBackend } from '@angular/common/http';
-import { provideHttpClient } from '@angular/common/http';
+//import { provideHttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http'; //deprecated
 
 // INTERCEPTORS
 import { LoadingInterceptor } from './_interceptors/loading.interceptor';
@@ -78,7 +79,6 @@ import { ProcessActionsComponent } from './components/process-actions/process-ac
 import { UnitsTreeComponent } from './pages/user-management/units/units-tree/units-tree.component';
 import { UnitDetailsComponent } from './pages/user-management/units/units-details/units-details.component';
 import { UserSelectionDialogComponent } from './pages/user-management/units/user-selection-dialog/user-selection-dialog.component';
-import { UnitActionsAssignmentComponent } from './pages/user-management/units/units-actions-asssignment/unit-actions-assignment.component';
 import { PlatformSelectionComponent } from './pages/platform-selection/platform-selection.component';
 import { PageRedirectComponent } from './pages/page-redirect/page-redirect.component';
 import { PageNotfoundComponent } from './pages/page-notfound/page-notfound.component';
@@ -126,8 +126,6 @@ import { SignupComponent } from './pages/signup/signup.component';
 import { UnauthorizedComponent } from './pages/unauthorized/unauthorized.component';
 import { AuthCallbackComponent } from './pages/auth-callback/auth-callback.component';
 import { AuthSignoutComponent } from './pages/auth-signout/auth-signout.component';
-import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
-import { ForceChangePasswordComponent } from './pages/force-change-password/force-change-password.component';
 import { ViewBiblioGraphicData } from './pages/task-management/work-monitor/view-content/biblio-data/view-biblio-graphic-data.component';
 
 // ECHART
@@ -207,7 +205,6 @@ const WipoThemePreset = definePreset(Aura, {
     UnitDetailsComponent,
     UnitsPageComponent,
     UserSelectionDialogComponent,
-    UnitActionsAssignmentComponent,
     CreateUnitComponent,
     GroupsComponent,
     ConfigurableStepperComponent,
@@ -250,10 +247,9 @@ const WipoThemePreset = definePreset(Aura, {
     ModalComponent,
     SignupComponent,
     UnauthorizedComponent,
-    ForgotPasswordComponent,
-    ForceChangePasswordComponent,
   ],
   imports: [
+    HttpClientModule, //deprecated
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
@@ -272,7 +268,7 @@ const WipoThemePreset = definePreset(Aura, {
     NgxEchartsModule.forRoot({ echarts: () => import('echarts/core') }),
     // CUSTOM_IMPORTS
     PrimeNGModule,
-    EChartsModule
+    EChartsModule,
   ],
   providers: [
     /*
@@ -307,8 +303,8 @@ const WipoThemePreset = definePreset(Aura, {
       },
     }),
     MessageService,
-    provideHttpClient()
+    //provideHttpClient()
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

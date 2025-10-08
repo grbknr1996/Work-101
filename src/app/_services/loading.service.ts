@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { MechanicsService } from './mechanics.service';
 
 export interface LoadingState {
   isLoading: boolean;
@@ -17,18 +18,23 @@ export class LoadingService {
 
   public loading$ = this.loadingSubject.asObservable();
 
-  constructor() {}
+  constructor(private mechanicsService: MechanicsService) {}
 
   /**
    * Show loading with optional message
    */
   show(message?: string): void {
+    const defaultMessage = this.mechanicsService.translate(
+      'common.components.table.loading'
+    );
     console.log(
-      `LoadingService: Showing loader with message: ${message || 'Loading...'}`
+      `LoadingService: Showing loader with message: ${
+        message || defaultMessage
+      }`
     );
     this.loadingSubject.next({
       isLoading: true,
-      message: message || 'Loading...',
+      message: message || defaultMessage,
     });
   }
 

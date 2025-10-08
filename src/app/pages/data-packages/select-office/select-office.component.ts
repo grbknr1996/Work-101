@@ -21,10 +21,10 @@ interface Office {
 })
 export class SelectOfficeComponent implements OnInit {
 
+  layoutConfig;
   breadcrumbItems = [];
 
   offices: Office[] | undefined;
-
   selectedOffice: Office | undefined;
 
   constructor(
@@ -36,6 +36,20 @@ export class SelectOfficeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    this.layoutConfig = {
+      appTitle: this.ms.translate('common.components.app.title'),
+      showHeader: true,
+      showSidebar: true,
+      headerItems: [],
+      sidebarItems: [],
+      footerText: '© WIPO ' + new Date().getFullYear(),
+      fixedHeader: true,
+      fixedSidebar: true,
+      sidebarCollapsed: false,
+      theme: 'light',
+      logo: '',
+    };
 
     this.route.params.subscribe((params) => {
       const officeCode =

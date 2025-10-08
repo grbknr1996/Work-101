@@ -5,19 +5,19 @@
         .header-icon
           i.pi.pi-cog
         .header-text
-          h2 Office Platform
-          p.subtitle Select an Office Platform.
-          span.info-text {{ availablePlatforms.length }} offices available
+          h2 {{ 'platformSelection.title' | translate }}
+          p.subtitle {{ 'platformSelection.subtitle' | translate }}
+          span.info-text {{ availablePlatforms.length }} {{ 'platformSelection.officesAvailable' | translate }}
       button.close-button((click)="isModal ? onClose() : onLogout()")
         i.pi.pi-times
     
     .modal-body
       .search-section
-        label(for="platform-search") Office Platform
+        label(for="platform-search") {{ 'platformSelection.search.label' | translate }}
         .search-input-container
           input#platform-search.search-input(
             type="text",
-            placeholder="Type to search offices...",
+            [placeholder]="'platformSelection.search.placeholder' | translate",
             [(ngModel)]="searchTerm",
             (input)="onSearch()"
           )
@@ -39,4 +39,4 @@
         [disabled]="!selectedPlatform",
         (click)="onContinue()"
       )
-        span Continue
+        span {{ 'platformSelection.continue' | translate }}

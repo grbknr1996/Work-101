@@ -16,11 +16,11 @@
         </div>
       </p-tab>}
     </p-tablist>
-    <p-tabpanels>@for (category of categories; track category.ipType) {
-      <p-tabpanel [value]="category.ipType">
+    <p-tabView>@for (category of categories; track category.ipType) {
+      <p-tabPanel [value]="category.ipType">
         <app-table [columns]="tableColumns" [data]="acknowledgeData" (actionClick)="onActionClick($event.action, $event.item)" [showClearButton]="false" [showSearch]="false"></app-table>
-      </p-tabpanel>}
-    </p-tabpanels>
+      </p-tabPanel>}
+    </p-tabView>
   </p-tabs>
   <p-dialog [header]="'notifications.office.dialog.header'|translate" [(visible)]="showEditDialog" [modal]="true" [style]="{ width: '400px' }" [draggable]="false" [resizable]="false">
     <form class="office-form" [formGroup]="acknowledgeForm">

@@ -7,7 +7,6 @@ import { AddExclusionRuleComponent } from './add-exclusion-rule/add-exclusion-ru
 import { OriginatingOfficesComponent } from './originating-offices/originating-offices.component';
 import { RecipientSystemsComponent } from './recipient-systems/recipient-systems.component';
 import { DataExchangeConfigService } from 'src/app/_services/data-exchange-config.service';
-import { provideHttpClient } from '@angular/common/http';
 
 const routes: Routes = [
   {
@@ -37,7 +36,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  exports: [RouterModule],
-  providers: [DataExchangeConfigService, provideHttpClient()],
+  imports: [CommonModule, RouterModule.forChild(routes)],
+  providers: [DataExchangeConfigService],
 })
 export class DataExchangeConfigModule {}

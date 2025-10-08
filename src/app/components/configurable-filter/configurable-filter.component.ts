@@ -55,33 +55,6 @@ export interface FilterValue {
   selector: 'app-configurable-filter',
   templateUrl: './configurable-filter.component.html',
   standalone: false,
-  styles: [
-    `
-      .radio-option {
-        width: 100%;
-        padding: 0.5rem 0;
-      }
-
-      .radio-group {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-      }
-
-      .radio-item {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-      }
-
-      .radio-label {
-        font-size: 0.875rem;
-        cursor: pointer;
-        user-select: none;
-        flex: 1;
-      }
-    `,
-  ],
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class ConfigurableFilterComponent implements OnInit, OnDestroy {

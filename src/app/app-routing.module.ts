@@ -6,61 +6,67 @@ const routes: Routes = [
   // Auth callback route - handles redirect from AWS Cognito
   {
     path: 'auth-callback',
-    loadChildren: async () => (await import('./pages/auth-callback/auth-callback.module')).AuthCallbackComponentModule
+    loadChildren: async () =>
+      (await import('./pages/auth-callback/auth-callback.module'))
+        .AuthCallbackComponentModule,
   },
   // Logged-out route - handles logout redirect
   {
     path: 'logged-out',
-    loadChildren: async () => (await import('./pages/auth-signout/auth-signout.module')).AuthSignoutComponentModule
+    loadChildren: async () =>
+      (await import('./pages/auth-signout/auth-signout.module'))
+        .AuthSignoutComponentModule,
   },
   // Simple sign-in route - redirects to hosted UI
   {
     path: 'sign-in',
-    loadChildren: async () => (await import('./pages/sign-in/sign-in.module')).SignInComponentModule
+    loadChildren: async () =>
+      (await import('./pages/sign-in/sign-in.module')).SignInComponentModule,
   },
   {
     path: 'platform-selection',
-    loadChildren: async () => (await import('./pages/platform-selection/platform-selection.module')).PlatformSelectionComponentModule,
+    loadChildren: async () =>
+      (await import('./pages/platform-selection/platform-selection.module'))
+        .PlatformSelectionComponentModule,
     canActivate: [AuthGuard],
   },
   // Auth routes with office and language parameters
   {
     path: ':officeCode/:langCode/sign-in',
-    loadChildren: async () => (await import('./pages/sign-in/sign-in.module')).SignInComponentModule,
+    loadChildren: async () =>
+      (await import('./pages/sign-in/sign-in.module')).SignInComponentModule,
     canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/signup',
-    loadChildren: async () => (await import('./pages/signup/signup.module')).SignupComponentModule,
+    loadChildren: async () =>
+      (await import('./pages/signup/signup.module')).SignupComponentModule,
   },
-  {
-    path: ':officeCode/:langCode/forgot-password',
-    loadChildren: async () => (await import('./pages/forgot-password/forgot-password.module')).ForgotPasswordComponentModule,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: ':officeCode/:langCode/force-change-password',
-    loadChildren: async () => (await import('./pages/force-change-password/force-change-password.module')).ForceChangePasswordComponentModule,
-    canActivate: [AuthGuard],
-  },
+
   {
     path: ':officeCode/:langCode/logged-out',
-    loadChildren: async () => (await import('./pages/auth-signout/auth-signout.module')).AuthSignoutComponentModule
+    loadChildren: async () =>
+      (await import('./pages/auth-signout/auth-signout.module'))
+        .AuthSignoutComponentModule,
   },
   // Main application routes with office and language parameters
   {
     path: ':officeCode/:langCode/dashboard',
-    loadChildren: async () => (await import('./pages/dashboard/dashboard.module')).DashboardModule,
+    loadChildren: async () =>
+      (await import('./pages/dashboard/dashboard.module')).DashboardModule,
     canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/statistics',
-    loadChildren: async () => (await import('./pages/statistics/statistics.module')).StatisticsModule,
-    canActivate: [AuthGuard]
+    loadChildren: async () =>
+      (await import('./pages/statistics/statistics.module')).StatisticsModule,
+    canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/user-management',
-    loadChildren: async () => (await import('./pages/user-management/user-management.module')).UserManagementModule,
+    loadChildren: async () =>
+      (await import('./pages/user-management/user-management.module'))
+        .UserManagementModule,
     canActivate: [AuthGuard],
     data: {
       permissions: [],
@@ -68,7 +74,9 @@ const routes: Routes = [
   },
   {
     path: ':officeCode/:langCode/configuration/data-exchange/dashboard',
-    loadChildren: async () => (await import('./pages/data-exchange-config/data-exchange-config.module')).DataExchangeConfigModule,
+    loadChildren: async () =>
+      (await import('./pages/data-exchange-config/data-exchange-config.module'))
+        .DataExchangeConfigModule,
     canActivate: [AuthGuard],
     data: {
       //permissions: ['system_config_view'],
@@ -77,91 +85,148 @@ const routes: Routes = [
   },
   {
     path: ':officeCode/:langCode/data-packages',
-    loadChildren: async () => (await import('./pages/data-packages/data-packages.module')).DataPackageModule,
+    loadChildren: async () =>
+      (await import('./pages/data-packages/data-packages.module'))
+        .DataPackageModule,
     canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/notifications',
-    loadChildren: async () => (await import('./pages/aripo-notifications/aripo-notifications.module')).AripoNotificationsModule,
+    loadChildren: async () =>
+      (await import('./pages/aripo-notifications/aripo-notifications.module'))
+        .AripoNotificationsModule,
     canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/acknowledge-notifications',
-    loadChildren: async () => (await import('./pages/acknowledge-notifications/acknowledge-notifications.module')).AcknowledgeNotificationsModule,
+    loadChildren: async () =>
+      (
+        await import(
+          './pages/acknowledge-notifications/acknowledge-notifications.module'
+        )
+      ).AcknowledgeNotificationsModule,
     canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/renewal-reminder',
-    loadChildren: async () => (await import('./pages/renewal-reminder/renewal-reminder.module')).RenewalReminderModule,
+    loadChildren: async () =>
+      (await import('./pages/renewal-reminder/renewal-reminder.module'))
+        .RenewalReminderModule,
     canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/data-capture/dashboard',
-    loadChildren: async () => (await import('./pages/data-capture/data-capture.module')).DataCaptureModule,
+    loadChildren: async () =>
+      (await import('./pages/data-capture/data-capture.module'))
+        .DataCaptureModule,
     canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/system-configuration/fee-config',
-    loadChildren: async () => (await import('./pages/fee-config/fee-config.module')).FeeConfigComponentModule,
+    loadChildren: async () =>
+      (await import('./pages/fee-config/fee-config.module'))
+        .FeeConfigComponentModule,
     canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/system-configuration/fee-config/calculator',
-    loadChildren: async () => (await import('./pages/fee-calculator/fee-calculator.module')).FeeCalculatorComponentModule,
+    loadChildren: async () =>
+      (await import('./pages/fee-calculator/fee-calculator.module'))
+        .FeeCalculatorComponentModule,
     canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/publication/pending',
-    loadChildren: async () => (await import('./pages/journal-publication/journal-publication.module')).JournalPublicationComponentModule,
+    loadChildren: async () =>
+      (await import('./pages/journal-publication/journal-publication.module'))
+        .JournalPublicationComponentModule,
     canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/publication/journals',
-    loadChildren: async () => (await import('./pages/online-publication-journal/online-publication-journal.module')).OnlinePublicationJournalComponentModule,
+    loadChildren: async () =>
+      (
+        await import(
+          './pages/online-publication-journal/online-publication-journal.module'
+        )
+      ).OnlinePublicationJournalComponentModule,
     canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/task-management/work-monitor',
-    loadChildren: async () => (await import('./pages/task-management/work-monitor/work-monitor.module')).WorkMonitorComponentModule,
+    loadChildren: async () =>
+      (await import('./pages/task-management/work-monitor/work-monitor.module'))
+        .WorkMonitorComponentModule,
     canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/task-management/my-tasks',
-    loadChildren: async () => (await import('./pages/task-management/my-tasks/my-tasks.module')).MyPendingTasksComponentModule,
+    loadChildren: async () =>
+      (await import('./pages/task-management/my-tasks/my-tasks.module'))
+        .MyPendingTasksComponentModule,
     canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/task-management/work-monitor/task-assignment',
-    loadChildren: async () => (await import('./pages/task-management/work-monitor/assign-tasks/assign-tasks.module')).AssignTasksComponentModule,
+    loadChildren: async () =>
+      (
+        await import(
+          './pages/task-management/work-monitor/assign-tasks/assign-tasks.module'
+        )
+      ).AssignTasksComponentModule,
     canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/task-management/work-monitor/task-assignment/record-action',
-    loadChildren: async () => (await import('./pages/task-management/work-monitor/view-content/record-action/record-action.module')).RecordActionComponentModule,
+    loadChildren: async () =>
+      (
+        await import(
+          './pages/task-management/work-monitor/view-content/record-action/record-action.module'
+        )
+      ).RecordActionComponentModule,
     canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/task-management/work-monitor/tasks-distribution',
-    loadChildren: async () => (await import('./pages/task-management/work-monitor/tasks-distribution/tasks-distribution.module')).TasksDistributionComponentModule,
+    loadChildren: async () =>
+      (
+        await import(
+          './pages/task-management/work-monitor/tasks-distribution/tasks-distribution.module'
+        )
+      ).TasksDistributionComponentModule,
     canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/task-management/work-monitor/task-assignment/view-content/:documentId',
-    loadChildren: async () => (await import('./pages/task-management/work-monitor/view-content/view-content.module')).ViewContentComponentModule,
+    loadChildren: async () =>
+      (
+        await import(
+          './pages/task-management/work-monitor/view-content/view-content.module'
+        )
+      ).ViewContentComponentModule,
     canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/task-management/work-monitor/task-assignment/:documentId/history',
-    loadChildren: async () => (await import('./pages/task-management/work-monitor/view-content/history/task-history.module')).TaskHistoryComponentModule,
+    loadChildren: async () =>
+      (
+        await import(
+          './pages/task-management/work-monitor/view-content/history/task-history.module'
+        )
+      ).TaskHistoryComponentModule,
     canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/notfound',
-    loadChildren: async () => (await import('./pages/page-notfound/page-notfound.module')).PageNotfoundModule
+    loadChildren: async () =>
+      (await import('./pages/page-notfound/page-notfound.module'))
+        .PageNotfoundModule,
   },
   {
     path: ':officeCode/:langCode/unauthorized',
-    loadChildren: async () => (await import('./pages/unauthorized/unauthorized.module')).UnauthorizedComponentModule
+    loadChildren: async () =>
+      (await import('./pages/unauthorized/unauthorized.module'))
+        .UnauthorizedComponentModule,
   },
 
   // Redirects for office/:langCode pattern
@@ -206,4 +271,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

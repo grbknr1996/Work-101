@@ -27,203 +27,22 @@ export class AripoNotificationsComponent implements OnInit {
   @ViewChild(ConfigurableFilterBarComponent)
   configurableFilter!: ConfigurableFilterBarComponent;
 
-  layoutConfig = {
-    appTitle: 'WIPO IPAS Central',
-    showHeader: true,
-    showSidebar: true,
-    headerItems: [],
-    sidebarItems: [],
-    footerText: 'WIPO',
-    fixedHeader: true,
-    fixedSidebar: true,
-    sidebarCollapsed: false,
-    theme: 'light',
-    logo: '',
-  };
-
+  layoutConfig;
   breadcrumbItems = [];
 
   selectedTab = 'aripo-incoming';
 
-  aripoStats = [
-    {
-      label: 'Total Received Applications',
-      count: 4800,
-      period: 'Last File: AP_CV_REQUEST_20250813193647.zip',
-      color: '#3949AB', // Indigo color
-    },
-    {
-      label: 'Processed Notifications',
-      count: 10320,
-      period: '',
-      color: '#2E7D32', // Green color
-    },
-    {
-      label: 'Failed Notifications',
-      count: 11,
-      period: 'Last File: AP_CV_REQUEST_20250516193725.zip',
-      color: '#d30101ff', // Blue color
-    },
-  ];
-
+  aripoStats = [];
   aripoStatSelected;
 
-  aripoIncomingTableColumns = [
-    { field: 'batchId', header: 'Batch Id'},
-    { field: 'fileId', header: 'File Id' },
-    { field: 'formType', header: 'Form Type' },
-    { field: 'aripoSequence', header: 'ARIPO-File Sequence' },
-    { field: 'notificationDate', header: 'Notified On' },
-    { field: 'processingDate', header: 'Processed On' },
-    {
-      field: 'status',
-      header: 'Status',
-      display: 'chip',
-      severity: (value) => {
-        if (value === 'transformation_loaded') {
-          return 'success';
-        } else if (value === 'transformation_failed') {
-          return 'danger';
-        } else {
-          return 'info';
-        }
-      },
-    },
-    {
-      field: 'actions',
-      header: 'Actions',
-      display: 'actions',
-      actions: [
-        {
-          label: 'Download',
-          icon: 'pi pi-file-plus',
-          action: 'download',
-          severity: 'info',
-        },
-      ],
-    },
-  ];
-
-  aripoOutgoingTableColumns = [
-    { field: 'batchId', header: 'Batch Id'},
-    { field: 'fileId', header: 'File Id' },
-    { field: 'formType', header: 'Form Type' },
-    { field: 'aripoSequence', header: 'ARIPO-File Sequence' },
-    { field: 'receivedDate', header: 'Received On' },
-    { field: 'notificationDate', header: 'Notified On' },
-    {
-      field: 'status',
-      header: 'Status',
-      display: 'chip',
-      severity: (value) => {
-        if (value === 'Granted') {
-          return 'success';
-        } else if (value === 'Refused') {
-          return 'danger';
-        } else {
-          return 'info';
-        }
-      },
-    },
-    {
-      field: 'actions',
-      header: 'Actions',
-      display: 'actions',
-      actions: [
-        {
-          label: 'Download',
-          icon: 'pi pi-file-plus',
-          action: 'download',
-          severity: 'info',
-        },
-      ],
-    },
-  ];
+  aripoIncomingTableColumns = [];
+  aripoOutgoingTableColumns = [];
 
   aripoIncomingTableData = aripoNotificationsData;
   aripoOutgoingTableData = aripoOutgoingNotificationsData;
 
-  aripoIncomingFilterConfigs: FilterConfig[] = [
-    {
-      key: 'batchId',
-      label: 'Batch Id',
-      type: 'text',
-      section: 'FILE',
-    },
-    {
-      key: 'fileId',
-      label: 'File Id',
-      type: 'text',
-      section: 'FILE',
-    },
-    {
-      key: 'formType',
-      label: 'Form Type',
-      type: 'text',
-      section: 'FILE',
-    },
-    {
-      key: 'notificationDate',
-      label: 'Notified On',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'transformation_loaded',
-      label: 'Processed',
-      type: 'checkbox',
-      section: 'STATUS',
-    },
-    {
-      key: 'transformation_failed',
-      label: 'Failed',
-      type: 'checkbox',
-      section: 'STATUS',
-    },
-  ];
-
-  aripoOutgoingFilterConfigs: FilterConfig[] = [
-    {
-      key: 'batchId',
-      label: 'Batch Id',
-      type: 'text',
-      section: 'FILE',
-    },
-    {
-      key: 'fileId',
-      label: 'File Id',
-      type: 'text',
-      section: 'FILE',
-    },
-    {
-      key: 'formType',
-      label: 'Form Type',
-      type: 'text',
-      section: 'FILE',
-    },
-    {
-      key: 'notificationDate',
-      label: 'Notified On',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'Granted',
-      label: 'Granted',
-      type: 'checkbox',
-      section: 'STATUS',
-    },
-    {
-      key: 'Refused',
-      label: 'Refused',
-      type: 'checkbox',
-      section: 'STATUS',
-    },
-  ];
+  aripoIncomingFilterConfigs: FilterConfig[] = [];
+  aripoOutgoingFilterConfigs: FilterConfig[] = [];
 
   appliedFilters: FilterValue[] = [];
 
@@ -240,6 +59,199 @@ export class AripoNotificationsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    this.aripoStats = [
+      {
+        label: 'Total Received Applications',
+        display: this.ms.translate('notifications.aripo.stats.total'),
+        count: 4800,
+        period: this.ms.translate('notifications.aripo.stats.lastFile')+': AP_CV_REQUEST_20250813193647.zip',
+        color: '#3949AB', // Indigo color
+      },
+      {
+        label: 'Processed Notifications',
+        display: this.ms.translate('notifications.aripo.stats.processed'),
+        count: 10320,
+        period: '',
+        color: '#2E7D32', // Green color
+      },
+      {
+        label: 'Failed Notifications',
+        display: this.ms.translate('notifications.aripo.stats.failed'),
+        count: 11,
+        period: this.ms.translate('notifications.aripo.stats.lastFile')+': AP_CV_REQUEST_20250516193725.zip',
+        color: '#d30101ff', // Blue color
+      },
+    ];
+
+    this.aripoIncomingTableColumns = [
+      { field: 'batchId', header: this.ms.translate('notifications.aripo.table.batchId') },
+      { field: 'fileId', header: this.ms.translate('notifications.aripo.table.fileId') },
+      { field: 'formType', header: this.ms.translate('notifications.aripo.table.formType') },
+      { field: 'aripoSequence', header: this.ms.translate('notifications.aripo.table.aripoSeq') },
+      { field: 'notificationDate', header: this.ms.translate('notifications.aripo.table.notifiedOn') },
+      { field: 'processingDate', header: this.ms.translate('notifications.aripo.table.processedOn') },
+      {
+        field: 'status',
+        header: this.ms.translate('notifications.aripo.table.status'),
+        display: 'chip',
+        severity: (value) => {
+          if (value === 'transformation_loaded') {
+            return 'success';
+          } else if (value === 'transformation_failed') {
+            return 'danger';
+          } else {
+            return 'info';
+          }
+        },
+      },
+      {
+        field: 'actions',
+        header: this.ms.translate('notifications.aripo.table.actions'),
+        display: 'actions',
+        actions: [
+          {
+            label: this.ms.translate('notifications.aripo.table.download'),
+            icon: 'pi pi-file-plus',
+            action: 'download',
+            severity: 'info',
+          },
+        ],
+      },
+    ];
+
+    this.aripoOutgoingTableColumns = [
+      { field: 'batchId', header: this.ms.translate('notifications.aripo.table.batchId')},
+      { field: 'fileId', header: this.ms.translate('notifications.aripo.table.fileId') },
+      { field: 'formType', header: this.ms.translate('notifications.aripo.table.formType') },
+      { field: 'aripoSequence', header: this.ms.translate('notifications.aripo.table.aripoSeq') },
+      { field: 'receivedDate', header: this.ms.translate('notifications.aripo.table.receivedOn') },
+      { field: 'notificationDate', header: this.ms.translate('notifications.aripo.table.notifiedOn') },
+      {
+        field: 'status',
+        header: this.ms.translate('notifications.aripo.table.status'),
+        display: 'chip',
+        severity: (value) => {
+          if (value === 'Granted') {
+            return 'success';
+          } else if (value === 'Refused') {
+            return 'danger';
+          } else {
+            return 'info';
+          }
+        },
+      },
+      {
+        field: 'actions',
+        header: this.ms.translate('notifications.aripo.table.actions'),
+        display: 'actions',
+        actions: [
+          {
+            label: this.ms.translate('notifications.aripo.table.download'),
+            icon: 'pi pi-file-plus',
+            action: 'download',
+            severity: 'info',
+          },
+        ],
+      },
+    ];
+
+    this.aripoIncomingFilterConfigs = [
+      {
+        key: 'batchId',
+        label: this.ms.translate('notifications.aripo.table.batchId'),
+        type: 'text',
+        section: this.ms.translate('common.components.filter.section.file'),
+      },
+      {
+        key: 'fileId',
+        label: this.ms.translate('notifications.aripo.table.fileId'),
+        type: 'text',
+        section: this.ms.translate('common.components.filter.section.file'),
+      },
+      {
+        key: 'formType',
+        label: this.ms.translate('notifications.aripo.table.formType'),
+        type: 'text',
+        section: this.ms.translate('common.components.filter.section.file'),
+      },
+      {
+        key: 'notificationDate',
+        label: this.ms.translate('notifications.aripo.table.notifiedOn'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
+        dateFormat: 'yy-mm-dd',
+        section: this.ms.translate('common.components.filter.section.dateFilters'),
+      },
+      {
+        key: 'transformation_loaded',
+        label: this.ms.translate('notifications.aripo.filter.status.processed'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.status'),
+      },
+      {
+        key: 'transformation_failed',
+        label: this.ms.translate('notifications.aripo.filter.status.failed'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.status'),
+      },
+    ];
+
+    this.aripoOutgoingFilterConfigs = [
+      {
+        key: 'batchId',
+        label: this.ms.translate('notifications.aripo.table.batchId'),
+        type: 'text',
+        section: this.ms.translate('common.components.filter.section.file'),
+      },
+      {
+        key: 'fileId',
+        label: this.ms.translate('notifications.aripo.table.fileId'),
+        type: 'text',
+        section: this.ms.translate('common.components.filter.section.file'),
+      },
+      {
+        key: 'formType',
+        label: this.ms.translate('notifications.aripo.table.formType'),
+        type: 'text',
+        section: this.ms.translate('common.components.filter.section.file'),
+      },
+      {
+        key: 'notificationDate',
+        label: this.ms.translate('notifications.aripo.table.notifiedOn'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
+        dateFormat: 'yy-mm-dd',
+        section: this.ms.translate('common.components.filter.section.dateFilters'),
+      },
+      {
+        key: 'Granted',
+        label: this.ms.translate('notifications.aripo.filter.status.granted'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.status'),
+      },
+      {
+        key: 'Refused',
+        label: this.ms.translate('notifications.aripo.filter.status.refused'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.status'),
+      },
+    ];
+
+    this.layoutConfig = {
+      appTitle: this.ms.translate('common.components.app.title'),
+      showHeader: true,
+      showSidebar: true,
+      headerItems: [],
+      sidebarItems: [],
+      footerText: '© WIPO ' + new Date().getFullYear(),
+      fixedHeader: true,
+      fixedSidebar: true,
+      sidebarCollapsed: false,
+      theme: 'light',
+      logo: '',
+    };
+
     this.route.params.subscribe((params) => {
       const officeCode =
         params['officeCode'] || this.ms.getCurrentOffice() || 'default';
@@ -254,7 +266,7 @@ export class AripoNotificationsComponent implements OnInit {
 
       this.breadcrumbItems = [
         {
-          label: 'Notifications',
+          label: this.ms.translate('notifications.header'),
           routerLink: `/${officeCode}/${langCode}/notifications/aripo-incoming`,
         },
       ];

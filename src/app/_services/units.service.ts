@@ -403,6 +403,9 @@ export class UnitsService {
         deputy: result.deputyHeadGroup?.actionTypes || [],
         staff: result.staffGroup?.actionTypes || [],
       },
+      headUserGroupId: result.headUserGroup?.groupId,
+      deputyHeadUsersGroupId: result.deputyHeadGroup?.groupId,
+      staffUsersGroupId: result.staffGroup?.groupId,
       children: [],
     };
   }

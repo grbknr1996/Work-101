@@ -11,6 +11,7 @@ import {
 
 interface PackageStat {
   label: string;
+  display: string;
   count: number;
   percentChange: number;
   period: string;
