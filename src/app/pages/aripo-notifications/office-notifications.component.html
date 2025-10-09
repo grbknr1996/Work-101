@@ -16,13 +16,13 @@
         </div>
       </p-tab>}
     </p-tablist>
-    <p-tabView>@for (category of categories; track category.ipType) {
-      <p-tabPanel [value]="category.ipType">
+    <p-tabpanels>@for (category of categories; track category.ipType) {
+      <p-tabpanel [value]="category.ipType">
         <app-table [columns]="tableColumns" [data]="acknowledgeData" (actionClick)="onActionClick($event.action, $event.item)" [showClearButton]="false" [showSearch]="false"></app-table>
-      </p-tabPanel>}
-    </p-tabView>
+      </p-tabpanel>}
+    </p-tabpanels>
   </p-tabs>
-  <p-dialog [header]="'notifications.office.dialog.header'|translate" [(visible)]="showEditDialog" [modal]="true" [style]="{ width: '400px' }" [draggable]="false" [resizable]="false">
+  <p-dialog [header]="'notifications.office.dialog.header'|translate" [(visible)]="showEditDialog" [modal]="true" [draggable]="false" [resizable]="false">
     <form class="office-form" [formGroup]="acknowledgeForm">
       <div class="form-field">
         <label for="acknowledge">{{"notifications.office.dialog.date"|translate}}</label>
@@ -34,7 +34,7 @@
       <button pButton type="button" [label]="'common.components.modal.update'|translate" (click)="onSaveOffice()"></button>
     </ng-template>
   </p-dialog>
-  <p-dialog [header]="'notifications.office.dialog.information'|translate" [(visible)]="showInfoDialog" [modal]="true" [style]="{ width: '400px' }" [draggable]="false" [resizable]="false">
+  <p-dialog [header]="'notifications.office.dialog.information'|translate" [(visible)]="showInfoDialog" [modal]="true" [draggable]="false" [resizable]="false">
     <div>{{"notifications.office.dialog.message"|translate}}     </div>
     <ng-template pTemplate="footer">
       <button class="p-button-text" pButton type="button" [label]="'common.components.modal.cancel'|translate" (click)="onCancel()"></button>

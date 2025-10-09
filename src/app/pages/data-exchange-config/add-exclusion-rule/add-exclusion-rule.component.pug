@@ -90,49 +90,95 @@ app-layout([config]="layoutConfig")
 
   //- Step 1 (formerly Step 2)
   div(*ngIf="step === 1").w-full
-    p-tabView.w-full
-      p-tabPanel(
-        *ngFor="let cat of selectedCategories",
-        [header]="getCategoryLabel(cat)"
-      )
-        .mb-6
-          b.text-lg.font-semibold.text-gray-800 Configure Distribution Rules for {{ getCategoryLabel(cat) }}
-        p-accordion
-          p-accordionTab(header="Event Code Inclusion")
-            .mb-4.text-sm.text-gray-600
-              | Choose which event codes should be distributed for {{ getCategoryLabel(cat) }}.
-            .grid.grid-cols-1.gap-4(class="md:grid-cols-2")
-              .col-span-1(
-                *ngFor="let event of getEventCodesForCategory(cat); let i = index"
-              )
-                .flex.items-center
-                  p-checkbox(
-                    [(ngModel)]="eventExclusions[cat]",
-                    [value]="event.code",
-                    [binary]="false",
-                    inputId="event-{{ cat }}-{{ event.code }}"
-                  )
-                  label.ml-3.text-sm.text-gray-700(for="event-{{ cat }}-{{ event.code }}")
-                    | {{ event.code }}: {{ event.label }}
+    p-tabs.w-full
+      p-tablist
+        p-tab(*ngFor="let cat of selectedCategories") {{getCategoryLabel(cat)}}
 
-          p-accordionTab(header="Document Inclusion")
-            .flex.items-center
-              p-checkbox(
-               [(ngModel)]="enableDocumentExclusions[cat]",
-               binary="true",
-               inputId="enable-doc-{{ cat }}"
-              )
-              label.ml-3.text-sm.text-gray-700(for="enable-doc-{{ cat }}") Enable Document Inclusion
-            .ml-6.mt-2.text-sm.text-gray-500
-              | Document inclusion is enabled by default with all document types selected.
-            .mt-4(*ngIf="enableDocumentExclusions[cat]")
-              label.block.text-sm.font-medium.text-gray-700.mb-2 Select Document Types to Include
-              p-multiSelect(
-                [options]="getDocumentTypesForCategory(cat)",
-                [(ngModel)]="documentExclusions[cat]",
-                defaultLabel="Select Document Types",
-                display="chip"
-              )
+      p-tabpanels
+        p-tabpanel
+          .mb-6
+            b.text-lg.font-semibold.text-gray-800 Configure Distribution Rules for {{ getCategoryLabel(cat) }}
+          p-accordion
+            p-accordionTab(header="Event Code Inclusion")
+              .mb-4.text-sm.text-gray-600
+                | Choose which event codes should be distributed for {{ getCategoryLabel(cat) }}.
+              .grid.grid-cols-1.gap-4(class="md:grid-cols-2")
+                .col-span-1(
+                  *ngFor="let event of getEventCodesForCategory(cat); let i = index"
+                )
+                  .flex.items-center
+                    p-checkbox(
+                      [(ngModel)]="eventExclusions[cat]",
+                      [value]="event.code",
+                      [binary]="false",
+                      inputId="event-{{ cat }}-{{ event.code }}"
+                    )
+                    label.ml-3.text-sm.text-gray-700(for="event-{{ cat }}-{{ event.code }}")
+                      | {{ event.code }}: {{ event.label }}
+
+            p-accordionTab(header="Document Inclusion")
+              .flex.items-center
+                p-checkbox(
+                [(ngModel)]="enableDocumentExclusions[cat]",
+                binary="true",
+                inputId="enable-doc-{{ cat }}"
+                )
+                label.ml-3.text-sm.text-gray-700(for="enable-doc-{{ cat }}") Enable Document Inclusion
+              .ml-6.mt-2.text-sm.text-gray-500
+                | Document inclusion is enabled by default with all document types selected.
+              .mt-4(*ngIf="enableDocumentExclusions[cat]")
+                label.block.text-sm.font-medium.text-gray-700.mb-2 Select Document Types to Include
+                p-multiSelect(
+                  [options]="getDocumentTypesForCategory(cat)",
+                  [(ngModel)]="documentExclusions[cat]",
+                  defaultLabel="Select Document Types",
+                  display="chip"
+                )
+
+
+    //- p-tabView.w-full
+    //-   p-tabPanel(
+    //-     *ngFor="let cat of selectedCategories",
+    //-     [header]="getCategoryLabel(cat)"
+    //-   )
+    //-     .mb-6
+    //-       b.text-lg.font-semibold.text-gray-800 Configure Distribution Rules for {{ getCategoryLabel(cat) }}
+    //-     p-accordion
+    //-       p-accordionTab(header="Event Code Inclusion")
+    //-         .mb-4.text-sm.text-gray-600
+    //-           | Choose which event codes should be distributed for {{ getCategoryLabel(cat) }}.
+    //-         .grid.grid-cols-1.gap-4(class="md:grid-cols-2")
+    //-           .col-span-1(
+    //-             *ngFor="let event of getEventCodesForCategory(cat); let i = index"
+    //-           )
+    //-             .flex.items-center
+    //-               p-checkbox(
+    //-                 [(ngModel)]="eventExclusions[cat]",
+    //-                 [value]="event.code",
+    //-                 [binary]="false",
+    //-                 inputId="event-{{ cat }}-{{ event.code }}"
+    //-               )
+    //-               label.ml-3.text-sm.text-gray-700(for="event-{{ cat }}-{{ event.code }}")
+    //-                 | {{ event.code }}: {{ event.label }}
+
+    //-       p-accordionTab(header="Document Inclusion")
+    //-         .flex.items-center
+    //-           p-checkbox(
+    //-            [(ngModel)]="enableDocumentExclusions[cat]",
+    //-            binary="true",
+    //-            inputId="enable-doc-{{ cat }}"
+    //-           )
+    //-           label.ml-3.text-sm.text-gray-700(for="enable-doc-{{ cat }}") Enable Document Inclusion
+    //-         .ml-6.mt-2.text-sm.text-gray-500
+    //-           | Document inclusion is enabled by default with all document types selected.
+    //-         .mt-4(*ngIf="enableDocumentExclusions[cat]")
+    //-           label.block.text-sm.font-medium.text-gray-700.mb-2 Select Document Types to Include
+    //-           p-multiSelect(
+    //-             [options]="getDocumentTypesForCategory(cat)",
+    //-             [(ngModel)]="documentExclusions[cat]",
+    //-             defaultLabel="Select Document Types",
+    //-             display="chip"
+    //-           )
     .mt-8.flex.justify-between
       button.bg-gray-500.text-white.px-6.py-2.rounded-lg.transition-colors(
         class="hover:bg-gray-600",

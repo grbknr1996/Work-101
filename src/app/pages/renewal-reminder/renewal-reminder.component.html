@@ -6,7 +6,7 @@
   </div>
   <app-multiple-stats [multipleStats]="packageStats" (statSelected)="onStatSelect($event)" [selectedStat]="statSelected"></app-multiple-stats>
   <app-configurable-filter-bar [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)" [showDateSearchBar]="true" (filterDateSearch)="filterSearch($event)" [appliedFilters]="appliedFilters" [clearAllLabel]="'common.components.filter.clearAll'|translate" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()" (removeDefaultFilter)="removeDefaultFilter($event)"></app-configurable-filter-bar>
-  <div class="flex justify-between items-center" style="padding:5px 5px 0 0">
+  <div class="flex justify-between items-center acknowledge-button">
     <div></div>
     <button class="p-button-primary" pButton [disabled]="'renewal.button.sendNotification'|translate" icon="pi pi-envelope" (click)="onSendMail()"></button>
   </div>

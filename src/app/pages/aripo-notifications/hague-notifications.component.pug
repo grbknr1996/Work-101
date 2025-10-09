@@ -47,14 +47,27 @@ app-layout([config]="layoutConfig")
           (chipRemove)="removeFilterChip($event)",
           (clearAll)="clearAllFilters()",
         )
-  p-tabView([(activeIndex)]="hagueActiveIndex")
-    p-tabPanel(value="hague-incoming")
-      ng-template(pTemplate="header")
-        div((click)="onHeaderClick($event, 'hague-incoming')") {{"notifications.hague.incoming.header"|translate}}
-      app-table([columns]="hagueIncomingTableColumns", [data]="hagueIncomingTableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false") 
 
-    p-tabPanel(value="hague-outgoing")
-      ng-template(pTemplate="header")
-        div((click)="onHeaderClick($event, 'hague-outgoing')") {{"notifications.hague.outgoing.header"|translate}}
-      app-table([columns]="hagueOutgoingTableColumns", [data]="hagueOutgoingTableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false")
+  p-tabs([value]="hagueActiveIndex")
+    p-tablist
+      p-tab(value="hague-incoming", (click)="onHeaderClick($event, 'hague-incoming')") {{"notifications.hague.incoming.header"|translate}}
+      p-tab(value="hague-outgoing", (click)="onHeaderClick($event, 'hague-incoming')") {{"notifications.hague.outgoing.header"|translate}}   
+
+    p-tabpanels
+      p-tabpanel(value="hague-incoming")
+        app-table([columns]="hagueIncomingTableColumns", [data]="hagueIncomingTableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false") 
+      p-tabpanel(value="hague-outgoing")
+        app-table([columns]="hagueOutgoingTableColumns", [data]="hagueOutgoingTableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false")
+
+
+  //- p-tabView([(activeIndex)]="hagueActiveIndex")
+  //-   p-tabPanel(value="hague-incoming")
+  //-     ng-template(pTemplate="header")
+  //-       div((click)="onHeaderClick($event, 'hague-incoming')") {{"notifications.hague.incoming.header"|translate}}
+  //-     app-table([columns]="hagueIncomingTableColumns", [data]="hagueIncomingTableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false") 
+
+  //-   p-tabPanel(value="hague-outgoing")
+  //-     ng-template(pTemplate="header")
+  //-       div((click)="onHeaderClick($event, 'hague-outgoing')") {{"notifications.hague.outgoing.header"|translate}}
+  //-     app-table([columns]="hagueOutgoingTableColumns", [data]="hagueOutgoingTableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false")
 

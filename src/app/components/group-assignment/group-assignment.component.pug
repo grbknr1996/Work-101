@@ -1,12 +1,12 @@
 .group-assignment-card.bg-white.rounded-lg.shadow-lg.p-6(class="min-h-[600px]")
   .card-header.mb-6
-    h2.text-2xl.font-bold.text-blue-600 Group Assignment
+    h2.text-2xl.font-bold.text-blue-600 {{ 'common.components.groupAssignment.title' | translate }}
   
   .card-content
     .group-assignment-container.flex.gap-8
       // Available Groups Panel
       .group-list.available.flex-1
-        h3.text-lg.font-semibold.text-blue-600.mb-4 {{ availableLabel }}
+        h3.text-lg.font-semibold.text-blue-600.mb-4 {{ 'common.components.groupAssignment.availableGroups' | translate }}
 
         // Available Groups Filter and Sort Controls
         .filter-sort-controls.mb-4.p-3.bg-gray-50.rounded-lg.border.border-gray-200
@@ -14,7 +14,7 @@
             // Search Control
             .flex-1
               input(
-                placeholder="Search groups by name...",
+                [placeholder]="'common.components.groupAssignment.searchGroups' | translate",
                 [(ngModel)]="searchTerm",
                 (keyup.enter)="onSearchChange(searchTerm)",
                 class="w-full",
@@ -24,7 +24,7 @@
             p-button(
               (onClick)="onSearchChange(searchTerm)",
               icon="pi pi-search",
-              label="Search",
+              [label]="'common.components.groupAssignment.search' | translate",
               styleClass="p-button-primary p-button-sm"
             )
             
@@ -32,43 +32,43 @@
               *ngIf="searchTerm",
               (onClick)="clearSearch()",
               icon="pi pi-times",
-              label="Clear",
+              [label]="'common.components.groupAssignment.clear' | translate",
               styleClass="p-button-secondary p-button-sm"
             )
 
           .flex.flex-wrap.gap-3.items-center.mt-2
             // Filter by Type
             .flex.items-center.gap-2(class="min-w-[180px]")
-              label.text-sm.font-medium.text-gray-700 Filter by Type:
+              label.text-sm.font-medium.text-gray-700 {{ 'common.components.groupAssignment.filterByType' | translate }}
               
               p-dropdown(
                 [(ngModel)]="filterType",
                 (onChange)="onFilterTypeChange($event.value)",
-                [options]="[{ label: 'All Types', value: 'all' }, { label: 'User Groups', value: 'user' }, { label: 'Business Groups', value: 'business' }]",
+                [options]="filterTypeOptions",
                 optionLabel="label",
                 optionValue="value",
-                placeholder="Select Type",
+                [placeholder]="'common.components.groupAssignment.selectType' | translate",
                 styleClass="min-w-[120px]"
               )
 
             // Sort Controls
             .flex.items-center.gap-2(class="min-w-[180px]")
-              label.text-sm.font-medium.text-gray-700 Sort by:
+              label.text-sm.font-medium.text-gray-700 {{ 'common.components.groupAssignment.sortBy' | translate }}
               
               p-dropdown(
                 [(ngModel)]="sortBy",
                 (onChange)="onSortChange($event.value, sortOrder)",
-                [options]="[{ label: 'Name', value: 'groupName' }, { label: 'Type', value: 'groupType' }]",
+                [options]="sortByOptions",
                 optionLabel="label",
                 optionValue="value",
-                placeholder="Select Sort",
+                [placeholder]="'common.components.groupAssignment.selectSort' | translate",
                 styleClass="min-w-[100px]"
               )
               
               p-button(
                 (onClick)="onSortChange(sortBy, sortOrder === 'asc' ? 'desc' : 'asc')",
                 [icon]="sortOrder === 'asc' ? 'pi pi-sort-up' : 'pi pi-sort-down'",
-                [title]="sortOrder === 'asc' ? 'Sort Descending' : 'Sort Ascending'",
+                [title]="sortOrder === 'asc' ? ('common.components.groupAssignment.sortDescending' | translate) : ('common.components.groupAssignment.sortAscending' | translate)",
                 styleClass="p-button-outlined p-button-sm"
               )
 
@@ -80,7 +80,7 @@
               [checked]="isAllAvailableSelected()",
               (change)="toggleSelectAllAvailable($event.target.checked)"
             )
-            span.text-sm.font-medium.text-gray-700 Select All
+            span.text-sm.font-medium.text-gray-700 {{ 'common.components.groupAssignment.selectAll' | translate }}
 
         .group-list-body.bg-gray-50.rounded-lg.p-4.overflow-y-auto.border(class="min-h-[400px] max-h-[400px]")
           .group-item.flex.items-center.justify-between.p-3.mb-2.bg-white.rounded-lg.shadow-sm.border.border-gray-200.transition-colors(
@@ -132,7 +132,7 @@
 
       // Assigned Groups Panel
       .group-list.assigned.flex-1
-        h3.text-lg.font-semibold.text-blue-600.mb-4 {{ assignedLabel }}
+        h3.text-lg.font-semibold.text-blue-600.mb-4 {{ 'common.components.groupAssignment.assignedGroups' | translate }}
 
         // Assigned Groups Filter and Sort Controls
         .filter-sort-controls.mb-4.p-3.bg-gray-50.rounded-lg.border.border-gray-200
@@ -140,7 +140,7 @@
             // Search Control
             .flex-1(class="min-w-[200px]")
               input(
-                placeholder="Search assigned groups...",
+                [placeholder]="'common.components.groupAssignment.searchAssignedGroups' | translate",
                 [(ngModel)]="assignedSearchTerm",
                 (keyup.enter)="onAssignedSearchChange(assignedSearchTerm)",
                 class="w-full",
@@ -150,7 +150,7 @@
             p-button(
               (onClick)="onAssignedSearchChange(assignedSearchTerm)",
               icon="pi pi-search",
-              label="Search",
+              [label]="'common.components.groupAssignment.search' | translate",
               styleClass="p-button-primary p-button-sm"
             )
             
@@ -158,43 +158,43 @@
               *ngIf="assignedSearchTerm",
               (onClick)="clearAssignedSearch()",
               icon="pi pi-times",
-              label="Clear",
+              [label]="'common.components.groupAssignment.clear' | translate",
               styleClass="p-button-secondary p-button-sm"
             )
 
           .flex.flex-wrap.gap-3.items-center.mt-2
             // Filter by Type
             .flex.items-center.gap-2(class="min-w-[180px]")
-              label.text-sm.font-medium.text-gray-700 Filter by Type:
+              label.text-sm.font-medium.text-gray-700 {{ 'common.components.groupAssignment.filterByType' | translate }}
               
               p-dropdown(
                 [(ngModel)]="assignedFilterType",
                 (onChange)="onAssignedFilterTypeChange($event.value)",
-                [options]="[{ label: 'All Types', value: 'all' }, { label: 'User Groups', value: 'user' }, { label: 'Business Groups', value: 'business' }]",
+                [options]="assignedFilterTypeOptions",
                 optionLabel="label",
                 optionValue="value",
-                placeholder="Select Type",
+                [placeholder]="'common.components.groupAssignment.selectType' | translate",
                 styleClass="min-w-[120px]"
               )
 
             // Sort Controls
             .flex.items-center.gap-2(class="min-w-[180px]")
-              label.text-sm.font-medium.text-gray-700 Sort by:
+              label.text-sm.font-medium.text-gray-700 {{ 'common.components.groupAssignment.sortBy' | translate }}
               
               p-dropdown(
                 [(ngModel)]="assignedSortBy",
                 (onChange)="onAssignedSortChange($event.value, assignedSortOrder)",
-                [options]="[{ label: 'Name', value: 'groupName' }, { label: 'Type', value: 'groupType' }]",
+                [options]="assignedSortByOptions",
                 optionLabel="label",
                 optionValue="value",
-                placeholder="Select Sort",
+                [placeholder]="'common.components.groupAssignment.selectSort' | translate",
                 styleClass="min-w-[100px]"
               )
               
               p-button(
                 (onClick)="onAssignedSortChange(assignedSortBy, assignedSortOrder === 'asc' ? 'desc' : 'asc')",
                 [icon]="assignedSortOrder === 'asc' ? 'pi pi-sort-up' : 'pi pi-sort-down'",
-                [title]="assignedSortOrder === 'asc' ? 'Sort Descending' : 'Sort Ascending'",
+                [title]="assignedSortOrder === 'asc' ? ('common.components.groupAssignment.sortDescending' | translate) : ('common.components.groupAssignment.sortAscending' | translate)",
                 styleClass="p-button-outlined p-button-sm"
               )
 
@@ -206,7 +206,7 @@
               [checked]="isAllAssignedSelected()",
               (change)="toggleSelectAllAssigned($event.target.checked)"
             )
-            span.text-sm.font-medium.text-gray-700 Select All
+            span.text-sm.font-medium.text-gray-700 {{ 'common.components.groupAssignment.selectAll' | translate }}
 
         .group-list-body.bg-gray-50.rounded-lg.p-4.overflow-y-auto.border(class="min-h-[400px] max-h-[400px]")
           .group-item.flex.items-center.justify-between.p-3.mb-2.bg-white.rounded-lg.shadow-sm.border.border-gray-200.transition-colors(
@@ -232,8 +232,8 @@
             *ngIf="pagedAssignedGroups.length === 0"
           )
             i.pi.pi-users.text-4xl.mb-2
-            p.text-sm No groups assigned yet
-            p.text-xs.text-gray-400 Select groups from the left panel to assign
+            p.text-sm {{ 'common.components.groupAssignment.noGroupsAssigned' | translate }}
+            p.text-xs.text-gray-400 {{ 'common.components.groupAssignment.selectGroupsToAssign' | translate }}
 
         .mt-4
           p-paginator(

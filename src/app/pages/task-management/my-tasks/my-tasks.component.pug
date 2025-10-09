@@ -3,16 +3,16 @@ app-layout
 
   .grid.grid-cols-1(class="md:grid-cols-4 gap-4 mb-6")
     p-card.w-full.text-center
-      .font-semibold.text-sm.mb-2 My Tasks
+      .font-semibold.text-sm.mb-2 {{ 'taskManagement.myTasks.totalTasks' | translate }}
       .text-3xl.font-bold.text-orange-600 42
     p-card.w-full.text-center
-      .font-semibold.text-sm.mb-2 Overdue Tasks
+      .font-semibold.text-sm.mb-2 {{ 'taskManagement.myTasks.overdueTasks' | translate }}
       .text-3xl.font-bold.text-red-600 5
     p-card.w-full.text-center
-      .font-semibold.text-sm.mb-2 Overdue Soon
+      .font-semibold.text-sm.mb-2 {{ 'taskManagement.myTasks.overdueSoon' | translate }}
       .text-3xl.font-bold.text-yellow-600 2
     p-card.w-full.text-center
-      .font-semibold.text-sm.mb-2 Average age
+      .font-semibold.text-sm.mb-2 {{ 'taskManagement.myTasks.averageAge' | translate }}
       .text-3xl.font-bold.text-purple-600 45
 
   .grid.grid-cols-6.mt-2
@@ -38,7 +38,7 @@ app-layout
             [outlined]="true",
             [text]="true",
             (click)="approvalbucketList()",
-            pTooltip="Approval Bucket",
+            pTooltip="{{ 'taskManagement.myTasks.approvalBucket' | translate }}",
             tooltipPosition="bottom"
           )
           p-badge(
@@ -63,12 +63,12 @@ app-layout
     app-filter-chips(
       [appliedFilters]="appliedFilters",
       [showClearAll]="true",
-      [clearAllLabel]="'Clear All'",
+      [clearAllLabel]="'taskManagement.myTasks.clearAll' | translate",
       (chipRemove)="removeFilterChip($event)",
       (clearAll)="clearAllFilters()"
     )
 
-    h3.text-lg.font-semibold.mb-3(*ngIf="showApprovalBucket", , style="margin-top: 1.5rem;") Approval Bucket List
+    h3.text-lg.font-semibold.mb-3(*ngIf="showApprovalBucket", , style="margin-top: 1.5rem;") {{ 'taskManagement.myTasks.approvalBucketList' | translate }}
     app-table(
       [columns]="tableColumns",
       [paginator]="true",
@@ -122,4 +122,4 @@ app-layout
             | No action selected.
 
   .flex.justify-end.mt-2
-    p-button(*ngIf="selectedTasks.length > 0 && showApprovalBucket && !showSlider", label="Bulk Approve", icon="pi pi-check-circle", styleClass="p-button-success", (onClick)="bulkApprove()")
+    p-button(*ngIf="selectedTasks.length > 0 && showApprovalBucket && !showSlider", [label]="'taskManagement.myTasks.bulkApprove' | translate", icon="pi pi-check-circle", styleClass="p-button-success", (onClick)="bulkApprove()")

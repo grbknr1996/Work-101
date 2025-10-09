@@ -61,80 +61,9 @@ export class MyPendingTasksComponent implements OnInit {
   pageSize = 10;
   totalRecords = 0;
 
-  tableColumns = [
-    { headerDisplay: 'headerCheckbox', display: 'checkbox' },
-    { field: 'processName', header: 'Process Name', display: 'text' },
-    { field: 'description', header: 'Description', display: 'text' },
-    { field: 'documentId', header: 'Document/File Id', display: 'text' },
-    { field: 'receivedOn', header: 'Received On', sortable: true },
-    { field: 'lastAction', header: 'Last Action', display: 'text' },
-    { field: 'age', header: 'Age(days)', sortable: true, display: 'text' },
-    { field: 'daysOverDue', header: 'Days Overdue(days)', sortable: true, display: 'text' },
-    { field: 'lastResponsibleUser', header: 'Last Responsible User', display: 'text' },
-    {
-      field: 'actions', header: 'Actions', display: 'actions',
-      actions: [
-        {
-          label: 'Approve',
-          icon: 'pi pi-check',
-          action: 'approve',
-          severity: 'warning',
-        },
-        {
-          label: 'History',
-          icon: 'pi pi-clock',
-          action: 'history',
-          severity: 'info',
-        },
-        {
-          label: 'Document',
-          icon: 'pi pi-file',
-          action: 'document',
-          severity: 'info',
-        }
-      ]
-    },
-  ];
+  tableColumns = [];
 
-
-  filterConfigs: FilterConfig[] = [
-    {
-      key: 'Industrial Designs',
-      label: 'Industrial Designs',
-      type: 'checkbox',
-      section: 'PROCESS TYPE',
-    },
-    {
-      key: 'Patents',
-      label: 'Patents',
-      type: 'checkbox',
-      section: 'PROCESS TYPE',
-    },
-    {
-      key: 'Trademarks',
-      label: 'Trademarks',
-      type: 'checkbox',
-      section: 'PROCESS TYPE',
-    },
-    {
-      key: 'Other IP Registrations',
-      label: 'Other IP Registrations',
-      type: 'checkbox',
-      section: 'PROCESS TYPE',
-    },
-    {
-      key: 'Post Filing',
-      label: 'Post Filing',
-      type: 'checkbox',
-      section: 'PROCESS TYPE',
-    },
-    {
-      key: 'Office Documents',
-      label: 'Office Documents',
-      type: 'checkbox',
-      section: 'PROCESS TYPE',
-    }
-  ];
+  filterConfigs: FilterConfig[] = [];
 
   filteredGroups: any[] = [];
   appliedFilters: FilterValue[] = [];
@@ -158,7 +87,86 @@ export class MyPendingTasksComponent implements OnInit {
     private router: Router,
     private menuService: SidebarMenuService,
 
-  ) { }
+  ) { 
+    this.initializeConfigurations();
+  }
+
+  private initializeConfigurations(): void {
+    this.filterConfigs = [
+      {
+        key: 'Industrial Designs',
+        label: this.ms.translate('taskManagement.myTasks.industrialDesigns'),
+        type: 'checkbox',
+        section: 'PROCESS TYPE',
+      },
+      {
+        key: 'Patents',
+        label: this.ms.translate('taskManagement.myTasks.patents'),
+        type: 'checkbox',
+        section: 'PROCESS TYPE',
+      },
+      {
+        key: 'Trademarks',
+        label: this.ms.translate('taskManagement.myTasks.trademarks'),
+        type: 'checkbox',
+        section: 'PROCESS TYPE',
+      },
+      {
+        key: 'Other IP Registrations',
+        label: this.ms.translate('taskManagement.myTasks.otherIPRegistrations'),
+        type: 'checkbox',
+        section: 'PROCESS TYPE',
+      },
+      {
+        key: 'Post Filing',
+        label: this.ms.translate('taskManagement.myTasks.postFiling'),
+        type: 'checkbox',
+        section: 'PROCESS TYPE',
+      },
+      {
+        key: 'Office Documents',
+        label: this.ms.translate('taskManagement.myTasks.officeDocuments'),
+        type: 'checkbox',
+        section: 'PROCESS TYPE',
+      }
+    ];
+    
+    this.tableColumns = [
+      { headerDisplay: 'headerCheckbox', display: 'checkbox' },
+      { field: 'processName', header: this.ms.translate('taskManagement.myTasks.table.header.processName'), display: 'text' },
+      { field: 'description', header: this.ms.translate('taskManagement.myTasks.table.header.description'), display: 'text' },
+      { field: 'documentId', header: this.ms.translate('taskManagement.myTasks.table.header.documentId'), display: 'text' },
+      { field: 'receivedOn', header: this.ms.translate('taskManagement.myTasks.table.header.receivedOn'), sortable: true },
+      { field: 'lastAction', header: this.ms.translate('taskManagement.myTasks.table.header.lastAction'), display: 'text' },
+      { field: 'age', header: this.ms.translate('taskManagement.myTasks.table.header.age'), sortable: true, display: 'text' },
+      { field: 'daysOverDue', header: this.ms.translate('taskManagement.myTasks.table.header.daysOverDue'), sortable: true, display: 'text' },
+      { field: 'lastResponsibleUser', header: this.ms.translate('taskManagement.myTasks.table.header.lastResponsibleUser'), display: 'text' },
+      {
+        field: 'actions', header: this.ms.translate('taskManagement.myTasks.table.header.actions'), display: 'actions',
+        actions: [
+          {
+            label: this.ms.translate('taskManagement.myTasks.approve'),
+            icon: 'pi pi-check',
+            action: 'approve',
+            severity: 'warning',
+          },
+          {
+            label: this.ms.translate('taskManagement.myTasks.history'),
+            icon: 'pi pi-clock',
+            action: 'history',
+            severity: 'info',
+          },
+          {
+            label: this.ms.translate('taskManagement.myTasks.document'),
+            icon: 'pi pi-file',
+            action: 'document',
+            severity: 'info',
+          }
+        ]
+      },
+    ];
+
+  }
 
   ngOnInit() {
 

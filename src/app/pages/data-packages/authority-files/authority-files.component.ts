@@ -31,28 +31,12 @@ export class AuthorityFilesComponent implements OnInit {
   breadcrumbItems = [];
 
   // Static Package stats for demo
-
   packageStats = [];
-
   statSelected;
 
   globalFilterFields = ['publicationNumber'];
 
-  tableColumns = [
-    { field: 'image', header: '', display: 'image'},
-    {
-      field: 'publicationNumber',
-      header: 'Publication Number',
-      sortable: true,
-    },
-    { field: 'publicationDate', header: 'Publication Date' },
-    { field: 'kindCode', header: 'Kind Code' },
-    { field: 'exceptionCode', header: 'Exception Code' },
-    { field: 'abstract', header: 'Abstract' },
-    { field: 'description', header: 'Description' },
-    { field: 'claims', header: 'Claims' },
-  ];
-
+  tableColumns = [];
   tableData = authorityData;
 
   sortField: string = 'publicationNumber';
@@ -60,73 +44,9 @@ export class AuthorityFilesComponent implements OnInit {
 
   applicationOfficeCode = '';
 
-  filterConfigs: FilterConfig[] = [
-    {
-      key: 'publicationNumber',
-      label: 'Publication Number',
-      type: 'text',
-      section: 'AUTHORITY',
-    },
-    {
-      key: 'publicationDate',
-      label: 'Publication Date',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'abstract',
-      label: 'Abstract',
-      type: 'checkbox',
-      section: 'STATUS',
-    },
-    {
-      key: 'description',
-      label: 'Description',
-      type: 'checkbox',
-      section: 'STATUS',
-    },
-    {
-      key: 'claims',
-      label: 'Claims',
-      type: 'checkbox',
-      section: 'STATUS',
-    },
-  ];
+  filterConfigs: FilterConfig[] = [];
 
-  filterActions = [
-    {
-      label: 'Download Table Data',
-      icon: 'pi pi-arrow-circle-down',
-      action: 'downloadTableData',
-      severity: 'info',
-    },
-    {
-      label: 'Download Definition File',
-      icon: 'pi pi-file-pdf',
-      action: 'downloadDefinitionFile',
-      severity: 'info',
-    },
-    {
-      label: 'Download Full CSV',
-      icon: 'pi pi-file-excel',
-      action: 'downloadAuthorityFile',
-      severity: 'info',
-    },
-    {
-      label: 'Download Exception List',
-      icon: 'pi pi-download',
-      action: 'downloadExceptionList',
-      severity: 'info',
-    },
-    {
-      label: 'Upload Exception List',
-      icon: 'pi pi-upload',
-      action: 'uploadExceptionList',
-      severity: 'info',
-    },
-  ];
+  filterActions = [];
 
   appliedFilters: FilterValue[] = [];
 
@@ -146,27 +66,114 @@ export class AuthorityFilesComponent implements OnInit {
     this.packageStats = [
       {
         label: 'All',
+        display: this.ms.translate('dataService.authorityFiles.stats.all'),
         count: 3222929,
-        period: 'Since 2025',
+        period: this.ms.translate('dataService.authorityFiles.stats.since')+' 2025',
         color: '#3949AB', // Indigo color
       },
       {
         label: 'Patents',
+        display: this.ms.translate('dataService.authorityFiles.stats.patents'),
         count: 292929,
-        period: 'Since 2025',
+        period: this.ms.translate('dataService.authorityFiles.stats.since')+' 2025',
         color: '#2E7D32', // Green color
       },
       {
         label: 'Utility Models',
+        display: this.ms.translate('dataService.authorityFiles.stats.utilityModels'),
         count: 1288239,
-        period: 'Since 2025',
+        period: this.ms.translate('dataService.authorityFiles.stats.since')+' 2025',
         color: '#0288D1', // Blue color
       },
       {
         label: 'Inconsistent Full-text Files',
+        display: this.ms.translate('dataService.authorityFiles.stats.inconsistentFiles'),
         count: 127,
-        period: 'Since 2025',
+        period: this.ms.translate('dataService.authorityFiles.stats.since')+' 2025',
         color: '#D32F2F', // Red color
+      },
+    ];
+
+    this.tableColumns = [
+      { field: 'image', header: '', display: 'image'},
+      {
+        field: 'publicationNumber',
+        header: this.ms.translate('dataService.authorityFiles.table.publicationNumber'),
+        sortable: true,
+      },
+      { field: 'publicationDate', header: this.ms.translate('dataService.authorityFiles.table.publicationDate') },
+      { field: 'kindCode', header: this.ms.translate('dataService.authorityFiles.table.kindCode') },
+      { field: 'exceptionCode', header: this.ms.translate('dataService.authorityFiles.table.exceptionCode') },
+      { field: 'abstract', header: this.ms.translate('dataService.authorityFiles.table.abstract') },
+      { field: 'description', header: this.ms.translate('dataService.authorityFiles.table.description') },
+      { field: 'claims', header: this.ms.translate('dataService.authorityFiles.table.claims') },
+    ];
+
+    this.filterConfigs = [
+      {
+        key: 'publicationNumber',
+        label: this.ms.translate('dataService.authorityFiles.table.publicationNumber'),
+        type: 'text',
+        section: this.ms.translate('common.components.filter.section.file'),
+      },
+      {
+        key: 'publicationDate',
+        label: this.ms.translate('dataService.authorityFiles.table.publicationDate'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
+        dateFormat: 'yy-mm-dd',
+        section: this.ms.translate('common.components.filter.section.dateFilters'),
+      },
+      {
+        key: 'abstract',
+        label: this.ms.translate('dataService.authorityFiles.table.abstract'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.status'),
+      },
+      {
+        key: 'description',
+        label: this.ms.translate('dataService.authorityFiles.table.description'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.status'),
+      },
+      {
+        key: 'claims',
+        label: this.ms.translate('dataService.authorityFiles.table.claims'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.status'),
+      },
+    ];
+
+    this.filterActions = [
+      {
+        label: this.ms.translate('dataService.authorityFiles.table.actions.downloadData'),
+        icon: 'pi pi-arrow-circle-down',
+        action: 'downloadTableData',
+        severity: 'info',
+      },
+      {
+        label: this.ms.translate('dataService.authorityFiles.table.actions.downloadDefinition'),
+        icon: 'pi pi-file-pdf',
+        action: 'downloadDefinitionFile',
+        severity: 'info',
+      },
+      {
+        label: this.ms.translate('dataService.authorityFiles.table.actions.downloadCsv'),
+        icon: 'pi pi-file-excel',
+        action: 'downloadAuthorityFile',
+        severity: 'info',
+      },
+      {
+        label: this.ms.translate('dataService.authorityFiles.table.actions.downloadException'),
+        icon: 'pi pi-download',
+        action: 'downloadExceptionList',
+        severity: 'info',
+      },
+      {
+        label: this.ms.translate('dataService.authorityFiles.table.actions.uploadException'),
+        icon: 'pi pi-upload',
+        action: 'uploadExceptionList',
+        severity: 'info',
       },
     ];
 
@@ -195,15 +202,15 @@ export class AuthorityFilesComponent implements OnInit {
         this.applicationOfficeCode = officeCodeParam;
         this.breadcrumbItems = [
           {
-            label: 'Offices',
+            label: this.ms.translate('dataService.authorityFiles.breadCrum.offices'),
             routerLink: `/${officeCode}/${langCode}/data-packages`,
           },
           {
-            label: 'Data Sharing',
+            label: this.ms.translate('dataService.authorityFiles.breadCrum.dataSharing'),
             routerLink: `/${officeCode}/${langCode}/data-packages/${officeCodeParam}`,
           },
           {
-            label: 'Authority Files',
+            label: this.ms.translate('dataService.authorityFiles.breadCrum.authorityFiles'),
             routerLink: `/${officeCode}/${langCode}/data-packages/authority-files`,
           },
         ];
@@ -211,11 +218,11 @@ export class AuthorityFilesComponent implements OnInit {
         this.applicationOfficeCode = officeCode;
         this.breadcrumbItems = [
           {
-            label: 'Data Sharing',
+            label: this.ms.translate('dataService.authorityFiles.breadCrum.dataSharing'),
             routerLink: `/${officeCode}/${langCode}/data-packages`,
           },
           {
-            label: 'Authority Files',
+            label: this.ms.translate('dataService.authorityFiles.breadCrum.authorityFiles'),
             routerLink: `/${officeCode}/${langCode}/data-packages/authority-files`,
           },
         ];

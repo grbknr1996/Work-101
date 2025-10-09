@@ -40,30 +40,7 @@ export class WorkMonitorComponent implements OnInit {
     pageSize = 10;
     totalRecords = 0;
 
-    tableColumns = [
-        { field: 'processName', header: 'Process Name', display: 'text' },
-        { field: 'status', header: 'Status', display: 'text', sortable: true, },
-        { field: 'assignedTasks', header: 'Assigned', display: 'text', sortable: true, },
-        { field: 'unassignedTasks', header: 'Unassigned', display: 'text', sortable: true, },
-        { field: 'averageAge', header: 'Average Age (days)', display: 'text', sortable: true, },
-        { field: 'responsibleGroup', header: 'Responsible Group', display: 'text', sortable: true, },
-        { field: 'actions', header: 'Task Actions', display: 'actions',
-            actions: [
-                {
-                    label: 'Task Distribution',
-                    icon: 'pi pi-arrows-alt',
-                    action: 'distribute',
-                    severity: 'info',
-                },
-                {
-                    label: 'Task Assignment',
-                    icon: 'pi pi-user-plus',
-                    action: 'assign',
-                    severity: 'info',
-                }
-            ]
-        },
-    ];
+    tableColumns = [];
 
     processStatuses: Record<string, string[]> = {
         "Industrial Designs": ["Examination", "Granted", "In Publication", "Published"],
@@ -82,12 +59,37 @@ export class WorkMonitorComponent implements OnInit {
     constructor(
         private taskManagementService: TaskManagementService,
         private menuService: SidebarMenuService,
-        public ms: MechanicsService,
         private cdr: ChangeDetectorRef,
         private router: Router,
         private route: ActivatedRoute,
         private mechanicsService: MechanicsService
-    ) { }
+    ) {
+        this.tableColumns = [
+            { field: 'processName', header: this.mechanicsService.translate('taskManagement.workMonitor.processName'), display: 'text' },
+            { field: 'status', header: this.mechanicsService.translate('taskManagement.workMonitor.status'), display: 'text', sortable: true },
+            { field: 'assignedTasks', header: this.mechanicsService.translate('taskManagement.workMonitor.assigned'), display: 'text', sortable: true },
+            { field: 'unassignedTasks', header: this.mechanicsService.translate('taskManagement.workMonitor.unassigned'), display: 'text', sortable: true },
+            { field: 'averageAge', header: this.mechanicsService.translate('taskManagement.workMonitor.averageAge'), display: 'text', sortable: true },
+            { field: 'responsibleGroup', header: this.mechanicsService.translate('taskManagement.workMonitor.responsibleGroup'), display: 'text', sortable: true },
+            {
+                field: 'actions', header: this.mechanicsService.translate('taskManagement.workMonitor.actions'), display: 'actions',
+                actions: [
+                    {
+                        label: this.mechanicsService.translate('taskManagement.workMonitor.distribution'),
+                        icon: 'pi pi-arrows-alt',
+                        action: 'distribute',
+                        severity: 'info',
+                    },
+                    {
+                        label: this.mechanicsService.translate('taskManagement.workMonitor.assignment'),
+                        icon: 'pi pi-user-plus',
+                        action: 'assign',
+                        severity: 'info',
+                    }
+                ]
+            },
+        ];
+    }
 
     ngOnInit() {
         if (this.processGroupByName.length) {
@@ -124,7 +126,7 @@ export class WorkMonitorComponent implements OnInit {
 
         this.route.params.subscribe((params) => {
             const officeCode =
-                params['officeCode'] || this.ms.getCurrentOffice() || 'default';
+                params['officeCode'] || this.mechanicsService.getCurrentOffice() || 'default';
             const langCode = params['langCode'] || 'en';
 
             this.breadcrumbItems = [

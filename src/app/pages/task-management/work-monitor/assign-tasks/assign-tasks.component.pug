@@ -3,21 +3,21 @@ app-layout
 
   .grid.grid-cols-1(class="md:grid-cols-4 gap-4 mb-6")
     p-card.w-full
-      .font-semibold.text-lg.mb-2 Process
+      .font-semibold.text-lg.mb-2 {{ 'taskManagement.assigntasks.labels.process' | translate }}
       .text-sm {{ selectedProcessName }}
 
     //- Status
     p-card.w-full
-      .font-semibold.text-lg.mb-2 Status
+      .font-semibold.text-lg.mb-2 {{ 'taskManagement.assigntasks.labels.status' | translate }}
       .text-sm {{ stageLabel }}
 
     p-card.w-full
-      .font-semibold.text-lg.mb-2 Pending Tasks
+      .font-semibold.text-lg.mb-2 {{ 'taskManagement.assigntasks.labels.pendingTasks' | translate }}
       .text-sm {{ tasksToDistribute }}
 
     //- Total Tasks
     p-card.w-full
-      .font-semibold.text-lg.mb-2 Total Tasks
+      .font-semibold.text-lg.mb-2 {{ 'taskManagement.assigntasks.labels.totalTasks' | translate }}
       .text-sm {{ totalTasks }}
 
   .grid.grid-cols-6.mt-2
@@ -64,37 +64,37 @@ app-layout
   div(*ngIf="selectedTasks.length > 0").flex.flex-wrap.items-start.gap-4
     //- Select User Unit
     .flex.flex-col.flex-1
-      label.block.text-sm.font-medium.mb-1 Select User Unit
+      label.block.text-sm.font-medium.mb-1 {{ 'taskManagement.assigntasks.labels.selectUnit' | translate }}
       p-dropdown.w-full.border.rounded-md(
         [options]="unitWithMembers",
         optionLabel="unitName",
         optionValue="id",
-        placeholder="Select Unit",
+        [placeholder]="'taskManagement.assigntasks.placeholders.selectUnit' | translate",
         (onChange)="onUnitChange($event.value)"
       )
 
     //- Select User
     .flex.flex-col.flex-1
-      label.block.text-sm.font-medium.mb-1 Select User
+      label.block.text-sm.font-medium.mb-1 {{ 'taskManagement.assigntasks.labels.selectUser' | translate }}
       p-dropdown.w-full.border.rounded-md(
         [options]="members"
         optionLabel="name"
         optionValue="id"
-        placeholder="Select User"
+        [placeholder]="'taskManagement.assigntasks.placeholders.selectUser' | translate"
         [(ngModel)]="selectedMemberId",
         (onChange)="selectedMemberId = $event.value"
       )
 
     //- Actions
     .flex.flex-col.flex-1
-      label.block.text-sm.font-medium.mb-1 Actions
+      label.block.text-sm.font-medium.mb-1 {{ 'taskManagement.assigntasks.labels.actions' | translate }}
       .flex.gap-2
-        p-button(label="Confirm", (onClick)="Assign()", [disabled]="!selectedMemberId")
+        p-button([label]="'taskManagement.assigntasks.buttons.confirm' | translate", (onClick)="Assign()", [disabled]="!selectedMemberId")
         button.p-button-danger(
           *ngIf="isAssignedView && selectedTasks.length > 0",
           pButton,
           type="button",
-          label="Unassign",
+          [label]="'taskManagement.assigntasks.buttons.unassign' | translate",
           icon="pi pi-user-minus",
           (click)="unassignTasks()"
         )

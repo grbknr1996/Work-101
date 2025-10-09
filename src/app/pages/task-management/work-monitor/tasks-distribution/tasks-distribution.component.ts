@@ -57,14 +57,7 @@ export class TasksDistributionComponent implements OnInit {
 
   selectedUnit: UnitWithMembers | null = null;
 
-  tableColumns = [
-    { headerDisplay: 'headerCheckbox', display: 'checkbox' },
-    { field: 'name', header: 'Name', display: 'text' },
-    { field: 'workMode', header: 'Work Mode', display: 'tag' },
-    { field: 'assignedTasks', header: 'Current Tasks', display: 'text' },
-    { field: 'projectedTasks', header: 'Projected Tasks', display: 'text' },
-    { field: 'totalAfter', header: 'Total', display: 'text' }
-  ];
+  tableColumns = [];
 
   constructor(
     private taskManagementService: TaskManagementService,
@@ -73,7 +66,16 @@ export class TasksDistributionComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private router: Router,
     private route: ActivatedRoute,
-  ) { }
+  ) {     
+    this.tableColumns = [
+      { headerDisplay: 'headerCheckbox', display: 'checkbox' },
+      { field: 'name', header: this.ms.translate('taskManagement.distribution.table.header.name'), display: 'text' },
+      { field: 'workMode', header: this.ms.translate('taskManagement.distribution.table.header.workMode'), display: 'tag' },
+      { field: 'assignedTasks', header: this.ms.translate('taskManagement.distribution.table.header.assignedTasks'), display: 'text' },
+      { field: 'projectedTasks', header: this.ms.translate('taskManagement.distribution.table.header.projectedTasks'), display: 'text' },
+      { field: 'totalAfter', header: this.ms.translate('taskManagement.distribution.table.header.totalAfter'), display: 'text' }
+    ];
+  }
 
   ngOnInit() {
 
@@ -168,22 +170,6 @@ export class TasksDistributionComponent implements OnInit {
     return this.tasksToDistribute - this.getAssignedTaskTotal();
   }
 
-  // This method updates projected tasks for each member:
-  // updateMembersProjectedTasks() {
-  //   const projected = this.getProjectedTasksPerMember();
-  //   this.members = this.members.map(m => ({
-  //     ...m,
-  //     projectedTasks: projected
-  //   }));
-  //   // Optionally: update `totalAfter` for each member if you want
-  //   this.members = this.members.map(m => ({
-  //     ...m,
-  //     totalAfter: (m.assignedTasks ?? 0) + (m.projectedTasks ?? 0)
-  //   }));
-  // }
-  // onThresholdChange() {
-  //   this.updateMembersProjectedTasks();
-  // }
   getTotalAssignedTasksOfMembers(): number {
     return this.members?.reduce((sum, m) => sum + (m.assignedTasks ?? 0), 0) ?? 0;
   }

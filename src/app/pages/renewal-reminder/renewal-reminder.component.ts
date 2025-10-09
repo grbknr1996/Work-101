@@ -19,7 +19,7 @@ import {
 @Component({
   selector: 'app-renewal-reminder',
   templateUrl: './renewal-reminder.component.html',
-   standalone: false,
+  standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RenewalReminderComponent implements OnInit {
@@ -27,120 +27,22 @@ export class RenewalReminderComponent implements OnInit {
   @ViewChild(ConfigurableFilterBarComponent)
   configurableFilter!: ConfigurableFilterBarComponent;
 
-  layoutConfig = {
-    appTitle: 'WIPO IPAS Central',
-    showHeader: true,
-    showSidebar: true,
-    headerItems: [],
-    sidebarItems: [],
-    footerText: 'WIPO',
-    fixedHeader: true,
-    fixedSidebar: true,
-    sidebarCollapsed: false,
-    theme: 'light',
-    logo: '',
-  };
-
+  layoutConfig;
   breadcrumbItems = []; 
   
   currentDate: Date = new Date();
-
   renewalMonth = this.currentDate.toLocaleString('default', { month: 'short' });
   renewalYear = this.currentDate.getFullYear()+1;
 
-  packageStats = [
-    {
-      label: 'trademarks',
-      displayLabel:['Trademarks'],
-      //count:80,
-      countLabel: 'Next Renewals: '+this.renewalMonth+' '+this.renewalYear,
-      //period: 'Since: March 24, 2025',
-      periodList:['Files: 145000', 'Expected Fees: 89`000 USD'],
-      color: '#3949AB', // Indigo color
-    },
-    {
-      label: 'patents',
-      displayLabel:['Patents'],
-      //count: 12,
-      countLabel: 'Next Renewals: '+this.renewalMonth+' '+this.renewalYear,
-      //period: 'Since: March 24, 2025',
-      periodList:['Files: 5674', 'Expected Fees: 145`000 USD'],
-      color: '#2E7D32', // Green color
-    },
-    {
-      label: 'designs',
-      displayLabel:['Designs'],
-      //count: 120,
-      countLabel: 'Next Renewals: '+this.renewalMonth+' '+this.renewalYear,
-      //period: 'Since: March 24, 2025',
-      periodList:['Files: 8467', 'Expected Fees: 78`000 USD'],
-      color: '#0662ccff', // Blue color
-    },
-    {
-      label: 'others',
-      displayLabel:['Others'],
-      //count: 120,
-      countLabel: 'Next Renewals: '+this.renewalMonth+' '+this.renewalYear,
-      //period: 'Since: March 24, 2025',
-      periodList:['Files: 234', 'Expected Fees: 2`000 USD'],
-      color: '#023a7aff', // Blue color
-    },
-  ];
-
+  packageStats = [];
   statSelected;
 
-  tableColumns = [
-    { field: 'selected', header: 'Select', display: 'checkbox' },
-    { field: 'fileId', header: 'File Id' },
-    { field: 'expiryDate', header: 'Expiry Date' },
-    { field: 'renewalDueDate', header: 'Renewal Due Date' },
-    { field: 'expectedFee', header: 'Expected Fee' },
-    { field: 'fileSummary', header: 'File Summary' },
-    { field: 'fileOwners', header: 'File Owners' },
-    { field: 'notificationEmails', header: 'Notified By' },
-    { field: 'mailSentDate', header: 'Notified On' },
-  ];
-
+  tableColumns = [];
   tableData = renewalData;
 
   selectedItems: any[] = [];
 
-  filterConfigs: FilterConfig[] = [
-//    {
-//      key: 'fileId',
-//      label: 'File Id',
-//      type: 'text',
-//      section: 'FILE',
-//    },
-    {
-      key: 'renewalDueDate',
-      label: 'Renewal Due Date',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'expiryDate',
-      label: 'Expiry Date',
-      type: 'dateRange',
-      placeholder: 'Select date range',
-      dateFormat: 'yy-mm-dd',
-      section: 'DATE FILTERS',
-    },
-    {
-      key: 'mail_sent',
-      label: 'Notified',
-      type: 'checkbox',
-      section: 'NOTIFIED',
-    },
-    {
-      key: 'mail_not_sent',
-      label: 'Not Notified',
-      type: 'checkbox',
-      section: 'NOTIFIED',
-    },
-  ];
+  filterConfigs: FilterConfig[] = [];
 
   appliedFilters: FilterValue[] = [];
 
@@ -155,6 +57,103 @@ export class RenewalReminderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    this.packageStats = [
+      {
+        label: 'trademarks',
+        displayLabel:[this.ms.translate('renewal.stats.trademarks')],
+        //count:80,
+        countLabel: this.ms.translate('renewal.stats.nextRenewals')+': '+this.renewalMonth+' '+this.renewalYear,
+        //period: 'Since: March 24, 2025',
+        periodList:[this.ms.translate('renewal.stats.files')+': 145000', this.ms.translate('renewal.stats.expectedFees')+': 89`000 USD'],
+        color: '#3949AB', // Indigo color
+      },
+      {
+        label: 'patents',
+        displayLabel:[this.ms.translate('renewal.stats.patents')],
+        //count: 12,
+        countLabel: this.ms.translate('renewal.stats.nextRenewals')+': '+this.renewalMonth+' '+this.renewalYear,
+        //period: 'Since: March 24, 2025',
+        periodList:[this.ms.translate('renewal.stats.files')+': 5674', this.ms.translate('renewal.stats.expectedFees')+': 145`000 USD'],
+        color: '#2E7D32', // Green color
+      },
+      {
+        label: 'designs',
+        displayLabel:[this.ms.translate('renewal.stats.designs')],
+        //count: 120,
+        countLabel: this.ms.translate('renewal.stats.nextRenewals')+': '+this.renewalMonth+' '+this.renewalYear,
+        //period: 'Since: March 24, 2025',
+        periodList:[this.ms.translate('renewal.stats.files')+': 8467', this.ms.translate('renewal.stats.expectedFees')+': 78`000 USD'],
+        color: '#0662ccff', // Blue color
+      },
+      {
+        label: 'others',
+        displayLabel:[this.ms.translate('renewal.stats.others')],
+        //count: 120,
+        countLabel: this.ms.translate('renewal.stats.nextRenewals')+': '+this.renewalMonth+' '+this.renewalYear,
+        //period: 'Since: March 24, 2025',
+        periodList:[this.ms.translate('renewal.stats.files')+': 234', this.ms.translate('renewal.stats.expectedFees')+': 2`000 USD'],
+        color: '#023a7aff', // Blue color
+      },
+    ];
+
+    this.tableColumns = [
+      { field: 'selected', header: this.ms.translate('renewal.table.select'), display: 'checkbox' },
+      { field: 'fileId', header: this.ms.translate('renewal.table.fileId') },
+      { field: 'expiryDate', header: this.ms.translate('renewal.table.expiryDate') },
+      { field: 'renewalDueDate', header: this.ms.translate('renewal.table.renewalDueDate') },
+      { field: 'expectedFee', header: this.ms.translate('renewal.table.expectedFee') },
+      { field: 'fileSummary', header: this.ms.translate('renewal.table.fileSummary') },
+      { field: 'fileOwners', header: this.ms.translate('renewal.table.fileOwners') },
+      { field: 'notificationEmails', header: this.ms.translate('renewal.table.notifiedBy') },
+      { field: 'mailSentDate', header: this.ms.translate('renewal.table.notifiedOn') },
+    ];
+
+    this.filterConfigs = [
+      {
+        key: 'renewalDueDate',
+        label: this.ms.translate('renewal.table.renewalDueDate'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
+        dateFormat: 'yy-mm-dd',
+        section: this.ms.translate('common.components.filter.section.dateFilters'),
+      },
+      {
+        key: 'expiryDate',
+        label: this.ms.translate('renewal.table.expiryDate'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
+        dateFormat: 'yy-mm-dd',
+        section: this.ms.translate('common.components.filter.section.dateFilters'),
+      },
+      {
+        key: 'mail_sent',
+        label: this.ms.translate('renewal.filter.notified'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.notified'),
+      },
+      {
+        key: 'mail_not_sent',
+        label: this.ms.translate('renewal.filter.notNotified'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.notified'),
+      },
+    ];
+
+    this.layoutConfig = {
+      appTitle: this.ms.translate('common.components.app.title'),
+      showHeader: true,
+      showSidebar: true,
+      headerItems: [],
+      sidebarItems: [],
+      footerText: '© WIPO ' + new Date().getFullYear(),
+      fixedHeader: true,
+      fixedSidebar: true,
+      sidebarCollapsed: false,
+      theme: 'light',
+      logo: '',
+    };
+
     this.route.params.subscribe((params) => {
       const officeCode =
         params['officeCode'] || this.ms.getCurrentOffice() || 'default';
@@ -162,7 +161,7 @@ export class RenewalReminderComponent implements OnInit {
 
       this.breadcrumbItems = [
         {
-          label: 'Renewals',
+          label: this.ms.translate('renewal.header'),
           routerLink: `/${officeCode}/${langCode}/renewal-reminder`,
         },
       ];

@@ -64,23 +64,23 @@ export class MadridNotificationsComponent implements OnInit {
     this.madridStats = [
       {
         label: 'Total Received Applications',
-        display: this.ms.translate('notifications.aripo.stats.total'),
+        display: this.ms.translate('notifications.madrid.stats.total'),
         count: 1880,
-        period: this.ms.translate('notifications.aripo.stats.lastReceivedGazette')+': 202530',
+        period: this.ms.translate('notifications.madrid.stats.lastReceivedGazette')+': 202530',
         color: '#3949AB', // Indigo color
       },
       {
         label: 'Total Processed Transactions',
-        display: this.ms.translate('notifications.aripo.stats.processed'),
+        display: this.ms.translate('notifications.madrid.stats.processed'),
         count: 4320,
-        period: this.ms.translate('notifications.aripo.stats.lastGazette')+': 202530',
+        period: this.ms.translate('notifications.madrid.stats.lastGazette')+': 202530',
         color: '#2E7D32', // Green color
       },
       {
         label: 'Failed Transactions',
-        display: this.ms.translate('notifications.aripo.stats.failed'),
+        display: this.ms.translate('notifications.madrid.stats.failed'),
         count: 12,
-        period: this.ms.translate('notifications.aripo.stats.lastGazette')+': 202525',
+        period: this.ms.translate('notifications.madrid.stats.lastGazette')+': 202525',
         color: '#d30101ff', // Blue color
       },
     ];

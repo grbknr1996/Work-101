@@ -41,46 +41,11 @@ export class AssignTasksComponent implements OnInit {
   pageSize = 10;
   totalRecords = 0;
 
-  tableColumnsBase = [
-    { field: 'checkbox', header: 'Selected', display: 'checkbox' },
-    { field: 'description', header: 'Description', display: 'text' },
-    { field: 'documentId', header: 'Document/File Id', display: 'text' },
-    { field: 'receivedOn', header: 'Received On', sortable: true },
-    { field: 'lastAction', header: 'Last Action', display: 'text' },
-    { field: 'age', header: 'Age(days)', sortable: true, display: 'text' },
-    { field: 'daysOverDue', header: 'Days Overdue(days)', sortable: true, display: 'text' },
-    { field: 'lastResponsibleUser', header: 'Last Responsible User', display: 'text' },
-    { field: 'actions', header: 'Actions', display: 'actions',
-      actions: [
-        {
-          label: 'view-content',
-          icon: 'pi pi-eye',
-          action: 'viewContent',
-          severity: 'info',
-        },
-      ]
-    }
-  ];
+  tableColumnsBase = [];
+  tableColumnsAssignedExtra = [];
+  tableColumns = [];
 
-  tableColumnsAssignedExtra = [
-    { field: 'assignedUnit', header: 'Assigned Unit', display: 'text' },
-    { field: 'assignedUser', header: 'Assigned User', display: 'text' },
-  ];
-
-  tableColumns = [...this.tableColumnsBase];
-
-  filterConfigs: FilterConfig[] = [
-    {
-      key: 'assignmentStatus',
-      label: 'Task Status',
-      type: 'radio',
-      options: [
-        { label: 'Assigned Tasks', value: 'assigned' },
-        { label: 'Unassigned Tasks', value: 'unassigned' },
-      ],
-      defaultValue: 'unassigned' // default = show Unassigned
-    }
-  ];
+  filterConfigs: FilterConfig[] = [];
   filteredGroups: any[] = [];
   appliedFilters: FilterValue[] = [];
   groups: any[] = [];
@@ -92,7 +57,9 @@ export class AssignTasksComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
-  ) { }
+  ) {
+    this.initializeConfigurations();
+   }
 
   ngOnInit() {
 
@@ -140,6 +107,51 @@ export class AssignTasksComponent implements OnInit {
 
   }
 
+  private initializeConfigurations(): void {
+    this.filterConfigs = [
+      {
+        key: 'assignmentStatus',
+        label: 'Task Status',
+        type: 'radio',
+        options: [
+          { label: 'Assigned Tasks', value: 'assigned' },
+          { label: 'Unassigned Tasks', value: 'unassigned' },
+        ],
+        defaultValue: 'unassigned' // default = show Unassigned
+      }
+    ];
+
+    this.tableColumnsBase = [
+      { field: 'checkbox', header: this.ms.translate('taskManagement.assigntasks.table.header.selected'), display: 'checkbox' },
+      { field: 'description', header: this.ms.translate('taskManagement.assigntasks.table.header.description'), display: 'text' },
+      { field: 'documentId', header: this.ms.translate('taskManagement.assigntasks.table.header.documentId'), display: 'text' },
+      { field: 'receivedOn', header: this.ms.translate('taskManagement.assigntasks.table.header.receivedOn'), sortable: true },
+      { field: 'lastAction', header: this.ms.translate('taskManagement.assigntasks.table.header.lastAction'), display: 'text' },
+      { field: 'age', header: this.ms.translate('taskManagement.assigntasks.table.header.age'), sortable: true, display: 'text' },
+      { field: 'daysOverDue', header: this.ms.translate('taskManagement.assigntasks.table.header.daysOverDue'), sortable: true, display: 'text' },
+      { field: 'lastResponsibleUser', header: this.ms.translate('taskManagement.assigntasks.table.header.lastResponsibleUser'), display: 'text' },
+      {
+        field: 'actions', header: this.ms.translate('taskManagement.assigntasks.table.header.actions'), display: 'actions',
+        actions: [
+          {
+            label: this.ms.translate('taskManagement.assigntasks.table.actions.viewContent'),
+            icon: 'pi pi-eye',
+            action: 'viewContent',
+            severity: 'info',
+          },
+        ]
+      }
+    ];
+
+    this.tableColumnsAssignedExtra = [
+      { field: 'assignedUnit', header: this.ms.translate('taskManagement.assigntasks.table.header.assignedUnit'), display: 'text' },
+      { field: 'assignedUser', header: this.ms.translate('taskManagement.assigntasks.table.header.assignedUser'), display: 'text' },
+    ];
+
+    this.tableColumns = [...this.tableColumnsBase];
+
+
+  }
 
   onUnitChange(unitId: string) {
     const selected = this.unitWithMembers.find(u => u.id === unitId);
@@ -152,7 +164,6 @@ export class AssignTasksComponent implements OnInit {
 
     }
   }
-
 
   onSelectionChange(selected: TasksDetails[]) {
     this.selectedTasks = selected;
@@ -204,37 +215,6 @@ export class AssignTasksComponent implements OnInit {
     this.appliedFilters = filters;
     this.cdr.detectChanges();
   }
-
-  // private applyFilters(filters: FilterValue[]): void {
-  //   let filtered = [...this.tasksList];
-
-  //   // By default, show unassigned tasks
-  //   let showAssigned = false;
-  //   let showUnassigned = true;
-
-  //   filters.forEach(f => {
-  //     if (f.key === 'assigned') showAssigned = !!f.value;
-  //     if (f.key === 'unassigned') showUnassigned = !!f.value;
-  //   });
-
-  //   filtered = filtered.filter(task => {
-  //     const isUnassigned = task.assignedUser === 'Unassigned';
-  //     const isAssigned = !isUnassigned;
-
-  //     return (isUnassigned && showUnassigned) || (isAssigned && showAssigned);
-  //   });
-
-  //     if (showAssigned && !showUnassigned) {
-  //     this.tableColumns = [...this.tableColumnsBase, ...this.tableColumnsAssignedExtra];
-  //   } else {
-  //     this.tableColumns = [...this.tableColumnsBase];
-  //   }
-
-  //   this.filteredGroups = filtered;
-  //   this.totalRecords = filtered.length;
-  //   console.log("Filtered tasks:",this.totalRecords, this.filteredGroups);
-  //   this.cdr.detectChanges();
-  // }
 
   applyFilters(filters: FilterValue[]): void {
     let filtered = [...this.tasksList];

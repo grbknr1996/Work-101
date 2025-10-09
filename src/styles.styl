@@ -823,6 +823,115 @@ $transition-duration = 0.3s
 // ============================================
 
 // ============================================
+// Advanced Search Styles
+// ============================================
+
+.advanced-search-overlay
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  background-color: rgba(0, 0, 0, 0.5)
+  z-index: 100
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  padding-top: 30px
+  padding-left: 50px
+
+  .advanced-search-panel
+    background white
+    border-radius 8px
+    box-shadow 0 10px 25px rgba(0, 0, 0, 0.15)
+    width 96%
+    max-height 190vh
+    display flex
+    flex-direction column
+    overflow visible
+    animation slideIn 0.3s ease-out
+    position relative
+  
+  .loading-spinner
+    margin-bottom: 1rem
+  
+  .loading-text
+    color: white
+    font-size: 1.2rem
+  .filter-overlay
+    position absolute
+    top 100%
+    right 0
+    width 400px
+    max-width 90vw
+    max-height 140vh
+    z-index 100
+    margin-top 8px
+
+  .advanced-filter-content
+    flex 1
+    overflow-y auto
+    padding 1rem 1.5rem
+    min-height 380px
+
+  .filter-sections
+    display flex
+    flex-direction column
+    gap 1.5rem
+
+  .advanced-filter-actions
+    padding 1rem 1.5rem
+    border-top 1px solid #e5e7eb
+    background #f9fafb
+
+  .filter-section
+    border-bottom 1px solid #f3f4f6
+    padding-bottom 1rem
+
+    &:last-child
+      border-bottom none
+      padding-bottom 0
+
+  .section-title
+    font-size 0.875rem
+    font-weight 700
+    color #374151
+    text-transform uppercase
+    letter-spacing 0.05em
+    margin-bottom 0.75rem
+    margin-top 0
+
+  .filter-options
+    display flex
+    flex-direction column
+    gap 0.5rem
+
+  .filter-panel
+    &::before
+      content ""
+      position absolute
+      top -8px
+      right 20px
+      width 0
+      height 0
+      border-left 8px solid transparent
+      border-right 8px solid transparent
+      border-bottom 8px solid white
+      z-index 1
+
+.no-border-fieldset
+  fieldset
+    border: none !important;
+  .p-fieldset-legend
+    text-align: right;
+
+// ============================================
+// Advanced Search Styles END
+// ============================================
+
+
+// ============================================
 // Table Component Styles
 // ============================================
 .flex-search-bar
@@ -3166,6 +3275,8 @@ app-renewal-reminder
       p-button
         button.p-button-outlined
           background transparent
+  .acknowledge-button
+    padding 5px 5px 0 0;
 
 // ================================
 // End of Renewal Reminder Styles
@@ -5101,6 +5212,8 @@ app-configurable-filter
 
     .filter-actions
       padding 1rem
+  .advanced-button
+    padding-left 5px;
 // ========================================
 // Filter chips Component
 // ========================================
@@ -5531,6 +5644,35 @@ app-biblio-data
     b
       display block
       margin-bottom 0.25rem
+
+app-panel-header-icons
+  .panel-header
+    display flex
+    justify-content space-between
+    align-items center
+    margin-bottom 0.75rem
+    background-color #ebf8ff
+    padding 0.5rem
+    border-radius 0.375rem
+    box-shadow 0 1px 2px rgba(0, 0, 0, 0.05)
+
+  .panel-title
+    font-weight 500
+    font-size 1rem
+    color #2d3748
+
+  .icon-group
+    display flex
+    gap 1rem
+
+  .clickable-icon
+    cursor pointer
+    transition color 0.2s ease-in-out
+
+  .clickable-icon:hover
+    color #4299e1
+
+
 // ============================================
 // App Toast Component Styles
 // ============================================

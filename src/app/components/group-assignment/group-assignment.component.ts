@@ -6,12 +6,13 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
+import { MechanicsService } from '../../_services/mechanics.service';
 
 export interface GroupItem {
   id: string;
   name: string;
   type: string;
-  iimsGroupId?: string; // Optional iimsGroupId for compatibility with new API response
+  iimsGroupId?: string;
 }
 
 @Component({
@@ -22,8 +23,6 @@ export interface GroupItem {
 export class GroupAssignmentComponent implements OnChanges {
   @Input() availableGroups: GroupItem[] = [];
   @Input() assignedGroups: GroupItem[] = [];
-  @Input() availableLabel: string = 'Available Groups';
-  @Input() assignedLabel: string = 'Assigned Groups';
   @Input() pageSize: number = 10;
   @Input() currentAvailablePage: number = 1;
   @Input() totalAvailablePages: number = 1;
@@ -68,6 +67,16 @@ export class GroupAssignmentComponent implements OnChanges {
   assignedSortBy: string = 'groupName'; // 'groupName', 'groupType'
   assignedSortOrder: string = 'asc'; // 'asc', 'desc'
 
+  // Translation options for dropdowns
+  filterTypeOptions: any[] = [];
+  sortByOptions: any[] = [];
+  assignedFilterTypeOptions: any[] = [];
+  assignedSortByOptions: any[] = [];
+
+  constructor(private ms: MechanicsService) {
+    this.initializeTranslationOptions();
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     // Sync input values with internal state when they change
     if (changes['currentSearchTerm']) {
@@ -82,6 +91,71 @@ export class GroupAssignmentComponent implements OnChanges {
     if (changes['currentSortOrder']) {
       this.sortOrder = this.currentSortOrder;
     }
+  }
+
+  private initializeTranslationOptions() {
+    // Initialize filter type options
+    this.filterTypeOptions = [
+      {
+        label: this.ms.translate('common.components.groupAssignment.allTypes'),
+        value: 'all',
+      },
+      {
+        label: this.ms.translate(
+          'common.components.groupAssignment.userGroups'
+        ),
+        value: 'user',
+      },
+      {
+        label: this.ms.translate(
+          'common.components.groupAssignment.businessGroups'
+        ),
+        value: 'business',
+      },
+    ];
+
+    // Initialize sort by options
+    this.sortByOptions = [
+      {
+        label: this.ms.translate('common.components.groupAssignment.name'),
+        value: 'groupName',
+      },
+      {
+        label: this.ms.translate('common.components.groupAssignment.type'),
+        value: 'groupType',
+      },
+    ];
+
+    this.assignedFilterTypeOptions = [
+      {
+        label: this.ms.translate('common.components.groupAssignment.allTypes'),
+        value: 'all',
+      },
+      {
+        label: this.ms.translate(
+          'common.components.groupAssignment.userGroups'
+        ),
+        value: 'user',
+      },
+      {
+        label: this.ms.translate(
+          'common.components.groupAssignment.businessGroups'
+        ),
+        value: 'business',
+      },
+    ];
+
+    // Initialize assigned sort by options
+    this.assignedSortByOptions = [
+      {
+        label: this.ms.translate('common.components.groupAssignment.name'),
+        value: 'groupName',
+      },
+      {
+        label: this.ms.translate('common.components.groupAssignment.type'),
+        value: 'groupType',
+      },
+    ];
   }
 
   // For available groups, use the input directly since it's server-side paginated

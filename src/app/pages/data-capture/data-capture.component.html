@@ -16,10 +16,10 @@
         </div>
       </p-tab>}
     </p-tablist>
-    <p-tabView>@for (category of categories; track category.ipType) {
-      <p-tabPanel [value]="category.ipType">
+    <p-tabpanels>@for (category of categories; track category.ipType) {
+      <p-tabpanel [value]="category.ipType">
         <app-table [columns]="tableColumns" [data]="tableData" (actionClick)="onActionClick($event.action, $event.item)" [showClearButton]="false" [showSearch]="false"></app-table>
-      </p-tabPanel>}
-    </p-tabView>
+      </p-tabpanel>}
+    </p-tabpanels>
   </p-tabs>
 </app-layout>

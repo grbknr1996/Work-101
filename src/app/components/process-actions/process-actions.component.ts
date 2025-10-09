@@ -17,6 +17,7 @@ import {
   ProcessAction,
   ProcessType,
 } from '../../_services/process-action.service';
+import { MechanicsService } from '../../_services/mechanics.service';
 
 @Component({
   selector: 'app-process-actions',
@@ -42,7 +43,10 @@ export class ProcessActionsComponent implements OnInit, OnDestroy, OnChanges {
 
   private subscriptions: Subscription = new Subscription();
 
-  constructor(private processActionService: ProcessActionService) {}
+  constructor(
+    private processActionService: ProcessActionService,
+    private ms: MechanicsService
+  ) {}
 
   ngOnInit(): void {
     if (this.isEditMode) {
@@ -141,7 +145,7 @@ export class ProcessActionsComponent implements OnInit, OnDestroy, OnChanges {
   getProcessTypeName(processTypeId: string): string {
     // Handle special case for null process type
     if (processTypeId === 'null') {
-      return 'Note Actions';
+      return this.ms.translate('common.components.processActions.noteActions');
     }
     // Prefer names from loaded process types map
     const fromMap = this.processTypes[processTypeId];

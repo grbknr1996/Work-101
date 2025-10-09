@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BibliographicData, CategoryStats, ProcessSummary, ProcessWithTasks, TasksDetails, UnitWithMembers} from '../schemas/taskManageMent-schema';
+import { BibliographicData, CategoryStats, ProcessSummary, ProcessWithTasks, UnitWithMembers} from '../schemas/taskManageMent-schema';
 
 export interface UserQueryParams {
   loginId?: string;

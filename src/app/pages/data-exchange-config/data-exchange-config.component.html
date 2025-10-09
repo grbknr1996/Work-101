@@ -3,10 +3,7 @@
   <app-breadcrumbs [items]="getBreadcrumbItems()"></app-breadcrumbs>
   <div class="data-exchange-config-heading pb-10">
     <h1>Data Exchange Configuration</h1>
-    <p>
-      Click on any of the cards above to navigate to the respective
-      configuration section.
-    </p>
+    <p>Click on any of the cards above to navigate to the respective configuration section.</p>
   </div>
   <div class="summary-stats">
     <div class="stat-card" *ngFor="let card of summaryCards" (click)="onSummaryCardClick(card)" [style.cursor]="card.clickable ? 'pointer' : 'default'">
@@ -14,7 +11,7 @@
         <div class="stat-icon" [ngStyle]="{'background': 'linear-gradient(135deg, ' + card.color + ' 0%, ' + card.color + 'dd 100%)'}"><i [class]="card.icon"></i></div>
         <div class="stat-info">
           <div class="stat-number" *ngIf="card.count !== null">{{ card.count }}</div>
-          <div class="stat-label">{{ card.title }}</div>
+          <div class="stat-label">{{ card.title | translate }}</div>
         </div>
       </div>
     </div>

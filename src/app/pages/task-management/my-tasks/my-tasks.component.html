@@ -3,19 +3,19 @@
   <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
     <p-card class="w-full text-center">
-      <div class="font-semibold text-sm mb-2">My Tasks</div>
+      <div class="font-semibold text-sm mb-2">{{ 'taskManagement.myTasks.totalTasks' | translate }}</div>
       <div class="text-3xl font-bold text-orange-600">42</div>
     </p-card>
     <p-card class="w-full text-center">
-      <div class="font-semibold text-sm mb-2">Overdue Tasks</div>
+      <div class="font-semibold text-sm mb-2">{{ 'taskManagement.myTasks.overdueTasks' | translate }}</div>
       <div class="text-3xl font-bold text-red-600">5</div>
     </p-card>
     <p-card class="w-full text-center">
-      <div class="font-semibold text-sm mb-2">Overdue Soon</div>
+      <div class="font-semibold text-sm mb-2">{{ 'taskManagement.myTasks.overdueSoon' | translate }}</div>
       <div class="text-3xl font-bold text-yellow-600">2</div>
     </p-card>
     <p-card class="w-full text-center">
-      <div class="font-semibold text-sm mb-2">Average age</div>
+      <div class="font-semibold text-sm mb-2">{{ 'taskManagement.myTasks.averageAge' | translate }}</div>
       <div class="text-3xl font-bold text-purple-600">45</div>
     </p-card>
   </div>
@@ -33,7 +33,7 @@
       <div class="col-span-8 flex justify-end gap-5 filter-icons">
         <p-button icon="pi pi-list" [outlined]="true" [text]="true" (click)="myTasksList()" pTooltip="My Tasks" tooltipPosition="bottom"></p-button>
         <div class="relative inline-block">
-          <p-button icon="pi pi-cart-plus" [outlined]="true" [text]="true" (click)="approvalbucketList()" pTooltip="Approval Bucket" tooltipPosition="bottom"></p-button>
+          <p-button icon="pi pi-cart-plus" [outlined]="true" [text]="true" (click)="approvalbucketList()" pTooltip="{{ 'taskManagement.myTasks.approvalBucket' | translate }}" tooltipPosition="bottom"></p-button>
           <p-badge *ngIf="approvalBucket.length &gt; 0" [value]="approvalBucket.length" severity="danger" styleClass="absolute -top-2 -right-2 rounded-full"></p-badge>
         </div>
         <app-configurable-filter [filters]="filterConfigs" [showClearAll]="false" [showApplyButton]="true" [showFilterSelector]="false" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>
@@ -41,8 +41,8 @@
     </div>
   </div>
   <div class="mb-8 mt-1 w-full">
-    <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="true" [clearAllLabel]="'Clear All'" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-filter-chips>
-    <h3 class="text-lg font-semibold mb-3" *ngIf="showApprovalBucket"  style="margin-top: 1.5rem;">Approval Bucket List</h3>
+    <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="true" [clearAllLabel]="'taskManagement.myTasks.clearAll' | translate" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-filter-chips>
+    <h3 class="text-lg font-semibold mb-3" *ngIf="showApprovalBucket"  style="margin-top: 1.5rem;">{{ 'taskManagement.myTasks.approvalBucketList' | translate }}</h3>
     <app-table [columns]="tableColumns" [paginator]="true" [rows]="10" [totalRecords]="showApprovalBucket ? approvalBucket.length : tableData.length" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} tasks'" [dataKey]="'documentId'" [data]="showApprovalBucket ? approvalBucket : tableData" (selectionChange)="onSelectionChange($event)" (actionClick)="onActionClick($event.action, $event.item)"></app-table>
     <p-sidebar class="custom-sidebar" [(visible)]="showSlider" position="right" [showCloseIcon]="false" [dismissible]="false" [ngClass]="{ 'sidebar-maximized': isMaximized }" [appendTo]="'app-layout'">
       <div class="sidebar-header flex items-center justify-between p-3">
@@ -66,6 +66,6 @@
     </p-sidebar>
   </div>
   <div class="flex justify-end mt-2">
-    <p-button *ngIf="selectedTasks.length &gt; 0 &amp;&amp; showApprovalBucket &amp;&amp; !showSlider" label="Bulk Approve" icon="pi pi-check-circle" styleClass="p-button-success" (onClick)="bulkApprove()"></p-button>
+    <p-button *ngIf="selectedTasks.length &gt; 0 &amp;&amp; showApprovalBucket &amp;&amp; !showSlider" [label]="'taskManagement.myTasks.bulkApprove' | translate" icon="pi pi-check-circle" styleClass="p-button-success" (onClick)="bulkApprove()"></p-button>
   </div>
 </app-layout>

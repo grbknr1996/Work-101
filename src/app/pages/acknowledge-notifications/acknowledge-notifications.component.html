@@ -6,7 +6,7 @@
   </div>
   <app-configurable-filter-bar [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'notifications.acknowledge.filter.placeHolder'|translate" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)" [showSearchBar]="true" [searchBar]="searchBar" (filterSearch)="filterSearch($event)" [searchLabel]="'notifications.acknowledge.filter.search'|translate" [showDownloadIcon]="false" [appliedFilters]="appliedFilters" [clearAllLabel]="'common.components.filter.clearAll'|translate" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-configurable-filter-bar>
   <app-table [columns]="tableColumns" [data]="acknowledgeData" (actionClick)="onActionClick($event.action, $event.item)" [showClearButton]="false" [showSearch]="false"></app-table>
-  <p-dialog [header]="'notifications.acknowledge.dialog.header'|translate" [(visible)]="showEditDialog" [modal]="true" [style]="{ width: '400px' }" [draggable]="false" [resizable]="false">
+  <p-dialog [header]="'notifications.acknowledge.dialog.header'|translate" [(visible)]="showEditDialog" [modal]="true" [draggable]="false" [resizable]="false">
     <form class="office-form" [formGroup]="acknowledgeForm">
       <div class="form-grid">
         <div class="form-field">

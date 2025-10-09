@@ -42,35 +42,40 @@
     </form>
   </div>
   <div class="w-full" *ngIf="step === 1">
-    <p-tabView class="w-full">
-      <p-tabPanel *ngFor="let cat of selectedCategories" [header]="getCategoryLabel(cat)">
-        <div class="mb-6"><b class="text-lg font-semibold text-gray-800">Configure Distribution Rules for {{ getCategoryLabel(cat) }}</b></div>
-        <p-accordion>
-          <p-accordionTab header="Event Code Inclusion">
-            <div class="mb-4 text-sm text-gray-600">Choose which event codes should be distributed for {{ getCategoryLabel(cat) }}.</div>
-            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <div class="col-span-1" *ngFor="let event of getEventCodesForCategory(cat); let i = index">
-                <div class="flex items-center">
-                  <p-checkbox [(ngModel)]="eventExclusions[cat]" [value]="event.code" [binary]="false" inputId="event-{{ cat }}-{{ event.code }}"></p-checkbox>
-                  <label class="ml-3 text-sm text-gray-700" for="event-{{ cat }}-{{ event.code }}">{{ event.code }}: {{ event.label }}</label>
+    <p-tabs class="w-full">
+      <p-tablist>
+        <p-tab *ngFor="let cat of selectedCategories">{{getCategoryLabel(cat)}}</p-tab>
+      </p-tablist>
+      <p-tabpanels>
+        <p-tabpanel>
+          <div class="mb-6"><b class="text-lg font-semibold text-gray-800">Configure Distribution Rules for {{ getCategoryLabel(cat) }}</b></div>
+          <p-accordion>
+            <p-accordionTab header="Event Code Inclusion">
+              <div class="mb-4 text-sm text-gray-600">Choose which event codes should be distributed for {{ getCategoryLabel(cat) }}.</div>
+              <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div class="col-span-1" *ngFor="let event of getEventCodesForCategory(cat); let i = index">
+                  <div class="flex items-center">
+                    <p-checkbox [(ngModel)]="eventExclusions[cat]" [value]="event.code" [binary]="false" inputId="event-{{ cat }}-{{ event.code }}"></p-checkbox>
+                    <label class="ml-3 text-sm text-gray-700" for="event-{{ cat }}-{{ event.code }}">{{ event.code }}: {{ event.label }}</label>
+                  </div>
                 </div>
               </div>
-            </div>
-          </p-accordionTab>
-          <p-accordionTab header="Document Inclusion">
-            <div class="flex items-center">
-              <p-checkbox [(ngModel)]="enableDocumentExclusions[cat]" binary="true" inputId="enable-doc-{{ cat }}"></p-checkbox>
-              <label class="ml-3 text-sm text-gray-700" for="enable-doc-{{ cat }}">Enable Document Inclusion</label>
-            </div>
-            <div class="ml-6 mt-2 text-sm text-gray-500">Document inclusion is enabled by default with all document types selected.</div>
-            <div class="mt-4" *ngIf="enableDocumentExclusions[cat]">
-              <label class="block text-sm font-medium text-gray-700 mb-2">Select Document Types to Include</label>
-              <p-multiSelect [options]="getDocumentTypesForCategory(cat)" [(ngModel)]="documentExclusions[cat]" defaultLabel="Select Document Types" display="chip"></p-multiSelect>
-            </div>
-          </p-accordionTab>
-        </p-accordion>
-      </p-tabPanel>
-    </p-tabView>
+            </p-accordionTab>
+            <p-accordionTab header="Document Inclusion">
+              <div class="flex items-center">
+                <p-checkbox [(ngModel)]="enableDocumentExclusions[cat]" binary="true" inputId="enable-doc-{{ cat }}"></p-checkbox>
+                <label class="ml-3 text-sm text-gray-700" for="enable-doc-{{ cat }}">Enable Document Inclusion</label>
+              </div>
+              <div class="ml-6 mt-2 text-sm text-gray-500">Document inclusion is enabled by default with all document types selected.</div>
+              <div class="mt-4" *ngIf="enableDocumentExclusions[cat]">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Select Document Types to Include</label>
+                <p-multiSelect [options]="getDocumentTypesForCategory(cat)" [(ngModel)]="documentExclusions[cat]" defaultLabel="Select Document Types" display="chip"></p-multiSelect>
+              </div>
+            </p-accordionTab>
+          </p-accordion>
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
     <div class="mt-8 flex justify-between">
       <button class="bg-gray-500 text-white px-6 py-2 rounded-lg transition-colors hover:bg-gray-600" pButton type="button" label="Back" (click)="prevStep()"></button>
       <button class="bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors hover:bg-blue-700" pButton type="button" label="Next" (click)="nextStep()"></button>

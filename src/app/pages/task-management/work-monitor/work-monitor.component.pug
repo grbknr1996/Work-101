@@ -13,9 +13,9 @@ app-layout
           )
             .font-semibold.text-lg.mb-6 {{cat.processName}}
             .flex.justify-between.mb-1
-              span.font-semibold Total: {{cat.total}}
-              span.text-red-600 Pending: {{cat.pending}}
-            .text-sm Average age: {{cat.avgAge}} days
+              span.font-semibold {{ 'taskManagement.workMonitor.total' | translate }}: {{cat.total}}
+              span.text-red-600 {{ 'taskManagement.workMonitor.pending' | translate }}: {{cat.pending}}
+            .text-sm {{ 'taskManagement.workMonitor.averageAge' | translate }}: {{cat.avgAge}} {{ 'days' | translate }}
 
   //- Filters Section
   .grid.grid-cols-6.mt-2
@@ -37,7 +37,7 @@ app-layout
           [outlined]="true",
           [text]="true",
           (click)="toggleView()",
-          [pTooltip]="viewType === 'card' ? 'List View' : 'Card View'",
+          [pTooltip]="viewType === 'card' ? ( 'taskManagement.workMonitor.listView' | translate ) : ( 'taskManagement.workMonitor.cardView' | translate )",
           tooltipPosition="bottom"
         )
         app-configurable-filter(
@@ -60,7 +60,7 @@ app-layout
             .category-label {{ processGroup.name | capitalizeWords }}
             p-badge([value]="processGroup.list.length")
 
-      p-tabpanels
+      p-tabpanels 
         ng-container(*ngFor="let processGroup of processGroupByName; trackBy: trackByName")
           p-tabpanel([value]="processGroup.name")
             //- Card view
@@ -76,7 +76,7 @@ app-layout
                           [outlined]="true",
                           [text]="true",
                           (click)="navigateToDistributionScreen(process)",
-                          pTooltip="Task Distribution",
+                          pTooltip="{{ 'taskManagement.workMonitor.distribution' | translate }}",
                           tooltipPosition="bottom"
                         )
                         p-button(
@@ -84,7 +84,7 @@ app-layout
                           [outlined]="true",
                           [text]="true",
                           (click)="navigateToUserAssignmentScreen(process.id)",
-                          pTooltip="User Assignment",
+                          pTooltip="{{ 'taskManagement.workMonitor.userAssignment' | translate }}",
                           tooltipPosition="bottom"
                         )
 
@@ -93,12 +93,12 @@ app-layout
 
 
                     .flex.justify-between.mb-1
-                      span.text-green-800.font-bold Assigned: {{ process.assignedTasks }}
-                      span.text-red-600.font-bold Unassigned: {{ process.unassignedTasks }}
+                      span.text-green-800.font-bold {{ 'taskManagement.workMonitor.assigned' | translate }}: {{ process.assignedTasks }}
+                      span.text-red-600.font-bold {{ 'taskManagement.workMonitor.unassigned' | translate }}: {{ process.unassignedTasks }}
 
                     .flex.items-center.text-xs.text-blue-700
                       span.pi.pi-clock.mr-1
-                      | {{ process.averageAge }} days
+                      | {{ process.averageAge }} {{ 'days' | translate }}
 
             //- List view
             div(*ngIf="viewType === 'list'")

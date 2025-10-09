@@ -7,7 +7,7 @@ ng-container(*ngIf="!showLayout")
 
 ng-template(#mainContent)
   .mb-4
-    h2.text-lg.font-semibold.mb-2 Review Checklist
+    h2.text-lg.font-semibold.mb-2 {{ 'taskManagement.recordAction.reviewChecklist' | translate }}
     p-tree(
       [value]="checklistItems",
       selectionMode="checkbox",
@@ -17,35 +17,35 @@ ng-template(#mainContent)
     )
 
   .w-full.p-4
-    h2.text-lg.font-semibold.mb-4 Review Assessment
-
+    h2.text-lg.font-semibold.mb-4 {{ 'taskManagement.recordAction.reviewAssessment' | translate }}
+  
     .grid.grid-cols-1.gap-4.mb-4
       div
-        label.block.text-sm.font-medium.mb-1 Technical Assessment
+        label.block.text-sm.font-medium.mb-1 {{ 'taskManagement.recordAction.technicalAssessment' | translate }}
         input.w-full(pInputText, [(ngModel)]="assessment", maxlength="200")
-        small.text-gray-500 Max 200 characters
+        small.text-gray-500 {{ 'taskManagement.recordAction.maxChars' | translate }}
 
       div
-        label.block.text-sm.font-medium.mb-1 Analysis
+        label.block.text-sm.font-medium.mb-1 {{ 'taskManagement.recordAction.analysis' | translate }}
         input.w-full(pInputText, [(ngModel)]="analysis", maxlength="200")
-        small.text-gray-500 Max 200 characters
+        small.text-gray-500 {{ 'taskManagement.recordAction.maxChars' | translate }}
 
     .grid.grid-cols-1.gap-6.mb-4
       div
-        label.block.text-sm.font-medium.mb-1 Detailed Review Notes
+        label.block.text-sm.font-medium.mb-1 {{ 'taskManagement.recordAction.detailedReviewNotes' | translate }}
         p-editor([(ngModel)]="detailedReviewNotes", [style]="{height:'150px'}")
 
       div
-        label.block.text-sm.font-medium.mb-1 Recommendations & Next Steps
+        label.block.text-sm.font-medium.mb-1 {{ 'taskManagement.recordAction.recommendationsNextSteps' | translate }}
         p-editor([(ngModel)]="recommendations", [style]="{height:'150px'}")
 
       div
-        label.block.text-sm.font-medium.mb-1 Additional Comments
+        label.block.text-sm.font-medium.mb-1 {{ 'taskManagement.recordAction.additionalComments' | translate }}
         p-editor([(ngModel)]="additionalComments", [style]="{height:'150px'}")
 
     .grid.grid-cols-1(class="md:grid-cols-3 gap-4 items-end mb-4")
       div
-        label.block.text-sm.font-medium.mb-1 Next Responsible User Unit
+        label.block.text-sm.font-medium.mb-1 {{ 'taskManagement.recordAction.nextResponsibleUserUnit' | translate }}
         p-dropdown.w-full(
           [options]="units",
           optionLabel="unitName",
@@ -56,7 +56,7 @@ ng-template(#mainContent)
         )
 
       div
-        label.block.text-sm.font-medium.mb-1 Next Responsible User
+        label.block.text-sm.font-medium.mb-1 {{ 'taskManagement.recordAction.nextResponsibleUser' | translate }}
         p-dropdown.w-full(
           [options]="members",
           optionLabel="name",
@@ -66,5 +66,5 @@ ng-template(#mainContent)
         )
 
       .flex.justify-end.gap-3
-        p-button(label="Cancel", icon="pi pi-times", (onClick)="cancelAction()")
-        p-button(label="Record", icon="pi pi-check", (onClick)="assignAction()")
+        p-button([label]="'taskManagement.recordAction.btn.cancel' | translate", icon="pi pi-times", (onClick)="cancelAction()")
+        p-button([label]="'taskManagement.recordAction.btn.submit' | translate", icon="pi pi-check", (onClick)="assignAction()")

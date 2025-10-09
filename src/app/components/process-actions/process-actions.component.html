@@ -1,32 +1,26 @@
 
-<!-- Process Actions Component (Pug)-->
 <div class="process-actions-wrapper">
-  <!-- Summary Section-->
   <div class="flex items-center justify-between mb-4" *ngIf="showSummary">
-    <label class="block font-medium">Process Actions for {{ selectedRole | titlecase }} Role</label>
+    <label class="block font-medium">{{ 'common.components.processActions.processActionsFor' | translate }} {{ selectedRole | titlecase }} {{ 'common.components.processActions.role' | translate }}</label>
     <div class="selected-actions-summary">
-      <div class="summary-container"><span class="summary-badge" [class.no-selections]="cleanSelectedRoleActions.length === 0"><i class="mr-1 pi" [class.pi-check-circle]="cleanSelectedRoleActions.length &gt; 0" [class.pi-circle]="cleanSelectedRoleActions.length === 0"></i> {{ cleanSelectedRoleActions.length }} action{{ cleanSelectedRoleActions.length === 1 ? '' : 's' }} selected</span></div>
+      <div class="summary-container"><span class="summary-badge" [class.no-selections]="cleanSelectedRoleActions.length === 0"><i class="mr-1 pi" [class.pi-check-circle]="cleanSelectedRoleActions.length &gt; 0" [class.pi-circle]="cleanSelectedRoleActions.length === 0"></i> {{ cleanSelectedRoleActions.length }} {{ cleanSelectedRoleActions.length === 1 ? ('common.components.processActions.actionsSelected' | translate) : ('common.components.processActions.actionsSelectedPlural' | translate) }}</span></div>
     </div>
   </div>
-  <!-- Loading State (only in edit mode)-->
   <div class="loading-container" *ngIf="isEditMode &amp;&amp; !actionsLoaded">
     <div class="loading-spinner"><i class="pi pi-spin pi-spinner" style="font-size: 2rem; color: #3b82f6"></i>
-      <p class="loading-text">Loading process actions...</p>
+      <p class="loading-text">{{ 'common.components.processActions.loadingProcessActions' | translate }}</p>
     </div>
   </div>
-  <!-- Process Types View/Edit-->
   <div class="process-actions-container" *ngIf="!isEditMode || actionsLoaded">
-    <!-- Edit mode: full interactive list-->
     <ng-container *ngIf="isEditMode; else readOnlyView">
       <div class="process-type-card" *ngFor="let processTypeId of getProcessTypeKeys()" [class.expanded]="isProcessTypeExpanded(processTypeId)">
         <div class="process-type-header" (click)="toggleProcessType(processTypeId)">
-          <div class="process-type-info"><i class="pi mr-2" [class.pi-chevron-right]="!isProcessTypeExpanded(processTypeId)" [class.pi-chevron-down]="isProcessTypeExpanded(processTypeId)"></i><span class="process-type-name">{{ getProcessTypeName(processTypeId) }}</span><span class="process-type-count">({{ getProcessTypeActions(processTypeId).length }})</span><span class="selected-count" *ngIf="getSelectedCountForProcessType(processTypeId) &gt; 0">- {{ getSelectedCountForProcessType(processTypeId) }} selected</span></div>
+          <div class="process-type-info"><i class="pi mr-2" [class.pi-chevron-right]="!isProcessTypeExpanded(processTypeId)" [class.pi-chevron-down]="isProcessTypeExpanded(processTypeId)"></i><span class="process-type-name">{{ getProcessTypeName(processTypeId) }}</span><span class="process-type-count">({{ getProcessTypeActions(processTypeId).length }})</span><span class="selected-count" *ngIf="getSelectedCountForProcessType(processTypeId) &gt; 0">- {{ getSelectedCountForProcessType(processTypeId) }} {{ 'common.components.processActions.selected' | translate }}</span></div>
           <div class="process-type-actions">
-            <button class="p-button-sm p-button-outlined" pButton label="Select All" (click)="selectAllActionsForProcessType(processTypeId); $event.stopPropagation()" style="margin-right: 0.5rem"></button>
-            <button class="p-button-sm p-button-outlined p-button-danger" pButton label="Deselect All" (click)="deselectAllActionsForProcessType(processTypeId); $event.stopPropagation()" style="margin-right: 0.5rem"></button>
+            <button class="p-button-sm p-button-outlined" pButton [label]="'common.components.processActions.selectAll' | translate" (click)="selectAllActionsForProcessType(processTypeId); $event.stopPropagation()" style="margin-right: 0.5rem"></button>
+            <button class="p-button-sm p-button-outlined p-button-danger" pButton [label]="'common.components.processActions.deselectAll' | translate" (click)="deselectAllActionsForProcessType(processTypeId); $event.stopPropagation()" style="margin-right: 0.5rem"></button>
           </div>
         </div>
-        <!-- Actions List-->
         <div class="actions-list" *ngIf="isProcessTypeExpanded(processTypeId)">
           <div class="action-item" *ngFor="let action of getProcessTypeActions(processTypeId)" [class.selected]="isActionSelected(action)" (click)="toggleAction(action)">
             <div class="action-info"><span class="action-name">{{ action.actionTypeName }}</span><span class="action-type">({{ action.actionType }})</span></div>
@@ -35,11 +29,10 @@
         </div>
       </div>
     </ng-container>
-    <!-- Read-only view: show only selected actions grouped by process type-->
     <ng-template #readOnlyView>
       <div class="process-type-card" *ngFor="let processTypeId of getReadOnlyProcessTypeKeys()">
         <div class="process-type-header">
-          <div class="process-type-info"><span class="process-type-name">{{ getProcessTypeName(processTypeId) }}</span><span class="selected-count">{{ getReadOnlyActionsForProcessType(processTypeId).length }} selected</span></div>
+          <div class="process-type-info"><span class="process-type-name">{{ getProcessTypeName(processTypeId) }}</span><span class="selected-count">{{ getReadOnlyActionsForProcessType(processTypeId).length }} {{ 'common.components.processActions.selected' | translate }}</span></div>
         </div>
         <div class="actions-list">
           <div class="action-item selected" *ngFor="let action of getReadOnlyActionsForProcessType(processTypeId)">

@@ -3,19 +3,19 @@
   <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
     <p-card class="w-full">
-      <div class="font-semibold text-lg mb-2">Process</div>
+      <div class="font-semibold text-lg mb-2">{{ 'taskManagement.assigntasks.labels.process' | translate }}</div>
       <div class="text-sm">{{ selectedProcessName }}</div>
     </p-card>
     <p-card class="w-full">
-      <div class="font-semibold text-lg mb-2">Status</div>
+      <div class="font-semibold text-lg mb-2">{{ 'taskManagement.assigntasks.labels.status' | translate }}</div>
       <div class="text-sm">{{ stageLabel }}</div>
     </p-card>
     <p-card class="w-full">
-      <div class="font-semibold text-lg mb-2">Pending Tasks</div>
+      <div class="font-semibold text-lg mb-2">{{ 'taskManagement.assigntasks.labels.pendingTasks' | translate }}</div>
       <div class="text-sm">{{ tasksToDistribute }}</div>
     </p-card>
     <p-card class="w-full">
-      <div class="font-semibold text-lg mb-2">Total Tasks</div>
+      <div class="font-semibold text-lg mb-2">{{ 'taskManagement.assigntasks.labels.totalTasks' | translate }}</div>
       <div class="text-sm">{{ totalTasks }}</div>
     </p-card>
   </div>
@@ -38,18 +38,18 @@
   <app-table [columns]="tableColumns" [data]="filteredGroups" [paginator]="true" [rows]="10" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} tasks'" [showClearButton]="false" [dataKey]="'documentId'" (selectionChange)="onSelectionChange($event)" (actionClick)="onActionClick($event.action, $event.item)"></app-table>
   <div class="flex flex-wrap items-start gap-4" *ngIf="selectedTasks.length &gt; 0">
     <div class="flex flex-col flex-1">
-      <label class="block text-sm font-medium mb-1">Select User Unit</label>
-      <p-dropdown class="w-full border rounded-md" [options]="unitWithMembers" optionLabel="unitName" optionValue="id" placeholder="Select Unit" (onChange)="onUnitChange($event.value)"></p-dropdown>
+      <label class="block text-sm font-medium mb-1">{{ 'taskManagement.assigntasks.labels.selectUnit' | translate }}</label>
+      <p-dropdown class="w-full border rounded-md" [options]="unitWithMembers" optionLabel="unitName" optionValue="id" [placeholder]="'taskManagement.assigntasks.placeholders.selectUnit' | translate" (onChange)="onUnitChange($event.value)"></p-dropdown>
     </div>
     <div class="flex flex-col flex-1">
-      <label class="block text-sm font-medium mb-1">Select User</label>
-      <p-dropdown class="w-full border rounded-md" [options]="members" optionLabel="name" optionValue="id" placeholder="selectedMemberId" (onChange)="selectedMemberId = $event.value"></p-dropdown>
+      <label class="block text-sm font-medium mb-1">{{ 'taskManagement.assigntasks.labels.selectUser' | translate }}</label>
+      <p-dropdown class="w-full border rounded-md" [options]="members" optionLabel="name" optionValue="selectedMemberId" (onChange)="selectedMemberId = $event.value"></p-dropdown>
     </div>
     <div class="flex flex-col flex-1">
-      <label class="block text-sm font-medium mb-1">Actions</label>
+      <label class="block text-sm font-medium mb-1">{{ 'taskManagement.assigntasks.labels.actions' | translate }}</label>
       <div class="flex gap-2">
-        <p-button label="Confirm" (onClick)="Assign()" [disabled]="!selectedMemberId"></p-button>
-        <button class="p-button-danger" *ngIf="isAssignedView &amp;&amp; selectedTasks.length &gt; 0" pButton type="button" label="Unassign" icon="pi pi-user-minus" (click)="unassignTasks()"></button>
+        <p-button [label]="'taskManagement.assigntasks.buttons.confirm' | translate" (onClick)="Assign()" [disabled]="!selectedMemberId"></p-button>
+        <button class="p-button-danger" *ngIf="isAssignedView &amp;&amp; selectedTasks.length &gt; 0" pButton type="button" [label]="'taskManagement.assigntasks.buttons.unassign' | translate" icon="pi pi-user-minus" (click)="unassignTasks()"></button>
       </div>
     </div>
   </div>

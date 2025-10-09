@@ -72,10 +72,46 @@
           "status": "STATUS",
           "decision": "DECISION",
           "correctionRequired": "Correction Required",
-          "transmittalMethods": "Transmittal Methods"
+          "transmittalMethods": "Transmittal Methods",
+          "userName": "USER NAME",
+          "notified": "NOTIFIED"
         }
       },
-
+      "groupAssignment": {
+        "title": "Group Assignment",
+        "availableGroups": "Available Groups",
+        "assignedGroups": "Assigned Groups",
+        "searchGroups": "Search groups by name...",
+        "searchAssignedGroups": "Search assigned groups...",
+        "search": "Search",
+        "clear": "Clear",
+        "filterByType": "Filter by Type:",
+        "allTypes": "All Types",
+        "userGroups": "User Groups",
+        "businessGroups": "Business Groups",
+        "selectType": "Select Type",
+        "sortBy": "Sort by:",
+        "name": "Name",
+        "type": "Type",
+        "selectSort": "Select Sort",
+        "sortDescending": "Sort Descending",
+        "sortAscending": "Sort Ascending",
+        "selectAll": "Select All",
+        "noGroupsAssigned": "No groups assigned yet",
+        "selectGroupsToAssign": "Select groups from the left panel to assign"
+      },
+      "processActions": {
+        "title": "Process Actions",
+        "processActionsFor": "Process Actions for",
+        "role": "Role",
+        "actionsSelected": "action selected",
+        "actionsSelectedPlural": "actions selected",
+        "loadingProcessActions": "Loading process actions...",
+        "selectAll": "Select All",
+        "deselectAll": "Deselect All",
+        "selected": "selected",
+        "noteActions": "Note Actions"
+      },
       "navigation": {
         "localHost": "LOCAL HOST"
       },
@@ -211,11 +247,34 @@
   },
   "renewal": {
     "title": "Renewal Reminder",
+    "header": "Renewals",
     "button": {
       "sendNotification": "Send Notification"
     },
     "table": {
-      "emptyMessage": "Please select one IP category"
+      "emptyMessage": "Please select one IP category",
+      "select": "Select",
+      "fileId": "File Id",
+      "expiryDate": "Expiry Date",
+      "renewalDueDate": "Renewal Due Date",
+      "expectedFee": "Expected Fee",
+      "fileSummary": "File Summary",
+      "fileOwners": "File Owners",
+      "notifiedBy": "Notified By",
+      "notifiedOn": "Notified On"
+    },
+    "stats": {
+      "trademarks": "Trademarks",
+      "patents": "Patents",
+      "designs": "Designs",
+      "others": "Others",
+      "nextRenewals": "Next Renewals",
+      "files": "Files",
+      "expectedFees": "Expected Fees"
+    },
+    "filter": {
+      "notified": "Notified",
+      "notNotified": "Not Notified"
     }
   },
   "dataCapture": {
@@ -224,6 +283,29 @@
     "filter": {
       "search": "Search File Id/ Document Id",
       "placeHolder": "Select filters to display"
+    },
+    "stats":{
+      "total": "Total Received Applications",
+      "postFilings": "Total Received Post-Filings",
+      "documents": "Total Received Documents",
+      "since": "Since",
+      "applicationAwaiting": "Applications Awaiting Capture",
+      "postFilingAwaiting": "Post-Filings Awaiting Capture",
+      "documentsAwaiting": "Documents Awaiting Digitalization"
+    },
+    "table":{
+      "applicationDocument": "Application/ Document Name",
+      "applicationOrDocument": "Application or Document Name",
+      "fileId": "File Id",
+      "documentId": "Document Id",
+      "receivedOn": "Received On",
+      "certifiedOn": "Certified On",
+      "certifiedBy": "Certified By",
+      "digitalizedOn": "Digitalized On",
+      "digitalizedBy": "Digitalized By",
+      "actions": "Actions",
+      "bibliographicEditing": "Bibliographic Editing",
+      "documentIndexation": "Document Indexation"
     }
   },
   "notifications": {
@@ -435,7 +517,39 @@
       "title": "Data Sharing",
       "filter": {
         "search": "Search File Name",
-        "placeHolder": "Select filters to display"
+        "placeHolder": "Select filters to display",
+        "status": {
+          "processed": "Processed",
+          "failed": "Failed",
+          "partial": "Partial",
+          "inProgress": "In Progress"
+        }
+      },
+      "breadCrum": {
+        "offices": "Offices",
+        "dataSharing": "Data Sharing"
+      },
+      "stats": {
+        "total": "TOTAL COUNT",
+        "year": "TOTAL IN YEAR",
+        "month": "TOTAL IN MONTH",
+        "week": "TOTAL IN WEEK"
+      },
+      "table": {
+        "filename": "File name",
+        "sharedDate": "Shared Date",
+        "category": "IP Right Category",
+        "processedDate": "Processed Date",
+        "status": "Status",
+        "totalCount": "Total Count",
+        "processedCount": "Processed Count",
+        "actions": {
+          "header": "Actions",
+          "downloadPackageCsv": "Download package report in csv",
+          "downloadPackageJson": "Download package report in json",
+          "downloadFailureCsv": "Download failure report in csv",
+          "downloadFailureJson": "Download failure report in json"
+        }
       }
     },
     "authorityFiles": {
@@ -443,6 +557,34 @@
       "filter": {
         "search": "Search Publication Number",
         "placeHolder": "Select filters to display"
+      },
+      "breadCrum": {
+        "offices": "Offices",
+        "dataSharing": "Data Sharing",
+        "authorityFiles": "Authority Files"
+      },
+      "stats": {
+        "all": "All",
+        "patents": "Patents",
+        "utilityModels": "Utility Models",
+        "inconsistentFiles": "Inconsistent Full-text Files",
+        "since": "Since"
+      },
+      "table": {
+        "publicationNumber": "Publication Number",
+        "publicationDate": "Publication Date",
+        "kindCode": "Kind Code",
+        "exceptionCode": "Exception Code",
+        "abstract": "Abstract",
+        "description": "Description",
+        "claims": "Claims",
+        "actions": {
+          "downloadData": "Download Table Data",
+          "downloadDefinition": "Download Definition File",
+          "downloadCsv": "Download Full CSV",
+          "downloadException": "Download Exception List",
+          "uploadException": "Upload Exception List"
+        }
       }
     },
     "selectOffice": {
@@ -2414,6 +2556,164 @@
       "addedUserToRole": "Added {count} user(s) to {role} role",
       "removedPermissionSet": "Removed {label} permission set",
       "removedPermissionFromRole": "Removed {label} permission from {role} role"
+    }
+  },
+
+  "taskManagement": {
+    "workMonitor": {
+      "total": "Total",
+      "pending": "Pending",
+      "averageAge": "Average age",
+      "days": "days",
+      "search": "Search",
+      "listView": "List View",
+      "cardView": "Card View",
+      "taskDistribution": "Task Distribution",
+      "userAssignment": "User Assignment",
+      "assigned": "Assigned",
+      "unassigned": "Unassigned",
+      "processName": "Process Name",
+      "status": "Status",
+      "responsibleGroup": "Responsible Group",
+      "taskActions": "Task Actions",
+      "taskAssignment": "Task Assignment",
+      "actions": "Task Actions",
+      "distribution": "Task Distribution",
+      "assignment": "Task Assignment"
+    },
+    "myTasks": {
+      "breadcrumb": "My Tasks",
+      "myTasks": "My Tasks",
+      "totalTasks": "Total Tasks",
+      "overdueTasks": "Overdue Tasks",
+      "overdueSoon": "Overdue Soon",
+      "averageAge": "Average age",
+      "search": "Search",
+      "approvalBucket": "Approval Bucket",
+      "clearAll": "Clear All",
+      "approvalBucketList": "Approval Bucket List",
+      "showingTasksReport": "Showing {first} to {last} of {totalRecords} tasks",
+      "bulkApprove": "Bulk Approve",
+      "noActionSelected": "No action selected",
+      "industrialDesigns": "Industrial Designs",
+      "patents": "Patents",
+      "trademarks": "Trademarks",
+      "otherIPRegistrations": "Other IP Registrations",
+      "postFiling": "Post Filing",
+      "officeDocuments": "Office Documents",
+      "processName": "Process Name",
+      "history": "History",
+      "document": "View Document",
+      "table": {
+        "header": {
+          "processName": "Process Name",
+          "description": "Description",
+          "documentId": "Document/File Id",
+          "receivedOn": "Received On",
+          "lastAction": "Last Action",
+          "age": "Age(days)",
+          "daysOverDue": "Days Overdue",
+          "lastResponsibleUser": "Last Responsible User",
+          "actions": "Task Actions"
+        }
+      }
+    },
+    "assigntasks": {
+      "labels": {
+        "process": "Process",
+        "status": "Status",
+        "pendingTasks": "Pending Tasks",
+        "totalTasks": "Total Tasks",
+        "search": "Search",
+        "selectUserUnit": "Select User Unit",
+        "selectUnit": "Select Unit",
+        "selectUser": "Select User",
+        "actions": "Actions",
+        "confirm": "Confirm",
+        "unassign": "Unassign"
+      },
+      "filter": {
+        "taskStatus": "Task Status",
+        "assignedTasks": "Assigned Tasks",
+        "unassignedTasks": "Unassigned Tasks"
+      },
+      "table": {
+        "header": {
+          "selected": "Selected",
+          "description": "Description",
+          "documentId": "Document/File Id",
+          "receivedOn": "Received On",
+          "lastAction": "Last Action",
+          "age": "Age(days)",
+          "daysOverDue": "Days Overdue(days)",
+          "lastResponsibleUser": "Last Responsible User",
+          "actions": "Actions",
+          "assignedUnit": "Assigned Unit",
+          "assignedUser": "Assigned User"
+        },
+        "actions": {
+          "viewContent": "View Content"
+        }
+      }
+    },
+    "distribution": {
+      "breadcrumb": {
+        "workMonitor": "Work Monitor",
+        "tasksDistribution": "Tasks Distribution"
+      },
+      "labels": {
+        "process": "Process",
+        "status": "Status",
+        "pendingTasks": "Pending Tasks",
+        "totalTasks": "Total Tasks",
+        "selectUserUnit": "Select User Unit",
+        "selectUnit": "Select Unit",
+        "averageWorkQuantity": "Average Work Quantity",
+        "distributionThreshold": "Distribution Threshold",
+        "tasksPerMember": "tasks per member",
+        "equalDistribution": "Equal Distribution",
+        "tasksToAssign": "Tasks to Assign",
+        "tasksWillBeDistributed": "{{tasksToDistribute}} tasks will be distributed to {{membersCount}} members"
+      },
+      "table": {
+        "header": {
+          "selected": "Selected",
+          "name": "Name",
+          "workMode": "Work Mode",
+          "assignedTasks": "Assigned Tasks",
+          "currentTasks": "Current Tasks",
+          "projectedTasks": "Projected Tasks",
+          "totalAfter": "Total"
+        }
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "confirm": "Confirm Distribution"
+      },
+      "messages": {
+        "pleaseSelectUser": "Please select at least one user to distribute tasks.",
+        "tasksDistributionSuccess": "Tasks distribution confirmed successfully!",
+        "tasksDistributionError": "Error distributing tasks. Check console for details."
+      }
+    },
+    "recordAction": {
+      "breadcrumb": "Review Checklist",
+      "reviewChecklist": "Review Checklist",
+      "reviewAssessment": "Review Assessment",
+      "technicalAssessment": "Technical Assessment",
+      "analysis": "Analysis",
+      "detailedReviewNotes": "Detailed Review Notes",
+      "recommendationsNextSteps": "Recommendations & Next Steps",
+      "additionalComments": "Additional Comments",
+      "nextResponsibleUserUnit": "Next Responsible User Unit",
+      "nextResponsibleUser": "Next Responsible User",
+      "selectUnit": "Select Unit",
+      "selectUser": "Select User",
+      "maxChars": "Max 200 characters",
+      "btn": {
+        "cancel": "Cancel",
+        "submit": "Record"
+      }
     }
   }
 }

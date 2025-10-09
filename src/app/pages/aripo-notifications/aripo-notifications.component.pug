@@ -47,12 +47,23 @@ app-layout([config]="layoutConfig")
           (chipRemove)="removeFilterChip($event)",
           (clearAll)="clearAllFilters()",
         )
-  p-tabView([(activeIndex)]="aripoActiveIndex")
-      p-tabPanel(value="aripo-incoming")
-          ng-template(pTemplate="header")
-            div((click)="onHeaderClick($event, 'aripo-incoming')") {{"notifications.aripo.incoming.header"|translate}}
-          app-table([columns]="aripoIncomingTableColumns", [data]="aripoIncomingTableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false") 
-      p-tabPanel(value="aripo-outgoing")
-          ng-template(pTemplate="header")
-            div((click)="onHeaderClick($event, 'aripo-outgoing')") {{"notifications.aripo.outgoing.header"|translate}} 
-          app-table([columns]="aripoOutgoingTableColumns", [data]="aripoOutgoingTableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false")        
+  p-tabs([value]="aripoActiveIndex")
+    p-tablist
+      p-tab((click)="onHeaderClick($event, 'aripo-incoming')") {{"notifications.aripo.incoming.header"|translate}}
+      p-tab((click)="onHeaderClick($event, 'aripo-outgoing')") {{"notifications.aripo.outgoing.header"|translate}}
+
+    p-tabpanels
+      p-tabpanel(value="aripo-incoming")
+        app-table([columns]="aripoIncomingTableColumns", [data]="aripoIncomingTableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false")
+      p-tabpanel(value="aripo-outgoing")
+        app-table([columns]="aripoOutgoingTableColumns", [data]="aripoOutgoingTableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false")
+
+  //- p-tabView([(activeIndex)]="aripoActiveIndex")
+  //-     p-tabPanel(value="aripo-incoming")
+  //-         ng-template(pTemplate="header")
+  //-           div((click)="onHeaderClick($event, 'aripo-incoming')") {{"notifications.aripo.incoming.header"|translate}}
+  //-         app-table([columns]="aripoIncomingTableColumns", [data]="aripoIncomingTableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false") 
+  //-     p-tabPanel(value="aripo-outgoing")
+  //-         ng-template(pTemplate="header")
+  //-           div((click)="onHeaderClick($event, 'aripo-outgoing')") {{"notifications.aripo.outgoing.header"|translate}} 
+  //-         app-table([columns]="aripoOutgoingTableColumns", [data]="aripoOutgoingTableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false")        

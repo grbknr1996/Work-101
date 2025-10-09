@@ -1,23 +1,23 @@
-// Process Actions Component (Pug)
+
 .process-actions-wrapper
-  // Summary Section
+ 
   .flex.items-center.justify-between.mb-4(*ngIf="showSummary")
-    label.block.font-medium Process Actions for {{ selectedRole | titlecase }} Role
+    label.block.font-medium {{ 'common.components.processActions.processActionsFor' | translate }} {{ selectedRole | titlecase }} {{ 'common.components.processActions.role' | translate }}
     .selected-actions-summary
       .summary-container
         span.summary-badge([class.no-selections]="cleanSelectedRoleActions.length === 0")
           i.mr-1.pi([class.pi-check-circle]="cleanSelectedRoleActions.length > 0", [class.pi-circle]="cleanSelectedRoleActions.length === 0")
-          |  {{ cleanSelectedRoleActions.length }} action{{ cleanSelectedRoleActions.length === 1 ? '' : 's' }} selected
+          |  {{ cleanSelectedRoleActions.length }} {{ cleanSelectedRoleActions.length === 1 ? ('common.components.processActions.actionsSelected' | translate) : ('common.components.processActions.actionsSelectedPlural' | translate) }}
 
-  // Loading State (only in edit mode)
+  
   .loading-container(*ngIf="isEditMode && !actionsLoaded")
     .loading-spinner
       i.pi.pi-spin.pi-spinner(style="font-size: 2rem; color: #3b82f6")
-      p.loading-text Loading process actions...
+      p.loading-text {{ 'common.components.processActions.loadingProcessActions' | translate }}
 
-  // Process Types View/Edit
+  
   .process-actions-container(*ngIf="!isEditMode || actionsLoaded")
-    // Edit mode: full interactive list
+    
     ng-container(*ngIf="isEditMode; else readOnlyView")
       .process-type-card(*ngFor="let processTypeId of getProcessTypeKeys()", [class.expanded]="isProcessTypeExpanded(processTypeId)")
         .process-type-header((click)="toggleProcessType(processTypeId)")
@@ -25,12 +25,12 @@
             i.pi.mr-2([class.pi-chevron-right]="!isProcessTypeExpanded(processTypeId)", [class.pi-chevron-down]="isProcessTypeExpanded(processTypeId)")
             span.process-type-name {{ getProcessTypeName(processTypeId) }}
             span.process-type-count ({{ getProcessTypeActions(processTypeId).length }})
-            span.selected-count(*ngIf="getSelectedCountForProcessType(processTypeId) > 0") - {{ getSelectedCountForProcessType(processTypeId) }} selected
+            span.selected-count(*ngIf="getSelectedCountForProcessType(processTypeId) > 0") - {{ getSelectedCountForProcessType(processTypeId) }} {{ 'common.components.processActions.selected' | translate }}
           .process-type-actions
-            button.p-button-sm.p-button-outlined(pButton, label="Select All", (click)="selectAllActionsForProcessType(processTypeId); $event.stopPropagation()", style="margin-right: 0.5rem")
-            button.p-button-sm.p-button-outlined.p-button-danger(pButton, label="Deselect All", (click)="deselectAllActionsForProcessType(processTypeId); $event.stopPropagation()", style="margin-right: 0.5rem")
+            button.p-button-sm.p-button-outlined(pButton, [label]="'common.components.processActions.selectAll' | translate", (click)="selectAllActionsForProcessType(processTypeId); $event.stopPropagation()", style="margin-right: 0.5rem")
+            button.p-button-sm.p-button-outlined.p-button-danger(pButton, [label]="'common.components.processActions.deselectAll' | translate", (click)="deselectAllActionsForProcessType(processTypeId); $event.stopPropagation()", style="margin-right: 0.5rem")
 
-        // Actions List
+        
         .actions-list(*ngIf="isProcessTypeExpanded(processTypeId)")
           .action-item(*ngFor="let action of getProcessTypeActions(processTypeId)", [class.selected]="isActionSelected(action)", (click)="toggleAction(action)")
             .action-info
@@ -39,13 +39,13 @@
             .action-checkbox
               i.pi([class.pi-check]="isActionSelected(action)", [class.pi-circle]="!isActionSelected(action)")
 
-    // Read-only view: show only selected actions grouped by process type
+   
     ng-template(#readOnlyView)
       .process-type-card(*ngFor="let processTypeId of getReadOnlyProcessTypeKeys()")
         .process-type-header
           .process-type-info
             span.process-type-name {{ getProcessTypeName(processTypeId) }}
-            span.selected-count {{ getReadOnlyActionsForProcessType(processTypeId).length }} selected
+            span.selected-count {{ getReadOnlyActionsForProcessType(processTypeId).length }} {{ 'common.components.processActions.selected' | translate }}
         .actions-list
           .action-item.selected(*ngFor="let action of getReadOnlyActionsForProcessType(processTypeId)")
             .action-info

@@ -3,9 +3,12 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HTTP_INTERCEPTORS, HttpBackend } from '@angular/common/http';
-//import { provideHttpClient } from '@angular/common/http';
-import { HttpClientModule } from '@angular/common/http'; //deprecated
+import {
+  HTTP_INTERCEPTORS,
+  HttpBackend,
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 
 // INTERCEPTORS
 import { LoadingInterceptor } from './_interceptors/loading.interceptor';
@@ -249,7 +252,6 @@ const WipoThemePreset = definePreset(Aura, {
     UnauthorizedComponent,
   ],
   imports: [
-    HttpClientModule, //deprecated
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
@@ -271,13 +273,6 @@ const WipoThemePreset = definePreset(Aura, {
     EChartsModule,
   ],
   providers: [
-    /*
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AwsInterceptInterceptor,
-      multi: true // false completely breaks the app, for some reason
-    },
-    */
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AddHeaderInterceptor,
@@ -303,7 +298,7 @@ const WipoThemePreset = definePreset(Aura, {
       },
     }),
     MessageService,
-    //provideHttpClient()
+    provideHttpClient(withInterceptorsFromDi()),
   ],
   bootstrap: [AppComponent],
 })

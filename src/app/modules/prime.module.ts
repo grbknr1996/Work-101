@@ -38,7 +38,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { CheckboxModule } from 'primeng/checkbox';
 import { PaginatorModule } from 'primeng/paginator';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { TabViewModule } from 'primeng/tabview';
+// import { TabViewModule } from 'primeng/tabview';
 import { ButtonGroupModule } from 'primeng/buttongroup';
 import { AccordionModule } from 'primeng/accordion';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
@@ -49,6 +49,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { ScrollTopModule } from 'primeng/scrolltop';
 import { EditorModule } from 'primeng/editor';
 import { Listbox } from 'primeng/listbox';
+import { FieldsetModule } from 'primeng/fieldset';
 
 const PrimeNGModules: any[] = [
   //PrimeNG
@@ -88,7 +89,7 @@ const PrimeNGModules: any[] = [
   CheckboxModule,
   PaginatorModule,
   ProgressBarModule,
-  TabViewModule,
+  // TabViewModule,
   ButtonGroupModule,
   AccordionModule,
   ScrollPanelModule,
@@ -98,7 +99,8 @@ const PrimeNGModules: any[] = [
   ToolbarModule,
   ScrollTopModule,
   EditorModule,
-  Listbox
+  Listbox,
+  FieldsetModule
 ];
 
 @NgModule({
