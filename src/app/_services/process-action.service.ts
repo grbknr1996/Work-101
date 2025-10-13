@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { Observable, throwError, BehaviorSubject } from 'rxjs';
+import { catchError, map, switchMap, shareReplay, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.service';
 
@@ -21,6 +21,14 @@ export interface ProcessAction {
   providedIn: 'root',
 })
 export class ProcessActionService {
+  // Cache for process types
+  private processTypesCache$: Observable<ProcessType> | null = null;
+
+  // Cache for grouped actions
+  private groupedActionsCache$: Observable<{
+    [processType: string]: ProcessAction[];
+  }> | null = null;
+
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   /**
@@ -78,11 +86,19 @@ export class ProcessActionService {
   /**
    * Get process types from the configuration API
    * Based on API endpoint: {{configUrl}}/configurations/process-category/process-types
+   * Uses caching to prevent duplicate API calls
    */
   getProcessTypes(): Observable<ProcessType> {
+    // Return cached observable if it exists
+    if (this.processTypesCache$) {
+      console.log('Returning cached process types');
+      return this.processTypesCache$;
+    }
+
+    console.log('Fetching process types from API...');
     const configUrl = `${environment.configUrl}/configurations/process-category/process-types`;
 
-    return this.getAuthHeaders().pipe(
+    this.processTypesCache$ = this.getAuthHeaders().pipe(
       switchMap((headers) =>
         this.http.get<ProcessType>(configUrl, { headers })
       ),
@@ -90,8 +106,11 @@ export class ProcessActionService {
         console.log('Process types response received:', response);
         return response;
       }),
-      catchError((error) => this.handleError(error, 'Loading process types'))
+      catchError((error) => this.handleError(error, 'Loading process types')),
+      shareReplay(1) // Cache the result and share it with all subscribers
     );
+
+    return this.processTypesCache$;
   }
 
   /**
@@ -115,9 +134,17 @@ export class ProcessActionService {
 
   /**
    * Get grouped actions by process type
+   * Uses caching to prevent duplicate API calls
    */
   getGroupedActions(): Observable<{ [processType: string]: ProcessAction[] }> {
-    return this.getProcessActions().pipe(
+    // Return cached observable if it exists
+    if (this.groupedActionsCache$) {
+      console.log('Returning cached grouped actions');
+      return this.groupedActionsCache$;
+    }
+
+    console.log('Fetching grouped actions from API...');
+    this.groupedActionsCache$ = this.getProcessActions().pipe(
       map((actions) => {
         const grouped: { [processType: string]: ProcessAction[] } = {};
         actions.forEach((action) => {
@@ -128,8 +155,22 @@ export class ProcessActionService {
           }
           grouped[processType].push(action);
         });
+        console.log('Grouped actions processed:', grouped);
         return grouped;
-      })
+      }),
+      shareReplay(1) // Cache the result and share it with all subscribers
     );
+
+    return this.groupedActionsCache$;
+  }
+
+  /**
+   * Clear the cache for process types and grouped actions
+   * Useful when data needs to be refreshed
+   */
+  clearCache(): void {
+    console.log('Clearing process action service cache');
+    this.processTypesCache$ = null;
+    this.groupedActionsCache$ = null;
   }
 }

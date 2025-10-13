@@ -12,6 +12,7 @@ import {
 } from 'src/app/_services/units.service';
 import { UserService } from 'src/app/_services/user.service';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
+import { ToastService } from 'src/app/_services/toast.service';
 import { MenuItem } from 'primeng/api';
 import { CreateUnitStateService } from 'src/app/_services/create-unit-state.service';
 import { PermissionSetService } from 'src/app/_services/permission-set.service';
@@ -34,26 +35,18 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
   loading = false;
 
   // Form options
-  unitCategories: { label: string; value: UnitCategory }[] = [
-    { label: 'Division', value: 'Division' },
-    { label: 'Department', value: 'Department' },
-    { label: 'Section', value: 'Section' },
-  ];
+  unitCategories: { label: string; value: UnitCategory }[] = [];
 
   // Parent unit info for sub-units
   parentUnitInfo: { name: string; category: string } | null = null;
 
   // Role and tab properties
   selectedRoleIndex = 0;
-  selectedTabIndex = 0;
+  selectedTabIndex = '0'; // Initialize as string to match p-tab values
   selectedRole: 'head' | 'deputy' | 'staff' = 'head';
 
   // Role labels for buttons
-  roleLabels: { label: string; value: 'head' | 'deputy' | 'staff' }[] = [
-    { label: 'Head', value: 'head' },
-    { label: 'Deputy', value: 'deputy' },
-    { label: 'Staff', value: 'staff' },
-  ];
+  roleLabels: { label: string; value: 'head' | 'deputy' | 'staff' }[] = [];
 
   // User assignment properties
   assignedUsers = {
@@ -110,6 +103,7 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private stateService: CreateUnitStateService,
     private ms: MechanicsService,
+    private toastService: ToastService,
     private permissionSetService: PermissionSetService,
     private processActionService: ProcessActionService
   ) {
@@ -122,6 +116,7 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.initializeTranslations();
     this.setupBreadcrumbs();
     this.setupFormValidation();
     this.subscribeToState();
@@ -133,6 +128,48 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
     // Don't load users immediately - load them only when user selection dialog is opened
   }
 
+  private initializeTranslations() {
+    // Initialize unit categories with translations
+    this.unitCategories = [
+      {
+        label: this.ms.translate(
+          'userManagement.units.createUnit.categories.division'
+        ),
+        value: 'Division',
+      },
+      {
+        label: this.ms.translate(
+          'userManagement.units.createUnit.categories.department'
+        ),
+        value: 'Department',
+      },
+      {
+        label: this.ms.translate(
+          'userManagement.units.createUnit.categories.section'
+        ),
+        value: 'Section',
+      },
+    ];
+
+    // Initialize role labels with translations
+    this.roleLabels = [
+      {
+        label: this.ms.translate('userManagement.units.createUnit.roles.head'),
+        value: 'head',
+      },
+      {
+        label: this.ms.translate(
+          'userManagement.units.createUnit.roles.deputy'
+        ),
+        value: 'deputy',
+      },
+      {
+        label: this.ms.translate('userManagement.units.createUnit.roles.staff'),
+        value: 'staff',
+      },
+    ];
+  }
+
   private setupBreadcrumbs() {
     this.route.params.subscribe((params) => {
       const officeCode = params['officeCode'] || 'default';
@@ -140,15 +177,15 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
       this.breadcrumbItems = [
         {
-          label: 'User Management',
+          label: this.ms.translate('userManagement.title'),
           routerLink: `/${officeCode}/${langCode}/user-management`,
         },
         {
-          label: 'Units',
+          label: this.ms.translate('userManagement.units.title'),
           routerLink: `/${officeCode}/${langCode}/user-management/units`,
         },
         {
-          label: 'Create Unit',
+          label: this.ms.translate('userManagement.units.createUnit.title'),
           routerLink: `/${officeCode}/${langCode}/user-management/units/create`,
         },
       ];
@@ -268,11 +305,12 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
           'Could not fetch department details for division ID:',
           error
         );
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Could not load parent department details',
-        });
+        this.toastService.showError(
+          this.ms.translate('userManagement.units.createUnit.messages.error'),
+          this.ms.translate(
+            'userManagement.units.createUnit.messages.failedToLoadParentDepartment'
+          )
+        );
       },
     });
   }
@@ -282,11 +320,6 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
     // Validate that we have at least one head user
     if (!this.assignedUsers.head[0]?.userId) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Validation Error',
-        detail: 'Please select a head user for the unit',
-      });
       return;
     }
 
@@ -341,11 +374,6 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
     // Validate the request data
     if (!createRequest.headUserID || createRequest.headUserID === '0') {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Validation Error',
-        detail: 'Please select a valid head user for the unit',
-      });
       return;
     }
 
@@ -361,11 +389,12 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
     this.unitsService.createUnit(createRequest).subscribe({
       next: (response) => {
         this.loading = false;
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Unit created successfully',
-        });
+        this.toastService.showSuccess(
+          this.ms.translate('userManagement.units.createUnit.messages.success'),
+          this.ms.translate(
+            'userManagement.units.createUnit.messages.unitCreatedSuccess'
+          )
+        );
 
         // Clear the state after successful creation
         this.stateService.clearState();
@@ -376,11 +405,12 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
       error: (error) => {
         this.loading = false;
         console.error('Error creating unit:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to create unit',
-        });
+        this.toastService.showError(
+          this.ms.translate('userManagement.units.createUnit.messages.error'),
+          this.ms.translate(
+            'userManagement.units.createUnit.messages.failedToCreateUnit'
+          )
+        );
       },
     });
   }
@@ -388,16 +418,30 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
   getUnitCategoryLabel(): string {
     const category = this.unitForm.get('unitCategory')?.value;
     if (category) {
-      return category;
+      // Map category values to translation keys
+      const categoryMap: { [key: string]: string } = {
+        Division: this.ms.translate(
+          'userManagement.units.createUnit.categories.division'
+        ),
+        Department: this.ms.translate(
+          'userManagement.units.createUnit.categories.department'
+        ),
+        Section: this.ms.translate(
+          'userManagement.units.createUnit.categories.section'
+        ),
+      };
+      return categoryMap[category] || category;
     }
-    return this.parentUnitInfo ? 'Sub-unit' : 'Unit';
+    return this.parentUnitInfo
+      ? this.ms.translate('userManagement.units.createUnit.categories.subUnit')
+      : this.ms.translate('userManagement.units.createUnit.categories.unit');
   }
 
   // Role selection methods
   selectRole(index: number) {
     this.selectedRoleIndex = index;
     this.selectedRole = this.roleLabels[index].value;
-    this.selectedTabIndex = 0; // Reset to Users tab when switching roles
+    this.selectedTabIndex = '0'; // Reset to Users tab when switching roles
   }
 
   getRoleUserCount(role: string): number {
@@ -440,27 +484,31 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Failed to load permission sets:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to load permission sets',
-        });
+        this.toastService.showError(
+          this.ms.translate('userManagement.units.createUnit.messages.error'),
+          this.ms.translate(
+            'userManagement.units.createUnit.messages.failedToLoadPermissionSets'
+          )
+        );
         this.permissionsLoaded = true;
       },
     });
   }
 
   onTabChange(event: any) {
-    this.selectedTabIndex = event.index;
+    // Handle both index-based and value-based tab changes
+    const tabValue =
+      event.value !== undefined ? event.value : event.index?.toString();
+    this.selectedTabIndex = tabValue;
 
     // Load permission sets when Permissions tab is selected
-    if (event.index === 1) {
-      // Permissions tab is at index 1
+    if (tabValue === '1') {
+      // Permissions tab is at value '1'
       this.loadPermissionSets();
     }
     // Load actions when Actions tab is selected
-    if (event.index === 2) {
-      // Actions tab is at index 2
+    if (tabValue === '2') {
+      // Actions tab is at value '2'
       this.loadProcessActions();
     }
   }
@@ -479,15 +527,9 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
   removeRolePermission(role: 'head' | 'deputy' | 'staff', index: number) {
     if (index >= 0 && index < this.rolePermissions[role].length) {
-      const removedPermission = this.rolePermissions[role][index];
       this.rolePermissions[role].splice(index, 1);
       // Save to state service for persistence
       this.stateService.updateRolePermissions(this.rolePermissions);
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: `Removed ${removedPermission.label} permission from ${role} role`,
-      });
     }
   }
 
@@ -511,11 +553,12 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Failed to load process types:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to load process types',
-        });
+        this.toastService.showError(
+          this.ms.translate('userManagement.units.createUnit.messages.error'),
+          this.ms.translate(
+            'userManagement.units.createUnit.messages.failedToLoadProcessTypes'
+          )
+        );
       },
     });
 
@@ -527,11 +570,12 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Failed to load process actions:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to load process actions',
-        });
+        this.toastService.showError(
+          this.ms.translate('userManagement.units.createUnit.messages.error'),
+          this.ms.translate(
+            'userManagement.units.createUnit.messages.failedToLoadProcessActions'
+          )
+        );
         this.actionsLoaded = true;
       },
     });
@@ -540,7 +584,9 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
   getProcessTypeName(processTypeId: string): string {
     // Handle null or empty process type
     if (!processTypeId || processTypeId === 'null' || processTypeId === '') {
-      return 'Note Actions';
+      return this.ms.translate(
+        'userManagement.units.createUnit.processTypes.noteActions'
+      );
     }
 
     if (this.processTypes && this.processTypes.map) {
@@ -586,15 +632,9 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
   removeRoleAction(role: 'head' | 'deputy' | 'staff', index: number) {
     if (index >= 0 && index < this.roleActions[role].length) {
-      const removedAction = this.roleActions[role][index];
       this.roleActions[role].splice(index, 1);
       // Save to state service for persistence
       this.stateService.updateRoleActions(this.roleActions);
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: `Removed ${removedAction.actionTypeName} action from ${role} role`,
-      });
     }
   }
 
@@ -736,12 +776,6 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
     this.roleActions[this.selectedRole] = currentActions;
     this.stateService.updateRoleActions(this.roleActions);
-
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: `Added all actions for ${this.getProcessTypeName(processTypeId)}`,
-    });
   }
 
   deselectAllActionsForProcessType(processTypeId: string) {
@@ -754,14 +788,6 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
     ].filter((action) => !actionTypes.includes(action.actionType));
 
     this.stateService.updateRoleActions(this.roleActions);
-
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: `Removed all actions for ${this.getProcessTypeName(
-        processTypeId
-      )}`,
-    });
   }
 
   isActionSelected(action: ProcessAction): boolean {
@@ -796,11 +822,6 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
     if (this.unitForm.valid && this.assignedUsers.head.length > 0) {
       // Validate that we have at least one head user
       if (!this.assignedUsers.head[0]?.userId) {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Validation Error',
-          detail: 'Please select a head user for the unit',
-        });
         return;
       }
 
@@ -810,11 +831,6 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
         formValue.unitCategory === 'Department' &&
         !formValue.divisionUnitId
       ) {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Validation Error',
-          detail: 'Department must have a parent Division',
-        });
         return;
       }
 
@@ -827,11 +843,6 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
           this.loadDivisionIdForSection(formValue.departmentUnitId, true);
           return;
         } else {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Validation Error',
-            detail: 'Section must have both parent Department and Division',
-          });
           return;
         }
       }
@@ -840,13 +851,6 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
       this.submitForm();
     } else {
       this.markFormGroupTouched();
-      if (this.assignedUsers.head.length === 0) {
-        this.messageService.add({
-          severity: 'warn',
-          summary: 'Warning',
-          detail: 'Please assign at least one head user',
-        });
-      }
     }
   }
 
@@ -894,21 +898,10 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
   onUsersSelected(selectedUsers: UserAssignment[]) {
     // Add selected users to the current role using state service
     this.stateService.addUsersToRole(this.selectedRole, selectedUsers);
-
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: `Added ${selectedUsers.length} user(s) to ${this.selectedRole} role`,
-    });
   }
 
   removeUser(index: number) {
     this.stateService.removeUserFromRole(this.selectedRole, index);
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Removed',
-      detail: `User removed from ${this.selectedRole} role`,
-    });
   }
 
   ngOnDestroy() {

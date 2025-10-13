@@ -77,6 +77,25 @@
           "notified": "NOTIFIED"
         }
       },
+      "advancedFilter": {
+        "query": {
+          "header": "Show Advanced Search Query",
+          "queryUsed": "Search Query Used"
+        },
+        "button": "Advanced Search",
+        "header": "Advanced Search",
+        "close": "Close",
+        "category": "Form Category",
+        "template": "Query Templates",
+        "browse": "Browse Templates",
+        "save": "Save Current",
+        "created": "Created",
+        "lastUsed": "Last Used",
+        "load": "Load",
+        "clear": "Clear Current Search",
+        "cancel": "Cancel",
+        "search": "Search"
+      },
       "groupAssignment": {
         "title": "Group Assignment",
         "availableGroups": "Available Groups",
@@ -284,7 +303,7 @@
       "search": "Search File Id/ Document Id",
       "placeHolder": "Select filters to display"
     },
-    "stats":{
+    "stats": {
       "total": "Total Received Applications",
       "postFilings": "Total Received Post-Filings",
       "documents": "Total Received Documents",
@@ -293,7 +312,7 @@
       "postFilingAwaiting": "Post-Filings Awaiting Capture",
       "documentsAwaiting": "Documents Awaiting Digitalization"
     },
-    "table":{
+    "table": {
       "applicationDocument": "Application/ Document Name",
       "applicationOrDocument": "Application or Document Name",
       "fileId": "File Id",
@@ -2324,7 +2343,17 @@
   },
   "charts": {
     "statistics": {
+      "commons": {
+        "menu": "Statistics",
+        "menu1": "Trends",
+        "menu2": "Origins",
+        "menu3": "Applicants",
+        "menu4": "Representatives",
+        "menu5": "Fees",
+        "menu6": "Productivity"
+      },
       "application_count": {
+        "name": "STATISTICS OVERVIEW",
         "ID-ND": "Designs",
         "ID-NI": "Models",
         "PA-NP": "Conventional Patents",
@@ -2334,7 +2363,13 @@
         "P": "Patents",
         "T": "Trademarks",
         "accounted_application": "ACCOUNTED APPLICATIONS",
-        "active_application": "ACTIVE APPLICATIONS",
+        "active_application": "ACTIVE APPLICATIONS"
+      },
+      "trends": {
+        "tech": "TECHNOLOGY SECTORS (In Filter Chip - Trademarks, Top 5)"
+      },
+      "origins": {
+        "compare": "ORIGINS (In Filter Chip - RESIDENTS vs NON_RESIDENTS, Accounted/Active Applications)",
         "_R": "RESIDENTS [DOMESTIC]",
         "_NR": "NON-RESIDENTS [FOREIGN]"
       }
@@ -2531,7 +2566,6 @@
       "staff": "Staff",
       "users": "Users",
       "permissions": "Permissions",
-
       "editUnit": "Edit Unit",
       "addSubUnit": "Add Sub-unit",
       "save": "Save",
@@ -2555,10 +2589,69 @@
       "setUserToRole": "Set {count} user(s) to {role} role",
       "addedUserToRole": "Added {count} user(s) to {role} role",
       "removedPermissionSet": "Removed {label} permission set",
-      "removedPermissionFromRole": "Removed {label} permission from {role} role"
+      "removedPermissionFromRole": "Removed {label} permission from {role} role",
+      "searchUnits": "Search units...",
+      "collapseAll": "Collapse All",
+      "expandAll": "Expand All",
+      "collapseAllText": "Collapse all",
+      "expandAllText": "Expand all",
+      "deleteUnit": "Delete Unit",
+      "createUnit": {
+        "title": "Create New Unit",
+        "type": "Type",
+        "category": "Category",
+        "parent": "Parent",
+        "unitName": "Unit Name",
+        "unitNamePlaceholder": "Type the Unit name here.",
+        "tabs": {
+          "users": "Users",
+          "permissions": "Permissions",
+          "actions": "Actions"
+        },
+        "noUsersAssigned": "No users assigned to this role",
+        "saveUnit": "Save the unit",
+        "messages": {
+          "validationError": "Validation Error",
+          "success": "Success",
+          "error": "Error",
+          "warning": "Warning",
+          "removed": "Removed",
+          "selectHeadUser": "Please select a head user for the unit",
+          "selectValidHeadUser": "Please select a valid head user for the unit",
+          "unitCreatedSuccess": "Unit created successfully",
+          "failedToCreateUnit": "Failed to create unit",
+          "failedToLoadPermissionSets": "Failed to load permission sets",
+          "failedToLoadProcessTypes": "Failed to load process types",
+          "failedToLoadProcessActions": "Failed to load process actions",
+          "failedToLoadParentDepartment": "Could not load parent department details",
+          "departmentMustHaveParentDivision": "Department must have a parent Division",
+          "sectionMustHaveBothParents": "Section must have both parent Department and Division",
+          "assignAtLeastOneHeadUser": "Please assign at least one head user",
+          "removedPermissionFromRole": "Removed {permission} permission from {role} role",
+          "removedActionFromRole": "Removed {action} action from {role} role",
+          "addedAllActionsFor": "Added all actions for {processType}",
+          "removedAllActionsFor": "Removed all actions for {processType}",
+          "addedUsersToRole": "Added {count} user(s) to {role} role",
+          "userRemovedFromRole": "User removed from {role} role"
+        },
+        "categories": {
+          "division": "Division",
+          "department": "Department",
+          "section": "Section",
+          "unit": "Unit",
+          "subUnit": "Sub-unit"
+        },
+        "roles": {
+          "head": "Head",
+          "deputy": "Deputy",
+          "staff": "Staff"
+        },
+        "processTypes": {
+          "noteActions": "Note Actions"
+        }
+      }
     }
   },
-
   "taskManagement": {
     "workMonitor": {
       "total": "Total",

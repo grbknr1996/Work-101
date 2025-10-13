@@ -1,72 +1,60 @@
 app-layout
   app-breadcrumbs(
     [items]="breadcrumbItems",
-    style="margin-top: 1.5rem; margin-bottom: 1rem"
+    class="breadcrumbs-container"
   )
 
   .create-unit-container(
     [formGroup]="unitForm",
-    style="width: 100%; margin: 2rem 0; padding: 2rem; background: #fff; border-radius: 1rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);"
+    class="create-unit-container"
   )
     // Unit Header
-    .unit-header(
-      style="margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #e0e0e0"
-    )
-      div(style="display: flex; justify-content: space-between; align-items: center")
+    .unit-header
+      .header-content
         div
-          h2(style="margin: 0 0 0.5rem 0; color: #333; font-size: 1.5rem; font-weight: 600") Create New Unit
-          div(style="display: flex; gap: 1rem; align-items: center")
-            span(
-              style="background: #e3f2fd; color: #1976d2; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.875rem; font-weight: 500;"
-            ) {{ getUnitCategoryLabel() }}
-            span(
-              style="color: #666; font-size: 0.875rem",
+          h2.unit-title {{ 'userManagement.units.createUnit.title' | translate }}
+          .header-info
+            span.category-badge {{ getUnitCategoryLabel() }}
+            span.parent-info(
               *ngIf="parentUnitInfo"
             ) Parent: {{ parentUnitInfo.name }} ({{ parentUnitInfo.category }})
 
     // Unit Information Section
-    .mb-6(
-      style="display: flex; gap: 1.5rem; align-items: flex-start; flex-wrap: nowrap; margin-bottom: 2rem;"
-    )
-      div(style="flex: 1 1 0")
+    .unit-info-section
+      .info-field
         .p-field
-          label.block.mb-2.font-medium Type
+          label.block.mb-2.font-medium {{ 'userManagement.units.createUnit.type' | translate }}
           span.text-gray-600 {{ getUnitCategoryLabel() }}
       
-      div(style="flex: 1 1 0")
+      .info-field
         .p-field
-          label.block.mb-2.font-medium Category
+          label.block.mb-2.font-medium {{ 'userManagement.units.createUnit.category' | translate }}
           span.text-gray-600 {{ unitForm.get('unitCategory')?.value || 'N/A' }}
       
-      div(style="flex: 1 1 0")
+      .info-field
         .p-field
-          label.block.mb-2.font-medium Parent
+          label.block.mb-2.font-medium {{ 'userManagement.units.createUnit.parent' | translate }}
           span.text-gray-600 {{ parentUnitInfo?.name || 'N/A' }}
       
-      div(style="flex: 2 1 0")
+      .unit-name-field
         .p-field
           label(
             for="unitName",
             class="block mb-2 font-medium"
-          ) Unit Name 
+          ) {{ 'userManagement.units.createUnit.unitName' | translate }}
             span.text-red-500 *
           input#unitName(
             type="text",
             pInputText,
             formControlName="unitName",
-            placeholder="Type the Unit name here.",
+            [placeholder]="'userManagement.units.createUnit.unitNamePlaceholder' | translate",
             [class.p-invalid]="unitForm.get('unitName')?.invalid && unitForm.get('unitName')?.touched",
-            style="width: 100%"
+            class="unit-name-input"
           )
-          small.p-error(
-            *ngIf="getFieldError('unitName')",
-            style="display: block; margin-top: 0.25rem"
-          ) {{ getFieldError('unitName') }}
+          app-validation-errors([control]="unitForm.get('unitName')")
 
     // Role Selector
-    .role-selector(
-      style="display: flex; gap: 1rem; margin-bottom: 2rem; justify-content: flex-start"
-    )
+    .role-selector
       p-buttonGroup
         button(
           pButton,
@@ -75,32 +63,32 @@ app-layout
           [class.p-button-outlined]="selectedRoleIndex !== i",
           [class.p-button-primary]="selectedRoleIndex === i",
           (click)="selectRole(i)",
-          style="min-width: 120px; font-weight: 500"
+          class="role-button"
         )
 
     // Tabs for Users, Permissions, Actions
-    p-tabs([value]="selectedTabIndex", style="margin-top: 1rem")
+    p-tabs([value]="selectedTabIndex", (onChange)="onTabChange($event)", class="tabs-container")
       p-tablist
-        p-tab Users
-        p-tab Permissions
-        p-tab Actions
+        p-tab(value="0") {{ 'userManagement.units.createUnit.tabs.users' | translate }}
+        p-tab(value="1") {{ 'userManagement.units.createUnit.tabs.permissions' | translate }}
+        p-tab(value="2") {{ 'userManagement.units.createUnit.tabs.actions' | translate }}
 
       p-tabpanels
         // Users Tab
-        p-tabpanel
+        p-tabpanel(value="0")
           button.p-button-sm.p-button-primary(
             pButton,
             icon="pi pi-plus",
             [label]="selectedRole === 'head' && getSelectedRoleUsers().length > 0 ? 'Change Head User' : 'Add User'",
-            style="margin-bottom: 1rem",
+            class="add-user-button",
             (click)="openUserSelectionDialog()"
           )
           p-table([value]="getSelectedRoleUsers()")
             ng-template(pTemplate="header")
               tr
-                th Name
-                th Email
-                th(style="width: 60px") Actions
+                th {{ 'userManagement.units.name' | translate }}
+                th {{ 'userManagement.units.email' | translate }}
+                th.actions-column {{ 'userManagement.units.actions' | translate }}
             ng-template(
               pTemplate="body",
               let-user,
@@ -113,24 +101,24 @@ app-layout
                   button.p-button-text.p-button-sm.p-button-danger(
                     pButton,
                     icon="pi pi-times",
-                    title="Remove User",
+                    [title]="'userManagement.units.removeUser' | translate",
                     (click)="removeUser(i)"
                   )
             ng-template(pTemplate="emptymessage")
               tr
-                td.text-center(colspan="3") No users assigned to this role
+                td.text-center(colspan="3") {{ 'userManagement.units.createUnit.noUsersAssigned' | translate }}
         // Permissions Tab
-        p-tabpanel
+        p-tabpanel(value="1")
           .grid
             .col-12
-              label.block.mb-2.font-medium Permission Sets
+              label.block.mb-2.font-medium {{ 'userManagement.units.permissionSets' | translate }}
               p-multiSelect.w-full(
                 [options]="availablePermissions",
                 [(ngModel)]="selectedPermissions",
                 (onChange)="onRolePermissionChange($event.value)",
                 optionLabel="label",
                 [filter]="true",
-                placeholder="Select Permission Sets",
+                [placeholder]="'userManagement.units.selectPermissionSets' | translate",
                 [panelStyle]="{minWidth: '600px', width: '80vw', maxWidth: '700px', maxHeight: '400px', overflowX: 'auto'}",
                 [virtualScroll]="true",
                 [virtualScrollItemSize]="34",
@@ -141,18 +129,18 @@ app-layout
                   let-permission,
                   pTemplate="item"
                 )
-                  .flex.items-center.justify-between.p-2(style="min-width: 350px")
+                  .flex.items-center.justify-between.p-2.permission-item
                     span.font-semibold {{ permission.label }}
             
             .col-12.mt-4
               .bg-gray-50.p-4.rounded-lg
-                h4.font-semibold.mb-4 Selected Permissions
+                h4.font-semibold.mb-4 {{ 'userManagement.units.selectedPermissions' | translate }}
                 .flex.flex-wrap.gap-2
                   span.inline-block.bg-blue-100.text-blue-800.px-2.py-1.rounded-full.text-xs(
                     *ngFor="let permission of selectedPermissions"
                   ) {{ permission.label }}
         // Actions Tab
-        p-tabpanel
+        p-tabpanel(value="2")
           app-process-actions(
             [selectedRole]="selectedRole",
             [selectedActions]="getSelectedRoleActions()",
@@ -161,87 +149,6 @@ app-layout
             (actionsChange)="onActionsChange($event)"
           )
 
-
-    //- p-tabView(
-    //-   [(activeIndex)]="selectedTabIndex",
-    //-   style="margin-top: 1rem"
-    //- )
-    //-   // Users Tab
-    //-   p-tabPanel(header="Users")
-    //-     button.p-button-sm.p-button-primary(
-    //-       pButton,
-    //-       icon="pi pi-plus",
-    //-       [label]="selectedRole === 'head' && getSelectedRoleUsers().length > 0 ? 'Change Head User' : 'Add User'",
-    //-       style="margin-bottom: 1rem",
-    //-       (click)="openUserSelectionDialog()"
-    //-     )
-    //-     p-table([value]="getSelectedRoleUsers()")
-    //-       ng-template(pTemplate="header")
-    //-         tr
-    //-           th Name
-    //-           th Email
-    //-           th(style="width: 60px") Actions
-    //-       ng-template(
-    //-         pTemplate="body",
-    //-         let-user,
-    //-         let-i="rowIndex"
-    //-       )
-    //-         tr
-    //-           td {{ user.userName }}
-    //-           td {{ user.email || user.login }}
-    //-           td
-    //-             button.p-button-text.p-button-sm.p-button-danger(
-    //-               pButton,
-    //-               icon="pi pi-times",
-    //-               title="Remove User",
-    //-               (click)="removeUser(i)"
-    //-             )
-    //-       ng-template(pTemplate="emptymessage")
-    //-         tr
-    //-           td.text-center(colspan="3") No users assigned to this role
-
-    //-   // Permissions Tab
-    //-   p-tabPanel(header="Permissions")
-    //-     .grid
-    //-       .col-12
-    //-         label.block.mb-2.font-medium Permission Sets
-    //-         p-multiSelect.w-full(
-    //-           [options]="availablePermissions",
-    //-           [(ngModel)]="selectedPermissions",
-    //-           (onChange)="onRolePermissionChange($event.value)",
-    //-           optionLabel="label",
-    //-           [filter]="true",
-    //-           placeholder="Select Permission Sets",
-    //-           [panelStyle]="{minWidth: '600px', width: '80vw', maxWidth: '700px', maxHeight: '400px', overflowX: 'auto'}",
-    //-           [virtualScroll]="true",
-    //-           [virtualScrollItemSize]="34",
-    //-           [showToggleAll]="true",
-    //-           appendTo="body"
-    //-         )
-    //-           ng-template(
-    //-             let-permission,
-    //-             pTemplate="item"
-    //-           )
-    //-             .flex.items-center.justify-between.p-2(style="min-width: 350px")
-    //-               span.font-semibold {{ permission.label }}
-          
-    //-       .col-12.mt-4
-    //-         .bg-gray-50.p-4.rounded-lg
-    //-           h4.font-semibold.mb-4 Selected Permissions
-    //-           .flex.flex-wrap.gap-2
-    //-             span.inline-block.bg-blue-100.text-blue-800.px-2.py-1.rounded-full.text-xs(
-    //-               *ngFor="let permission of selectedPermissions"
-    //-             ) {{ permission.label }}
-
-    //-   // Actions Tab
-    //-   p-tabPanel(header="Actions")
-    //-     app-process-actions(
-    //-       [selectedRole]="selectedRole",
-    //-       [selectedActions]="getSelectedRoleActions()",
-    //-       [isEditMode]="true",
-    //-       [showSummary]="true",
-    //-       (actionsChange)="onActionsChange($event)"
-    //-     )
 
     // User Selection Dialog
     app-user-selection-dialog(
@@ -252,11 +159,11 @@ app-layout
     )
 
     // Form Actions
-    .flex.justify-content-center.gap-2.mt-6(style="margin-top: 2rem")
+    .flex.justify-content-center.gap-2.mt-6.form-actions
       button(
         type="button",
         pButton,
-        label="Cancel",
+        [label]="'userManagement.units.cancel' | translate",
         icon="pi pi-times",
         class="p-button-outlined",
         (click)="onCancel()",
@@ -265,11 +172,11 @@ app-layout
       button(
         type="button",
         pButton,
-        label="Save",
+        [label]="'userManagement.units.save' | translate",
         icon="pi pi-check",
         class="p-button-primary",
         (click)="onSubmit()",
         [loading]="loading",
         [disabled]="unitForm.invalid || assignedUsers.head.length === 0",
-        title="Save the unit"
+        [title]="'userManagement.units.createUnit.saveUnit' | translate"
       )

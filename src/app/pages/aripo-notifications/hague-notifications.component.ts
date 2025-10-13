@@ -281,9 +281,9 @@ export class HagueNotificationsComponent implements OnInit {
     this.menuService.updateMenuItems(menuItems);
 
     this.hagueStatSelected = 'Total Received Applications';
-
+ 
     this.indexesBasedOnTab();
-    this.cdr.detectChanges();
+    //this.cdr.detectChanges();
   }
 
   indexesBasedOnTab(){

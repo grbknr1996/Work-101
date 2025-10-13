@@ -1,57 +1,57 @@
 
-<div class="unit-details-container" style="border-radius: 1rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);">
+<div class="unit-details-container">
   <!-- Unit Header-->
-  <div class="unit-header" *ngIf="unit" style="margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #e0e0e0">
-    <div style="display: flex; justify-content: space-between; align-items: center">
+  <div class="unit-header" *ngIf="unit">
+    <div class="unit-header-row">
       <div>
         <!-- Unit Name Display/Edit-->
         <div *ngIf="!isEditMode">
-          <h2 style="margin: 0 0 0.5rem 0; color: #333; font-size: 1.5rem; font-weight: 600">{{ unit.name }}</h2>
+          <h2>{{ unit.name }}</h2>
         </div>
         <div *ngIf="isEditMode" [formGroup]="unitForm">
           <input type="text" formControlName="unitName" placeholder="Enter unit name" style="font-size: 1.5rem; font-weight: 600; background: transparent; border: none; border-bottom: 2px solid #1976d2; padding: 0.5rem 0; width: 100%; max-width: 400px; outline: none;" [class.p-invalid]="unitForm.get('unitName')?.invalid &amp;&amp; unitForm.get('unitName')?.touched"><small class="p-error" *ngIf="unitForm.get('unitName')?.invalid &amp;&amp; unitForm.get('unitName')?.touched" style="display: block; margin-top: 0.25rem">{{ 'userManagement.units.unitNameRequired' | translate }}</small>
         </div>
-        <div style="display: flex; gap: 1rem; align-items: center"><span style="background: #e3f2fd; color: #1976d2; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.875rem; font-weight: 500;">{{ unitCategory || 'Unit' }}</span><span style="color: #666; font-size: 0.875rem">ID: {{ unit.id }}</span></div>
+        <div style="display: flex; gap: 1rem; align-items: center"><span class="unit-category-badge">{{ unitCategory || 'Unit' }}</span><span class="unit-id-text">ID: {{ unit.id }}</span></div>
       </div>
-      <div style="display: flex; gap: 0.5rem">
+      <div class="header-actions">
         <!-- View Mode Buttons-->
         <ng-container *ngIf="!isEditMode">
-          <button class="p-button-outlined p-button-sm" pButton icon="pi pi-pencil" (click)="editUnit()" [title]="'userManagement.units.editUnit' | translate" style="min-width: 40px; height: 40px"></button>
-          <button class="p-button-outlined p-button-sm" *ngIf="unitCategory !== 'Section'" pButton icon="pi pi-plus" [title]="'userManagement.units.addSubUnit' | translate" style="min-width: 40px; height: 40px" (click)="createSubUnit()"></button>
+          <button class="p-button-outlined p-button-sm header-action-btn" pButton icon="pi pi-pencil" (click)="editUnit()" [title]="'userManagement.units.editUnit' | translate"></button>
+          <button class="p-button-outlined p-button-sm header-action-btn" *ngIf="unitCategory !== 'Section'" pButton icon="pi pi-plus" [title]="'userManagement.units.addSubUnit' | translate" (click)="createSubUnit()"></button>
         </ng-container>
         <!-- Edit Mode Buttons-->
         <ng-container *ngIf="isEditMode">
-          <button class="p-button-success p-button-sm" pButton [label]="'userManagement.units.save' | translate" (click)="saveUnit()" title="Save Changes" style="min-width: 80px; height: 40px"></button>
-          <button class="p-button-outlined p-button-sm" pButton [label]="'userManagement.units.cancel' | translate" (click)="cancelEdit()" title="Cancel Edit" style="min-width: 80px; height: 40px"></button>
+          <button class="p-button-success p-button-sm header-primary-btn" pButton [label]="'userManagement.units.save' | translate" (click)="saveUnit()" title="Save Changes"></button>
+          <button class="p-button-outlined p-button-sm header-primary-btn" pButton [label]="'userManagement.units.cancel' | translate" (click)="cancelEdit()" title="Cancel Edit"></button>
         </ng-container>
       </div>
     </div>
   </div>
-  <div class="role-selector" style="display: flex; gap: 1rem; margin-bottom: 1.5rem; justify-content: flex-start">
+  <div class="role-selector">
     <!-- Desktop: Button Group-->
     <p-buttonGroup class="role-buttons-desktop">
-      <button pButton *ngFor="let role of roleLabels; let i = index" [label]="role.label" [class.p-button-outlined]="selectedRoleIndex !== i" [class.p-button-primary]="selectedRoleIndex === i" (click)="selectRole(i)" style="min-width: 120px; font-weight: 500"></button>
+      <button pButton *ngFor="let role of roleLabels; let i = index" [label]="role.label" [class.p-button-outlined]="selectedRoleIndex !== i" [class.p-button-primary]="selectedRoleIndex === i" (click)="selectRole(i)"></button>
     </p-buttonGroup>
     <!-- Mobile: Dropdown-->
     <div class="role-dropdown-mobile">
       <p-dropdown [options]="roleLabels" [(ngModel)]="selectedRoleLabel" optionLabel="label" (onChange)="onRoleDropdownChange($event)" placeholder="Select Role" styleClass="w-full" [style]="{ width: '100%' }"></p-dropdown>
     </div>
   </div>
-  <p-tabs [value]="selectedTabIndex">
+  <p-tabs [(value)]="selectedTabIndex">
     <p-tablist>
-      <p-tab>{{'userManagement.units.users' | translate}}</p-tab>
-      <p-tab>{{'userManagement.units.permissions' | translate}}</p-tab>
-      <p-tab>{{'userManagement.units.actions' | translate}}</p-tab>
+      <p-tab [value]="0">{{ 'userManagement.units.users' | translate }}</p-tab>
+      <p-tab [value]="1">{{ 'userManagement.units.permissions' | translate }}</p-tab>
+      <p-tab [value]="2">{{ 'userManagement.units.actions' | translate }}</p-tab>
     </p-tablist>
     <p-tabpanels>
-      <p-tabpanel>
+      <p-tabpanel [value]="0">
         <button class="p-button-sm p-button-primary" *ngIf="isEditMode" pButton icon="pi pi-plus" [label]="selectedRole === 'head' &amp;&amp; getSelectedRoleUsers().length &gt; 0 ? ('userManagement.units.changeHeadUser' | translate) : ('userManagement.units.addUser' | translate)" style="margin-bottom: 1rem" (click)="openAddUserDialog()"></button>
         <p-table [value]="getSelectedRoleUsers()" *ngIf="unit">
           <ng-template pTemplate="header">
             <tr>
               <th>{{ 'userManagement.units.name' | translate }}</th>
               <th>{{ 'userManagement.units.email' | translate }}</th>
-              <th style="width: 60px">{{ 'userManagement.units.actions' | translate }}</th>
+              <th class="actions-col-60">{{ 'userManagement.units.actions' | translate }}</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-user let-i="rowIndex">
@@ -62,7 +62,7 @@
                 <!-- View Mode: Show View button-->
                 <button class="p-button-text p-button-sm" *ngIf="!isEditMode" pButton icon="pi pi-eye" [title]="'userManagement.units.viewUser' | translate" (click)="viewUser(user)"></button>
                 <!-- Edit Mode: Show View and Delete buttons-->
-                <div *ngIf="isEditMode" style="display: flex; gap: 0.25rem">
+                <div class="row-actions" *ngIf="isEditMode">
                   <button class="p-button-text p-button-sm" pButton icon="pi pi-eye" [title]="'userManagement.units.viewUser' | translate" (click)="viewUser(user)"></button>
                   <button class="p-button-text p-button-sm p-button-danger" pButton icon="pi pi-times" [title]="'userManagement.units.removeUser' | translate" (click)="removeUser(selectedRole, i)"></button>
                 </div>
@@ -73,7 +73,7 @@
         <!-- User Selection Dialog-->
         <app-user-selection-dialog [(visible)]="userSelectionDialogVisible" [currentMembers]="getSelectedRoleUsers()" [role]="selectedRole" (membersSelected)="onUsersSelected($event)"></app-user-selection-dialog>
       </p-tabpanel>
-      <p-tabpanel>
+      <p-tabpanel [value]="1">
         <div class="grid">
           <div class="col-12">
             <label class="block mb-2 font-medium">{{ 'userManagement.units.permissionSets' | translate }}</label>
@@ -88,22 +88,16 @@
               </ng-template>
             </p-multiSelect>
           </div>
-          <div class="col-12 mt-4">
-            <div class="bg-gray-50 p-4 rounded-lg">
-              <h4 class="font-semibold mb-4">{{ 'userManagement.units.selectedPermissions' | translate }}</h4>
-              <div class="flex flex-wrap gap-2"><span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs" *ngFor="let permission of isEditMode ? selectedPermissions : cleanSelectedRolePermissions">{{ permission.label }}</span></div>
-            </div>
-          </div>
         </div>
       </p-tabpanel>
-      <p-tabpanel>
+      <p-tabpanel [value]="2">
         <app-process-actions [selectedRole]="selectedRole" [selectedActions]="getSelectedRoleActions()" [isEditMode]="isEditMode" [showSummary]="true" (actionsChange)="onActionsChange($event)"></app-process-actions>
       </p-tabpanel>
     </p-tabpanels>
   </p-tabs>
 </div>
 <!-- No unit selected state-->
-<div class="no-unit-selected" *ngIf="!unit" style="text-align: center; padding: 3rem; color: #666"><i class="pi pi-building" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem; display: block"></i>
-  <h3 style="margin: 0 0 0.5rem 0; color: #888">{{ 'userManagement.units.noUnitSelected' | translate }}</h3>
-  <p style="margin: 0; font-size: 0.9rem">{{ 'userManagement.units.selectUnitFromTree' | translate }}</p>
+<div class="no-unit-selected" *ngIf="!unit"><i class="pi pi-building no-unit-icon"></i>
+  <h3 class="no-unit-title">{{ 'userManagement.units.noUnitSelected' | translate }}</h3>
+  <p class="no-unit-desc">{{ 'userManagement.units.selectUnitFromTree' | translate }}</p>
 </div>

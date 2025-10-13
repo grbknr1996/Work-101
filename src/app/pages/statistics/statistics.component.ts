@@ -3,14 +3,12 @@ import { Component, OnInit, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
-
 //TRANSLATE
 import { TranslateService } from '@ngx-translate/core';
+import { MechanicsService } from 'src/app/_services/mechanics.service';
 
 //UTILITY
 import { UtilityService } from 'src/app/_services/utility.service';
-
-
 
 //CUSTOM INTERFACES
 import { LayoutConfig } from 'src/app/components/app-layout/app-layout.component';
@@ -35,6 +33,7 @@ export class StatisticsComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
+  private ms = inject(MechanicsService);
   private utility = inject(UtilityService);
   //SERVICE
   private chartService = inject(ChartService);
@@ -211,17 +210,13 @@ export class StatisticsComponent implements OnInit {
 
   ngOnInit() {
     this.layout = {
-      appTitle: 'IPAS Central',
       showHeader: true,
-      showSidebar: false,
       headerItems: [],
-      sidebarItems: [],
-      footerText: '© WIPO ' + new Date().getFullYear(),
       fixedHeader: true,
+      showSidebar: false,
+      sidebarItems: [],
       fixedSidebar: false,
-      sidebarCollapsed: false,
-      theme: 'light',
-      logo: ''
+      sidebarCollapsed: false
     };
     let officeCode = this.route.snapshot.params['officeCode'] || 'default';
     let langCode = this.route.snapshot.params['langCode'] || 'en';
@@ -232,17 +227,15 @@ export class StatisticsComponent implements OnInit {
     };
     this.items = [
       {
-        label: "Statistics",
+        label: this.ms.translate('charts.statistics.commons.menu'),
         routerLink: `/${officeCode}/${langCode}/statistics`
       }
     ];
 
-    this.chartService.setChartID(0);
-    this.chartService.setChartTheme('STATISTICS OVERVIEW');
-
     this.fontFamily = this.getGlobalFont();
     this.chartSettings();
     this.translate.get([
+      'charts.statistics.application_count.name',
       'charts.statistics.application_count.ID-ND',
       'charts.statistics.application_count.ID-NI',
       'charts.statistics.application_count.PA-NP',
@@ -264,6 +257,10 @@ export class StatisticsComponent implements OnInit {
       this.translationMap.set("T", translations['charts.statistics.application_count.T']);
       this.translationMap.set("accounted_application", translations['charts.statistics.application_count.accounted_application']);
       this.translationMap.set("active_application", translations['charts.statistics.application_count.active_application']);
+
+      //COMMUNICATE WITH COMMON
+      this.chartService.setChartID(0);
+      this.chartService.setChartTheme(translations['charts.statistics.application_count.name']);
 
       this.getAccountedApplications();
       this.getActiveApplications();

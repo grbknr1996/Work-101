@@ -227,7 +227,8 @@ export class UserService {
       errorMessage = 'Server error. Please try again later.';
       this.toastService.showError('Server Error', errorMessage);
     } else {
-      errorMessage = error.message || error.error?.message || 'Unknown error occurred';
+      errorMessage =
+        error.message || error.error?.message || 'Unknown error occurred';
       this.toastService.showError('Error', errorMessage);
     }
 
@@ -240,7 +241,7 @@ export class UserService {
    */
   private getAuthHeaders(): Observable<HttpHeaders> {
     return this.authService.getEncodedTokens().pipe(
-      switchMap(tokens => {
+      switchMap((tokens) => {
         const officeCode = this.authService.getCurrentOfficeCode();
         if (tokens && tokens.accessToken) {
           const headers = new HttpHeaders({
@@ -289,7 +290,10 @@ export class UserService {
       httpParams = httpParams.set('isLocked', params.isLocked.toString());
     }
     if (params.exactMatchIndicator !== undefined) {
-      httpParams = httpParams.set('exactMatchIndicator', params.exactMatchIndicator.toString());
+      httpParams = httpParams.set(
+        'exactMatchIndicator',
+        params.exactMatchIndicator.toString()
+      );
     }
     if (params.limit) {
       httpParams = httpParams.set('limit', params.limit.toString());
@@ -304,7 +308,10 @@ export class UserService {
       httpParams = httpParams.set('order', params.order);
     }
     if (params.wipoPlatformCode) {
-      httpParams = httpParams.set('wipo-platform-code', params.wipoPlatformCode);
+      httpParams = httpParams.set(
+        'wipo-platform-code',
+        params.wipoPlatformCode
+      );
     }
     if (params.statuses && params.statuses.length > 0) {
       // Add status as comma-separated values: status=active,inactive
@@ -312,26 +319,35 @@ export class UserService {
       httpParams = httpParams.set('statuses', statusString);
     }
     if (params.creationStartDate) {
-      httpParams = httpParams.set('creationStartDate', params.creationStartDate);
+      httpParams = httpParams.set(
+        'creationStartDate',
+        params.creationStartDate
+      );
     }
     if (params.creationEndDate) {
       httpParams = httpParams.set('creationEndDate', params.creationEndDate);
     }
     if (params.lastUpdateStartDate) {
-      httpParams = httpParams.set('lastUpdateStartDate', params.lastUpdateStartDate);
+      httpParams = httpParams.set(
+        'lastUpdateStartDate',
+        params.lastUpdateStartDate
+      );
     }
     if (params.lastUpdateEndDate) {
-      httpParams = httpParams.set('lastUpdateEndDate', params.lastUpdateEndDate);
+      httpParams = httpParams.set(
+        'lastUpdateEndDate',
+        params.lastUpdateEndDate
+      );
     }
 
     return this.getAuthHeaders().pipe(
-      switchMap(headers =>
+      switchMap((headers) =>
         this.http.get<UserQueryResponse>(`${environment.backendUrl}/queries`, {
           params: httpParams,
           headers: headers,
         })
       ),
-      catchError(error => this.handleError(error, 'Loading user accounts'))
+      catchError((error) => this.handleError(error, 'Loading user accounts'))
     );
   }
 
@@ -340,19 +356,26 @@ export class UserService {
    */
   getUserAccount(loginId: string): Observable<DetailedUserAccount> {
     return this.getAuthHeaders().pipe(
-      switchMap(headers =>
-        this.http.get<DetailedUserAccount>(`${environment.backendUrl}?userId=${loginId}`, {
-          headers: headers,
-        })
+      switchMap((headers) =>
+        this.http.get<DetailedUserAccount>(
+          `${environment.backendUrl}?userId=${loginId}`,
+          {
+            headers: headers,
+          }
+        )
       ),
-      switchMap(response => {
+      switchMap((response) => {
         if (response && response.userGroupBag) {
           return of(response);
         } else {
-          return throwError(() => new Error(`User account with login ID ${loginId} not found`));
+          return throwError(
+            () => new Error(`User account with login ID ${loginId} not found`)
+          );
         }
       }),
-      catchError(error => this.handleError(error, `Loading user account ${loginId}`))
+      catchError((error) =>
+        this.handleError(error, `Loading user account ${loginId}`)
+      )
     );
   }
 
@@ -364,15 +387,15 @@ export class UserService {
 
     return this.getAuthHeaders()
       .pipe(
-        switchMap(headers =>
+        switchMap((headers) =>
           this.http.post<UserAccount>(`${environment.backendUrl}`, userData, {
             headers: headers,
           })
         ),
-        catchError(error => this.handleError(error, 'Creating user account'))
+        catchError((error) => this.handleError(error, 'Creating user account'))
       )
       .pipe(
-        switchMap(user => {
+        switchMap((user) => {
           this.toastService.showSuccess(
             'Success',
             `User account ${user.userName || user.loginId} created successfully`
@@ -385,19 +408,24 @@ export class UserService {
   /**
    * Update an existing user account
    */
-  updateUserAccount(loginId: string, userData: UserUpdatePayload): Observable<any> {
+  updateUserAccount(
+    loginId: string,
+    userData: UserUpdatePayload
+  ): Observable<any> {
     return this.getAuthHeaders()
       .pipe(
-        switchMap(headers =>
+        switchMap((headers) =>
           this.http.put<any>(`${environment.backendUrl}`, userData, {
             headers: headers,
             observe: 'response', // This ensures we get the full response including status
           })
         ),
-        catchError(error => this.handleError(error, `Updating user account ${loginId}`))
+        catchError((error) =>
+          this.handleError(error, `Updating user account ${loginId}`)
+        )
       )
       .pipe(
-        switchMap(response => {
+        switchMap((response) => {
           // Handle both 200 (with body) and 204 (no content) responses
           if (response.status === 204 || response.status === 200) {
             this.toastService.showSuccess(
@@ -405,11 +433,18 @@ export class UserService {
               `User account ${loginId} updated successfully`
             );
             // Return the response body if available, otherwise return a success indicator
-            return of(response.body || { success: true, status: response.status });
+            return of(
+              response.body || { success: true, status: response.status }
+            );
           }
           // For other success status codes, still treat as success
-          this.toastService.showSuccess('Success', `User account ${loginId} updated successfully`);
-          return of(response.body || { success: true, status: response.status });
+          this.toastService.showSuccess(
+            'Success',
+            `User account ${loginId} updated successfully`
+          );
+          return of(
+            response.body || { success: true, status: response.status }
+          );
         })
       );
   }
@@ -420,16 +455,21 @@ export class UserService {
   deleteUserAccount(loginId: string): Observable<void> {
     return this.getAuthHeaders()
       .pipe(
-        switchMap(headers =>
+        switchMap((headers) =>
           this.http.delete<void>(`${environment.backendUrl}/users/${loginId}`, {
             headers: headers,
           })
         ),
-        catchError(error => this.handleError(error, `Deleting user account ${loginId}`))
+        catchError((error) =>
+          this.handleError(error, `Deleting user account ${loginId}`)
+        )
       )
       .pipe(
         switchMap(() => {
-          this.toastService.showSuccess('Success', `User account ${loginId} deleted successfully`);
+          this.toastService.showSuccess(
+            'Success',
+            `User account ${loginId} deleted successfully`
+          );
           return of(void 0);
         })
       );
@@ -438,25 +478,30 @@ export class UserService {
   /**
    * Activate/Deactivate a user account
    */
-  toggleUserStatus(loginId: string, isActive: boolean): Observable<UserAccount> {
+  toggleUserStatus(
+    loginId: string,
+    isActive: boolean
+  ): Observable<UserAccount> {
     return this.getAuthHeaders()
       .pipe(
-        switchMap(headers =>
+        switchMap((headers) =>
           this.http.patch<UserAccount>(
             `${environment.backendUrl}/users/${loginId}/status`,
             { isActive: isActive },
             { headers: headers }
           )
         ),
-        catchError(error =>
+        catchError((error) =>
           this.handleError(
             error,
-            `${isActive ? 'Activating' : 'Deactivating'} user account ${loginId}`
+            `${
+              isActive ? 'Activating' : 'Deactivating'
+            } user account ${loginId}`
           )
         )
       )
       .pipe(
-        switchMap(user => {
+        switchMap((user) => {
           const action = isActive ? 'activated' : 'deactivated';
           this.toastService.showSuccess(
             'Success',
@@ -471,7 +516,9 @@ export class UserService {
    * Get user groups with filter criteria
    * Based on the API endpoint: {{baseUrl}}/groups/queries
    */
-  getUserGroups(params: UserGroupQueryParams = {}): Observable<UserGroupQueryResponse> {
+  getUserGroups(
+    params: UserGroupQueryParams = {}
+  ): Observable<UserGroupQueryResponse> {
     let httpParams = new HttpParams();
 
     // Add query parameters if they are provided
@@ -494,7 +541,10 @@ export class UserService {
       httpParams = httpParams.set('userId', params.userId);
     }
     if (params.exactMatchIndicator !== undefined) {
-      httpParams = httpParams.set('exactMatchIndicator', params.exactMatchIndicator.toString());
+      httpParams = httpParams.set(
+        'exactMatchIndicator',
+        params.exactMatchIndicator.toString()
+      );
     }
     if (params.limit) {
       httpParams = httpParams.set('limit', params.limit.toString());
@@ -509,11 +559,14 @@ export class UserService {
       httpParams = httpParams.set('order', params.order);
     }
     if (params.wipoPlatformCode) {
-      httpParams = httpParams.set('wipo-platform-code', params.wipoPlatformCode);
+      httpParams = httpParams.set(
+        'wipo-platform-code',
+        params.wipoPlatformCode
+      );
     }
 
     return this.getAuthHeaders().pipe(
-      switchMap(headers => {
+      switchMap((headers) => {
         const finalOptions =
           Object.keys(params).length > 0
             ? { params: httpParams, headers: headers }
@@ -524,7 +577,7 @@ export class UserService {
           finalOptions
         );
       }),
-      catchError(error => this.handleError(error, 'Loading user groups'))
+      catchError((error) => this.handleError(error, 'Loading user groups'))
     );
   }
 
@@ -534,16 +587,18 @@ export class UserService {
   createUserGroup(groupData: CreateGroupRequest): Observable<any> {
     return this.getAuthHeaders()
       .pipe(
-        switchMap(headers =>
+        switchMap((headers) =>
           this.http.post<any>(`${environment.backendUrl}/groups`, groupData, {
             headers: headers,
             observe: 'response',
           })
         ),
-        catchError(error => this.handleError(error, `Creating user group ${groupData.groupName}`))
+        catchError((error) =>
+          this.handleError(error, `Creating user group ${groupData.groupName}`)
+        )
       )
       .pipe(
-        switchMap(response => {
+        switchMap((response) => {
           // Handle 201 Created response
           if (response.status === 201) {
             return of({
@@ -563,16 +618,18 @@ export class UserService {
   updateUserGroup(groupData: UpdateGroupRequest): Observable<any> {
     return this.getAuthHeaders()
       .pipe(
-        switchMap(headers =>
+        switchMap((headers) =>
           this.http.put<any>(`${environment.backendUrl}/groups`, groupData, {
             headers: headers,
             observe: 'response',
           })
         ),
-        catchError(error => this.handleError(error, `Updating user group ${groupData.groupId}`))
+        catchError((error) =>
+          this.handleError(error, `Updating user group ${groupData.groupId}`)
+        )
       )
       .pipe(
-        switchMap(response => {
+        switchMap((response) => {
           // Handle 204 No Content response
           if (response.status === 204) {
             return of({ success: true, message: 'Group updated successfully' });
@@ -588,16 +645,24 @@ export class UserService {
   deleteUserGroup(groupId: number): Observable<void> {
     return this.getAuthHeaders()
       .pipe(
-        switchMap(headers =>
-          this.http.delete<void>(`${environment.backendUrl}/groups/${groupId}`, {
-            headers: headers,
-          })
+        switchMap((headers) =>
+          this.http.delete<void>(
+            `${environment.backendUrl}/groups/${groupId}`,
+            {
+              headers: headers,
+            }
+          )
         ),
-        catchError(error => this.handleError(error, `Deleting user group ${groupId}`))
+        catchError((error) =>
+          this.handleError(error, `Deleting user group ${groupId}`)
+        )
       )
       .pipe(
         switchMap(() => {
-          this.toastService.showSuccess('Success', `User group ${groupId} deleted successfully`);
+          this.toastService.showSuccess(
+            'Success',
+            `User group ${groupId} deleted successfully`
+          );
           return of(void 0);
         })
       );
@@ -609,14 +674,19 @@ export class UserService {
    */
   getGroupMembers(groupId: number): Observable<GroupWithMembers> {
     return this.getAuthHeaders().pipe(
-      switchMap(headers => {
+      switchMap((headers) => {
         const params = new HttpParams().set('groupId', groupId.toString());
-        return this.http.get<GroupWithMembers>(`${environment.backendUrl}/groups/members`, {
-          params: params,
-          headers: headers,
-        });
+        return this.http.get<GroupWithMembers>(
+          `${environment.backendUrl}/groups/members`,
+          {
+            params: params,
+            headers: headers,
+          }
+        );
       }),
-      catchError(error => this.handleError(error, `Loading group members for group ${groupId}`))
+      catchError((error) =>
+        this.handleError(error, `Loading group members for group ${groupId}`)
+      )
     );
   }
 
@@ -626,7 +696,7 @@ export class UserService {
   resendVerificationEmail(loginId: string): Observable<any> {
     return this.getAuthHeaders()
       .pipe(
-        switchMap(headers =>
+        switchMap((headers) =>
           this.http.post<any>(
             `${environment.backendUrl}/users/${loginId}/resend-verification`,
             {},
@@ -635,10 +705,12 @@ export class UserService {
             }
           )
         ),
-        catchError(error => this.handleError(error, `Resending verification email for ${loginId}`))
+        catchError((error) =>
+          this.handleError(error, `Resending verification email for ${loginId}`)
+        )
       )
       .pipe(
-        switchMap(response => {
+        switchMap((response) => {
           this.toastService.showSuccess(
             'Success',
             `Verification email sent successfully to ${loginId}`
@@ -654,12 +726,12 @@ export class UserService {
    */
   getUserStats(): Observable<UserStats> {
     return this.getAuthHeaders().pipe(
-      switchMap(headers =>
+      switchMap((headers) =>
         this.http.get<UserStats>(`${environment.backendUrl}/stats`, {
           headers: headers,
         })
       ),
-      catchError(error => this.handleError(error, 'Loading user statistics'))
+      catchError((error) => this.handleError(error, 'Loading user statistics'))
     );
   }
 }

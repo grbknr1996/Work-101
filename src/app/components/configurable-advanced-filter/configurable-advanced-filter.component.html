@@ -1,0 +1,61 @@
+
+<div class="filter-component-container">
+  <button class="filter-button" pButton type="button" [label]="'common.components.advancedFilter.button'|translate" icon="pi pi-search" (click)="toggleFilter()"></button>
+  <!-- Filter Overlay-->
+  <div class="advanced-search-overlay" *ngIf="visible">
+    <div class="advanced-search-panel">
+      <div class="overflow-y-auto">
+        <div class="advanced-header">
+          <h1 class="advanced-header-text">{{"common.components.advancedFilter.header"|translate}}</h1>
+        </div>
+      </div>
+      <!-- Close Button - Positioned at top right corner-->
+      <button class="p-button-sm close-button-overlay" pButton type="button" icon="pi pi-times" [pTooltip]="'common.components.advancedFilter.close'|translate" tooltipPosition="bottom" tooltipStyleClass="text-xs px-2 py-1" (click)="onClose()"></button>
+      <!-- Filter Content-->
+      <div class="advanced-filter-content">
+        <div class="space-y-2 category-box">
+          <label class="category-title">{{"common.components.advancedFilter.category"|translate}}</label>
+          <p-select class="w-full" [options]="categories" [(ngModel)]="selectedCategories" optionLabel="name"></p-select>
+        </div>
+        <div class="query-template-box">
+          <div class="query-template-header">
+            <h3> <i class="pi pi-briefcase" pButtonIcon> </i>&nbsp; {{"common.components.advancedFilter.template"|translate}}</h3>
+            <div class="query-template-buttons">
+              <button class="query-button-browse" (click)="toggleTemplate()">{{"common.components.advancedFilter.browse"|translate}} ({{queryTemplates.length}})</button>
+              <button class="query-button-save"> <i class="pi pi-save" pButtonIcon></i>&nbsp; {{"common.components.advancedFilter.save"|translate}}</button>
+            </div>
+          </div>
+          <div class="query-templates space-y-2">
+            <div class="template-box" *ngFor="let template of queryTemplates">
+              <div class="template-alignment">
+                <div class="template-left">
+                  <div class="template-title-box">
+                    <div class="template-title">{{template.title}}</div><span class="template-category">{{template.category}}</span>
+                  </div>
+                  <p class="template-description">{{template.description}}</p>
+                  <div class="template-date"><span class="template-date-text">{{"common.components.advancedFilter.created"|translate}}: {{template.created}}</span><span class="template-date-text">{{"common.components.advancedFilter.lastUsed"|translate}}: {{template.lastUsed}}</span></div>
+                </div>
+                <div class="template-right">
+                  <button class="query-button-load"> <i class="pi pi-copy" pButtonIcon></i>&nbsp; {{"common.components.advancedFilter.load"|translate}}</button>
+                  <button class="query-button-delete"><i class="pi pi-trash" pButtonIcon></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="query-button-clear">
+            <button class="query-button-browse">{{"common.components.advancedFilter.clear"|translate}}</button>
+          </div>
+        </div>
+      </div>
+      <!-- Action Buttons-->
+      <div class="advanced-filter-actions">
+        <div class="flex items-center justify-end gap-3 sticky bottom-0">
+          <div class="action-buttons">
+            <button class="p-button-outlined p-button-secondary" pButton type="button" [label]="'common.components.advancedFilter.cancel'|translate" (click)="onClose()"></button>
+            <button class="p-button-primary" pButton type="button" [label]="'common.components.advancedFilter.search'|translate" (click)="onApplyFilters()"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

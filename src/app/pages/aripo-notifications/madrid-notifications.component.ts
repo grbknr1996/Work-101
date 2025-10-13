@@ -321,7 +321,7 @@ export class MadridNotificationsComponent implements OnInit {
     this.madridStatSelected = 'Total Received Applications';
 
     this.indexesBasedOnTab();
-    this.cdr.detectChanges();
+    //this.cdr.detectChanges();
   }
 
   indexesBasedOnTab(){

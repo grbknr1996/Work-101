@@ -3,10 +3,9 @@ import { Component, OnInit, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 
-
-
 //TRANSLATE
 import { TranslateService } from '@ngx-translate/core';
+import { MechanicsService } from 'src/app/_services/mechanics.service';
 
 //UTILITY
 import { UtilityService } from 'src/app/_services/utility.service';
@@ -33,6 +32,7 @@ export class OriginsComponent implements OnInit {
   private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
+  private ms = inject(MechanicsService);
   private utility = inject(UtilityService);
   //SERVICE
   private chartService = inject(ChartService);
@@ -183,17 +183,13 @@ export class OriginsComponent implements OnInit {
 
   ngOnInit(): void {
     this.layout = {
-      appTitle: 'IPAS Central',
       showHeader: true,
-      showSidebar: false,
       headerItems: [],
-      sidebarItems: [],
-      footerText: '© WIPO ' + new Date().getFullYear(),
       fixedHeader: true,
+      showSidebar: false,
+      sidebarItems: [],
       fixedSidebar: false,
-      sidebarCollapsed: false,
-      theme: 'light',
-      logo: ''
+      sidebarCollapsed: false
     };
     let officeCode = this.route.snapshot.params['officeCode'] || 'default';
     let langCode = this.route.snapshot.params['langCode'] || 'en';
@@ -204,18 +200,14 @@ export class OriginsComponent implements OnInit {
     };
     this.items = [
       {
-        label: "Statistics",
+        label: this.ms.translate('charts.statistics.commons.menu'),
         routerLink: `/${officeCode}/${langCode}/statistics`
       },
       {
-        label: "Origins",
+        label: this.ms.translate('charts.statistics.commons.menu2'),
         routerLink: `/${officeCode}/${langCode}/statistics/origins`
       }
     ];
-
-    this.chartService.setChartID(2);
-    if (this.currentLegend2 === 'accounted_application') this.chartService.setChartTheme('ORIGINS - RESIDENTS vs NON_RESIDENTS: ACCOUNTED APPLICATIONS');
-    if (this.currentLegend2 === 'active_application') this.chartService.setChartTheme('ORIGINS - RESIDENTS vs NON_RESIDENTS: ACTIVE APPLICATIONS');
 
     this.fontFamily = this.getGlobalFont();
     this.chartSettings();
@@ -225,16 +217,21 @@ export class OriginsComponent implements OnInit {
       'charts.statistics.application_count.T',
       'charts.statistics.application_count.accounted_application',
       'charts.statistics.application_count.active_application',
-      'charts.statistics.application_count._R',
-      'charts.statistics.application_count._NR'
+      'charts.statistics.origins.compare',
+      'charts.statistics.origins._R',
+      'charts.statistics.origins._NR'
     ]).subscribe((translations) => {
       this.translationMap.set("D", translations['charts.statistics.application_count.D']);
       this.translationMap.set("P", translations['charts.statistics.application_count.P']);
       this.translationMap.set("T", translations['charts.statistics.application_count.T']);
       this.translationMap.set("accounted_application", translations['charts.statistics.application_count.accounted_application']);
       this.translationMap.set("active_application", translations['charts.statistics.application_count.active_application']);
-      this.translationMap.set("_R", translations['charts.statistics.application_count._R']);
-      this.translationMap.set("_NR", translations['charts.statistics.application_count._NR']);
+      this.translationMap.set("_R", translations['charts.statistics.origins._R']);
+      this.translationMap.set("_NR", translations['charts.statistics.origins._NR']);
+
+      //COMMUNICATE WITH COMMON
+      this.chartService.setChartID(2);
+      this.chartService.setChartTheme(translations['charts.statistics.origins.compare']);
 
       this.getAccountedApplications();
       this.getActiveApplications();

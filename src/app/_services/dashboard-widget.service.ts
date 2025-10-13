@@ -1,6 +1,5 @@
-import { Injectable, inject, effect } from '@angular/core';
+import { Injectable, effect } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { PermissionService } from './permission.service';
 import { MechanicsService } from './mechanics.service';
 import { DASHBOARD_WIDGETS } from '../_constants/dashboard-widget.constant';
@@ -10,11 +9,13 @@ import { DASHBOARD_WIDGETS } from '../_constants/dashboard-widget.constant';
 })
 export class DashboardWidgetService {
   private dashboardWidgetsSubject = new BehaviorSubject<any[]>([]);
-  private permissionService = inject(PermissionService);
 
   dashboardWidgets$ = this.dashboardWidgetsSubject.asObservable();
 
-  constructor(private mechanicsService: MechanicsService) {
+  constructor(
+    private mechanicsService: MechanicsService,
+    private permissionService: PermissionService
+  ) {
     this.initializeDashboardWidgets();
   }
 
@@ -90,7 +91,10 @@ export class DashboardWidgetService {
 
   private buildWidgetItemLink(link: string): string {
     const officeCode = this.mechanicsService.getCurrentOffice() || 'default';
-    const langCode = this.mechanicsService.lang || 'en';
+    const langCode =
+      this.mechanicsService.lang ||
+      this.mechanicsService.getDefaultLanguage() ||
+      'en';
     const cleanLink = link.startsWith('/') ? link : `/${link}`;
     return `/${officeCode}/${langCode}${cleanLink}`;
   }

@@ -86,6 +86,9 @@ export class ConfigurableFilterBarComponent {
   @Input() searchDateFormat: string = 'yy-mm-dd'
   @Input() disabled: boolean = false;
   @Input() filterClearAll: boolean = true;
+  @Input() showAdvancedSearch: boolean = false;
+  @Input() showAdvancedSearchQuery: boolean = false;
+  @Input() selectedQuery;
 
   @Output() filterChange = new EventEmitter<FilterValue[]>();
   @Output() filterCleared = new EventEmitter<void>();

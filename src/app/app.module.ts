@@ -77,6 +77,8 @@ import { ValidationErrorsComponent } from './components/validation-errors/valida
 import { PanelHeaderIconsComponent } from './components/panels-header/panel-header-icons.component';
 import { MultipleStatsComponent } from './components/multiple-stats/multiple-stats.component';
 import { ProcessActionsComponent } from './components/process-actions/process-actions.component';
+import { ConfigurableAdvancedFilterComponent } from './components/configurable-advanced-filter/configurable-advanced-filter.component';
+import { AdvancedFilterQueryComponent } from './components/advanced-filter-query/advanced-filter-query.component';
 
 // PAGE_COMPONENTS
 import { UnitsTreeComponent } from './pages/user-management/units/units-tree/units-tree.component';
@@ -106,10 +108,13 @@ import { ViewContentComponent } from './pages/task-management/work-monitor/view-
 import { TasksDistributionComponent } from './pages/task-management/work-monitor/tasks-distribution/tasks-distribution.component';
 import { AssignTasksComponent } from './pages/task-management/work-monitor/assign-tasks/assign-tasks.component';
 import { MyPendingTasksComponent } from './pages/task-management/my-tasks/my-tasks.component';
-import { ChartNavbarComponent } from './pages/statistics/chart-navbar/chart-navbar.component';
-import { TrendsComponent } from './pages/statistics/trends/trends.component';
+//Statistics Components
 import { StatisticsComponent } from './pages/statistics/statistics.component';
+import { ChartNavbarComponent } from './pages/statistics/chart-navbar/chart-navbar.component';
+
+import { TrendsComponent } from './pages/statistics/trends/trends.component';
 import { OriginsComponent } from './pages/statistics/origins/origins.component';
+//-----
 import { RenewalReminderComponent } from './pages/renewal-reminder/renewal-reminder.component';
 import { JournalPublicationComponent } from './pages/journal-publication/journal-publication.component';
 import { OnlinePublicationJournalComponent } from './pages/online-publication-journal/online-publication-journal.component';
@@ -226,10 +231,12 @@ const WipoThemePreset = definePreset(Aura, {
     TasksDistributionComponent,
     AssignTasksComponent,
     MyPendingTasksComponent,
+    //Statistics Components
+    StatisticsComponent,
     ChartNavbarComponent,
     TrendsComponent,
-    StatisticsComponent,
     OriginsComponent,
+    //-----
     MultipleStatsComponent,
     RenewalReminderComponent,
     JournalPublicationComponent,
@@ -250,6 +257,8 @@ const WipoThemePreset = definePreset(Aura, {
     ModalComponent,
     SignupComponent,
     UnauthorizedComponent,
+    ConfigurableAdvancedFilterComponent,
+    AdvancedFilterQueryComponent,
   ],
   imports: [
     AppRoutingModule,

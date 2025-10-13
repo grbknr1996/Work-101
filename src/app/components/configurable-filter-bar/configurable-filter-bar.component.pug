@@ -20,7 +20,10 @@
             (onSelect)="onCalenderSelect($event)",
             (onClearClick)="onClearEvent($event)"
           )
-      .col-span-8.flex.justify-end.gap-2.filter-icons
+      .col-span-4.advanced-button
+        div([style]="showAdvancedSearch? '' :'display:none' ")
+          app-configurable-advanced-filter
+      .col-span-4.flex.justify-end.gap-2.filter-icons
         p-button(
           *ngFor="let act of actions",
           [icon]="act.icon",
@@ -61,3 +64,5 @@
     (chipRemove)="removeFilterChip($event)",
     (clearAll)="clearAllFilters()"
   )
+.mt-1.w-full.app-advanced-filter-query([style]="showAdvancedSearchQuery? '' :'display:none' ")
+  app-advanced-filter-query([selectedQuery]="selectedQuery")

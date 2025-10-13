@@ -2,6 +2,10 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+//TRANSLATE
+import { TranslateService } from '@ngx-translate/core';
+import { MechanicsService } from 'src/app/_services/mechanics.service';
+
 //CUSTOM INTERFACES
 import { LayoutConfig } from 'src/app/components/app-layout/app-layout.component';
 import { MenuItem } from 'primeng/api';
@@ -22,6 +26,8 @@ export class TrendsComponent implements OnInit {
 
   //DI
   private route = inject(ActivatedRoute);
+  private translate = inject(TranslateService);
+  private ms = inject(MechanicsService);
   //SERVICE
   private chartService = inject(ChartService);
 
@@ -99,17 +105,13 @@ export class TrendsComponent implements OnInit {
 
   ngOnInit(): void {
     this.layout = {
-      appTitle: 'IPAS Central',
       showHeader: true,
-      showSidebar: false,
       headerItems: [],
-      sidebarItems: [],
-      footerText: '© WIPO ' + new Date().getFullYear(),
       fixedHeader: true,
+      showSidebar: false,
+      sidebarItems: [],
       fixedSidebar: false,
-      sidebarCollapsed: false,
-      theme: 'light',
-      logo: ''
+      sidebarCollapsed: false
     };
     let officeCode = this.route.snapshot.params['officeCode'] || 'default';
     let langCode = this.route.snapshot.params['langCode'] || 'en';
@@ -120,19 +122,25 @@ export class TrendsComponent implements OnInit {
     };
     this.items = [
       {
-        label: "Statistics",
+        label: this.ms.translate('charts.statistics.commons.menu'),
         routerLink: `/${officeCode}/${langCode}/statistics`
       },
       {
-        label: "Trends",
+        label: this.ms.translate('charts.statistics.commons.menu1'),
         routerLink: `/${officeCode}/${langCode}/statistics/trends`
       }
     ];
 
-    this.chartService.setChartID(1);
-    this.chartService.setChartTheme('TRADEMARKS - TOP 5 TECHNOLOGIES');
-
     this.chartSettings();
+    this.translate.get([
+      'charts.statistics.trends.tech'
+    ]).subscribe((translations) => {
+
+      //COMMUNICATE WITH COMMON
+      this.chartService.setChartID(1);
+      this.chartService.setChartTheme(translations['charts.statistics.trends.tech']);
+
+    })
 
     //DYNAMIC CHART HEIGHT
     this.chartHeight = 500;

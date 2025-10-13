@@ -13,7 +13,12 @@
     <div class="col-span-4" [style]="showDateSearchBar? '' :'display:none' ">
       <p-datePicker class="w-full date-calendar" [(ngModel)]="searchBarDate" [placeholder]="dateSearchLabel || 'Select date'" [dateFormat]="searchDateFormat || 'yy-mm-dd'" selectionMode="range" [showIcon]="true" [showButtonBar]="true" [touchUI]="false" [readonlyInput]="true" appendTo="body" (onSelect)="onCalenderSelect($event)" (onClearClick)="onClearEvent($event)"></p-datePicker>
     </div>
-    <div class="col-span-8 flex justify-end gap-2 filter-icons">
+    <div class="col-span-4 advanced-button">
+      <div [style]="showAdvancedSearch? '' :'display:none' ">
+        <app-configurable-advanced-filter></app-configurable-advanced-filter>
+      </div>
+    </div>
+    <div class="col-span-4 flex justify-end gap-2 filter-icons">
       <p-button *ngFor="let act of actions" [icon]="act.icon" [outlined]="true" [text]="true" [pTooltip]="act.label" (click)="onActionClick(act.action)"></p-button>
       <app-configurable-filter [filters]="filters" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'Select filters to display'" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>
       <p-button *ngIf="showDownloadIcon" icon="pi pi-file-pdf" [outlined]="true" [text]="true" (click)="onDownloadDetails()"></p-button>
@@ -23,4 +28,7 @@
 </div>
 <div class="mt-1 w-full" [style]="(disabled || appliedFilters.length == 0)? 'display:none' : '' ">
   <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="filterClearAll" [clearAllLabel]="'Clear All'" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-filter-chips>
+</div>
+<div class="mt-1 w-full app-advanced-filter-query" [style]="showAdvancedSearchQuery? '' :'display:none' ">
+  <app-advanced-filter-query [selectedQuery]="selectedQuery"></app-advanced-filter-query>
 </div>

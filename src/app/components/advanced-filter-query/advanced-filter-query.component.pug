@@ -1,0 +1,32 @@
+p-fieldset.no-border-fieldset([legend]="'common.components.advancedFilter.query.header'|translate", [toggleable]="true", [collapsed]="true", [style]="selectedQuery != null? '' : 'display:none'")
+  .mb-6.query-box
+    h3.query-header.mb-3(*ngIf="selectedQuery != null") {{"common.components.advancedFilter.query.queryUsed"|translate}}
+    div(*ngFor="let levelList of selectedQuery.levelList")
+      div(*ngIf="levelList.level === '1'; else level2Block")
+        div(*ngFor="let group_list of levelList.group_list")
+            div.level1-margin
+              .group-name {{group_list.group_name}}
+                div(*ngFor="let file_list of group_list.file_list")
+                  div.group-margin
+                    div
+                      span.field-name {{file_list.field_label}}:&nbsp;
+                      span.field-connector {{file_list.connecting}} 
+                      span.field-value &apos;{{file_list.value}}&apos;
+                    .operator {{file_list.operator}}
+                .operator {{group_list.group_operator}}
+      ng-template(#level2Block)
+          div.level2-margin
+            .level-name {{levelList.level_name}}:
+            .level-marker
+              div(*ngFor="let group_list of levelList.group_list")
+                div.level2-group-margin
+                  .group-name {{group_list.group_name}}
+                    div(*ngFor="let file_list of group_list.file_list")
+                      div.group-margin
+                        div
+                          span.field-name {{file_list.field_label}}:&nbsp;
+                          span.field-connector {{file_list.connecting}} 
+                          span.field-value &apos;{{file_list.value}}&apos;
+                        .operator {{file_list.operator}}
+                    .operator {{group_list.group_operator}}
+      .operator {{levelList.level_operator}}

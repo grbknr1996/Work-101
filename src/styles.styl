@@ -826,6 +826,9 @@ $transition-duration = 0.3s
 // Advanced Search Styles
 // ============================================
 
+.advanced-button
+  padding-left 5px;
+
 .advanced-search-overlay
   position: fixed
   top: 0
@@ -838,21 +841,259 @@ $transition-duration = 0.3s
   flex-direction: column
   justify-content: center
   align-items: center
-  padding-top: 30px
+  padding-top: 26px
   padding-left: 50px
+
+  .advanced-header
+    display flex
+    padding 2rem 1.5rem 0.75rem 1.5rem
+    background-color rgb(255, 255, 255, 1)
+    border-bottom-width 1px
+    justify-content space-between
+    align-items center
+    position sticky
+    top 0px
+    z-index 10
+
+  .advanced-overlay-close
+    position absolute
+    top 2rem
+    right 0.75rem
+    z-index 10
+    width 2rem
+    height 2rem
+    border-radius 4px
+    display flex
+    align-items center
+    justify-content center
+    color #6b7280
+    background transparent
+    border none
+    cursor pointer
+    transition all 0.2s ease
+
+    &:hover
+      background-color #f3f4f6
+      color #374151
+
+  .advanced-header-text
+    font-size 1.5rem
+    font-weight 500
+
+  .category-box
+    max-width 28rem
+    padding-bottom 5px
+
+  .category-title
+    color rgb(75, 85, 99, 1)
+
+  .query-template-box
+    padding 0.5rem
+    background-color rgb(236, 253, 245, 1)
+    border-color rgb(167, 243, 208, 1)
+    border-width 1px
+    border-radius 0.5rem
+
+  .query-template-header
+    display flex
+    justify-content space-between
+    align-items center
+
+  .query-template-buttons
+    display flex
+    gap 0.5rem
+
+  .query-button-browse
+    display inline-flex
+    height 2rem
+    justify-content center
+    align-items center
+    border-radius 0.375rem
+    border-width 1px
+    border-color rgb(110, 231, 183, 1)
+    padding-left 0.75rem
+    padding-right 0.75rem
+    font-weight 500
+    color rgb(4, 120, 87, 1)
+
+  .query-button-save
+    display inline-flex
+    height 2rem
+    justify-content center
+    align-items center
+    border-radius 0.375rem
+    background-color rgb(5, 150, 105, 1)
+    padding-left 0.75rem
+    padding-right 0.75rem
+    font-weight 500
+    color rgb(255, 255, 255, 1)
+
+  .query-button-clear
+    margin-top 0.75rem
+    border-top-width 1px
+    padding-top 0.5rem
+    border-color rgb(167, 243, 208, 1)
+
+  .query-button-load
+    display inline-flex
+    height 2rem
+    flex-shrink 0
+    justify-content center
+    align-items center
+    white-space nowrap
+    border-radius 0.375rem
+    background-color rgb(5, 150, 105, 1)
+    padding-left 0.75rem
+    padding-right 0.75rem
+    font-weight 500
+    color rgb(255, 255, 255, 1)
+
+  .query-button-delete
+    display inline-flex
+    height 2rem
+    justify-content center
+    align-items center
+    border-radius 0.375rem
+    border-width 1px
+    border-color rgb(110, 231, 183, 1)
+    padding-left 0.75rem
+    padding-right 0.75rem
+    font-weight 500
+    color rgb(220, 38, 38, 1)
+
+  .query-templates
+    margin-top 0.75rem
+    max-height 16rem
+    overflow-y auto
+
+  .template-box
+    padding 0.75rem
+    background-color rgb(255, 255, 255, 1)
+    border-width 1px
+    border-color rgb(167, 243, 208, 1)
+    border-radius 0.5rem
+
+  .template-alignment
+    display flex
+    justify-content space-between
+    align-items flex-start
+
+  .template-left
+    flex 1 1 0%
+
+  .template-right
+    display flex
+    gap 0.25rem
+    margin-left 0.75rem
+
+  .template-title-box
+    display flex
+    gap 0.25rem
+    align-items center
+    margin-bottom 0.25rem
+
+  .template-title
+    color rgb(6, 78, 59, 1)
+    font-weight 500
+
+  .template-category
+    border-radius 0.25rem
+    background-color rgb(209, 250, 229, 1)
+    padding-left 0.5rem
+    padding-right 0.5rem
+    padding-top 0.25rem
+    padding-bottom 0.25rem
+    line-height 1rem
+    font-size 0.75rem
+    color rgb(4, 120, 87,1)
+
+  .template-description
+    margin-bottom 0.5rem
+    font-size 0.875rem
+    line-height 1.25rem
+    color rgb(75, 85, 99, 1)
+
+  .template-date
+    display flex
+    align-items center
+    gap 1rem
+    font-size 0.75rem
+    line-height 1rem
+
+  .template-date-text
+    display flex
+    gap 0.25rem
+    align-items center
+
+  .advanced-filter-content
+    flex 1
+    overflow-y auto
+    padding 8rem 1rem 0rem 1.5rem
+    min-height 380px
 
   .advanced-search-panel
     background white
     border-radius 8px
     box-shadow 0 10px 25px rgba(0, 0, 0, 0.15)
-    width 96%
-    max-height 190vh
+    width 97%
+    max-height 220vh
     display flex
     flex-direction column
     overflow visible
     animation slideIn 0.3s ease-out
     position relative
-  
+
+  .filter-group-box
+    padding 1rem
+    background-color rgb(249, 250, 251, 1)
+    border-width 1px
+    border-color rgb(229, 231, 235, 1)
+    border-radius 0.5rem
+
+  .filter-group-content
+    display flex
+    justify-content space-between
+    align-items center
+    margin-bottom 1rem
+
+  .filter-group-heading
+    display flex
+    gap 0.75rem
+    align-items center
+
+  .filter-group-selection
+    height 1.25rem
+    width 1.25rem
+    border-width 2px
+    border-radius 0.25rem
+    border-color rgb(209, 213, 219, 1)
+    color rgb(37, 99, 235, 1)
+
+  .filter-group-name
+    font-weight 500
+    color rgb(55, 65, 81, 1)
+
+  .filter-group-delete
+    display inline-flex
+    height 2rem
+    width 2rem
+    justify-content center
+    align-items center
+    gap 0.5rem
+    border-radius 0.375rem
+    border-width 1px
+    line-height 1.25rem
+    font-size 0.875rem
+    font-weight 500
+    outline-offset 2px
+    outline 2px solid transparent
+
+  .filter-group-header-text
+    margin-bottom 0.75rem
+    gap 0.5rem
+    color rgb(75, 85, 99, 1)
+
+
   .loading-spinner
     margin-bottom: 1rem
   
@@ -868,12 +1109,6 @@ $transition-duration = 0.3s
     max-height 140vh
     z-index 100
     margin-top 8px
-
-  .advanced-filter-content
-    flex 1
-    overflow-y auto
-    padding 1rem 1.5rem
-    min-height 380px
 
   .filter-sections
     display flex
@@ -920,11 +1155,61 @@ $transition-duration = 0.3s
       border-bottom 8px solid white
       z-index 1
 
-.no-border-fieldset
-  fieldset
-    border: none !important;
-  .p-fieldset-legend
-    text-align: right;
+.app-advanced-filter-query
+  .no-border-fieldset
+    fieldset
+      border none
+    .p-fieldset-legend
+      text-align right
+
+  .query-box
+    background-color rgb(255, 255, 255, 1)
+    padding 1rem
+    border-width 1px
+    border-radius 0.5rem
+
+  .query-header
+    font-size 1.125rem
+
+  .level1-margin
+    margin-left 0px
+
+  .level2-margin
+    margin-left 20px
+
+  .group-margin
+    margin-left 16px
+
+  .level2-group-margin
+    margin-left 40px
+
+  .level-name
+    color rgb(67, 56, 202 , 1)
+    font-weight 600
+
+  .level-marker
+    padding-left 0.05rem
+    border-color rgb(199, 210, 254, 1)
+    border-left-width 2px
+
+  .group-name
+    color rgb(126, 34, 206 , 1)
+    font-weight 600
+
+  .field-name
+    color rgb(21, 128, 61, 1)
+    font-weight 500
+
+  .field-connector
+    color rgb(75, 85, 99 , 1)
+
+  .field-value
+    color rgb(71, 24, 39 , 1)
+    font-weight 600
+
+  .operator
+    color rgb(37, 99, 235, 1)
+    font-weight 700
 
 // ============================================
 // Advanced Search Styles END
@@ -5198,6 +5483,7 @@ app-configurable-filter
     &:focus
       border-color #dc2626
       box-shadow 0 0 0 0.2rem rgba(220, 38, 38, 0.25)
+  
   app-configurable-filter
     .filter-panel
       max-height 60vh
@@ -5212,8 +5498,7 @@ app-configurable-filter
 
     .filter-actions
       padding 1rem
-  .advanced-button
-    padding-left 5px;
+  
 // ========================================
 // Filter chips Component
 // ========================================
@@ -5546,14 +5831,6 @@ app-table-card
 
   .card-item
     animation cardFadeIn 0.3s ease-out
-
-//STATISTICS TOPICS TAB
-app-chart-navbar
-  p-tabs
-    p-tablist
-        p-tab
-          .category-label
-            font-size 1.1 rem
 
 // TASK MANAGEMENT SERVICE
 app-view-content
@@ -6544,4 +6821,279 @@ app-auth-callback
       align-items: center
       height 100vh
       background-color #f5f5f5
+app-units-tree
+  .units-tree-container
+  .units-tree-scrollable
+    width: 100%
+    height: 80vh
+
+  .units-tree-header
+    margin-left: 0.5rem
+
+  .units-tree-header-text
+    font-size: 0.8em
+    color: #888
+    margin-left: 0.5rem
+    vertical-align: middle
+
+  .units-tree-node-container
+    display: flex
+    align-items: center
+    gap: 0.5rem
+    width: 100%
+
+  .units-tree-main-content
+    flex: 1
+    display: flex
+    flex-direction: column
+    gap: 0.25rem
+
+  .units-tree-name-container
+    display: flex
+    align-items: center
+    gap: 0.5rem
+
+  .units-tree-icon
+    font-size: 0.8rem
+    color: var(--p-primary-color)
+
+  .units-tree-label
+    font-size: 0.8rem
+    color: var(--p-primary-color)
+
+  .units-tree-label-selected
+    font-weight: 700
+
+  .units-tree-label-unselected
+    font-weight: 500
+
+  .units-tree-subtext-container
+    display: flex
+    align-items: center
+    gap: 0.5rem
+
+  .units-tree-subtext
+    font-size: 0.7rem
+    color: #666
+    font-style: italic
+
+  .units-tree-actions
+    display: flex
+    gap: 0.25rem
+
+  .units-tree-action-btn
+    min-width: 24px
+    height: 24px
+
+  .units-tree-delete-btn
+    min-width: 24px
+    height: 24px
+    color: red
+
+  .units-tree-expand-icon
+    color: #1976d2
+
+  .units-tree-collapse-icon
+    color: #b0b0b0
+
+// ============================================
+// Units Details Component Styles
+// ============================================
+app-unit-details
+  .unit-details-container
+    border-radius 1rem
+    box-shadow 0 2px 8px rgba(0, 0, 0, 0.04)
+
+    .unit-header
+      margin-bottom 2rem
+      padding-bottom 1rem
+      border-bottom 1px solid #e0e0e0
+
+      .unit-header-row
+        display flex
+        justify-content space-between
+        align-items center
+
+      // Title styles
+      h2
+        margin 0 0 0.5rem 0
+        color #333
+        font-size 1.5rem
+        font-weight 600
+
+      // Editable unit name input
+      .unit-name-input
+        font-size 1.5rem
+        font-weight 600
+        background transparent
+        border none
+        border-bottom 2px solid #1976d2
+        padding 0.5rem 0
+        width 100%
+        max-width 400px
+        outline none
+
+      .unit-name-error
+        display block
+        margin-top 0.25rem
+
+      // Badges next to title
+      .unit-category-badge
+        background #e3f2fd
+        color #1976d2
+        padding 0.25rem 0.75rem
+        border-radius 1rem
+        font-size 0.875rem
+        font-weight 500
+
+      .unit-id-text
+        color #666
+        font-size 0.875rem
+
+      // Header actions (edit, add sub-unit, save, cancel)
+      .header-actions
+        display flex
+        gap 0.5rem
+
+        .header-action-btn
+          min-width 40px
+          height 40px
+
+        .header-primary-btn
+          min-width 80px
+          height 40px
+
+    // Role selector area
+    .role-selector
+      display flex
+      gap 1rem
+      margin-bottom 1.5rem
+      justify-content flex-start
+
+      .role-buttons-desktop
+        button
+          min-width 120px
+          font-weight 500
+
+      .role-dropdown-mobile
+        .w-full
+          width 100%
+
+    // Table actions row in edit mode
+    .row-actions
+      display flex
+      gap 0.25rem
+
+    // Table actions column width
+    .actions-col-60
+      width 60px
+
+  // No unit selected state
+  .no-unit-selected
+    text-align center
+    padding 3rem
+    color #666
+
+    .no-unit-icon
+      font-size 3rem
+      color #ccc
+      margin-bottom 1rem
+      display block
+
+    .no-unit-title
+      margin 0 0 0.5rem 0
+      color #888
+
+    .no-unit-desc
+      margin 0
+      font-size 0.9rem
+// ============================================
+// Create Unit  Component Styles
+// ============================================
+app-create-unit
+  .breadcrumbs-container
+    margin-top: 1.5rem
+    margin-bottom: 1rem
+
+  .create-unit-container
+    width: 100%
+    margin: 2rem 0
+    padding: 2rem
+    background: #fff
+    border-radius: 1rem
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04)
+
+  .unit-header
+    margin-bottom: 2rem
+    padding-bottom: 1rem
+    border-bottom: 1px solid #e0e0e0
+
+    .header-content
+      display: flex
+      justify-content: space-between
+      align-items: center
+
+    .header-info
+      display: flex
+      gap: 1rem
+      align-items: center
+
+    .unit-title
+      margin: 0 0 0.5rem 0
+      color: #333
+      font-size: 1.5rem
+      font-weight: 600
+
+    .category-badge
+      background: #e3f2fd
+      color: #1976d2
+      padding: 0.25rem 0.75rem
+      border-radius: 1rem
+      font-size: 0.875rem
+      font-weight: 500
+
+    .parent-info
+      color: #666
+      font-size: 0.875rem
+
+  .unit-info-section
+    display: flex
+    gap: 1.5rem
+    align-items: flex-start
+    flex-wrap: nowrap
+    margin-bottom: 2rem
+
+    .info-field
+      flex: 1 1 0
+
+    .unit-name-field
+      flex: 2 1 0
+
+    .unit-name-input
+      width: 100%
+
+  .role-selector
+    display: flex
+    gap: 1rem
+    margin-bottom: 2rem
+    justify-content: flex-start
+
+    .role-button
+      min-width: 120px
+      font-weight: 500
+
+  .tabs-container
+    margin-top: 1rem
+
+  .add-user-button
+    margin-bottom: 1rem
+
+  .actions-column
+    width: 60px
+
+  .permission-item
+    min-width: 350px
+
+  .form-actions
+    margin-top: 2rem
       

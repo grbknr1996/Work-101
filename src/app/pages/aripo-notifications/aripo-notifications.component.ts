@@ -281,7 +281,7 @@ export class AripoNotificationsComponent implements OnInit {
     this.aripoStatSelected = 'Total Received Applications';
 
     this.indexesBasedOnTab();
-    this.cdr.detectChanges();
+    //this.cdr.detectChanges();
   }
 
   indexesBasedOnTab(){

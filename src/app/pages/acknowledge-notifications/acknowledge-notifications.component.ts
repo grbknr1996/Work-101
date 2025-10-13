@@ -77,21 +77,21 @@ export class AcknowledgeNotificationsComponent implements OnInit {
 
     this.packageStats = [
       {
-        label: 'Total Received Applications',
+        //label: 'Total Received Applications',
         display: this.ms.translate('notifications.acknowledge.stats.total'),
         count: 4800,
         period: '2025',
         color: '#3949AB', // Indigo color
       },
       {
-        label: 'Processed Notifications',
+        //label: 'Processed Notifications',
         display: this.ms.translate('notifications.acknowledge.stats.processed'),
         count: 320,
         period: '2025',
         color: '#2E7D32', // Green color
       },
       {
-        label: 'Failed Notifications',
+        //label: 'Failed Notifications',
         display: this.ms.translate('notifications.acknowledge.stats.failed'),
         count: 110,
         period: '2025',

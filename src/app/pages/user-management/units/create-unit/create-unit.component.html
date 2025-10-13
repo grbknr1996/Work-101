@@ -1,63 +1,64 @@
 
 <app-layout>
-  <app-breadcrumbs [items]="breadcrumbItems" style="margin-top: 1.5rem; margin-bottom: 1rem"></app-breadcrumbs>
-  <div class="create-unit-container" [formGroup]="unitForm" style="width: 100%; margin: 2rem 0; padding: 2rem; background: #fff; border-radius: 1rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);">
+  <app-breadcrumbs class="breadcrumbs-container" [items]="breadcrumbItems"></app-breadcrumbs>
+  <div class="create-unit-container create-unit-container" [formGroup]="unitForm">
     <!-- Unit Header-->
-    <div class="unit-header" style="margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #e0e0e0">
-      <div style="display: flex; justify-content: space-between; align-items: center">
+    <div class="unit-header">
+      <div class="header-content">
         <div>
-          <h2 style="margin: 0 0 0.5rem 0; color: #333; font-size: 1.5rem; font-weight: 600">Create New Unit</h2>
-          <div style="display: flex; gap: 1rem; align-items: center"><span style="background: #e3f2fd; color: #1976d2; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.875rem; font-weight: 500;">{{ getUnitCategoryLabel() }}</span><span style="color: #666; font-size: 0.875rem" *ngIf="parentUnitInfo">Parent: {{ parentUnitInfo.name }} ({{ parentUnitInfo.category }})</span></div>
+          <h2 class="unit-title">{{ 'userManagement.units.createUnit.title' | translate }}</h2>
+          <div class="header-info"><span class="category-badge">{{ getUnitCategoryLabel() }}</span><span class="parent-info" *ngIf="parentUnitInfo">Parent: {{ parentUnitInfo.name }} ({{ parentUnitInfo.category }})</span></div>
         </div>
       </div>
     </div>
     <!-- Unit Information Section-->
-    <div class="mb-6" style="display: flex; gap: 1.5rem; align-items: flex-start; flex-wrap: nowrap; margin-bottom: 2rem;">
-      <div style="flex: 1 1 0">
+    <div class="unit-info-section">
+      <div class="info-field">
         <div class="p-field">
-          <label class="block mb-2 font-medium">Type</label><span class="text-gray-600">{{ getUnitCategoryLabel() }}</span>
+          <label class="block mb-2 font-medium">{{ 'userManagement.units.createUnit.type' | translate }}</label><span class="text-gray-600">{{ getUnitCategoryLabel() }}</span>
         </div>
       </div>
-      <div style="flex: 1 1 0">
+      <div class="info-field">
         <div class="p-field">
-          <label class="block mb-2 font-medium">Category</label><span class="text-gray-600">{{ unitForm.get('unitCategory')?.value || 'N/A' }}</span>
+          <label class="block mb-2 font-medium">{{ 'userManagement.units.createUnit.category' | translate }}</label><span class="text-gray-600">{{ unitForm.get('unitCategory')?.value || 'N/A' }}</span>
         </div>
       </div>
-      <div style="flex: 1 1 0">
+      <div class="info-field">
         <div class="p-field">
-          <label class="block mb-2 font-medium">Parent</label><span class="text-gray-600">{{ parentUnitInfo?.name || 'N/A' }}</span>
+          <label class="block mb-2 font-medium">{{ 'userManagement.units.createUnit.parent' | translate }}</label><span class="text-gray-600">{{ parentUnitInfo?.name || 'N/A' }}</span>
         </div>
       </div>
-      <div style="flex: 2 1 0">
+      <div class="unit-name-field">
         <div class="p-field">
-          <label class="block mb-2 font-medium" for="unitName">Unit Name <span class="text-red-500">*</span></label>
-          <input id="unitName" type="text" pInputText formControlName="unitName" placeholder="Type the Unit name here." [class.p-invalid]="unitForm.get('unitName')?.invalid &amp;&amp; unitForm.get('unitName')?.touched" style="width: 100%"><small class="p-error" *ngIf="getFieldError('unitName')" style="display: block; margin-top: 0.25rem">{{ getFieldError('unitName') }}</small>
+          <label class="block mb-2 font-medium" for="unitName">{{ 'userManagement.units.createUnit.unitName' | translate }}<span class="text-red-500">*</span></label>
+          <input class="unit-name-input" id="unitName" type="text" pInputText formControlName="unitName" [placeholder]="'userManagement.units.createUnit.unitNamePlaceholder' | translate" [class.p-invalid]="unitForm.get('unitName')?.invalid &amp;&amp; unitForm.get('unitName')?.touched">
+          <app-validation-errors [control]="unitForm.get('unitName')"></app-validation-errors>
         </div>
       </div>
     </div>
     <!-- Role Selector-->
-    <div class="role-selector" style="display: flex; gap: 1rem; margin-bottom: 2rem; justify-content: flex-start">
+    <div class="role-selector">
       <p-buttonGroup>
-        <button pButton *ngFor="let role of roleLabels; let i = index" [label]="role.label" [class.p-button-outlined]="selectedRoleIndex !== i" [class.p-button-primary]="selectedRoleIndex === i" (click)="selectRole(i)" style="min-width: 120px; font-weight: 500"></button>
+        <button class="role-button" pButton *ngFor="let role of roleLabels; let i = index" [label]="role.label" [class.p-button-outlined]="selectedRoleIndex !== i" [class.p-button-primary]="selectedRoleIndex === i" (click)="selectRole(i)"></button>
       </p-buttonGroup>
     </div>
     <!-- Tabs for Users, Permissions, Actions-->
-    <p-tabs [value]="selectedTabIndex" style="margin-top: 1rem">
+    <p-tabs class="tabs-container" [value]="selectedTabIndex" (onChange)="onTabChange($event)">
       <p-tablist>
-        <p-tab>Users</p-tab>
-        <p-tab>Permissions</p-tab>
-        <p-tab>Actions</p-tab>
+        <p-tab value="0">{{ 'userManagement.units.createUnit.tabs.users' | translate }}</p-tab>
+        <p-tab value="1">{{ 'userManagement.units.createUnit.tabs.permissions' | translate }}</p-tab>
+        <p-tab value="2">{{ 'userManagement.units.createUnit.tabs.actions' | translate }}</p-tab>
       </p-tablist>
       <p-tabpanels>
         <!-- Users Tab-->
-        <p-tabpanel>
-          <button class="p-button-sm p-button-primary" pButton icon="pi pi-plus" [label]="selectedRole === 'head' &amp;&amp; getSelectedRoleUsers().length &gt; 0 ? 'Change Head User' : 'Add User'" style="margin-bottom: 1rem" (click)="openUserSelectionDialog()"></button>
+        <p-tabpanel value="0">
+          <button class="p-button-sm p-button-primary add-user-button" pButton icon="pi pi-plus" [label]="selectedRole === 'head' &amp;&amp; getSelectedRoleUsers().length &gt; 0 ? 'Change Head User' : 'Add User'" (click)="openUserSelectionDialog()"></button>
           <p-table [value]="getSelectedRoleUsers()">
             <ng-template pTemplate="header">
               <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th style="width: 60px">Actions</th>
+                <th>{{ 'userManagement.units.name' | translate }}</th>
+                <th>{{ 'userManagement.units.email' | translate }}</th>
+                <th class="actions-column">{{ 'userManagement.units.actions' | translate }}</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-user let-i="rowIndex">
@@ -65,38 +66,38 @@
                 <td>{{ user.userName }}</td>
                 <td>{{ user.email || user.login }}</td>
                 <td>
-                  <button class="p-button-text p-button-sm p-button-danger" pButton icon="pi pi-times" title="Remove User" (click)="removeUser(i)"></button>
+                  <button class="p-button-text p-button-sm p-button-danger" pButton icon="pi pi-times" [title]="'userManagement.units.removeUser' | translate" (click)="removeUser(i)"></button>
                 </td>
               </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
               <tr>
-                <td class="text-center" colspan="3">No users assigned to this role</td>
+                <td class="text-center" colspan="3">{{ 'userManagement.units.createUnit.noUsersAssigned' | translate }}</td>
               </tr>
             </ng-template>
           </p-table>
         </p-tabpanel>
         <!-- Permissions Tab-->
-        <p-tabpanel>
+        <p-tabpanel value="1">
           <div class="grid">
             <div class="col-12">
-              <label class="block mb-2 font-medium">Permission Sets</label>
-              <p-multiSelect class="w-full" [options]="availablePermissions" [(ngModel)]="selectedPermissions" (onChange)="onRolePermissionChange($event.value)" optionLabel="label" [filter]="true" placeholder="Select Permission Sets" [panelStyle]="{minWidth: '600px', width: '80vw', maxWidth: '700px', maxHeight: '400px', overflowX: 'auto'}" [virtualScroll]="true" [virtualScrollItemSize]="34" [showToggleAll]="true" appendTo="body">
+              <label class="block mb-2 font-medium">{{ 'userManagement.units.permissionSets' | translate }}</label>
+              <p-multiSelect class="w-full" [options]="availablePermissions" [(ngModel)]="selectedPermissions" (onChange)="onRolePermissionChange($event.value)" optionLabel="label" [filter]="true" [placeholder]="'userManagement.units.selectPermissionSets' | translate" [panelStyle]="{minWidth: '600px', width: '80vw', maxWidth: '700px', maxHeight: '400px', overflowX: 'auto'}" [virtualScroll]="true" [virtualScrollItemSize]="34" [showToggleAll]="true" appendTo="body">
                 <ng-template let-permission pTemplate="item">
-                  <div class="flex items-center justify-between p-2" style="min-width: 350px"><span class="font-semibold">{{ permission.label }}</span></div>
+                  <div class="flex items-center justify-between p-2 permission-item"><span class="font-semibold">{{ permission.label }}</span></div>
                 </ng-template>
               </p-multiSelect>
             </div>
             <div class="col-12 mt-4">
               <div class="bg-gray-50 p-4 rounded-lg">
-                <h4 class="font-semibold mb-4">Selected Permissions</h4>
+                <h4 class="font-semibold mb-4">{{ 'userManagement.units.selectedPermissions' | translate }}</h4>
                 <div class="flex flex-wrap gap-2"><span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs" *ngFor="let permission of selectedPermissions">{{ permission.label }}</span></div>
               </div>
             </div>
           </div>
         </p-tabpanel>
         <!-- Actions Tab-->
-        <p-tabpanel>
+        <p-tabpanel value="2">
           <app-process-actions [selectedRole]="selectedRole" [selectedActions]="getSelectedRoleActions()" [isEditMode]="true" [showSummary]="true" (actionsChange)="onActionsChange($event)"></app-process-actions>
         </p-tabpanel>
       </p-tabpanels>
@@ -104,9 +105,9 @@
     <!-- User Selection Dialog-->
     <app-user-selection-dialog [(visible)]="userSelectionDialogVisible" [currentMembers]="getSelectedRoleUsers()" [role]="selectedRole" (membersSelected)="onUsersSelected($event)"></app-user-selection-dialog>
     <!-- Form Actions-->
-    <div class="flex justify-content-center gap-2 mt-6" style="margin-top: 2rem">
-      <button class="p-button-outlined" type="button" pButton label="Cancel" icon="pi pi-times" (click)="onCancel()" [disabled]="loading"></button>
-      <button class="p-button-primary" type="button" pButton label="Save" icon="pi pi-check" (click)="onSubmit()" [loading]="loading" [disabled]="unitForm.invalid || assignedUsers.head.length === 0" title="Save the unit"></button>
+    <div class="flex justify-content-center gap-2 mt-6 form-actions">
+      <button class="p-button-outlined" type="button" pButton [label]="'userManagement.units.cancel' | translate" icon="pi pi-times" (click)="onCancel()" [disabled]="loading"></button>
+      <button class="p-button-primary" type="button" pButton [label]="'userManagement.units.save' | translate" icon="pi pi-check" (click)="onSubmit()" [loading]="loading" [disabled]="unitForm.invalid || assignedUsers.head.length === 0" [title]="'userManagement.units.createUnit.saveUnit' | translate"></button>
     </div>
   </div>
 </app-layout>

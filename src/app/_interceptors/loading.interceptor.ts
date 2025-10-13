@@ -10,12 +10,17 @@ import {
 import { Observable } from 'rxjs';
 import { tap, finalize } from 'rxjs/operators';
 import { LoadingService } from '../_services/loading.service';
+import { MechanicsService } from '../_services/mechanics.service';
+import { LOADER_URL_PATTERNS } from '../_constants/common.constant';
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
   private activeRequests = 0;
 
-  constructor(private loadingService: LoadingService) {}
+  constructor(
+    private loadingService: LoadingService,
+    private ms: MechanicsService
+  ) {}
 
   intercept(
     request: HttpRequest<any>,
@@ -24,7 +29,9 @@ export class LoadingInterceptor implements HttpInterceptor {
     if (this.shouldShowLoader(request)) {
       this.activeRequests++;
       console.log(`Loading started. Active requests: ${this.activeRequests}`);
-      this.loadingService.show('Loading...');
+      this.loadingService.show(
+        this.ms.translate('common.components.table.loading')
+      );
     }
 
     return next.handle(request).pipe(
@@ -57,11 +64,9 @@ export class LoadingInterceptor implements HttpInterceptor {
 
   private shouldShowLoader(request: HttpRequest<any>): boolean {
     // Show loader for API calls, but not for assets, images, etc.
-    const shouldShow =
-      request.url.includes('/dev/') ||
-      request.url.includes('/api/') ||
-      request.url.includes('services/') ||
-      request.url.includes('permissions');
+    const shouldShow = LOADER_URL_PATTERNS.some((pattern) =>
+      request.url.includes(pattern)
+    );
     console.log(
       `LoadingInterceptor: URL ${request.url} - shouldShow: ${shouldShow}`
     );

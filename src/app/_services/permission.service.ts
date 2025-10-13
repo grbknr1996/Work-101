@@ -43,7 +43,10 @@ export class PermissionService {
   readonly error$ = this.error.asReadonly();
   readonly isLoaded$ = this.isLoaded.asReadonly();
 
-  constructor(private http: HttpClient, private loadingService: LoadingService) {
+  constructor(
+    private http: HttpClient,
+    private loadingService: LoadingService
+  ) {
     // Effect to log state changes for debugging
     effect(() => {
       console.log('Permission state changed:', this.permissionState());
@@ -62,7 +65,7 @@ export class PermissionService {
     this.setError(null);
 
     return from(fetchAuthSession()).pipe(
-      map(accessToken => {
+      map((accessToken) => {
         if (!accessToken.tokens?.accessToken) {
           throw new Error('No access token available');
         }
@@ -70,7 +73,7 @@ export class PermissionService {
         return token;
       }),
       // Extract username from JWT token
-      map(accessToken => {
+      map((accessToken) => {
         try {
           // Decode the JWT token to get the username
           const payload = JSON.parse(atob(accessToken.split('.')[1]));
@@ -100,9 +103,10 @@ export class PermissionService {
         const url = `${environment.backendUrl}/permissions?userId=${username}`;
         return this.http.get<any[]>(url, { headers }) as Observable<any[]>;
       }),
-      tap(apiResponse => {
+      tap((apiResponse) => {
         // Handle the actual API response format
-        const { permissions, permissionSets } = this.processApiResponse(apiResponse);
+        const { permissions, permissionSets } =
+          this.processApiResponse(apiResponse);
 
         // Update signals
         this.permissions.set(permissions);
@@ -110,7 +114,7 @@ export class PermissionService {
         this.isLoaded.set(true);
         this.error.set(null);
       }),
-      catchError(error => {
+      catchError((error) => {
         console.error('Error fetching user permissions:', error);
         this.setError(error.message || 'Failed to fetch permissions');
         return throwError(() => error);
@@ -134,7 +138,7 @@ export class PermissionService {
         const allPermissions: string[] = [];
         const permissionSets: PermissionSet[] = [];
 
-        apiResponse.forEach(item => {
+        apiResponse.forEach((item) => {
           if (item.permissions && Array.isArray(item.permissions)) {
             allPermissions.push(...item.permissions);
             permissionSets.push({
@@ -169,7 +173,7 @@ export class PermissionService {
    */
   getPermissionsFromSet(permissionSetId: string): string[] {
     const permissionSet = this.permissionSets().find(
-      set => set.permissionSetId === permissionSetId
+      (set) => set.permissionSetId === permissionSetId
     );
 
     return permissionSet ? permissionSet.permissions : [];
@@ -186,14 +190,18 @@ export class PermissionService {
    * Check if user has any of the specified permissions
    */
   hasAnyPermission(permissions: string[]): boolean {
-    return permissions.some(permission => this.permissions().includes(permission));
+    return permissions.some((permission) =>
+      this.permissions().includes(permission)
+    );
   }
 
   /**
    * Check if user has all of the specified permissions
    */
   hasAllPermissions(permissions: string[]): boolean {
-    return permissions.every(permission => this.permissions().includes(permission));
+    return permissions.every((permission) =>
+      this.permissions().includes(permission)
+    );
   }
 
   /**

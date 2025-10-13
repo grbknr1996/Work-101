@@ -1,4 +1,4 @@
-import { Injectable, inject, Injector } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, from, throwError, of } from 'rxjs';
 import { catchError, delay, map, tap } from 'rxjs/operators';
@@ -22,6 +22,7 @@ import { configuration } from '../../environments/environment';
 import { instanceType } from '../utils';
 import * as awsAmplify from 'aws-amplify';
 import { environment } from '../../environments/environment';
+import { MechanicsService } from './mechanics.service';
 
 export interface User {
   id: string;
@@ -45,8 +46,6 @@ export interface AuthState {
   providedIn: 'root',
 })
 export class AuthService {
-  private router = inject(Router);
-  private injector = inject(Injector);
   private authStateSubject = new BehaviorSubject<AuthState>({
     user: null,
     isAuthenticated: false,
@@ -60,7 +59,10 @@ export class AuthService {
 
   private tempUser: any = null; // Store user during challenges
 
-  constructor() {
+  constructor(
+    private router: Router,
+    private mechanicsService: MechanicsService
+  ) {
     Amplify.configure({
       Auth: {
         Cognito: {
@@ -190,19 +192,17 @@ export class AuthService {
           console.log('Current user:', currentUser);
 
           try {
-            const { MechanicsService } = await import('./mechanics.service');
-            const mechanicsService = this.injector.get(MechanicsService);
             const userAttributes = await fetchUserAttributes();
             const formattedUser = this.formatUserAttributes(userAttributes);
             const officeCode =
               formattedUser.officeCode ||
-              mechanicsService.getCurrentOffice() ||
+              this.mechanicsService.getCurrentOffice() ||
               'default';
 
             // Update MechanicsService with the office code using injector to avoid circular dependency
             try {
-              mechanicsService.setCurrentOfficeFromAuth(officeCode);
-              mechanicsService.setUserActualOffice(officeCode);
+              this.mechanicsService.setCurrentOfficeFromAuth(officeCode);
+              this.mechanicsService.setUserActualOffice(officeCode);
             } catch (error) {
               console.warn('Could not update MechanicsService:', error);
             }
@@ -228,11 +228,9 @@ export class AuthService {
 
             // Update MechanicsService with the office code using injector to avoid circular dependency
             try {
-              const { MechanicsService } = await import('./mechanics.service');
-              const mechanicsService = this.injector.get(MechanicsService);
-              mechanicsService.setCurrentOfficeFromAuth(officeCode);
+              this.mechanicsService.setCurrentOfficeFromAuth(officeCode);
               // Also set the user's actual office to preserve WIPO admin status
-              mechanicsService.setUserActualOffice(officeCode);
+              this.mechanicsService.setUserActualOffice(officeCode);
             } catch (error) {
               console.warn('Could not update MechanicsService:', error);
             }

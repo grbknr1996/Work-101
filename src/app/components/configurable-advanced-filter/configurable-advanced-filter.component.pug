@@ -1,0 +1,81 @@
+.filter-component-container
+  button.filter-button(
+    pButton,
+    type="button",
+    [label]="'common.components.advancedFilter.button'|translate",
+    icon="pi pi-search",
+    (click)="toggleFilter()",
+  )
+
+  // Filter Overlay
+  .advanced-search-overlay(*ngIf="visible")
+    .advanced-search-panel
+      .overflow-y-auto
+        .advanced-header
+          h1.advanced-header-text {{"common.components.advancedFilter.header"|translate}}
+      // Close Button - Positioned at top right corner
+      button.p-button-sm.close-button-overlay(
+        pButton,
+        type="button",
+        icon="pi pi-times",
+        [pTooltip]="'common.components.advancedFilter.close'|translate",
+        tooltipPosition="bottom",
+        tooltipStyleClass="text-xs px-2 py-1",
+        (click)="onClose()"
+      )
+
+      // Filter Content
+      .advanced-filter-content
+        div.space-y-2.category-box
+          label.category-title {{"common.components.advancedFilter.category"|translate}}
+          p-select.w-full([options]="categories", [(ngModel)]="selectedCategories", optionLabel="name")
+
+        .query-template-box
+          .query-template-header
+            h3 
+              i.pi.pi-briefcase(pButtonIcon) 
+              | &nbsp; {{"common.components.advancedFilter.template"|translate}}
+            .query-template-buttons
+              button.query-button-browse((click)="toggleTemplate()") {{"common.components.advancedFilter.browse"|translate}} ({{queryTemplates.length}})
+              button.query-button-save 
+                i.pi.pi-save(pButtonIcon)
+                | &nbsp; {{"common.components.advancedFilter.save"|translate}}
+
+          .query-templates.space-y-2
+            .template-box(*ngFor="let template of queryTemplates")
+              .template-alignment
+                .template-left
+                  .template-title-box
+                    .template-title {{template.title}}
+                    span.template-category {{template.category}}
+                  p.template-description {{template.description}}
+                  .template-date
+                    span.template-date-text {{"common.components.advancedFilter.created"|translate}}: {{template.created}}
+                    span.template-date-text {{"common.components.advancedFilter.lastUsed"|translate}}: {{template.lastUsed}}
+                .template-right
+                  button.query-button-load 
+                    i.pi.pi-copy(pButtonIcon)
+                    | &nbsp; {{"common.components.advancedFilter.load"|translate}}
+                  button.query-button-delete
+                    i.pi.pi-trash(pButtonIcon)
+
+          .query-button-clear
+            button.query-button-browse {{"common.components.advancedFilter.clear"|translate}}
+
+      // Action Buttons
+      .advanced-filter-actions
+        .flex.items-center.justify-end.gap-3.sticky.bottom-0
+          .action-buttons
+            button.p-button-outlined.p-button-secondary(
+              pButton,
+              type="button",
+              [label]="'common.components.advancedFilter.cancel'|translate",
+              (click)="onClose()"
+            )
+            button.p-button-primary(
+              pButton,
+              type="button",
+              [label]="'common.components.advancedFilter.search'|translate",
+              (click)="onApplyFilters()"
+            )
+
