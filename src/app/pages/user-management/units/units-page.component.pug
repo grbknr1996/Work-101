@@ -35,7 +35,8 @@ app-layout
         )
       
       .tree-container
-        app-units-tree#unitsTree(
+        app-units-tree(
+          #unitsTree,
           [searchText]="searchText",
           [filter]="false",
           (nodeSelected)="onNodeSelected($event)"
@@ -65,7 +66,8 @@ app-layout
         )
       
       .tree-container
-        app-units-tree#unitsTree(
+        app-units-tree(
+          #unitsTree,
           [searchText]="searchText",
           [filter]="false",
           (nodeSelected)="onNodeSelected($event)"
@@ -88,7 +90,8 @@ app-layout
       ng-container(*ngIf="selectedUnit; else noSelection")
         app-unit-details(
           [unit]="selectedUnit",
-          [unitCategory]="selectedUnitCategory"
+          [unitCategory]="selectedUnitCategory",
+          (unitUpdated)="onUnitUpdated()"
         )
       
       ng-template(#noSelection)

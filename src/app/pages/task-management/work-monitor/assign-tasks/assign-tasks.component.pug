@@ -69,7 +69,7 @@ app-layout
         [options]="unitWithMembers",
         optionLabel="unitName",
         optionValue="id",
-        [placeholder]="'taskManagement.assigntasks.placeholders.selectUnit' | translate",
+        [placeholder]="'taskManagement.assigntasks.labels.selectUnit' | translate",
         (onChange)="onUnitChange($event.value)"
       )
 
@@ -77,10 +77,10 @@ app-layout
     .flex.flex-col.flex-1
       label.block.text-sm.font-medium.mb-1 {{ 'taskManagement.assigntasks.labels.selectUser' | translate }}
       p-dropdown.w-full.border.rounded-md(
-        [options]="members"
-        optionLabel="name"
-        optionValue="id"
-        [placeholder]="'taskManagement.assigntasks.placeholders.selectUser' | translate"
+        [options]="members",
+        optionLabel="name",
+        optionValue="id",
+        [placeholder]="'taskManagement.assigntasks.labels.selectUser' | translate",
         [(ngModel)]="selectedMemberId",
         (onChange)="selectedMemberId = $event.value"
       )

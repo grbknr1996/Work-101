@@ -242,60 +242,75 @@ export const resizeImage = async (
  * Handle HTTP errors and show appropriate toast messages
  */
 export const handleError = (
-  error: any, 
-  operation: string, 
+  error: any,
+  operation: string,
   toastService: ToastService,
-  mechanicalService: MechanicsService): Observable<never> => {
-    let errorMessage = 'An unexpected error occurred';
+  mechanicalService: MechanicsService
+): Observable<never> => {
+  // Prefer server-provided i18n key if available
+  const serverKey: string | undefined =
+    error?.error?.i18nKey || error?.error?.messageKey;
 
-    if (error.status === 401) {
-        errorMessage = 'Authentication failed. Please log in again.';
-        toastService.showError('Authentication Error', errorMessage);
-    } else if (error.status === 403) {
-        errorMessage = "You don't have permission to perform this action.";
-        toastService.showError('Permission Denied', errorMessage);
-    } else if (error.status === 404) {
-        errorMessage = 'The requested resource was not found.';
-        toastService.showError('Not Found', errorMessage);
-    } else if (error.status === 0) {
-        errorMessage = 'Network error. Please check your connection.';
-        toastService.showError('Network Error', errorMessage);
-    } else if (error.status >= 500) {
-        errorMessage = 'Server error. Please try again later.';
-        toastService.showError('Server Error', errorMessage);
-    } else {
-        errorMessage =
-            error.message || error.error?.message || 'Unknown error occurred';
-        toastService.showError('Error', mechanicalService.translate(errorMessage));
-    }
+  // Title keys by status
+  let titleKey = 'common.components.modal.information';
+  if (error?.status === 403) {
+    titleKey = 'unauthorized.title'; // Access Denied
+  }
+  let messageKeyOrText: string = '';
 
-    console.error(`${operation} failed:`, error);
-    return throwError(() => new Error(mechanicalService.translate(errorMessage)));
-}
+  if (serverKey) {
+    messageKeyOrText = serverKey;
+  } else if (error?.status === 403) {
+    messageKeyOrText = 'error.response.code.message.403';
+  } else if (error?.status === 404) {
+    messageKeyOrText = 'error.response.code.message.404';
+  } else if (error?.status === 0) {
+    // No direct key in en.json; keep readable text, still pass through translate()
+    messageKeyOrText = 'error.response.code.message.0';
+  } else if (error?.status >= 500) {
+    messageKeyOrText = 'error.response.code.message.500';
+  } else if (error?.status === 401) {
+    messageKeyOrText = 'error.response.code.message.401';
+  } else {
+    messageKeyOrText =
+      error?.error?.message || error?.message || 'Unknown error occurred';
+  }
+
+  const translatedTitle =
+    mechanicalService.translate(titleKey) || 'Information';
+  const translatedMessage = mechanicalService.translate(messageKeyOrText);
+
+  toastService.showError(translatedTitle, translatedMessage);
+
+  console.error(`${operation} failed:`, error);
+  return throwError(() => new Error(translatedMessage));
+};
 
 /**
  * Get the authorization headers with Bearer token
  */
-export const getAuthHeaders = (authService: AuthService): Observable<HttpHeaders> => {
-    return authService.getEncodedTokens().pipe(
-        switchMap((tokens) => {
-            const officeCode = authService.getCurrentOfficeCode();
-            if (tokens && tokens.accessToken) {
-                const headers = new HttpHeaders({
-                    Authorization: `Bearer ${tokens.accessToken}`,
-                    'Content-Type': 'application/json',
-                    'wipo-platform-code': officeCode,
-                });
-                return of(headers);
-            } else {
-                console.error('No access token available');
-                // Return headers without authorization - this will likely result in a 401
-                const headers = new HttpHeaders({
-                    'Content-Type': 'application/json',
-                    'wipo-platform-code': officeCode,
-                });
-                return of(headers);
-            }
-        })
-    );
-}
+export const getAuthHeaders = (
+  authService: AuthService
+): Observable<HttpHeaders> => {
+  return authService.getEncodedTokens().pipe(
+    switchMap((tokens) => {
+      const officeCode = authService.getCurrentOfficeCode();
+      if (tokens && tokens.accessToken) {
+        const headers = new HttpHeaders({
+          Authorization: `Bearer ${tokens.accessToken}`,
+          'Content-Type': 'application/json',
+          'wipo-platform-code': officeCode,
+        });
+        return of(headers);
+      } else {
+        console.error('No access token available');
+        // Return headers without authorization - this will likely result in a 401
+        const headers = new HttpHeaders({
+          'Content-Type': 'application/json',
+          'wipo-platform-code': officeCode,
+        });
+        return of(headers);
+      }
+    })
+  );
+};

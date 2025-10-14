@@ -94,7 +94,14 @@
         "load": "Load",
         "clear": "Clear Current Search",
         "cancel": "Cancel",
-        "search": "Search"
+        "search": "Search",
+        "field": "Field",
+        "strategy": "Search Strategy",
+        "value": "Value",
+        "actions": "Actions",
+        "fieldPlaceholder": "Select Field",
+        "strategyPlaceholder": "Select Search Strategy",
+        "valuePlaceholder": "Enter the value to search"
       },
       "groupAssignment": {
         "title": "Group Assignment",
@@ -610,6 +617,10 @@
       "title": "Select Office",
       "placeHolder": "Select Office",
       "button": "Select Office"
+    },
+    "dataExchangeConfiguration": {
+      "title": "Data Exchange Configuration",
+      "sub_title": "Click on any of the cards above to navigate to the respective configuration section."
     }
   },
   "user": {
@@ -2048,9 +2059,11 @@
     "response": {
       "code": {
         "message": {
-          "500": "Unable to contact WIPO CASE system.",
-          "404": "Application is not yet loaded into WIPO CASE system.",
-          "403": "You are not authorized to use this service please contact to administrator."
+          "500": "Unable to contact WIPO IPAS system.",
+          "404": "Application is not yet loaded into WIPO IPAS system.",
+          "403": "You are not authorized to use this service please contact to administrator.",
+          "401": "Authentication failed. Please log in again.",
+          "0": "Network error. Please check your connection"
         }
       }
     },
@@ -2596,6 +2609,9 @@
       "collapseAllText": "Collapse all",
       "expandAllText": "Expand all",
       "deleteUnit": "Delete Unit",
+      "unitDeletedSuccess": "Unit deleted successfully",
+      "unitDeletedFailed": "Failed to delete unit. Please try again.",
+
       "createUnit": {
         "title": "Create New Unit",
         "type": "Type",
@@ -2695,6 +2711,7 @@
       "postFiling": "Post Filing",
       "officeDocuments": "Office Documents",
       "processName": "Process Name",
+      "approve": "Approve",
       "history": "History",
       "document": "View Document",
       "table": {
@@ -2721,7 +2738,9 @@
         "selectUserUnit": "Select User Unit",
         "selectUnit": "Select Unit",
         "selectUser": "Select User",
-        "actions": "Actions",
+        "actions": "Actions"
+      },
+      "buttons": {
         "confirm": "Confirm",
         "unassign": "Unassign"
       },
@@ -2807,6 +2826,12 @@
         "cancel": "Cancel",
         "submit": "Record"
       }
+    }
+  },
+  "systemConfiguration": {
+    "feeConfiguration": {
+      "title": "Filling Fees",
+      "search_label": "Search"
     }
   }
 }

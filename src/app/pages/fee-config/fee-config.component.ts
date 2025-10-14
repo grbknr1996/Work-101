@@ -336,7 +336,7 @@ export class FeeConfigComponent implements OnInit {
 
   onLocationChange(officeCode) {
     console.log(officeCode);
-    this.feeService.getFeesConditions(null, officeCode).subscribe((feeServices) => {
+    this.feeService.getFeesConditions(officeCode, null).subscribe((feeServices) => {
       this.feeBag = feeServices.requestBag[0].feeBag.map(fee => {
         if ("ipRightCategory" in fee)
           return fee;

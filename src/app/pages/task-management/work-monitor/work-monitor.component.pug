@@ -17,6 +17,12 @@ app-layout
               span.text-red-600 {{ 'taskManagement.workMonitor.pending' | translate }}: {{cat.pending}}
             .text-sm {{ 'taskManagement.workMonitor.averageAge' | translate }}: {{cat.avgAge}} {{ 'days' | translate }}
 
+    .col-span-2
+        echarts(
+          [options]="chartOptions",
+          style="width:640px;height:320px;"
+        )
+
   //- Filters Section
   .grid.grid-cols-6.mt-2
     .col-span-6.grid.grid-cols-12.filter

@@ -2799,12 +2799,12 @@ export class TaskManagementService {
 
     getCategoryStats(): Promise<CategoryStats[]> {
     return Promise.resolve([
-        { processName: 'Industrial Designs', total: 120, pending: 25, avgAge: 5 },
+        { processName: 'Industrial Designs', total: 120, pending: 25, avgAge: 15 },
         { processName: 'Patents', total: 80, pending: 10, avgAge: 3 },
-        { processName: 'Trademarks', total: 200, pending: 40, avgAge: 7 },
-        { processName: 'Other IP Registrations', total: 60, pending: 5, avgAge: 2 },
+        { processName: 'Trademarks', total: 200, pending: 40, avgAge: 17 },
+        { processName: 'Other IP Registrations', total: 60, pending: 5, avgAge: 22 },
         { processName: 'Post-filing', total: 95, pending: 15, avgAge: 4 },
-        { processName: 'Office Documents', total: 150, pending: 20, avgAge: 6 }
+        { processName: 'Office Documents', total: 150, pending: 20, avgAge: 36 }
     ]);
     }
 

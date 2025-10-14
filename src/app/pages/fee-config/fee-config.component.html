@@ -3,7 +3,7 @@
   <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
   <div class="floating-calculator" cdkDrag="" pToolTip="Calculator" toolTipPosition="left" (click)="openCalculator()"><i class="pi pi-calculator"></i></div>
   <div class="flex flex-row gap-2">
-    <h1 class="text-xl mt-2 ml-4 col-span-3">Filling Fees</h1>
+    <h1 class="text-xl mt-2 ml-4 col-span-3">{{ "systemConfiguration.feeConfiguration.title" | translate }}</h1>
     <p-select class="w-full md:w-56" (onChange)="onLocationChange($event.value.code)" [options]="docOrigins" [(ngModel)]="selectedLocation" optionLabel="name" placeholder="Select Location/Office"></p-select>
   </div>
   <div class="grid grid-cols-6 mt-2">
@@ -14,7 +14,7 @@
             <p-inputicon class="pi pi-search"></p-inputicon>
             <input class="w-full" id="on_label" pInputText="" [(ngModel)]="searchBar" autocomplete="off">
           </p-iconfield>
-          <label for="on_label">Search</label>
+          <label for="on_label">{{ "systemConfiguration.feeConfiguration.search_label" | translate }}</label>
         </p-floatlabel>
       </div>
       <div class="col-span-8 flex justify-end gap-2 filter-icons">
@@ -25,12 +25,12 @@
     </div>
   </div>
   <div class="mb-8 mt-1 w-full">
-    <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="true" [clearAllLabel]="'Clear All'" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-filter-chips>
+    <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="true" [clearAllLabel]="ms.translate('Clear All')" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-filter-chips>
     <div class="col-span-6">
       <p-tabs value="trademarks">
         <p-tablist>@for (category of categories; track category.ipRightCategory) {
           <p-tab [value]="category.ipRightCategory">
-            <div class="category-label">{{ category.ipRightCategory | capitalizeWords }}</div>
+            <div class="category-label">{{ category.ipRightCategory | capitalizeWords | translate }}</div>
             <p-badge [value]="category.count"></p-badge>
           </p-tab>}
         </p-tablist>
@@ -39,10 +39,10 @@
             <div class="col-span-3 mt-3">
               <p-card class="w-full">
                 <ng-template #header="">
-                  <h1>{{ service.feeDescription }}</h1>
+                  <h1>{{ service.feeDescription | translate }}</h1>
                 </ng-template>
-                <div class="text-base font-bold mb-2">{{ service.feeCategory }}</div>
-                <div class="text-xs">{{ service.documentOriginName }}</div>
+                <div class="text-base font-bold mb-2">{{ service.feeCategory | translate }}</div>
+                <div class="text-xs">{{ service.documentOriginName | translate }}</div>
                 <ng-template #footer="">
                   <div class="flex gap-4 mt-1">
                     <p-button class="w-full" size="small" severity="secondary" [outlined]="true" styleClass="w-full">Basic Fee {{ service.basicFeeUnitAmount }}$</p-button>

@@ -2,8 +2,8 @@
 <app-layout [config]="layoutConfig">
   <app-breadcrumbs [items]="getBreadcrumbItems()"></app-breadcrumbs>
   <div class="data-exchange-config-heading pb-10">
-    <h1>Data Exchange Configuration</h1>
-    <p>Click on any of the cards above to navigate to the respective configuration section.</p>
+    <h1>{{"dataService.dataExchangeConfiguration.title" | translate}}</h1>
+    <p>{{"dataService.dataExchangeConfiguration.sub_title" | translate}}</p>
   </div>
   <div class="summary-stats">
     <div class="stat-card" *ngFor="let card of summaryCards" (click)="onSummaryCardClick(card)" [style.cursor]="card.clickable ? 'pointer' : 'default'">

@@ -57,7 +57,6 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
   // Permissions and actions
   availablePermissions: any[] = [];
-  selectedPermissions: any[] = [];
   processes: any[] = [];
   selectedActions: any[] = [];
 
@@ -132,21 +131,15 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
     // Initialize unit categories with translations
     this.unitCategories = [
       {
-        label: this.ms.translate(
-          'userManagement.units.createUnit.categories.division'
-        ),
+        label: this.ms.translate('userManagement.units.createUnit.categories.division'),
         value: 'Division',
       },
       {
-        label: this.ms.translate(
-          'userManagement.units.createUnit.categories.department'
-        ),
+        label: this.ms.translate('userManagement.units.createUnit.categories.department'),
         value: 'Department',
       },
       {
-        label: this.ms.translate(
-          'userManagement.units.createUnit.categories.section'
-        ),
+        label: this.ms.translate('userManagement.units.createUnit.categories.section'),
         value: 'Section',
       },
     ];
@@ -158,9 +151,7 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
         value: 'head',
       },
       {
-        label: this.ms.translate(
-          'userManagement.units.createUnit.roles.deputy'
-        ),
+        label: this.ms.translate('userManagement.units.createUnit.roles.deputy'),
         value: 'deputy',
       },
       {
@@ -171,7 +162,7 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
   }
 
   private setupBreadcrumbs() {
-    this.route.params.subscribe((params) => {
+    this.route.params.subscribe(params => {
       const officeCode = params['officeCode'] || 'default';
       const langCode = params['langCode'] || 'en';
 
@@ -190,9 +181,7 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
         },
       ];
 
-      const menuItems = this.menuService.generateUserManagementMenu(
-        this.router.url
-      );
+      const menuItems = this.menuService.generateUserManagementMenu(this.router.url);
       this.menuService.updateMenuItems(menuItems);
       this.layoutConfig = {
         sidebarItems: menuItems,
@@ -202,19 +191,13 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
   private setupFormValidation() {
     // Watch for unit category changes to show/hide parent unit fields
-    this.unitForm.get('unitCategory')?.valueChanges.subscribe((category) => {
+    this.unitForm.get('unitCategory')?.valueChanges.subscribe(category => {
       if (category === 'Department') {
-        this.unitForm
-          .get('divisionUnitId')
-          ?.setValidators([Validators.required]);
+        this.unitForm.get('divisionUnitId')?.setValidators([Validators.required]);
         this.unitForm.get('departmentUnitId')?.clearValidators();
       } else if (category === 'Section') {
-        this.unitForm
-          .get('divisionUnitId')
-          ?.setValidators([Validators.required]);
-        this.unitForm
-          .get('departmentUnitId')
-          ?.setValidators([Validators.required]);
+        this.unitForm.get('divisionUnitId')?.setValidators([Validators.required]);
+        this.unitForm.get('departmentUnitId')?.setValidators([Validators.required]);
       } else {
         this.unitForm.get('divisionUnitId')?.clearValidators();
         this.unitForm.get('departmentUnitId')?.clearValidators();
@@ -231,11 +214,9 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
   }
 
   private handleParentUnit() {
-    this.route.queryParams.subscribe((params) => {
+    this.route.queryParams.subscribe(params => {
       const parentId = params['parentId'];
       const parentCategory = params['parentCategory'];
-
-      console.log('Query params received:', { parentId, parentCategory });
 
       if (parentId && parentCategory) {
         // Set parent unit info for display (using ID initially, will be resolved later if needed)
@@ -244,7 +225,6 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
           category: parentCategory,
         };
 
-        console.log('Parent unit info set initially:', this.parentUnitInfo);
         this.stateService.updateParentUnitInfo(this.parentUnitInfo);
 
         // Set the appropriate parent unit field based on parent category
@@ -272,20 +252,15 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
     });
   }
 
-  private loadDivisionIdForSection(
-    departmentId: string,
-    shouldSubmit: boolean = false
-  ) {
+  private loadDivisionIdForSection(departmentId: string, shouldSubmit: boolean = false) {
     // Load division ID for sections
     if (shouldSubmit) {
       this.loading = true;
     }
 
     this.unitsService.getUnitDetails(departmentId, 'Department').subscribe({
-      next: (unitDetails) => {
-        console.log('Department details for section creation:', unitDetails);
+      next: unitDetails => {
         const divisionId = unitDetails.result.divisionUnitId;
-        console.log('Division ID from department:', divisionId);
 
         // Update the form with division ID
         this.unitForm.patchValue({
@@ -299,17 +274,12 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
           this.loading = false;
         }
       },
-      error: (error) => {
+      error: error => {
         this.loading = false;
-        console.warn(
-          'Could not fetch department details for division ID:',
-          error
-        );
+
         this.toastService.showError(
           this.ms.translate('userManagement.units.createUnit.messages.error'),
-          this.ms.translate(
-            'userManagement.units.createUnit.messages.failedToLoadParentDepartment'
-          )
+          this.ms.translate('userManagement.units.createUnit.messages.failedToLoadParentDepartment')
         );
       },
     });
@@ -330,42 +300,28 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
       divisionUnitId: formValue.divisionUnitId || '',
       // group IDs omitted for creation per requirement
       headUserID: String(this.assignedUsers.head[0].userId),
-      deputyHeadUsersId: this.assignedUsers.deputy.map((user) =>
-        String(user.userId)
-      ),
-      staffUsersId: this.assignedUsers.staff.map((user) => String(user.userId)),
-      headUserPermissions: this.rolePermissions.head.map((p) =>
-        Number(p.value || p)
-      ),
-      deputyHeadUserPermissions: this.rolePermissions.deputy.map((p) =>
-        Number(p.value || p)
-      ),
-      staffUserPermissions: this.rolePermissions.staff.map((p) =>
-        Number(p.value || p)
-      ),
-      headUserActionType: this.roleActions.head.map((action) => {
-        console.log('Head action:', action);
+      deputyHeadUsersId: this.assignedUsers.deputy.map(user => String(user.userId)),
+      staffUsersId: this.assignedUsers.staff.map(user => String(user.userId)),
+      headUserPermissions: this.rolePermissions.head.map(p => Number(p.value || p)),
+      deputyHeadUserPermissions: this.rolePermissions.deputy.map(p => Number(p.value || p)),
+      staffUserPermissions: this.rolePermissions.staff.map(p => Number(p.value || p)),
+      headUserActionType: this.roleActions.head.map(action => {
         const actionType = action?.actionType;
         if (!actionType) {
-          console.error('Head action missing actionType:', action);
           return '';
         }
         return String(actionType);
       }),
-      deputyHeadUserActionType: this.roleActions.deputy.map((action) => {
-        console.log('Deputy action:', action);
+      deputyHeadUserActionType: this.roleActions.deputy.map(action => {
         const actionType = action?.actionType;
         if (!actionType) {
-          console.error('Deputy action missing actionType:', action);
           return '';
         }
         return String(actionType);
       }),
-      staffUserActionType: this.roleActions.staff.map((action) => {
-        console.log('Staff action:', action);
+      staffUserActionType: this.roleActions.staff.map(action => {
         const actionType = action?.actionType;
         if (!actionType) {
-          console.error('Staff action missing actionType:', action);
           return '';
         }
         return String(actionType);
@@ -377,23 +333,12 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Log the request for debugging
-    console.log('Creating unit with request:', createRequest);
-    console.log('Assigned users:', this.assignedUsers);
-    console.log('Role permissions:', this.rolePermissions);
-    console.log('Role actions:', this.roleActions);
-    console.log('Head role actions details:', this.roleActions.head);
-    console.log('Deputy role actions details:', this.roleActions.deputy);
-    console.log('Staff role actions details:', this.roleActions.staff);
-
     this.unitsService.createUnit(createRequest).subscribe({
-      next: (response) => {
+      next: response => {
         this.loading = false;
         this.toastService.showSuccess(
           this.ms.translate('userManagement.units.createUnit.messages.success'),
-          this.ms.translate(
-            'userManagement.units.createUnit.messages.unitCreatedSuccess'
-          )
+          this.ms.translate('userManagement.units.createUnit.messages.unitCreatedSuccess')
         );
 
         // Clear the state after successful creation
@@ -402,14 +347,12 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
         // Navigate back to units list
         this.router.navigate(['../'], { relativeTo: this.route });
       },
-      error: (error) => {
+      error: error => {
         this.loading = false;
-        console.error('Error creating unit:', error);
+
         this.toastService.showError(
           this.ms.translate('userManagement.units.createUnit.messages.error'),
-          this.ms.translate(
-            'userManagement.units.createUnit.messages.failedToCreateUnit'
-          )
+          this.ms.translate('userManagement.units.createUnit.messages.failedToCreateUnit')
         );
       },
     });
@@ -420,15 +363,9 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
     if (category) {
       // Map category values to translation keys
       const categoryMap: { [key: string]: string } = {
-        Division: this.ms.translate(
-          'userManagement.units.createUnit.categories.division'
-        ),
-        Department: this.ms.translate(
-          'userManagement.units.createUnit.categories.department'
-        ),
-        Section: this.ms.translate(
-          'userManagement.units.createUnit.categories.section'
-        ),
+        Division: this.ms.translate('userManagement.units.createUnit.categories.division'),
+        Department: this.ms.translate('userManagement.units.createUnit.categories.department'),
+        Section: this.ms.translate('userManagement.units.createUnit.categories.section'),
       };
       return categoryMap[category] || category;
     }
@@ -442,6 +379,14 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
     this.selectedRoleIndex = index;
     this.selectedRole = this.roleLabels[index].value;
     this.selectedTabIndex = '0'; // Reset to Users tab when switching roles
+
+    // Ensure the role permissions array is initialized
+    if (!this.rolePermissions[this.selectedRole]) {
+      this.rolePermissions[this.selectedRole] = [];
+    }
+
+    // Force change detection by creating a new array reference
+    this.rolePermissions = { ...this.rolePermissions };
   }
 
   getRoleUserCount(role: string): number {
@@ -453,10 +398,6 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
   }
 
   // Permission and action methods
-  onSelectedPermissionsChange(permissions: any[]) {
-    this.selectedPermissions = permissions;
-    this.onRolePermissionChange(permissions);
-  }
 
   onSelectedActionsChange(actions: any[]) {
     this.selectedActions = actions;
@@ -464,31 +405,22 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
   loadPermissionSets() {
     if (this.permissionsLoaded) {
-      console.log('Permission sets already loaded:', this.availablePermissions);
       return; // Already loaded
     }
 
-    console.log('Loading permission sets...');
     // Load permission sets from API
     this.permissionSetService.getPermissionSets().subscribe({
-      next: (permissionSets) => {
-        this.availablePermissions = permissionSets.map((ps) => ({
+      next: permissionSets => {
+        this.availablePermissions = permissionSets.map(ps => ({
           label: ps.permissionSetName,
           value: ps.permissionSetId,
         }));
         this.permissionsLoaded = true;
-        console.log(
-          'Permission sets loaded from API:',
-          this.availablePermissions
-        );
       },
-      error: (error) => {
-        console.error('Failed to load permission sets:', error);
+      error: error => {
         this.toastService.showError(
           this.ms.translate('userManagement.units.createUnit.messages.error'),
-          this.ms.translate(
-            'userManagement.units.createUnit.messages.failedToLoadPermissionSets'
-          )
+          this.ms.translate('userManagement.units.createUnit.messages.failedToLoadPermissionSets')
         );
         this.permissionsLoaded = true;
       },
@@ -497,8 +429,7 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
   onTabChange(event: any) {
     // Handle both index-based and value-based tab changes
-    const tabValue =
-      event.value !== undefined ? event.value : event.index?.toString();
+    const tabValue = event.value !== undefined ? event.value : event.index?.toString();
     this.selectedTabIndex = tabValue;
 
     // Load permission sets when Permissions tab is selected
@@ -518,9 +449,24 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
     return this.rolePermissions[this.selectedRole];
   }
 
+  // Getter/setter for two-way binding with multiselect
+  get currentRolePermissions(): any[] {
+    // Ensure we always return an array, even if undefined
+    return this.rolePermissions[this.selectedRole] || [];
+  }
+
+  set currentRolePermissions(permissions: any[]) {
+    // Ensure the role permissions array exists
+    if (!this.rolePermissions[this.selectedRole]) {
+      this.rolePermissions[this.selectedRole] = [];
+    }
+    this.rolePermissions[this.selectedRole] = permissions || [];
+    // Save to state service for persistence
+    this.stateService.updateRolePermissions(this.rolePermissions);
+  }
+
   onRolePermissionChange(permissions: any[]) {
     this.rolePermissions[this.selectedRole] = permissions;
-    console.log(`Updated ${this.selectedRole} permissions:`, permissions);
     // Save to state service for persistence
     this.stateService.updateRolePermissions(this.rolePermissions);
   }
@@ -535,7 +481,7 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
   get cleanSelectedRolePermissions(): any[] {
     return this.rolePermissions[this.selectedRole].filter(
-      (permission) => permission != null && permission != undefined
+      permission => permission != null && permission != undefined
     );
   }
 
@@ -547,34 +493,26 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
     // Load process types and actions
     this.processActionService.getProcessTypes().subscribe({
-      next: (processTypes) => {
+      next: processTypes => {
         this.processTypes = processTypes;
-        console.log('Process types loaded:', processTypes);
       },
-      error: (error) => {
-        console.error('Failed to load process types:', error);
+      error: error => {
         this.toastService.showError(
           this.ms.translate('userManagement.units.createUnit.messages.error'),
-          this.ms.translate(
-            'userManagement.units.createUnit.messages.failedToLoadProcessTypes'
-          )
+          this.ms.translate('userManagement.units.createUnit.messages.failedToLoadProcessTypes')
         );
       },
     });
 
     this.processActionService.getGroupedActions().subscribe({
-      next: (groupedActions) => {
+      next: groupedActions => {
         this.groupedActions = groupedActions;
         this.actionsLoaded = true;
-        console.log('Grouped actions loaded:', groupedActions);
       },
-      error: (error) => {
-        console.error('Failed to load process actions:', error);
+      error: error => {
         this.toastService.showError(
           this.ms.translate('userManagement.units.createUnit.messages.error'),
-          this.ms.translate(
-            'userManagement.units.createUnit.messages.failedToLoadProcessActions'
-          )
+          this.ms.translate('userManagement.units.createUnit.messages.failedToLoadProcessActions')
         );
         this.actionsLoaded = true;
       },
@@ -584,9 +522,7 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
   getProcessTypeName(processTypeId: string): string {
     // Handle null or empty process type
     if (!processTypeId || processTypeId === 'null' || processTypeId === '') {
-      return this.ms.translate(
-        'userManagement.units.createUnit.processTypes.noteActions'
-      );
+      return this.ms.translate('userManagement.units.createUnit.processTypes.noteActions');
     }
 
     if (this.processTypes && this.processTypes.map) {
@@ -610,8 +546,7 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
   }
 
   toggleProcessType(processTypeId: string) {
-    this.expandedProcessTypes[processTypeId] =
-      !this.expandedProcessTypes[processTypeId];
+    this.expandedProcessTypes[processTypeId] = !this.expandedProcessTypes[processTypeId];
   }
 
   isProcessTypeExpanded(processTypeId: string): boolean {
@@ -625,7 +560,7 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
   onRoleActionChange(actions: any[]) {
     this.roleActions[this.selectedRole] = actions;
-    console.log(`Updated ${this.selectedRole} actions:`, actions);
+
     // Save to state service for persistence
     this.stateService.updateRoleActions(this.roleActions);
   }
@@ -640,7 +575,7 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
   get cleanSelectedRoleActions(): any[] {
     return this.roleActions[this.selectedRole].filter(
-      (action) => action != null && action != undefined
+      action => action != null && action != undefined
     );
   }
 
@@ -655,10 +590,9 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
       byProcessType: {} as { [key: string]: number },
     };
 
-    actions.forEach((action) => {
+    actions.forEach(action => {
       const processType = action.processType || 'null';
-      summary.byProcessType[processType] =
-        (summary.byProcessType[processType] || 0) + 1;
+      summary.byProcessType[processType] = (summary.byProcessType[processType] || 0) + 1;
     });
 
     return summary;
@@ -666,19 +600,19 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
   getSelectedActionsForProcessType(processTypeId: string): any[] {
     return this.cleanSelectedRoleActions.filter(
-      (action) => (action.processType || 'null') === processTypeId
+      action => (action.processType || 'null') === processTypeId
     );
   }
 
   getSelectedCountForProcessType(processTypeId: string): number {
     const actions = this.getProcessTypeActions(processTypeId);
-    return actions.filter((action) => this.isActionSelected(action)).length;
+    return actions.filter(action => this.isActionSelected(action)).length;
   }
 
   // Handle actions change from the process actions component
   onActionsChange(actions: any[]) {
     this.roleActions[this.selectedRole] = actions;
-    console.log('Actions changed for', this.selectedRole, ':', actions);
+
     // Save to state service for persistence
     this.stateService.updateRoleActions(this.roleActions);
   }
@@ -698,7 +632,7 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
     } else {
       const searchTerm = this.selectedActionsSearchTerm.toLowerCase();
       this.selectedActionsFiltered = actions.filter(
-        (action) =>
+        action =>
           action.actionTypeName.toLowerCase().includes(searchTerm) ||
           action.actionType.toLowerCase().includes(searchTerm)
       );
@@ -717,9 +651,7 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
   }
 
   getSelectedActionsTotalPages(): number {
-    return Math.ceil(
-      this.selectedActionsFiltered.length / this.selectedActionsPageSize
-    );
+    return Math.ceil(this.selectedActionsFiltered.length / this.selectedActionsPageSize);
   }
 
   onSelectedActionsPageChange(page: number) {
@@ -760,12 +692,8 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
     const currentActions = [...this.roleActions[this.selectedRole]];
 
     // Add actions that aren't already selected
-    actions.forEach((action) => {
-      if (
-        !currentActions.some(
-          (existing) => existing.actionType === action.actionType
-        )
-      ) {
+    actions.forEach(action => {
+      if (!currentActions.some(existing => existing.actionType === action.actionType)) {
         currentActions.push({
           actionType: action.actionType,
           actionTypeName: action.actionTypeName,
@@ -780,26 +708,26 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
   deselectAllActionsForProcessType(processTypeId: string) {
     const actions = this.getProcessTypeActions(processTypeId);
-    const actionTypes = actions.map((action) => action.actionType);
+    const actionTypes = actions.map(action => action.actionType);
 
     // Remove actions that belong to this process type
-    this.roleActions[this.selectedRole] = this.roleActions[
-      this.selectedRole
-    ].filter((action) => !actionTypes.includes(action.actionType));
+    this.roleActions[this.selectedRole] = this.roleActions[this.selectedRole].filter(
+      action => !actionTypes.includes(action.actionType)
+    );
 
     this.stateService.updateRoleActions(this.roleActions);
   }
 
   isActionSelected(action: ProcessAction): boolean {
     return this.roleActions[this.selectedRole].some(
-      (selected) => selected.actionType === action.actionType
+      selected => selected.actionType === action.actionType
     );
   }
 
   toggleAction(action: ProcessAction) {
     const currentActions = [...this.roleActions[this.selectedRole]];
     const existingIndex = currentActions.findIndex(
-      (existing) => existing.actionType === action.actionType
+      existing => existing.actionType === action.actionType
     );
 
     if (existingIndex > -1) {
@@ -827,10 +755,7 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
       // Validate unit category and parent relationships
       const formValue = this.unitForm.value;
-      if (
-        formValue.unitCategory === 'Department' &&
-        !formValue.divisionUnitId
-      ) {
+      if (formValue.unitCategory === 'Department' && !formValue.divisionUnitId) {
         return;
       }
 
@@ -859,7 +784,7 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
   }
 
   private markFormGroupTouched() {
-    Object.keys(this.unitForm.controls).forEach((key) => {
+    Object.keys(this.unitForm.controls).forEach(key => {
       const control = this.unitForm.get(key);
       control?.markAsTouched();
     });
@@ -909,20 +834,11 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
   }
 
   private subscribeToState() {
-    this.stateSubscription = this.stateService.state$.subscribe((state) => {
-      console.log('State subscription triggered:', state);
-      console.log(
-        'Current parentUnitInfo before state update:',
-        this.parentUnitInfo
-      );
-      console.log('State parentUnitInfo:', state.parentUnitInfo);
-
+    this.stateSubscription = this.stateService.state$.subscribe(state => {
       this.assignedUsers = { ...state.assignedUsers };
       this.parentUnitInfo = state.parentUnitInfo;
       this.rolePermissions = { ...state.rolePermissions };
       this.roleActions = { ...state.roleActions };
-
-      console.log('Parent unit info after state update:', this.parentUnitInfo);
 
       // Update form with saved data
       this.unitForm.patchValue(state.formData, { emitEvent: false });
@@ -931,15 +847,11 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
   private restoreState() {
     const currentState = this.stateService.getCurrentState();
-    console.log('Restoring state:', currentState);
-    console.log('Current parentUnitInfo before restore:', this.parentUnitInfo);
 
     this.assignedUsers = { ...currentState.assignedUsers };
     this.parentUnitInfo = currentState.parentUnitInfo;
     this.rolePermissions = { ...currentState.rolePermissions };
     this.roleActions = { ...currentState.roleActions };
-
-    console.log('Parent unit info after restore:', this.parentUnitInfo);
 
     // Restore form data
     this.unitForm.patchValue(currentState.formData, { emitEvent: false });

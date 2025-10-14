@@ -27,11 +27,7 @@ export class LoadingService {
     const defaultMessage = this.mechanicsService.translate(
       'common.components.table.loading'
     );
-    console.log(
-      `LoadingService: Showing loader with message: ${
-        message || defaultMessage
-      }`
-    );
+
     this.loadingSubject.next({
       isLoading: true,
       message: message || defaultMessage,
@@ -42,7 +38,6 @@ export class LoadingService {
    * Hide loading
    */
   hide(): void {
-    console.log('LoadingService: Hiding loader');
     this.loadingSubject.next({
       isLoading: false,
       message: '',

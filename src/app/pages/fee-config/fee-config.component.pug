@@ -10,7 +10,7 @@ app-layout
     i.pi.pi-calculator
   
   .flex.flex-row.gap-2
-    h1.text-xl.mt-2.ml-4.col-span-3 Filling Fees
+    h1.text-xl.mt-2.ml-4.col-span-3 {{ "systemConfiguration.feeConfiguration.title" | translate }}
     p-select(
       (onChange)="onLocationChange($event.value.code)",
       [options]="docOrigins",
@@ -32,7 +32,7 @@ app-layout
               [(ngModel)]="searchBar",
               autocomplete="off"
             )
-          label(for="on_label") Search
+          label(for="on_label") {{ "systemConfiguration.feeConfiguration.search_label" | translate }}
       
       .col-span-8.flex.justify-end.gap-2.filter-icons
         app-configurable-filter(
@@ -63,7 +63,7 @@ app-layout
     app-filter-chips(
       [appliedFilters]="appliedFilters",
       [showClearAll]="true",
-      [clearAllLabel]="'Clear All'",
+      [clearAllLabel]="ms.translate('Clear All')",
       [getDisplayValue]="getFilterDisplayValue.bind(this)",
       (chipRemove)="removeFilterChip($event)",
       (clearAll)="clearAllFilters()"
@@ -74,7 +74,7 @@ app-layout
         p-tablist
           | @for (category of categories; track category.ipRightCategory) {
           p-tab([value]="category.ipRightCategory")
-            .category-label {{ category.ipRightCategory | capitalizeWords }}
+            .category-label {{ category.ipRightCategory | capitalizeWords | translate }}
             p-badge([value]="category.count")
           | }
         
@@ -85,10 +85,10 @@ app-layout
             .col-span-3.mt-3
               p-card.w-full
                 ng-template(#header="")
-                  h1 {{ service.feeDescription }}
+                  h1 {{ service.feeDescription | translate }}
                 
-                .text-base.font-bold.mb-2 {{ service.feeCategory }}
-                .text-xs {{ service.documentOriginName }}
+                .text-base.font-bold.mb-2 {{ service.feeCategory | translate }}
+                .text-xs {{ service.documentOriginName | translate }}
                 
                 ng-template(#footer="")
                   .flex.gap-4.mt-1

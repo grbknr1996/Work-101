@@ -1,10 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { UnitNode } from 'src/app/_services/units.service';
-import {
-  AppLayoutComponent,
-  LayoutConfig,
-} from 'src/app/components/app-layout/app-layout.component';
+import { LayoutConfig } from 'src/app/components/app-layout/app-layout.component';
 import { MenuItem } from 'primeng/api';
 import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -98,6 +95,17 @@ export class UnitsPageComponent implements OnInit {
   closeMobileMenu() {
     if (this.isMobile) {
       this.showTree = false;
+    }
+  }
+
+  onUnitUpdated() {
+    // Refresh the units tree when a unit is updated
+    console.log('onUnitUpdated called, refreshing units tree...');
+    if (this.unitsTree) {
+      console.log('unitsTree found, calling refresh()');
+      this.unitsTree.refresh();
+    } else {
+      console.log('unitsTree not found!');
     }
   }
 }

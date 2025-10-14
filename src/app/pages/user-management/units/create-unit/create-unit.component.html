@@ -82,16 +82,16 @@
           <div class="grid">
             <div class="col-12">
               <label class="block mb-2 font-medium">{{ 'userManagement.units.permissionSets' | translate }}</label>
-              <p-multiSelect class="w-full" [options]="availablePermissions" [(ngModel)]="selectedPermissions" (onChange)="onRolePermissionChange($event.value)" optionLabel="label" [filter]="true" [placeholder]="'userManagement.units.selectPermissionSets' | translate" [panelStyle]="{minWidth: '600px', width: '80vw', maxWidth: '700px', maxHeight: '400px', overflowX: 'auto'}" [virtualScroll]="true" [virtualScrollItemSize]="34" [showToggleAll]="true" appendTo="body">
+              <p-multiSelect class="w-full" [options]="availablePermissions" [(ngModel)]="currentRolePermissions" [ngModelOptions]="{standalone: true}" (onChange)="onRolePermissionChange($event.value)" optionLabel="label" [filter]="true" [placeholder]="'userManagement.units.selectPermissionSets' | translate" [panelStyle]="{minWidth: '600px', width: '80vw', maxWidth: '700px', maxHeight: '400px', overflowX: 'auto'}" [virtualScroll]="true" [virtualScrollItemSize]="34" [showToggleAll]="true" appendTo="body">
                 <ng-template let-permission pTemplate="item">
                   <div class="flex items-center justify-between p-2 permission-item"><span class="font-semibold">{{ permission.label }}</span></div>
                 </ng-template>
               </p-multiSelect>
             </div>
             <div class="col-12 mt-4">
-              <div class="bg-gray-50 p-4 rounded-lg">
+              <div class="bg-gray-50 p-4 rounded-lg" *ngIf="getSelectedRolePermissions().length&gt;0">
                 <h4 class="font-semibold mb-4">{{ 'userManagement.units.selectedPermissions' | translate }}</h4>
-                <div class="flex flex-wrap gap-2"><span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs" *ngFor="let permission of selectedPermissions">{{ permission.label }}</span></div>
+                <div class="flex flex-wrap gap-2"><span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs" *ngFor="let permission of getSelectedRolePermissions()">{{ permission.label }}</span></div>
               </div>
             </div>
           </div>

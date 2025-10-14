@@ -54,6 +54,7 @@ export class WorkMonitorComponent implements OnInit {
     tableData: ProcessSummary[] = [];
     filterConfigs: FilterConfig[] = [];
     appliedFilters: FilterValue[] = [];
+    chartOptions: any;
 
 
     constructor(
@@ -92,12 +93,75 @@ export class WorkMonitorComponent implements OnInit {
     }
 
     ngOnInit() {
+
         if (this.processGroupByName.length) {
             this.activeTabIndex = 0;
         }
 
-        this.taskManagementService.getCategoryStats().then((data) => {
-            this.categoriess = data;
+        this.taskManagementService.getCategoryStats().then((stats) => {
+            this.categoriess = stats;
+            const categories = stats.map(s => s.processName);
+            const assignedData = stats.map(s => s.total - s.pending);
+            const unassignedData = stats.map(s => s.pending);
+            const avgAge = stats.map(s => s.avgAge);
+
+
+        this.chartOptions = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: { type: 'shadow' },
+                formatter: params => {
+                const category = params[0].axisValue;
+                const assigned = params.find(p => p.seriesName === 'Assigned')?.data ?? 0;
+                const unassigned = params.find(p => p.seriesName === 'Unassigned')?.data ?? 0;
+                const avgAge = params.find(p => p.seriesName === 'Average Age')?.data ?? 0;
+                const total = assigned + unassigned;
+                return `
+                    <b>${category}</b><br/>
+                    Total: ${total}<br/>
+                    <span style="color:#4caf50">Assigned: ${assigned}</span><br/>
+                    <span style="color:#f59e0b">Unassigned: ${unassigned}</span></br>
+                    <span style="color:#3f51b5">Average Age: ${avgAge} days</span>
+                `;
+                }
+            },
+            xAxis: {
+                type: 'category',
+                data: categories,
+                axisLabel: { rotate: 30 }
+            },
+            yAxis: [
+                { type: 'value', name: 'Tasks' },
+                { type: 'value', name: 'Average Age (days)', position: 'right' }
+            ],
+            series: [
+                {
+                name: 'Assigned',
+                type: 'bar',
+                stack: 'total',
+                itemStyle: { color: '#4caf50' },
+                data: assignedData,
+                yAxisIndex: 0
+                },
+                {
+                name: 'Unassigned',
+                type: 'bar',
+                stack: 'total',
+                itemStyle: { color: '#f59e0b' },
+                data: unassignedData,
+                yAxisIndex: 0
+                },
+                {
+                name: 'Average Age',
+                type: 'line',
+                smooth: true,
+                data: avgAge,
+                itemStyle: { color: '#3f51b5' },
+                lineStyle: { width: 3 },
+                yAxisIndex: 1
+                }
+            ]
+            };
         });
         // this.taskManagementService.getProcessSummaries().then((data) => {
         //   this.processSummaries = data;

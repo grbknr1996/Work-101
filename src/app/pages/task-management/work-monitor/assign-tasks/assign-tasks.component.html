@@ -39,11 +39,11 @@
   <div class="flex flex-wrap items-start gap-4" *ngIf="selectedTasks.length &gt; 0">
     <div class="flex flex-col flex-1">
       <label class="block text-sm font-medium mb-1">{{ 'taskManagement.assigntasks.labels.selectUnit' | translate }}</label>
-      <p-dropdown class="w-full border rounded-md" [options]="unitWithMembers" optionLabel="unitName" optionValue="id" [placeholder]="'taskManagement.assigntasks.placeholders.selectUnit' | translate" (onChange)="onUnitChange($event.value)"></p-dropdown>
+      <p-dropdown class="w-full border rounded-md" [options]="unitWithMembers" optionLabel="unitName" optionValue="id" [placeholder]="'taskManagement.assigntasks.labels.selectUnit' | translate" (onChange)="onUnitChange($event.value)"></p-dropdown>
     </div>
     <div class="flex flex-col flex-1">
       <label class="block text-sm font-medium mb-1">{{ 'taskManagement.assigntasks.labels.selectUser' | translate }}</label>
-      <p-dropdown class="w-full border rounded-md" [options]="members" optionLabel="name" optionValue="selectedMemberId" (onChange)="selectedMemberId = $event.value"></p-dropdown>
+      <p-dropdown class="w-full border rounded-md" [options]="members" optionLabel="name" optionValue="id" [placeholder]="'taskManagement.assigntasks.labels.selectUser' | translate" [(ngModel)]="selectedMemberId" (onChange)="selectedMemberId = $event.value"></p-dropdown>
     </div>
     <div class="flex flex-col flex-1">
       <label class="block text-sm font-medium mb-1">{{ 'taskManagement.assigntasks.labels.actions' | translate }}</label>

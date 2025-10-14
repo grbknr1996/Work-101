@@ -75,10 +75,6 @@ export class DashboardWidgetService {
             link: this.buildWidgetItemLink(item.link),
           }));
 
-        console.log(
-          `Widget "${widget.title}" items after filtering:`,
-          filteredItems
-        );
         return {
           ...widget,
           items: filteredItems,

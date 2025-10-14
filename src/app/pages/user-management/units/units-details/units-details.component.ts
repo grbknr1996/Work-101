@@ -1,6 +1,8 @@
 import {
   Component,
   Input,
+  Output,
+  EventEmitter,
   OnChanges,
   SimpleChanges,
   OnInit,
@@ -31,6 +33,7 @@ import { ProcessActionService } from 'src/app/_services/process-action.service';
 export class UnitDetailsComponent implements OnChanges, OnInit {
   @Input() unit: UnitNode | null = null;
   @Input() unitCategory: string = '';
+  @Output() unitUpdated = new EventEmitter<void>();
 
   unitForm: FormGroup;
 
@@ -368,6 +371,8 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
           this.isEditMode = false;
           // Reload the unit data to get the latest from server
           this.reloadUnitData();
+          // Emit event to notify parent component to refresh the tree
+          this.unitUpdated.emit();
         },
         error: (error) => {
           console.error('Error updating unit:', error);

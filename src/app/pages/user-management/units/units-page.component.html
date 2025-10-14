@@ -14,7 +14,7 @@
         <button class="p-button-sm p-button-primary" pButton icon="pi pi-plus" [label]="'userManagement.units.newRootUnit' | translate" (click)="createNewRootUnit()"></button>
       </div>
       <div class="tree-container">
-        <app-units-tree id="unitsTree" [searchText]="searchText" [filter]="false" (nodeSelected)="onNodeSelected($event)"></app-units-tree>
+        <app-units-tree #unitsTree [searchText]="searchText" [filter]="false" (nodeSelected)="onNodeSelected($event)"></app-units-tree>
       </div>
     </div>
     <!-- Mobile sidebar (mobile only)-->
@@ -27,7 +27,7 @@
         <button class="p-button-sm p-button-primary" pButton icon="pi pi-plus" [label]="'userManagement.units.newRootUnit' | translate" (click)="createNewRootUnit()"></button>
       </div>
       <div class="tree-container">
-        <app-units-tree id="unitsTree" [searchText]="searchText" [filter]="false" (nodeSelected)="onNodeSelected($event)"></app-units-tree>
+        <app-units-tree #unitsTree [searchText]="searchText" [filter]="false" (nodeSelected)="onNodeSelected($event)"></app-units-tree>
       </div>
     </div>
     <!-- Toggle button and divider (desktop only)-->
@@ -38,7 +38,7 @@
     <!-- Main content area - takes full width when tree is hidden-->
     <div class="main-content" [style.width]="showTree ? 'auto' : '100%'">
       <ng-container *ngIf="selectedUnit; else noSelection">
-        <app-unit-details [unit]="selectedUnit" [unitCategory]="selectedUnitCategory"></app-unit-details>
+        <app-unit-details [unit]="selectedUnit" [unitCategory]="selectedUnitCategory" (unitUpdated)="onUnitUpdated()"></app-unit-details>
       </ng-container>
       <ng-template #noSelection>
         <div class="no-selection-message">{{ 'userManagement.units.selectNodeToView' | translate }}</div>

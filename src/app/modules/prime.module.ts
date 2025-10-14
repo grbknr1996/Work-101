@@ -50,6 +50,7 @@ import { ScrollTopModule } from 'primeng/scrolltop';
 import { EditorModule } from 'primeng/editor';
 import { Listbox } from 'primeng/listbox';
 import { FieldsetModule } from 'primeng/fieldset';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 
 const PrimeNGModules: any[] = [
   //PrimeNG
@@ -100,7 +101,8 @@ const PrimeNGModules: any[] = [
   ScrollTopModule,
   EditorModule,
   Listbox,
-  FieldsetModule
+  FieldsetModule,
+  ToggleButtonModule
 ];
 
 @NgModule({

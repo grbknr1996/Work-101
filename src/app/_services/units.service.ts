@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.service';
 import { ToastService } from './toast.service';
 import { MechanicsService } from './mechanics.service';
+import { getAuthHeaders, handleError } from '../utils';
 
 export interface UserAssignment {
   userId: number;
@@ -182,69 +183,17 @@ export class UnitsService {
     private mechanicsService: MechanicsService
   ) {}
 
-  /**
-   * Handle HTTP errors and show appropriate toast messages
-   */
-  private handleError(error: any, operation: string): Observable<never> {
-    let errorMessage = 'An unexpected error occurred';
-
-    if (error.status === 401) {
-      errorMessage = 'Authentication failed. Please log in again.';
-      this.toastService.showError('Authentication Error', errorMessage);
-    } else if (error.status === 403) {
-      errorMessage = "You don't have permission to perform this action.";
-      this.toastService.showError('Permission Denied', errorMessage);
-    } else if (error.status === 404) {
-      errorMessage = 'The requested resource was not found.';
-      this.toastService.showError('Not Found', errorMessage);
-    } else if (error.status === 0) {
-      errorMessage = 'Network error. Please check your connection.';
-      this.toastService.showError('Network Error', errorMessage);
-    } else if (error.status >= 500) {
-      errorMessage = 'Server error. Please try again later.';
-      this.toastService.showError('Server Error', errorMessage);
-    } else {
-      errorMessage =
-        error.message || error.error?.message || 'Unknown error occurred';
-      this.toastService.showError('Error', errorMessage);
-    }
-
-    console.error(`${operation} failed:`, error);
-    return throwError(() => new Error(errorMessage));
-  }
+  // Centralized translated error handling provided by utils.handleError
 
   /**
    * Get the authorization headers with Bearer token
    */
-  private getAuthHeaders(): Observable<HttpHeaders> {
-    return this.authService.getEncodedTokens().pipe(
-      switchMap((tokens) => {
-        const officeCode = this.authService.getCurrentOfficeCode();
-        if (tokens && tokens.accessToken) {
-          const headers = new HttpHeaders({
-            Authorization: `Bearer ${tokens.accessToken}`,
-            'Content-Type': 'application/json',
-            'wipo-platform-code': officeCode,
-          });
-          return of(headers);
-        } else {
-          console.error('No access token available');
-          // Return headers without authorization - this will likely result in a 401
-          const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'wipo-platform-code': officeCode,
-          });
-          return of(headers);
-        }
-      })
-    );
-  }
 
   /**
    * Get units from API endpoint {{baseUrl}}/units/queries
    */
   getUnits(): Observable<UnitsQueryResponse> {
-    return this.getAuthHeaders().pipe(
+    return getAuthHeaders(this.authService).pipe(
       switchMap((headers) =>
         this.http.get<UnitsQueryResponse>(
           `${environment.backendUrl}/units/queries`,
@@ -253,7 +202,9 @@ export class UnitsService {
           }
         )
       ),
-      catchError((error) => this.handleError(error, 'Loading units'))
+      catchError((error) =>
+        handleError(error, '', this.toastService, this.mechanicsService)
+      )
     );
   }
 
@@ -265,7 +216,7 @@ export class UnitsService {
     unitId: string,
     unitCategory: UnitCategory
   ): Observable<UnitDetailsResponse> {
-    return this.getAuthHeaders().pipe(
+    return getAuthHeaders(this.authService).pipe(
       switchMap((headers) =>
         this.http.get<UnitDetailsResponse>(`${environment.backendUrl}/units`, {
           headers: headers,
@@ -276,7 +227,7 @@ export class UnitsService {
         })
       ),
       catchError((error) =>
-        this.handleError(error, `Loading unit details for ${unitId}`)
+        handleError(error, '', this.toastService, this.mechanicsService)
       )
     );
   }
@@ -286,7 +237,7 @@ export class UnitsService {
    * Based on API endpoint: {{baseUrl}}/units (POST)
    */
   createUnit(unitData: CreateUnitRequest): Observable<CreateUnitResponse> {
-    return this.getAuthHeaders().pipe(
+    return getAuthHeaders(this.authService).pipe(
       switchMap((headers) =>
         this.http.post<CreateUnitResponse>(
           `${environment.backendUrl}/units`,
@@ -296,7 +247,9 @@ export class UnitsService {
           }
         )
       ),
-      catchError((error) => this.handleError(error, 'Creating unit'))
+      catchError((error) =>
+        handleError(error, '', this.toastService, this.mechanicsService)
+      )
     );
   }
 
@@ -542,7 +495,7 @@ export class UnitsService {
   }
 
   deleteUnit(unitId: string, unitCategory: UnitCategory): Observable<boolean> {
-    return this.getAuthHeaders().pipe(
+    return getAuthHeaders(this.authService).pipe(
       switchMap((headers) =>
         this.http.delete(`${environment.backendUrl}/units`, {
           headers: headers,
@@ -553,14 +506,20 @@ export class UnitsService {
         })
       ),
       switchMap(() => {
-        this.toastService.showSuccess('Success', 'Unit deleted successfully');
+        this.toastService.showSuccess(
+          'Success',
+          this.mechanicsService.translate(
+            'userManagement.units.unitDeletedSuccess'
+          )
+        );
         return of(true);
       }),
       catchError((error) => {
-        console.error('Error deleting unit:', error);
         this.toastService.showError(
           'Error',
-          'Failed to delete unit. Please try again.'
+          this.mechanicsService.translate(
+            'userManagement.units.unitDeletedFailed'
+          )
         );
         return of(false);
       })
@@ -600,26 +559,41 @@ export class UnitsService {
         [],
     };
 
-    return this.getAuthHeaders().pipe(
+    return getAuthHeaders(this.authService).pipe(
       switchMap((headers) =>
-        this.http.put<CreateUnitResponse>(
+        this.http.put<any>(
           `${environment.backendUrl}/units/update`,
           updateRequest,
           {
             headers: headers,
+            observe: 'response', // This ensures we get the full response including status
           }
         )
       ),
       switchMap((response) => {
-        if (response.success) {
-          this.toastService.showSuccess('Success', 'Unit updated successfully');
+        // Handle both 200 (with body) and 204 (no content) responses
+        if (response.status === 204 || response.status === 200) {
+          this.toastService.showSuccess(
+            'Success',
+            this.mechanicsService.translate(
+              'userManagement.units.unitUpdatedSuccess'
+            )
+          );
           // Return the updated unit
           return of(unit);
-        } else {
-          throw new Error(response.message || 'Failed to update unit');
         }
+        // For other success status codes, still treat as success
+        this.toastService.showSuccess(
+          'Success',
+          this.mechanicsService.translate(
+            'userManagement.units.unitUpdatedSuccess'
+          )
+        );
+        return of(unit);
       }),
-      catchError((error) => this.handleError(error, 'Updating unit'))
+      catchError((error) =>
+        handleError(error, '', this.toastService, this.mechanicsService)
+      )
     );
   }
 

@@ -55,7 +55,7 @@ export class DataExchangeConfigComponent implements OnInit {
     this.langCode = this.route.snapshot.params['langCode'] || 'en';
 
     this.layoutConfig = {
-      appTitle: 'Data Exchange Configuration',
+      appTitle: this.ms.translate('Data Exchange Configuration'),
       showHeader: true,
       showSidebar: true,
       headerItems: [],

@@ -2,8 +2,8 @@ app-layout([config]="layoutConfig")
   app-breadcrumbs([items]="getBreadcrumbItems()")
   
   .data-exchange-config-heading.pb-10
-    h1 Data Exchange Configuration
-    p Click on any of the cards above to navigate to the respective configuration section.
+    h1 {{"dataService.dataExchangeConfiguration.title" | translate}}
+    p {{"dataService.dataExchangeConfiguration.sub_title" | translate}}
   .summary-stats
     .stat-card(
       *ngFor="let card of summaryCards",
