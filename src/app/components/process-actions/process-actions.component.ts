@@ -43,10 +43,7 @@ export class ProcessActionsComponent implements OnInit, OnDestroy, OnChanges {
 
   private subscriptions: Subscription = new Subscription();
 
-  constructor(
-    private processActionService: ProcessActionService,
-    private ms: MechanicsService
-  ) {}
+  constructor(private processActionService: ProcessActionService, private ms: MechanicsService) {}
 
   ngOnInit(): void {
     if (this.isEditMode) {
@@ -63,11 +60,7 @@ export class ProcessActionsComponent implements OnInit, OnDestroy, OnChanges {
       this.loadProcessActions();
     }
     // Refresh selection when inputs change
-    if (
-      changes['selectedRole'] ||
-      changes['selectedActions'] ||
-      changes['isEditMode']
-    ) {
+    if (changes['selectedRole'] || changes['selectedActions'] || changes['isEditMode']) {
       this.initializeSelectedActions();
     }
   }
@@ -79,14 +72,14 @@ export class ProcessActionsComponent implements OnInit, OnDestroy, OnChanges {
   private loadProcessActions(): void {
     this.subscriptions.add(
       this.processActionService.getGroupedActions().subscribe({
-        next: (grouped) => {
+        next: grouped => {
           this.groupedActions = grouped;
           this.processActions = Object.values(grouped).flat();
           this.actionsLoaded = true;
           // Now that metadata is available, rebuild the selected set mapping to models
           this.initializeSelectedActions();
         },
-        error: (error) => {
+        error: error => {
           console.error('Error loading process actions:', error);
           this.actionsLoaded = true;
         },
@@ -95,13 +88,13 @@ export class ProcessActionsComponent implements OnInit, OnDestroy, OnChanges {
 
     this.subscriptions.add(
       this.processActionService.getProcessTypes().subscribe({
-        next: (processTypes) => {
+        next: processTypes => {
           // Handle the API response structure: { id: "process-types", map: { "003": "Trademarks", ... } }
           if (processTypes && processTypes.map) {
             this.processTypes = processTypes.map;
           }
         },
-        error: (error) => {
+        error: error => {
           console.error('Error loading process types:', error);
         },
       })
@@ -109,26 +102,18 @@ export class ProcessActionsComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private initializeSelectedActions(): void {
-    const incoming = Array.isArray(this.selectedActions)
-      ? this.selectedActions
-      : [];
+    const incoming = Array.isArray(this.selectedActions) ? this.selectedActions : [];
     if (this.isEditMode) {
-      this.selectedActionsSet = new Set(
-        incoming.map((action) => this.getActionKey(action))
-      );
+      this.selectedActionsSet = new Set(incoming.map(action => this.getActionKey(action)));
       this.directSelectedActions = [];
     } else {
       // In view mode, render directly from provided actions, avoid API reliance
-      this.directSelectedActions = incoming.map((a) => ({
+      this.directSelectedActions = incoming.map(a => ({
         actionType: a.actionType,
         actionTypeName: a.actionTypeName || a.actionType,
-        processType:
-          a.processType ??
-          (typeof a.processType === 'string' ? a.processType : 'null'),
+        processType: a.processType || 'null',
       }));
-      this.selectedActionsSet = new Set(
-        this.directSelectedActions.map((a) => this.getActionKey(a))
-      );
+      this.selectedActionsSet = new Set(this.directSelectedActions.map(a => this.getActionKey(a)));
     }
   }
 
@@ -137,9 +122,7 @@ export class ProcessActionsComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getSelectedProcessTypeKeys(): string[] {
-    return this.getProcessTypeKeys().filter(
-      (key) => this.getSelectedCountForProcessType(key) > 0
-    );
+    return this.getProcessTypeKeys().filter(key => this.getSelectedCountForProcessType(key) > 0);
   }
 
   getProcessTypeName(processTypeId: string): string {
@@ -153,9 +136,7 @@ export class ProcessActionsComponent implements OnInit, OnDestroy, OnChanges {
 
     // Fallback: infer from incoming selectedActions (Unit Details provides processTypeName)
     const match = (this.selectedActions || []).find(
-      (a) =>
-        (a?.processType ?? 'null') === processTypeId &&
-        (a as any).processTypeName
+      a => (a?.processType ?? 'null') === processTypeId && (a as any).processTypeName
     ) as any;
     if (match && match.processTypeName) return match.processTypeName;
 
@@ -168,14 +149,14 @@ export class ProcessActionsComponent implements OnInit, OnDestroy, OnChanges {
 
   getSelectedActionsForProcessType(processTypeId: string): ProcessAction[] {
     const actions = this.getProcessTypeActions(processTypeId);
-    return actions.filter((action) => this.isActionSelected(action));
+    return actions.filter(action => this.isActionSelected(action));
   }
 
   // Read-only helpers (no metadata required)
   getReadOnlyProcessTypeKeys(): string[] {
     const keys = Array.from(
       new Set(
-        this.directSelectedActions.map((a) =>
+        this.directSelectedActions.map(a =>
           a.processType == null ? 'null' : String(a.processType)
         )
       )
@@ -186,7 +167,7 @@ export class ProcessActionsComponent implements OnInit, OnDestroy, OnChanges {
   getReadOnlyActionsForProcessType(processTypeId: string): any[] {
     const key = processTypeId == null ? 'null' : String(processTypeId);
     return this.directSelectedActions.filter(
-      (a) => (a.processType == null ? 'null' : String(a.processType)) === key
+      a => (a.processType == null ? 'null' : String(a.processType)) === key
     );
   }
 
@@ -221,7 +202,7 @@ export class ProcessActionsComponent implements OnInit, OnDestroy, OnChanges {
 
   selectAllActionsForProcessType(processTypeId: string): void {
     const actions = this.getProcessTypeActions(processTypeId);
-    actions.forEach((action) => {
+    actions.forEach(action => {
       const actionKey = this.getActionKey(action);
       this.selectedActionsSet.add(actionKey);
     });
@@ -230,7 +211,7 @@ export class ProcessActionsComponent implements OnInit, OnDestroy, OnChanges {
 
   deselectAllActionsForProcessType(processTypeId: string): void {
     const actions = this.getProcessTypeActions(processTypeId);
-    actions.forEach((action) => {
+    actions.forEach(action => {
       const actionKey = this.getActionKey(action);
       this.selectedActionsSet.delete(actionKey);
     });
@@ -239,24 +220,24 @@ export class ProcessActionsComponent implements OnInit, OnDestroy, OnChanges {
 
   getSelectedCountForProcessType(processTypeId: string): number {
     const actions = this.getProcessTypeActions(processTypeId);
-    return actions.filter((action) => this.isActionSelected(action)).length;
+    return actions.filter(action => this.isActionSelected(action)).length;
   }
 
   get cleanSelectedRoleActions(): any[] {
     return Array.from(this.selectedActionsSet)
-      .map((actionKey) => {
+      .map(actionKey => {
         const [actionType, processType] = actionKey.split('|');
         return this.processActions.find(
-          (action) =>
-            action.actionType === actionType &&
-            action.processType === processType
+          action =>
+            action.actionType === actionType && (action.processType || 'null') === processType
         );
       })
-      .filter((action) => action !== undefined);
+      .filter(action => action !== undefined);
   }
 
   private getActionKey(action: ProcessAction): string {
-    return `${action.actionType}|${action.processType}`;
+    const processType = action.processType || 'null';
+    return `${action.actionType}|${processType}`;
   }
 
   private emitActionsChange(): void {
