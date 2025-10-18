@@ -92,3 +92,10 @@ app-layout([config]="layoutConfig")
           (onLazyLoad)="onLazyLoad($event)",
           (sortChange)="onSort($event)"
         )
+
+  // Resend Verification Email Modal
+  app-modal(
+    [(visible)]="showResendVerificationModal",
+    [config]="resendVerificationModalConfig",
+    (visibleChange)="onResendVerificationModalClose()"
+  )

@@ -25,6 +25,7 @@ import {
 } from 'src/app/_services/user.service';
 import { finalize } from 'rxjs/operators';
 import { CardColumnDefinition } from 'src/app/components/table-card/table-card.component';
+import { ModalConfig } from 'src/app/components/modal/modal.component';
 
 @Component({
   selector: 'app-user-accounts',
@@ -102,6 +103,15 @@ export class UserAccountsComponent implements OnInit {
 
   // Card view column definitions with organized sections
   cardColumns: CardColumnDefinition[] = [];
+
+  // Modal properties for resend verification email
+  showResendVerificationModal = false;
+  resendVerificationModalConfig: ModalConfig = {
+    header: 'Information',
+    content: '',
+    showIcon: true,
+    showCloseButton: true,
+  };
 
   constructor(
     private menuService: SidebarMenuService,
@@ -702,10 +712,18 @@ export class UserAccountsComponent implements OnInit {
   }
 
   resendVerificationEmail(user: UserAccount) {
-    this.userService.resendVerificationEmail(user.loginId).subscribe(() => {
-      // Optionally reload data or show success message
-      console.log('Verification email sent successfully');
-    });
+    this.userService
+      .resendVerificationEmailWithModal(user.loginId, user.email)
+      .subscribe((result) => {
+        this.resendVerificationModalConfig = result.modalConfig;
+        this.showResendVerificationModal = true;
+        this.cdr.markForCheck();
+      });
+  }
+
+  onResendVerificationModalClose() {
+    this.showResendVerificationModal = false;
+    this.cdr.markForCheck();
   }
 
   onCreateUser() {

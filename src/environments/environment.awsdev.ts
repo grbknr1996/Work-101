@@ -13,12 +13,16 @@ export const environment = {
   ],
   env: 'awsdev',
   appUrl: 'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int',
-  dataServicesApi: 'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int',
+  dataServicesApi: 'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/data-services/v1/shared-packages',
+  feesConditionsUrl:
+    'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/services/v1/fees',
+  documentOriginsUrl:
+    'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/services/offices/configurations/document-origins',
   authApi: 'https://auth.iims.ipobs.dev.web1.wipo.int/oauth2/token',
   authApiUsername: '669h7kl059b8i246an6v455vja',
   authApiPassword: '9nso5vg4rmf7v1rfr6adjt4ncd6e4c5694ti71mp5pstg7h12li',
   configUrl:
-    'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/services//offices',
+    'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/services/offices',
   backendUrl:
     'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/services/users',
   cognito: {

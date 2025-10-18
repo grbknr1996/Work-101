@@ -14,6 +14,8 @@ import {
 import {
   ConfigurableFilterComponent,
 } from '../../components/configurable-filter/configurable-filter.component';
+import { AdvancedFilterQuery } from '../advanced-filter-query/advanced-filter-query.component';
+import { SearchCategory } from '../configurable-advanced-filter/configurable-advanced-filter.component';
 
 export interface FilterConfig {
   key: string;
@@ -88,7 +90,10 @@ export class ConfigurableFilterBarComponent {
   @Input() filterClearAll: boolean = true;
   @Input() showAdvancedSearch: boolean = false;
   @Input() showAdvancedSearchQuery: boolean = false;
-  @Input() selectedQuery;
+  @Input() selectedQuery: AdvancedFilterQuery | null = null;
+  @Input() category: string = "All";
+  @Input() categorySelection: boolean = false;
+  @Input() templateSelection: boolean = true;
 
   @Output() filterChange = new EventEmitter<FilterValue[]>();
   @Output() filterCleared = new EventEmitter<void>();

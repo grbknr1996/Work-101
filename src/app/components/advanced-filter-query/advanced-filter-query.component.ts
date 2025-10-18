@@ -1,26 +1,34 @@
 import { Component, Input } from '@angular/core';
 
 export interface FieldQueries {
+  selected?: boolean;
+  fieldId: string;
   field: string;
   field_label: string;
   connecting: string; 
   connecting_key: string;
   value: string;
   operator: string;
+  orOperator?: boolean;
 }
 
 export interface GroupQueries {
+  selected?: boolean;
   group: string;
   group_name: string;
   file_list: FieldQueries[];
   group_operator: string;
+  orOperator?: boolean;
 }
 
 export interface LevelQueries {
+  selected?: boolean;
   level: string;
+  levelId: string;
   level_name: string;
   group_list: GroupQueries[];
   level_operator: string;
+  orOperator?: boolean;
 }
 
 export interface AdvancedFilterQuery {

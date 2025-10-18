@@ -15,7 +15,7 @@ app-layout
       (onChange)="onLocationChange($event.value.code)",
       [options]="docOrigins",
       [(ngModel)]="selectedLocation", 
-      optionLabel="name", 
+      optionLabel="documentOriginName", 
       placeholder="Select Location/Office",
       class="w-full md:w-56"
     )
@@ -87,8 +87,7 @@ app-layout
                 ng-template(#header="")
                   h1 {{ service.feeDescription | translate }}
                 
-                .text-base.font-bold.mb-2 {{ service.feeCategory | translate }}
-                .text-xs {{ service.documentOriginName | translate }}
+                .text-base.font-bold.mb-2 {{ service.feeCategory | translate | capitalizeWords }}
                 
                 ng-template(#footer="")
                   .flex.gap-4.mt-1
@@ -97,10 +96,10 @@ app-layout
                       severity="secondary",
                       [outlined]="true",
                       styleClass="w-full"
-                    ) Basic Fee {{ service.basicFeeUnitAmount }}$
+                    ) Basic Fee {{ service.basicFeeUnitAmount }} {{ currencyCode }}
                     p-button.w-full(
                       size="small",
                       styleClass="w-full"
-                    ) Variable Fee {{ service.additionalFeeUnitAmount }}$
+                    ) Variable Fee {{ service.additionalFeeUnitAmount }} {{ currencyCode }}
             | }
           | }

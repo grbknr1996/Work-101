@@ -127,8 +127,8 @@ export class DataExchangeService {
         });
 
        
-        //const statusParams = status.map((s) => `status=${s}`).join('&');
-        const dataServicesUrl = `${environment.dataServicesApi}/shared-dates?platformCode=${platformCode}&sharedDateStart=${sharedDateStart}&sharedDateEnd=${sharedDateEnd}`;
+        const statusParams = status.map((s) => `status=${s}`).join('&');
+        const dataServicesUrl = `${environment.dataServicesApi}/shared-dates?platformCode=${platformCode}&sharedDateStart=${sharedDateStart}&sharedDateEnd=${sharedDateEnd}&${statusParams}`;
 
         return this.http
           .get<SharedPackageResponse[]>(dataServicesUrl, { headers })

@@ -1,5 +1,5 @@
 //ANGULAR CORE
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ViewChild, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 
@@ -9,6 +9,9 @@ import { MechanicsService } from 'src/app/_services/mechanics.service';
 
 //UTILITY
 import { UtilityService } from 'src/app/_services/utility.service';
+
+//CHART FILTER MODEL
+import { chartFilterConfig } from '../chart-filter/chart-filter.model';
 
 //CUSTOM INTERFACES
 import { LayoutConfig } from 'src/app/components/app-layout/app-layout.component';
@@ -27,6 +30,8 @@ import { ChartService } from '../chart.service';
   templateUrl: './origins.component.html'
 })
 export class OriginsComponent implements OnInit {
+  //ELEMENTS
+  @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
 
   //DI
   private http = inject(HttpClient);
@@ -53,13 +58,28 @@ export class OriginsComponent implements OnInit {
   currentIPCategory: string = '';
 
   fontFamily = '';
-  chartHeight: any;
+  chartHeight: any = 600;
+  chartWidth: any = 1100;
+  resizeObserver!: ResizeObserver;
   chartInstance: any;
   chartOption: any;
   chartLegendSelected: any;
   currentLegend1: string = 'R_NR';
   currentLegend2: string = 'accounted_application';
 
+  //COMMONS
+  filters!: chartFilterConfig[];
+  /*
+  filters: chartFilterConfig[] = [
+    { include: true, key: 'compare', type: 'checkbox', model: false },
+    { include: true, key: 'yearRange', type: 'yearrange', model: [new Date(), new Date()], minDate: new Date(), maxDate: new Date() },
+    { include: true, key: 'type', type: 'radio', model: 'M', options: [{ label: 'Male', value: 'M' }, { label: 'Female', value: 'F' }] },
+    { include: true, key: 'IPType', type: 'dropdown', model: 'D', options: [{ label: 'Breakfast', value: 'B' }, { label: 'Lunch', value: 'L' }, { label: 'Dinner', value: 'D' }] }
+  ];
+  */
+  showFilter: boolean = false;
+  //CHART-NAVBAR
+  onFilter() { this.showFilter = !this.showFilter; }
   onReset() {
     this.currentIPCategory = '';
     this.currentLegend1 = 'R_NR';
@@ -106,7 +126,7 @@ export class OriginsComponent implements OnInit {
         top: '15%',
         left: '15%',
         right: '15%',
-        bottom: '15%',
+        bottom: '10%',
         containLabel: true
       },
       xAxis: {
@@ -179,17 +199,19 @@ export class OriginsComponent implements OnInit {
     };
   }
   chartHeightFunc() { return this.chartHeight; }
-  chartWidthFunc() { return 1100; }
+  chartWidthFunc() { return this.chartWidth; }
+  resizeChartInDiv(chartDiv: HTMLElement) {
+    this.chartHeight = chartDiv.offsetHeight;
+    this.chartWidth = chartDiv.offsetWidth;
+    requestAnimationFrame(() => { if (this.chartInstance) this.chartInstance.resize(); });
+  }
 
   ngOnInit(): void {
     this.layout = {
       showHeader: true,
       headerItems: [],
       fixedHeader: true,
-      showSidebar: false,
-      sidebarItems: [],
-      fixedSidebar: false,
-      sidebarCollapsed: false
+      showSidebar: true
     };
     let officeCode = this.route.snapshot.params['officeCode'] || 'default';
     let langCode = this.route.snapshot.params['langCode'] || 'en';
@@ -236,6 +258,14 @@ export class OriginsComponent implements OnInit {
       this.getAccountedApplications();
       this.getActiveApplications();
     })
+  }
+  ngAfterViewInit() {
+    const chartDiv = this.chartContainer.nativeElement;
+    if (chartDiv) {
+      this.resizeObserver = new ResizeObserver(() => this.resizeChartInDiv(chartDiv));
+      this.resizeObserver.observe(chartDiv);
+      window.addEventListener('resize', () => this.resizeChartInDiv(chartDiv));
+    }
   }
 
   getAccountedApplications() {
@@ -294,9 +324,8 @@ export class OriginsComponent implements OnInit {
     }
 
     //DYNAMIC CHART HEIGHT
-    this.chartHeight = 500;
     this.chartHeightFunc();
-    setTimeout(() => { this.chartInstance.resize(); }, 1000);
+    this.chartWidthFunc();
 
     setTimeout(() => {
       //2DBAR
@@ -330,5 +359,10 @@ export class OriginsComponent implements OnInit {
     const interval = roundedMax / 5;
 
     return { max: roundedMax, interval: interval };
+  }
+
+  ngOnDestroy() {
+    if (this.resizeObserver) this.resizeObserver.disconnect();
+    window.removeEventListener('resize', () => this.resizeChartInDiv(this.chartContainer.nativeElement));
   }
 }

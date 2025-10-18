@@ -9,7 +9,6 @@ import {
 import { Router } from '@angular/router';
 // PrimeNG imports
 
-
 import { MenuItem } from 'primeng/api';
 
 // Components
@@ -18,6 +17,10 @@ import { MenuItem } from 'primeng/api';
 import { MechanicsService } from '../../_services/mechanics.service';
 import { QueryParamsService } from 'src/app/_services/queryParams.service';
 import { AuthService, User } from 'src/app/_services/auth.service';
+import {
+  UserService,
+  DetailedUserAccount,
+} from 'src/app/_services/user.service';
 import { Subscription } from 'rxjs';
 
 interface MobileMenuItem {
@@ -55,12 +58,14 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
   isWipoAdmin: boolean = false;
 
   private userSubscription: Subscription | null = null;
+  private hasFetchedUserDetails: boolean = false;
 
   constructor(
     public ms: MechanicsService,
     private router: Router,
     private qs: QueryParamsService,
-    private auth: AuthService
+    private auth: AuthService,
+    private userService: UserService
   ) {
     this.checkScreenSize();
     this.logo = this.ms.getLogo();
@@ -94,6 +99,9 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     try {
+      // Restore any previously persisted username early
+      this.restoreUserName();
+
       const pathSegments = window.location.pathname.split('/');
       if (pathSegments.length >= 3) {
         const officeCode = pathSegments[1];
@@ -117,10 +125,24 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
       this.userSubscription = this.auth.currentUser$.subscribe((user) => {
         this.currentUser = user;
         if (user) {
-          this.userName = user.name || user.email || 'User';
+          // Prefer stored/display name and avoid overwriting with raw login/email during navigation
+          const storedDisplayName = this.getStoredUserName();
+
+          this.userName =
+            this.userName ||
+            storedDisplayName ||
+            user.name ||
+            user.email ||
+            'User';
           this.userInitial = this.userName.charAt(0).toUpperCase();
           // Use MechanicsService to check WIPO admin status
           this.isWipoAdmin = this.ms.isCurrentUserWipoAdmin();
+
+          // Fetch detailed user info only once per session if no stored name
+          const loginIdentifier = user.name || user.email || '';
+          if (!storedDisplayName && !this.hasFetchedUserDetails) {
+            this.fetchAndSetUserName(loginIdentifier);
+          }
         } else {
           this.userName = 'Guest';
           this.userInitial = 'G';
@@ -360,5 +382,53 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       window.location.reload();
     }, 100); // Small delay to ensure the platform change is persisted
+  }
+
+  // User details persistence and retrieval
+  private persistUserName(name: string): void {
+    try {
+      localStorage.setItem('navbar.userName', name);
+    } catch {}
+  }
+
+  private getStoredUserName(): string | null {
+    try {
+      return localStorage.getItem('navbar.userName');
+    } catch {
+      return null;
+    }
+  }
+
+  private restoreUserName(): void {
+    try {
+      const stored = localStorage.getItem('navbar.userName');
+      if (stored) {
+        this.userName = stored;
+        this.userInitial = this.userName.charAt(0).toUpperCase();
+      }
+    } catch {}
+  }
+
+  private fetchAndSetUserName(loginIdentifier: string): void {
+    if (!loginIdentifier || this.hasFetchedUserDetails) {
+      return;
+    }
+
+    this.hasFetchedUserDetails = true;
+    this.userService.getUserAccount(loginIdentifier).subscribe({
+      next: (detail: DetailedUserAccount) => {
+        const resolvedName =
+          detail?.userName || detail?.loginId || this.userName;
+        if (resolvedName) {
+          this.userName = resolvedName;
+          this.userInitial = this.userName.charAt(0).toUpperCase();
+          this.persistUserName(this.userName);
+          this.initializeMenuItems();
+        }
+      },
+      error: () => {
+        // Keep existing display name; no action needed
+      },
+    });
   }
 }

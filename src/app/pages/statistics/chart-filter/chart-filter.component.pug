@@ -1,0 +1,56 @@
+//-FILTER BOX
+div(*ngIf="show", class="tw-filter-container bg-gray-100 p-4 w-full flex flex-col gap-6")
+
+    //-HEADER - TITLE | CLOSE | LINE
+    div(class="tw-filter-header pb-1 mb-1 flex justify-between items-center border-b border-gray-300")
+        span(class="tw-filter-title text-base font-semibold uppercase text-gray-800") {{ 'charts.statistics.filters.title' | translate }}
+        button(class="tw-filter-close block lg:hidden text-gray-600 hover:text-gray-800 text-xl", (click)="hide()")
+            i.pi.pi-times
+
+    //-FILTER OPTIONS
+    div(class="tw-filter-form grid grid-cols-1 md:grid-cols-3 lg:grid-cols-1 gap-4")
+        div(*ngFor="let filter of finalFilters", class="tw-filter-section flex flex-col w-full")
+
+            label(*ngIf="filter.type !== 'checkbox'", class="tw-filter-label text-base font-medium text-gray-800 mb-2") {{ filter.label }}
+
+            //-DROPDOWN
+            p-select(
+                *ngIf="filter.type === 'dropdown'",
+                [options]="filter.options",
+                [(ngModel)]="filter.model",
+                styleClass="w-full tw-filter-select"
+            )
+
+            //-YEAR RANGE
+            p-datepicker(
+                *ngIf="filter.type === 'yearrange'",
+                [(ngModel)]="filter.model",
+                selectionMode="range",
+                view="year",
+                dateFormat="yy",
+                [yearNavigator]="true",
+                [minDate]="filter.minDate",
+                [maxDate]="filter.maxDate",
+                [showIcon]="true",
+                [readonlyInput]="true",
+                class="tw-filter-datepicker w-full !flex",
+                styleClass="w-full flex-1"
+            )
+
+            //-CHECKBOX
+            div(*ngIf="filter.type === 'checkbox'", class="flex items-center space-x-2")
+                p-checkbox(
+                    [(ngModel)]="filter.model",
+                    [binary]="true"
+                )
+                label(class="text-sm text-gray-700") {{ filter.label }}
+
+            //-RADIO
+            div(*ngIf="filter.type === 'radio'", class="tw-filter-options flex flex-col gap-2")
+                div(*ngFor="let option of filter.options", class="tw-filter-option flex items-center space-x-2")
+                    p-radiobutton(
+                        [name]="filter.key",
+                        [value]="option.value",
+                        [(ngModel)]="filter.model"
+                    )
+                    label(class="tw-filter-option-label text-sm text-gray-700") {{ option.label }}

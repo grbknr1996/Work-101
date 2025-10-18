@@ -5,6 +5,8 @@ import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.service';
 import { ToastService } from './toast.service';
+import { MechanicsService } from './mechanics.service';
+import { ModalConfig } from '../components/modal/modal.component';
 
 export interface UserAccount {
   userName: string;
@@ -202,7 +204,8 @@ export class UserService {
   constructor(
     private http: HttpClient,
     private authService: AuthService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private ms: MechanicsService
   ) {}
 
   /**
@@ -692,14 +695,20 @@ export class UserService {
 
   /**
    * Resend verification email for unverified users
+   * Based on the API endpoint: {{baseUrl}}/emails/verification
    */
-  resendVerificationEmail(loginId: string): Observable<any> {
+  resendVerificationEmail(loginId: string, email: string): Observable<any> {
+    const payload = {
+      loginId: loginId,
+      email: email,
+    };
+
     return this.getAuthHeaders()
       .pipe(
         switchMap((headers) =>
-          this.http.post<any>(
-            `${environment.backendUrl}/users/${loginId}/resend-verification`,
-            {},
+          this.http.put<any>(
+            `${environment.backendUrl}/emails/verification`,
+            payload,
             {
               headers: headers,
             }
@@ -713,7 +722,7 @@ export class UserService {
         switchMap((response) => {
           this.toastService.showSuccess(
             'Success',
-            `Verification email sent successfully to ${loginId}`
+            `Verification email sent successfully to ${email}`
           );
           return of(response);
         })
@@ -732,6 +741,120 @@ export class UserService {
         })
       ),
       catchError((error) => this.handleError(error, 'Loading user statistics'))
+    );
+  }
+
+  /**
+   * Get modal configuration for resend verification email success
+   */
+  getResendVerificationSuccessModalConfig(email: string): ModalConfig {
+    const translatedMessage = this.ms
+      .translate('userManagement.userAccounts.resendVerificationEmailSuccess')
+      .replace('{{email}}', email);
+
+    return {
+      header: this.ms.translate('common.components.modal.success'),
+      content: translatedMessage,
+      showIcon: true,
+      iconClass: 'pi pi-check-circle',
+      iconColor: '#28a745',
+      iconSize: '3rem',
+      showCloseButton: true,
+
+      width: '500px',
+      buttons: [
+        {
+          label: this.ms.translate('common.components.modal.close'),
+          icon: 'pi pi-times',
+          class: 'p-button-secondary',
+          action: 'close',
+        },
+      ],
+    };
+  }
+
+  /**
+   * Get modal configuration for resend verification email failure
+   */
+  getResendVerificationErrorModalConfig(
+    email: string,
+    errorMessage: string
+  ): ModalConfig {
+    const translatedMessage = this.ms
+      .translate('userManagement.userAccounts.resendVerificationEmailError')
+      .replace('{{email}}', email)
+      .replace('{{errorMessage}}', errorMessage);
+
+    return {
+      header: this.ms.translate('common.components.modal.error'),
+      content: translatedMessage,
+      showIcon: true,
+      iconClass: 'pi pi-exclamation-triangle',
+      iconColor: '#dc3545',
+      iconSize: '3rem',
+      showCloseButton: true,
+
+      width: '500px',
+      buttons: [
+        {
+          label: this.ms.translate('common.components.modal.close'),
+          icon: 'pi pi-times',
+          class: 'p-button-secondary',
+          action: 'close',
+        },
+      ],
+    };
+  }
+
+  /**
+   * Resend verification email with modal response handling
+   * This method returns both the API response and modal configuration
+   */
+  resendVerificationEmailWithModal(
+    loginId: string,
+    email: string
+  ): Observable<{
+    success: boolean;
+    modalConfig: ModalConfig;
+    response?: any;
+    error?: any;
+  }> {
+    const payload = {
+      loginId: loginId,
+      email: email,
+    };
+
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) =>
+        this.http.put<any>(
+          `${environment.backendUrl}/emails/verification`,
+          payload,
+          {
+            headers: headers,
+          }
+        )
+      ),
+      switchMap((response) => {
+        return of({
+          success: true,
+          modalConfig: this.getResendVerificationSuccessModalConfig(email),
+          response: response,
+        });
+      }),
+      catchError((error) => {
+        const errorMessage =
+          error.error?.message ||
+          error.message ||
+          'An unexpected error occurred';
+        return of({
+          success: false,
+          modalConfig: this.getResendVerificationErrorModalConfig(
+            email,
+            errorMessage
+          ),
+          error: error,
+        });
+      })
     );
   }
 }

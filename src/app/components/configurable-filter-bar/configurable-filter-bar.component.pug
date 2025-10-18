@@ -22,7 +22,11 @@
           )
       .col-span-4.advanced-button
         div([style]="showAdvancedSearch? '' :'display:none' ")
-          app-configurable-advanced-filter
+          app-configurable-advanced-filter(
+            [category]="category", 
+            [categorySelection]="categorySelection", 
+            [templateSelection]="templateSelection"
+          )
       .col-span-4.flex.justify-end.gap-2.filter-icons
         p-button(
           *ngFor="let act of actions",
@@ -64,5 +68,5 @@
     (chipRemove)="removeFilterChip($event)",
     (clearAll)="clearAllFilters()"
   )
-.mt-1.w-full.app-advanced-filter-query([style]="showAdvancedSearchQuery? '' :'display:none' ")
+.mt-1.w-full.app-advanced-filter-query([style]="(showAdvancedSearchQuery || (selectedQuery != null) )? '' :'display:none' ")
   app-advanced-filter-query([selectedQuery]="selectedQuery")

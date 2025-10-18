@@ -8,14 +8,21 @@ import {
   OnInit,
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { UnitNode, UserAssignment, UnitsService } from 'src/app/_services/units.service';
+import {
+  UnitNode,
+  UserAssignment,
+  UnitsService,
+} from 'src/app/_services/units.service';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { GroupItem } from 'src/app/components/group-assignment/group-assignment.component';
 import { CreateUnitStateService } from 'src/app/_services/create-unit-state.service';
 import { ToastService } from 'src/app/_services/toast.service';
-import { PermissionSetService, PermissionSet } from 'src/app/_services/permission-set.service';
+import {
+  PermissionSetService,
+  PermissionSet,
+} from 'src/app/_services/permission-set.service';
 import { ProcessActionService } from 'src/app/_services/process-action.service';
 
 @Component({
@@ -77,18 +84,21 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
   };
 
   get selectedRole(): 'head' | 'deputy' | 'staff' {
-    return this.roleLabels[this.selectedRoleIndex].value as 'head' | 'deputy' | 'staff';
+    return this.roleLabels[this.selectedRoleIndex].value as
+      | 'head'
+      | 'deputy'
+      | 'staff';
   }
 
   get cleanSelectedPermissions(): any[] {
     return this.selectedPermissions.filter(
-      permission => permission != null && permission != undefined
+      (permission) => permission != null && permission != undefined
     );
   }
 
   get cleanSelectedRolePermissions(): any[] {
     return this.rolePermissions[this.selectedRole].filter(
-      permission => permission != null && permission != undefined
+      (permission) => permission != null && permission != undefined
     );
   }
 
@@ -127,9 +137,9 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
 
     // Load permission sets from API
     this.permissionSetService.getPermissionSets().subscribe({
-      next: permissionSets => {
+      next: (permissionSets) => {
         this.permissionSets = permissionSets;
-        this.availablePermissions = permissionSets.map(ps => ({
+        this.availablePermissions = permissionSets.map((ps) => ({
           label: ps.permissionSetName,
           value: ps.permissionSetId,
         }));
@@ -137,7 +147,7 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
         this.cleanSelectedPermissionsArray();
         console.log('Permission sets loaded:', this.availablePermissions);
       },
-      error: error => {
+      error: (error) => {
         console.error('Failed to load permission sets:', error);
         this.toastService.showError('Error', 'Failed to load permission sets.');
         this.permissionsLoaded = true;
@@ -189,10 +199,12 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
     }
 
     // Convert role permissions to the format expected by the multiselect
-    this.selectedPermissions = this.currentRolePermissions.map(permission => ({
-      label: permission.permissionSetName,
-      value: permission.permissionSetId,
-    }));
+    this.selectedPermissions = this.currentRolePermissions.map(
+      (permission) => ({
+        label: permission.permissionSetName,
+        value: permission.permissionSetId,
+      })
+    );
   }
 
   onTabChange(event: any) {
@@ -205,29 +217,32 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
   onPermissionSelectionChange(event: any) {
     // Filter out any null or undefined values
     this.selectedPermissions = event.value.filter(
-      permission => permission != null && permission != undefined
+      (permission) => permission != null && permission != undefined
     );
     console.log('Permission selection changed:', this.selectedPermissions);
 
     // Update the unit's role permissions
     if (this.unit) {
-      this.unit.rolePermissions[this.selectedRole] = this.selectedPermissions.map(permission => ({
-        isSystem: true, // Assuming these are system permissions
-        permissionSetId: permission.value,
-        permissionSetName: permission.label,
-      }));
+      this.unit.rolePermissions[this.selectedRole] =
+        this.selectedPermissions.map((permission) => ({
+          isSystem: true, // Assuming these are system permissions
+          permissionSetId: permission.value,
+          permissionSetName: permission.label,
+        }));
     }
   }
 
   private cleanSelectedPermissionsArray() {
     // Remove any null or undefined values from selectedPermissions
     this.selectedPermissions = this.selectedPermissions.filter(
-      permission => permission != null && permission != undefined
+      (permission) => permission != null && permission != undefined
     );
   }
 
   onRoleDropdownChange(event: any) {
-    const selectedIndex = this.roleLabels.findIndex(role => role.value === event.value.value);
+    const selectedIndex = this.roleLabels.findIndex(
+      (role) => role.value === event.value.value
+    );
     if (selectedIndex !== -1) {
       this.selectRole(selectedIndex);
     }
@@ -245,7 +260,10 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
 
   openAddUserDialog() {
     // For head role, if there's already a user, clear it first to allow changing
-    if (this.selectedRole === 'head' && this.getSelectedRoleUsers().length > 0) {
+    if (
+      this.selectedRole === 'head' &&
+      this.getSelectedRoleUsers().length > 0
+    ) {
       // Clear the existing head user to allow selection of a new one
       if (this.unit) {
         this.unit.roles.head = [];
@@ -281,7 +299,10 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
     if (index >= 0 && index < this.selectedPermissions.length) {
       const removedPermission = this.selectedPermissions[index];
       this.selectedPermissions.splice(index, 1);
-      this.toastService.showSuccess('Success', `Removed ${removedPermission.label} permission set`);
+      this.toastService.showSuccess(
+        'Success',
+        `Removed ${removedPermission.label} permission set`
+      );
     }
   }
 
@@ -344,7 +365,7 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
 
       // Call API to save the unit
       this.unitsService.updateUnit(this.unit).subscribe({
-        next: updatedUnit => {
+        next: (updatedUnit) => {
           console.log('Unit updated successfully:', updatedUnit);
           this.toastService.showSuccess('Success', 'Unit updated successfully');
           this.isEditMode = false;
@@ -353,9 +374,12 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
           // Emit event to notify parent component to refresh the tree
           this.unitUpdated.emit();
         },
-        error: error => {
+        error: (error) => {
           console.error('Error updating unit:', error);
-          this.toastService.showError('Error', 'Failed to update unit. Please try again.');
+          this.toastService.showError(
+            'Error',
+            'Failed to update unit. Please try again.'
+          );
         },
       });
     }
@@ -381,10 +405,13 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
 
     // Reload unit details from API
     this.unitsService.getUnitDetails(this.unit.id, unitCategory).subscribe({
-      next: unitDetails => {
+      next: (unitDetails) => {
         console.log('Unit data reloaded:', unitDetails);
         // Convert the API response to UnitNode format
-        this.unit = this.unitsService.convertUnitDetailsToUnitNode(unitDetails, unitCategory);
+        this.unit = this.unitsService.convertUnitDetailsToUnitNode(
+          unitDetails,
+          unitCategory
+        );
         // Reload the current role actions from the updated unit data
         this.mapActionsFromUnitData();
         // Update form with the latest unit name
@@ -392,7 +419,7 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
           unitName: this.unit.name,
         });
       },
-      error: error => {
+      error: (error) => {
         console.error('Error reloading unit data:', error);
         this.toastService.showError('Error', 'Failed to reload unit data.');
       },
@@ -425,9 +452,9 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
 
     this.toastService.showSuccess(
       'Success',
-      `${this.selectedRole === 'head' ? 'Set' : 'Added'} ${selectedUsers.length} user(s) to ${
-        this.selectedRole
-      } role`
+      `${this.selectedRole === 'head' ? 'Set' : 'Added'} ${
+        selectedUsers.length
+      } user(s) to ${this.selectedRole} role`
     );
   }
 
@@ -449,7 +476,7 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
 
     // Map head user group actions
     if (this.unit.roleActions?.head) {
-      this.roleActions.head = this.unit.roleActions.head.map(action => ({
+      this.roleActions.head = this.unit.roleActions.head.map((action) => ({
         actionType: action.actionType,
         actionTypeName: action.actionTypeName,
         processType: action.processType?.procTyp || null,
@@ -459,7 +486,7 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
 
     // Map deputy head group actions
     if (this.unit.roleActions?.deputy) {
-      this.roleActions.deputy = this.unit.roleActions.deputy.map(action => ({
+      this.roleActions.deputy = this.unit.roleActions.deputy.map((action) => ({
         actionType: action.actionType,
         actionTypeName: action.actionTypeName,
         processType: action.processType?.procTyp || null,
@@ -469,7 +496,7 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
 
     // Map staff group actions
     if (this.unit.roleActions?.staff) {
-      this.roleActions.staff = this.unit.roleActions.staff.map(action => ({
+      this.roleActions.staff = this.unit.roleActions.staff.map((action) => ({
         actionType: action.actionType,
         actionTypeName: action.actionTypeName,
         processType: action.processType?.procTyp || null,
@@ -491,29 +518,38 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
 
     // Map head user group permissions
     if (this.unit.rolePermissions?.head) {
-      this.rolePermissions.head = this.unit.rolePermissions.head.map(permission => ({
-        label: permission.permissionSetName,
-        value: permission.permissionSetId,
-      }));
+      this.rolePermissions.head = this.unit.rolePermissions.head.map(
+        (permission) => ({
+          label: permission.permissionSetName,
+          value: permission.permissionSetId,
+        })
+      );
     }
 
     // Map deputy head group permissions
     if (this.unit.rolePermissions?.deputy) {
-      this.rolePermissions.deputy = this.unit.rolePermissions.deputy.map(permission => ({
-        label: permission.permissionSetName,
-        value: permission.permissionSetId,
-      }));
+      this.rolePermissions.deputy = this.unit.rolePermissions.deputy.map(
+        (permission) => ({
+          label: permission.permissionSetName,
+          value: permission.permissionSetId,
+        })
+      );
     }
 
     // Map staff group permissions
     if (this.unit.rolePermissions?.staff) {
-      this.rolePermissions.staff = this.unit.rolePermissions.staff.map(permission => ({
-        label: permission.permissionSetName,
-        value: permission.permissionSetId,
-      }));
+      this.rolePermissions.staff = this.unit.rolePermissions.staff.map(
+        (permission) => ({
+          label: permission.permissionSetName,
+          value: permission.permissionSetId,
+        })
+      );
     }
 
-    console.log('Mapped role permissions from unit data:', this.rolePermissions);
+    console.log(
+      'Mapped role permissions from unit data:',
+      this.rolePermissions
+    );
   }
 
   // Process type methods are now handled by the process-actions component
@@ -525,7 +561,7 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
 
   get cleanSelectedRoleActions(): any[] {
     return this.roleActions[this.selectedRole].filter(
-      action => action != null && action != undefined
+      (action) => action != null && action != undefined
     );
   }
 

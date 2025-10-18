@@ -4,7 +4,7 @@
   <div class="floating-calculator" cdkDrag="" pToolTip="Calculator" toolTipPosition="left" (click)="openCalculator()"><i class="pi pi-calculator"></i></div>
   <div class="flex flex-row gap-2">
     <h1 class="text-xl mt-2 ml-4 col-span-3">{{ "systemConfiguration.feeConfiguration.title" | translate }}</h1>
-    <p-select class="w-full md:w-56" (onChange)="onLocationChange($event.value.code)" [options]="docOrigins" [(ngModel)]="selectedLocation" optionLabel="name" placeholder="Select Location/Office"></p-select>
+    <p-select class="w-full md:w-56" (onChange)="onLocationChange($event.value.code)" [options]="docOrigins" [(ngModel)]="selectedLocation" optionLabel="documentOriginName" placeholder="Select Location/Office"></p-select>
   </div>
   <div class="grid grid-cols-6 mt-2">
     <div class="col-span-6 grid grid-cols-12 filter">
@@ -41,12 +41,11 @@
                 <ng-template #header="">
                   <h1>{{ service.feeDescription | translate }}</h1>
                 </ng-template>
-                <div class="text-base font-bold mb-2">{{ service.feeCategory | translate }}</div>
-                <div class="text-xs">{{ service.documentOriginName | translate }}</div>
+                <div class="text-base font-bold mb-2">{{ service.feeCategory | translate | capitalizeWords }}</div>
                 <ng-template #footer="">
                   <div class="flex gap-4 mt-1">
-                    <p-button class="w-full" size="small" severity="secondary" [outlined]="true" styleClass="w-full">Basic Fee {{ service.basicFeeUnitAmount }}$</p-button>
-                    <p-button class="w-full" size="small" styleClass="w-full">Variable Fee {{ service.additionalFeeUnitAmount }}$</p-button>
+                    <p-button class="w-full" size="small" severity="secondary" [outlined]="true" styleClass="w-full">Basic Fee {{ service.basicFeeUnitAmount }} {{ currencyCode }}</p-button>
+                    <p-button class="w-full" size="small" styleClass="w-full">Variable Fee {{ service.additionalFeeUnitAmount }} {{ currencyCode }}</p-button>
                   </div>
                 </ng-template>
               </p-card>

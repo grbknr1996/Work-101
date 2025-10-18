@@ -47,7 +47,9 @@
         "information": "Information",
         "confirm": "Confirm",
         "cancel": "Cancel",
-        "update": "Update"
+        "update": "Update",
+        "error": "Error",
+        "success": "Success"
       },
       "table": {
         "loading": "Loading...",
@@ -101,7 +103,22 @@
         "actions": "Actions",
         "fieldPlaceholder": "Select Field",
         "strategyPlaceholder": "Select Search Strategy",
-        "valuePlaceholder": "Enter the value to search"
+        "valuePlaceholder": "Enter the value to search",
+        "toggle": {
+          "or": "OR",
+          "and": "AND",
+          "tooltip": "Click to switch between AND/OR"
+        },
+        "addFilterGroup": "Add Filter Group",
+        "saveTemplate": {
+          "title": "Save Query Template",
+          "templateName": "Template Name",
+          "description": "Description (Optional)",
+          "cancel": "Cancel",
+          "save": "Save Template",
+          "templatePlaceHolder": "Enter template name",
+          "descriptionPlaceHolder": "Describe what this template is for"
+        }
       },
       "groupAssignment": {
         "title": "Group Assignment",
@@ -2356,6 +2373,19 @@
   },
   "charts": {
     "statistics": {
+      "filters": {
+        "title": "CHART FILTERS",
+        "type": "APPLICATION TYPE",
+        "IPType": "IP TYPE",
+        "yearRange": "YEAR RANGE",
+        "origin": "ORIGIN",
+        "all": "All",
+        "typeOption1": "Accounted",
+        "typeOption2": "Active",
+        "typeOption3": "Inactive",
+        "originOption1": "Residents [Domestic]",
+        "originOption2": "Non-Residents [Foreign]"
+      },
       "commons": {
         "menu": "Statistics",
         "menu1": "Trends",
@@ -2415,6 +2445,8 @@
       "actions": "Actions",
       "editUser": "Edit User",
       "resendVerificationEmail": "Resend Verification Email",
+      "resendVerificationEmailSuccess": "Verification email has been sent successfully to {{email}}. Please check the email inbox and follow the instructions to verify the account.",
+      "resendVerificationEmailError": "Failed to send verification email to {{email}}. Error: {{errorMessage}}",
       "viewUser": "View User",
       "removeUser": "Remove User",
       "active": "Active",
@@ -2611,7 +2643,6 @@
       "deleteUnit": "Delete Unit",
       "unitDeletedSuccess": "Unit deleted successfully",
       "unitDeletedFailed": "Failed to delete unit. Please try again.",
-
       "createUnit": {
         "title": "Create New Unit",
         "type": "Type",

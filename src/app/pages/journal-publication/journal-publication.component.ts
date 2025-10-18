@@ -44,7 +44,7 @@ enum IpTypes {
 @Component({
   selector: 'app-journal-publication',
   standalone:false,
-  providers: [CapitalizeWordsPipe],
+  providers: [],
   templateUrl: './journal-publication.component.html',
 })
 export class JournalPublicationComponent implements OnInit, OnChanges {

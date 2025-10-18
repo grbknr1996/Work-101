@@ -108,10 +108,7 @@ export class TrendsComponent implements OnInit {
       showHeader: true,
       headerItems: [],
       fixedHeader: true,
-      showSidebar: false,
-      sidebarItems: [],
-      fixedSidebar: false,
-      sidebarCollapsed: false
+      showSidebar: true
     };
     let officeCode = this.route.snapshot.params['officeCode'] || 'default';
     let langCode = this.route.snapshot.params['langCode'] || 'en';

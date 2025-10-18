@@ -36,4 +36,6 @@
       </div>
     </div>
   </div>
+  <!-- Resend Verification Email Modal-->
+  <app-modal [(visible)]="showResendVerificationModal" [config]="resendVerificationModalConfig" (visibleChange)="onResendVerificationModalClose()"></app-modal>
 </app-layout>

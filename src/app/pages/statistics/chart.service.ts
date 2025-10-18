@@ -6,8 +6,8 @@ import { BehaviorSubject } from "rxjs";
 export class ChartService {
 
   //PROPERTIES
-  private currentID = new BehaviorSubject<number>(0);
-  private currentTheme = new BehaviorSubject<string>('OFFICE STATISTICS');
+  private currentID = new BehaviorSubject<number>(-1);
+  private currentTheme = new BehaviorSubject<string>('');
 
   getChartID() { return this.currentID.asObservable(); }
   getChartTheme() { return this.currentTheme.asObservable(); }

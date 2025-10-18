@@ -8,6 +8,9 @@ import { TranslateService } from '@ngx-translate/core';
 //SERVICE
 import { ChartService } from '../chart.service';
 
+//COMMONS USED
+import { MenuItem, SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
+
 @Component({
   standalone: false,
   selector: 'app-chart-navbar',
@@ -21,6 +24,8 @@ export class ChartNavbarComponent implements OnInit {
   private translate = inject(TranslateService);
   //SERVICE
   private chartService = inject(ChartService);
+  //COMMONS USED
+  private sidebarMenuService = inject(SidebarMenuService);
 
   //PROPERTIES
   currentID: number = -1;
@@ -32,13 +37,6 @@ export class ChartNavbarComponent implements OnInit {
   @Output() onReset = new EventEmitter<void>();
   filter() { this.onFilter.emit(); }
   reset() { this.onReset.emit(); }
-
-  setChartCommons(data: any) {
-    this.chartTopics.forEach((item: any) => {
-      this.router.navigate([data]);
-      //COMMONS SET IN CHART'S ngOnInit()
-    })
-  }
 
   constructor() { }
 
@@ -64,6 +62,47 @@ export class ChartNavbarComponent implements OnInit {
 
       this.chartService.getChartID().subscribe(data => { this.currentID = data; });
       this.chartService.getChartTheme().subscribe(data => { this.currentTheme = data; });
+
+      //SIDEBAR MENUS
+      const sidebarMenu: MenuItem[] = [
+        {
+          id: this.chartTopics[0].id,
+          label: this.chartTopics[0].title,
+          icon: this.chartTopics[0].icon,
+          routerLink: this.chartTopics[0].route
+        },
+        {
+          id: this.chartTopics[1].id,
+          label: this.chartTopics[1].title,
+          icon: this.chartTopics[1].icon,
+          routerLink: this.chartTopics[1].route
+        },
+        {
+          id: this.chartTopics[2].id,
+          label: this.chartTopics[2].title,
+          icon: this.chartTopics[2].icon,
+          routerLink: this.chartTopics[2].route
+        },
+        {
+          id: this.chartTopics[3].id,
+          label: this.chartTopics[3].title,
+          icon: this.chartTopics[3].icon,
+          routerLink: this.chartTopics[3].route
+        },
+        {
+          id: this.chartTopics[4].id,
+          label: this.chartTopics[4].title,
+          icon: this.chartTopics[4].icon,
+          routerLink: this.chartTopics[4].route
+        },
+        {
+          id: this.chartTopics[5].id,
+          label: this.chartTopics[5].title,
+          icon: this.chartTopics[5].icon,
+          routerLink: this.chartTopics[5].route
+        }
+      ];
+      this.sidebarMenuService.updateMenuItems(sidebarMenu);
     })
   }
 }

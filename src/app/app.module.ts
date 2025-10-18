@@ -111,7 +111,7 @@ import { MyPendingTasksComponent } from './pages/task-management/my-tasks/my-tas
 //Statistics Components
 import { StatisticsComponent } from './pages/statistics/statistics.component';
 import { ChartNavbarComponent } from './pages/statistics/chart-navbar/chart-navbar.component';
-
+import { ChartFilterComponent } from './pages/statistics/chart-filter/chart-filter.component';
 import { TrendsComponent } from './pages/statistics/trends/trends.component';
 import { OriginsComponent } from './pages/statistics/origins/origins.component';
 //-----
@@ -234,6 +234,7 @@ const WipoThemePreset = definePreset(Aura, {
     //Statistics Components
     StatisticsComponent,
     ChartNavbarComponent,
+    ChartFilterComponent,
     TrendsComponent,
     OriginsComponent,
     //-----
@@ -311,4 +312,4 @@ const WipoThemePreset = definePreset(Aura, {
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

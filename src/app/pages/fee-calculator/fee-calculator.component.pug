@@ -9,37 +9,58 @@ app-layout
                     p-select#locations.w-full(
                         [options]='docOrigins', 
                         [(ngModel)]='selectedLocation',
-                        optionLabel="name"
+                        optionLabel="documentOriginName"
                     )
                     label(for='locations') Location/Offices
                 p-floatlabel.col-span-4.mb-4(variant='on')
                     p-select#category.w-full(
                         [options]='categories', 
                         [(ngModel)]='selectedCategory',
-                        [disabled]="selectedLocation === null"
+                        optionLabel="label",
+                        [disabled]="selectedLocation === null",
+                        (onChange)="getFeeConditionsData()"
                     )
                     label(for='category') Category
                 p-floatlabel.col-span-4.mb-4(variant='on')
                     p-select#services.w-full(
-                        [options]='services', 
-                        [(ngModel)]='selectedService',
-                        [disabled]="selectedLocation === null"
+                        [options]="groupedFilings", 
+                        [(ngModel)]="selectedFileType",
+                        [group]="true",
+                        [disabled]="selectedLocation === null || selectedCategory === null",
+                        (onChange)="onSelectingService($event.value)"
                     )
-                    label(for='services') Services
+                        ng-template( let-group="", #group="")
+                            .flex.items-center
+                                i.filetype-group-icon(
+                                    class="pi pi-file-edit", 
+                                    style="color: slateblue"
+                                )
+                                .text-lg.font-bold {{ group.label }}
+                    label(for='services') Filing Type
             hr.mt-4.mb-4
-            p-table.mt-4([value]='services')
+            p-table.mt-4([value]='selectedServicesList')
                 ng-template(pTemplate='header')
                     tr
-                        th Fee
-                        th.text-right Unit(s)
+                        th.fee-column Fee
+                        th.units-column Unit(s)
+                        th Rate
                 ng-template(pTemplate='body', let-service='')
                     tr
-                        td {{ service.label }}
-                        td.text-right
-                            .flex.items-center.gap-2.justify-end
-                                button.p-button-sm.p-button-text(pButton='', icon='pi pi-minus', (click)='decreaseUnit(service)')
-                                | {{ service.units }}
+                        td.fee-column {{ service.label }}
+                        td
+                            .units-column.flex.items-center.gap-2
+                                button(
+                                    *ngIf="service.totalUnits === 1",
+                                    pButton='', icon='pi pi-trash', (click)='deleteItem(service)'
+                                ).p-button-sm.p-button-text
+                                button(
+                                    *ngIf="service.units > 1",
+                                    pButton='', icon='pi pi-minus', (click)='decreaseUnit(service)'
+                                ).p-button-sm.p-button-text
+                                | {{ service.totalUnits }}
                                 button.p-button-sm.p-button-text(pButton='', icon='pi pi-plus', (click)='increaseUnit(service)')
+                        td.font-bold {{ currencyCode }} {{ service.rate }} 
+                            span.additional-amount(*ngIf="(service.totalAdditionalRates) > service.rate") &#40; &plus;{{ service.totalAdditionalRates }} {{ currencyCode }} &#41;
             p-floatlabel.w-full.mt-4(variant='on')
                 p-select.w-full#discounts([options]='discountOptions', [(ngModel)]='selectedDiscount')
                 label(for='discounts') Available Discounts
@@ -49,20 +70,20 @@ app-layout
             .text-lg.pb-4 Summary
             .flex.justify-between.mb-4(*ngFor='let item of calculatedItems')
                 div {{ item.quantity }} X {{ item.label }}
-                .font-semibold {{ item.amount | currency:&apos;USD&apos; }}
+                .font-semibold {{ currencyCode }} {{ item.amount }}
             .flex.justify-between.mb-4.text-green-500(*ngFor='let discount of discounts')
                 div Discount &#64; {{ discount.rate }}%
-                div -{{ discount.amount | currency:&apos;USD&apos; }}
+                div -{{ currencyCode }} {{ discount.amount }}
             .flex.justify-between.mt-3
                 strong Subtotal
-                strong {{ subtotal | currency:&apos;USD&apos; }}
+                strong {{ currencyCode }} {{ subtotal }}
             .flex.justify-between.mt-2
                 span *Tax
-                span {{ tax | currency:&apos;USD&apos; }}
+                span {{ currencyCode }} {{ tax }}
             hr.mt-4.mb-4
             .flex.justify-between.text-xl.font-bold
                 span Total Including Tax
-                span {{ totalWithTax | currency:&apos;USD&apos; }}
+                span {{ currencyCode }} {{ totalWithTax }}
             .mt-4.p-3.bg-yellow-100.border-round
                 strong *Tax Details:
                 p Tax calculated at 18% on subtotal after discounts

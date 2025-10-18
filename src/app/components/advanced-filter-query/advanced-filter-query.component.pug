@@ -1,7 +1,7 @@
-p-fieldset.no-border-fieldset([legend]="'common.components.advancedFilter.query.header'|translate", [toggleable]="true", [collapsed]="true", [style]="selectedQuery != null? '' : 'display:none'")
+p-fieldset.no-border-fieldset([legend]="'common.components.advancedFilter.query.header'|translate", [toggleable]="true", [collapsed]="true", [style]="selectedQuery === null? 'display:none' : ''")
   .mb-6.query-box
     h3.query-header.mb-3(*ngIf="selectedQuery != null") {{"common.components.advancedFilter.query.queryUsed"|translate}}
-    div(*ngFor="let levelList of selectedQuery.levelList")
+    div(*ngFor="let levelList of selectedQuery?.levelList")
       div(*ngIf="levelList.level === '1'; else level2Block")
         div(*ngFor="let group_list of levelList.group_list")
             div.level1-margin

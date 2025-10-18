@@ -8,40 +8,39 @@
   )
 
   // Filter Overlay
-  .advanced-search-overlay(*ngIf="visible")
+  .advanced-search-overlay.overflow-y-auto(*ngIf="visible")
     .advanced-search-panel
-      .overflow-y-auto
-        .advanced-header
-          h1.advanced-header-text {{"common.components.advancedFilter.header"|translate}}
-      // Close Button - Positioned at top right corner
-      button.p-button-sm.close-button-overlay(
-        pButton,
-        type="button",
-        icon="pi pi-times",
-        [pTooltip]="'common.components.advancedFilter.close'|translate",
-        tooltipPosition="bottom",
-        tooltipStyleClass="text-xs px-2 py-1",
-        (click)="onClose()"
-      )
+      .advanced-header
+        h1.advanced-header-text {{"common.components.advancedFilter.header"|translate}}
+        // Close Button - Positioned at top right corner
+        button.p-button-sm.advanced-overlay-close(
+          pButton,
+          type="button",
+          icon="pi pi-times",
+          [pTooltip]="'common.components.advancedFilter.close'|translate",
+          tooltipPosition="bottom",
+          tooltipStyleClass="text-xs px-2 py-1",
+          (click)="onClose()"
+        )
 
       // Filter Content
       .advanced-filter-content
-        div.space-y-2.category-box
+        div.space-y-2.category-box(*ngIf="categorySelection")
           label.category-title {{"common.components.advancedFilter.category"|translate}}
-          p-select.w-full([options]="categories", [(ngModel)]="selectedCategories", optionLabel="name")
+          p-select.w-full([options]="categories", [(ngModel)]="selectedCategory", (onChange)="filterTemplates()", optionLabel="name")
 
-        .query-template-box
+        .query-template-box(*ngIf="templateSelection")
           .query-template-header
             h3 
               i.pi.pi-briefcase(pButtonIcon) 
               | &nbsp; {{"common.components.advancedFilter.template"|translate}}
             .query-template-buttons
               button.query-button-browse((click)="toggleTemplate()") {{"common.components.advancedFilter.browse"|translate}} ({{queryTemplates.length}})
-              button.query-button-save 
+              button.query-button-save((click)="openSaveTemplate()") 
                 i.pi.pi-save(pButtonIcon)
                 | &nbsp; {{"common.components.advancedFilter.save"|translate}}
 
-          .query-templates.space-y-2
+          .query-templates.space-y-2(*ngIf="templateVisible")
             .template-box(*ngFor="let template of queryTemplates")
               .template-alignment
                 .template-left
@@ -53,16 +52,132 @@
                     span.template-date-text {{"common.components.advancedFilter.created"|translate}}: {{template.created}}
                     span.template-date-text {{"common.components.advancedFilter.lastUsed"|translate}}: {{template.lastUsed}}
                 .template-right
-                  button.query-button-load 
+                  button.query-button-load((click)="loadTemplate(template.templateId)") 
                     i.pi.pi-copy(pButtonIcon)
                     | &nbsp; {{"common.components.advancedFilter.load"|translate}}
-                  button.query-button-delete
+                  button.query-button-delete((click)="deleteTemplate(template.templateId)") 
                     i.pi.pi-trash(pButtonIcon)
 
           .query-button-clear
-            button.query-button-browse {{"common.components.advancedFilter.clear"|translate}}
+            button.query-button-browse((click)="clearSearch()") {{"common.components.advancedFilter.clear"|translate}}
 
-      // Action Buttons
+        br
+
+        div(*ngFor="let level of levels; let k = index; let levellast = last")
+          div(*ngIf="level.level === '1'; else level2Block")
+            div(*ngFor="let group of level.group_list; let j = index; let grouplast = last")
+              .filter-group-box
+                .filter-group-content
+                  .filter-group-heading
+                    .relative
+                      input.filter-group-selection(type='checkbox', [value]="group.selected")
+                    .filter-group-name {{group.group_name}}
+                  button.filter-group-delete((click)="removeGroup(level.levelId,group.group)")
+                    i.pi.pi-times(pButtonIcon)
+                .grid.grid-cols-12.filter-group-header-text
+                  .col-span-3 {{"common.components.advancedFilter.field"|translate}}
+                  .col-span-3 {{"common.components.advancedFilter.strategy"|translate}}
+                  .col-span-3 {{"common.components.advancedFilter.value"|translate}}
+                  .col-span-3 {{"common.components.advancedFilter.actions"|translate}}
+                div(*ngFor="let file of group.file_list; let i = index; let last = last")
+                  .grid.grid-cols-12.filter-field-line
+                    .col-span-3
+                      p-select.filter-field-select([options]="fieldOptions", [(ngModel)]="file.field", [placeholder]="'common.components.advancedFilter.fieldPlaceholder'|translate", [group]="true")
+                        ng-template(let-group #grp)
+                          div.flex.items-center
+                            span {{grp.label}}
+                    .col-span-3
+                      p-select.filter-field-select([options]="queryOptions", [(ngModel)]="file.connecting_key", [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate", optionLabel="name")
+                    .col-span-3
+                      input.filter-field-value([placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate", [value]="file.value")
+                    .col-span-3.flex.gap-1
+                      button.filter-field-delete((click)="removeField(level.levelId, group.group, file.fieldId)")
+                        i.pi.pi-trash(pButtonIcon)
+                      button.filter-field-add(*ngIf="last", (click)="addField(level.levelId, group.group)")
+                        i.pi.pi-plus(pButtonIcon)
+                  .filter-operator-box(*ngIf="!last")
+                    p-togglebutton.filter-operator-button(*ngIf="group.file_list?.length === 2", [(ngModel)]="file.orOperator", [onLabel]="'common.components.advancedFilter.toggle.or'|translate", [offLabel]="'common.components.advancedFilter.toggle.and'|translate", [pTooltip]="'common.components.advancedFilter.toggle.tooltip'|translate")
+                    p-togglebutton.filter-operator-button(*ngIf="group.file_list?.length > 2", [(ngModel)]="file.orOperator", [onLabel]="'common.components.advancedFilter.toggle.or'|translate", [offLabel]="'common.components.advancedFilter.toggle.and'|translate",onIcon="pi pi-lock" ,offIcon="pi pi-lock", disabled="true")
+
+              .filter-group-operator(*ngIf="!grouplast")
+                p-togglebutton.filter-operator-button(*ngIf="level.group_list?.length === 2", [(ngModel)]="group.orOperator", [onLabel]="'common.components.advancedFilter.toggle.or'|translate", [offLabel]="'common.components.advancedFilter.toggle.and'|translate", [pTooltip]="'common.components.advancedFilter.toggle.tooltip'|translate")
+                p-togglebutton.filter-operator-button(*ngIf="level.group_list?.length > 2", [(ngModel)]="group.orOperator", [onLabel]="'common.components.advancedFilter.toggle.or'|translate", [offLabel]="'common.components.advancedFilter.toggle.and'|translate",onIcon="pi pi-lock" ,offIcon="pi pi-lock", disabled="true")
+
+            .filter-group-operator(*ngIf="!levellast")
+              p-togglebutton.filter-operator-button(*ngIf="levels?.length === 2", [(ngModel)]="level.orOperator", [onLabel]="'common.components.advancedFilter.toggle.or'|translate", [offLabel]="'common.components.advancedFilter.toggle.and'|translate", [pTooltip]="'common.components.advancedFilter.toggle.tooltip'|translate")
+              p-togglebutton.filter-operator-button(*ngIf="levels?.length > 2", [(ngModel)]="level.orOperator", [onLabel]="'common.components.advancedFilter.toggle.or'|translate", [offLabel]="'common.components.advancedFilter.toggle.and'|translate",onIcon="pi pi-lock" ,offIcon="pi pi-lock", disabled="true")
+
+
+          ng-template(#level2Block)
+            .filter-level-box
+              .filter-level-content
+                span.filter-level-title ( Grouped Logic ) - Level 1
+              .filter-level-header
+                .filter-level-header-content
+                  .relative
+                    input.filter-level-selection(type='checkbox', [value]="level.selected")
+                  span.filter-level-text Select for further grouping
+                button.filter-level-ungroup
+                  i.pi.pi-times(pButtonIcon)
+                  | Ungroup
+            
+              .space-y-4
+                div(*ngFor="let group of level.group_list; let j = index; let grouplast = last")
+                  .filter-group-box
+                    .filter-group-content
+                      .filter-group-heading
+                        .relative
+                          input.filter-group-selection(type='checkbox', [value]="group.selected")
+                        .filter-group-name {{group.group_name}}
+                      button.filter-group-delete((click)="removeGroup(level.levelId,group.group)")
+                        i.pi.pi-times(pButtonIcon)
+                    .grid.grid-cols-12.filter-group-header-text
+                      .col-span-3 {{"common.components.advancedFilter.field"|translate}}
+                      .col-span-3 {{"common.components.advancedFilter.strategy"|translate}}
+                      .col-span-3 {{"common.components.advancedFilter.value"|translate}}
+                      .col-span-3 {{"common.components.advancedFilter.actions"|translate}}
+                    div(*ngFor="let file of group.file_list; let i = index; let last = last")
+                      .grid.grid-cols-12.filter-field-line
+                        .col-span-3
+                          p-select.filter-field-select([options]="fieldOptions", [(ngModel)]="file.field", [placeholder]="'common.components.advancedFilter.fieldPlaceholder'|translate", [group]="true")
+                            ng-template(let-group #grp)
+                              div.flex.items-center
+                                span {{grp.label}}
+                        .col-span-3
+                          p-select.filter-field-select([options]="queryOptions", [(ngModel)]="file.connecting_key", [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate", optionLabel="name")
+                        .col-span-3
+                          input.filter-field-value([placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate", [value]="file.value")
+                        .col-span-3.flex.gap-1
+                          button.filter-field-delete((click)="removeField(level.levelId, group.group, file.fieldId)")
+                            i.pi.pi-trash(pButtonIcon)
+                          button.filter-field-add(*ngIf="last", (click)="addField(level.levelId, group.group)")
+                            i.pi.pi-plus(pButtonIcon)
+                      .filter-operator-box(*ngIf="!last")
+                        p-togglebutton.filter-operator-button(*ngIf="group.file_list?.length === 2", [(ngModel)]="file.orOperator", [onLabel]="'common.components.advancedFilter.toggle.or'|translate", [offLabel]="'common.components.advancedFilter.toggle.and'|translate", [pTooltip]="'common.components.advancedFilter.toggle.tooltip'|translate")
+                        p-togglebutton.filter-operator-button(*ngIf="group.file_list?.length > 2", [(ngModel)]="file.orOperator", [onLabel]="'common.components.advancedFilter.toggle.or'|translate", [offLabel]="'common.components.advancedFilter.toggle.and'|translate",onIcon="pi pi-lock" ,offIcon="pi pi-lock", disabled="true")
+
+                  .filter-group-operator(*ngIf="!grouplast")
+                    p-togglebutton.filter-operator-button(*ngIf="level.group_list?.length === 2", [(ngModel)]="group.orOperator", [onLabel]="'common.components.advancedFilter.toggle.or'|translate", [offLabel]="'common.components.advancedFilter.toggle.and'|translate", [pTooltip]="'common.components.advancedFilter.toggle.tooltip'|translate")
+                    p-togglebutton.filter-operator-button(*ngIf="level.group_list?.length > 2", [(ngModel)]="group.orOperator", [onLabel]="'common.components.advancedFilter.toggle.or'|translate", [offLabel]="'common.components.advancedFilter.toggle.and'|translate",onIcon="pi pi-lock" ,offIcon="pi pi-lock", disabled="true")
+
+            .filter-group-operator(*ngIf="!levellast")
+                  p-togglebutton.filter-operator-button(*ngIf="levels?.length === 2", [(ngModel)]="level.orOperator", [onLabel]="'common.components.advancedFilter.toggle.or'|translate", [offLabel]="'common.components.advancedFilter.toggle.and'|translate", [pTooltip]="'common.components.advancedFilter.toggle.tooltip'|translate")
+                  p-togglebutton.filter-operator-button(*ngIf="levels?.length > 2", [(ngModel)]="level.orOperator", [onLabel]="'common.components.advancedFilter.toggle.or'|translate", [offLabel]="'common.components.advancedFilter.toggle.and'|translate",onIcon="pi pi-lock" ,offIcon="pi pi-lock", disabled="true")
+
+        .filter-group-add-line
+            button.filter-group-add-button((click)="addGroup()")
+              i.pi.pi-plus(pButtonIcon)
+              | {{"common.components.advancedFilter.addFilterGroup"|translate}}
+
+        br
+        br
+        br
+        br
+        br
+        br
+        br
+        br
+
       .advanced-filter-actions
         .flex.items-center.justify-end.gap-3.sticky.bottom-0
           .action-buttons
@@ -79,3 +194,19 @@
               (click)="onApplyFilters()"
             )
 
+    .template-dialog-overlay(*ngIf="showSaveTemplate")
+      .template-dialog-container
+        .template-dialog-header
+          h2.template-dialog-title {{"common.components.advancedFilter.saveTemplate.title"|translate}}
+        .space-y-4
+          div
+            label {{"common.components.advancedFilter.saveTemplate.templateName"|translate}}
+            input.template-title-input(type="text", [placeholder]="'common.components.advancedFilter.saveTemplate.templatePlaceHolder'|translate", [(ngModel)]="templateTitle")
+          div
+            label {{"common.components.advancedFilter.saveTemplate.description"|translate}}
+            textarea.template-description-textarea([placeholder]="'common.components.advancedFilter.saveTemplate.descriptionPlaceHolder'|translate", [(ngModel)]="templateDescripton")
+          .template-button-group
+            button.p-button-secondary(pButton, type='button', (click)="closeSaveTemplate()") {{"common.components.advancedFilter.saveTemplate.cancel"|translate}}
+            button.p-button-primary(pButton, type='button', (click)="saveAsTemplate()") {{"common.components.advancedFilter.saveTemplate.save"|translate}}
+        button.template-close-button(type='button', (click)="closeSaveTemplate()")
+          i.pi.pi-times(pButtonIcon)

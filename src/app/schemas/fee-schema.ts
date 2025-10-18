@@ -16,7 +16,7 @@ export interface Fee {
 }
 
 export type FeeConditions = {
-  platformCode: string,
+  platformCode?: string,
   currencyCode: string,
   feePayableTotalAmount: number,
   feePayableTotalGrossAmount: number,
@@ -27,6 +27,7 @@ export type FeeConditions = {
 }
 
 type RequestBag = {
+  documentOriginCode: string,
   responseFeeCount: number,
   feeBag: FeeBag[]
 }
@@ -36,6 +37,7 @@ export type FeeBag = {
   feeCategory: string,
   feeTypeCode: string,
   feeDescription: string,
+  applicablePeriod?: string,
   basicFeeUnitAmount: number,
   basicFeeUnitQuantity: number,
   additionalFeeUnitAmount: number,
@@ -83,8 +85,13 @@ type DiscountBag = {
 }
 
 export type DocumentOrigins = {
-  id: string,
-  map: {
-    [key: string]: string
-  }
+  // id: string,
+  // map: {
+  //   [key: string]: string
+  // } 
+  documentOriginCode: string,
+  documentOriginName: string,
+  allowReceptionIndicator: boolean,
+  backfileIndicator: boolean,
+  efilingIndicator: boolean
 }

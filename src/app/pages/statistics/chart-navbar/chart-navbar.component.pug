@@ -1,27 +1,18 @@
-//- Title and Filters
-.mb-4.flex.justify-between.items-center.gap-3.p-3.rounded(style="background: #e5f3f7")
-    h3.text-lg.font-semibold {{ currentTheme }}
-
-    .flex.items-center.gap-3
-        //- app-configurable-filter(
-        //-     #configurableFilter,
-        //-     [filters]="filters"
-        //- )
-        button.p-button-text(
+//- CONTAINER
+div(class="tw-panel w-full p-3 sm:p-4 mb-4 bg-[#e5f3f7] flex flex-wrap justify-between items-center gap-3")
+    //- TITLE
+    h2(class="tw-title w-full sm:w-auto text-center sm:text-left text-sm md:text-lg lg:text-xl font-semibold") {{ currentTheme }}
+    //- FILTER + REFRESH
+    div(class="tw-buttons flex flex-wrap flex-col sm:flex-row gap-3 w-full sm:w-auto justify-center sm:justify-end")
+        button.p-button-text.tw-btn(
+            pButton,
+            icon="pi pi-sliders-h",
+            style="color: var(--p-button-outlined-secondary-color)",
+            (click)="filter()"
+        )
+        button.p-button-text.tw-btn(
             pButton,
             icon="pi pi-refresh",
             style="color: var(--p-button-outlined-secondary-color)",
             (click)="reset()"
         )
-
-//- Chart Topics Tab
-.mb-8.mt-1.w-full
-    .col-span-6
-        p-tabs([value]="currentID")
-            p-tablist
-                | @for (item of chartTopics; track item.id) {
-                p-tab([value]="item.id", (click)="setChartCommons(item.route)")
-                    .flex.items-center.gap-2
-                        i([class]="item.icon")
-                        .category-label {{ item.title }}
-                | }

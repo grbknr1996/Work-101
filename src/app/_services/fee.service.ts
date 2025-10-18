@@ -54,10 +54,10 @@ export class FeeService {
         );
     }
 
-    getDocumentOrigins(): Observable<DocumentOrigins> {
+    getDocumentOrigins(): Observable<DocumentOrigins[]> {
         return getAuthHeaders(this.authService).pipe(
             switchMap((headers) =>
-                this.http.get<DocumentOrigins>(`${environment.documentOriginsUrl}`, {
+                this.http.get<DocumentOrigins[]>(`${environment.documentOriginsUrl}`, {
                     headers: headers
                 })
             ),
@@ -65,1068 +65,20 @@ export class FeeService {
         );
     }
 
-    getAPIData(dataType): FeeConditions | DocumentOrigins {
+    getAPIData(dataType): FeeConditions | DocumentOrigins[] {
         if (dataType == "feeConditions") {
             return {
-                "platformCode": "vc",
                 "currencyCode": "USD",
                 "feePayableTotalAmount": 0.0,
                 "feePayableTotalGrossAmount": 0.0,
                 "feePayableTotalDiscountAmount": 0.0,
                 "feePayableTotalTaxAmount": 0.0,
-                "feeCalculationDate": "2025-09-22T12:05:24.130Z",
+                "feeCalculationDate": "2025-10-13T07:33:08.072Z",
                 "requestBag": [
                     {
-                        "responseFeeCount": 128,
+                        "documentOriginCode": "VC",
+                        "responseFeeCount": 87,
                         "feeBag": [
-                            {
-                                "feeId": "010",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "CLM",
-                                "feeDescription": "Patent-Regular",
-                                "basicFeeUnitAmount": 100.0,
-                                "basicFeeUnitQuantity": 10,
-                                "additionalFeeUnitAmount": 50.0,
-                                "additionalFeeUnitQuantity": 5,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "BF",
-                                "documentOriginName": "Back-File"
-                            },
-                            {
-                                "feeId": "039",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "PCL",
-                                "feeDescription": "Patent-AppType_AppSubType_NoOfClaims",
-                                "basicFeeUnitAmount": 200.0,
-                                "basicFeeUnitQuantity": 5,
-                                "additionalFeeUnitAmount": 50.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "BF",
-                                "documentOriginName": "Back-File"
-                            },
-                            {
-                                "feeId": "057",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent-Annuity (1-3)",
-                                "basicFeeUnitAmount": 100.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 100.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "BF",
-                                "documentOriginName": "Back-File",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    },
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 5.0,
-                                        "discountPercentage": null
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "058",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent Annuity (4-6)",
-                                "basicFeeUnitAmount": 150.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 150.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "BF",
-                                "documentOriginName": "Back-File",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    },
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 10.0,
-                                        "discountPercentage": null
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "10"
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "059",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent Annuity (10-12)",
-                                "basicFeeUnitAmount": 200.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 200.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "BF",
-                                "documentOriginName": "Back-File",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "060",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent Annuity (7-9)",
-                                "basicFeeUnitAmount": 250.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 250.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "BF",
-                                "documentOriginName": "Back-File",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    },
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "10"
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "040",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "DRW",
-                                "feeDescription": "Patent-AppType_NoOfDrawingImages",
-                                "basicFeeUnitAmount": 200.0,
-                                "basicFeeUnitQuantity": 5,
-                                "additionalFeeUnitAmount": 50.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "applicationSubCategoryCode": "NP",
-                                "applicationSubCategory": "National Patents",
-                                "documentOriginCode": "BF",
-                                "documentOriginName": "Back-File",
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "7"
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "043",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "PCL",
-                                "feeDescription": "Patent-AppSubType_NP_NoOfPriorityClaims",
-                                "basicFeeUnitAmount": 100.0,
-                                "basicFeeUnitQuantity": 10,
-                                "additionalFeeUnitAmount": 25.0,
-                                "additionalFeeUnitQuantity": 2,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "applicationSubCategoryCode": "NP",
-                                "applicationSubCategory": "National Patents",
-                                "documentOriginCode": "BF",
-                                "documentOriginName": "Back-File",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax1",
-                                        "taxDescription": "Corporate Tax",
-                                        "taxAmount": 15.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 5.0,
-                                        "discountPercentage": null
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 7.0,
-                                        "discountPercentage": null
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "044",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "CLM",
-                                "feeDescription": "Patent-AppSubType_UM_NoOfClaims",
-                                "basicFeeUnitAmount": 200.0,
-                                "basicFeeUnitQuantity": 2,
-                                "additionalFeeUnitAmount": 150.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "applicationSubCategoryCode": "NP",
-                                "applicationSubCategory": "National Patents",
-                                "documentOriginCode": "BF",
-                                "documentOriginName": "Back-File",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "10"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "047",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "DPG",
-                                "feeDescription": "Patent-AppSubType_NoOfDocumentPages",
-                                "basicFeeUnitAmount": 100.0,
-                                "basicFeeUnitQuantity": 2,
-                                "additionalFeeUnitAmount": 150.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "applicationSubCategoryCode": "NP",
-                                "applicationSubCategory": "National Patents",
-                                "documentOriginCode": "BF",
-                                "documentOriginName": "Back-File",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 7.0,
-                                        "discountPercentage": null
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 10.0,
-                                        "discountPercentage": null
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "045",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "CLM",
-                                "feeDescription": "Patent-AppSubType_PCTP_NoOfClaims",
-                                "basicFeeUnitAmount": 300.0,
-                                "basicFeeUnitQuantity": 2,
-                                "additionalFeeUnitAmount": 200.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "applicationSubCategoryCode": "PP",
-                                "applicationSubCategory": "PCT Patents",
-                                "documentOriginCode": "BF",
-                                "documentOriginName": "Back-File"
-                            },
-                            {
-                                "feeId": "011",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "DRW",
-                                "feeDescription": "Patent-Special drawings",
-                                "basicFeeUnitAmount": 0.0,
-                                "basicFeeUnitQuantity": 4,
-                                "additionalFeeUnitAmount": 2.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "applicationSubCategoryCode": "UM",
-                                "applicationSubCategory": "Utility Model",
-                                "documentOriginCode": "BF",
-                                "documentOriginName": "Back-File"
-                            },
-                            {
-                                "feeId": "010",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "CLM",
-                                "feeDescription": "Patent-Regular",
-                                "basicFeeUnitAmount": 100.0,
-                                "basicFeeUnitQuantity": 10,
-                                "additionalFeeUnitAmount": 50.0,
-                                "additionalFeeUnitQuantity": 5,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "V2",
-                                "documentOriginName": "St. Vincent & Grenadines (Tax)"
-                            },
-                            {
-                                "feeId": "039",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "PCL",
-                                "feeDescription": "Patent-AppType_AppSubType_NoOfClaims",
-                                "basicFeeUnitAmount": 200.0,
-                                "basicFeeUnitQuantity": 5,
-                                "additionalFeeUnitAmount": 50.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "V2",
-                                "documentOriginName": "St. Vincent & Grenadines (Tax)"
-                            },
-                            {
-                                "feeId": "057",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent-Annuity (1-3)",
-                                "basicFeeUnitAmount": 100.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 100.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "V2",
-                                "documentOriginName": "St. Vincent & Grenadines (Tax)",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    },
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 5.0,
-                                        "discountPercentage": null
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "058",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent Annuity (4-6)",
-                                "basicFeeUnitAmount": 150.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 150.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "V2",
-                                "documentOriginName": "St. Vincent & Grenadines (Tax)",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    },
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 10.0,
-                                        "discountPercentage": null
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "10"
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "059",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent Annuity (10-12)",
-                                "basicFeeUnitAmount": 200.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 200.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "V2",
-                                "documentOriginName": "St. Vincent & Grenadines (Tax)",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "060",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent Annuity (7-9)",
-                                "basicFeeUnitAmount": 250.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 250.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "V2",
-                                "documentOriginName": "St. Vincent & Grenadines (Tax)",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    },
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "10"
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "040",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "DRW",
-                                "feeDescription": "Patent-AppType_NoOfDrawingImages",
-                                "basicFeeUnitAmount": 200.0,
-                                "basicFeeUnitQuantity": 5,
-                                "additionalFeeUnitAmount": 50.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "applicationSubCategoryCode": "NP",
-                                "applicationSubCategory": "National Patents",
-                                "documentOriginCode": "V2",
-                                "documentOriginName": "St. Vincent & Grenadines (Tax)",
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "7"
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "043",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "PCL",
-                                "feeDescription": "Patent-AppSubType_NP_NoOfPriorityClaims",
-                                "basicFeeUnitAmount": 100.0,
-                                "basicFeeUnitQuantity": 10,
-                                "additionalFeeUnitAmount": 25.0,
-                                "additionalFeeUnitQuantity": 2,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "applicationSubCategoryCode": "NP",
-                                "applicationSubCategory": "National Patents",
-                                "documentOriginCode": "V2",
-                                "documentOriginName": "St. Vincent & Grenadines (Tax)",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax1",
-                                        "taxDescription": "Corporate Tax",
-                                        "taxAmount": 15.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 5.0,
-                                        "discountPercentage": null
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 7.0,
-                                        "discountPercentage": null
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "044",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "CLM",
-                                "feeDescription": "Patent-AppSubType_UM_NoOfClaims",
-                                "basicFeeUnitAmount": 200.0,
-                                "basicFeeUnitQuantity": 2,
-                                "additionalFeeUnitAmount": 150.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "applicationSubCategoryCode": "NP",
-                                "applicationSubCategory": "National Patents",
-                                "documentOriginCode": "V2",
-                                "documentOriginName": "St. Vincent & Grenadines (Tax)",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "10"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "047",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "DPG",
-                                "feeDescription": "Patent-AppSubType_NoOfDocumentPages",
-                                "basicFeeUnitAmount": 100.0,
-                                "basicFeeUnitQuantity": 2,
-                                "additionalFeeUnitAmount": 150.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "applicationSubCategoryCode": "NP",
-                                "applicationSubCategory": "National Patents",
-                                "documentOriginCode": "V2",
-                                "documentOriginName": "St. Vincent & Grenadines (Tax)",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 7.0,
-                                        "discountPercentage": null
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 10.0,
-                                        "discountPercentage": null
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "045",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "CLM",
-                                "feeDescription": "Patent-AppSubType_PCTP_NoOfClaims",
-                                "basicFeeUnitAmount": 300.0,
-                                "basicFeeUnitQuantity": 2,
-                                "additionalFeeUnitAmount": 200.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "applicationSubCategoryCode": "PP",
-                                "applicationSubCategory": "PCT Patents",
-                                "documentOriginCode": "V2",
-                                "documentOriginName": "St. Vincent & Grenadines (Tax)"
-                            },
-                            {
-                                "feeId": "011",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "DRW",
-                                "feeDescription": "Patent-Special drawings",
-                                "basicFeeUnitAmount": 0.0,
-                                "basicFeeUnitQuantity": 4,
-                                "additionalFeeUnitAmount": 2.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "applicationSubCategoryCode": "UM",
-                                "applicationSubCategory": "Utility Model",
-                                "documentOriginCode": "V2",
-                                "documentOriginName": "St. Vincent & Grenadines (Tax)"
-                            },
                             {
                                 "feeId": "001",
                                 "feeCategory": "registration fee",
@@ -1145,36 +97,7 @@ export class FeeService {
                                 "ipRightCategoryCode": "D",
                                 "ipRightCategory": "DESIGNS",
                                 "documentOriginCode": "VC",
-                                "documentOriginName": "St. Vincent & Grenadines",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    }
-                                ]
+                                "documentOriginName": "St. Vincent & Grenadines"
                             },
                             {
                                 "feeId": "004",
@@ -1203,7 +126,7 @@ export class FeeService {
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
@@ -1212,14 +135,14 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "VAT",
-                                        "taxDescription": "Global VAT",
+                                        "taxDescription": "VAT",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 10
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -1238,7 +161,7 @@ export class FeeService {
                                 "feeId": "023",
                                 "feeCategory": "registration fee",
                                 "feeTypeCode": "RED",
-                                "feeDescription": "UD-Renewal fee for Design Unit (RED|RDL)",
+                                "feeDescription": "UD-Renewal fee for Design Unit (RED| RDL)",
                                 "basicFeeUnitAmount": 100.0,
                                 "basicFeeUnitQuantity": 1,
                                 "additionalFeeUnitAmount": 5.0,
@@ -1260,15 +183,15 @@ export class FeeService {
                                 "taxBag": [
                                     {
                                         "taxId": "VAT",
-                                        "taxDescription": "Global VAT",
+                                        "taxDescription": "VAT",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 10
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
@@ -1277,7 +200,18 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
+                                    }
+                                ],
+                                "discountBag": [
+                                    {
+                                        "discountScheme": {
+                                            "discountCategory": "DID01",
+                                            "discountDescription": "SME",
+                                            "documentCode": "SME"
+                                        },
+                                        "discountAmount": 0.0,
+                                        "discountPercentage": "5"
                                     }
                                 ]
                             },
@@ -1308,23 +242,83 @@ export class FeeService {
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "VAT",
-                                        "taxDescription": "Global VAT",
+                                        "taxDescription": "VAT",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 10
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax4",
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
+                                    }
+                                ],
+                                "discountBag": [
+                                    {
+                                        "discountScheme": {
+                                            "discountCategory": "DID01",
+                                            "discountDescription": "SME",
+                                            "documentCode": "SME"
+                                        },
+                                        "discountAmount": 0.0,
+                                        "discountPercentage": "5"
+                                    }
+                                ]
+                            },
+                            {
+                                "feeId": "023",
+                                "feeCategory": "registration fee",
+                                "feeTypeCode": "RED",
+                                "feeDescription": "UD-Renewal fee for Design Unit (RED| RDL)",
+                                "basicFeeUnitAmount": 100.0,
+                                "basicFeeUnitQuantity": 1,
+                                "additionalFeeUnitAmount": 5.0,
+                                "additionalFeeUnitQuantity": 1,
+                                "taxInclusionFeeIndicator": false,
+                                "globalTaxExclusionIndicator": false,
+                                "feePayableTotalAmount": 0.0,
+                                "feePayableTotalGrossAmount": 0.0,
+                                "feePayableTotalDiscountAmount": 0.0,
+                                "feePayableTotalTaxAmount": 0.0,
+                                "ipRightCategoryCode": "D",
+                                "ipRightCategory": "DESIGNS",
+                                "fileType": "D",
+                                "fileTypeName": "Industrial Designs",
+                                "applicationCategoryCode": "ID",
+                                "applicationCategory": "Industrial Design",
+                                "applicationSubCategoryCode": "ID",
+                                "applicationSubCategory": "Industrial Design",
+                                "documentOriginCode": "VC",
+                                "documentOriginName": "St. Vincent & Grenadines",
+                                "taxBag": [
+                                    {
+                                        "taxId": "VAT",
+                                        "taxDescription": "VAT",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "Tax2",
+                                        "taxDescription": "Gift Tax",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "Tax4",
+                                        "taxDescription": "GST",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -1370,12 +364,12 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -1434,7 +428,7 @@ export class FeeService {
                                 "feeDescription": "Design-Special DSN unit RD",
                                 "basicFeeUnitAmount": 40.0,
                                 "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 10.0,
+                                "additionalFeeUnitAmount": 30.0,
                                 "additionalFeeUnitQuantity": 1,
                                 "taxInclusionFeeIndicator": false,
                                 "globalTaxExclusionIndicator": false,
@@ -1480,7 +474,7 @@ export class FeeService {
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
@@ -1489,14 +483,14 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "VAT",
-                                        "taxDescription": "Global VAT",
+                                        "taxDescription": "VAT",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 10
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -1562,23 +556,23 @@ export class FeeService {
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "VAT",
-                                        "taxDescription": "Global VAT",
+                                        "taxDescription": "VAT",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 10
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax4",
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -1624,12 +618,12 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -1659,7 +653,7 @@ export class FeeService {
                                 "feeId": "023",
                                 "feeCategory": "registration fee",
                                 "feeTypeCode": "RED",
-                                "feeDescription": "UD-Renewal fee for Design Unit (RED|RDL)",
+                                "feeDescription": "UD-Renewal fee for Design Unit (RED| RDL)",
                                 "basicFeeUnitAmount": 100.0,
                                 "basicFeeUnitQuantity": 1,
                                 "additionalFeeUnitAmount": 5.0,
@@ -1681,15 +675,15 @@ export class FeeService {
                                 "taxBag": [
                                     {
                                         "taxId": "VAT",
-                                        "taxDescription": "Global VAT",
+                                        "taxDescription": "VAT",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 10
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
@@ -1698,7 +692,18 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
+                                    }
+                                ],
+                                "discountBag": [
+                                    {
+                                        "discountScheme": {
+                                            "discountCategory": "DID01",
+                                            "discountDescription": "SME",
+                                            "documentCode": "SME"
+                                        },
+                                        "discountAmount": 0.0,
+                                        "discountPercentage": "5"
                                     }
                                 ]
                             },
@@ -1733,12 +738,12 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -1784,6 +789,7 @@ export class FeeService {
                                 "feeCategory": "registration fee",
                                 "feeTypeCode": "ANU",
                                 "feeDescription": "Patent-Annuity (1-3)",
+                                "applicablePeriod": "1-3",
                                 "basicFeeUnitAmount": 100.0,
                                 "basicFeeUnitQuantity": 1,
                                 "additionalFeeUnitAmount": 100.0,
@@ -1806,7 +812,7 @@ export class FeeService {
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
@@ -1815,7 +821,7 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -1844,6 +850,7 @@ export class FeeService {
                                 "feeCategory": "registration fee",
                                 "feeTypeCode": "ANU",
                                 "feeDescription": "Patent Annuity (4-6)",
+                                "applicablePeriod": "4-6",
                                 "basicFeeUnitAmount": 150.0,
                                 "basicFeeUnitQuantity": 1,
                                 "additionalFeeUnitAmount": 150.0,
@@ -1868,12 +875,12 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -1904,6 +911,7 @@ export class FeeService {
                                 "feeCategory": "registration fee",
                                 "feeTypeCode": "ANU",
                                 "feeDescription": "Patent Annuity (10-12)",
+                                "applicablePeriod": "10-20",
                                 "basicFeeUnitAmount": 200.0,
                                 "basicFeeUnitQuantity": 1,
                                 "additionalFeeUnitAmount": 200.0,
@@ -1926,7 +934,7 @@ export class FeeService {
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -1937,6 +945,7 @@ export class FeeService {
                                 "feeCategory": "registration fee",
                                 "feeTypeCode": "ANU",
                                 "feeDescription": "Patent Annuity (7-9)",
+                                "applicablePeriod": "7-9",
                                 "basicFeeUnitAmount": 250.0,
                                 "basicFeeUnitQuantity": 1,
                                 "additionalFeeUnitAmount": 250.0,
@@ -1961,12 +970,12 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -2015,6 +1024,15 @@ export class FeeService {
                                 "applicationCategory": "Test Patent",
                                 "documentOriginCode": "VC",
                                 "documentOriginName": "St. Vincent & Grenadines",
+                                "taxBag": [
+                                    {
+                                        "taxId": "Tax2",
+                                        "taxDescription": "Gift Tax",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    }
+                                ],
                                 "discountBag": [
                                     {
                                         "discountScheme": {
@@ -2094,7 +1112,7 @@ export class FeeService {
                                 "additionalFeeUnitAmount": 50.0,
                                 "additionalFeeUnitQuantity": 1,
                                 "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
+                                "globalTaxExclusionIndicator": false,
                                 "feePayableTotalAmount": 0.0,
                                 "feePayableTotalGrossAmount": 0.0,
                                 "feePayableTotalDiscountAmount": 0.0,
@@ -2108,7 +1126,16 @@ export class FeeService {
                                 "applicationSubCategoryCode": "FA",
                                 "applicationSubCategory": "Foreign-PA",
                                 "documentOriginCode": "VC",
-                                "documentOriginName": "St. Vincent & Grenadines"
+                                "documentOriginName": "St. Vincent & Grenadines",
+                                "taxBag": [
+                                    {
+                                        "taxId": "Tax2",
+                                        "taxDescription": "Gift Tax",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    }
+                                ]
                             },
                             {
                                 "feeId": "041",
@@ -2170,30 +1197,6 @@ export class FeeService {
                                 "additionalFeeUnitAmount": 50.0,
                                 "additionalFeeUnitQuantity": 1,
                                 "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "VC",
-                                "documentOriginName": "St. Vincent & Grenadines"
-                            },
-                            {
-                                "feeId": "057",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent-Annuity (1-3)",
-                                "basicFeeUnitAmount": 100.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 100.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
                                 "globalTaxExclusionIndicator": false,
                                 "feePayableTotalAmount": 0.0,
                                 "feePayableTotalGrossAmount": 0.0,
@@ -2211,50 +1214,24 @@ export class FeeService {
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    },
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 5.0,
-                                        "discountPercentage": null
+                                        "taxPercentage": 0
                                     }
                                 ]
                             },
                             {
-                                "feeId": "058",
+                                "feeId": "070",
                                 "feeCategory": "registration fee",
                                 "feeTypeCode": "ANU",
-                                "feeDescription": "Patent Annuity (4-6)",
-                                "basicFeeUnitAmount": 150.0,
+                                "feeDescription": "Annuity (11-15)",
+                                "applicablePeriod": "11-15",
+                                "basicFeeUnitAmount": 320.0,
                                 "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 150.0,
+                                "additionalFeeUnitAmount": 320.0,
                                 "additionalFeeUnitQuantity": 1,
                                 "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
+                                "globalTaxExclusionIndicator": false,
                                 "feePayableTotalAmount": 0.0,
                                 "feePayableTotalGrossAmount": 0.0,
                                 "feePayableTotalDiscountAmount": 0.0,
@@ -2265,50 +1242,44 @@ export class FeeService {
                                 "fileTypeName": "Patents",
                                 "applicationCategoryCode": "PT",
                                 "applicationCategory": "Patents",
+                                "applicationSubCategoryCode": "NP",
+                                "applicationSubCategory": "National Patents",
                                 "documentOriginCode": "VC",
-                                "documentOriginName": "St. Vincent & Grenadines",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    },
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 10.0,
-                                        "discountPercentage": null
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "10"
-                                    }
-                                ]
+                                "documentOriginName": "St. Vincent & Grenadines"
                             },
                             {
-                                "feeId": "059",
+                                "feeId": "071",
                                 "feeCategory": "registration fee",
                                 "feeTypeCode": "ANU",
-                                "feeDescription": "Patent Annuity (10-12)",
+                                "feeDescription": "Annuity (16-20)",
+                                "applicablePeriod": "16-20",
+                                "basicFeeUnitAmount": 350.0,
+                                "basicFeeUnitQuantity": 1,
+                                "additionalFeeUnitAmount": 350.0,
+                                "additionalFeeUnitQuantity": 1,
+                                "taxInclusionFeeIndicator": false,
+                                "globalTaxExclusionIndicator": false,
+                                "feePayableTotalAmount": 0.0,
+                                "feePayableTotalGrossAmount": 0.0,
+                                "feePayableTotalDiscountAmount": 0.0,
+                                "feePayableTotalTaxAmount": 0.0,
+                                "ipRightCategoryCode": "P",
+                                "ipRightCategory": "PATENTS",
+                                "fileType": "P",
+                                "fileTypeName": "Patents",
+                                "applicationCategoryCode": "PT",
+                                "applicationCategory": "Patents",
+                                "applicationSubCategoryCode": "NP",
+                                "applicationSubCategory": "National Patents",
+                                "documentOriginCode": "VC",
+                                "documentOriginName": "St. Vincent & Grenadines"
+                            },
+                            {
+                                "feeId": "072",
+                                "feeCategory": "registration fee",
+                                "feeTypeCode": "ANU",
+                                "feeDescription": "Annuity (4-10)",
+                                "applicablePeriod": "4-10",
                                 "basicFeeUnitAmount": 200.0,
                                 "basicFeeUnitQuantity": 1,
                                 "additionalFeeUnitAmount": 200.0,
@@ -2325,86 +1296,20 @@ export class FeeService {
                                 "fileTypeName": "Patents",
                                 "applicationCategoryCode": "PT",
                                 "applicationCategory": "Patents",
+                                "applicationSubCategoryCode": "NP",
+                                "applicationSubCategory": "National Patents",
                                 "documentOriginCode": "VC",
-                                "documentOriginName": "St. Vincent & Grenadines",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ]
+                                "documentOriginName": "St. Vincent & Grenadines"
                             },
                             {
-                                "feeId": "060",
+                                "feeId": "073",
                                 "feeCategory": "registration fee",
                                 "feeTypeCode": "ANU",
-                                "feeDescription": "Patent Annuity (7-9)",
-                                "basicFeeUnitAmount": 250.0,
+                                "feeDescription": "Annuity (1-3)",
+                                "applicablePeriod": "3",
+                                "basicFeeUnitAmount": 400.0,
                                 "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 250.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "VC",
-                                "documentOriginName": "St. Vincent & Grenadines",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    },
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "10"
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "040",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "DRW",
-                                "feeDescription": "Patent-AppType_NoOfDrawingImages",
-                                "basicFeeUnitAmount": 200.0,
-                                "basicFeeUnitQuantity": 5,
-                                "additionalFeeUnitAmount": 50.0,
+                                "additionalFeeUnitAmount": 300.0,
                                 "additionalFeeUnitQuantity": 1,
                                 "taxInclusionFeeIndicator": false,
                                 "globalTaxExclusionIndicator": false,
@@ -2421,192 +1326,7 @@ export class FeeService {
                                 "applicationSubCategoryCode": "NP",
                                 "applicationSubCategory": "National Patents",
                                 "documentOriginCode": "VC",
-                                "documentOriginName": "St. Vincent & Grenadines",
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "7"
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "043",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "PCL",
-                                "feeDescription": "Patent-AppSubType_NP_NoOfPriorityClaims",
-                                "basicFeeUnitAmount": 100.0,
-                                "basicFeeUnitQuantity": 10,
-                                "additionalFeeUnitAmount": 25.0,
-                                "additionalFeeUnitQuantity": 2,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "applicationSubCategoryCode": "NP",
-                                "applicationSubCategory": "National Patents",
-                                "documentOriginCode": "VC",
-                                "documentOriginName": "St. Vincent & Grenadines",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax1",
-                                        "taxDescription": "Corporate Tax",
-                                        "taxAmount": 15.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 5.0,
-                                        "discountPercentage": null
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 7.0,
-                                        "discountPercentage": null
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "044",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "CLM",
-                                "feeDescription": "Patent-AppSubType_UM_NoOfClaims",
-                                "basicFeeUnitAmount": 200.0,
-                                "basicFeeUnitQuantity": 2,
-                                "additionalFeeUnitAmount": 150.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "applicationSubCategoryCode": "NP",
-                                "applicationSubCategory": "National Patents",
-                                "documentOriginCode": "VC",
-                                "documentOriginName": "St. Vincent & Grenadines",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "10"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "047",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "DPG",
-                                "feeDescription": "Patent-AppSubType_NoOfDocumentPages",
-                                "basicFeeUnitAmount": 100.0,
-                                "basicFeeUnitQuantity": 2,
-                                "additionalFeeUnitAmount": 150.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "P",
-                                "fileTypeName": "Patents",
-                                "applicationCategoryCode": "PT",
-                                "applicationCategory": "Patents",
-                                "applicationSubCategoryCode": "NP",
-                                "applicationSubCategory": "National Patents",
-                                "documentOriginCode": "VC",
-                                "documentOriginName": "St. Vincent & Grenadines",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 7.0,
-                                        "discountPercentage": null
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 10.0,
-                                        "discountPercentage": null
-                                    }
-                                ]
+                                "documentOriginName": "St. Vincent & Grenadines"
                             },
                             {
                                 "feeId": "045",
@@ -2678,36 +1398,7 @@ export class FeeService {
                                 "ipRightCategoryCode": "T",
                                 "ipRightCategory": "TRADEMARKS",
                                 "documentOriginCode": "VC",
-                                "documentOriginName": "St. Vincent & Grenadines",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    }
-                                ]
+                                "documentOriginName": "St. Vincent & Grenadines"
                             },
                             {
                                 "feeId": "002",
@@ -2734,12 +1425,12 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -2747,9 +1438,183 @@ export class FeeService {
                                 "discountBag": [
                                     {
                                         "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
+                                            "discountCategory": "DID01",
+                                            "discountDescription": "SME",
+                                            "documentCode": "SME"
+                                        },
+                                        "discountAmount": 0.0,
+                                        "discountPercentage": "5"
+                                    }
+                                ]
+                            },
+                            {
+                                "feeId": "020",
+                                "feeCategory": "registration fee",
+                                "feeTypeCode": "REN",
+                                "feeDescription": "UD-Renewal Fee for Nice Class (REN | RNL)",
+                                "basicFeeUnitAmount": 50.0,
+                                "basicFeeUnitQuantity": 1,
+                                "additionalFeeUnitAmount": 10.0,
+                                "additionalFeeUnitQuantity": 1,
+                                "taxInclusionFeeIndicator": false,
+                                "globalTaxExclusionIndicator": false,
+                                "feePayableTotalAmount": 0.0,
+                                "feePayableTotalGrossAmount": 0.0,
+                                "feePayableTotalDiscountAmount": 0.0,
+                                "feePayableTotalTaxAmount": 0.0,
+                                "ipRightCategoryCode": "T",
+                                "ipRightCategory": "TRADEMARKS",
+                                "fileType": "M",
+                                "fileTypeName": "Collective",
+                                "applicationCategoryCode": "CM",
+                                "applicationCategory": "Collective Mark",
+                                "documentOriginCode": "VC",
+                                "documentOriginName": "St. Vincent & Grenadines",
+                                "taxBag": [
+                                    {
+                                        "taxId": "VAT",
+                                        "taxDescription": "VAT",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "Tax2",
+                                        "taxDescription": "Gift Tax",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "Tax4",
+                                        "taxDescription": "GST",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    }
+                                ],
+                                "discountBag": [
+                                    {
+                                        "discountScheme": {
+                                            "discountCategory": "DID01",
+                                            "discountDescription": "SME",
+                                            "documentCode": "SME"
+                                        },
+                                        "discountAmount": 0.0,
+                                        "discountPercentage": "5"
+                                    }
+                                ]
+                            },
+                            {
+                                "feeId": "022",
+                                "feeCategory": "registration fee",
+                                "feeTypeCode": "REC",
+                                "feeDescription": "UD-Renewal Fee Color Logo (REN | RNL)",
+                                "basicFeeUnitAmount": 500.0,
+                                "basicFeeUnitQuantity": 2,
+                                "additionalFeeUnitAmount": 100.0,
+                                "additionalFeeUnitQuantity": 1,
+                                "taxInclusionFeeIndicator": false,
+                                "globalTaxExclusionIndicator": false,
+                                "feePayableTotalAmount": 0.0,
+                                "feePayableTotalGrossAmount": 0.0,
+                                "feePayableTotalDiscountAmount": 0.0,
+                                "feePayableTotalTaxAmount": 0.0,
+                                "ipRightCategoryCode": "T",
+                                "ipRightCategory": "TRADEMARKS",
+                                "fileType": "M",
+                                "fileTypeName": "Collective",
+                                "applicationCategoryCode": "CM",
+                                "applicationCategory": "Collective Mark",
+                                "documentOriginCode": "VC",
+                                "documentOriginName": "St. Vincent & Grenadines",
+                                "taxBag": [
+                                    {
+                                        "taxId": "Tax2",
+                                        "taxDescription": "Gift Tax",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "VAT",
+                                        "taxDescription": "VAT",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "Tax4",
+                                        "taxDescription": "GST",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    }
+                                ],
+                                "discountBag": [
+                                    {
+                                        "discountScheme": {
+                                            "discountCategory": "DID01",
+                                            "discountDescription": "SME",
+                                            "documentCode": "SME"
+                                        },
+                                        "discountAmount": 0.0,
+                                        "discountPercentage": "5"
+                                    }
+                                ]
+                            },
+                            {
+                                "feeId": "036",
+                                "feeCategory": "registration fee",
+                                "feeTypeCode": "REI",
+                                "feeDescription": "UD-Renewal Fee Number of Logo/Drawing/Unit ( REN | RNL | RDL | RED )",
+                                "basicFeeUnitAmount": 100.0,
+                                "basicFeeUnitQuantity": 1,
+                                "additionalFeeUnitAmount": 10.0,
+                                "additionalFeeUnitQuantity": 1,
+                                "taxInclusionFeeIndicator": false,
+                                "globalTaxExclusionIndicator": true,
+                                "feePayableTotalAmount": 0.0,
+                                "feePayableTotalGrossAmount": 0.0,
+                                "feePayableTotalDiscountAmount": 0.0,
+                                "feePayableTotalTaxAmount": 0.0,
+                                "ipRightCategoryCode": "T",
+                                "ipRightCategory": "TRADEMARKS",
+                                "fileType": "M",
+                                "fileTypeName": "Collective",
+                                "applicationCategoryCode": "CM",
+                                "applicationCategory": "Collective Mark",
+                                "documentOriginCode": "VC",
+                                "documentOriginName": "St. Vincent & Grenadines",
+                                "taxBag": [
+                                    {
+                                        "taxId": "Tax2",
+                                        "taxDescription": "Gift Tax",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "VAT",
+                                        "taxDescription": "VAT",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "Tax4",
+                                        "taxDescription": "GST",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    }
+                                ],
+                                "discountBag": [
+                                    {
+                                        "discountScheme": {
+                                            "discountCategory": "DID01",
+                                            "discountDescription": "SME",
+                                            "documentCode": "SME"
                                         },
                                         "discountAmount": 0.0,
                                         "discountPercentage": "5"
@@ -2760,13 +1625,13 @@ export class FeeService {
                                 "feeId": "003",
                                 "feeCategory": "registration fee",
                                 "feeTypeCode": "NCL",
-                                "feeDescription": "TM-Specific Goods and Services (collective)",
-                                "basicFeeUnitAmount": 200.0,
-                                "basicFeeUnitQuantity": 3,
-                                "additionalFeeUnitAmount": 60.0,
+                                "feeDescription": "TM-Specific Goods and Services (Collective | GEN)",
+                                "basicFeeUnitAmount": 700.0,
+                                "basicFeeUnitQuantity": 4,
+                                "additionalFeeUnitAmount": 200.0,
                                 "additionalFeeUnitQuantity": 1,
                                 "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
+                                "globalTaxExclusionIndicator": false,
                                 "feePayableTotalAmount": 0.0,
                                 "feePayableTotalGrossAmount": 0.0,
                                 "feePayableTotalDiscountAmount": 0.0,
@@ -2787,21 +1652,21 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "VAT",
-                                        "taxDescription": "Global VAT",
+                                        "taxDescription": "VAT",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 10
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -2856,7 +1721,7 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -2911,12 +1776,12 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -2946,13 +1811,13 @@ export class FeeService {
                                 "feeId": "003",
                                 "feeCategory": "registration fee",
                                 "feeTypeCode": "NCL",
-                                "feeDescription": "TM-Specific Goods and Services (collective)",
-                                "basicFeeUnitAmount": 200.0,
-                                "basicFeeUnitQuantity": 3,
-                                "additionalFeeUnitAmount": 60.0,
+                                "feeDescription": "TM-Specific Goods and Services (Collective | GEN)",
+                                "basicFeeUnitAmount": 700.0,
+                                "basicFeeUnitQuantity": 4,
+                                "additionalFeeUnitAmount": 200.0,
                                 "additionalFeeUnitQuantity": 1,
                                 "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
+                                "globalTaxExclusionIndicator": false,
                                 "feePayableTotalAmount": 0.0,
                                 "feePayableTotalGrossAmount": 0.0,
                                 "feePayableTotalDiscountAmount": 0.0,
@@ -2971,21 +1836,21 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "VAT",
-                                        "taxDescription": "Global VAT",
+                                        "taxDescription": "VAT",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 10
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -3035,15 +1900,15 @@ export class FeeService {
                                 "taxBag": [
                                     {
                                         "taxId": "VAT",
-                                        "taxDescription": "Global VAT",
+                                        "taxDescription": "VAT",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 10
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
@@ -3052,7 +1917,7 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -3094,23 +1959,23 @@ export class FeeService {
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "VAT",
-                                        "taxDescription": "Global VAT",
+                                        "taxDescription": "VAT",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 10
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax4",
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -3152,23 +2017,23 @@ export class FeeService {
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "VAT",
-                                        "taxDescription": "Global VAT",
+                                        "taxDescription": "VAT",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 10
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax4",
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -3212,7 +2077,7 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -3265,12 +2130,12 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -3325,7 +2190,7 @@ export class FeeService {
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -3336,9 +2201,9 @@ export class FeeService {
                                 "feeCategory": "registration fee",
                                 "feeTypeCode": "LGC",
                                 "feeDescription": "TM-Color logo",
-                                "basicFeeUnitAmount": 20.0,
+                                "basicFeeUnitAmount": 50.0,
                                 "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 5.0,
+                                "additionalFeeUnitAmount": 10.0,
                                 "additionalFeeUnitQuantity": 1,
                                 "taxInclusionFeeIndicator": false,
                                 "globalTaxExclusionIndicator": false,
@@ -3362,12 +2227,12 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -3404,12 +2269,12 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -3434,1019 +2299,12 @@ export class FeeService {
                                         "discountPercentage": "5"
                                     }
                                 ]
-                            },
-                            {
-                                "feeId": "001",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "REG",
-                                "feeDescription": "Regular fees IP",
-                                "basicFeeUnitAmount": 100.0,
-                                "basicFeeUnitQuantity": 2,
-                                "additionalFeeUnitAmount": 50.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "D",
-                                "ipRightCategory": "DESIGNS",
-                                "documentOriginCode": "TB",
-                                "documentOriginName": "Test Back File",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "010",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "CLM",
-                                "feeDescription": "Patent-Regular",
-                                "basicFeeUnitAmount": 100.0,
-                                "basicFeeUnitQuantity": 10,
-                                "additionalFeeUnitAmount": 50.0,
-                                "additionalFeeUnitQuantity": 5,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "B",
-                                "fileTypeName": "Patents Test",
-                                "applicationCategoryCode": "PT2",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "TB",
-                                "documentOriginName": "Test Back File"
-                            },
-                            {
-                                "feeId": "057",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent-Annuity (1-3)",
-                                "basicFeeUnitAmount": 100.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 100.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "B",
-                                "fileTypeName": "Patents Test",
-                                "applicationCategoryCode": "PT2",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "TB",
-                                "documentOriginName": "Test Back File",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    },
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 5.0,
-                                        "discountPercentage": null
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "058",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent Annuity (4-6)",
-                                "basicFeeUnitAmount": 150.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 150.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "B",
-                                "fileTypeName": "Patents Test",
-                                "applicationCategoryCode": "PT2",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "TB",
-                                "documentOriginName": "Test Back File",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    },
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 10.0,
-                                        "discountPercentage": null
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "10"
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "059",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent Annuity (10-12)",
-                                "basicFeeUnitAmount": 200.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 200.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "B",
-                                "fileTypeName": "Patents Test",
-                                "applicationCategoryCode": "PT2",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "TB",
-                                "documentOriginName": "Test Back File",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "060",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent Annuity (7-9)",
-                                "basicFeeUnitAmount": 250.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 250.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "B",
-                                "fileTypeName": "Patents Test",
-                                "applicationCategoryCode": "PT2",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "TB",
-                                "documentOriginName": "Test Back File",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    },
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "10"
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "057",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent-Annuity (1-3)",
-                                "basicFeeUnitAmount": 100.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 100.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "E",
-                                "fileTypeName": "Patents Test",
-                                "applicationCategoryCode": "PT3",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "TB",
-                                "documentOriginName": "Test Back File",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    },
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 5.0,
-                                        "discountPercentage": null
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "058",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent Annuity (4-6)",
-                                "basicFeeUnitAmount": 150.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 150.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "E",
-                                "fileTypeName": "Patents Test",
-                                "applicationCategoryCode": "PT3",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "TB",
-                                "documentOriginName": "Test Back File",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    },
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 10.0,
-                                        "discountPercentage": null
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "10"
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "059",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent Annuity (10-12)",
-                                "basicFeeUnitAmount": 200.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 200.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "E",
-                                "fileTypeName": "Patents Test",
-                                "applicationCategoryCode": "PT3",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "TB",
-                                "documentOriginName": "Test Back File",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "060",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent Annuity (7-9)",
-                                "basicFeeUnitAmount": 250.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 250.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "E",
-                                "fileTypeName": "Patents Test",
-                                "applicationCategoryCode": "PT3",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "TB",
-                                "documentOriginName": "Test Back File",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    },
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "10"
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "010",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "CLM",
-                                "feeDescription": "Patent-Regular",
-                                "basicFeeUnitAmount": 100.0,
-                                "basicFeeUnitQuantity": 10,
-                                "additionalFeeUnitAmount": 50.0,
-                                "additionalFeeUnitQuantity": 5,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "N",
-                                "fileTypeName": "Patents VC",
-                                "applicationCategoryCode": "PT1",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "TB",
-                                "documentOriginName": "Test Back File"
-                            },
-                            {
-                                "feeId": "057",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent-Annuity (1-3)",
-                                "basicFeeUnitAmount": 100.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 100.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "N",
-                                "fileTypeName": "Patents VC",
-                                "applicationCategoryCode": "PT1",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "TB",
-                                "documentOriginName": "Test Back File",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    },
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 5.0,
-                                        "discountPercentage": null
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "058",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent Annuity (4-6)",
-                                "basicFeeUnitAmount": 150.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 150.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "N",
-                                "fileTypeName": "Patents VC",
-                                "applicationCategoryCode": "PT1",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "TB",
-                                "documentOriginName": "Test Back File",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    },
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 10.0,
-                                        "discountPercentage": null
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "10"
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "059",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent Annuity (10-12)",
-                                "basicFeeUnitAmount": 200.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 200.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "N",
-                                "fileTypeName": "Patents VC",
-                                "applicationCategoryCode": "PT1",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "TB",
-                                "documentOriginName": "Test Back File",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "060",
-                                "feeCategory": "registration fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent Annuity (7-9)",
-                                "basicFeeUnitAmount": 250.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 250.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "ipRightCategoryCode": "P",
-                                "ipRightCategory": "PATENTS",
-                                "fileType": "N",
-                                "fileTypeName": "Patents VC",
-                                "applicationCategoryCode": "PT1",
-                                "applicationCategory": "Patents",
-                                "documentOriginCode": "TB",
-                                "documentOriginName": "Test Back File",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    },
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "10"
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "057",
-                                "feeCategory": "maintenance fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent-Annuity (1-3)",
-                                "basicFeeUnitAmount": 100.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 100.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "userDocumentCode": "UDANU",
-                                "userDocumentCodeName": "Annuity payment",
-                                "userDocumentType": "PTA",
-                                "userDocumentTypeName": "Payment of Patent Annuity",
-                                "documentOriginCode": "V2",
-                                "documentOriginName": "St. Vincent & Grenadines (Tax)",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    },
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 5.0,
-                                        "discountPercentage": null
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "058",
-                                "feeCategory": "maintenance fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent Annuity (4-6)",
-                                "basicFeeUnitAmount": 150.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 150.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "userDocumentCode": "UDANU",
-                                "userDocumentCodeName": "Annuity payment",
-                                "userDocumentType": "PTA",
-                                "userDocumentTypeName": "Payment of Patent Annuity",
-                                "documentOriginCode": "V2",
-                                "documentOriginName": "St. Vincent & Grenadines (Tax)",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    },
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 10.0,
-                                        "discountPercentage": null
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "10"
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "059",
-                                "feeCategory": "maintenance fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent Annuity (10-12)",
-                                "basicFeeUnitAmount": 200.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 200.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "userDocumentCode": "UDANU",
-                                "userDocumentCodeName": "Annuity payment",
-                                "userDocumentType": "PTA",
-                                "userDocumentTypeName": "Payment of Patent Annuity",
-                                "documentOriginCode": "V2",
-                                "documentOriginName": "St. Vincent & Grenadines (Tax)",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "060",
-                                "feeCategory": "maintenance fee",
-                                "feeTypeCode": "ANU",
-                                "feeDescription": "Patent Annuity (7-9)",
-                                "basicFeeUnitAmount": 250.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 250.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": true,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "userDocumentCode": "UDANU",
-                                "userDocumentCodeName": "Annuity payment",
-                                "userDocumentType": "PTA",
-                                "userDocumentTypeName": "Payment of Patent Annuity",
-                                "documentOriginCode": "V2",
-                                "documentOriginName": "St. Vincent & Grenadines (Tax)",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    },
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    },
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "10"
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "061",
-                                "feeCategory": "maintenance fee",
-                                "feeTypeCode": "PNT",
-                                "feeDescription": "Penalty-Annuity 1-5",
-                                "basicFeeUnitAmount": 5.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 5.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "userDocumentCode": "UDANU",
-                                "userDocumentCodeName": "Annuity payment",
-                                "userDocumentType": "PTA",
-                                "userDocumentTypeName": "Payment of Patent Annuity",
-                                "documentOriginCode": "V2",
-                                "documentOriginName": "St. Vincent & Grenadines (Tax)"
-                            },
-                            {
-                                "feeId": "062",
-                                "feeCategory": "maintenance fee",
-                                "feeTypeCode": "PNT",
-                                "feeDescription": "Penalty-Annuity 6-10",
-                                "basicFeeUnitAmount": 10.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 10.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "userDocumentCode": "UDANU",
-                                "userDocumentCodeName": "Annuity payment",
-                                "userDocumentType": "PTA",
-                                "userDocumentTypeName": "Payment of Patent Annuity",
-                                "documentOriginCode": "V2",
-                                "documentOriginName": "St. Vincent & Grenadines (Tax)"
-                            },
-                            {
-                                "feeId": "063",
-                                "feeCategory": "maintenance fee",
-                                "feeTypeCode": "PNT",
-                                "feeDescription": "Penalty-Annuity 11-20",
-                                "basicFeeUnitAmount": 20.0,
-                                "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 20.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "userDocumentCode": "UDANU",
-                                "userDocumentCodeName": "Annuity payment",
-                                "userDocumentType": "PTA",
-                                "userDocumentTypeName": "Payment of Patent Annuity",
-                                "documentOriginCode": "V2",
-                                "documentOriginName": "St. Vincent & Grenadines (Tax)"
                             },
                             {
                                 "feeId": "019",
                                 "feeCategory": "maintenance fee",
                                 "feeTypeCode": "REG",
-                                "feeDescription": "UD-Regular Fee (POA | ABT | ROL)",
+                                "feeDescription": "UD-Regular Fee (POA | ABT | ROL| DOC | EXP)",
                                 "basicFeeUnitAmount": 500.0,
                                 "basicFeeUnitQuantity": 2,
                                 "additionalFeeUnitAmount": 100.0,
@@ -4469,21 +2327,21 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "VAT",
-                                        "taxDescription": "Global VAT",
+                                        "taxDescription": "VAT",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 10
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -4512,6 +2370,7 @@ export class FeeService {
                                 "feeCategory": "maintenance fee",
                                 "feeTypeCode": "ANU",
                                 "feeDescription": "Patent-Annuity (1-3)",
+                                "applicablePeriod": "1-3",
                                 "basicFeeUnitAmount": 100.0,
                                 "basicFeeUnitQuantity": 1,
                                 "additionalFeeUnitAmount": 100.0,
@@ -4532,7 +2391,7 @@ export class FeeService {
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
@@ -4541,7 +2400,7 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -4570,6 +2429,7 @@ export class FeeService {
                                 "feeCategory": "maintenance fee",
                                 "feeTypeCode": "ANU",
                                 "feeDescription": "Patent Annuity (4-6)",
+                                "applicablePeriod": "4-6",
                                 "basicFeeUnitAmount": 150.0,
                                 "basicFeeUnitQuantity": 1,
                                 "additionalFeeUnitAmount": 150.0,
@@ -4592,12 +2452,12 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -4628,6 +2488,7 @@ export class FeeService {
                                 "feeCategory": "maintenance fee",
                                 "feeTypeCode": "ANU",
                                 "feeDescription": "Patent Annuity (10-12)",
+                                "applicablePeriod": "10-20",
                                 "basicFeeUnitAmount": 200.0,
                                 "basicFeeUnitQuantity": 1,
                                 "additionalFeeUnitAmount": 200.0,
@@ -4648,7 +2509,7 @@ export class FeeService {
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -4659,6 +2520,7 @@ export class FeeService {
                                 "feeCategory": "maintenance fee",
                                 "feeTypeCode": "ANU",
                                 "feeDescription": "Patent Annuity (7-9)",
+                                "applicablePeriod": "7-9",
                                 "basicFeeUnitAmount": 250.0,
                                 "basicFeeUnitQuantity": 1,
                                 "additionalFeeUnitAmount": 250.0,
@@ -4681,12 +2543,12 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -4717,6 +2579,7 @@ export class FeeService {
                                 "feeCategory": "maintenance fee",
                                 "feeTypeCode": "PNT",
                                 "feeDescription": "Penalty-Annuity 1-5",
+                                "applicablePeriod": "1-5",
                                 "basicFeeUnitAmount": 5.0,
                                 "basicFeeUnitQuantity": 1,
                                 "additionalFeeUnitAmount": 5.0,
@@ -4739,6 +2602,7 @@ export class FeeService {
                                 "feeCategory": "maintenance fee",
                                 "feeTypeCode": "PNT",
                                 "feeDescription": "Penalty-Annuity 6-10",
+                                "applicablePeriod": "6-10",
                                 "basicFeeUnitAmount": 10.0,
                                 "basicFeeUnitQuantity": 1,
                                 "additionalFeeUnitAmount": 10.0,
@@ -4761,6 +2625,7 @@ export class FeeService {
                                 "feeCategory": "maintenance fee",
                                 "feeTypeCode": "PNT",
                                 "feeDescription": "Penalty-Annuity 11-20",
+                                "applicablePeriod": "11-20",
                                 "basicFeeUnitAmount": 20.0,
                                 "basicFeeUnitQuantity": 1,
                                 "additionalFeeUnitAmount": 20.0,
@@ -4799,22 +2664,6 @@ export class FeeService {
                                 "userDocumentTypeName": "Request for Claim",
                                 "documentOriginCode": "VC",
                                 "documentOriginName": "St. Vincent & Grenadines",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    },
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 0
-                                    }
-                                ],
                                 "discountBag": [
                                     {
                                         "discountScheme": {
@@ -4861,7 +2710,7 @@ export class FeeService {
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -4908,6 +2757,15 @@ export class FeeService {
                                 "userDocumentTypeName": "Change of Name and/or Address",
                                 "documentOriginCode": "VC",
                                 "documentOriginName": "St. Vincent & Grenadines",
+                                "taxBag": [
+                                    {
+                                        "taxId": "Tax4",
+                                        "taxDescription": "GST",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    }
+                                ],
                                 "discountBag": [
                                     {
                                         "discountScheme": {
@@ -4950,6 +2808,15 @@ export class FeeService {
                                 "userDocumentTypeName": "Change of Name",
                                 "documentOriginCode": "VC",
                                 "documentOriginName": "St. Vincent & Grenadines",
+                                "taxBag": [
+                                    {
+                                        "taxId": "Tax4",
+                                        "taxDescription": "GST",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    }
+                                ],
                                 "discountBag": [
                                     {
                                         "discountScheme": {
@@ -4975,13 +2842,13 @@ export class FeeService {
                                 "feeId": "013",
                                 "feeCategory": "maintenance fee",
                                 "feeTypeCode": "NFL",
-                                "feeDescription": "UD-Number of affected file (CRP)",
+                                "feeDescription": "UD-Number of affected file (CRP )",
                                 "basicFeeUnitAmount": 100.0,
                                 "basicFeeUnitQuantity": 1,
                                 "additionalFeeUnitAmount": 50.0,
                                 "additionalFeeUnitQuantity": 1,
                                 "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
+                                "globalTaxExclusionIndicator": true,
                                 "feePayableTotalAmount": 0.0,
                                 "feePayableTotalGrossAmount": 0.0,
                                 "feePayableTotalDiscountAmount": 0.0,
@@ -4994,9 +2861,23 @@ export class FeeService {
                                 "documentOriginName": "St. Vincent & Grenadines",
                                 "taxBag": [
                                     {
+                                        "taxId": "Tax4",
+                                        "taxDescription": "GST",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "VAT",
+                                        "taxDescription": "VAT",
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -5019,6 +2900,15 @@ export class FeeService {
                                         },
                                         "discountAmount": 0.0,
                                         "discountPercentage": "10"
+                                    },
+                                    {
+                                        "discountScheme": {
+                                            "discountCategory": "DID03",
+                                            "discountDescription": "IDCard",
+                                            "documentCode": "IDC"
+                                        },
+                                        "discountAmount": 15.0,
+                                        "discountPercentage": null
                                     }
                                 ]
                             },
@@ -5049,12 +2939,12 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -5074,6 +2964,71 @@ export class FeeService {
                                             "discountCategory": "DID01",
                                             "discountDescription": "SME",
                                             "documentCode": "SME"
+                                        },
+                                        "discountAmount": 0.0,
+                                        "discountPercentage": "5"
+                                    }
+                                ]
+                            },
+                            {
+                                "feeId": "019",
+                                "feeCategory": "maintenance fee",
+                                "feeTypeCode": "REG",
+                                "feeDescription": "UD-Regular Fee (POA | ABT | ROL| DOC | EXP)",
+                                "basicFeeUnitAmount": 500.0,
+                                "basicFeeUnitQuantity": 2,
+                                "additionalFeeUnitAmount": 100.0,
+                                "additionalFeeUnitQuantity": 1,
+                                "taxInclusionFeeIndicator": false,
+                                "globalTaxExclusionIndicator": false,
+                                "feePayableTotalAmount": 0.0,
+                                "feePayableTotalGrossAmount": 0.0,
+                                "feePayableTotalDiscountAmount": 0.0,
+                                "feePayableTotalTaxAmount": 0.0,
+                                "userDocumentCode": "UDDOC",
+                                "userDocumentCodeName": "Without Affected file",
+                                "userDocumentType": "PAC",
+                                "userDocumentTypeName": "Pre Application Search",
+                                "documentOriginCode": "VC",
+                                "documentOriginName": "St. Vincent & Grenadines",
+                                "taxBag": [
+                                    {
+                                        "taxId": "Tax4",
+                                        "taxDescription": "GST",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "Tax2",
+                                        "taxDescription": "Gift Tax",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "VAT",
+                                        "taxDescription": "VAT",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    }
+                                ],
+                                "discountBag": [
+                                    {
+                                        "discountScheme": {
+                                            "discountCategory": "DID01",
+                                            "discountDescription": "SME",
+                                            "documentCode": "SME"
+                                        },
+                                        "discountAmount": 0.0,
+                                        "discountPercentage": "5"
+                                    },
+                                    {
+                                        "discountScheme": {
+                                            "discountCategory": "DID02",
+                                            "discountDescription": "Individual",
+                                            "documentCode": "NID"
                                         },
                                         "discountAmount": 0.0,
                                         "discountPercentage": "5"
@@ -5107,12 +3062,12 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -5163,7 +3118,7 @@ export class FeeService {
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
@@ -5172,14 +3127,14 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "VAT",
-                                        "taxDescription": "Global VAT",
+                                        "taxDescription": "VAT",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 10
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -5221,21 +3176,21 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "VAT",
-                                        "taxDescription": "Global VAT",
+                                        "taxDescription": "VAT",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 10
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -5263,7 +3218,7 @@ export class FeeService {
                                 "feeId": "019",
                                 "feeCategory": "maintenance fee",
                                 "feeTypeCode": "REG",
-                                "feeDescription": "UD-Regular Fee (POA | ABT | ROL)",
+                                "feeDescription": "UD-Regular Fee (POA | ABT | ROL| DOC | EXP)",
                                 "basicFeeUnitAmount": 500.0,
                                 "basicFeeUnitQuantity": 2,
                                 "additionalFeeUnitAmount": 100.0,
@@ -5286,21 +3241,108 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "VAT",
-                                        "taxDescription": "Global VAT",
+                                        "taxDescription": "VAT",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 10
+                                        "taxPercentage": 0
+                                    }
+                                ],
+                                "discountBag": [
+                                    {
+                                        "discountScheme": {
+                                            "discountCategory": "DID01",
+                                            "discountDescription": "SME",
+                                            "documentCode": "SME"
+                                        },
+                                        "discountAmount": 0.0,
+                                        "discountPercentage": "5"
+                                    },
+                                    {
+                                        "discountScheme": {
+                                            "discountCategory": "DID02",
+                                            "discountDescription": "Individual",
+                                            "documentCode": "NID"
+                                        },
+                                        "discountAmount": 0.0,
+                                        "discountPercentage": "5"
+                                    }
+                                ]
+                            },
+                            {
+                                "feeId": "001",
+                                "feeCategory": "maintenance fee",
+                                "feeTypeCode": "REG",
+                                "feeDescription": "Regular fees IP",
+                                "basicFeeUnitAmount": 100.0,
+                                "basicFeeUnitQuantity": 2,
+                                "additionalFeeUnitAmount": 50.0,
+                                "additionalFeeUnitQuantity": 1,
+                                "taxInclusionFeeIndicator": false,
+                                "globalTaxExclusionIndicator": true,
+                                "feePayableTotalAmount": 0.0,
+                                "feePayableTotalGrossAmount": 0.0,
+                                "feePayableTotalDiscountAmount": 0.0,
+                                "feePayableTotalTaxAmount": 0.0,
+                                "userDocumentCode": "UDGEN",
+                                "userDocumentCodeName": "Other post filing request with affected file",
+                                "userDocumentType": "RAM",
+                                "userDocumentTypeName": "Request for Amendment /correcton",
+                                "documentOriginCode": "VC",
+                                "documentOriginName": "St. Vincent & Grenadines"
+                            },
+                            {
+                                "feeId": "003",
+                                "feeCategory": "maintenance fee",
+                                "feeTypeCode": "NCL",
+                                "feeDescription": "TM-Specific Goods and Services (Collective | GEN)",
+                                "basicFeeUnitAmount": 700.0,
+                                "basicFeeUnitQuantity": 4,
+                                "additionalFeeUnitAmount": 200.0,
+                                "additionalFeeUnitQuantity": 1,
+                                "taxInclusionFeeIndicator": false,
+                                "globalTaxExclusionIndicator": false,
+                                "feePayableTotalAmount": 0.0,
+                                "feePayableTotalGrossAmount": 0.0,
+                                "feePayableTotalDiscountAmount": 0.0,
+                                "feePayableTotalTaxAmount": 0.0,
+                                "userDocumentCode": "UDGEN",
+                                "userDocumentCodeName": "Other post filing request with affected file",
+                                "userDocumentType": "RAM",
+                                "userDocumentTypeName": "Request for Amendment /correcton",
+                                "documentOriginCode": "VC",
+                                "documentOriginName": "St. Vincent & Grenadines",
+                                "taxBag": [
+                                    {
+                                        "taxId": "Tax4",
+                                        "taxDescription": "GST",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "Tax2",
+                                        "taxDescription": "Gift Tax",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "VAT",
+                                        "taxDescription": "VAT",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -5349,7 +3391,7 @@ export class FeeService {
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
@@ -5358,14 +3400,14 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "VAT",
-                                        "taxDescription": "Global VAT",
+                                        "taxDescription": "VAT",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 10
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -5384,7 +3426,7 @@ export class FeeService {
                                 "feeId": "017",
                                 "feeCategory": "maintenance fee",
                                 "feeTypeCode": "NFL",
-                                "feeDescription": "UD-Number of affected file (NCL)(UDGEN)",
+                                "feeDescription": "UD-Number of affected file (NCL| GEN)",
                                 "basicFeeUnitAmount": 200.0,
                                 "basicFeeUnitQuantity": 2,
                                 "additionalFeeUnitAmount": 50.0,
@@ -5407,82 +3449,24 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "VAT",
-                                        "taxDescription": "Global VAT",
+                                        "taxDescription": "VAT",
                                         "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 10
-                                    }
-                                ],
-                                "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID01",
-                                            "discountDescription": "SME",
-                                            "documentCode": "SME"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    }
-                                ]
-                            },
-                            {
-                                "feeId": "056",
-                                "feeCategory": "maintenance fee",
-                                "feeTypeCode": "NCL",
-                                "feeDescription": "UD-Addition of Nice (NCL)(UDGEN)",
-                                "basicFeeUnitAmount": 700.0,
-                                "basicFeeUnitQuantity": 4,
-                                "additionalFeeUnitAmount": 200.0,
-                                "additionalFeeUnitQuantity": 1,
-                                "taxInclusionFeeIndicator": false,
-                                "globalTaxExclusionIndicator": false,
-                                "feePayableTotalAmount": 0.0,
-                                "feePayableTotalGrossAmount": 0.0,
-                                "feePayableTotalDiscountAmount": 0.0,
-                                "feePayableTotalTaxAmount": 0.0,
-                                "userDocumentCode": "UDGEN",
-                                "userDocumentCodeName": "Other post filing request with affected file",
-                                "userDocumentType": "RAM",
-                                "userDocumentTypeName": "Request for Amendment /correcton",
-                                "documentOriginCode": "VC",
-                                "documentOriginName": "St. Vincent & Grenadines",
-                                "taxBag": [
-                                    {
-                                        "taxId": "Tax4",
-                                        "taxDescription": "GST",
-                                        "taxAmount": 0.0,
-                                        "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
-                                    },
-                                    {
-                                        "taxId": "Tax2",
-                                        "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
-                                    {
-                                        "discountScheme": {
-                                            "discountCategory": "DID02",
-                                            "discountDescription": "Individual",
-                                            "documentCode": "NID"
-                                        },
-                                        "discountAmount": 0.0,
-                                        "discountPercentage": "5"
-                                    },
                                     {
                                         "discountScheme": {
                                             "discountCategory": "DID01",
@@ -5515,6 +3499,15 @@ export class FeeService {
                                 "userDocumentTypeName": "Payment of Requested Fees",
                                 "documentOriginCode": "VC",
                                 "documentOriginName": "St. Vincent & Grenadines",
+                                "taxBag": [
+                                    {
+                                        "taxId": "Tax4",
+                                        "taxDescription": "GST",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    }
+                                ],
                                 "discountBag": [
                                     {
                                         "discountScheme": {
@@ -5561,7 +3554,7 @@ export class FeeService {
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
@@ -5570,14 +3563,14 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "VAT",
-                                        "taxDescription": "Global VAT",
+                                        "taxDescription": "VAT",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 10
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -5597,9 +3590,9 @@ export class FeeService {
                                 "feeCategory": "maintenance fee",
                                 "feeTypeCode": "LGC",
                                 "feeDescription": "TM-Color logo",
-                                "basicFeeUnitAmount": 20.0,
+                                "basicFeeUnitAmount": 50.0,
                                 "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 5.0,
+                                "additionalFeeUnitAmount": 10.0,
                                 "additionalFeeUnitQuantity": 1,
                                 "taxInclusionFeeIndicator": false,
                                 "globalTaxExclusionIndicator": false,
@@ -5619,12 +3612,12 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -5635,9 +3628,9 @@ export class FeeService {
                                 "feeCategory": "maintenance fee",
                                 "feeTypeCode": "LGO",
                                 "feeDescription": "UD-Logo",
-                                "basicFeeUnitAmount": 100.0,
+                                "basicFeeUnitAmount": 50.0,
                                 "basicFeeUnitQuantity": 1,
-                                "additionalFeeUnitAmount": 20.0,
+                                "additionalFeeUnitAmount": 10.0,
                                 "additionalFeeUnitQuantity": 1,
                                 "taxInclusionFeeIndicator": false,
                                 "globalTaxExclusionIndicator": true,
@@ -5655,7 +3648,7 @@ export class FeeService {
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -5665,7 +3658,7 @@ export class FeeService {
                                 "feeId": "019",
                                 "feeCategory": "maintenance fee",
                                 "feeTypeCode": "REG",
-                                "feeDescription": "UD-Regular Fee (POA | ABT | ROL)",
+                                "feeDescription": "UD-Regular Fee (POA | ABT | ROL| DOC | EXP)",
                                 "basicFeeUnitAmount": 500.0,
                                 "basicFeeUnitQuantity": 2,
                                 "additionalFeeUnitAmount": 100.0,
@@ -5688,21 +3681,21 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "VAT",
-                                        "taxDescription": "Global VAT",
+                                        "taxDescription": "VAT",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 10
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -5727,10 +3720,75 @@ export class FeeService {
                                 ]
                             },
                             {
+                                "feeId": "064",
+                                "feeCategory": "maintenance fee",
+                                "feeTypeCode": "NFL",
+                                "feeDescription": "UD-Change of Name and Address of Stakeholders",
+                                "basicFeeUnitAmount": 300.0,
+                                "basicFeeUnitQuantity": 1,
+                                "additionalFeeUnitAmount": 100.0,
+                                "additionalFeeUnitQuantity": 1,
+                                "taxInclusionFeeIndicator": false,
+                                "globalTaxExclusionIndicator": false,
+                                "feePayableTotalAmount": 0.0,
+                                "feePayableTotalGrossAmount": 0.0,
+                                "feePayableTotalDiscountAmount": 0.0,
+                                "feePayableTotalTaxAmount": 0.0,
+                                "userDocumentCode": "UDNAS",
+                                "userDocumentCodeName": "Change of name and/or address of stakeholders",
+                                "userDocumentType": "NAS",
+                                "userDocumentTypeName": "Test Change of name and address of stakeholders",
+                                "documentOriginCode": "VC",
+                                "documentOriginName": "St. Vincent & Grenadines",
+                                "taxBag": [
+                                    {
+                                        "taxId": "VAT",
+                                        "taxDescription": "VAT",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "Tax2",
+                                        "taxDescription": "Gift Tax",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "Tax4",
+                                        "taxDescription": "GST",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    }
+                                ],
+                                "discountBag": [
+                                    {
+                                        "discountScheme": {
+                                            "discountCategory": "DID02",
+                                            "discountDescription": "Individual",
+                                            "documentCode": "NID"
+                                        },
+                                        "discountAmount": 0.0,
+                                        "discountPercentage": "10"
+                                    },
+                                    {
+                                        "discountScheme": {
+                                            "discountCategory": "DID01",
+                                            "discountDescription": "SME",
+                                            "documentCode": "SME"
+                                        },
+                                        "discountAmount": 0.0,
+                                        "discountPercentage": "12"
+                                    }
+                                ]
+                            },
+                            {
                                 "feeId": "017",
                                 "feeCategory": "maintenance fee",
                                 "feeTypeCode": "NFL",
-                                "feeDescription": "UD-Number of affected file (NCL)(UDGEN)",
+                                "feeDescription": "UD-Number of affected file (NCL| GEN)",
                                 "basicFeeUnitAmount": 200.0,
                                 "basicFeeUnitQuantity": 2,
                                 "additionalFeeUnitAmount": 50.0,
@@ -5753,21 +3811,21 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "VAT",
-                                        "taxDescription": "Global VAT",
+                                        "taxDescription": "VAT",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 10
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -5786,7 +3844,7 @@ export class FeeService {
                                 "feeId": "056",
                                 "feeCategory": "maintenance fee",
                                 "feeTypeCode": "NCL",
-                                "feeDescription": "UD-Addition of Nice (NCL)(UDGEN)",
+                                "feeDescription": "UD-Addition of Nice (NCL)",
                                 "basicFeeUnitAmount": 700.0,
                                 "basicFeeUnitQuantity": 4,
                                 "additionalFeeUnitAmount": 200.0,
@@ -5809,12 +3867,63 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    }
+                                ],
+                                "discountBag": [
+                                    {
+                                        "discountScheme": {
+                                            "discountCategory": "DID02",
+                                            "discountDescription": "Individual",
+                                            "documentCode": "NID"
+                                        },
+                                        "discountAmount": 0.0,
+                                        "discountPercentage": "5"
+                                    },
+                                    {
+                                        "discountScheme": {
+                                            "discountCategory": "DID01",
+                                            "discountDescription": "SME",
+                                            "documentCode": "SME"
+                                        },
+                                        "discountAmount": 0.0,
+                                        "discountPercentage": "5"
+                                    }
+                                ]
+                            },
+                            {
+                                "feeId": "054",
+                                "feeCategory": "maintenance fee",
+                                "feeTypeCode": "NFL",
+                                "feeDescription": "UD-Number of affected file (COR & PU2)",
+                                "basicFeeUnitAmount": 200.0,
+                                "basicFeeUnitQuantity": 2,
+                                "additionalFeeUnitAmount": 125.0,
+                                "additionalFeeUnitQuantity": 1,
+                                "taxInclusionFeeIndicator": false,
+                                "globalTaxExclusionIndicator": false,
+                                "feePayableTotalAmount": 0.0,
+                                "feePayableTotalGrossAmount": 0.0,
+                                "feePayableTotalDiscountAmount": 0.0,
+                                "feePayableTotalTaxAmount": 0.0,
+                                "userDocumentCode": "UDOPP",
+                                "userDocumentCodeName": "Opposition",
+                                "userDocumentType": "NOP",
+                                "userDocumentTypeName": "Notice of Opposition",
+                                "documentOriginCode": "VC",
+                                "documentOriginName": "St. Vincent & Grenadines",
+                                "taxBag": [
+                                    {
+                                        "taxId": "Tax2",
+                                        "taxDescription": "Gift Tax",
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -5844,7 +3953,7 @@ export class FeeService {
                                 "feeId": "019",
                                 "feeCategory": "maintenance fee",
                                 "feeTypeCode": "REG",
-                                "feeDescription": "UD-Regular Fee (POA | ABT | ROL)",
+                                "feeDescription": "UD-Regular Fee (POA | ABT | ROL| DOC | EXP)",
                                 "basicFeeUnitAmount": 500.0,
                                 "basicFeeUnitQuantity": 2,
                                 "additionalFeeUnitAmount": 100.0,
@@ -5867,21 +3976,21 @@ export class FeeService {
                                         "taxDescription": "GST",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 5
+                                        "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     },
                                     {
                                         "taxId": "VAT",
-                                        "taxDescription": "Global VAT",
+                                        "taxDescription": "VAT",
                                         "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
-                                        "taxPercentage": 10
+                                        "taxPercentage": 0
                                     }
                                 ],
                                 "discountBag": [
@@ -5902,6 +4011,62 @@ export class FeeService {
                                         },
                                         "discountAmount": 0.0,
                                         "discountPercentage": "5"
+                                    }
+                                ]
+                            },
+                            {
+                                "feeId": "018",
+                                "feeCategory": "maintenance fee",
+                                "feeTypeCode": "NFL",
+                                "feeDescription": "UD-Number of affected file (RSP | POC)",
+                                "basicFeeUnitAmount": 100.0,
+                                "basicFeeUnitQuantity": 1,
+                                "additionalFeeUnitAmount": 50.0,
+                                "additionalFeeUnitQuantity": 1,
+                                "taxInclusionFeeIndicator": false,
+                                "globalTaxExclusionIndicator": false,
+                                "feePayableTotalAmount": 0.0,
+                                "feePayableTotalGrossAmount": 0.0,
+                                "feePayableTotalDiscountAmount": 0.0,
+                                "feePayableTotalTaxAmount": 0.0,
+                                "userDocumentCode": "UDPOC",
+                                "userDocumentCodeName": "Recordal of priority document",
+                                "userDocumentType": "PO",
+                                "userDocumentTypeName": "Test priority document",
+                                "documentOriginCode": "VC",
+                                "documentOriginName": "St. Vincent & Grenadines",
+                                "taxBag": [
+                                    {
+                                        "taxId": "Tax4",
+                                        "taxDescription": "GST",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "Tax2",
+                                        "taxDescription": "Gift Tax",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "VAT",
+                                        "taxDescription": "VAT",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    }
+                                ],
+                                "discountBag": [
+                                    {
+                                        "discountScheme": {
+                                            "discountCategory": "DID01",
+                                            "discountDescription": "SME",
+                                            "documentCode": "SME"
+                                        },
+                                        "discountAmount": 0.0,
+                                        "discountPercentage": "10"
                                     }
                                 ]
                             },
@@ -5930,7 +4095,7 @@ export class FeeService {
                                     {
                                         "taxId": "Tax2",
                                         "taxDescription": "Gift Tax",
-                                        "taxAmount": 20.0,
+                                        "taxAmount": 0.0,
                                         "taxMinimumAmount": 0.0,
                                         "taxPercentage": 0
                                     }
@@ -5961,9 +4126,9 @@ export class FeeService {
                                 "feeCategory": "maintenance fee",
                                 "feeTypeCode": "NFL",
                                 "feeDescription": "UD-Number of affected file (PUB)",
-                                "basicFeeUnitAmount": 50.0,
-                                "basicFeeUnitQuantity": 2,
-                                "additionalFeeUnitAmount": 30.0,
+                                "basicFeeUnitAmount": 200.0,
+                                "basicFeeUnitQuantity": 1,
+                                "additionalFeeUnitAmount": 125.0,
                                 "additionalFeeUnitQuantity": 1,
                                 "taxInclusionFeeIndicator": false,
                                 "globalTaxExclusionIndicator": false,
@@ -5976,13 +4141,49 @@ export class FeeService {
                                 "userDocumentType": "PUB",
                                 "userDocumentTypeName": "Special Publication Request",
                                 "documentOriginCode": "VC",
-                                "documentOriginName": "St. Vincent & Grenadines"
+                                "documentOriginName": "St. Vincent & Grenadines",
+                                "taxBag": [
+                                    {
+                                        "taxId": "Tax4",
+                                        "taxDescription": "GST",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "Tax2",
+                                        "taxDescription": "Gift Tax",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    }
+                                ],
+                                "discountBag": [
+                                    {
+                                        "discountScheme": {
+                                            "discountCategory": "DID02",
+                                            "discountDescription": "Individual",
+                                            "documentCode": "NID"
+                                        },
+                                        "discountAmount": 0.0,
+                                        "discountPercentage": "5"
+                                    },
+                                    {
+                                        "discountScheme": {
+                                            "discountCategory": "DID01",
+                                            "discountDescription": "SME",
+                                            "documentCode": "SME"
+                                        },
+                                        "discountAmount": 0.0,
+                                        "discountPercentage": "5"
+                                    }
+                                ]
                             },
                             {
                                 "feeId": "018",
                                 "feeCategory": "maintenance fee",
                                 "feeTypeCode": "NFL",
-                                "feeDescription": "UD-Number of affected file (RSP)",
+                                "feeDescription": "UD-Number of affected file (RSP | POC)",
                                 "basicFeeUnitAmount": 100.0,
                                 "basicFeeUnitQuantity": 1,
                                 "additionalFeeUnitAmount": 50.0,
@@ -5998,13 +4199,47 @@ export class FeeService {
                                 "userDocumentType": "OPC",
                                 "userDocumentTypeName": "Notification of Attendance UDRSP",
                                 "documentOriginCode": "VC",
-                                "documentOriginName": "St. Vincent & Grenadines"
+                                "documentOriginName": "St. Vincent & Grenadines",
+                                "taxBag": [
+                                    {
+                                        "taxId": "Tax4",
+                                        "taxDescription": "GST",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "Tax2",
+                                        "taxDescription": "Gift Tax",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "VAT",
+                                        "taxDescription": "VAT",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    }
+                                ],
+                                "discountBag": [
+                                    {
+                                        "discountScheme": {
+                                            "discountCategory": "DID01",
+                                            "discountDescription": "SME",
+                                            "documentCode": "SME"
+                                        },
+                                        "discountAmount": 0.0,
+                                        "discountPercentage": "10"
+                                    }
+                                ]
                             },
                             {
                                 "feeId": "018",
                                 "feeCategory": "maintenance fee",
                                 "feeTypeCode": "NFL",
-                                "feeDescription": "UD-Number of affected file (RSP)",
+                                "feeDescription": "UD-Number of affected file (RSP | POC)",
                                 "basicFeeUnitAmount": 100.0,
                                 "basicFeeUnitQuantity": 1,
                                 "additionalFeeUnitAmount": 50.0,
@@ -6020,7 +4255,41 @@ export class FeeService {
                                 "userDocumentType": "TRSP",
                                 "userDocumentTypeName": "Test Response to office document",
                                 "documentOriginCode": "VC",
-                                "documentOriginName": "St. Vincent & Grenadines"
+                                "documentOriginName": "St. Vincent & Grenadines",
+                                "taxBag": [
+                                    {
+                                        "taxId": "Tax4",
+                                        "taxDescription": "GST",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "Tax2",
+                                        "taxDescription": "Gift Tax",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    },
+                                    {
+                                        "taxId": "VAT",
+                                        "taxDescription": "VAT",
+                                        "taxAmount": 0.0,
+                                        "taxMinimumAmount": 0.0,
+                                        "taxPercentage": 0
+                                    }
+                                ],
+                                "discountBag": [
+                                    {
+                                        "discountScheme": {
+                                            "discountCategory": "DID01",
+                                            "discountDescription": "SME",
+                                            "documentCode": "SME"
+                                        },
+                                        "discountAmount": 0.0,
+                                        "discountPercentage": "10"
+                                    }
+                                ]
                             }
                         ]
                     }
@@ -6028,18 +4297,57 @@ export class FeeService {
             }
         }
         else if (dataType === "location") {
-            return {
-                "id": "document-origins",
-                "map": {
-                    "B1": "Back-File 1 [B1]",
-                    "BF": "Back-File [BF]",
-                    "E": "Efiling [E]",
-                    "TB": "Test Back File [TB]",
-                    "V2": "St. Vincent & Grenadines (Tax) [V2]",
-                    "V3": "VC New [V3]",
-                    "VC": "St. Vincent & Grenadines [VC]"
+            return [
+                {
+                    "documentOriginCode": "VC",
+                    "documentOriginName": "St. Vincent & Grenadines",
+                    "efilingIndicator": false,
+                    "backfileIndicator": false,
+                    "allowReceptionIndicator": false
+                },
+                {
+                    "documentOriginCode": "BF",
+                    "documentOriginName": "Back-File",
+                    "efilingIndicator": false,
+                    "backfileIndicator": false,
+                    "allowReceptionIndicator": false
+                },
+                {
+                    "documentOriginCode": "TB",
+                    "documentOriginName": "Test Back File",
+                    "efilingIndicator": false,
+                    "backfileIndicator": false,
+                    "allowReceptionIndicator": false
+                },
+                {
+                    "documentOriginCode": "B1",
+                    "documentOriginName": "Back-File 1",
+                    "efilingIndicator": false,
+                    "backfileIndicator": true,
+                    "allowReceptionIndicator": false
+                },
+                {
+                    "documentOriginCode": "V2",
+                    "documentOriginName": "St. Vincent & Grenadines (Tax)",
+                    "efilingIndicator": false,
+                    "backfileIndicator": false,
+                    "allowReceptionIndicator": false
+                },
+                {
+                    "documentOriginCode": "E",
+                    "documentOriginName": "Efiling",
+                    "efilingIndicator": true,
+                    "backfileIndicator": false,
+                    "allowReceptionIndicator": false
+                },
+                {
+                    "documentOriginCode": "V3",
+                    "documentOriginName": "VC New",
+                    "efilingIndicator": false,
+                    "backfileIndicator": false,
+                    "allowReceptionIndicator": false
                 }
-            }
+            ]
         }
 
     }

@@ -15,7 +15,7 @@
     </div>
     <div class="col-span-4 advanced-button">
       <div [style]="showAdvancedSearch? '' :'display:none' ">
-        <app-configurable-advanced-filter></app-configurable-advanced-filter>
+        <app-configurable-advanced-filter [category]="category" [categorySelection]="categorySelection" [templateSelection]="templateSelection"></app-configurable-advanced-filter>
       </div>
     </div>
     <div class="col-span-4 flex justify-end gap-2 filter-icons">
@@ -29,6 +29,6 @@
 <div class="mt-1 w-full" [style]="(disabled || appliedFilters.length == 0)? 'display:none' : '' ">
   <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="filterClearAll" [clearAllLabel]="'Clear All'" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-filter-chips>
 </div>
-<div class="mt-1 w-full app-advanced-filter-query" [style]="showAdvancedSearchQuery? '' :'display:none' ">
+<div class="mt-1 w-full app-advanced-filter-query" [style]="(showAdvancedSearchQuery || (selectedQuery != null) )? '' :'display:none' ">
   <app-advanced-filter-query [selectedQuery]="selectedQuery"></app-advanced-filter-query>
 </div>

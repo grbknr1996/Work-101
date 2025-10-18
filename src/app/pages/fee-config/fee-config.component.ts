@@ -3,7 +3,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
 import { FeeService } from 'src/app/_services/fee.service';
-import { FeeBag } from 'src/app/schemas/fee-schema';
+import { FeeBag, FeeConditions } from 'src/app/schemas/fee-schema';
 import {
   ConfigurableFilterComponent,
   FilterConfig,
@@ -34,6 +34,7 @@ enum IpTypes {
 export class FeeConfigComponent implements OnInit {
   @ViewChild(ConfigurableFilterComponent)
   configurableFilter!: ConfigurableFilterComponent;
+  currencyCode: string;
   feeBag!: FeeBag[];
 
   docOrigins: any[];
@@ -146,11 +147,8 @@ export class FeeConfigComponent implements OnInit {
     this.onLocationChange(officeCode);
     this.feeService.getDocumentOrigins().subscribe((documentOrigins) => {
       console.log('document origins: ', documentOrigins);
-      this.docOrigins = Object.entries(documentOrigins.map).map(([code, name]) => ({
-        name,
-        code
-      }));
-      this.selectedLocation = this.docOrigins.filter(value => value.code === officeCode.toUpperCase())[0];
+      this.docOrigins = documentOrigins;
+      this.selectedLocation = this.docOrigins.filter(value => value.documentOriginCode === officeCode.toUpperCase())[0];
     });
   }
 
@@ -327,16 +325,16 @@ export class FeeConfigComponent implements OnInit {
       const officeCode =
         params['officeCode'] || this.ms.getCurrentOffice() || 'default';
       const langCode = params['langCode'] || 'en';
-      this.feeService.setSelectedItems({ docOrigins: this.docOrigins, feeBag: this.feeBag });
       this.router.navigate([
         `/${officeCode}/${langCode}/system-configuration/fee-config/calculator`,
-      ]);
+      ], { state: { docOrigins: this.docOrigins} });
     });
   }
 
   onLocationChange(officeCode) {
     console.log(officeCode);
     this.feeService.getFeesConditions(officeCode, null).subscribe((feeServices) => {
+      this.currencyCode = feeServices.currencyCode;
       this.feeBag = feeServices.requestBag[0].feeBag.map(fee => {
         if ("ipRightCategory" in fee)
           return fee;

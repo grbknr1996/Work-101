@@ -1,7 +1,12 @@
 app-layout([config]="layout")
     app-breadcrumbs([autoGenerate]="false", [home]="home", [items]="items")
-    app-chart-navbar((onReset)="onReset()")
+    app-chart-navbar((onFilter)="onFilter()", (onReset)="onReset()")
 
-    //- Center the Chart
-    div(style="display: flex; align-items: center; justify-content: center;")
-        div(echarts, [(options)]="chartOption", (chartInit)="onChartEvent($event, 'chartInit')", (chartClick)="onChartEvent($event, 'chartClick')", (chartLegendSelectChanged)="onChartEvent($event, 'chartLegendSelectChanged')", [ngStyle]="{'height.px' : chartHeightFunc(), 'width.px' : chartWidthFunc() }")
+    div(class="tw-stats-content w-full min-h-[80vh] flex flex-col lg:flex-row justify-center items-center gap-4 transition-all duration-300")
+        //-FILTER: >=992 or <992
+        div(*ngIf="showFilter", class="tw-filter-wrapper box-border min-w-0 max-w-full w-full lg:w-[30%] bg-gray-100 shadow-md p-4 border border-gray-200 order-first lg:order-last transition-all duration-300 self-stretch")
+            app-chart-filter([actualFilters]="filters", [show]="showFilter", (onHide)="showFilter = false")
+
+        //-CHART: >=992 or <992
+        div(class="tw-chart-wrapper w-full flex justify-center items-center lg:justify-start lg:items-center lg:w-[70%] transition-all duration-300")
+            div(echarts, [(options)]="chartOption", (chartInit)="onChartEvent($event, 'chartInit')", (chartClick)="onChartEvent($event, 'chartClick')", (chartLegendSelectChanged)="onChartEvent($event, 'chartLegendSelectChanged')", [ngStyle]="{'height.px' : chartHeightFunc(), 'width.px' : chartWidthFunc()}", #chartContainer)
