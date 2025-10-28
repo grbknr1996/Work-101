@@ -635,7 +635,7 @@ $transition-duration = 0.3s
   flex: 1
   position: relative
   transition: margin-left 0.3s ease-in-out
-  min-height: calc(100vh - 64px) 
+  min-height: calc(120vh - 64px) 
   
   &.with-sidebar 
     @media (max-width: 800px)
@@ -652,7 +652,7 @@ $transition-duration = 0.3s
   padding: 1rem
   display: flex
   flex-direction: column
-  min-height: calc(100vh - 64px) // Ensure it takes full height minus navbar
+  min-height: calc(120vh - 64px) // Ensure it takes full height minus navbar
   
   @media screen and (max-width: 450px)
     padding 0
@@ -779,6 +779,7 @@ $transition-duration = 0.3s
   transition background-color 0.2s
   text-decoration none
   border-radius 4px
+  cursor pointer
   
   &:hover
     background-color var(--surface-hover, #f8f9fa)
@@ -1044,11 +1045,18 @@ $transition-duration = 0.3s
 
   .filter-group-box
     padding 1rem
-    background-color rgb(249, 250, 251)
     border-width 1px
-    border-color rgb(229, 231, 235)
     border-radius 0.5rem
 
+  .filter-group-box-unselected
+    background-color rgb(249, 250, 251)
+    border-color rgb(229, 231, 235)
+
+  .filter-group-box-selected
+    background-color #eff6ff
+    border 2px solid #93c5fd
+    outline 2px solid #bfdbfe
+    
   .filter-group-content
     display flex
     justify-content space-between
@@ -1202,6 +1210,12 @@ $transition-duration = 0.3s
     border-radius 0.5rem
     transition all 0.2s ease
 
+  .filter-level-box-selected
+    box-shadow: 0 0 0 4px #812fc4ff
+    border-radius: 0.5rem
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.1)) drop-shadow(0 4px 6px rgba(0, 0, 0, 0.05))
+    transform: scale(1.02)
+
   .filter-level-content
     position absolute
     top -0.75rem
@@ -1263,6 +1277,92 @@ $transition-duration = 0.3s
     padding-left 0.75rem
     padding-right 0.75rem
     color #4C1D95
+
+  .selection-box
+    background-color #eff6ff
+    padding 0.75rem
+    border 1px solid #bfdbfe
+    border-radius 0.5rem
+
+  .selection-header
+    display flex
+    align-items center
+    justify-content space-between
+    font-size 0.875rem
+
+  .selection-text
+    color #1e40af
+
+  .clear-button
+    padding 0 0.75rem
+    height 1.75rem
+    font-size 0.875rem
+    font-weight 500
+    color #2563eb
+    border 1px solid #bfdbfe
+    border-radius 0.375rem
+    background-color white
+    cursor pointer
+
+    &:hover
+      color #1e3a8a
+      border-color #93c5fd
+      background-color #f1f5f9
+
+  .group-selection-badge
+    font-size 0.75rem
+    background-color #dbeafe
+    color #1d4ed8
+    padding 0.25rem 0.5rem
+    border-radius 9999px
+    font-weight 500
+
+  .filter-group-button-container
+    position fixed
+    bottom 5.25rem
+    right 2.5rem
+    z-index 20
+
+  .filter-group-button
+    display inline-flex
+    align-items center
+    justify-content center
+    gap 0.5rem
+    font-weight 500
+    height 2.5rem
+    padding 1rem 1.5rem
+    font-size 1.125rem
+    color white
+    background linear-gradient(to right, #2563eb, #4f46e5)
+    border-radius 9999px
+    transform scale(1)
+    border none
+    cursor pointer
+
+    &:hover
+      background linear-gradient(to right, #1d4ed8, #4338ca)
+      transform scale(1.1)
+
+  .filter-group-add-level-button
+    display: inline-flex
+    align-items: center
+    justify-content: center
+    gap: 0.5rem
+    white-space: nowrap
+    font-weight: 500
+    padding: 1rem 1.5rem
+    height: 2.5rem
+    color: #fff
+    border-radius: 9999px
+    background: linear-gradient(to right, #16a34a, #059669)
+    outline: none
+    border: none
+    cursor: pointer
+    transform: scale(1)
+
+    &:hover
+      background: linear-gradient(to right, #15803d, #047857)
+      transform: scale(1.1)
 
   .template-dialog-overlay
     position fixed
@@ -1346,8 +1446,6 @@ $transition-duration = 0.3s
     top 100%
     right 0
     width 400px
-    max-width 90vw
-    max-height 140vh
     z-index 100
     margin-top 8px
 
@@ -3358,6 +3456,33 @@ app-online-publication-journal
 // =============================
 // End of Online Publication Journal Page
 // =============================
+
+// =============================
+// Start of Auxiliary Register Dashboard Page
+// =============================
+
+app-auxiliary-register
+  .filter
+    padding 0.4rem;
+    background-color #e5f3f7;
+    border-radius var(--p-inputtext-border-radius, 6px);
+    .filter-icons
+      .p-button-text
+        color var(--p-button-outlined-secondary-color);
+      p-button
+        button.p-button-outlined
+          background transparent;
+
+.poa-details
+  background-color: #f3f3f3;
+  .p-drawer-header
+    padding: 0rem;
+    .title-subtitle
+      padding: 1.25rem;
+
+// =============================
+// End of Auxiliary Register Dashboard Page
+// =============================
   
 // =============================
 // Signup Component Styles
@@ -5184,6 +5309,38 @@ app-add-exclusion-rule
     .p-tabview-panels
       padding 1rem 0
 // ========================================
+// Global Override for Filter Input Font Size
+// ========================================
+.filter-content input.p-inputtext,
+.filter-option input.p-inputtext,
+app-configurable-filter input.p-inputtext,
+app-configurable-filter .p-inputtext
+  font-size 0.75rem !important
+
+.filter-content input.p-inputtext::placeholder,
+.filter-option input.p-inputtext::placeholder,
+app-configurable-filter input.p-inputtext::placeholder,
+app-configurable-filter .p-inputtext::placeholder
+  font-size 0.75rem !important
+
+/* Generic selectors for all filter inputs regardless of language */
+.filter-content input,
+.filter-option input,
+.filter-content .p-inputtext,
+.filter-option .p-inputtext,
+app-configurable-filter input,
+app-configurable-filter .p-inputtext
+  font-size 0.75rem 
+
+/* Generic placeholder selectors for all filter inputs */
+.filter-content input::placeholder,
+.filter-option input::placeholder,
+.filter-content .p-inputtext::placeholder,
+.filter-option .p-inputtext::placeholder,
+app-configurable-filter input::placeholder,
+app-configurable-filter .p-inputtext::placeholder
+  font-size 0.75rem 
+// ========================================
 // App-Configurable-filter
 // ========================================
 // Filter Component Container
@@ -5329,7 +5486,6 @@ app-configurable-filter
     border-radius 8px
     box-shadow 0 10px 25px rgba(0, 0, 0, 0.15)
     width 100%
-    max-height 60vh
     display flex
     flex-direction column
     overflow visible
@@ -5484,30 +5640,86 @@ app-configurable-filter
   /* Filter Content */
   .filter-content
     flex 1
-    overflow-y auto
-    padding 1rem 1.5rem
-    min-height 200px
+    overflow visible
+    display flex
+    flex-direction column
 
   .filter-sections
     display flex
     flex-direction column
-    gap 1.5rem
+    gap 1rem
+    flex 1
 
   .filter-section
     border-bottom 1px solid #f3f4f6
-    padding-bottom 1rem
+    padding-bottom 0.75rem
 
     &:last-child
       border-bottom none
       padding-bottom 0
+   /* Custom Tab Layout Styles */
+  .filter-tabs
+    flex 1
+    display flex
+    flex-direction column
+    max-width 100%
+
+    .tab-navigation
+      display flex
+      flex-wrap wrap
+      gap 0.25rem
+      padding 0.5rem
+      border-bottom 1px solid #e5e7eb
+      background #f9fafb
+      border-radius 0
+      max-width 100%
+      overflow hidden
+
+    .tab-header
+      padding 0.5rem 0.75rem
+      font-size 0.75rem
+      font-weight 500
+      color #6b7280
+      border-radius 0
+      border none
+      background transparent
+      cursor pointer
+      transition all 0.2s ease
+      white-space nowrap
+      flex-shrink 0
+
+      &:hover
+        color #1f2937
+        background #f3f4f6
+
+      &.active
+        color #1f2937
+        background transparent
+        border none
+        border-bottom 2px solid #3b82f6
+        box-shadow none
+
+    .tab-content
+      flex 1
+      padding 0
+      background #ffffff
+      position relative
+
+    .tab-panel
+      padding 1rem
+      height 100%
+      display none
+
+      &.active
+        display block
 
   .section-title
-    font-size 0.875rem
-    font-weight 700
+    font-size 0.75rem
+    font-weight 600
     color #374151
     text-transform uppercase
     letter-spacing 0.05em
-    margin-bottom 0.75rem
+    margin-bottom 0.5rem
     margin-top 0
 
   .filter-options
@@ -5521,11 +5733,20 @@ app-configurable-filter
   .checkbox-option
     display flex
     align-items center
-    gap 0.75rem
-    padding 0.5rem 0
+    gap 0.5rem
+    padding 0.25rem 0
+
+  /* Two-column layout for checkbox options (STATUS section), date filters, and text fields */
+  .filter-options:has(.checkbox-option),
+  .filter-options:has(.date-option),
+  .filter-options:has(.daterange-option),
+  .filter-options:has(.text-option)
+    display grid
+    grid-template-columns 1fr 1fr
+    gap 0.5rem 0.75rem
 
   .checkbox-label
-    font-size 0.875rem
+    font-size 0.75rem
     color #374151
     cursor pointer
     user-select none
@@ -5540,14 +5761,27 @@ app-configurable-filter
   .daterange-option
     width 100%
 
+  .filter-options:has(.checkbox-option) .daterange-option,
+  .filter-options:has(.checkbox-option) .date-option,
+  .filter-options:has(.date-option) .daterange-option,
+  .filter-options:has(.daterange-option) .daterange-option
+    grid-column 1 / -1
+
+  /* Smart layout for single items - make them span full width to prevent empty columns (excluding text fields) */
+  .filter-options:has(.checkbox-option):not(:has(.checkbox-option + .checkbox-option)) .checkbox-option,
+  .filter-options:has(.date-option):not(:has(.date-option + .date-option)) .date-option,
+  .filter-options:has(.number-option):not(:has(.number-option + .number-option)) .number-option
+    grid-column 1 / -1
+    max-width 50%
+    justify-self center
   /* Filter Labels */
   .filter-label
     display block
-    font-size 0.875rem
-    font-weight 600
+    font-size 0.75rem
+    font-weight 500
     color #374151
-    margin-bottom 0.5rem
-    line-height 1.25rem
+    margin-bottom 0.375rem
+    line-height 1.125rem
 
   /* PrimeNG Component Overrides - Essential Only */
   :host ::ng-deep .p-multiselect,
@@ -5555,7 +5789,33 @@ app-configurable-filter
   :host ::ng-deep .p-calendar,
   :host ::ng-deep .p-inputnumber
     width 100%
+    font-size 0.75rem
 
+  /* Smaller placeholder text */
+  :host ::ng-deep .p-multiselect .p-multiselect-label,
+  :host ::ng-deep .p-dropdown .p-dropdown-label,
+  :host ::ng-deep .p-calendar .p-inputtext,
+  :host ::ng-deep .p-inputtext::placeholder,
+  :host ::ng-deep .p-inputnumber input::placeholder
+    font-size 0.75rem !important
+
+  /* Override PrimeNG default font-size for input text - more specific selectors */
+  :host ::ng-deep .p-inputtext,
+  :host ::ng-deep input.p-inputtext,
+  :host ::ng-deep .p-component.p-inputtext
+    font-size 0.75rem !important
+
+  /* Even more specific for filter component */
+  app-configurable-filter :host ::ng-deep .p-inputtext,
+  app-configurable-filter :host ::ng-deep input.p-inputtext
+    font-size 0.75rem !important
+
+  /* Global override for filter inputs */
+  .filter-content .p-inputtext,
+  .filter-content input.p-inputtext,
+  .filter-option .p-inputtext,
+  .filter-option input.p-inputtext
+    font-size 0.75rem !important  
   /* Input Field Styling - Essential Only */
   :host ::ng-deep .p-multiselect:focus,
   :host ::ng-deep .p-dropdown:focus,
@@ -5630,11 +5890,14 @@ app-configurable-filter
     padding 1rem 1.5rem
     border-top 1px solid #e5e7eb
     background #f9fafb
+    margin-top auto
+    flex-shrink 0
 
   .action-buttons
     display flex
     gap 0.75rem
     justify-content space-between
+    width 100%
 
     button
       flex 1
@@ -5643,6 +5906,7 @@ app-configurable-filter
       font-weight 600
       border-radius 6px
       transition all 0.2s ease
+      min-height 2.5rem
 
   /* Responsive Design */
   @media (max-width: 768px)
@@ -5651,18 +5915,6 @@ app-configurable-filter
       max-width 90vw
       right 0
       z-index 100
-
-    .filter-panel
-      max-height 60vh
-      min-height 300px
-
-    .filter-header
-      padding 1rem
-
-    .filter-content
-      padding 1rem
-      min-height 200px
-
     .filter-actions
       padding 1rem
 
@@ -5673,9 +5925,9 @@ app-configurable-filter
       right -50px !important
       z-index 100
 
-    .filter-panel
-      max-height 60vh
-      min-height 250px
+    
+     
+      
 
     .header-actions
       gap 0.25rem
@@ -5736,17 +5988,6 @@ app-configurable-filter
       box-shadow 0 0 0 0.2rem rgba(220, 38, 38, 0.25)
   
   app-configurable-filter
-    .filter-panel
-      max-height 60vh
-      min-height 300px
-
-    .filter-header
-      padding 1rem
-
-    .filter-content
-      padding 1rem
-      min-height 200px
-
     .filter-actions
       padding 1rem
   
@@ -7347,4 +7588,34 @@ app-create-unit
 
   .form-actions
     margin-top: 2rem
+// ========================================
+// Work In Progress Component Styles
+// ========================================
+work-in-progress
+  .container
+    display: flex
+    justify-content: center
+    align-items: center
+    background-color transparent
+    max-width 100%
+    
+  .main-container
+    text-align: center
+    padding: 2rem
+
+  .icon
+    font-size: 4rem
+    color: var(--primary-color, #007bff)
+    margin-bottom: 1rem
+
+  .title
+    font-size: 2.5rem
+    font-weight: bold
+    margin-bottom: 1rem
+    color: var(--text-color, #333)
+
+  .description
+    font-size: 1.1rem
+    color: var(--text-color-secondary, #666)
+    margin-bottom: 2rem
       

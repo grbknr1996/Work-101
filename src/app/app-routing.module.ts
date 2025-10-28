@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './_guards/auth.guard';
+import { WORK_IN_PROGRESS_ROUTES } from './_constants/work-in-progress-routes.constant';
 
 const routes: Routes = [
   // Auth callback route - handles redirect from AWS Cognito
@@ -217,6 +218,13 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: ':officeCode/:langCode/stakeholders-registry/auxiliary-register',
+    loadChildren: async () =>
+      (await import('./pages/auxiliary-register/auxiliary-register.module'))
+        .AuxiliaryRegisterModule,
+    canActivate: [AuthGuard],
+  },
+  {
     path: ':officeCode/:langCode/notfound',
     loadChildren: async () =>
       (await import('./pages/page-notfound/page-notfound.module'))
@@ -228,7 +236,15 @@ const routes: Routes = [
       (await import('./pages/unauthorized/unauthorized.module'))
         .UnauthorizedComponentModule,
   },
-
+  {
+    path: ':officeCode/:langCode/work-in-progress',
+    loadChildren: async () =>
+      (await import('./pages/work-in-progress/work-in-progress.module'))
+        .WorkInProgressModule,
+    canActivate: [AuthGuard],
+  },
+  // Work in Progress - Undeveloped Widget Routes
+  ...WORK_IN_PROGRESS_ROUTES,
   // Redirects for office/:langCode pattern
   {
     path: ':officeCode/:langCode',

@@ -1,3 +1,4 @@
+import { environment } from '../../environments/environment';
 import { DashboardWidget } from '../interfaces';
 
 export const PERMISSION_SETS = {
@@ -25,17 +26,24 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
     icon: 'pi-briefcase',
     requiredPermissions: [],
     items: [
+      // {
+      //   icon: 'pi-objects-column',
+      //   label: 'dashboard.widgets.workspace.items.filingDashboard',
+      //   link: '/filing-dashboard',
+      //   requiredPermissions: [],
+      // },
+      // {
+      //   icon: 'pi-plus-circle',
+      //   label: 'dashboard.widgets.workspace.items.newFilings',
+      //   link: '/new-filings',
+      //   requiredPermissions: [],
+      // },
       {
-        icon: 'pi-objects-column',
-        label: 'dashboard.widgets.workspace.items.filingDashboard',
-        link: '/filing-dashboard',
-        requiredPermissions: [],
-      },
-      {
-        icon: 'pi-plus-circle',
-        label: 'dashboard.widgets.workspace.items.newFilings',
-        link: '/new-filings',
-        requiredPermissions: [],
+        icon: 'pi-eye',
+        label: 'dashboard.widgets.receptionOperations.items.efilingReview',
+        link: environment.efillingUrl,
+        requiredPermissions: ['efiling_dashboard_view'],
+        isExternal: true,
       },
       {
         icon: 'pi-bell',
@@ -95,12 +103,12 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
         link: '/data-capture/documents',
         requiredPermissions: ['pending_doc_capture_view'],
       },
-      {
-        icon: 'pi-calendar',
-        label: 'dashboard.widgets.dataCapture.items.pendingDailyLogs',
-        link: '/data-capture/daily-logs',
-        requiredPermissions: ['pending_daily_log_view'],
-      },
+      // {
+      //   icon: 'pi-calendar',
+      //   label: 'dashboard.widgets.dataCapture.items.pendingDailyLogs',
+      //   link: '/data-capture/daily-logs',
+      //   requiredPermissions: ['pending_daily_log_view'],
+      // },
     ],
   },
   {
@@ -124,7 +132,7 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
       {
         icon: 'pi-chart-pie',
         label: 'dashboard.widgets.receptionOperations.items.dashboard',
-        link: '/dashboard',
+        link: '/reception/dashboard',
         requiredPermissions: ['reception_dashboard_view'],
       },
       {
@@ -133,12 +141,12 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
         link: '/configurations',
         requiredPermissions: ['system_config_view'],
       },
-      {
-        icon: 'pi-eye',
-        label: 'dashboard.widgets.receptionOperations.items.efilingReview',
-        link: '/efiling/review',
-        requiredPermissions: ['efiling_dashboard_view'],
-      },
+      // {
+      //   icon: 'pi-eye',
+      //   label: 'dashboard.widgets.receptionOperations.items.efilingReview',
+      //   link: '/efiling/review',
+      //   requiredPermissions: ['efiling_dashboard_view'],
+      // },
     ],
   },
   {
@@ -163,6 +171,12 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
         icon: 'pi-envelope',
         label: 'dashboard.widgets.stakeholdersRegistry.items.emailRegister',
         link: '/email-register',
+        requiredPermissions: ['email_receipients_view'],
+      },
+      {
+        icon: 'pi-receipt',
+        label: 'dashboard.widgets.stakeholdersRegistry.items.auxiliaryRegister',
+        link: '/stakeholders-registry/auxiliary-register',
         requiredPermissions: ['email_receipients_view'],
       },
     ],

@@ -68,7 +68,9 @@ export class OriginsComponent implements OnInit {
   currentLegend2: string = 'accounted_application';
 
   //COMMONS
-  filters!: chartFilterConfig[];
+  filters: chartFilterConfig[] = [
+    { include: true, key: 'compare', label: 'charts.statistics.filters.compare1', type: 'checkbox', model: true }
+  ];
   /*
   filters: chartFilterConfig[] = [
     { include: true, key: 'compare', type: 'checkbox', model: false },
@@ -77,7 +79,7 @@ export class OriginsComponent implements OnInit {
     { include: true, key: 'IPType', type: 'dropdown', model: 'D', options: [{ label: 'Breakfast', value: 'B' }, { label: 'Lunch', value: 'L' }, { label: 'Dinner', value: 'D' }] }
   ];
   */
-  showFilter: boolean = false;
+  showFilter: boolean = true;
   //CHART-NAVBAR
   onFilter() { this.showFilter = !this.showFilter; }
   onReset() {

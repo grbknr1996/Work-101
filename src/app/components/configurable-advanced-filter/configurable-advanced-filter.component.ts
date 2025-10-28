@@ -42,6 +42,8 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
   @Input() categorySelection: boolean = false;
   @Input() templateSelection: boolean = true;
 
+  @Output() advancedFilterSearch = new EventEmitter<AdvancedFilterQuery>();
+
   queryTemplatesFromDb: QueryTemplate[] | null = null;
   queryTemplates: QueryTemplate[] | null = null;
 
@@ -57,16 +59,17 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
   selectedCategory: SearchCategory | undefined;
 
   fieldOptions;
+  fieldOptionsFromDb;
   queryOptions;
 
-  //fields: FieldQueries[];
-  //groups: GroupQueries[];
   levels: LevelQueries[];
 
   groupNumber = 1;
   levelNumber = 1;
 
   templateVisible = true;
+
+  selectedList;
   
   constructor(private fb: FormBuilder) {
   }
@@ -89,8 +92,8 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
       { code: 'trademarks', name: 'Trademarks' },
       { code: 'designs', name: 'Designs' },
       { code: 'gazette', name: 'Gazette' },
-      { code: 'data-packages', name: 'Data Packages' },
-      { code: 'authority-files', name: 'Authority Files' },
+      { code: 'datapackages', name: 'Data Packages' },
+      { code: 'authorityfiles', name: 'Authority Files' },
     ];
 
     this.queryOptions = [
@@ -100,45 +103,265 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
       { code: 'Ends', name: 'Ends With' }
     ];
 
-    this.fieldOptions = [
+    this.fieldOptionsFromDb = [
       {
-        label: 'Free Text',
-        value: 'TXT',
-        items: [
-          { label: 'Title', value: 'TTL' },
-          { label: 'Description', value: 'DESC' },
-          { label: 'Mark Name', value: 'MK' },
-          { label: 'Title in Other Language', value: 'TTL_EN' }
+        "key": "patents",
+        "options": [
+          {
+            "label": "Free Text",
+            "code": "TXT",
+            "items": [
+              { "name": "Title", "code": "TTL" },
+              { "name": "Description", "code": "DESC" },
+              { "name": "Mark Name", "code": "MK" },
+              { "name": "Title in Other Language", "code": "TTL_EN" }
+            ]
+          },
+          {
+            "label": "Property",
+            "code": "PROP",
+            "items": [
+              { "name": "Application Id", "code": "AFNB" },
+              { "name": "Filing Date", "code": "AFDT" },
+              { "name": "Application Type", "code": "APP_TYP" },
+              { "name": "Status", "code": "STLB" }
+            ]
+          },
+          {
+            "label": "Classifications",
+            "code": "CLS",
+            "items": [
+              { "name": "Nice", "code": "NCL" },
+              { "name": "Vienna", "code": "VCL" },
+              { "name": "Locarno", "code": "LCL" },
+              { "name": "IPC", "code": "IPC" }
+            ]
+          },
+          {
+            "label": "Country",
+            "code": "COUNTRY",
+            "items": [
+              { "name": "Applicant County", "code": "APCT" },
+              { "name": "Priority Country", "code": "PCCT" },
+              { "name": "Filing Country", "code": "AFCT" },
+              { "name": "Publication Country", "code": "PUBCT" }
+            ]
+          }
         ]
       },
       {
-        label: 'Property',
-        value: 'PROP',
-        items: [
-          { label: 'Application Id', value: 'AFNB' },
-          { label: 'Filing Date', value: 'AFDT' },
-          { label: 'Application Type', value: 'APP_TYP' },
-          { label: 'Status', value: 'STLB' }
+        "key": "trademarks",
+        "options": [
+          {
+            "label": "Free Text",
+            "code": "TXT",
+            "items": [
+              { "name": "Title", "code": "TTL" },
+              { "name": "Description", "code": "DESC" },
+              { "name": "Mark Name", "code": "MK" },
+              { "name": "Title in Other Language", "code": "TTL_EN" }
+            ]
+          },
+          {
+            "label": "Property",
+            "code": "PROP",
+            "items": [
+              { "name": "Application Id", "code": "AFNB" },
+              { "name": "Filing Date", "code": "AFDT" },
+              { "name": "Application Type", "code": "APP_TYP" },
+              { "name": "Status", "code": "STLB" }
+            ]
+          },
+          {
+            "label": "Classifications",
+            "code": "CLS",
+            "items": [
+              { "name": "Nice", "code": "NCL" },
+              { "name": "Vienna", "code": "VCL" },
+              { "name": "Locarno", "code": "LCL" },
+              { "name": "IPC", "code": "IPC" }
+            ]
+          },
+          {
+            "label": "Country",
+            "code": "COUNTRY",
+            "items": [
+              { "name": "Applicant County", "code": "APCT" },
+              { "name": "Priority Country", "code": "PCCT" },
+              { "name": "Filing Country", "code": "AFCT" },
+              { "name": "Publication Country", "code": "PUBCT" }
+            ]
+          }
         ]
       },
       {
-        label: 'Classifications',
-        value: 'CLS',
-        items: [
-          { label: 'Nice', value: 'NCL' },
-          { label: 'Vienna', value: 'VCL' },
-          { label: 'Locarno', value: 'LCL' },
-          { label: 'IPC', value: 'IPC' }
+        "key": "designs",
+        "options": [
+          {
+            "label": "Free Text",
+            "code": "TXT",
+            "items": [
+              { "name": "Title", "code": "TTL" },
+              { "name": "Description", "code": "DESC" },
+              { "name": "Mark Name", "code": "MK" },
+              { "name": "Title in Other Language", "code": "TTL_EN" }
+            ]
+          },
+          {
+            "label": "Property",
+            "code": "PROP",
+            "items": [
+              { "name": "Application Id", "code": "AFNB" },
+              { "name": "Filing Date", "code": "AFDT" },
+              { "name": "Application Type", "code": "APP_TYP" },
+              { "name": "Status", "code": "STLB" }
+            ]
+          },
+          {
+            "label": "Classifications",
+            "code": "CLS",
+            "items": [
+              { "name": "Nice", "code": "NCL" },
+              { "name": "Vienna", "code": "VCL" },
+              { "name": "Locarno", "code": "LCL" },
+              { "name": "IPC", "code": "IPC" }
+            ]
+          },
+          {
+            "label": "Country",
+            "code": "COUNTRY",
+            "items": [
+              { "name": "Applicant County", "code": "APCT" },
+              { "name": "Priority Country", "code": "PCCT" },
+              { "name": "Filing Country", "code": "AFCT" },
+              { "name": "Publication Country", "code": "PUBCT" }
+            ]
+          }
         ]
       },
       {
-        label: 'Country',
-        value: 'COUNTRY',
-        items: [
-          { label: 'Applicant County', value: 'APCT' },
-          { label: 'Priority Country', value: 'PCCT' },
-          { label: 'Filing Country', value: 'AFCT' },
-          { label: 'Publication Country', value: 'PUBCT' }
+        "key": "gazette",
+        "options": [
+          {
+            "label": "Free Text",
+            "code": "TXT",
+            "items": [
+              { "name": "Title", "code": "TTL" },
+              { "name": "Description", "code": "DESC" },
+              { "name": "Mark Name", "code": "MK" },
+              { "name": "Title in Other Language", "code": "TTL_EN" }
+            ]
+          },
+          {
+            "label": "Property",
+            "code": "PROP",
+            "items": [
+              { "name": "Application Id", "code": "AFNB" },
+              { "name": "Filing Date", "code": "AFDT" },
+              { "name": "Application Type", "code": "APP_TYP" },
+              { "name": "Status", "code": "STLB" }
+            ]
+          },
+          {
+            "label": "Classifications",
+            "code": "CLS",
+            "items": [
+              { "name": "Nice", "code": "NCL" },
+              { "name": "Vienna", "code": "VCL" },
+              { "name": "Locarno", "code": "LCL" },
+              { "name": "IPC", "code": "IPC" }
+            ]
+          },
+          {
+            "label": "Country",
+            "code": "COUNTRY",
+            "items": [
+              { "name": "Applicant County", "code": "APCT" },
+              { "name": "Priority Country", "code": "PCCT" },
+              { "name": "Filing Country", "code": "AFCT" },
+              { "name": "Publication Country", "code": "PUBCT" }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "datapackages",
+        "options": [
+          {
+            "label": "Free Text",
+            "code": "TXT",
+            "items": [
+              { "name": "Title", "code": "TTL" },
+              { "name": "Description", "code": "DESC" },
+              { "name": "Mark Name", "code": "MK" },
+              { "name": "Title in Other Language", "code": "TTL_EN" }
+            ]
+          },
+          {
+            "label": "Property",
+            "code": "PROP",
+            "items": [
+              { "name": "Application Id", "code": "AFNB" },
+              { "name": "Filing Date", "code": "AFDT" },
+              { "name": "Application Type", "code": "APP_TYP" },
+              { "name": "Status", "code": "STLB" }
+            ]
+          },
+          {
+            "label": "Classifications",
+            "code": "CLS",
+            "items": [
+              { "name": "Nice", "code": "NCL" },
+              { "name": "Vienna", "code": "VCL" },
+              { "name": "Locarno", "code": "LCL" },
+              { "name": "IPC", "code": "IPC" }
+            ]
+          },
+          {
+            "label": "Country",
+            "code": "COUNTRY",
+            "items": [
+              { "name": "Applicant County", "code": "APCT" },
+              { "name": "Priority Country", "code": "PCCT" },
+              { "name": "Filing Country", "code": "AFCT" },
+              { "name": "Publication Country", "code": "PUBCT" }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "authorityfiles",
+        "options": [
+          {
+            "label": "Free Text",
+            "code": "TXT",
+            "items": [
+              { "name": "Title", "code": "TTL" },
+              { "name": "Description", "code": "DESC" },
+              { "name": "Mark Name", "code": "MK" },
+              { "name": "Title in Other Language", "code": "TTL_EN" }
+            ]
+          },
+          {
+            "label": "Property",
+            "code": "PROP",
+            "items": [
+              { "name": "Application Id", "code": "AFNB" },
+              { "name": "Filing Date", "code": "AFDT" },
+              { "name": "Application Type", "code": "APP_TYP" },
+              { "name": "Status", "code": "STLB" }
+            ]
+          },
+          {
+            "label": "Country",
+            "code": "COUNTRY",
+            "items": [
+              { "name": "Applicant County", "code": "APCT" },
+              { "name": "Priority Country", "code": "PCCT" },
+              { "name": "Filing Country", "code": "AFCT" },
+              { "name": "Publication Country", "code": "PUBCT" }
+            ]
+          }
         ]
       }
     ];
@@ -150,7 +373,7 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
       description: "Common search for US filed patents with specific status",
       created: "2025-10-10",
       lastUsed: "2025-10-12",
-      query: {"category":"patents","levelList":[{"level":"1","levelId":"1","level_name":"","group_list":[{"group":"1","group_name":"Group 1","file_list":[{"fieldId":"1","field":"goods_service","field_label":"Goods and Service","connecting":"contains the word","connecting_key":"%val%","value":"cola","operator":"AND","orOperator":false},{"fieldId":"2","field":"nice","field_label":"Nice Classifications","connecting":"equals","connecting_key":"=val","value":"24","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"AND","orOperator":false},{"level":"2","levelId":"2","level_name":"Level 2 Query","group_list":[{"group":"2","group_name":"Group 2","file_list":[{"fieldId":"1","field":"office","field_label":"IP Office","connecting":"equals","connecting_key":"=val","value":"VC","operator":"AND","orOperator":false},{"fieldId":"2","field":"vienna","field_label":"Vienna Classifications","connecting":"contains","connecting_key":"%val%","value":"1.13","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false},{"group":"3","group_name":"Group 3","file_list":[{"fieldId":"3","field":"feature","field_label":"Feaure","connecting":"contains","connecting_key":"%val%","value":"3D","operator":"AND","orOperator":false},{"fieldId":"4","field":"brand","field_label":"Brand Name","connecting":"contains","connecting_key":"%val%","value":"premium","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"OR","orOperator":true},{"level":"1","levelId":"3","level_name":"","group_list":[{"group":"4","group_name":"Group 4","file_list":[{"fieldId":"1","field":"status","field_label":"Status","connecting":"equals","connecting_key":"=val","value":"Registered","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"AND","orOperator":false}]}
+      query: {"category":"patents","levelList":[{"level":"1","levelId":"1","level_name":"","group_list":[{"group":"1","group_name":"Group 1","file_list":[{"fieldId":"1","field":{"name":"Description","code":"DESC"},"connecting":{"code":"Like","name":"Contains Word"},"value":"cola","operator":"AND","orOperator":false},{"fieldId":"2","field":{"name":"Nice","code":"NCL"},"connecting":{"code":"Exact","name":"Equals"},"value":"24","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"AND","orOperator":false},{"level":"2","levelId":"2","level_name":"Level 2 Query","group_list":[{"group":"2","group_name":"Group 2","file_list":[{"fieldId":"1","field":{"name":"Applicant County","code":"APCT"},"connecting":{"code":"Exact","name":"Equals"},"value":"VC","operator":"AND","orOperator":false},{"fieldId":"2","field":{"name":"Vienna","code":"VCL"},"connecting":{"code":"Starts","name":"Starts With"},"value":"1.13","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false},{"group":"3","group_name":"Group 3","file_list":[{"fieldId":"3","field":{"name":"Mark Name","code":"MK"},"connecting":{"code":"Like","name":"Contains Word"},"value":"3D","operator":"AND","orOperator":false},{"fieldId":"4","field":{"name":"Application Type","code":"APP_TYP"},"connecting":{"code":"Like","name":"Contains Word"},"value":"premium","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"OR","orOperator":true},{"level":"1","levelId":"3","level_name":"","group_list":[{"group":"4","group_name":"Group 4","file_list":[{"fieldId":"1","field":{"name":"Status","code":"STLB"},"connecting":{"code":"Exact","name":"Equals"},"value":"Registered","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"AND","orOperator":false}]}
     },
     {
       templateId: "2",
@@ -159,7 +382,7 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
       description: "Search for trademark brand names and goods/services",
       created: "2025-10-10",
       lastUsed: "2025-10-12",
-      query: {"category":"patents","levelList":[{"level":"1","levelId":"1","level_name":"","group_list":[{"group":"1","group_name":"Group 1","file_list":[{"fieldId":"1","field":"goods_service","field_label":"Goods and Service","connecting":"contains the word","connecting_key":"%val%","value":"cola","operator":"AND","orOperator":false},{"fieldId":"2","field":"nice","field_label":"Nice Classifications","connecting":"equals","connecting_key":"=val","value":"24","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"AND","orOperator":false},{"level":"2","levelId":"2","level_name":"Level 2 Query","group_list":[{"group":"2","group_name":"Group 2","file_list":[{"fieldId":"1","field":"office","field_label":"IP Office","connecting":"equals","connecting_key":"=val","value":"VC","operator":"AND","orOperator":false},{"fieldId":"2","field":"vienna","field_label":"Vienna Classifications","connecting":"contains","connecting_key":"%val%","value":"1.13","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false},{"group":"3","group_name":"Group 3","file_list":[{"fieldId":"3","field":"feature","field_label":"Feaure","connecting":"contains","connecting_key":"%val%","value":"3D","operator":"AND","orOperator":false},{"fieldId":"4","field":"brand","field_label":"Brand Name","connecting":"contains","connecting_key":"%val%","value":"premium","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"OR","orOperator":true},{"level":"1","levelId":"3","level_name":"","group_list":[{"group":"4","group_name":"Group 4","file_list":[{"fieldId":"1","field":"status","field_label":"Status","connecting":"equals","connecting_key":"=val","value":"Registered","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"AND","orOperator":false}]}
+      query: {"category":"patents","levelList":[{"level":"1","levelId":"1","level_name":"","group_list":[{"group":"1","group_name":"Group 1","file_list":[{"fieldId":"1","field":{"name":"Description","code":"DESC"},"connecting":{"code":"Like","name":"Contains Word"},"value":"cola","operator":"AND","orOperator":false},{"fieldId":"2","field":{"name":"Nice","code":"NCL"},"connecting":{"code":"Exact","name":"Equals"},"value":"24","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"AND","orOperator":false},{"level":"2","levelId":"2","level_name":"Level 2 Query","group_list":[{"group":"2","group_name":"Group 2","file_list":[{"fieldId":"1","field":{"name":"Applicant County","code":"APCT"},"connecting":{"code":"Exact","name":"Equals"},"value":"VC","operator":"AND","orOperator":false},{"fieldId":"2","field":{"name":"Vienna","code":"VCL"},"connecting":{"code":"Starts","name":"Starts With"},"value":"1.13","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false},{"group":"3","group_name":"Group 3","file_list":[{"fieldId":"3","field":{"name":"Mark Name","code":"MK"},"connecting":{"code":"Like","name":"Contains Word"},"value":"3D","operator":"AND","orOperator":false},{"fieldId":"4","field":{"name":"Application Type","code":"APP_TYP"},"connecting":{"code":"Like","name":"Contains Word"},"value":"premium","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"OR","orOperator":true},{"level":"1","levelId":"3","level_name":"","group_list":[{"group":"4","group_name":"Group 4","file_list":[{"fieldId":"1","field":{"name":"Status","code":"STLB"},"connecting":{"code":"Exact","name":"Equals"},"value":"Registered","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"AND","orOperator":false}]}
     }];
 
     this.queryTemplates = this.queryTemplatesFromDb;
@@ -168,15 +391,28 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
     if(this.category != "All"){
       this.selectedCategory = this.categories.find(item => item.code === this.category);
       this.filterTemplates();
+    } else {
+      this.filterFieldOptions();
     }
 
-
     this.clearSearch();
-    
+
+    this.selectedList = {"total": 0, "groups": 0, "levels": 0, groupList: [], levelList: []};
   }
 
   private initializeFilterSelector(): void {
     // Initially select all filters
+  }
+
+  filterFieldOptions(): void {
+    let filtered;
+    if (this.selectedCategory.code != "All"){
+      let selectedOptions = this.fieldOptionsFromDb.find(item => item.key === this.selectedCategory.code);
+      filtered = selectedOptions.options;
+    }else {
+      filtered = this.fieldOptionsFromDb.flatMap(entry => entry.options);
+    }
+    this.fieldOptions = filtered;
   }
 
   filterTemplates(): void {
@@ -187,19 +423,23 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
       filtered = this.queryTemplatesFromDb;
     }
     this.queryTemplates = filtered;
+
+    this.filterFieldOptions();
   }
 
   clearSearch(): void {
     let nextNumber = Math.floor(Math.random() * 100) + 1;
-    let fields = [{"fieldId":nextNumber+"", "field":"", "field_label":"", "connecting":"", "connecting_key":"", "value":"", "operator":"","orOperator":false}];
+    let fields = [{"fieldId":nextNumber+"", "field":{code: "", name:""}, "connecting":{code: "", name:""}, "value":"", "operator":"","orOperator":false}];
 
     this.groupNumber = 1;
-    let groups = [{"group":this.groupNumber+"", "group_name":"Group "+this.groupNumber, "file_list": fields, "group_operator":"","orOperator":false}];  
+    let groupId = Math.floor(Math.random() * 100) + 1;
+    let groups = [{"group":groupId+"", "group_name":"Group "+this.groupNumber, "file_list": fields, "group_operator":"","orOperator":false}];  
     this.groupNumber = this.groupNumber + 1;
 
     this.levelNumber = 1;
-    this.levels = [{"level":"1","levelId":"1","level_name":"","group_list": groups,"level_operator":"AND","orOperator":false}]
-    this.levelNumber = this.levelNumber + 1;
+    let levelId = Math.floor(Math.random() * 100) + 1;
+    this.levels = [{"level":"1","levelId":levelId+"","level_name":"","group_list": groups,"level_operator":"AND","orOperator":false}];
+
   }
 
   onClose(): void {
@@ -237,6 +477,7 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
   }
 
   saveAsTemplate(): void {
+    //console.log(this.levels);
     let nextNumber = Math.floor(Math.random() * 100) + 1;
 
     let newTemplate = {
@@ -267,7 +508,7 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
     });
 
     let nextNumber = Math.floor(Math.random() * 100) + 1;
-    const newItemDetail: FieldQueries = {"fieldId":nextNumber+"", "field":"", "field_label":"", "connecting":"", "connecting_key":"", "value":"", "operator":"","orOperator":firstFieldOperator}
+    const newItemDetail: FieldQueries = {"fieldId":nextNumber+"", "field":{code: "", name:""}, "connecting":{code: "", name:""}, "value":"", "operator":"","orOperator":firstFieldOperator}
     targetGroup.file_list.push(newItemDetail);
 
   }
@@ -292,23 +533,26 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
 
 
   addGroup(): void {
-
-    let selectedLevel = this.levels.at(-1);
-
-    let firstGroupOperator = false;
-    if(selectedLevel.group_list.length > 0){
-      firstGroupOperator = selectedLevel.group_list[0].orOperator;
-      selectedLevel.group_list.forEach(item => {
-        item.orOperator = firstGroupOperator;
+    let firstLevelOperator = false;
+    if(this.levels.length > 1){
+      let selectedLevel = this.levels.at(-2);
+      firstLevelOperator = selectedLevel.orOperator;
+      this.levels.forEach(item => {
+        item.orOperator = firstLevelOperator;
       });
     }
 
     let nextNumber = Math.floor(Math.random() * 100) + 1;
-    let fields = [{"fieldId":nextNumber+"", "field":"", "field_label":"", "connecting":"", "connecting_key":"", "value":"", "operator":"","orOperator":false}];
-    let group = {"group":this.groupNumber+"", "group_name":"Group "+this.groupNumber, "file_list": fields, "group_operator":"","orOperator":firstGroupOperator};
+    let fields = [{"fieldId":nextNumber+"", "field":{code: "", name:""}, "connecting":{code: "", name:""}, "value":"", "operator":"","orOperator":false}];
+    
+    let groupId = Math.floor(Math.random() * 100) + 1;
+    let group = {"group":groupId+"", "group_name":"Group "+this.groupNumber, "file_list": fields, "group_operator":"","orOperator":firstLevelOperator};
     this.groupNumber = this.groupNumber + 1;
 
-    selectedLevel.group_list.push(group);
+    let levelId = Math.floor(Math.random() * 100) + 1;
+    let level = {"level":"1","levelId":levelId+"","level_name":"","group_list": [group],"level_operator":"AND","orOperator":firstLevelOperator};
+
+    this.levels.push(level);
   }
 
   removeGroup(levelId: string, groupId: string ): void {
@@ -319,6 +563,179 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
     if (indexToRemove !== -1) {
       selectedLevel.group_list.splice(indexToRemove, 1);
     }
+
+    if(selectedLevel.group_list.length === 0){
+      const levelIndexToRemove = this.levels.findIndex(item => item.levelId === levelId);
+      if (levelIndexToRemove !== -1) {
+        this.levels.splice(levelIndexToRemove, 1);
+      }
+    }
+  }
+
+  onSearch(): void {
+
+    this.visible = false;
+    let advancedFilterQuery = {"category":this.selectedCategory.code, "levelList":this.levels};
+    this.advancedFilterSearch.emit(advancedFilterQuery);
+
+  }
+
+  onSelectionChange(type: string, levelId: string, groupId: string, event: Event): void {
+    const isChecked = (event.target as HTMLInputElement).checked;
+
+    if (type === "group") {
+      const groupSelected = this.levels.find(item => item.levelId === levelId).group_list.find(grp => grp.group === groupId);
+      groupSelected.selected = isChecked;
+      //console.log(groupSelected.group_name+" "+isChecked);
+      if(isChecked){
+        this.selectedList.total = this.selectedList.total + 1;
+        this.selectedList.groups = this.selectedList.groups + 1;
+        this.selectedList.groupList.push(groupSelected);
+      }else{
+        this.selectedList.total = this.selectedList.total - 1;
+        this.selectedList.groups = this.selectedList.groups - 1;
+
+        const indexToRemove =  this.selectedList.groupList.findIndex(item => item.group === groupId);
+        if (indexToRemove !== -1) {
+           this.selectedList.groupList.splice(indexToRemove, 1);
+        }
+      }
+ 
+    } else if (type === "level") {
+      const levelSelected = this.levels.find(item => item.levelId === levelId);
+      levelSelected.selected = isChecked;
+
+      if(isChecked){
+        this.selectedList.total = this.selectedList.total + 1;
+        this.selectedList.levels = this.selectedList.levels + 1;
+        this.selectedList.levelList.push(levelSelected);
+      }else{
+        this.selectedList.total = this.selectedList.total - 1;
+        this.selectedList.levels = this.selectedList.levels - 1;
+
+        const indexToRemove = this.selectedList.levelList.findIndex(item => item.levelId === levelId);
+        if (indexToRemove !== -1) {
+          this.selectedList.levelList.splice(indexToRemove, 1);
+        }
+      }
+    }
+    
+    //console.log(this.selectedList);
+  }
+
+  clearSelection(): void {
+    this.selectedList = {"total": 0, "groups": 0, "levels": 0, groupList: [], levelList: []};
+    this.levels = this.levels.map(level => ({
+      ...level,
+      selected: false,
+      group_list: level.group_list?.map(group => ({
+        ...group,
+        selected: false
+      })) || []
+    }));
+
+  }
+
+  createLevel2(): void {
+    //console.log(this.levels);
+    //console.log(this.selectedList);
+    const selectedGroups = [];
+    let firstSelectedIndex = -1;
+
+    this.levels = this.levels.map((level,index) => {
+      if(firstSelectedIndex < 0) {
+        let groupSelectedIndex = level.group_list.findIndex(group => group.selected);
+        if(groupSelectedIndex > -1){
+          firstSelectedIndex = index;
+        }
+      }
+      const remainingGroups = level.group_list.filter(group => {
+        if (group.selected) {
+          selectedGroups.push({ ...group, selected: false });
+          return false;
+        }
+        return true;
+      });
+      return { ...level, group_list: remainingGroups };
+
+    });
+
+    const newLevelId = Math.floor(Math.random() * 100) + 1;
+    const newLevel = {
+      level: "2",
+      levelId: newLevelId+"",
+      level_name: `Grouped Level ${this.levelNumber}`,
+      group_list: selectedGroups,
+      level_operator: "AND",
+      orOperator: false
+    };
+    this.levelNumber = this.levelNumber + 1;
+    this.levels.splice(firstSelectedIndex, 0, newLevel);
+
+    this.levels = this.levels.filter(level => level.group_list.length > 0);
+
+    this.selectedList = {"total": 0, "groups": 0, "levels": 0, groupList: [], levelList: []};
+    //console.log(this.levels);
+  }
+
+  unGroup(levelId: string): void {
+    //console.log(this.levels);
+    let selectedLevel = this.levels.find(item => item.levelId === levelId);
+
+    let indexToRemove = this.levels.findIndex(item => item.levelId === levelId);
+    if (indexToRemove !== -1) {
+      this.levels.splice(indexToRemove, 1);
+    }
+
+    selectedLevel.group_list.forEach(group => {
+      let newLevelId = Math.floor(Math.random() * 100) + 1;
+      const newLevel = {
+        level: "1",
+        levelId: newLevelId+"",
+        level_name: "",
+        group_list: [
+          {
+            ...group
+          }
+        ],
+        level_operator: "AND",
+        orOperator: false
+      };
+      this.levels.splice(indexToRemove, 0, newLevel);
+      indexToRemove = indexToRemove + 1;
+    });
+    //console.log(this.levels);
+  }
+
+  mergeWithSelectedLevel() {
+
+    const targetIndex = this.levels.findIndex(l => l.selected);
+    if (targetIndex === -1) {
+      return;
+    }
+
+    const targetLevel = this.levels[targetIndex];
+
+    const selectedGroups: any[] = [];
+
+    this.levels.forEach((lvl, lvlIndex) => {
+      if (lvlIndex === targetIndex) {
+        return;
+      }
+      const selectedInLevel = lvl.group_list.filter(g => g.selected);
+      if (selectedInLevel.length) {
+        selectedGroups.push(...selectedInLevel);
+        lvl.group_list = lvl.group_list.filter(g => !g.selected);
+      }
+    });
+
+    if (selectedGroups.length) {
+      targetLevel.group_list.push(...selectedGroups.map(g => ({ ...g, selected: false })));
+    }
+
+    this.levels = this.levels.filter(l => l.group_list.length > 0);
+
+    this.selectedList = {"total": 0, "groups": 0, "levels": 0, groupList: [], levelList: []};
   }
 
 }

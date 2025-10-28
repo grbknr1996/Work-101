@@ -63,15 +63,25 @@
 
         br
 
+        .selection-box(*ngIf="selectedList.total > 0")
+          .selection-header
+            .selection-text
+              strong {{"common.components.advancedFilter.selection.selected"|translate}}:
+              |  {{selectedList.groups}} {{"common.components.advancedFilter.selection.group"|translate}},  {{selectedList.levels}} {{"common.components.advancedFilter.selection.level"|translate}}
+            button.clear-button((click)="clearSelection()") {{"common.components.advancedFilter.selection.clear"|translate}} ({{selectedList.total}})
+
+        br
+
         div(*ngFor="let level of levels; let k = index; let levellast = last")
           div(*ngIf="level.level === '1'; else level2Block")
             div(*ngFor="let group of level.group_list; let j = index; let grouplast = last")
-              .filter-group-box
+              .filter-group-box([ngClass]="{ 'filter-group-box-unselected': !group.selected, 'filter-group-box-selected': group.selected }")
                 .filter-group-content
                   .filter-group-heading
                     .relative
-                      input.filter-group-selection(type='checkbox', [value]="group.selected")
+                      input.filter-group-selection(type='checkbox', [value]="group.selected", (change)="onSelectionChange('group',level.levelId, group.group, $event)")
                     .filter-group-name {{group.group_name}}
+                    span.group-selection-badge(*ngIf="group.selected") {{"common.components.advancedFilter.selection.forGrouping"|translate}}
                   button.filter-group-delete((click)="removeGroup(level.levelId,group.group)")
                     i.pi.pi-times(pButtonIcon)
                 .grid.grid-cols-12.filter-group-header-text
@@ -82,14 +92,14 @@
                 div(*ngFor="let file of group.file_list; let i = index; let last = last")
                   .grid.grid-cols-12.filter-field-line
                     .col-span-3
-                      p-select.filter-field-select([options]="fieldOptions", [(ngModel)]="file.field", [placeholder]="'common.components.advancedFilter.fieldPlaceholder'|translate", [group]="true")
+                      p-select.filter-field-select([options]="fieldOptions", [(ngModel)]="file.field", [placeholder]="'common.components.advancedFilter.fieldPlaceholder'|translate", [group]="true", optionLabel="name")
                         ng-template(let-group #grp)
                           div.flex.items-center
-                            span {{grp.label}}
+                            span {{grp.name}}
                     .col-span-3
-                      p-select.filter-field-select([options]="queryOptions", [(ngModel)]="file.connecting_key", [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate", optionLabel="name")
+                      p-select.filter-field-select([options]="queryOptions", [(ngModel)]="file.connecting", [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate", optionLabel="name")
                     .col-span-3
-                      input.filter-field-value([placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate", [value]="file.value")
+                      input.filter-field-value([placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate", [(ngModel)]="file.value")
                     .col-span-3.flex.gap-1
                       button.filter-field-delete((click)="removeField(level.levelId, group.group, file.fieldId)")
                         i.pi.pi-trash(pButtonIcon)
@@ -109,25 +119,25 @@
 
 
           ng-template(#level2Block)
-            .filter-level-box
+            .filter-level-box([ngClass]="{'filter-level-box-selected': level.selected}")
               .filter-level-content
-                span.filter-level-title ( Grouped Logic ) - Level 1
+                span.filter-level-title ( {{"common.components.advancedFilter.selection.groupedLogic"|translate}} ) - {{level.level_name}}
               .filter-level-header
                 .filter-level-header-content
                   .relative
-                    input.filter-level-selection(type='checkbox', [value]="level.selected")
-                  span.filter-level-text Select for further grouping
-                button.filter-level-ungroup
+                    input.filter-level-selection(type='checkbox', [value]="level.selected", (change)="onSelectionChange('level',level.levelId,'',$event)")
+                  span.filter-level-text {{"common.components.advancedFilter.selection.furtherGrouping"|translate}}
+                button.filter-level-ungroup((click)="unGroup(level.levelId)")
                   i.pi.pi-times(pButtonIcon)
-                  | Ungroup
+                  |  {{"common.components.advancedFilter.selection.unGroup"|translate}}
             
               .space-y-4
                 div(*ngFor="let group of level.group_list; let j = index; let grouplast = last")
-                  .filter-group-box
+                  .filter-group-box.filter-group-box-unselected
                     .filter-group-content
                       .filter-group-heading
                         .relative
-                          input.filter-group-selection(type='checkbox', [value]="group.selected")
+                          //input.filter-group-selection(type='checkbox', [value]="group.selected", (change)="onSelectionChange('group',level.levelId, group.group,$event)")
                         .filter-group-name {{group.group_name}}
                       button.filter-group-delete((click)="removeGroup(level.levelId,group.group)")
                         i.pi.pi-times(pButtonIcon)
@@ -139,12 +149,12 @@
                     div(*ngFor="let file of group.file_list; let i = index; let last = last")
                       .grid.grid-cols-12.filter-field-line
                         .col-span-3
-                          p-select.filter-field-select([options]="fieldOptions", [(ngModel)]="file.field", [placeholder]="'common.components.advancedFilter.fieldPlaceholder'|translate", [group]="true")
+                          p-select.filter-field-select([options]="fieldOptions", [(ngModel)]="file.field", [placeholder]="'common.components.advancedFilter.fieldPlaceholder'|translate", [group]="true", optionLabel="name")
                             ng-template(let-group #grp)
                               div.flex.items-center
-                                span {{grp.label}}
+                                span {{grp.name}}
                         .col-span-3
-                          p-select.filter-field-select([options]="queryOptions", [(ngModel)]="file.connecting_key", [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate", optionLabel="name")
+                          p-select.filter-field-select([options]="queryOptions", [(ngModel)]="file.connecting", [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate", optionLabel="name")
                         .col-span-3
                           input.filter-field-value([placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate", [value]="file.value")
                         .col-span-3.flex.gap-1
@@ -191,7 +201,7 @@
               pButton,
               type="button",
               [label]="'common.components.advancedFilter.search'|translate",
-              (click)="onApplyFilters()"
+              (click)="onSearch()"
             )
 
     .template-dialog-overlay(*ngIf="showSaveTemplate")
@@ -210,3 +220,11 @@
             button.p-button-primary(pButton, type='button', (click)="saveAsTemplate()") {{"common.components.advancedFilter.saveTemplate.save"|translate}}
         button.template-close-button(type='button', (click)="closeSaveTemplate()")
           i.pi.pi-times(pButtonIcon)
+
+    .filter-group-button-container(*ngIf="selectedList.total > 1")
+      button.filter-group-button(*ngIf="selectedList.levels == 0", (click)="createLevel2()")
+        i.pi.pi-server(pButtonIcon)
+        |  {{"common.components.advancedFilter.groupButton.group"|translate}} {{selectedList.groups}} {{"common.components.advancedFilter.groupButton.items"|translate}}
+      button.filter-group-add-level-button(*ngIf="selectedList.levels == 1", (click)="mergeWithSelectedLevel()")
+        i.pi.pi-bolt(pButtonIcon)
+        |  {{"common.components.advancedFilter.groupButton.addGroup"|translate}}

@@ -1,0 +1,101 @@
+
+<app-layout>
+  <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
+  <h1 class="pt-4 text-xl ml-4">{{ "stakeholdersRegistry.auxiliaryRegister.pageTitle" | translate }}</h1>
+  <p class="pt-2 pb-2 ml-4 font-light">{{ "stakeholdersRegistry.auxiliaryRegister.pageSubTitle" | translate }}</p>
+  <div class="mb-4">
+    <app-user-stats [config]="auxiliaryStatsConfig" (statSelected)="onStatSelected($event)"></app-user-stats>
+  </div>
+  <div class="grid grid-cols-6 mt-2">
+    <div class="col-span-6 grid grid-cols-12 filter">
+      <div class="col-span-4">
+        <p-floatlabel variant="on">
+          <p-iconfield>
+            <p-inputicon class="pi pi-search"></p-inputicon>
+            <input class="w-full" id="on_label" pInputText="" [(ngModel)]="searchBar" autocomplete="off">
+          </p-iconfield>
+          <label for="on_label">{{ "stakeholdersRegistry.auxiliaryRegister.search_label" | translate }}</label>
+        </p-floatlabel>
+      </div>
+      <div class="col-span-8 flex justify-end gap-2 filter-icons">
+        <app-configurable-filter [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'Select filters to display'" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>
+      </div>
+    </div>
+  </div>
+  <div class="mb-8 mt-1 w-full">
+    <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="true" [clearAllLabel]="ms.translate('Clear All')" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-filter-chips>
+  </div>
+  <div class="grid grid-cols-6 mt-2">
+    <div class="col-span-6">
+      <app-table [columns]="tableColumns" [data]="tableData" [globalFilterFields]="globalFilterFields" [showSearchButton]="false" [showClearButton]="false" [paginator]="true" [lazy]="true" [rows]="pageSize" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} publications'" (actionClick)="onActionClick($event.action, $event.item)" (onLazyLoad)="onLazyLoad($event)"></app-table>
+    </div>
+  </div>
+</app-layout>
+<p-drawer [(visible)]="visiblePoa" position="right" styleClass="!w-full md:!w-80 lg:!w-[50rem]">
+  <ng-template #header="">
+    <div class="flex flex-col gap-2 title-subtitle">
+      <div class="flex flex-row items-center gap-2">
+        <h1 class="font-bold text-xl">{{ viewTableItem.documentNumber }}</h1>
+        <p-tag [severity]="getTagColorValue(viewTableItem.status).severity" [value]="getTagColorValue(viewTableItem.status).value"></p-tag>
+      </div>
+      <div class="flex items-center gap-1">
+        <h3 class="mb-1">{{ viewTableItem.grantorName }}&nbsp;</h3><i class="pi pi-arrow-right" style="font-size: 1rem; color: green"></i>
+        <h3 class="mb-1">&nbsp;{{ viewTableItem.granteeName }}</h3>
+      </div>
+      <div class="flex items-center gap-1">
+        <div class="text-sm">{{ "stakeholdersRegistry.auxiliaryRegister.poaDrawerCard.registrationDate" | translate }}: </div>
+        <div class="font-bold">{{ viewTableItem.registrationDate }}</div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #content="">
+    <ng-container *ngIf="visiblePoa">
+      <ngx-extended-pdf-viewer [src]="'assets/screencapture-intranet-wipo-int-jira-browse-WS-7757-2025-09-04-10_32_37.pdf'" [zoom]="'80%'" [showToolbar]="true" [showZoomButtons]="true" [showPresentationModeButton]="true" [showSidebarButton]="true" [showFindButton]="true" [showPagingButtons]="true" [showSecondaryToolbarButton]="true" [showRotateButton]="true" [showHandToolButton]="true" [showDownloadButton]="true" [showPrintButton]="true" [showOpenFileButton]="true"></ngx-extended-pdf-viewer>
+    </ng-container>
+  </ng-template>
+</p-drawer>
+<p-drawer [(visible)]="visibleComments" position="right" styleClass="!w-full md:!w-80 lg:!w-[50rem]">
+  <ng-template #header="">
+    <div class="flex flex-col gap-2 title-subtitle">
+      <div class="flex flex-row items-center gap-2">
+        <h1 class="font-bold text-xl">{{ "stakeholdersRegistry.auxiliaryRegister.commentsDrawerCard.comments" | translate }}</h1>
+      </div>
+      <div class="flex items-center gap-1">
+        <div class="text-sm">{{ "stakeholdersRegistry.auxiliaryRegister.commentsDrawerCard.commentsFor" | translate }}</div>
+        <div class="font-bold">{{ viewTableItem.documentNumber }}</div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #content="">
+    <ng-container *ngIf="visibleComments">
+      <div class="flex flex-col gap-2">
+        <p-card>
+          <ng-template #title="">
+            <div class="flex text-center gap-2"><i class="pi pi-user" style="font-size: 1.25rem"></i>
+              <h2 class="text-lg">Admin User</h2>
+            </div>
+          </ng-template>
+          <ng-template #subtitle="">
+            <div class="flex text-center gap-2"><i class="pi pi-clock" style="font-size: 1rem"></i>
+              <div class="text-sm">2024-09-16 10:30 AM</div>
+            </div>
+          </ng-template>
+          <p>Initial review completed. All documentation appears to be in order.</p>
+        </p-card>
+        <p-card>
+          <ng-template #title="">
+            <div class="flex text-center gap-2"><i class="pi pi-user" style="font-size: 1.25rem"></i>
+              <h2 class="text-lg">Legal Reviewer</h2>
+            </div>
+          </ng-template>
+          <ng-template #subtitle="">
+            <div class="flex text-center gap-2"><i class="pi pi-clock" style="font-size: 1rem"> </i>
+              <div class="text-sm">2024-09-17 02:15 PM</div>
+            </div>
+          </ng-template>
+          <p>Verified signatures and notarization. Approved for processing.</p>
+        </p-card>
+      </div>
+    </ng-container>
+  </ng-template>
+</p-drawer>

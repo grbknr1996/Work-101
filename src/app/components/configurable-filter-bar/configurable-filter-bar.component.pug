@@ -1,12 +1,12 @@
-.grid.grid-cols-6.mt-2([style]="disabled? 'display:none' : '' ")
+.grid.grid-cols-6.mt-2(*ngIf="!disabled")
     .col-span-6.grid.grid-cols-12.filter
-      .col-span-4([style]="showSearchBar? '' :'display:none' ")
+      .col-span-4(*ngIf="showSearchBar")
         p-floatlabel(variant='on')
           p-iconfield
             p-inputicon.pi.pi-search
             input.w-full#on_label(pInputText='', [(ngModel)]='searchBar', (input)="onFilterSearch(searchBar)", autocomplete='off')
           label(for='on_label') {{ searchLabel }}
-      .col-span-4([style]="showDateSearchBar? '' :'display:none' ")
+      .col-span-4(*ngIf="showDateSearchBar")
           p-datePicker.w-full.date-calendar(
             [(ngModel)]="searchBarDate",
             [placeholder]="dateSearchLabel || 'Select date'",
@@ -21,11 +21,12 @@
             (onClearClick)="onClearEvent($event)"
           )
       .col-span-4.advanced-button
-        div([style]="showAdvancedSearch? '' :'display:none' ")
+        div(*ngIf="showAdvancedSearch")
           app-configurable-advanced-filter(
             [category]="category", 
             [categorySelection]="categorySelection", 
-            [templateSelection]="templateSelection"
+            [templateSelection]="templateSelection",
+            (advancedFilterSearch)="onAdvancedFilterSearch($event)"
           )
       .col-span-4.flex.justify-end.gap-2.filter-icons
         p-button(
@@ -47,13 +48,13 @@
           (filterApplied)="onFilterApplied($event)",
           (appliedFiltersChange)="onAppliedFiltersChange($event)",
         )
-        p-button( *ngIf="showDownloadIcon",
+        p-button(*ngIf="showDownloadIcon",
           icon="pi pi-file-pdf",
           [outlined]="true",
           [text]="true",
           (click)="onDownloadDetails()",
         )
-        p-button( *ngIf="showInfoIcon",
+        p-button(*ngIf="showInfoIcon",
           icon="pi pi-info-circle",
           [outlined]="true",
           [text]="true",
@@ -68,5 +69,5 @@
     (chipRemove)="removeFilterChip($event)",
     (clearAll)="clearAllFilters()"
   )
-.mt-1.w-full.app-advanced-filter-query([style]="(showAdvancedSearchQuery || (selectedQuery != null) )? '' :'display:none' ")
-  app-advanced-filter-query([selectedQuery]="selectedQuery")
+.mt-1.w-full.app-advanced-filter-query(*ngIf="showAdvancedSearchQuery")
+  app-advanced-filter-query([selectedQuery]="selectedQuery", [showQuery]="showQuery")

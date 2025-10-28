@@ -15,7 +15,6 @@ import {
   ConfigurableFilterComponent,
 } from '../../components/configurable-filter/configurable-filter.component';
 import { AdvancedFilterQuery } from '../advanced-filter-query/advanced-filter-query.component';
-import { SearchCategory } from '../configurable-advanced-filter/configurable-advanced-filter.component';
 
 export interface FilterConfig {
   key: string;
@@ -108,6 +107,7 @@ export class ConfigurableFilterBarComponent {
   @Output() infoDetails = new EventEmitter<void>();
   @Output() actionClick = new EventEmitter<string>();
   @Output() removeDefaultFilter = new EventEmitter<string>();
+  @Output() advancedFilterSearch = new EventEmitter<AdvancedFilterQuery>();
 
   
   @Input() appliedFilters: FilterValue[] = [];
@@ -118,6 +118,8 @@ export class ConfigurableFilterBarComponent {
 
   @Output() chipRemove = new EventEmitter<string>();
   @Output() clearAll = new EventEmitter<void>();
+
+  showQuery = false;
 
   filterForm: FormGroup;
   selectedFilters: string[] = [];
@@ -142,18 +144,15 @@ export class ConfigurableFilterBarComponent {
   }
 
   onFilterChange(filters: FilterValue[]): void {
-    console.log('Filter changed:', filters);
     // Don't apply filters or show red dot on change - only track changes
     this.filterChange.emit(filters);
   }
 
   onFilterCleared(): void {
-    console.log('Filters cleared');
     this.filterCleared.emit();
   }
 
   onFilterApplied(filters: FilterValue[]): void {
-    console.log('Filters applied:', filters);
     this.filterApplied.emit(filters);
   }
 
@@ -162,12 +161,10 @@ export class ConfigurableFilterBarComponent {
   }
 
   onFilterSearch(searchBar: string): void {
-    console.log("onFilterSearch "+this.searchBar);
     this.filterSearch.emit(this.searchBar);
   }
 
   onCalenderSelect(val: any): void {
-    console.log(this.searchBarDate);
     this.filterDateSearch.emit(this.searchBarDate);
   }
 
@@ -178,17 +175,14 @@ export class ConfigurableFilterBarComponent {
   }
 
   onClearEvent(val: any): void {
-    console.log('Date cleared!');
     this.filterDateSearch.emit(this.searchBarDate);
   }
 
   onDownloadDetails(): void {
-    console.log("onDownloadDetails ");
     this.downloadDetails.emit();
   }
 
   onInfoDetails(): void {
-    console.log("onInfoDetails ");
     this.infoDetails.emit();
   }
 
@@ -197,7 +191,6 @@ export class ConfigurableFilterBarComponent {
   }
 
   onChipRemove(filterKey: string): void {
-    console.log("filter-bar onChipRemove");
     this.chipRemove.emit(filterKey);
   }
 
@@ -208,5 +201,28 @@ export class ConfigurableFilterBarComponent {
   getFilterDisplayValue(filter: FilterValue): string {
     return this.getDisplayValue(filter);
   }
+
+  onAdvancedFilterSearch(query: AdvancedFilterQuery): void {
+    this.selectedQuery = query;
+    
+    if(queryAdded(query)) {
+      this.showQuery = true;
+      return this.advancedFilterSearch.emit(query);
+    } else {
+      this.showQuery = false;
+    }
+  }
   
 }
+function queryAdded(query: AdvancedFilterQuery) {
+  const levelList = query.levelList.flat();
+  const hasValue = levelList.some(level =>
+    level.group_list.flat().some(group =>
+      group.file_list.flat().some(file =>
+        file.value !== "" && file.field.code !== ""
+      )
+    )
+  );
+  return hasValue;
+}
+

@@ -16,6 +16,7 @@ import {
 } from '@angular/forms';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
 import { HostListener } from '@angular/core';
+import { MechanicsService } from 'src/app/_services/mechanics.service';
 
 export interface FilterConfig {
   key: string;
@@ -79,9 +80,10 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
   activeFiltersCount: number = 0;
   hasActiveFilters: boolean = false;
   appliedFilters: FilterValue[] = [];
+  activeTab: string = '0';
   private destroy$ = new Subject<void>();
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private ms: MechanicsService) {
     this.filterForm = this.fb.group({});
   }
 
@@ -89,6 +91,7 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
     this.initializeForm();
     this.setupFilterChangeListener();
     this.initializeFilterSelector();
+    this.activeTab = '0'; // Initialize active tab
   }
 
   ngOnDestroy(): void {
@@ -252,6 +255,10 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
     this.visibleChange.emit(this.visible);
   }
 
+  onTabChange(event: any): void {
+    this.activeTab = event.value;
+  }
+
   getFilterValue(key: string): any {
     return this.filterForm.get(key)?.value;
   }
@@ -270,7 +277,9 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
     );
 
     visibleFilters.forEach((filter) => {
-      const section = filter.section || 'General';
+      const section =
+        filter.section ||
+        this.ms.translate('common.components.filter.section.general');
       if (!sections[section]) {
         sections[section] = [];
       }
@@ -281,13 +290,14 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
   }
 
   getSectionKeys(): string[] {
-    return Object.keys(this.getFiltersBySection());
+    const sections = this.getFiltersBySection();
+
+    const keys = Object.keys(sections);
+
+    return keys;
   }
 
   removeFilterChip(filterKey: string): void {
-    console.log('removeFilterChip called with key:', filterKey);
-    console.log('Applied filters before removal:', this.appliedFilters);
-
     // Remove from applied filters
     this.appliedFilters = this.appliedFilters.filter(
       (f) => f.key !== filterKey
@@ -301,13 +311,6 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
     // Update states - sync all filter-related state variables
     this.activeFiltersCount = this.appliedFilters.length;
     this.hasActiveFilters = this.appliedFilters.length > 0;
-
-    console.log(
-      'State after removal - activeFiltersCount:',
-      this.activeFiltersCount,
-      'hasActiveFilters:',
-      this.hasActiveFilters
-    );
 
     // Emit state changes
     this.hasActiveFiltersChange.emit(this.hasActiveFilters);

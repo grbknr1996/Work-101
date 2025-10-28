@@ -14,11 +14,11 @@ enum IpTypes {
   INDUSTRIAL_DESIGNS = 'designs',
   GEOGRAPHICAL_INDICATIONS = 'geographical indications',
   TRADEMARKS_CODE = 't',
-  PATENTS_CODE = 'patents',
-  COPYRIGHTS_CODE = 'c',
-  POST_FILINGS_CODE = 'post filings',
-  INDUSTRIAL_DESIGNS_CODE = 'designs',
-  GEOGRAPHICAL_INDICATIONS_CODE = 'geographical indications',
+  PATENTS_CODE = 'p',
+  COPYRIGHTS_CODE = 'cr',
+  POST_FILINGS_CODE = 'pf',
+  INDUSTRIAL_DESIGNS_CODE = 'd',
+  GEOGRAPHICAL_INDICATIONS_CODE = 'gi',
 }
 
 @Component({

@@ -1,0 +1,529 @@
+{
+  "data": [
+    {
+      "techCategory": "C",
+      "filingYear": 2004,
+      "count": 85
+    },
+    {
+      "techCategory": "C",
+      "filingYear": 2005,
+      "count": 93
+    },
+    {
+      "techCategory": "C",
+      "filingYear": 2006,
+      "count": 181
+    },
+    {
+      "techCategory": "C",
+      "filingYear": 2007,
+      "count": 230
+    },
+    {
+      "techCategory": "C",
+      "filingYear": 2008,
+      "count": 292
+    },
+    {
+      "techCategory": "C",
+      "filingYear": 2009,
+      "count": 347
+    },
+    {
+      "techCategory": "C",
+      "filingYear": 2010,
+      "count": 346
+    },
+    {
+      "techCategory": "C",
+      "filingYear": 2011,
+      "count": 449
+    },
+    {
+      "techCategory": "C",
+      "filingYear": 2012,
+      "count": 489
+    },
+    {
+      "techCategory": "C",
+      "filingYear": 2013,
+      "count": 543
+    },
+    {
+      "techCategory": "C",
+      "filingYear": 2014,
+      "count": 582
+    },
+    {
+      "techCategory": "C",
+      "filingYear": 2015,
+      "count": 641
+    },
+    {
+      "techCategory": "C",
+      "filingYear": 2016,
+      "count": 680
+    },
+    {
+      "techCategory": "C",
+      "filingYear": 2017,
+      "count": 730
+    },
+    {
+      "techCategory": "C",
+      "filingYear": 2018,
+      "count": 790
+    },
+    {
+      "techCategory": "C",
+      "filingYear": 2019,
+      "count": 835
+    },
+    {
+      "techCategory": "C",
+      "filingYear": 2020,
+      "count": 886
+    },
+    {
+      "techCategory": "C",
+      "filingYear": 2021,
+      "count": 933
+    },
+    {
+      "techCategory": "C",
+      "filingYear": 2022,
+      "count": 989
+    },
+    {
+      "techCategory": "C",
+      "filingYear": 2023,
+      "count": 1034
+    },
+    {
+      "techCategory": "C",
+      "filingYear": 2024,
+      "count": 1093
+    },
+    {
+      "techCategory": "D",
+      "filingYear": 2004,
+      "count": 148
+    },
+    {
+      "techCategory": "D",
+      "filingYear": 2005,
+      "count": 188
+    },
+    {
+      "techCategory": "D",
+      "filingYear": 2006,
+      "count": 241
+    },
+    {
+      "techCategory": "D",
+      "filingYear": 2007,
+      "count": 299
+    },
+    {
+      "techCategory": "D",
+      "filingYear": 2008,
+      "count": 299
+    },
+    {
+      "techCategory": "D",
+      "filingYear": 2009,
+      "count": 374
+    },
+    {
+      "techCategory": "D",
+      "filingYear": 2010,
+      "count": 428
+    },
+    {
+      "techCategory": "D",
+      "filingYear": 2011,
+      "count": 471
+    },
+    {
+      "techCategory": "D",
+      "filingYear": 2012,
+      "count": 523
+    },
+    {
+      "techCategory": "D",
+      "filingYear": 2013,
+      "count": 572
+    },
+    {
+      "techCategory": "D",
+      "filingYear": 2014,
+      "count": 612
+    },
+    {
+      "techCategory": "D",
+      "filingYear": 2015,
+      "count": 655
+    },
+    {
+      "techCategory": "D",
+      "filingYear": 2016,
+      "count": 708
+    },
+    {
+      "techCategory": "D",
+      "filingYear": 2017,
+      "count": 753
+    },
+    {
+      "techCategory": "D",
+      "filingYear": 2018,
+      "count": 813
+    },
+    {
+      "techCategory": "D",
+      "filingYear": 2019,
+      "count": 856
+    },
+    {
+      "techCategory": "D",
+      "filingYear": 2020,
+      "count": 895
+    },
+    {
+      "techCategory": "D",
+      "filingYear": 2021,
+      "count": 944
+    },
+    {
+      "techCategory": "D",
+      "filingYear": 2022,
+      "count": 991
+    },
+    {
+      "techCategory": "D",
+      "filingYear": 2023,
+      "count": 995
+    },
+    {
+      "techCategory": "D",
+      "filingYear": 2024,
+      "count": 1092
+    },
+    {
+      "techCategory": "E",
+      "filingYear": 2004,
+      "count": 88
+    },
+    {
+      "techCategory": "E",
+      "filingYear": 2005,
+      "count": 118
+    },
+    {
+      "techCategory": "E",
+      "filingYear": 2006,
+      "count": 155
+    },
+    {
+      "techCategory": "E",
+      "filingYear": 2007,
+      "count": 145
+    },
+    {
+      "techCategory": "E",
+      "filingYear": 2008,
+      "count": 225
+    },
+    {
+      "techCategory": "E",
+      "filingYear": 2009,
+      "count": 248
+    },
+    {
+      "techCategory": "E",
+      "filingYear": 2010,
+      "count": 282
+    },
+    {
+      "techCategory": "E",
+      "filingYear": 2011,
+      "count": 320
+    },
+    {
+      "techCategory": "E",
+      "filingYear": 2012,
+      "count": 349
+    },
+    {
+      "techCategory": "E",
+      "filingYear": 2013,
+      "count": 373
+    },
+    {
+      "techCategory": "E",
+      "filingYear": 2014,
+      "count": 418
+    },
+    {
+      "techCategory": "E",
+      "filingYear": 2015,
+      "count": 450
+    },
+    {
+      "techCategory": "E",
+      "filingYear": 2016,
+      "count": 477
+    },
+    {
+      "techCategory": "E",
+      "filingYear": 2017,
+      "count": 513
+    },
+    {
+      "techCategory": "E",
+      "filingYear": 2018,
+      "count": 537
+    },
+    {
+      "techCategory": "E",
+      "filingYear": 2019,
+      "count": 576
+    },
+    {
+      "techCategory": "E",
+      "filingYear": 2020,
+      "count": 611
+    },
+    {
+      "techCategory": "E",
+      "filingYear": 2021,
+      "count": 634
+    },
+    {
+      "techCategory": "E",
+      "filingYear": 2022,
+      "count": 623
+    },
+    {
+      "techCategory": "E",
+      "filingYear": 2023,
+      "count": 709
+    },
+    {
+      "techCategory": "E",
+      "filingYear": 2024,
+      "count": 729
+    },
+    {
+      "techCategory": "M",
+      "filingYear": 2004,
+      "count": 77
+    },
+    {
+      "techCategory": "M",
+      "filingYear": 2005,
+      "count": 96
+    },
+    {
+      "techCategory": "M",
+      "filingYear": 2006,
+      "count": 122
+    },
+    {
+      "techCategory": "M",
+      "filingYear": 2007,
+      "count": 156
+    },
+    {
+      "techCategory": "M",
+      "filingYear": 2008,
+      "count": 171
+    },
+    {
+      "techCategory": "M",
+      "filingYear": 2009,
+      "count": 177
+    },
+    {
+      "techCategory": "M",
+      "filingYear": 2010,
+      "count": 238
+    },
+    {
+      "techCategory": "M",
+      "filingYear": 2011,
+      "count": 260
+    },
+    {
+      "techCategory": "M",
+      "filingYear": 2012,
+      "count": 284
+    },
+    {
+      "techCategory": "M",
+      "filingYear": 2013,
+      "count": 307
+    },
+    {
+      "techCategory": "M",
+      "filingYear": 2014,
+      "count": 283
+    },
+    {
+      "techCategory": "M",
+      "filingYear": 2015,
+      "count": 377
+    },
+    {
+      "techCategory": "M",
+      "filingYear": 2016,
+      "count": 392
+    },
+    {
+      "techCategory": "M",
+      "filingYear": 2017,
+      "count": 423
+    },
+    {
+      "techCategory": "M",
+      "filingYear": 2018,
+      "count": 456
+    },
+    {
+      "techCategory": "M",
+      "filingYear": 2019,
+      "count": 486
+    },
+    {
+      "techCategory": "M",
+      "filingYear": 2020,
+      "count": 504
+    },
+    {
+      "techCategory": "M",
+      "filingYear": 2021,
+      "count": 531
+    },
+    {
+      "techCategory": "M",
+      "filingYear": 2022,
+      "count": 565
+    },
+    {
+      "techCategory": "M",
+      "filingYear": 2023,
+      "count": 581
+    },
+    {
+      "techCategory": "M",
+      "filingYear": 2024,
+      "count": 618
+    },
+    {
+      "techCategory": "S",
+      "filingYear": 2004,
+      "count": 133
+    },
+    {
+      "techCategory": "S",
+      "filingYear": 2005,
+      "count": 157
+    },
+    {
+      "techCategory": "S",
+      "filingYear": 2006,
+      "count": 149
+    },
+    {
+      "techCategory": "S",
+      "filingYear": 2007,
+      "count": 245
+    },
+    {
+      "techCategory": "S",
+      "filingYear": 2008,
+      "count": 283
+    },
+    {
+      "techCategory": "S",
+      "filingYear": 2009,
+      "count": 322
+    },
+    {
+      "techCategory": "S",
+      "filingYear": 2010,
+      "count": 377
+    },
+    {
+      "techCategory": "S",
+      "filingYear": 2011,
+      "count": 406
+    },
+    {
+      "techCategory": "S",
+      "filingYear": 2012,
+      "count": 454
+    },
+    {
+      "techCategory": "S",
+      "filingYear": 2013,
+      "count": 502
+    },
+    {
+      "techCategory": "S",
+      "filingYear": 2014,
+      "count": 532
+    },
+    {
+      "techCategory": "S",
+      "filingYear": 2015,
+      "count": 575
+    },
+    {
+      "techCategory": "S",
+      "filingYear": 2016,
+      "count": 628
+    },
+    {
+      "techCategory": "S",
+      "filingYear": 2017,
+      "count": 658
+    },
+    {
+      "techCategory": "S",
+      "filingYear": 2018,
+      "count": 697
+    },
+    {
+      "techCategory": "S",
+      "filingYear": 2019,
+      "count": 740
+    },
+    {
+      "techCategory": "S",
+      "filingYear": 2020,
+      "count": 780
+    },
+    {
+      "techCategory": "S",
+      "filingYear": 2021,
+      "count": 832
+    },
+    {
+      "techCategory": "S",
+      "filingYear": 2022,
+      "count": 868
+    },
+    {
+      "techCategory": "S",
+      "filingYear": 2023,
+      "count": 911
+    },
+    {
+      "techCategory": "S",
+      "filingYear": 2024,
+      "count": 899
+    }
+  ]
+}

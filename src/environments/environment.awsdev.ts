@@ -12,8 +12,10 @@ export const environment = {
     'cv',
   ],
   env: 'awsdev',
+  efillingUrl: 'https://ipoffice-efiling-dev.ipobs.dev.web1.wipo.int/sign-in',
   appUrl: 'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int',
-  dataServicesApi: 'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/data-services/v1/shared-packages',
+  dataServicesApi:
+    'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/data-services/v1/shared-packages',
   feesConditionsUrl:
     'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/services/v1/fees',
   documentOriginsUrl:

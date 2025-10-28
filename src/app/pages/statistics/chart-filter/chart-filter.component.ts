@@ -42,20 +42,18 @@ export class ChartFilterComponent implements OnInit {
       'charts.statistics.application_count.P',
       'charts.statistics.application_count.T',
       'charts.statistics.filters.originOption1',
-      'charts.statistics.filters.originOption2'
+      'charts.statistics.filters.originOption2',
+      'charts.statistics.filters.compare',
+      'charts.statistics.filters.compare1',
+      'charts.statistics.filters.compare2'
     ]).subscribe((translations) => {
       this.defaultFilters = [
         {
           include: true,
-          key: 'type',
-          label: translations['charts.statistics.filters.type'],
-          type: 'radio',
-          model: 'accounted',
-          options: [
-            { label: translations['charts.statistics.filters.typeOption1'], value: 'accounted' },
-            { label: translations['charts.statistics.filters.typeOption2'], value: 'active' },
-            { label: translations['charts.statistics.filters.typeOption3'], value: 'inactive' }
-          ]
+          key: 'compare',
+          label: translations['charts.statistics.filters.compare'],
+          type: 'checkbox',
+          model: true
         },
         {
           include: true,
@@ -92,18 +90,26 @@ export class ChartFilterComponent implements OnInit {
           ]
         },
         {
-          include: false,
-          key: 'compare',
-          label: 'COMPARE MODE', //TRANSLATE
-          type: 'checkbox',
-          model: true
-        }
+          include: true,
+          key: 'type',
+          label: translations['charts.statistics.filters.type'],
+          type: 'radio',
+          model: 'accounted',
+          options: [
+            { label: translations['charts.statistics.filters.typeOption1'], value: 'accounted' },
+            { label: translations['charts.statistics.filters.typeOption2'], value: 'active' },
+            { label: translations['charts.statistics.filters.typeOption3'], value: 'inactive' }
+          ]
+        },
       ];
 
       this.finalFilters = (this.actualFilters != null) ? this.defaultFilters.map(defaults => ({
         ...defaults,
         ...this.actualFilters.find(actuals => (defaults.key === actuals.key))
       })) : this.defaultFilters
+      //COMPARE MODE - CHECKBOX - SET CUSTOM LABELS
+      this.finalFilters.map((finals) => { if (finals.key === 'compare' && finals.type === 'checkbox') finals.label = translations[finals.label] });
+      this.finalFilters = this.finalFilters.filter((finals) => finals.include === true);
     })
   }
 }

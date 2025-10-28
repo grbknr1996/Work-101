@@ -71,6 +71,7 @@ export class StatisticsComponent implements OnInit {
 
   //COMMONS
   filters: chartFilterConfig[] = [
+    { include: false, key: 'type', type: 'dropdown', model: '' },
     { include: false, key: 'compare', type: 'checkbox', model: '' }
   ];
   showFilter: boolean = false;

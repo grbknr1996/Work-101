@@ -113,6 +113,7 @@ import { StatisticsComponent } from './pages/statistics/statistics.component';
 import { ChartNavbarComponent } from './pages/statistics/chart-navbar/chart-navbar.component';
 import { ChartFilterComponent } from './pages/statistics/chart-filter/chart-filter.component';
 import { TrendsComponent } from './pages/statistics/trends/trends.component';
+import { TrendsHistoryComponent } from './pages/statistics/trends/trends-history/trends-history.component';
 import { OriginsComponent } from './pages/statistics/origins/origins.component';
 //-----
 import { RenewalReminderComponent } from './pages/renewal-reminder/renewal-reminder.component';
@@ -135,7 +136,8 @@ import { UnauthorizedComponent } from './pages/unauthorized/unauthorized.compone
 import { AuthCallbackComponent } from './pages/auth-callback/auth-callback.component';
 import { AuthSignoutComponent } from './pages/auth-signout/auth-signout.component';
 import { ViewBiblioGraphicData } from './pages/task-management/work-monitor/view-content/biblio-data/view-biblio-graphic-data.component';
-
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { WorkInProgressComponent } from './pages/work-in-progress/work-in-progress.component';
 // ECHART
 import { NgxEchartsModule } from 'ngx-echarts';
 // PRIMENG_API
@@ -144,6 +146,7 @@ import { MessageService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
 import { definePreset } from '@primeng/themes';
 import Aura from '@primeng/themes/aura';
+import { AuxiliaryRegisterComponent } from './pages/auxiliary-register/auxiliary-register.component';
 const WipoThemePreset = definePreset(Aura, {
   primitive: {
     fontFamily: '"Noto Sans", "Segoe UI", Roboto, Arial, sans-serif',
@@ -236,6 +239,7 @@ const WipoThemePreset = definePreset(Aura, {
     ChartNavbarComponent,
     ChartFilterComponent,
     TrendsComponent,
+    TrendsHistoryComponent,
     OriginsComponent,
     //-----
     MultipleStatsComponent,
@@ -260,6 +264,8 @@ const WipoThemePreset = definePreset(Aura, {
     UnauthorizedComponent,
     ConfigurableAdvancedFilterComponent,
     AdvancedFilterQueryComponent,
+    AuxiliaryRegisterComponent,
+    WorkInProgressComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -281,6 +287,7 @@ const WipoThemePreset = definePreset(Aura, {
     // CUSTOM_IMPORTS
     PrimeNGModule,
     EChartsModule,
+    NgxExtendedPdfViewerModule,
   ],
   providers: [
     {
@@ -312,4 +319,4 @@ const WipoThemePreset = definePreset(Aura, {
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -3,7 +3,8 @@
   "version": "0.0.250409",
   "scripts": {
     "i": "npm i --legacy-peer-deps --verbose",
-    "postinstall": "npm i --legacy-peer-deps --prefer-offline --no-audit --location=global concurrently pug-cli stylus-chokidar && pug --pretty --doctype html . && stylus-chokidar .",
+    "postinstall": "npm i --legacy-peer-deps --prefer-offline --no-audit --location=global concurrently pug-cli stylus-chokidar && npm run build:assets",
+    "build:assets": "pug --pretty --doctype html . && stylus-chokidar . && node scripts/copy-assets.mjs",
     "pugWatch": "pug --pretty --doctype html --watch .",
     "stylusWatch": "stylus-chokidar --watch .",
     "angularWatch": "ng serve --proxy-config proxy.conf.json --configuration devQuick",
@@ -46,6 +47,7 @@
     "express": "^4.21.2",
     "filenamify": "^6.0.0",
     "ngx-echarts": "^19.0.0",
+    "ngx-extended-pdf-viewer": "^25.6.0-alpha.3",
     "ngx-translate-multi-http-loader": "^19.0.2",
     "primeicons": "^7.0.0",
     "primeng": "^19.0.10",

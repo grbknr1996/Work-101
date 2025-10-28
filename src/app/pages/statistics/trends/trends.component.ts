@@ -1,10 +1,14 @@
 //ANGULAR CORE
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 //TRANSLATE
 import { TranslateService } from '@ngx-translate/core';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
+
+//CHART FILTER MODEL
+import { chartFilterConfig } from '../chart-filter/chart-filter.model';
 
 //CUSTOM INTERFACES
 import { LayoutConfig } from 'src/app/components/app-layout/app-layout.component';
@@ -23,8 +27,11 @@ import { ChartService } from '../chart.service';
   templateUrl: './trends.component.html'
 })
 export class TrendsComponent implements OnInit {
+  //ELEMENTS
+  @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
 
   //DI
+  private router = inject(Router);
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
   private ms = inject(MechanicsService);
@@ -38,33 +45,52 @@ export class TrendsComponent implements OnInit {
   items: BreadcrumbItem[] = [];
 
   //Property Declarations
-  chartHeight: any;
+  fontFamily = '';
+  chartHeight: any = 600;
+  chartWidth: any = 1100;
+  resizeObserver!: ResizeObserver;
   chartInstance: any;
   chartOption: any;
 
+  //COMMONS
+  filters: chartFilterConfig[] = [
+    { include: true, key: 'IPType', type: 'dropdown', model: 'T' },
+    { include: true, key: 'compare', label: 'charts.statistics.filters.compare2', type: 'checkbox', model: true }
+  ];
+  showFilter: boolean = true;
+  //CHART-NAVBAR
+  onFilter() { this.showFilter = !this.showFilter; }
+  onReset() { }
+
   //CHART EVENTS
+  getGlobalFont(): string { return getComputedStyle(document.body).getPropertyValue('font-family').trim(); }
   onChartEvent(event: any, type: string) {
     console.log("Event, Type", event, type);
 
     if (type === 'chartInit') this.chartInstance = event;
+    if (type === 'chartClick') {
+      //Technology Sectors - Pie Drilldown
+      if (event.componentType === 'series') {
+        this.router.navigate(['/vc/en/statistics/trends/tech-timeline']);
+      }
+    }
   }
   chartSettings() {
     this.chartOption = {
       title: {
-        text: `TOTAL\n\nWORLD TRADEMARKS\n\n3,552,000`,
-        left: '31%',
-        top: 'middle',
+        text: 'TRADEMARKS - TOP 5 BUSINESS SECTORS',
+        left: 'center',
+        top: '5%',
         textStyle: {
-          fontSize: 11,
+          color: '#3f3f3f',
+          fontSize: 18,
           fontWeight: 'bold'
         }
       },
       color: ['#0EA5E9', '#4EABD5', '#B9E2F4', '#D6F1FF', '#EAF8FF', '#F5FCFF'],
       colorBy: 'data',
       legend: {
-        orient: 'vertical',
-        top: 'center',
-        right: '30%',
+        top: '15%',
         itemGap: 30
       },
       tooltip: {
@@ -78,7 +104,8 @@ export class TrendsComponent implements OnInit {
           name: 'T_tech',
           type: 'pie',
           radius: ['40%', '70%'],
-          center: ['35%', '50%'],
+          top: '10%',
+          center: ['50%', '60%'],
           avoidLabelOverlap: false,
           label: {
             show: true,
@@ -102,6 +129,12 @@ export class TrendsComponent implements OnInit {
     };
   }
   chartHeightFunc() { return this.chartHeight; }
+  chartWidthFunc() { return this.chartWidth; }
+  resizeChartInDiv(chartDiv: HTMLElement) {
+    this.chartHeight = chartDiv.offsetHeight;
+    this.chartWidth = chartDiv.offsetWidth;
+    requestAnimationFrame(() => { if (this.chartInstance) this.chartInstance.resize(); });
+  }
 
   ngOnInit(): void {
     this.layout = {
@@ -128,6 +161,7 @@ export class TrendsComponent implements OnInit {
       }
     ];
 
+    this.fontFamily = this.getGlobalFont();
     this.chartSettings();
     this.translate.get([
       'charts.statistics.trends.tech'
@@ -140,8 +174,22 @@ export class TrendsComponent implements OnInit {
     })
 
     //DYNAMIC CHART HEIGHT
-    this.chartHeight = 500;
     this.chartHeightFunc();
-    setTimeout(() => { this.chartInstance.resize(); }, 100);
+    this.chartWidthFunc();
+    //RESIZE - MOCK PLACEHOLDER
+    setTimeout(() => { this.chartSettings }, 200);
+  }
+  ngAfterViewInit() {
+    const chartDiv = this.chartContainer.nativeElement;
+    if (chartDiv) {
+      this.resizeObserver = new ResizeObserver(() => this.resizeChartInDiv(chartDiv));
+      this.resizeObserver.observe(chartDiv);
+      window.addEventListener('resize', () => this.resizeChartInDiv(chartDiv));
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.resizeObserver) this.resizeObserver.disconnect();
+    window.removeEventListener('resize', () => this.resizeChartInDiv(this.chartContainer.nativeElement));
   }
 }

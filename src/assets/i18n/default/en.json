@@ -38,6 +38,7 @@
     "back": "Go Back"
   },
   "common": {
+    "goBack": "Go Back",
     "components": {
       "scroller": {
         "backToTop": "Back to top"
@@ -76,7 +77,8 @@
           "correctionRequired": "Correction Required",
           "transmittalMethods": "Transmittal Methods",
           "userName": "USER NAME",
-          "notified": "NOTIFIED"
+          "notified": "NOTIFIED",
+          "general": "GENERAL"
         }
       },
       "advancedFilter": {
@@ -118,6 +120,22 @@
           "save": "Save Template",
           "templatePlaceHolder": "Enter template name",
           "descriptionPlaceHolder": "Describe what this template is for"
+        },
+        "selection": {
+          "selected": "Selected",
+          "group": "group(s)",
+          "level": "cluster(s)",
+          "clear": "Clear",
+          "forGrouping": "Selected for grouping",
+          "grouped": "Grouped",
+          "groupedLogic": "Grouped Logic",
+          "furtherGrouping": "Select for further grouping",
+          "unGroup": "Ungroup"
+        },
+        "groupButton": {
+          "group": "Group",
+          "items": "Items",
+          "addGroup": "Add to Group"
         }
       },
       "groupAssignment": {
@@ -163,9 +181,12 @@
       }
     }
   },
+  "workInProgress": {
+    "title": "Development in Progress...",
+    "subtitle": "This page is currently under development. We're working hard to bring you new features and improvements."
+  },
   "dashboard": {
-    "title": "WELCOME TO WIPO IP OFFICE SUITE",
-    "subtitle": "WIPO IP ADMINISTRATION SYSTEM",
+    "title": "Welcome to WIPO IP Administration System",
     "widgets": {
       "workspace": {
         "title": "My Workspace",
@@ -193,7 +214,7 @@
         }
       },
       "receptionOperations": {
-        "title": "Reception Operations",
+        "title": "Reception",
         "items": {
           "newReception": "New Reception",
           "pendingReception": "Pending Reception",
@@ -203,26 +224,27 @@
         }
       },
       "stakeholdersRegistry": {
-        "title": "Stakeholders Registry",
+        "title": "Registers",
         "items": {
           "stakeholders": "Stakeholders",
           "registerView": "Register View",
-          "emailRegister": "Email Register"
+          "emailRegister": "Notification Emails",
+          "auxiliaryRegister": "Auxiliary Register"
         }
       },
       "publication": {
         "title": "Publication",
         "items": {
-          "pendingJournals": "Pending Journals",
-          "pendingPublications": "Pending Publications",
+          "pendingJournals": "Journals",
+          "pendingPublications": "Decision Actions",
           "notifications": "Notifications"
         }
       },
       "dataServices": {
-        "title": "Data Services",
+        "title": "Data Exchange",
         "items": {
-          "dataExchangeConfiguration": "Data Exchange Configuration",
-          "dataSharing": "Data Sharing"
+          "dataExchangeConfiguration": "Configuration",
+          "dataSharing": "Dashboard"
         }
       },
       "systemSettings": {
@@ -235,15 +257,15 @@
         }
       },
       "annuityMonitoring": {
-        "title": "Annuity Monitoring",
+        "title": "Reporting",
         "items": {
-          "annuitiesOrRenewals": "Annuities or Renewals",
-          "performance": "Performance",
+          "annuitiesOrRenewals": "Annuities & Renewals",
+          "performance": "Productivity",
           "statistics": "Statistics"
         }
       },
       "administrativeTools": {
-        "title": "Administrative Tools",
+        "title": "System Administration",
         "items": {
           "userManagement": "User Management",
           "jobScheduler": "Job Scheduler",
@@ -2384,7 +2406,10 @@
         "typeOption2": "Active",
         "typeOption3": "Inactive",
         "originOption1": "Residents [Domestic]",
-        "originOption2": "Non-Residents [Foreign]"
+        "originOption2": "Non-Residents [Foreign]",
+        "compare": "COMPARE MODE",
+        "compare1": "RESIDENTS vs NON_RESIDENTS",
+        "compare2": "TOP 5"
       },
       "commons": {
         "menu": "Statistics",
@@ -2409,10 +2434,10 @@
         "active_application": "ACTIVE APPLICATIONS"
       },
       "trends": {
-        "tech": "TECHNOLOGY SECTORS (In Filter Chip - Trademarks, Top 5)"
+        "tech": "TRENDS OF SECTORS"
       },
       "origins": {
-        "compare": "ORIGINS (In Filter Chip - RESIDENTS vs NON_RESIDENTS, Accounted/Active Applications)",
+        "compare": "ORIGINS",
         "_R": "RESIDENTS [DOMESTIC]",
         "_NR": "NON-RESIDENTS [FOREIGN]"
       }
@@ -2863,6 +2888,27 @@
     "feeConfiguration": {
       "title": "Filling Fees",
       "search_label": "Search"
+    }
+  },
+  "stakeholdersRegistry": {
+    "title": "Stakeholders Registry",
+    "auxiliaryRegister": {
+      "title": "Auxiliary Register",
+      "pageTitle": "Auxiliary Registry Dashboard",
+      "pageSubTitle": "View and manage legal documents across different registery types",
+      "search_label": "Search",
+      "poaDrawerCard": {
+        "registrationDate": "Registration Date"
+      },
+      "commentsDrawerCard": {
+        "comments": "Comments",
+        "commentsFor": "View comments for"
+      },
+      "stats": {
+        "totalPowerOfAttorneys": "Power of Attorneys",
+        "totalLicenses": "Licenses",
+        "totalDebts": "Debts"
+      }
     }
   }
 }

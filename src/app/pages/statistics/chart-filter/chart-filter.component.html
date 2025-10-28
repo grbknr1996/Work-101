@@ -10,7 +10,7 @@
       <p-datepicker class="tw-filter-datepicker w-full !flex" *ngIf="filter.type === 'yearrange'" [(ngModel)]="filter.model" selectionMode="range" view="year" dateFormat="yy" [yearNavigator]="true" [minDate]="filter.minDate" [maxDate]="filter.maxDate" [showIcon]="true" [readonlyInput]="true" styleClass="w-full flex-1"></p-datepicker>
       <div class="flex items-center space-x-2" *ngIf="filter.type === 'checkbox'">
         <p-checkbox [(ngModel)]="filter.model" [binary]="true"></p-checkbox>
-        <label class="text-sm text-gray-700">{{ filter.label }}</label>
+        <label class="text-sm font-semibold text-gray-700">{{ filter.label }}</label>
       </div>
       <div class="tw-filter-options flex flex-col gap-2" *ngIf="filter.type === 'radio'">
         <div class="tw-filter-option flex items-center space-x-2" *ngFor="let option of filter.options">

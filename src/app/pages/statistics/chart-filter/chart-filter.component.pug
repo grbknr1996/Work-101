@@ -43,7 +43,7 @@ div(*ngIf="show", class="tw-filter-container bg-gray-100 p-4 w-full flex flex-co
                     [(ngModel)]="filter.model",
                     [binary]="true"
                 )
-                label(class="text-sm text-gray-700") {{ filter.label }}
+                label(class="text-sm font-semibold text-gray-700") {{ filter.label }}
 
             //-RADIO
             div(*ngIf="filter.type === 'radio'", class="tw-filter-options flex flex-col gap-2")

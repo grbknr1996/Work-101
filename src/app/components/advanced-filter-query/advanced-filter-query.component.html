@@ -1,19 +1,25 @@
 
-<p-fieldset class="no-border-fieldset" [legend]="'common.components.advancedFilter.query.header'|translate" [toggleable]="true" [collapsed]="true" [style]="selectedQuery === null? 'display:none' : ''">
+<p-fieldset class="no-border-fieldset" *ngIf="showQuery" [legend]="'common.components.advancedFilter.query.header'|translate" [toggleable]="true" [collapsed]="true">
   <div class="mb-6 query-box">
-    <h3 class="query-header mb-3" *ngIf="selectedQuery != null">{{"common.components.advancedFilter.query.queryUsed"|translate}}</h3>
-    <div *ngFor="let levelList of selectedQuery?.levelList">
+    <h3 class="query-header mb-3">{{"common.components.advancedFilter.query.queryUsed"|translate}}</h3>
+    <div *ngFor="let levelList of selectedQuery?.levelList; let k = index; let levellast = last">
       <div *ngIf="levelList.level === '1'; else level2Block">
-        <div *ngFor="let group_list of levelList.group_list">
+        <div *ngFor="let group_list of levelList.group_list; let j = index; let grouplast = last">
           <div class="level1-margin">
             <div class="group-name">{{group_list.group_name}}
-              <div *ngFor="let file_list of group_list.file_list">
+              <div *ngFor="let file_list of group_list.file_list; let i = index; let last = last">
                 <div class="group-margin">
-                  <div><span class="field-name">{{file_list.field_label}}:&nbsp;</span><span class="field-connector">{{file_list.connecting}} </span><span class="field-value">&apos;{{file_list.value}}&apos;</span></div>
-                  <div class="operator">{{file_list.operator}}</div>
+                  <div><span class="field-name">{{file_list.field.name}}:&nbsp;</span><span class="field-connector">{{file_list.connecting.name}} </span><span class="field-value">&apos;{{file_list.value}}&apos;</span></div>
+                  <div class="operator" *ngIf="!last">
+                    <ng-container *ngIf="file_list.orOperator; else andLabel">{{"common.components.advancedFilter.toggle.or"|translate}}</ng-container>
+                    <ng-template #andLabel>{{"common.components.advancedFilter.toggle.and"|translate}}</ng-template>
+                  </div>
                 </div>
               </div>
-              <div class="operator">{{group_list.group_operator}}</div>
+              <div class="operator" *ngIf="!grouplast">{{group_list.orOperator}}
+                <ng-container *ngIf="group_list.orOperator; else andLabel">{{"common.components.advancedFilter.toggle.or"|translate}}</ng-container>
+                <ng-template #andLabel>{{"common.components.advancedFilter.toggle.and"|translate}}</ng-template>
+              </div>
             </div>
           </div>
         </div>
@@ -22,23 +28,32 @@
         <div class="level2-margin">
           <div class="level-name">{{levelList.level_name}}:</div>
           <div class="level-marker">
-            <div *ngFor="let group_list of levelList.group_list">
+            <div *ngFor="let group_list of levelList.group_list; let j = index; let grouplast = last">
               <div class="level2-group-margin">
                 <div class="group-name">{{group_list.group_name}}
-                  <div *ngFor="let file_list of group_list.file_list">
+                  <div *ngFor="let file_list of group_list.file_list; let i = index; let last = last">
                     <div class="group-margin">
-                      <div><span class="field-name">{{file_list.field_label}}:&nbsp;</span><span class="field-connector">{{file_list.connecting}} </span><span class="field-value">&apos;{{file_list.value}}&apos;</span></div>
-                      <div class="operator">{{file_list.operator}}</div>
+                      <div><span class="field-name">{{file_list.field.name}}:&nbsp;</span><span class="field-connector">{{file_list.connecting.name}} </span><span class="field-value">&apos;{{file_list.value}}&apos;</span></div>
+                      <div class="operator" *ngIf="!last">
+                        <ng-container *ngIf="file_list.orOperator; else andLabel">{{"common.components.advancedFilter.toggle.or"|translate}}</ng-container>
+                        <ng-template #andLabel>{{"common.components.advancedFilter.toggle.and"|translate}}</ng-template>
+                      </div>
                     </div>
                   </div>
-                  <div class="operator">{{group_list.group_operator}}</div>
+                  <div class="operator" *ngIf="!grouplast">
+                    <ng-container *ngIf="group_list.orOperator; else andLabel">{{"common.components.advancedFilter.toggle.or"|translate}}</ng-container>
+                    <ng-template #andLabel>{{"common.components.advancedFilter.toggle.and"|translate}}</ng-template>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </ng-template>
-      <div class="operator">{{levelList.level_operator}}</div>
+      <div class="operator" *ngIf="!levellast">
+        <ng-container *ngIf="levelList.orOperator; else andLabel">{{"common.components.advancedFilter.toggle.or"|translate}}</ng-container>
+        <ng-template #andLabel>{{"common.components.advancedFilter.toggle.and"|translate}}</ng-template>
+      </div>
     </div>
   </div>
 </p-fieldset>

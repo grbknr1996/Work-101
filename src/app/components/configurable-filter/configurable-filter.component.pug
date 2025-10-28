@@ -10,6 +10,7 @@
     [pTooltip]="'configurableFilter.openFilter' | translate",
     tooltipPosition="bottom",
     tooltipStyleClass="text-xs px-2 py-1"
+    style="background-color: transparent; border: none;"
   )
 
   // Filter Overlay
@@ -46,113 +47,120 @@
       // Filter Content
       .filter-content
         form.filter-form([formGroup]="filterForm")
-          .filter-sections
-            .filter-section(*ngFor="let sectionKey of getSectionKeys()")
-              h3.section-title {{ sectionKey }}
-              .filter-options
-                .filter-option(*ngFor="let filter of getFiltersBySection()[sectionKey]")
-                  // Checkbox Type
-                  .checkbox-option(*ngIf="filter.type === 'checkbox'")
-                    p-checkbox(
-                      [formControlName]="filter.key",
-                      [binary]="true",
-                      [inputId]="filter.key"
-                    )
-                    label.checkbox-label([for]="filter.key") {{ filter.label | translate }}
+          .filter-tabs
+            .tab-navigation
+              .tab-header(*ngFor="let sectionKey of getSectionKeys(); let i = index", 
+                [class.active]="activeTab === i.toString()",
+                (click)="onTabChange({value: i.toString()})"
+              ) {{ sectionKey }}
+            .tab-content
+              .tab-panel(*ngFor="let sectionKey of getSectionKeys(); let i = index", 
+                [class.active]="activeTab === i.toString()"
+              )
+                .filter-options
+                  .filter-option(*ngFor="let filter of getFiltersBySection()[sectionKey]")
+                    // Checkbox Type
+                    .checkbox-option(*ngIf="filter.type === 'checkbox'")
+                      p-checkbox(
+                        [formControlName]="filter.key",
+                        [binary]="true",
+                        [inputId]="filter.key"
+                      )
+                      label.checkbox-label([for]="filter.key") {{ filter.label | translate }}
 
-                  // Radio Type
-                  .radio-option(*ngIf="filter.type === 'radio'")
-                    label.filter-label {{ filter.label | translate }}
-                    .radio-group
-                      .radio-item(*ngFor="let option of filter.options; let i = index")
-                        p-radioButton(
-                          [formControlName]="filter.key",
-                          [value]="option.value",
-                          [inputId]="filter.key + '_' + i",
-                          [name]="filter.key"
-                        )
-                        label.radio-label([for]="filter.key + '_' + i") {{ option.label | translate }}
+                    // Radio Type
+                    .radio-option(*ngIf="filter.type === 'radio'")
+                      label.filter-label {{ filter.label | translate }}
+                      .radio-group
+                        .radio-item(*ngFor="let option of filter.options; let i = index")
+                          p-radioButton(
+                            [formControlName]="filter.key",
+                            [value]="option.value",
+                            [inputId]="filter.key + '_' + i",
+                            [name]="filter.key"
+                          )
+                          label.radio-label([for]="filter.key + '_' + i") {{ option.label | translate }}
 
-                  // Multi-Select Type
-                  .multiselect-option(*ngIf="filter.type === 'multiSelect'")
-                    label.filter-label {{ filter.label | translate }}
-                    p-multiSelect.w-full(
-                      [formControlName]="filter.key",
-                      [options]="filter.options || []",
-                      [placeholder]="filter.placeholder || ('configurableFilter.selectOptions' | translate)",
-                      [showClear]="filter.showClear !== false",
-                      [showFilter]="filter.showFilter !== false",
-                      [filterBy]="filter.filterBy || 'label'",
-                      [optionLabel]="filter.optionLabel || 'label'",
-                      [optionValue]="filter.optionValue || 'value'",
-                      appendTo="body"
-                    )
+                    // Multi-Select Type
+                    .multiselect-option(*ngIf="filter.type === 'multiSelect'")
+                      label.filter-label {{ filter.label | translate }}
+                      p-multiSelect.w-full(
+                        [formControlName]="filter.key",
+                        [options]="filter.options || []",
+                        [placeholder]="filter.placeholder || ('configurableFilter.selectOptions' | translate)",
+                        [showClear]="filter.showClear !== false",
+                        [showFilter]="filter.showFilter !== false",
+                        [filterBy]="filter.filterBy || 'label'",
+                        [optionLabel]="filter.optionLabel || 'label'",
+                        [optionValue]="filter.optionValue || 'value'",
+                        appendTo="body"
+                      )
 
-                  // Dropdown Type
-                  .dropdown-option(*ngIf="filter.type === 'dropdown'")
-                    label.filter-label {{ filter.label | translate }}
-                    p-dropdown.w-full(
-                      [formControlName]="filter.key",
-                      [options]="filter.options || []",
-                      [placeholder]="filter.placeholder || ('configurableFilter.selectOption' | translate)",
-                      [showClear]="filter.showClear !== false",
-                      [filter]="filter.showFilter !== false",
-                      [filterBy]="filter.filterBy || 'label'",
-                      [optionLabel]="filter.optionLabel || 'label'",
-                      [optionValue]="filter.optionValue || 'value'",
-                      appendTo="body"
-                    )
+                    // Dropdown Type
+                    .dropdown-option(*ngIf="filter.type === 'dropdown'")
+                      label.filter-label {{ filter.label | translate }}
+                      p-dropdown.w-full(
+                        [formControlName]="filter.key",
+                        [options]="filter.options || []",
+                        [placeholder]="filter.placeholder || ('configurableFilter.selectOption' | translate)",
+                        [showClear]="filter.showClear !== false",
+                        [filter]="filter.showFilter !== false",
+                        [filterBy]="filter.filterBy || 'label'",
+                        [optionLabel]="filter.optionLabel || 'label'",
+                        [optionValue]="filter.optionValue || 'value'",
+                        appendTo="body"
+                      )
 
-                  // Text Input Type
-                  .text-option(*ngIf="filter.type === 'text'")
-                    label.filter-label {{ filter.label | translate }}
-                    input.w-full(
-                      pInputText,
-                      [formControlName]="filter.key",
-                      [placeholder]="filter.placeholder || ('configurableFilter.enterText' | translate)"
-                    )
+                    // Text Input Type
+                    .text-option(*ngIf="filter.type === 'text'")
+                      label.filter-label {{ filter.label | translate }}
+                      input.w-full(
+                        pInputText,
+                        [formControlName]="filter.key",
+                        [placeholder]="filter.placeholder || ('configurableFilter.enterText' | translate)"
+                      )
 
-                  // Number Input Type
-                  .number-option(*ngIf="filter.type === 'number'")
-                    label.filter-label {{ filter.label | translate }}
-                    p-inputNumber.w-full(
-                      [formControlName]="filter.key",
-                      [placeholder]="filter.placeholder || ('configurableFilter.enterNumber' | translate)",
-                      [min]="filter.min",
-                      [max]="filter.max",
-                      [step]="filter.step"
-                    )
+                    // Number Input Type
+                    .number-option(*ngIf="filter.type === 'number'")
+                      label.filter-label {{ filter.label | translate }}
+                      p-inputNumber.w-full(
+                        [formControlName]="filter.key",
+                        [placeholder]="filter.placeholder || ('configurableFilter.enterNumber' | translate)",
+                        [min]="filter.min",
+                        [max]="filter.max",
+                        [step]="filter.step"
+                      )
 
-                  // Date Input Type
-                  .date-option(*ngIf="filter.type === 'date'")
-                    label.filter-label {{ filter.label | translate }}
-                    p-datePicker.w-full.date-calendar(
-                      [formControlName]="filter.key",
-                      [placeholder]="filter.placeholder || ('configurableFilter.selectDate' | translate)",
-                      [dateFormat]="filter.dateFormat || 'dd/mm/yy'",
-                      [showClear]="filter.showClear !== false",
-                      [showIcon]="true",
-                      [showButtonBar]="true",
-                      [touchUI]="false",
-                      appendTo="body"
-                    )
+                    // Date Input Type
+                    .date-option(*ngIf="filter.type === 'date'")
+                      label.filter-label {{ filter.label | translate }}
+                      p-datePicker.w-full.date-calendar(
+                        [formControlName]="filter.key",
+                        [placeholder]="filter.placeholder || ('configurableFilter.selectDate' | translate)",
+                        [dateFormat]="filter.dateFormat || 'dd/mm/yy'",
+                        [showClear]="filter.showClear !== false",
+                        [showIcon]="true",
+                        [showButtonBar]="true",
+                        [touchUI]="false",
+                        appendTo="body"
+                      )
 
-                  // Date Range Input Type
-                  .daterange-option(*ngIf="filter.type === 'dateRange'")
-                    label.filter-label {{ filter.label | translate }}
-                    p-datePicker.w-full.date-range-calendar(
-                      [formControlName]="filter.key",
-                      [placeholder]="filter.placeholder || ('configurableFilter.selectDateRange' | translate)",
-                      [dateFormat]="filter.dateFormat || 'dd/mm/yy'",
-                      [showClear]="filter.showClear !== false",
-                      selectionMode="range",
-                      [showIcon]="true",
-                      [showButtonBar]="true",
-                      [touchUI]="false",
-                      [class.error]="hasDateRangeError(filter.key)",
-                      appendTo="body"
-                    )
-                    small.error-message(*ngIf="hasDateRangeError(filter.key)") {{ getDateRangeError(filter.key) }}
+                    // Date Range Input Type
+                    .daterange-option(*ngIf="filter.type === 'dateRange'")
+                      label.filter-label {{ filter.label | translate }}
+                      p-datePicker.w-full.date-range-calendar(
+                        [formControlName]="filter.key",
+                        [placeholder]="filter.placeholder || ('configurableFilter.selectDateRange' | translate)",
+                        [dateFormat]="filter.dateFormat || 'dd/mm/yy'",
+                        [showClear]="filter.showClear !== false",
+                        selectionMode="range",
+                        [showIcon]="true",
+                        [showButtonBar]="true",
+                        [touchUI]="false",
+                        [class.error]="hasDateRangeError(filter.key)",
+                        appendTo="body"
+                      )
+                      small.error-message(*ngIf="hasDateRangeError(filter.key)") {{ getDateRangeError(filter.key) }}
 
       // Action Buttons
       .filter-actions(*ngIf="showClearAll || showApplyButton")

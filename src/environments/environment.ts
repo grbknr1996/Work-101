@@ -12,6 +12,7 @@ export const environment = {
     'cv',
   ],
   env: 'localhost',
+  efillingUrl: 'https://ipoffice-efiling-dev.ipobs.dev.web1.wipo.int/sign-in',
   appUrl: 'http://localhost:4200',
   configUrl: '/services/offices',
   backendUrl: '/services/users',

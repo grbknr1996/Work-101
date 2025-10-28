@@ -44,16 +44,22 @@
             <button class="query-button-browse" (click)="clearSearch()">{{"common.components.advancedFilter.clear"|translate}}</button>
           </div>
         </div><br>
+        <div class="selection-box" *ngIf="selectedList.total &gt; 0">
+          <div class="selection-header">
+            <div class="selection-text"><strong>{{"common.components.advancedFilter.selection.selected"|translate}}:</strong> {{selectedList.groups}} {{"common.components.advancedFilter.selection.group"|translate}},  {{selectedList.levels}} {{"common.components.advancedFilter.selection.level"|translate}}</div>
+            <button class="clear-button" (click)="clearSelection()">{{"common.components.advancedFilter.selection.clear"|translate}} ({{selectedList.total}})</button>
+          </div>
+        </div><br>
         <div *ngFor="let level of levels; let k = index; let levellast = last">
           <div *ngIf="level.level === '1'; else level2Block">
             <div *ngFor="let group of level.group_list; let j = index; let grouplast = last">
-              <div class="filter-group-box">
+              <div class="filter-group-box" [ngClass]="{ 'filter-group-box-unselected': !group.selected, 'filter-group-box-selected': group.selected }">
                 <div class="filter-group-content">
                   <div class="filter-group-heading">
                     <div class="relative">
-                      <input class="filter-group-selection" type="checkbox" [value]="group.selected">
+                      <input class="filter-group-selection" type="checkbox" [value]="group.selected" (change)="onSelectionChange('group',level.levelId, group.group, $event)">
                     </div>
-                    <div class="filter-group-name">{{group.group_name}}</div>
+                    <div class="filter-group-name">{{group.group_name}}</div><span class="group-selection-badge" *ngIf="group.selected">{{"common.components.advancedFilter.selection.forGrouping"|translate}}</span>
                   </div>
                   <button class="filter-group-delete" (click)="removeGroup(level.levelId,group.group)"><i class="pi pi-times" pButtonIcon></i></button>
                 </div>
@@ -66,17 +72,17 @@
                 <div *ngFor="let file of group.file_list; let i = index; let last = last">
                   <div class="grid grid-cols-12 filter-field-line">
                     <div class="col-span-3">
-                      <p-select class="filter-field-select" [options]="fieldOptions" [(ngModel)]="file.field" [placeholder]="'common.components.advancedFilter.fieldPlaceholder'|translate" [group]="true">
+                      <p-select class="filter-field-select" [options]="fieldOptions" [(ngModel)]="file.field" [placeholder]="'common.components.advancedFilter.fieldPlaceholder'|translate" [group]="true" optionLabel="name">
                         <ng-template let-group #grp>
-                          <div class="flex items-center"><span>{{grp.label}}</span></div>
+                          <div class="flex items-center"><span>{{grp.name}}</span></div>
                         </ng-template>
                       </p-select>
                     </div>
                     <div class="col-span-3">
-                      <p-select class="filter-field-select" [options]="queryOptions" [(ngModel)]="file.connecting_key" [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate" optionLabel="name"></p-select>
+                      <p-select class="filter-field-select" [options]="queryOptions" [(ngModel)]="file.connecting" [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate" optionLabel="name"></p-select>
                     </div>
                     <div class="col-span-3">
-                      <input class="filter-field-value" [placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate" [value]="file.value">
+                      <input class="filter-field-value" [placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate" [(ngModel)]="file.value">
                     </div>
                     <div class="col-span-3 flex gap-1">
                       <button class="filter-field-delete" (click)="removeField(level.levelId, group.group, file.fieldId)"><i class="pi pi-trash" pButtonIcon></i></button>
@@ -100,23 +106,23 @@
             </div>
           </div>
           <ng-template #level2Block>
-            <div class="filter-level-box">
-              <div class="filter-level-content"><span class="filter-level-title">( Grouped Logic ) - Level 1</span></div>
+            <div class="filter-level-box" [ngClass]="{'filter-level-box-selected': level.selected}">
+              <div class="filter-level-content"><span class="filter-level-title">( {{"common.components.advancedFilter.selection.groupedLogic"|translate}} ) - {{level.level_name}}</span></div>
               <div class="filter-level-header">
                 <div class="filter-level-header-content">
                   <div class="relative">
-                    <input class="filter-level-selection" type="checkbox" [value]="level.selected">
-                  </div><span class="filter-level-text">Select for further grouping</span>
+                    <input class="filter-level-selection" type="checkbox" [value]="level.selected" (change)="onSelectionChange('level',level.levelId,'',$event)">
+                  </div><span class="filter-level-text">{{"common.components.advancedFilter.selection.furtherGrouping"|translate}}</span>
                 </div>
-                <button class="filter-level-ungroup"><i class="pi pi-times" pButtonIcon></i>Ungroup</button>
+                <button class="filter-level-ungroup" (click)="unGroup(level.levelId)"><i class="pi pi-times" pButtonIcon></i> {{"common.components.advancedFilter.selection.unGroup"|translate}}</button>
               </div>
               <div class="space-y-4">
                 <div *ngFor="let group of level.group_list; let j = index; let grouplast = last">
-                  <div class="filter-group-box">
+                  <div class="filter-group-box filter-group-box-unselected">
                     <div class="filter-group-content">
                       <div class="filter-group-heading">
                         <div class="relative">
-                          <input class="filter-group-selection" type="checkbox" [value]="group.selected">
+                          <!--input.filter-group-selection(type='checkbox', [value]="group.selected", (change)="onSelectionChange('group',level.levelId, group.group,$event)")-->
                         </div>
                         <div class="filter-group-name">{{group.group_name}}</div>
                       </div>
@@ -131,14 +137,14 @@
                     <div *ngFor="let file of group.file_list; let i = index; let last = last">
                       <div class="grid grid-cols-12 filter-field-line">
                         <div class="col-span-3">
-                          <p-select class="filter-field-select" [options]="fieldOptions" [(ngModel)]="file.field" [placeholder]="'common.components.advancedFilter.fieldPlaceholder'|translate" [group]="true">
+                          <p-select class="filter-field-select" [options]="fieldOptions" [(ngModel)]="file.field" [placeholder]="'common.components.advancedFilter.fieldPlaceholder'|translate" [group]="true" optionLabel="name">
                             <ng-template let-group #grp>
-                              <div class="flex items-center"><span>{{grp.label}}</span></div>
+                              <div class="flex items-center"><span>{{grp.name}}</span></div>
                             </ng-template>
                           </p-select>
                         </div>
                         <div class="col-span-3">
-                          <p-select class="filter-field-select" [options]="queryOptions" [(ngModel)]="file.connecting_key" [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate" optionLabel="name"></p-select>
+                          <p-select class="filter-field-select" [options]="queryOptions" [(ngModel)]="file.connecting" [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate" optionLabel="name"></p-select>
                         </div>
                         <div class="col-span-3">
                           <input class="filter-field-value" [placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate" [value]="file.value">
@@ -175,7 +181,7 @@
         <div class="flex items-center justify-end gap-3 sticky bottom-0">
           <div class="action-buttons">
             <button class="p-button-outlined p-button-secondary" pButton type="button" [label]="'common.components.advancedFilter.cancel'|translate" (click)="onClose()"></button>
-            <button class="p-button-primary" pButton type="button" [label]="'common.components.advancedFilter.search'|translate" (click)="onApplyFilters()"></button>
+            <button class="p-button-primary" pButton type="button" [label]="'common.components.advancedFilter.search'|translate" (click)="onSearch()"></button>
           </div>
         </div>
       </div>
@@ -201,6 +207,10 @@
         </div>
         <button class="template-close-button" type="button" (click)="closeSaveTemplate()"><i class="pi pi-times" pButtonIcon></i></button>
       </div>
+    </div>
+    <div class="filter-group-button-container" *ngIf="selectedList.total &gt; 1">
+      <button class="filter-group-button" *ngIf="selectedList.levels == 0" (click)="createLevel2()"><i class="pi pi-server" pButtonIcon></i> {{"common.components.advancedFilter.groupButton.group"|translate}} {{selectedList.groups}} {{"common.components.advancedFilter.groupButton.items"|translate}}</button>
+      <button class="filter-group-add-level-button" *ngIf="selectedList.levels == 1" (click)="mergeWithSelectedLevel()"><i class="pi pi-bolt" pButtonIcon></i> {{"common.components.advancedFilter.groupButton.addGroup"|translate}}</button>
     </div>
   </div>
 </div>

@@ -72,7 +72,9 @@ export class DashboardWidgetService {
           })
           .map((item) => ({
             ...item,
-            link: this.buildWidgetItemLink(item.link),
+            link: item.isExternal
+              ? item.link
+              : this.buildWidgetItemLink(item.link),
           }));
 
         return {

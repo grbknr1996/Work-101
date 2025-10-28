@@ -77,7 +77,7 @@ export class DataPackagesComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private dataService: DataExchangeService
 
-  ) {}
+  ) { }
 
   ngOnInit(): void {
 
@@ -240,7 +240,7 @@ export class DataPackagesComponent implements OnInit {
 
     this.statSelected = 'TOTAL IN MONTH';
     let startDate = new Date();
-    startDate.setDate(1);
+    startDate.setMonth(startDate.getMonth() - 1);
 
     let today = new Date();
 
@@ -332,19 +332,19 @@ export class DataPackagesComponent implements OnInit {
   }
 
   private permanentFilters(): void {
-    let startDate = new Date();
     let today = new Date();
+    let startDate = new Date(today); // clone 'today' to avoid modifying it directly
 
-    if (this.statSelected == 'TOTAL IN YEAR') {
-      startDate.setMonth(0);
-      startDate.setDate(1);
-    } else if (this.statSelected == 'TOTAL IN MONTH') {
-      startDate.setDate(1);
-    } else if (this.statSelected == 'TOTAL IN WEEK') {
+    if (this.statSelected === 'TOTAL IN YEAR') {
+      startDate = new Date(today.getFullYear(), 0, 1);
+    } else if (this.statSelected === 'TOTAL IN MONTH') {
+      startDate = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+    } else if (this.statSelected === 'TOTAL IN WEEK') {
       startDate.setDate(today.getDate() - 7);
     } else {
-      startDate = new Date(1991, 3, 20);
+      startDate = new Date(1991, 3, 20); 
     }
+
 
     if (!this.dateFilterRemoved) {
       let dateFilter = { key: 'receivedDate', value: [startDate, today], type: 'dateRange' };
@@ -564,51 +564,52 @@ export class DataPackagesComponent implements OnInit {
   }
 
   private filterByStats(): void {
-  const today = new Date();
-  let startDate: Date;
+    const today = new Date();
+    let startDate: Date;
 
-  switch (this.statSelected) {
-    case 'TOTAL COUNT':
-      startDate = new Date('1999-12-31');
-      break;
+    switch (this.statSelected) {
+      case 'TOTAL COUNT':
+        startDate = new Date('1999-12-31');
+        break;
 
-    case 'TOTAL IN YEAR':
-      startDate = new Date(today.getFullYear(), 0, 1);
-      break;
+      case 'TOTAL IN YEAR':
+        startDate = new Date(today);
+        startDate.setFullYear(today.getFullYear() - 1);
+        break;
 
-    case 'TOTAL IN MONTH':
-      startDate = new Date(today.getFullYear(), today.getMonth(), 1);
-      break;
+      case 'TOTAL IN MONTH':
+        startDate = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+        break;
 
-    case 'TOTAL IN WEEK':
-      startDate = new Date();
-      startDate.setDate(today.getDate() - 7);
-      break;
+      case 'TOTAL IN WEEK':
+        startDate = new Date();
+        startDate.setDate(today.getDate() - 7);
+        break;
 
-    default:
-      startDate = new Date(today.getFullYear(), today.getMonth(), 1);
-      break;
+      default:
+        startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+        break;
+    }
+
+    const formattedStartDate = this.formatDate(startDate);
+    const formattedToday = this.formatDate(today);
+
+    // Update the appliedFilters with date range for UI
+    if (this.appliedFilters.some(f => f.key === 'receivedDate')) {
+      this.appliedFilters = this.appliedFilters.map(f =>
+        f.key === 'receivedDate' ? { ...f, value: [startDate, today] } : f
+      );
+    } else if (!this.dateFilterRemoved) {
+      const dateFilter = { key: 'receivedDate', value: [startDate, today], type: 'dateRange' };
+      this.appliedFilters = [...this.appliedFilters, dateFilter];
+    }
+
+    // Call service with formatted dates (server-side filtering)
+    this.loadSharedPackages(formattedStartDate, formattedToday);
   }
 
-  const formattedStartDate = this.formatDate(startDate);
-  const formattedToday = this.formatDate(today);
-
-  // Update the appliedFilters with date range for UI
-  if (this.appliedFilters.some(f => f.key === 'receivedDate')) {
-    this.appliedFilters = this.appliedFilters.map(f =>
-      f.key === 'receivedDate' ? { ...f, value: [startDate, today] } : f
-    );
-  } else if (!this.dateFilterRemoved) {
-    const dateFilter = { key: 'receivedDate', value: [startDate, today], type: 'dateRange' };
-    this.appliedFilters = [...this.appliedFilters, dateFilter];
-  }
-
-  // Call service with formatted dates (server-side filtering)
-  this.loadSharedPackages(formattedStartDate, formattedToday);
-}
 
 
-  
   private formatDate(date: Date): string {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // month is 0-based

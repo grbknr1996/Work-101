@@ -1,0 +1,14 @@
+app-layout([config]="layoutConfig")
+  div.container
+    div.main-container
+      i.pi.pi-cog.pi-spin.icon
+      h1.title {{ 'workInProgress.title' | translate }}
+      p.description {{ 'workInProgress.subtitle' | translate }}
+      div.back-button-container
+            button.p-button-outlined.p-button-secondary(
+				pButton,
+				type="button",
+				(click)="goBack()",
+				icon="pi pi-arrow-left",
+				[label]="ms.translate('common.goBack')"
+			)

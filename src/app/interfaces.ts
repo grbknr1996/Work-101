@@ -113,6 +113,7 @@ export interface DashboardWidgetItem {
   label: string;
   link: string;
   requiredPermissions: string[];
+  isExternal?: boolean;
 }
 
 // Data Exchange Configuration Interfaces
