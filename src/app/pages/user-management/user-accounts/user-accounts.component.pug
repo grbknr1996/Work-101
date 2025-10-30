@@ -1,101 +1,100 @@
 app-layout([config]="layoutConfig")
   app-breadcrumbs([items]="breadcrumbItems")
 
-  .p-4
-    // Header Section
-    .mb-4.flex.justify-between.items-center
-      div
-        h1.text-2xl.font-bold.text-gray-800 {{ 'userManagement.userAccounts.title' | translate }}
-        p.text-gray-600 {{ 'userManagement.userAccounts.manageUsers' | translate }}
-      button.p-button-primary(
-        pButton,
-        [label]="'userManagement.userAccounts.createUser' | translate",
-        icon="pi pi-plus",
-        (click)="onCreateUser()"
+  // Header Section
+  .mb-4.flex.justify-between.items-center
+    div
+      h1.text-2xl.font-bold.text-gray-800 {{ 'userManagement.userAccounts.title' | translate }}
+      p.text-gray-600 {{ 'userManagement.userAccounts.manageUsers' | translate }}
+    button.p-button-primary(
+      pButton,
+      [label]="'userManagement.userAccounts.createUser' | translate",
+      icon="pi pi-plus",
+      (click)="onCreateUser()"
+    )
+
+  // User Stats
+  .mb-4
+    app-user-stats(
+      [config]="userStatsConfig",
+      (statSelected)="onStatSelected($event)"
+    )
+
+  // Filter Section with Button and View Toggle
+  .mb-4.flex.justify-end.items-center.gap-3.p-3.rounded(style="background: #e5f3f7")
+    button.p-button-text.p-button-sm(
+      pButton,
+      type="button",
+      [icon]="isCardView ? 'pi pi-list' : 'pi pi-th-large'",
+      (click)="toggleView()",
+      [pTooltip]="'userManagement.userAccounts.toggleView' | translate",
+      style="color: var(--p-button-outlined-secondary-color)"
+    )
+    app-configurable-filter(
+      #configurableFilter,
+      [filters]="filterConfigs",
+      (filterChange)="onFilterChange($event)",
+      (filterCleared)="onFilterCleared()",
+      (filterApplied)="onFilterApplied($event)",
+      (appliedFiltersChange)="onAppliedFiltersChange($event)"
+    )
+    button.p-button-text(
+      pButton,
+      icon="pi pi-download",
+      style="color: var(--p-button-outlined-secondary-color)"
+    )
+
+  // Filter Chips Section
+  .mb-4
+    app-filter-chips(
+      [appliedFilters]="appliedFilters",
+      [showClearAll]="true",
+      [clearAllLabel]="'userManagement.userAccounts.clearAll' | translate",
+      [getDisplayValue]="getFilterDisplayValue.bind(this)",
+      (chipRemove)="onFilterChipRemoved($event)",
+      (clearAll)="onFilterChipsClearAll()"
+    )
+
+  // User Accounts Views
+  .relative
+    // Table View
+    div(*ngIf="!isCardView")
+      app-table(
+        [columns]="tableColumns",
+        [data]="tableData",
+        [globalFilterFields]="globalFilterFields",
+        [showSearchButton]="false",
+        [showClearButton]="false",
+        [paginator]="true",
+        [lazy]="true",
+        [rows]="pageSize",
+        [totalRecords]="totalRecords",
+        [rowsPerPageOptions]="[10, 25, 50, 100]",
+        [showCurrentPageReport]="true",
+        [currentPageReportTemplate]="'userManagement.userAccounts.showingUsers' | translate",
+        (actionClick)="onActionClick($event.action, $event.item)",
+        (onLazyLoad)="onLazyLoad($event)"
       )
 
-    // User Stats
-    .mb-4
-      app-user-stats(
-        [config]="userStatsConfig",
-        (statSelected)="onStatSelected($event)"
+    // Card View
+    div(*ngIf="isCardView")
+      app-table-card(
+        [columns]="cardColumns",
+        [data]="tableData",
+        [paginator]="true",
+        [rows]="10",
+        [totalRecords]="totalRecords",
+        [rowsPerPageOptions]="[10, 25, 50, 100]",
+        [showCurrentPageReport]="true",
+        [currentPageReportTemplate]="'userManagement.userAccounts.showingUsers' | translate",
+        (actionClick)="onActionClick($event.action, $event.item)",
+        (onLazyLoad)="onLazyLoad($event)",
+        (sortChange)="onSort($event)"
       )
 
-    // Filter Section with Button and View Toggle
-    .mb-4.flex.justify-end.items-center.gap-3.p-3.rounded(style="background: #e5f3f7")
-      button.p-button-text.p-button-sm(
-        pButton,
-        type="button",
-        [icon]="isCardView ? 'pi pi-list' : 'pi pi-th-large'",
-        (click)="toggleView()",
-        [pTooltip]="'userManagement.userAccounts.toggleView' | translate",
-        style="color: var(--p-button-outlined-secondary-color)"
-      )
-      app-configurable-filter(
-        #configurableFilter,
-        [filters]="filterConfigs",
-        (filterChange)="onFilterChange($event)",
-        (filterCleared)="onFilterCleared()",
-        (filterApplied)="onFilterApplied($event)",
-        (appliedFiltersChange)="onAppliedFiltersChange($event)"
-      )
-      button.p-button-text(
-        pButton,
-        icon="pi pi-download",
-        style="color: var(--p-button-outlined-secondary-color)"
-      )
-
-    // Filter Chips Section
-    .mb-4
-      app-filter-chips(
-        [appliedFilters]="appliedFilters",
-        [showClearAll]="true",
-        [clearAllLabel]="'userManagement.userAccounts.clearAll' | translate",
-        [getDisplayValue]="getFilterDisplayValue.bind(this)",
-        (chipRemove)="onFilterChipRemoved($event)",
-        (clearAll)="onFilterChipsClearAll()"
-      )
-
-    // User Accounts Views
-    .relative
-      // Table View
-      div(*ngIf="!isCardView")
-        app-table(
-          [columns]="tableColumns",
-          [data]="tableData",
-          [globalFilterFields]="globalFilterFields",
-          [showSearchButton]="false",
-          [showClearButton]="false",
-          [paginator]="true",
-          [lazy]="true",
-          [rows]="pageSize",
-          [totalRecords]="totalRecords",
-          [rowsPerPageOptions]="[10, 25, 50, 100]",
-          [showCurrentPageReport]="true",
-          [currentPageReportTemplate]="'userManagement.userAccounts.showingUsers' | translate",
-          (actionClick)="onActionClick($event.action, $event.item)",
-          (onLazyLoad)="onLazyLoad($event)"
-        )
-
-      // Card View
-      div(*ngIf="isCardView")
-        app-table-card(
-          [columns]="cardColumns",
-          [data]="tableData",
-          [paginator]="true",
-          [rows]="10",
-          [totalRecords]="totalRecords",
-          [rowsPerPageOptions]="[10, 25, 50, 100]",
-          [showCurrentPageReport]="true",
-          [currentPageReportTemplate]="'userManagement.userAccounts.showingUsers' | translate",
-          (actionClick)="onActionClick($event.action, $event.item)",
-          (onLazyLoad)="onLazyLoad($event)",
-          (sortChange)="onSort($event)"
-        )
-
-  // Resend Verification Email Modal
-  app-modal(
-    [(visible)]="showResendVerificationModal",
-    [config]="resendVerificationModalConfig",
-    (visibleChange)="onResendVerificationModalClose()"
-  )
+// Resend Verification Email Modal
+app-modal(
+  [(visible)]="showResendVerificationModal",
+  [config]="resendVerificationModalConfig",
+  (visibleChange)="onResendVerificationModalClose()"
+)

@@ -1,9 +1,7 @@
 import { Component, OnInit, signal, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import {
-  LayoutConfig,
-} from '../../components/app-layout/app-layout.component';
+import { LayoutConfig } from '../../components/app-layout/app-layout.component';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
 
 @Component({
@@ -18,14 +16,14 @@ export class DataExchangeConfigComponent implements OnInit {
 
   // Summary cards for the dashboard
   summaryCards = [
-    {
-      icon: 'pi pi-building',
-      title: 'Originating Offices',
-      description: 'Total IP offices providing data',
-      count: 1, // Set to 1 for office users
-      color: '#1976d2',
-      clickable: true,
-    },
+    // {
+    //   icon: 'pi pi-building',
+    //   title: 'Originating Offices',
+    //   description: 'Total IP offices providing data',
+    //   count: 1, // Set to 1 for office users
+    //   color: '#1976d2',
+    //   clickable: true,
+    // },
     {
       icon: 'pi pi-database',
       title: 'Recipient Systems',

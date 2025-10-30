@@ -47,7 +47,7 @@
         <p-tab *ngFor="let cat of selectedCategories">{{getCategoryLabel(cat)}}</p-tab>
       </p-tablist>
       <p-tabpanels>
-        <p-tabpanel>
+        <p-tabpanel *ngFor="let cat of selectedCategories">
           <div class="mb-6"><b class="text-lg font-semibold text-gray-800">Configure Distribution Rules for {{ getCategoryLabel(cat) }}</b></div>
           <p-accordion>
             <p-accordionTab header="Event Code Inclusion">

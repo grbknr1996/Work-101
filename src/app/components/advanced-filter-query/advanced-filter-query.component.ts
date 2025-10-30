@@ -4,8 +4,9 @@ export interface FieldQueries {
   selected?: boolean;
   fieldId: string;
   field: {code: string; name: string;};
+  fieldType?: string;
   connecting: {code: string; name: string;};
-  value: string;
+  value: any;
   operator: string;
   orOperator?: boolean;
 }

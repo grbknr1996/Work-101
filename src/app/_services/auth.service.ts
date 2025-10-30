@@ -189,7 +189,6 @@ export class AuthService {
           }
 
           const currentUser = await getCurrentUser();
-          console.log('Current user:', currentUser);
 
           try {
             const userAttributes = await fetchUserAttributes();
@@ -215,14 +214,10 @@ export class AuthService {
               attributes: userAttributes,
               officeCode: officeCode,
             });
-            console.log('User attributes:', userAttributes);
-            console.log('Extracted office code:', officeCode);
 
             // Removed: fetchCurrentDevice() after auth
             return true;
           } catch (error) {
-            console.error('Error fetching user attributes:', error);
-            // If we can't get attributes but have a session, still consider user authenticated
             const officeCode =
               this.extractOfficeCodeFromUserId(currentUser.userId) || 'default';
 

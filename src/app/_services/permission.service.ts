@@ -46,19 +46,11 @@ export class PermissionService {
   constructor(
     private http: HttpClient,
     private loadingService: LoadingService
-  ) {
-    // Effect to log state changes for debugging
-    effect(() => {
-      console.log('Permission state changed:', this.permissionState());
-    });
-  }
+  ) {}
 
   fetchUserPermissions(): Observable<any[]> {
-    console.log('PermissionService: fetchUserPermissions called');
-
     // Check if permissions are already loaded to avoid unnecessary API calls
     if (this.isLoaded()) {
-      console.log('Permissions already loaded, returning cached data');
       return of(this.permissions());
     }
 

@@ -11,23 +11,23 @@
       </p-floatlabel>
     </div>
     <div class="col-span-4" *ngIf="showDateSearchBar">
-      <p-datePicker class="w-full date-calendar" [(ngModel)]="searchBarDate" [placeholder]="dateSearchLabel || 'Select date'" [dateFormat]="searchDateFormat || 'yy-mm-dd'" selectionMode="range" [showIcon]="true" [showButtonBar]="true" [touchUI]="false" [readonlyInput]="true" appendTo="body" (onSelect)="onCalenderSelect($event)" (onClearClick)="onClearEvent($event)"></p-datePicker>
+      <p-datePicker class="w-full date-calendar" [(ngModel)]="searchBarDate" [placeholder]="dateSearchLabel || 'common.components.filter.selectDate'|translate" [dateFormat]="searchDateFormat || 'yy-mm-dd'" selectionMode="range" [showIcon]="true" [showButtonBar]="true" [touchUI]="false" [readonlyInput]="true" appendTo="body" (onSelect)="onCalenderSelect($event)" (onClearClick)="onClearEvent($event)"></p-datePicker>
     </div>
     <div class="col-span-4 advanced-button">
       <div *ngIf="showAdvancedSearch">
-        <app-configurable-advanced-filter [category]="category" [categorySelection]="categorySelection" [templateSelection]="templateSelection" (advancedFilterSearch)="onAdvancedFilterSearch($event)"></app-configurable-advanced-filter>
+        <app-configurable-advanced-filter [category]="category" [categorySelection]="categorySelection" [templateSelection]="templateSelection" [levelCreationAllowed]="levelCreationAllowed" (advancedFilterSearch)="onAdvancedFilterSearch($event)"></app-configurable-advanced-filter>
       </div>
     </div>
     <div class="col-span-4 flex justify-end gap-2 filter-icons">
       <p-button *ngFor="let act of actions" [icon]="act.icon" [outlined]="true" [text]="true" [pTooltip]="act.label" (click)="onActionClick(act.action)"></p-button>
-      <app-configurable-filter [filters]="filters" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'Select filters to display'" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>
+      <app-configurable-filter [filters]="filters" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'common.components.filter.selectFilters'|translate" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>
       <p-button *ngIf="showDownloadIcon" icon="pi pi-file-pdf" [outlined]="true" [text]="true" (click)="onDownloadDetails()"></p-button>
       <p-button *ngIf="showInfoIcon" icon="pi pi-info-circle" [outlined]="true" [text]="true" (click)="onInfoDetails()"></p-button>
     </div>
   </div>
 </div>
 <div class="mt-1 w-full" [style]="(disabled || appliedFilters.length == 0)? 'display:none' : '' ">
-  <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="filterClearAll" [clearAllLabel]="'Clear All'" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-filter-chips>
+  <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="filterClearAll" [clearAllLabel]="'common.components.filter.clearAll'|translate" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-filter-chips>
 </div>
 <div class="mt-1 w-full app-advanced-filter-query" *ngIf="showAdvancedSearchQuery">
   <app-advanced-filter-query [selectedQuery]="selectedQuery" [showQuery]="showQuery"></app-advanced-filter-query>

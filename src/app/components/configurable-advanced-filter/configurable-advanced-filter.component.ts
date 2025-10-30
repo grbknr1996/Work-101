@@ -12,7 +12,8 @@ import {
 } from '@angular/forms';
 import { formatDate } from '@angular/common';
 import { Subject } from 'rxjs';
-import { AdvancedFilterQuery, FieldQueries, GroupQueries, LevelQueries } from '../advanced-filter-query/advanced-filter-query.component'
+import { AdvancedFilterQuery, FieldQueries, LevelQueries } from '../advanced-filter-query/advanced-filter-query.component'
+import { MechanicsService } from 'src/app/_services/mechanics.service';
 
 export interface SearchCategory {
   code: string;
@@ -41,6 +42,7 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
   @Input() category: string = "All";
   @Input() categorySelection: boolean = false;
   @Input() templateSelection: boolean = true;
+  @Input() levelCreationAllowed: boolean = true;
 
   @Output() advancedFilterSearch = new EventEmitter<AdvancedFilterQuery>();
 
@@ -61,6 +63,7 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
   fieldOptions;
   fieldOptionsFromDb;
   queryOptions;
+  dateQueryOptions;
 
   levels: LevelQueries[];
 
@@ -71,7 +74,8 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
 
   selectedList;
   
-  constructor(private fb: FormBuilder) {
+  constructor(public ms: MechanicsService) {
+    
   }
 
   ngOnInit(): void {
@@ -103,12 +107,18 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
       { code: 'Ends', name: 'Ends With' }
     ];
 
+    this.dateQueryOptions = [
+      { code: 'before', name: 'Before' },
+      { code: 'after', name: 'After' },
+      { code: 'dateRange', name: 'Date Range' }
+    ];
+
     this.fieldOptionsFromDb = [
       {
         "key": "patents",
         "options": [
           {
-            "label": "Free Text",
+            "label": "Text Fields",
             "code": "TXT",
             "items": [
               { "name": "Title", "code": "TTL" },
@@ -153,7 +163,7 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
         "key": "trademarks",
         "options": [
           {
-            "label": "Free Text",
+            "label": "Text Fields",
             "code": "TXT",
             "items": [
               { "name": "Title", "code": "TTL" },
@@ -198,7 +208,7 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
         "key": "designs",
         "options": [
           {
-            "label": "Free Text",
+            "label": "Text Fields",
             "code": "TXT",
             "items": [
               { "name": "Title", "code": "TTL" },
@@ -243,7 +253,7 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
         "key": "gazette",
         "options": [
           {
-            "label": "Free Text",
+            "label": "Text Fields",
             "code": "TXT",
             "items": [
               { "name": "Title", "code": "TTL" },
@@ -288,7 +298,7 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
         "key": "datapackages",
         "options": [
           {
-            "label": "Free Text",
+            "label": "Text Fields",
             "code": "TXT",
             "items": [
               { "name": "Title", "code": "TTL" },
@@ -333,33 +343,18 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
         "key": "authorityfiles",
         "options": [
           {
-            "label": "Free Text",
+            "label": "Text Fields",
             "code": "TXT",
             "items": [
-              { "name": "Title", "code": "TTL" },
-              { "name": "Description", "code": "DESC" },
-              { "name": "Mark Name", "code": "MK" },
-              { "name": "Title in Other Language", "code": "TTL_EN" }
+              { "name": "File Number", "code": "fileNumber", "fieldType": "text" },
+              { "name": "Publication Number", "code": "publicationNumber", "fieldType": "text" }
             ]
           },
           {
-            "label": "Property",
-            "code": "PROP",
+            "label": "Date Fields",
+            "code": "date",
             "items": [
-              { "name": "Application Id", "code": "AFNB" },
-              { "name": "Filing Date", "code": "AFDT" },
-              { "name": "Application Type", "code": "APP_TYP" },
-              { "name": "Status", "code": "STLB" }
-            ]
-          },
-          {
-            "label": "Country",
-            "code": "COUNTRY",
-            "items": [
-              { "name": "Applicant County", "code": "APCT" },
-              { "name": "Priority Country", "code": "PCCT" },
-              { "name": "Filing Country", "code": "AFCT" },
-              { "name": "Publication Country", "code": "PUBCT" }
+              { "name": "Publication Date", "code": "publicationDate", "fieldType": "date" }
             ]
           }
         ]
@@ -373,7 +368,7 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
       description: "Common search for US filed patents with specific status",
       created: "2025-10-10",
       lastUsed: "2025-10-12",
-      query: {"category":"patents","levelList":[{"level":"1","levelId":"1","level_name":"","group_list":[{"group":"1","group_name":"Group 1","file_list":[{"fieldId":"1","field":{"name":"Description","code":"DESC"},"connecting":{"code":"Like","name":"Contains Word"},"value":"cola","operator":"AND","orOperator":false},{"fieldId":"2","field":{"name":"Nice","code":"NCL"},"connecting":{"code":"Exact","name":"Equals"},"value":"24","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"AND","orOperator":false},{"level":"2","levelId":"2","level_name":"Level 2 Query","group_list":[{"group":"2","group_name":"Group 2","file_list":[{"fieldId":"1","field":{"name":"Applicant County","code":"APCT"},"connecting":{"code":"Exact","name":"Equals"},"value":"VC","operator":"AND","orOperator":false},{"fieldId":"2","field":{"name":"Vienna","code":"VCL"},"connecting":{"code":"Starts","name":"Starts With"},"value":"1.13","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false},{"group":"3","group_name":"Group 3","file_list":[{"fieldId":"3","field":{"name":"Mark Name","code":"MK"},"connecting":{"code":"Like","name":"Contains Word"},"value":"3D","operator":"AND","orOperator":false},{"fieldId":"4","field":{"name":"Application Type","code":"APP_TYP"},"connecting":{"code":"Like","name":"Contains Word"},"value":"premium","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"OR","orOperator":true},{"level":"1","levelId":"3","level_name":"","group_list":[{"group":"4","group_name":"Group 4","file_list":[{"fieldId":"1","field":{"name":"Status","code":"STLB"},"connecting":{"code":"Exact","name":"Equals"},"value":"Registered","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"AND","orOperator":false}]}
+      query: {"category":"patents","levelList":[{"level":"1","levelId":"1","level_name":"","group_list":[{"group":"1","group_name":"Filter Group 1","file_list":[{"fieldId":"1","field":{"name":"Description","code":"DESC"},"connecting":{"code":"Like","name":"Contains Word"},"value":"cola","operator":"AND","orOperator":false},{"fieldId":"2","field":{"name":"Nice","code":"NCL"},"connecting":{"code":"Exact","name":"Equals"},"value":"24","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"AND","orOperator":false},{"level":"2","levelId":"2","level_name":"Level 2 Query","group_list":[{"group":"2","group_name":"Filter Group 2","file_list":[{"fieldId":"1","field":{"name":"Applicant County","code":"APCT"},"connecting":{"code":"Exact","name":"Equals"},"value":"VC","operator":"AND","orOperator":false},{"fieldId":"2","field":{"name":"Vienna","code":"VCL"},"connecting":{"code":"Starts","name":"Starts With"},"value":"1.13","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false},{"group":"3","group_name":"Filter Group 3","file_list":[{"fieldId":"3","field":{"name":"Mark Name","code":"MK"},"connecting":{"code":"Like","name":"Contains Word"},"value":"3D","operator":"AND","orOperator":false},{"fieldId":"4","field":{"name":"Application Type","code":"APP_TYP"},"connecting":{"code":"Like","name":"Contains Word"},"value":"premium","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"OR","orOperator":true},{"level":"1","levelId":"3","level_name":"","group_list":[{"group":"4","group_name":"Filter Group 4","file_list":[{"fieldId":"1","field":{"name":"Status","code":"STLB"},"connecting":{"code":"Exact","name":"Equals"},"value":"Registered","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"AND","orOperator":false}]}
     },
     {
       templateId: "2",
@@ -382,7 +377,16 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
       description: "Search for trademark brand names and goods/services",
       created: "2025-10-10",
       lastUsed: "2025-10-12",
-      query: {"category":"patents","levelList":[{"level":"1","levelId":"1","level_name":"","group_list":[{"group":"1","group_name":"Group 1","file_list":[{"fieldId":"1","field":{"name":"Description","code":"DESC"},"connecting":{"code":"Like","name":"Contains Word"},"value":"cola","operator":"AND","orOperator":false},{"fieldId":"2","field":{"name":"Nice","code":"NCL"},"connecting":{"code":"Exact","name":"Equals"},"value":"24","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"AND","orOperator":false},{"level":"2","levelId":"2","level_name":"Level 2 Query","group_list":[{"group":"2","group_name":"Group 2","file_list":[{"fieldId":"1","field":{"name":"Applicant County","code":"APCT"},"connecting":{"code":"Exact","name":"Equals"},"value":"VC","operator":"AND","orOperator":false},{"fieldId":"2","field":{"name":"Vienna","code":"VCL"},"connecting":{"code":"Starts","name":"Starts With"},"value":"1.13","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false},{"group":"3","group_name":"Group 3","file_list":[{"fieldId":"3","field":{"name":"Mark Name","code":"MK"},"connecting":{"code":"Like","name":"Contains Word"},"value":"3D","operator":"AND","orOperator":false},{"fieldId":"4","field":{"name":"Application Type","code":"APP_TYP"},"connecting":{"code":"Like","name":"Contains Word"},"value":"premium","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"OR","orOperator":true},{"level":"1","levelId":"3","level_name":"","group_list":[{"group":"4","group_name":"Group 4","file_list":[{"fieldId":"1","field":{"name":"Status","code":"STLB"},"connecting":{"code":"Exact","name":"Equals"},"value":"Registered","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"AND","orOperator":false}]}
+      query: {"category":"patents","levelList":[{"level":"1","levelId":"1","level_name":"","group_list":[{"group":"1","group_name":"Filter Group 1","file_list":[{"fieldId":"1","field":{"name":"Description","code":"DESC"},"connecting":{"code":"Like","name":"Contains Word"},"value":"cola","operator":"AND","orOperator":false},{"fieldId":"2","field":{"name":"Nice","code":"NCL"},"connecting":{"code":"Exact","name":"Equals"},"value":"24","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"AND","orOperator":false},{"level":"2","levelId":"2","level_name":"Level 2 Query","group_list":[{"group":"2","group_name":"Filter Group 2","file_list":[{"fieldId":"1","field":{"name":"Applicant County","code":"APCT"},"connecting":{"code":"Exact","name":"Equals"},"value":"VC","operator":"AND","orOperator":false},{"fieldId":"2","field":{"name":"Vienna","code":"VCL"},"connecting":{"code":"Starts","name":"Starts With"},"value":"1.13","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false},{"group":"3","group_name":"Filter Group 3","file_list":[{"fieldId":"3","field":{"name":"Mark Name","code":"MK"},"connecting":{"code":"Like","name":"Contains Word"},"value":"3D","operator":"AND","orOperator":false},{"fieldId":"4","field":{"name":"Application Type","code":"APP_TYP"},"connecting":{"code":"Like","name":"Contains Word"},"value":"premium","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"OR","orOperator":true},{"level":"1","levelId":"3","level_name":"","group_list":[{"group":"4","group_name":"Filter Group 4","file_list":[{"fieldId":"1","field":{"name":"Status","code":"STLB"},"connecting":{"code":"Exact","name":"Equals"},"value":"Registered","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"AND","orOperator":false}]}
+    },
+    {
+      templateId: "3",
+      category: "authorityfiles",
+      title: "Authority Files Sample",
+      description: "Search for Authority files related queries",
+      created: "2025-10-10",
+      lastUsed: "2025-10-12",
+      query: {"category":"patents","levelList":[{"level":"1","levelId":"1","level_name":"","group_list":[{"group":"1","group_name":"Filter Group 1","file_list":[{"fieldId":"1","field":{"name":"Description","code":"DESC"},"connecting":{"code":"Like","name":"Contains Word"},"value":"cola","operator":"AND","orOperator":false},{"fieldId":"2","field":{"name":"Nice","code":"NCL"},"connecting":{"code":"Exact","name":"Equals"},"value":"24","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"AND","orOperator":false},{"level":"2","levelId":"2","level_name":"Level 2 Query","group_list":[{"group":"2","group_name":"Filter Group 2","file_list":[{"fieldId":"1","field":{"name":"Applicant County","code":"APCT"},"connecting":{"code":"Exact","name":"Equals"},"value":"VC","operator":"AND","orOperator":false},{"fieldId":"2","field":{"name":"Vienna","code":"VCL"},"connecting":{"code":"Starts","name":"Starts With"},"value":"1.13","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false},{"group":"3","group_name":"Filter Group 3","file_list":[{"fieldId":"3","field":{"name":"Mark Name","code":"MK"},"connecting":{"code":"Like","name":"Contains Word"},"value":"3D","operator":"AND","orOperator":false},{"fieldId":"4","field":{"name":"Application Type","code":"APP_TYP"},"connecting":{"code":"Like","name":"Contains Word"},"value":"premium","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"OR","orOperator":true},{"level":"1","levelId":"3","level_name":"","group_list":[{"group":"4","group_name":"Filter Group 4","file_list":[{"fieldId":"1","field":{"name":"Status","code":"STLB"},"connecting":{"code":"Exact","name":"Equals"},"value":"Registered","operator":"AND","orOperator":false}],"group_operator":"AND","orOperator":false}],"level_operator":"AND","orOperator":false}]}
     }];
 
     this.queryTemplates = this.queryTemplatesFromDb;
@@ -433,7 +437,7 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
 
     this.groupNumber = 1;
     let groupId = Math.floor(Math.random() * 100) + 1;
-    let groups = [{"group":groupId+"", "group_name":"Group "+this.groupNumber, "file_list": fields, "group_operator":"","orOperator":false}];  
+    let groups = [{"group":groupId+"", "group_name":this.ms.translate('common.components.advancedFilter.display.groupName')+" "+this.groupNumber, "file_list": fields, "group_operator":"","orOperator":false}];  
     this.groupNumber = this.groupNumber + 1;
 
     this.levelNumber = 1;
@@ -496,6 +500,11 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
     this.showSaveTemplate = false
   }
 
+  onFieldChange(selectedField: any, file: FieldQueries) {
+    file.fieldType = selectedField.fieldType;
+  }
+
+
   addField(levelId: string, groupId: string ): void {
 
     let selectedLevel = this.levels.find(item => item.levelId === levelId);
@@ -546,7 +555,7 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
     let fields = [{"fieldId":nextNumber+"", "field":{code: "", name:""}, "connecting":{code: "", name:""}, "value":"", "operator":"","orOperator":false}];
     
     let groupId = Math.floor(Math.random() * 100) + 1;
-    let group = {"group":groupId+"", "group_name":"Group "+this.groupNumber, "file_list": fields, "group_operator":"","orOperator":firstLevelOperator};
+    let group = {"group":groupId+"", "group_name":this.ms.translate('common.components.advancedFilter.display.groupName')+" "+this.groupNumber, "file_list": fields, "group_operator":"","orOperator":firstLevelOperator};
     this.groupNumber = this.groupNumber + 1;
 
     let levelId = Math.floor(Math.random() * 100) + 1;
@@ -663,8 +672,8 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
     const newLevelId = Math.floor(Math.random() * 100) + 1;
     const newLevel = {
       level: "2",
-      levelId: newLevelId+"",
-      level_name: `Grouped Level ${this.levelNumber}`,
+      levelId: newLevelId + "",
+      level_name: this.ms.translate('common.components.advancedFilter.display.groupedLevel')+` ${this.levelNumber}`,
       group_list: selectedGroups,
       level_operator: "AND",
       orOperator: false

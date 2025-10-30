@@ -93,6 +93,7 @@ export class ConfigurableFilterBarComponent {
   @Input() category: string = "All";
   @Input() categorySelection: boolean = false;
   @Input() templateSelection: boolean = true;
+  @Input() levelCreationAllowed: boolean = true;
 
   @Output() filterChange = new EventEmitter<FilterValue[]>();
   @Output() filterCleared = new EventEmitter<void>();

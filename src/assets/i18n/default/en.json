@@ -66,6 +66,8 @@
       },
       "filter": {
         "clearAll": "Clear All",
+        "selectFilters":"Select filters to display",
+        "selectDate":"Select date",
         "date": {
           "placeHolder": "Select date range"
         },
@@ -106,6 +108,7 @@
         "fieldPlaceholder": "Select Field",
         "strategyPlaceholder": "Select Search Strategy",
         "valuePlaceholder": "Enter the value to search",
+        "datePlaceholder": "Select date",
         "toggle": {
           "or": "OR",
           "and": "AND",
@@ -136,6 +139,13 @@
           "group": "Group",
           "items": "Items",
           "addGroup": "Add to Group"
+        },
+        "display":{
+          "groupedLevel": "Grouped Level",
+          "groupName": "Filter Group",
+          "categoryoptions": {
+            "all": "All"
+          }
         }
       },
       "groupAssignment": {
@@ -194,6 +204,15 @@
           "filingDashboard": "Filing Dashboard",
           "newFilings": "New filings",
           "notifications": "Notifications"
+        }
+      },
+      "notifications": {
+        "title": "Notifications",
+        "items": {
+          "aripo": "ARIPO",
+          "hague": "Hague",
+          "madrid": "Madrid",
+          "office": "Office"
         }
       },
       "taskManagement": {
@@ -284,7 +303,7 @@
     "permissionError": {
       "title": "Permission Error",
       "message": "The requested operation could not be performed due to missing permissions in the user profile.",
-      "retryButton": "TRY AGAIN"
+      "retryButton": "Try Again"
     }
   },
   "platformSelection": {

@@ -77,6 +77,17 @@ export class TrendsComponent implements OnInit {
   }
   chartSettings() {
     this.chartOption = {
+      textStyle: {
+        fontFamily: this.fontFamily,
+        fontWeight: 500
+      },
+      legend: {
+        top: '15%',
+        itemGap: 30,
+        textStyle: {
+          fontSize: 15
+        }
+      },
       title: {
         text: 'TRADEMARKS - TOP 5 BUSINESS SECTORS',
         left: 'center',
@@ -87,14 +98,12 @@ export class TrendsComponent implements OnInit {
           fontWeight: 'bold'
         }
       },
-      color: ['#0EA5E9', '#4EABD5', '#B9E2F4', '#D6F1FF', '#EAF8FF', '#F5FCFF'],
-      colorBy: 'data',
-      legend: {
-        top: '15%',
-        itemGap: 30
-      },
       tooltip: {
         trigger: 'item',
+        textStyle: {
+          fontFamily: this.fontFamily,
+          fontSize: 16
+        },
         formatter: function (params: any) {
           return `<span style="font-size:12px;">${params.name}: ${params.value}%</span>`
         }
@@ -106,16 +115,12 @@ export class TrendsComponent implements OnInit {
           radius: ['40%', '70%'],
           top: '10%',
           center: ['50%', '60%'],
-          avoidLabelOverlap: false,
           label: {
             show: true,
             position: 'inside',
             formatter: '{c}%',
             color: '#3f3f3f',
             fontWeight: 'bold'
-          },
-          labelLine: {
-            show: false
           },
           data: [
             { value: 47.2, name: 'COMPUTER TECHNOLOGY' },
@@ -125,7 +130,9 @@ export class TrendsComponent implements OnInit {
             { value: 5.6, name: 'SEMICONDUCTORS' }
           ]
         }
-      ]
+      ],
+      color: ['#0EA5E9', '#4EABD5', '#B9E2F4', '#D6F1FF', '#EAF8FF', '#F5FCFF'],
+      colorBy: 'data'
     };
   }
   chartHeightFunc() { return this.chartHeight; }

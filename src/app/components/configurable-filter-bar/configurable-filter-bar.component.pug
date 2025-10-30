@@ -9,7 +9,7 @@
       .col-span-4(*ngIf="showDateSearchBar")
           p-datePicker.w-full.date-calendar(
             [(ngModel)]="searchBarDate",
-            [placeholder]="dateSearchLabel || 'Select date'",
+            [placeholder]="dateSearchLabel || 'common.components.filter.selectDate'|translate",
             [dateFormat]="searchDateFormat || 'yy-mm-dd'",
             selectionMode="range",
             [showIcon]="true",
@@ -26,6 +26,7 @@
             [category]="category", 
             [categorySelection]="categorySelection", 
             [templateSelection]="templateSelection",
+            [levelCreationAllowed]="levelCreationAllowed",
             (advancedFilterSearch)="onAdvancedFilterSearch($event)"
           )
       .col-span-4.flex.justify-end.gap-2.filter-icons
@@ -42,7 +43,7 @@
           [showClearAll]="true",
           [showApplyButton]="true",
           [showFilterSelector]="true",
-          [filterSelectorPlaceholder]="'Select filters to display'",
+          [filterSelectorPlaceholder]="'common.components.filter.selectFilters'|translate",
           (filterChange)="onFilterChange($event)",
           (filterCleared)="onFilterCleared()",
           (filterApplied)="onFilterApplied($event)",
@@ -64,7 +65,7 @@
   app-filter-chips(
     [appliedFilters]="appliedFilters",
     [showClearAll]="filterClearAll",
-    [clearAllLabel]="'Clear All'",
+    [clearAllLabel]="'common.components.filter.clearAll'|translate",
     [getDisplayValue]="getFilterDisplayValue.bind(this)",
     (chipRemove)="removeFilterChip($event)",
     (clearAll)="clearAllFilters()"

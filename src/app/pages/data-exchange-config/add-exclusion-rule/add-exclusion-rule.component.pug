@@ -95,7 +95,7 @@ app-layout([config]="layoutConfig")
         p-tab(*ngFor="let cat of selectedCategories") {{getCategoryLabel(cat)}}
 
       p-tabpanels
-        p-tabpanel
+        p-tabpanel(*ngFor="let cat of selectedCategories")
           .mb-6
             b.text-lg.font-semibold.text-gray-800 Configure Distribution Rules for {{ getCategoryLabel(cat) }}
           p-accordion

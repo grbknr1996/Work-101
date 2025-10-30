@@ -79,7 +79,7 @@
                 .filter-group-content
                   .filter-group-heading
                     .relative
-                      input.filter-group-selection(type='checkbox', [value]="group.selected", (change)="onSelectionChange('group',level.levelId, group.group, $event)")
+                      input.filter-group-selection(*ngIf="levelCreationAllowed", type='checkbox', [value]="group.selected", (change)="onSelectionChange('group',level.levelId, group.group, $event)")
                     .filter-group-name {{group.group_name}}
                     span.group-selection-badge(*ngIf="group.selected") {{"common.components.advancedFilter.selection.forGrouping"|translate}}
                   button.filter-group-delete((click)="removeGroup(level.levelId,group.group)")
@@ -92,14 +92,28 @@
                 div(*ngFor="let file of group.file_list; let i = index; let last = last")
                   .grid.grid-cols-12.filter-field-line
                     .col-span-3
-                      p-select.filter-field-select([options]="fieldOptions", [(ngModel)]="file.field", [placeholder]="'common.components.advancedFilter.fieldPlaceholder'|translate", [group]="true", optionLabel="name")
+                      p-select.filter-field-select([options]="fieldOptions", [(ngModel)]="file.field", [placeholder]="'common.components.advancedFilter.fieldPlaceholder'|translate", [group]="true", optionLabel="name", (onChange)="onFieldChange($event.value,file)")
                         ng-template(let-group #grp)
                           div.flex.items-center
                             span {{grp.name}}
                     .col-span-3
-                      p-select.filter-field-select([options]="queryOptions", [(ngModel)]="file.connecting", [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate", optionLabel="name")
+                      p-select.filter-field-select(*ngIf="file.fieldType == null", [options]="queryOptions", [disabled]="true", [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate", optionLabel="name")
+                      p-select.filter-field-select(*ngIf="file.fieldType == 'text'", [options]="queryOptions", [(ngModel)]="file.connecting", [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate", optionLabel="name")
+                      p-select.filter-field-select(*ngIf="file.fieldType == 'date'", [options]="dateQueryOptions", [(ngModel)]="file.connecting", [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate", optionLabel="name")
                     .col-span-3
-                      input.filter-field-value([placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate", [(ngModel)]="file.value")
+                      input.filter-field-value(*ngIf="file.fieldType == null", [placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate", [disabled]="true")
+                      input.filter-field-value(*ngIf="file.fieldType == 'text'", [placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate", [(ngModel)]="file.value")
+                      p-datePicker.w-full.date-calendar(
+                        *ngIf="file.fieldType == 'date'",
+                        [(ngModel)]="file.value",
+                        [placeholder]="'common.components.advancedFilter.datePlaceholder'|translate",
+                        [dateFormat]="searchDateFormat || 'yy-mm-dd'",
+                        [selectionMode]="file.connecting.code === 'dateRange' ? 'range' : 'single'",
+                        [showIcon]="true",
+                        [showButtonBar]="true",
+                        [touchUI]="false",
+                        [readonlyInput]="true"
+                      )
                     .col-span-3.flex.gap-1
                       button.filter-field-delete((click)="removeField(level.levelId, group.group, file.fieldId)")
                         i.pi.pi-trash(pButtonIcon)
@@ -125,7 +139,7 @@
               .filter-level-header
                 .filter-level-header-content
                   .relative
-                    input.filter-level-selection(type='checkbox', [value]="level.selected", (change)="onSelectionChange('level',level.levelId,'',$event)")
+                    input.filter-level-selection(*ngIf="levelCreationAllowed", type='checkbox', [value]="level.selected", (change)="onSelectionChange('level',level.levelId,'',$event)")
                   span.filter-level-text {{"common.components.advancedFilter.selection.furtherGrouping"|translate}}
                 button.filter-level-ungroup((click)="unGroup(level.levelId)")
                   i.pi.pi-times(pButtonIcon)
@@ -149,14 +163,28 @@
                     div(*ngFor="let file of group.file_list; let i = index; let last = last")
                       .grid.grid-cols-12.filter-field-line
                         .col-span-3
-                          p-select.filter-field-select([options]="fieldOptions", [(ngModel)]="file.field", [placeholder]="'common.components.advancedFilter.fieldPlaceholder'|translate", [group]="true", optionLabel="name")
+                          p-select.filter-field-select([options]="fieldOptions", [(ngModel)]="file.field", [placeholder]="'common.components.advancedFilter.fieldPlaceholder'|translate", [group]="true", optionLabel="name", (onChange)="onFieldChange($event.value,file)")
                             ng-template(let-group #grp)
                               div.flex.items-center
                                 span {{grp.name}}
                         .col-span-3
-                          p-select.filter-field-select([options]="queryOptions", [(ngModel)]="file.connecting", [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate", optionLabel="name")
+                          p-select.filter-field-select(*ngIf="file.fieldType == null", [options]="queryOptions", [disabled]="true", [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate", optionLabel="name")
+                          p-select.filter-field-select(*ngIf="file.fieldType == 'text'", [options]="queryOptions", [(ngModel)]="file.connecting", [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate", optionLabel="name")
+                          p-select.filter-field-select(*ngIf="file.fieldType == 'date'", [options]="dateQueryOptions", [(ngModel)]="file.connecting", [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate", optionLabel="name")
                         .col-span-3
-                          input.filter-field-value([placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate", [value]="file.value")
+                          input.filter-field-value(*ngIf="file.fieldType == null", [placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate", [disabled]="true")
+                          input.filter-field-value(*ngIf="file.fieldType == 'text'", [placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate", [(ngModel)]="file.value")
+                          p-datePicker.w-full.date-calendar(
+                            *ngIf="file.fieldType == 'date'",
+                            [(ngModel)]="file.value",
+                            [placeholder]="'common.components.advancedFilter.datePlaceholder'|translate",
+                            [dateFormat]="searchDateFormat || 'yy-mm-dd'",
+                            [selectionMode]="file.connecting.code === 'dateRange' ? 'range' : 'single'",
+                            [showIcon]="true",
+                            [showButtonBar]="true",
+                            [touchUI]="false",
+                            [readonlyInput]="true"
+                          )
                         .col-span-3.flex.gap-1
                           button.filter-field-delete((click)="removeField(level.levelId, group.group, file.fieldId)")
                             i.pi.pi-trash(pButtonIcon)

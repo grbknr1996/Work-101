@@ -1,5 +1,5 @@
 //ANGULAR CORE
-import { Component, OnInit, inject, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, inject, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 //TRANSLATE
@@ -33,6 +33,7 @@ export class ChartNavbarComponent implements OnInit {
   chartTopics = [];
 
   //NETWORKS
+  @Input() filterBadge: boolean = false;
   @Output() onFilter = new EventEmitter<void>();
   @Output() onReset = new EventEmitter<void>();
   filter() { this.onFilter.emit(); }

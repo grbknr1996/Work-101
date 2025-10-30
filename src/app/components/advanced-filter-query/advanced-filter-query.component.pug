@@ -11,7 +11,9 @@ p-fieldset.no-border-fieldset(*ngIf="showQuery", [legend]="'common.components.ad
                     div
                       span.field-name {{file_list.field.name}}:&nbsp;
                       span.field-connector {{file_list.connecting.name}} 
-                      span.field-value &apos;{{file_list.value}}&apos;
+                      span.field-value(*ngIf="file_list.fieldType != 'date'") &apos;{{file_list.value}}&apos;
+                      span.field-value(*ngIf="file_list.fieldType == 'date' && file_list.connecting.code == 'dateRange'") &apos;{{file_list.value[0] | date: 'yyyy-MM-dd'}} - {{file_list.value[1] | date: 'yyyy-MM-dd'}}&apos;
+                      span.field-value(*ngIf="file_list.fieldType == 'date' && file_list.connecting.code != 'dateRange'") &apos;{{file_list.value | date: 'yyyy-MM-dd'}}&apos;
                     .operator(*ngIf="!last")
                       ng-container(*ngIf="file_list.orOperator; else andLabel")
                         | {{"common.components.advancedFilter.toggle.or"|translate}}
@@ -34,7 +36,9 @@ p-fieldset.no-border-fieldset(*ngIf="showQuery", [legend]="'common.components.ad
                         div
                           span.field-name {{file_list.field.name}}:&nbsp;
                           span.field-connector {{file_list.connecting.name}} 
-                          span.field-value &apos;{{file_list.value}}&apos;
+                          span.field-value(*ngIf="file_list.fieldType != 'date'") &apos;{{file_list.value}}&apos;
+                          span.field-value(*ngIf="file_list.fieldType == 'date' && file_list.connecting.code == 'dateRange'") &apos;{{file_list.value[0] | date: 'yyyy-MM-dd'}} - {{file_list.value[1] | date: 'yyyy-MM-dd'}}&apos;
+                          span.field-value(*ngIf="file_list.fieldType == 'date' && file_list.connecting.code != 'dateRange'") &apos;{{file_list.value | date: 'yyyy-MM-dd'}}&apos;
                         .operator(*ngIf="!last")
                           ng-container(*ngIf="file_list.orOperator; else andLabel")
                             | {{"common.components.advancedFilter.toggle.or"|translate}}

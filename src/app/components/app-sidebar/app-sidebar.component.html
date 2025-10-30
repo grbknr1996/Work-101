@@ -1,5 +1,5 @@
 
-<div class="sidebar-container" [ngClass]="{'sidebar-fixed': fixed, 'sidebar-visible': visible, 'sidebar-hidden': !visible, 'sidebar-compact': compactMode &amp;&amp; !isMobile, 'sidebar-mobile': isMobile}" [style]="{'margin-top':'64px','height':'100%','position':'fixed'}">
+<div class="sidebar-container" [ngClass]="{'sidebar-fixed': fixed, 'sidebar-visible': visible, 'sidebar-hidden': !visible, 'sidebar-compact': compactMode &amp;&amp; !isMobile, 'sidebar-mobile': isMobile}" [style]="{'height':'100%','position':'fixed'}">
   <div class="sidebar-menu">
     <ul class="menu-list">
       <ng-container *ngFor="let item of menuItems">

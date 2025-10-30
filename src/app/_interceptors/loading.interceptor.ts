@@ -50,11 +50,8 @@ export class LoadingInterceptor implements HttpInterceptor {
       finalize(() => {
         if (this.shouldShowLoader(request)) {
           this.activeRequests--;
-          console.log(
-            `Loading finished. Active requests: ${this.activeRequests}`
-          );
+
           if (this.activeRequests === 0) {
-            console.log('Hiding loader - no active requests');
             this.loadingService.hide();
           }
         }
@@ -67,9 +64,7 @@ export class LoadingInterceptor implements HttpInterceptor {
     const shouldShow = LOADER_URL_PATTERNS.some((pattern) =>
       request.url.includes(pattern)
     );
-    console.log(
-      `LoadingInterceptor: URL ${request.url} - shouldShow: ${shouldShow}`
-    );
+
     return shouldShow;
   }
 

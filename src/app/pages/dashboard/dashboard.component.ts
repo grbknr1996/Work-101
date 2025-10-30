@@ -54,7 +54,6 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     const officeCode = this.route.snapshot.params.officeCode || 'default';
     const langCode = this.route.snapshot.params['langCode'] || 'en';
-    console.log('office code:::', officeCode, langCode);
 
     this.loadPermissions();
   }

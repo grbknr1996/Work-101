@@ -1,9 +1,5 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import {
-  Router,
-  NavigationEnd,
-  ActivatedRoute,
-} from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { filter } from 'rxjs/operators';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
@@ -40,7 +36,6 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
     // Subscribe to current office changes to update home breadcrumb
     this.officeSubscription = this.ms.currentOffice$.subscribe((officeCode) => {
-      console.log('Breadcrumbs: Current office changed to:', officeCode);
       this.updateHomeItem();
       if (this.autoGenerate) {
         this.items = this.createBreadcrumbs(this.activatedRoute.root);

@@ -9,7 +9,7 @@
             <div class="group-name">{{group_list.group_name}}
               <div *ngFor="let file_list of group_list.file_list; let i = index; let last = last">
                 <div class="group-margin">
-                  <div><span class="field-name">{{file_list.field.name}}:&nbsp;</span><span class="field-connector">{{file_list.connecting.name}} </span><span class="field-value">&apos;{{file_list.value}}&apos;</span></div>
+                  <div><span class="field-name">{{file_list.field.name}}:&nbsp;</span><span class="field-connector">{{file_list.connecting.name}} </span><span class="field-value" *ngIf="file_list.fieldType != 'date'">&apos;{{file_list.value}}&apos;</span><span class="field-value" *ngIf="file_list.fieldType == 'date' &amp;&amp; file_list.connecting.code == 'dateRange'">&apos;{{file_list.value[0] | date: 'yyyy-MM-dd'}} - {{file_list.value[1] | date: 'yyyy-MM-dd'}}&apos;</span><span class="field-value" *ngIf="file_list.fieldType == 'date' &amp;&amp; file_list.connecting.code != 'dateRange'">&apos;{{file_list.value | date: 'yyyy-MM-dd'}}&apos;</span></div>
                   <div class="operator" *ngIf="!last">
                     <ng-container *ngIf="file_list.orOperator; else andLabel">{{"common.components.advancedFilter.toggle.or"|translate}}</ng-container>
                     <ng-template #andLabel>{{"common.components.advancedFilter.toggle.and"|translate}}</ng-template>
@@ -33,7 +33,7 @@
                 <div class="group-name">{{group_list.group_name}}
                   <div *ngFor="let file_list of group_list.file_list; let i = index; let last = last">
                     <div class="group-margin">
-                      <div><span class="field-name">{{file_list.field.name}}:&nbsp;</span><span class="field-connector">{{file_list.connecting.name}} </span><span class="field-value">&apos;{{file_list.value}}&apos;</span></div>
+                      <div><span class="field-name">{{file_list.field.name}}:&nbsp;</span><span class="field-connector">{{file_list.connecting.name}} </span><span class="field-value" *ngIf="file_list.fieldType != 'date'">&apos;{{file_list.value}}&apos;</span><span class="field-value" *ngIf="file_list.fieldType == 'date' &amp;&amp; file_list.connecting.code == 'dateRange'">&apos;{{file_list.value[0] | date: 'yyyy-MM-dd'}} - {{file_list.value[1] | date: 'yyyy-MM-dd'}}&apos;</span><span class="field-value" *ngIf="file_list.fieldType == 'date' &amp;&amp; file_list.connecting.code != 'dateRange'">&apos;{{file_list.value | date: 'yyyy-MM-dd'}}&apos;</span></div>
                       <div class="operator" *ngIf="!last">
                         <ng-container *ngIf="file_list.orOperator; else andLabel">{{"common.components.advancedFilter.toggle.or"|translate}}</ng-container>
                         <ng-template #andLabel>{{"common.components.advancedFilter.toggle.and"|translate}}</ng-template>

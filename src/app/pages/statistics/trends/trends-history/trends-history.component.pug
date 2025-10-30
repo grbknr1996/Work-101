@@ -1,6 +1,6 @@
 app-layout([config]="layout")
     app-breadcrumbs([autoGenerate]="false", [home]="home", [items]="items")
-    app-chart-navbar((onFilter)="onFilter()", (onReset)="onReset()")
+    app-chart-navbar([filterBadge]="true", (onFilter)="onFilter()", (onReset)="onReset()")
 
     div(class="tw-stats-content w-full min-h-[80vh] flex flex-col lg:flex-row justify-center items-center gap-4 transition-all duration-300")
         //-FILTER: >=992 or <992

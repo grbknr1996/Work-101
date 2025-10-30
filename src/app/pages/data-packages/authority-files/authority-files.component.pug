@@ -31,6 +31,13 @@ app-layout([config]="layoutConfig")
           (clearAll)="clearAllFilters()",
           [actions]="filterActions",
           (actionClick)="onFilterActionClick($event.action)",
+          [showAdvancedSearch]="true",
+          [showAdvancedSearchQuery]="true",
+          [category]="'authorityfiles'",
+          [categorySelection]="false",
+          [templateSelection]="false",
+          [levelCreationAllowed]="false",
+          (advancedFilterSearch)="onAdvancedFilterSearch($event)"
         )
 
   app-table(

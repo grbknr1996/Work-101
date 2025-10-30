@@ -15,6 +15,7 @@ import {
   FilterValue,
   ConfigurableFilterBarComponent,
 } from '../../../components/configurable-filter-bar/configurable-filter-bar.component';
+import { AdvancedFilterQuery } from 'src/app/components/advanced-filter-query/advanced-filter-query.component';
 
 @Component({
   selector: 'app-authority-files',
@@ -274,6 +275,49 @@ export class AuthorityFilesComponent implements OnInit {
     console.log('Stats Selected:', statLabel);
     this.statSelected = statLabel;
     this.applyFilters();
+  }
+
+  onAdvancedFilterSearch(advancedFilterQuery: AdvancedFilterQuery): void {
+    console.log(advancedFilterQuery);
+
+    const levelJoin = advancedFilterQuery.levelList.some(f => f.orOperator) ? " OR " : " AND ";
+    let query = advancedFilterQuery.levelList
+      .map(level => {
+        const groupQueries = level.group_list.map(group => {
+
+          const fileJoin = group.file_list.some(f => f.orOperator) ? " OR " : " AND ";
+          const fileQueries = group.file_list.map(file => {
+            const field = file.field.code;
+            const op = file.connecting.code.toUpperCase();
+            const val =
+              file.fieldType === "text"
+                ? `'${file.value}'`
+                : ( op === "DATERANGE"
+                  ? file.value.map(v => `'${new Date(v).toLocaleDateString('en-CA', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit'
+                      })}'`).join(" AND ") 
+                  : `'${new Date(file.value).toLocaleDateString('en-CA', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit'
+                      })}'` 
+                  );
+
+            return `${field} ${op} ${val}`;
+          });
+          
+          return `(${fileQueries.join(fileJoin)})`;
+        });
+
+        return `(${groupQueries.join(levelJoin)})`;
+      })
+      .join(levelJoin);
+
+    console.log(query);
+    //TODO need to apply this query to the output
+
   }
 
   onFilterChange(filters: FilterValue[]): void {
