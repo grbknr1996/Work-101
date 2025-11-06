@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { ToastService } from './toast.service';
 import { MechanicsService } from './mechanics.service';
 import { getAuthHeaders, handleError } from '../utils';
+import { CACHE_HEADERS } from '../_constants/common.constant';
 
 export interface UserAssignment {
   userId: number;
@@ -194,14 +195,19 @@ export class UnitsService {
    */
   getUnits(): Observable<UnitsQueryResponse> {
     return getAuthHeaders(this.authService).pipe(
-      switchMap((headers) =>
-        this.http.get<UnitsQueryResponse>(
+      switchMap((headers) => {
+        // Add no-cache header to skip HTTP caching for units tree
+        const headersWithNoCache = headers.set(
+          CACHE_HEADERS.NO_CACHE,
+          'no-cache'
+        );
+        return this.http.get<UnitsQueryResponse>(
           `${environment.backendUrl}/units/queries`,
           {
-            headers: headers,
+            headers: headersWithNoCache,
           }
-        )
-      ),
+        );
+      }),
       catchError((error) =>
         handleError(error, '', this.toastService, this.mechanicsService)
       )
@@ -211,21 +217,30 @@ export class UnitsService {
   /**
    * Get unit details by unitId and unitCategory
    * Based on API endpoint: {{baseUrl}}/units?unitId=DIV16&unitCategory=Division
+   * Note: This request skips caching to ensure fresh data is always fetched
    */
   getUnitDetails(
     unitId: string,
     unitCategory: UnitCategory
   ): Observable<UnitDetailsResponse> {
     return getAuthHeaders(this.authService).pipe(
-      switchMap((headers) =>
-        this.http.get<UnitDetailsResponse>(`${environment.backendUrl}/units`, {
-          headers: headers,
-          params: {
-            unitId: unitId,
-            unitCategory: unitCategory,
-          },
-        })
-      ),
+      switchMap((headers) => {
+        // Add no-cache header to skip HTTP caching for unit details
+        const headersWithNoCache = headers.set(
+          CACHE_HEADERS.NO_CACHE,
+          'no-cache'
+        );
+        return this.http.get<UnitDetailsResponse>(
+          `${environment.backendUrl}/units`,
+          {
+            headers: headersWithNoCache,
+            params: {
+              unitId: unitId,
+              unitCategory: unitCategory,
+            },
+          }
+        );
+      }),
       catchError((error) =>
         handleError(error, '', this.toastService, this.mechanicsService)
       )

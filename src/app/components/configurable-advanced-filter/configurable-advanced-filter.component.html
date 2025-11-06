@@ -43,13 +43,13 @@
           <div class="query-button-clear">
             <button class="query-button-browse" (click)="clearSearch()">{{"common.components.advancedFilter.clear"|translate}}</button>
           </div>
-        </div><br>
+        </div>
         <div class="selection-box" *ngIf="selectedList.total &gt; 0">
           <div class="selection-header">
             <div class="selection-text"><strong>{{"common.components.advancedFilter.selection.selected"|translate}}:</strong> {{selectedList.groups}} {{"common.components.advancedFilter.selection.group"|translate}},  {{selectedList.levels}} {{"common.components.advancedFilter.selection.level"|translate}}</div>
             <button class="clear-button" (click)="clearSelection()">{{"common.components.advancedFilter.selection.clear"|translate}} ({{selectedList.total}})</button>
           </div>
-        </div><br>
+        </div>
         <div *ngFor="let level of levels; let k = index; let levellast = last">
           <div *ngIf="level.level === '1'; else level2Block">
             <div *ngFor="let group of level.group_list; let j = index; let grouplast = last">
@@ -183,13 +183,13 @@
         </div>
         <div class="filter-group-add-line">
           <button class="filter-group-add-button" (click)="addGroup()"><i class="pi pi-plus" pButtonIcon></i>{{"common.components.advancedFilter.addFilterGroup"|translate}}</button>
-        </div><br><br><br><br><br><br><br><br>
-      </div>
-      <div class="advanced-filter-actions">
-        <div class="flex items-center justify-end gap-3 sticky bottom-0">
-          <div class="action-buttons">
-            <button class="p-button-outlined p-button-secondary" pButton type="button" [label]="'common.components.advancedFilter.cancel'|translate" (click)="onClose()"></button>
-            <button class="p-button-primary" pButton type="button" [label]="'common.components.advancedFilter.search'|translate" (click)="onSearch()"></button>
+        </div><br><br>
+        <div class="advanced-filter-actions">
+          <div class="flex items-center justify-end gap-3 sticky bottom-0">
+            <div class="action-buttons">
+              <button class="p-button-outlined p-button-secondary" pButton type="button" [label]="'common.components.advancedFilter.cancel'|translate" (click)="onClose()"></button>
+              <button class="p-button-primary" pButton type="button" [label]="'common.components.advancedFilter.search'|translate" (click)="onSearch()"></button>
+            </div>
           </div>
         </div>
       </div>

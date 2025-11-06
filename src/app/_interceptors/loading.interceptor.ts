@@ -11,7 +11,10 @@ import { Observable } from 'rxjs';
 import { tap, finalize } from 'rxjs/operators';
 import { LoadingService } from '../_services/loading.service';
 import { MechanicsService } from '../_services/mechanics.service';
-import { LOADER_URL_PATTERNS } from '../_constants/common.constant';
+import {
+  LOADER_URL_PATTERNS,
+  SKIP_GLOBAL_LOADER_HEADER,
+} from '../_constants/common.constant';
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
@@ -26,6 +29,15 @@ export class LoadingInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    const shouldSkip = request.headers.has(SKIP_GLOBAL_LOADER_HEADER);
+
+    // Strip the skip header before sending to the server
+    const requestForNext = shouldSkip
+      ? request.clone({
+          headers: request.headers.delete(SKIP_GLOBAL_LOADER_HEADER),
+        })
+      : request;
+
     if (this.shouldShowLoader(request)) {
       this.activeRequests++;
       console.log(`Loading started. Active requests: ${this.activeRequests}`);
@@ -34,7 +46,7 @@ export class LoadingInterceptor implements HttpInterceptor {
       );
     }
 
-    return next.handle(request).pipe(
+    return next.handle(requestForNext).pipe(
       tap(
         (event) => {
           if (event instanceof HttpResponse) {
@@ -61,9 +73,11 @@ export class LoadingInterceptor implements HttpInterceptor {
 
   private shouldShowLoader(request: HttpRequest<any>): boolean {
     // Show loader for API calls, but not for assets, images, etc.
-    const shouldShow = LOADER_URL_PATTERNS.some((pattern) =>
+    const urlMatches = LOADER_URL_PATTERNS.some((pattern) =>
       request.url.includes(pattern)
     );
+    const isExplicitSkip = request.headers.has(SKIP_GLOBAL_LOADER_HEADER);
+    const shouldShow = urlMatches && !isExplicitSkip;
 
     return shouldShow;
   }

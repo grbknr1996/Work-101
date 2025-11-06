@@ -43,14 +43,18 @@ export const configuration = {
     availableLangs: ['en'],
     defaultLanguage: 'en',
     defaultLandingModule: 'dashboard',
+    efilingEnabled: true,
+    hideTitle: true,
   },
   br: {
-    name: 'INPI Brazil',
+    name: ' Instituto Nacional da Propriedade Industrial INPI',
     officeCode: 'br',
     logo: '/assets/images/br-logo.png',
     availableLangs: ['en', 'pt'],
     defaultLanguage: 'pt',
     defaultLandingModule: 'dashboard',
+    efilingEnabled: false,
+    hideTitle: true,
   },
   bt: {
     name: 'Ministry of Industry,Commerce and Employment (MoICE)',
@@ -59,6 +63,8 @@ export const configuration = {
     availableLangs: ['ar', 'en', 'fr', 'id', 'jp', 'kh', 'ms', 'vi'],
     defaultLanguage: 'en',
     defaultLandingModule: 'dashboard',
+    efilingEnabled: true,
+    hideTitle: true,
   },
   cv: {
     name: 'IGQPI - Instituto de Gestão da Qualidade e da \n Propriedade Intelectual',
@@ -67,14 +73,18 @@ export const configuration = {
     availableLangs: ['en', 'fr'],
     defaultLanguage: 'fr',
     defaultLandingModule: 'dashboard',
+    efilingEnabled: true,
+    hideTitle: false,
   },
   in: {
     name: 'IP India',
     officeCode: 'in',
-    logo: '/assets/images/ca-logo.png',
+    logo: '/assets/images/in-logo.png',
     availableLangs: ['en'],
     defaultLanguage: 'en',
     defaultLandingModule: 'dashboard',
+    efilingEnabled: false,
+    hideTitle: true,
   },
   'kh-moc': {
     name: 'KH MOC',
@@ -83,6 +93,8 @@ export const configuration = {
     availableLangs: ['ar', 'en', 'fr', 'id', 'jp', 'kh', 'ms', 'vi'],
     defaultLanguage: 'fr',
     defaultLandingModule: 'dashboard',
+    efilingEnabled: true,
+    hideTitle: true,
   },
   la: {
     name: 'DIP Lao PDR',
@@ -91,6 +103,8 @@ export const configuration = {
     availableLangs: ['en'],
     defaultLanguage: 'en',
     defaultLandingModule: 'dashboard',
+    efilingEnabled: true,
+    hideTitle: true,
   },
   my: {
     name: 'Intellectual Property Coorporation of Malaysia',
@@ -99,6 +113,8 @@ export const configuration = {
     availableLangs: ['en'],
     defaultLanguage: 'en',
     defaultLandingModule: 'dashboard',
+    efilingEnabled: true,
+    hideTitle: true,
   },
   ph: {
     name: 'Intellectual Property of the Philippines',
@@ -107,6 +123,8 @@ export const configuration = {
     availableLangs: ['en'],
     defaultLanguage: 'en',
     defaultLandingModule: 'dashboard',
+    efilingEnabled: true,
+    hideTitle: true,
   },
   sg: {
     name: 'IPOS Singapore',
@@ -115,6 +133,8 @@ export const configuration = {
     availableLangs: ['en', 'zh', 'ms', 'ta'],
     defaultLanguage: 'en',
     defaultLandingModule: 'dashboard',
+    efilingEnabled: false,
+    hideTitle: true,
   },
   th: {
     name: 'DIP Thailand',
@@ -123,6 +143,8 @@ export const configuration = {
     availableLangs: ['en', 'th'],
     defaultLanguage: 'th',
     defaultLandingModule: 'dashboard',
+    efilingEnabled: true,
+    hideTitle: true,
   },
   vc: {
     name: 'CIPO St. Vincent & Grenadines',
@@ -131,6 +153,8 @@ export const configuration = {
     availableLangs: ['en', 'fr', 'id', 'jp', 'ar'],
     defaultLanguage: 'en',
     defaultLandingModule: 'dashboard',
+    efilingEnabled: true,
+    hideTitle: false,
   },
   vn: {
     name: 'IP Vietnam',
@@ -139,6 +163,8 @@ export const configuration = {
     availableLangs: ['en', 'vi'],
     defaultLanguage: 'vi',
     defaultLandingModule: 'dashboard',
+    efilingEnabled: true,
+    hideTitle: true,
   },
   xx: {
     name: 'WIPO IP Office Support Platform',
@@ -147,5 +173,7 @@ export const configuration = {
     availableLangs: ['ar', 'en', 'fr', 'id', 'jp', 'kh', 'ms', 'vi'],
     defaultLanguage: 'en',
     defaultLandingModule: 'dashboard',
+    efilingEnabled: true,
+    hideTitle: false,
   },
 };

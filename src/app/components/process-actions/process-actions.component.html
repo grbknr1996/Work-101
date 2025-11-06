@@ -1,6 +1,6 @@
 
 <div class="process-actions-wrapper">
-  <div class="flex items-center justify-between mb-4" *ngIf="showSummary">
+  <div class="flex items-center justify-between mb-4" *ngIf="showSummary &amp;&amp; isEditMode">
     <label class="block font-medium">{{ 'common.components.processActions.processActionsFor' | translate }} {{ selectedRole | titlecase }} {{ 'common.components.processActions.role' | translate }}</label>
     <div class="selected-actions-summary">
       <div class="summary-container"><span class="summary-badge" [class.no-selections]="cleanSelectedRoleActions.length === 0"><i class="mr-1 pi" [class.pi-check-circle]="cleanSelectedRoleActions.length &gt; 0" [class.pi-circle]="cleanSelectedRoleActions.length === 0"></i> {{ cleanSelectedRoleActions.length }} {{ cleanSelectedRoleActions.length === 1 ? ('common.components.processActions.actionsSelected' | translate) : ('common.components.processActions.actionsSelectedPlural' | translate) }}</span></div>

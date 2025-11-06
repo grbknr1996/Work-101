@@ -11,7 +11,7 @@ p-menubar([style]="{'position': 'fixed','z-index':1000,'width':'100%'}", [model]
       )
       a.navbar-brand([routerLink]="['/', ms.getCurrentOffice(), selectedLanguage]")
         img.navbar-logo(*ngIf="logo", [src]="logo", alt="Logo")
-        span.navbar-title([innerHTML]="title")
+        span.navbar-title([innerHTML]="title", *ngIf="!hideTitle")
   ng-template(pTemplate="end")
     .navbar-end
       p-dropdown(
@@ -115,3 +115,9 @@ p-menubar([style]="{'position': 'fixed','z-index':1000,'width':'100%'}", [model]
       (platformSelected)="onPlatformSelected($event)",
       (modalClosed)="showPlatformSelector = false"
     )
+
+    app-mfa-registration-modal(
+      [(visible)]="showMFAModal" ,
+      [userId]="currentLoginId"
+    )
+  

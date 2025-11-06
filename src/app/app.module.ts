@@ -147,6 +147,9 @@ import { providePrimeNG } from 'primeng/config';
 import { definePreset } from '@primeng/themes';
 import Aura from '@primeng/themes/aura';
 import { AuxiliaryRegisterComponent } from './pages/auxiliary-register/auxiliary-register.component';
+import { MfaRegistrationModalComponent } from './components/mfa-registration-modal/mfa-registration-modal.component';
+import { InactivityModalComponent } from './components/inactivity-modal/inactivity-modal.component';
+import { HttpCacheInterceptor } from './_interceptors/http-cache.interceptor';
 const WipoThemePreset = definePreset(Aura, {
   primitive: {
     fontFamily: '"Noto Sans", "Segoe UI", Roboto, Arial, sans-serif',
@@ -266,6 +269,8 @@ const WipoThemePreset = definePreset(Aura, {
     AdvancedFilterQueryComponent,
     AuxiliaryRegisterComponent,
     WorkInProgressComponent,
+    MfaRegistrationModalComponent,
+    InactivityModalComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -303,6 +308,11 @@ const WipoThemePreset = definePreset(Aura, {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: PlatformInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpCacheInterceptor,
       multi: true,
     },
     providePrimeNG({

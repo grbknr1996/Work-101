@@ -20,11 +20,11 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 interface Acknowledge {
-    id: string;
-    documentId: string;
-    fileId: string;
-    transmissionDate: string;
-    acknowledgeDate: string;
+  id: string;
+  documentId: string;
+  fileId: string;
+  transmissionDate: string;
+  acknowledgeDate: string;
 }
 
 @Component({
@@ -61,7 +61,6 @@ export class AcknowledgeNotificationsComponent implements OnInit {
   showEditDialog = false;
   selectedOAcknowledge: Acknowledge | null = null;
 
-
   constructor(
     private fb: FormBuilder,
     private menuService: SidebarMenuService,
@@ -74,7 +73,6 @@ export class AcknowledgeNotificationsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.packageStats = [
       {
         //label: 'Total Received Applications',
@@ -100,16 +98,32 @@ export class AcknowledgeNotificationsComponent implements OnInit {
     ];
 
     this.tableColumns = [
-      { field: 'documentId', header: this.ms.translate('notifications.acknowledge.table.documentId'), sortable: true},
-      { field: 'fileId', header: this.ms.translate('notifications.acknowledge.table.fileId'), sortable: true },
-      { field: 'transmissionDate', header: this.ms.translate('notifications.acknowledge.table.transmissionDate'), sortable: true },
+      {
+        field: 'documentId',
+        header: this.ms.translate('notifications.acknowledge.table.documentId'),
+        sortable: true,
+      },
+      {
+        field: 'fileId',
+        header: this.ms.translate('notifications.acknowledge.table.fileId'),
+        sortable: true,
+      },
+      {
+        field: 'transmissionDate',
+        header: this.ms.translate(
+          'notifications.acknowledge.table.transmissionDate'
+        ),
+        sortable: true,
+      },
       {
         field: 'actions',
         header: this.ms.translate('notifications.acknowledge.table.actions'),
         display: 'actions',
         actions: [
           {
-            label: this.ms.translate('notifications.acknowledge.table.acknowledge'),
+            label: this.ms.translate(
+              'notifications.acknowledge.table.acknowledge'
+            ),
             icon: 'pi pi-thumbs-up',
             action: 'acknowledge',
             severity: 'info',
@@ -152,42 +166,46 @@ export class AcknowledgeNotificationsComponent implements OnInit {
         params['officeCode'] || this.ms.getCurrentOffice() || 'default';
       const langCode = params['langCode'] || 'en';
 
-        this.breadcrumbItems = [
-          {
-            label: this.ms.translate('notifications.acknowledge.title'),
-            routerLink: `/${officeCode}/${langCode}/acknowledge-notifications`,
-          },
-        ];
+      this.breadcrumbItems = [
+        {
+          label: this.ms.translate('notifications.acknowledge.title'),
+          routerLink: `/${officeCode}/${langCode}/acknowledge-notifications`,
+        },
+      ];
 
-      // Trigger change detection after updating breadcrumbs
       this.cdr.markForCheck();
     });
 
     const currentPath = this.router.url;
-    const menuItems = this.menuService.generateConfigurationMenu(currentPath,'');
+    const menuItems = this.menuService.generateConfigurationMenu(
+      currentPath,
+      ''
+    );
     this.menuService.updateMenuItems(menuItems);
     this.loadData();
   }
 
   private initForm(): void {
     this.acknowledgeForm = this.fb.group({
-      id: [''], 
+      id: [''],
       documentId: [''],
       fileId: [''],
       transmissionDate: [''],
-      acknowledgeDate: ['',Validators.required],
+      acknowledgeDate: ['', Validators.required],
     });
   }
 
   private loadData(): void {
-     const data: Acknowledge[] = acknowledgeNotificationsData.map((ack: Acknowledge) => ({
-          id: ack.id,
-          documentId: ack.documentId,
-          fileId: ack.fileId,
-          transmissionDate: ack.transmissionDate,
-          acknowledgeDate: ack.acknowledgeDate,
-        }));
-        this.acknowledgeData.set(data);
+    const data: Acknowledge[] = acknowledgeNotificationsData.map(
+      (ack: Acknowledge) => ({
+        id: ack.id,
+        documentId: ack.documentId,
+        fileId: ack.fileId,
+        transmissionDate: ack.transmissionDate,
+        acknowledgeDate: ack.acknowledgeDate,
+      })
+    );
+    this.acknowledgeData.set(data);
   }
 
   onActionClick(action: string, item: any) {
@@ -213,24 +231,24 @@ export class AcknowledgeNotificationsComponent implements OnInit {
 
   onSaveOffice(): void {
     //if (this.acknowledgeForm.valid) {
-      const formData = this.acknowledgeForm.value;
+    const formData = this.acknowledgeForm.value;
 
-      // this.acknowledgeData.update((acknowledgeNotificationsData) =>
-      //     acknowledgeNotificationsData.map((office) =>
-      //       office.id === this.selectedOAcknowledge?.id
-      //         ? { ...office, ...formData }
-      //         : office
-      //     )
-      // );
+    // this.acknowledgeData.update((acknowledgeNotificationsData) =>
+    //     acknowledgeNotificationsData.map((office) =>
+    //       office.id === this.selectedOAcknowledge?.id
+    //         ? { ...office, ...formData }
+    //         : office
+    //     )
+    // );
 
-      this.acknowledgeData.update((acknowledgeNotificationsData) =>
-          acknowledgeNotificationsData.filter((ack) =>
-            ack.id != this.selectedOAcknowledge?.id
-          )
-      );
+    this.acknowledgeData.update((acknowledgeNotificationsData) =>
+      acknowledgeNotificationsData.filter(
+        (ack) => ack.id != this.selectedOAcknowledge?.id
+      )
+    );
 
-      this.showEditDialog = false;
-      this.selectedOAcknowledge = null;
+    this.showEditDialog = false;
+    this.selectedOAcknowledge = null;
     //}
   }
 
@@ -279,7 +297,6 @@ export class AcknowledgeNotificationsComponent implements OnInit {
 
   private filterByStats(): void {
     // let endDate = new Date();
-
     // let startDate = new Date();
     // if (this.statSelected == 'TOTAL IN YEAR') {
     //   startDate.setFullYear(endDate.getFullYear() - 1);
@@ -291,7 +308,6 @@ export class AcknowledgeNotificationsComponent implements OnInit {
     //   //TOTAL COUNT
     //   startDate = null;
     // }
-
     // if (startDate == null) {
     //   this.tableData = acknowledgeNotificationsData;
     // } else {
@@ -307,7 +323,7 @@ export class AcknowledgeNotificationsComponent implements OnInit {
     this.searchByFilter();
   }
 
-  searchByFilter(): void{
+  searchByFilter(): void {
     this.tableData = this.tableData.filter((item) =>
       item.fileId?.toLowerCase().includes(this.searchBar)
     );
@@ -318,11 +334,10 @@ export class AcknowledgeNotificationsComponent implements OnInit {
     //this.searchByFilter();
     let filtered = [...this.tableData];
 
-    console.log("searchBar "+this.searchBar)
+    console.log('searchBar ' + this.searchBar);
     if (this.searchBar && this.searchBar.trim()) {
-      filtered = filtered.filter(
-        (item) =>
-          item.fileId?.toLowerCase().includes(this.searchBar)
+      filtered = filtered.filter((item) =>
+        item.fileId?.toLowerCase().includes(this.searchBar)
       );
     }
 
@@ -331,9 +346,8 @@ export class AcknowledgeNotificationsComponent implements OnInit {
         case 'search':
           if (filter.value && filter.value.trim()) {
             const searchTerm = filter.value.toLowerCase().trim();
-            filtered = filtered.filter(
-              (item) =>
-                item.fileId.toLowerCase().includes(searchTerm)
+            filtered = filtered.filter((item) =>
+              item.fileId.toLowerCase().includes(searchTerm)
             );
           }
           break;
@@ -381,8 +395,8 @@ export class AcknowledgeNotificationsComponent implements OnInit {
     this.appliedFilters = [];
     this.searchBar = '';
     this.configurableFilter.searchBar = '';
-   // this.tableData = acknowledgeNotificationsData;
-   this.loadData();
+    // this.tableData = acknowledgeNotificationsData;
+    this.loadData();
     this.configurableFilter.clearAllFilters();
     this.cdr.detectChanges();
   }
@@ -390,8 +404,8 @@ export class AcknowledgeNotificationsComponent implements OnInit {
   getFilterDisplayValue(filter: FilterValue): string {
     const filterConfig = this.filterConfigs.find((f) => f.key === filter.key);
 
-    if(filter.key == 'search'){
-      return `${filter.key}: ${filter.value}`
+    if (filter.key == 'search') {
+      return `${filter.key}: ${filter.value}`;
     }
 
     if (!filterConfig) return filter.key;

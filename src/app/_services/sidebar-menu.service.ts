@@ -115,20 +115,18 @@ export class SidebarMenuService {
         id: 'packages',
         label: 'Data Sharing',
         icon: 'pi pi-warehouse',
-        routerLink: this.getRouterLink(`/data-packages/${officeCode}`),
+        routerLink: this.getRouterLink(`/data-packages`),
       },
       {
         id: 'authority-files',
         label: 'Authority Files',
-        icon: 'pi pi-search',
-        routerLink: this.getRouterLink(
-          `/data-packages/authority-files/${officeCode}`
-        ),
+        icon: 'pi pi-list',
+        routerLink: this.getRouterLink(`/data-packages/authority-files`),
       },
       {
         id: 'data-configuration',
         label: 'Data Exchange Configuration',
-        icon: 'pi pi-database',
+        icon: 'pi pi-file-import',
         routerLink: this.getRouterLink(
           `/configuration/data-exchange/dashboard`
         ),
@@ -318,11 +316,9 @@ export class SidebarMenuService {
         id: 'pending-publications',
         label: 'Pending Publications',
         icon: 'pi pi-list-check',
-        routerLink: this.getRouterLink(
-          '/publication/pending'
-        ),
+        routerLink: this.getRouterLink('/publication/pending'),
         styleClass: lastPart.includes('pending') ? 'active' : '',
-      }
+      },
     ];
   }
 
@@ -348,9 +344,7 @@ export class SidebarMenuService {
         id: 'my-tasks',
         label: 'My Tasks',
         icon: 'pi pi-list-check',
-        routerLink: this.getRouterLink(
-          '/task-management/my-tasks'
-        ),
+        routerLink: this.getRouterLink('/task-management/my-tasks'),
         styleClass: lastPart.includes('my-tasks') ? 'active' : '',
       },
     ];

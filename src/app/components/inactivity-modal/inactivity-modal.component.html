@@ -1,0 +1,19 @@
+
+<ng-container *ngIf="inactivity$ | async as inactivityState">
+  <div class="inactivity-modal-overlay" *ngIf="inactivityState.isModalVisible">
+    <div class="inactivity-modal-container">
+      <div class="inactivity-modal-icon"><i class="pi pi-clock"></i></div>
+      <h2 class="inactivity-modal-title">{{ 'common.components.inactivityModal.title' | translate }}</h2>
+      <p class="inactivity-modal-message" *ngIf="!inactivityState.isExpired">{{ 'common.components.inactivityModal.messageActive' | translate }}</p>
+      <p class="inactivity-modal-message" *ngIf="inactivityState.isExpired">{{ 'common.components.inactivityModal.messageExpired' | translate }}</p>
+      <div class="inactivity-timer" *ngIf="!inactivityState.isExpired"><span class="timer-display">{{ formattedTime }}</span></div>
+      <p-divider></p-divider>
+      <div class="inactivity-modal-actions">
+        <button class="p-button p-component p-button-primary stay-active-btn" pButton type="button" [label]="('common.components.inactivityModal.stayActive' | translate)" (click)="onStayActive()" *ngIf="!inactivityState.isExpired"></button>
+        <button class="p-button p-component p-button-danger stay-active-btn" pButton type="button" [label]="('common.components.inactivityModal.logout' | translate)" (click)="onLogout()" *ngIf="!inactivityState.isExpired"></button>
+        <button class="p-button p-component p-button-secondary stay-active-btn" pButton type="button" [label]="('common.components.inactivityModal.ok' | translate)" (click)="onStayActive()" *ngIf="inactivityState.isExpired"></button>
+        <button class="p-button p-component p-button-danger stay-active-btn" pButton type="button" [label]="('common.components.inactivityModal.logout' | translate)" (click)="onLogout()" *ngIf="inactivityState.isExpired"></button>
+      </div>
+    </div>
+  </div>
+</ng-container>

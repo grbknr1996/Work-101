@@ -5,7 +5,7 @@ import { catchError, tap, map, switchMap, retry } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { LoadingService } from './loading.service';
 import { fetchAuthSession } from 'aws-amplify/auth';
-
+import { CACHE_HEADERS } from '../_constants/common.constant';
 export interface PermissionSet {
   permissionSetId: string;
   permissionSetName: string;
@@ -85,11 +85,12 @@ export class PermissionService {
       switchMap(({ accessToken, username }) => {
         // Extract platform code from username (format: xx_username)
         const platformCode = username.split('_')[0];
-
+        const ttl = CACHE_HEADERS.CACHE_TTL;
         const headers = new HttpHeaders({
           Authorization: `Bearer ${accessToken}`,
           'wipo-platform-code': platformCode,
           'Content-Type': 'application/json',
+          ttl: 100000,
         });
 
         const url = `${environment.backendUrl}/permissions?userId=${username}`;

@@ -1,7 +1,7 @@
 
 .process-actions-wrapper
  
-  .flex.items-center.justify-between.mb-4(*ngIf="showSummary")
+  .flex.items-center.justify-between.mb-4(*ngIf="showSummary && isEditMode")
     label.block.font-medium {{ 'common.components.processActions.processActionsFor' | translate }} {{ selectedRole | titlecase }} {{ 'common.components.processActions.role' | translate }}
     .selected-actions-summary
       .summary-container

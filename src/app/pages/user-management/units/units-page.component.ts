@@ -100,12 +100,19 @@ export class UnitsPageComponent implements OnInit {
 
   onUnitUpdated() {
     // Refresh the units tree when a unit is updated
-    console.log('onUnitUpdated called, refreshing units tree...');
     if (this.unitsTree) {
-      console.log('unitsTree found, calling refresh()');
       this.unitsTree.refresh();
-    } else {
-      console.log('unitsTree not found!');
+    }
+  }
+
+  onUnitDataUpdated(event: { unit: UnitNode; category: string }) {
+    // Update the selected unit with the fresh data from the server
+    this.selectedUnit = event.unit;
+    this.selectedUnitCategory = event.category;
+
+    // Immediately update the tree node label to reflect the name change
+    if (this.unitsTree && event.unit) {
+      this.unitsTree.updateNodeLabel(event.unit.id, event.unit.name);
     }
   }
 }

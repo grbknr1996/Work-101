@@ -1,0 +1,42 @@
+
+<p-dialog [header]="'common.components.mfaRegistrationModal.title' | translate" [(visible)]="visible" [modal]="true" [style]="{ width: '90vw', maxWidth: '720px' }" [draggable]="false" [resizable]="false" (onShow)="onShow()" (onHide)="onHide()">
+  <div class="p-fluid" *ngIf="!loading &amp;&amp; !errorMessage; else stateTpl">
+    <div class="mfa-container">
+      <!-- Left Section: QR Code and Secret-->
+      <div class="mfa-left-section">
+        <div class="p-field" style="text-align:center; margin-bottom: 1rem;"><img class="qr-code-image" *ngIf="qrCodeImageBase64" [src]="'data:image/png;base64,' + qrCodeImageBase64" [alt]="'common.components.mfaRegistrationModal.qrCodeAlt' | translate"></div>
+        <div class="p-field" *ngIf="secretCode">
+          <label class="p-mb-2" style="display:block; font-weight:600;">{{ 'common.components.mfaRegistrationModal.secretCode' | translate }}</label>
+          <div class="p-inputgroup">
+            <input pInputText [readonly]="true" [value]="secretCode">
+            <button pButton type="button" icon="pi pi-copy" (click)="copySecretCode()" [title]="'common.components.mfaRegistrationModal.copy' | translate"></button>
+          </div>
+        </div>
+        <p style="margin-top: 1rem;">{{ 'common.components.mfaRegistrationModal.instructions' | translate }}</p>
+      </div>
+      <!-- Vertical Divider-->
+      <p-divider layout="vertical" styleClass="mfa-divider"></p-divider>
+      <!-- Right Section: OTP Verification-->
+      <div class="mfa-right-section">
+        <div class="p-field">
+          <label class="p-mb-2" style="display:block; font-weight:600;">{{ 'common.components.mfaRegistrationModal.enterOtp' | translate }}</label>
+          <input class="otp-input" pInputText [(ngModel)]="otpCode" [placeholder]="'common.components.mfaRegistrationModal.otpPlaceholder' | translate" maxlength="6">
+        </div>
+        <div class="p-mt-3">
+          <button class="register-button" pButton type="button" [label]="'common.components.mfaRegistrationModal.registerAndLogout' | translate" icon="pi pi-qrcode" (click)="onRegisterAndLogout()" [disabled]="loading || !otpCode"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #stateTpl>
+    <div class="p-d-flex p-jc-center p-ai-center" *ngIf="loading" style="gap:8px;">
+      <p-progressSpinner styleClass="w-2rem h-2rem"></p-progressSpinner><span>{{ 'common.components.mfaRegistrationModal.loadingQrCode' | translate }}</span>
+    </div>
+    <div class="p-error" *ngIf="!loading &amp;&amp; errorMessage">{{ errorMessage }}</div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <div class="flex items-center gap-2 w-full" style="justify-content: flex-end;">
+      <button class="p-button-secondary" pButton type="button" [label]="'common.components.mfaRegistrationModal.close' | translate" (click)="onHide()" [disabled]="loading"></button>
+    </div>
+  </ng-template>
+</p-dialog>

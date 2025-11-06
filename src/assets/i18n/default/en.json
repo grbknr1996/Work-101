@@ -40,6 +40,27 @@
   "common": {
     "goBack": "Go Back",
     "components": {
+      "inactivityModal": {
+        "title": "Session Timeout Warning",
+        "messageActive": "You've been inactive for a while. Your session will expire in:",
+        "messageExpired": "Your session has expired due to inactivity.",
+        "stayActive": "Stay Active",
+        "logout": "Logout",
+        "ok": "OK"
+      },
+      "mfaRegistrationModal": {
+        "btnText": "Register MFA",
+        "title": "Register Multi-Factor Authentication",
+        "secretCode": "Secret code",
+        "copy": "Copy",
+        "qrCodeAlt": "MFA QR Code",
+        "instructions": "Scan the QR code with Google Authenticator (or any TOTP app). If you can't scan, enter the secret code manually.",
+        "enterOtp": "Enter OTP",
+        "otpPlaceholder": "6-digit code",
+        "registerAndLogout": "Register & Logout",
+        "loadingQrCode": "Loading QR code…",
+        "close": "Close"
+      },
       "scroller": {
         "backToTop": "Back to top"
       },
@@ -66,8 +87,8 @@
       },
       "filter": {
         "clearAll": "Clear All",
-        "selectFilters":"Select filters to display",
-        "selectDate":"Select date",
+        "selectFilters": "Select filters to display",
+        "selectDate": "Select date",
         "date": {
           "placeHolder": "Select date range"
         },
@@ -140,11 +161,35 @@
           "items": "Items",
           "addGroup": "Add to Group"
         },
-        "display":{
+        "display": {
           "groupedLevel": "Grouped Level",
           "groupName": "Filter Group",
           "categoryoptions": {
-            "all": "All"
+            "all": "All Options",
+            "patents": "Patents",
+            "trademarks": "Trademarks",
+            "designs": "Designs",
+            "datapackages": "Data Sharing",
+            "authorityfiles": "Authority Files"
+          },
+          "queryOptions": {
+            "like": "Contains Word",
+            "equals": "Equals",
+            "starts": "Starts With",
+            "ends": "Ends With",
+            "before": "Before",
+            "after": "After",
+            "exact": "Exact Date",
+            "dateRange": "Date Range"
+          },
+          "fieldGroupOptions": {
+            "text": "Text Fields",
+            "date": "Date Fields"
+          },
+          "fieldOptions": {
+            "fileNumber": "File Number",
+            "publicationNumber": "Publication Number",
+            "publicationDate": "Publication Date"
           }
         }
       },
@@ -188,6 +233,9 @@
       },
       "app": {
         "title": "IPAS Central"
+      },
+      "stats": {
+        "statistics": "Statistics"
       }
     }
   },
@@ -212,13 +260,13 @@
           "aripo": "ARIPO",
           "hague": "Hague",
           "madrid": "Madrid",
-          "office": "Office"
+          "office": "Office Documents"
         }
       },
       "taskManagement": {
-        "title": "Task Management",
+        "title": "Tasks",
         "items": {
-          "workMonitor": "Work Monitor",
+          "workMonitor": "Task Monitor",
           "myTasks": "My Tasks",
           "physicalDeliveries": "Physical Deliveries",
           "processGroups": "Process Groups"
@@ -238,6 +286,7 @@
           "newReception": "New Reception",
           "pendingReception": "Pending Reception",
           "dashboard": "Dashboard",
+          "configuration": "Configuration",
           "configurations": "Configurations",
           "efilingReview": "e Filing Review"
         }
@@ -246,17 +295,15 @@
         "title": "Registers",
         "items": {
           "stakeholders": "Stakeholders",
-          "registerView": "Register View",
           "emailRegister": "Notification Emails",
-          "auxiliaryRegister": "Auxiliary Register"
+          "auxiliaryRegister": "Auxiliary Registers"
         }
       },
       "publication": {
         "title": "Publication",
         "items": {
           "pendingJournals": "Journals",
-          "pendingPublications": "Decision Actions",
-          "notifications": "Notifications"
+          "pendingPublications": "Decision Actions"
         }
       },
       "dataServices": {
@@ -292,9 +339,8 @@
         }
       },
       "paymentManagement": {
-        "title": "Payment Management",
+        "title": "Payments",
         "items": {
-          "transactions": "Transactions",
           "bankDetails": "Bank Details",
           "paymentStatus": "Payment Status"
         }
@@ -598,7 +644,7 @@
   },
   "dataService": {
     "dataSharing": {
-      "title": "Data Sharing",
+      "title": "Dashboard",
       "filter": {
         "search": "Search File Name",
         "placeHolder": "Select filters to display",
@@ -611,7 +657,7 @@
       },
       "breadCrum": {
         "offices": "Offices",
-        "dataSharing": "Data Sharing"
+        "dataSharing": "Dashboard"
       },
       "stats": {
         "total": "TOTAL COUNT",
@@ -644,7 +690,7 @@
       },
       "breadCrum": {
         "offices": "Offices",
-        "dataSharing": "Data Sharing",
+        "dataSharing": "Dashboard",
         "authorityFiles": "Authority Files"
       },
       "stats": {
@@ -677,7 +723,7 @@
       "button": "Select Office"
     },
     "dataExchangeConfiguration": {
-      "title": "Data Exchange Configuration",
+      "title": "Data Sharing Configuration",
       "sub_title": "Click on any of the cards above to navigate to the respective configuration section."
     }
   },
@@ -2428,7 +2474,10 @@
         "originOption2": "Non-Residents [Foreign]",
         "compare": "COMPARE MODE",
         "compare1": "RESIDENTS vs NON_RESIDENTS",
-        "compare2": "TOP 5"
+        "compare2": "TOP 10",
+        "trends_theme": "THEME",
+        "trends_theme1": "Technology/Business",
+        "trends_theme2": "Origins"
       },
       "commons": {
         "menu": "Statistics",
@@ -2453,7 +2502,8 @@
         "active_application": "ACTIVE APPLICATIONS"
       },
       "trends": {
-        "tech": "TRENDS OF SECTORS"
+        "tech": "TRENDS OF SECTORS",
+        "origin": "TRENDS OF ORIGINS"
       },
       "origins": {
         "compare": "ORIGINS",
@@ -2518,6 +2568,9 @@
     "groups": {
       "title": "User Groups",
       "manageGroups": "Manage and view all user groups in the system",
+      "all": "All",
+      "filterSection": "SEARCH",
+      "clearAll": "CLEAR ALL",
       "createGroup": "Create Group",
       "editGroup": "Edit Group",
       "deleteGroup": "Delete Group",

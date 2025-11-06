@@ -34,6 +34,10 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
   @Input() unit: UnitNode | null = null;
   @Input() unitCategory: string = '';
   @Output() unitUpdated = new EventEmitter<void>();
+  @Output() unitDataUpdated = new EventEmitter<{
+    unit: UnitNode;
+    category: string;
+  }>();
 
   unitForm: FormGroup;
 
@@ -145,7 +149,6 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
         }));
         this.permissionsLoaded = true;
         this.cleanSelectedPermissionsArray();
-        console.log('Permission sets loaded:', this.availablePermissions);
       },
       error: (error) => {
         console.error('Failed to load permission sets:', error);
@@ -163,10 +166,6 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
       // Update mobile dropdown selection
       this.selectedRoleLabel = this.roleLabels[this.selectedRoleIndex];
       if (this.unit) {
-        console.log('UnitDetailsComponent: unit input changed', this.unit);
-        console.log('Roles:', this.unit.roles);
-        console.log('Role Permissions:', this.unit.rolePermissions);
-        console.log('Role Actions:', this.unit.roleActions);
         // Load existing permissions for the current role
         this.loadCurrentRolePermissions();
         // Update form with unit data
@@ -219,7 +218,6 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
     this.selectedPermissions = event.value.filter(
       (permission) => permission != null && permission != undefined
     );
-    console.log('Permission selection changed:', this.selectedPermissions);
 
     // Update the unit's role permissions
     if (this.unit) {
@@ -324,7 +322,6 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
 
   onSelectedActionsChange(newSelected: any[]) {
     // This method is no longer needed as actions are handled by process-actions component
-    console.log('Selected actions changed:', newSelected);
   }
 
   createSubUnit() {
@@ -361,13 +358,11 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
     if (this.unitForm.valid && this.unit) {
       // Update the unit name with form data
       this.unit.name = this.unitForm.get('unitName')?.value;
-      console.log('Saving unit with updated name:', this.unit.name);
 
       // Call API to save the unit
       this.unitsService.updateUnit(this.unit).subscribe({
         next: (updatedUnit) => {
-          console.log('Unit updated successfully:', updatedUnit);
-          this.toastService.showSuccess('Success', 'Unit updated successfully');
+          // Note: Success toast is already shown by the service
           this.isEditMode = false;
           // Reload the unit data to get the latest from server
           this.reloadUnitData();
@@ -398,25 +393,39 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
   }
 
   reloadUnitData() {
-    if (!this.unit) return;
+    if (!this.unit) {
+      return;
+    }
 
-    // Get the unit category from the unit data or determine it
-    const unitCategory = this.getUnitCategory();
+    // Use the input unitCategory if available, otherwise determine it
+    const unitCategory =
+      (this.unitCategory as 'Division' | 'Department' | 'Section') ||
+      this.getUnitCategory();
 
     // Reload unit details from API
     this.unitsService.getUnitDetails(this.unit.id, unitCategory).subscribe({
       next: (unitDetails) => {
-        console.log('Unit data reloaded:', unitDetails);
         // Convert the API response to UnitNode format
-        this.unit = this.unitsService.convertUnitDetailsToUnitNode(
+        const updatedUnit = this.unitsService.convertUnitDetailsToUnitNode(
           unitDetails,
           unitCategory
         );
+        // Update the local unit reference
+        this.unit = updatedUnit;
         // Reload the current role actions from the updated unit data
         this.mapActionsFromUnitData();
+        // Reload permissions from the updated unit data
+        this.mapPermissionsFromUnitData();
+        // Reload permissions for the current role
+        this.loadCurrentRolePermissions();
         // Update form with the latest unit name
         this.unitForm.patchValue({
           unitName: this.unit.name,
+        });
+        // Emit the updated unit to parent component so it can update its reference
+        this.unitDataUpdated.emit({
+          unit: updatedUnit,
+          category: unitCategory,
         });
       },
       error: (error) => {
@@ -436,7 +445,6 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
 
   viewUser(user: UserAssignment) {
     // TODO: Implement view user functionality
-    console.log('Viewing user:', user);
   }
 
   onUsersSelected(selectedUsers: UserAssignment[]) {
@@ -503,8 +511,6 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
         processTypeName: action.processType?.procTypeName || 'Note Actions',
       }));
     }
-
-    console.log('Mapped role actions from unit data:', this.roleActions);
   }
 
   // Map permissions from the unit's API response data
@@ -545,11 +551,6 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
         })
       );
     }
-
-    console.log(
-      'Mapped role permissions from unit data:',
-      this.rolePermissions
-    );
   }
 
   // Process type methods are now handled by the process-actions component
@@ -578,8 +579,5 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
       }
       this.unit.roleActions[this.selectedRole] = actions;
     }
-
-    console.log('Actions changed for', this.selectedRole, ':', actions);
-    console.log('Updated unit.roleActions:', this.unit?.roleActions);
   }
 }

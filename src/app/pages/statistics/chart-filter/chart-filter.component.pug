@@ -18,7 +18,8 @@ div(*ngIf="show", class="tw-filter-container bg-gray-100 p-4 w-full flex flex-co
                 *ngIf="filter.type === 'dropdown'",
                 [options]="filter.options",
                 [(ngModel)]="filter.model",
-                styleClass="w-full tw-filter-select"
+                styleClass="w-full tw-filter-select",
+                (onChange)="anyFilter(filter)"
             )
 
             //-YEAR RANGE

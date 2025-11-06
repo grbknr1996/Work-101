@@ -16,23 +16,22 @@ app-layout
       )
 
     // Filter Section with Button
-    .mb-4.flex.justify-end.items-center
-      .flex.items-center.gap-3
-        app-configurable-filter(
-          #configurableFilter,
-          [filters]="filterConfigs",
-          [showFilterSelector]="true",
-          [filterSelectorPlaceholder]="'notifications.acknowledge.filter.placeHolder'|translate",
-          (filterChange)="onFilterChange($event)",
-          (filterCleared)="onFilterCleared()",
-          (filterApplied)="onFilterApplied($event)",
-          (appliedFiltersChange)="onAppliedFiltersChange($event)"  
-        )
-        button(
-          pButton,
-          icon="pi pi-download",
-          class="p-button-text"
-        )
+    .mb-4.flex.justify-end.items-center.gap-3.p-3.rounded(style="background: #e5f3f7")
+      app-configurable-filter(
+        #configurableFilter,
+        [filters]="filterConfigs",
+        [showFilterSelector]="true",
+        [filterSelectorPlaceholder]="'notifications.acknowledge.filter.placeHolder'|translate",
+        (filterChange)="onFilterChange($event)",
+        (filterCleared)="onFilterCleared()",
+        (filterApplied)="onFilterApplied($event)",
+        (appliedFiltersChange)="onAppliedFiltersChange($event)"  
+      )
+      button.p-button-text(
+        pButton,
+        icon="pi pi-download",
+        style="color: var(--p-button-outlined-secondary-color)"
+      )
 
     // Filter Chips Section with Gradient Background
     .mb-4

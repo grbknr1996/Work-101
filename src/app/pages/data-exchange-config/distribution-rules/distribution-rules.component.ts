@@ -9,10 +9,7 @@ import {
 } from '@angular/core';
 
 import { Router, ActivatedRoute } from '@angular/router';
-import {
-
-  LayoutConfig,
-} from '../../../components/app-layout/app-layout.component';
+import { LayoutConfig } from '../../../components/app-layout/app-layout.component';
 import { DataExchangeConfigService } from '../../../_services/data-exchange-config.service';
 import { LoadingService } from '../../../_services/loading.service';
 import { ExclusionRule } from '../../../interfaces';
@@ -23,6 +20,7 @@ import {
   FilterValue,
 } from '../../../components/configurable-filter/configurable-filter.component';
 import { ConfigurableFilterComponent } from '../../../components/configurable-filter/configurable-filter.component';
+import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
 
 @Component({
   selector: 'app-distribution-rules',
@@ -137,6 +135,7 @@ export class DistributionRulesComponent implements OnInit {
     private dataExchangeService: DataExchangeConfigService,
     private http: HttpClient,
     private loadingService: LoadingService,
+    private sidebarService: SidebarMenuService,
     private cdr: ChangeDetectorRef
   ) {
     this.officeCode = this.route.snapshot.params['officeCode'] || 'default';
@@ -159,6 +158,12 @@ export class DistributionRulesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    const currentPath = this.router.url;
+    const menuItems = this.sidebarService.generateConfigurationMenu(
+      currentPath,
+      ''
+    );
+    this.sidebarService.updateMenuItems(menuItems);
   }
 
   private loadData(): void {
@@ -229,10 +234,10 @@ export class DistributionRulesComponent implements OnInit {
     return [
       {
         label: 'Configuration',
-        routerLink: `/${this.officeCode}/${this.langCode}/configuration`,
+        routerLink: `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard`,
       },
       {
-        label: 'Data Exchange',
+        label: 'Data Sharing',
         routerLink: `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard`,
       },
       {

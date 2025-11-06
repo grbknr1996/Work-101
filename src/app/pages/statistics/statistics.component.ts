@@ -12,6 +12,8 @@ import { UtilityService } from 'src/app/_services/utility.service';
 
 //CHART FILTER MODEL
 import { chartFilterConfig } from './chart-filter/chart-filter.model';
+//CHART FILTER COMPONENT
+import { ChartFilterComponent } from './chart-filter/chart-filter.component';
 
 //CUSTOM INTERFACES
 import { LayoutConfig } from 'src/app/components/app-layout/app-layout.component';
@@ -32,6 +34,7 @@ import { ChartService } from './chart.service';
 export class StatisticsComponent implements OnInit {
   //ELEMENTS
   @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
+  @ViewChild(ChartFilterComponent, { static: false }) chartFilterC!: ChartFilterComponent;
 
   //DI
   private http = inject(HttpClient);
@@ -71,16 +74,39 @@ export class StatisticsComponent implements OnInit {
 
   //COMMONS
   filters: chartFilterConfig[] = [
-    { include: false, key: 'type', type: 'dropdown', model: '' },
-    { include: false, key: 'compare', type: 'checkbox', model: '' }
+    { include: false, key: 'compare', type: 'checkbox', model: '' },
+    { include: false, key: 'trends_theme', type: 'dropdown', model: '' },
+    { include: false, key: 'origin', type: 'dropdown', model: '' },
+    { include: false, key: 'type', type: 'dropdown', model: '' }
   ];
   showFilter: boolean = false;
   //CHART-NAVBAR
   onFilter() { this.showFilter = !this.showFilter; }
   onReset() {
-    this.currentIPCategory = '';
-    this.currentLegend = 'accounted_application';
-    this.setSeriesData('accounted_application'); //DEFAULT CHART DATA
+    if (this.accountedDataMap.size > 5 || this.activeDataMap.size > 5) {
+      this.currentIPCategory = this.IPCategory.keys().next().value;
+      this.setSeriesData('accounted_active_application'); //DEFAULT CHART DATA
+      if (this.showFilter) this.updateFilterNGModel('IPType', this.currentIPCategory); //INITIAL
+    }
+    else {
+      this.currentIPCategory = '';
+      this.currentLegend = 'accounted_application';
+      this.setSeriesData('accounted_application'); //DEFAULT CHART DATA
+      if (this.showFilter) this.updateFilterNGModel('IPType', 'all'); //INITIAL
+    }
+  }
+  //CHART-FILTER
+  anyFilterEvent(filter: any) {
+    if (filter.key === 'IPType') {
+      if (filter.model === 'all') this.onReset();
+      else {
+        this.currentIPCategory = filter.model;
+        this.setSeriesData('accounted_active_application'); //ENTER COMPARISON VIEW
+      }
+    }
+  }
+  updateFilterNGModel(key: string, model: any, options?: any) {
+    this.chartFilterC.updateNGModel(key, model, options);
   }
 
   //CHART EVENTS
@@ -95,6 +121,7 @@ export class StatisticsComponent implements OnInit {
         this.currentIPCategory = '';
         this.IPCategory.forEach((value, key) => { if (value === event.value) this.currentIPCategory = key; }); //To Use Later
         this.setSeriesData('accounted_active_application'); //ENTER COMPARISON VIEW
+        if (this.showFilter) if (this.accountedDataMap.size <= 5 || this.activeDataMap.size <= 5) this.updateFilterNGModel('IPType', this.currentIPCategory);
       }
       //Application Categories - Bar Drilldown
       if (event.componentType === 'series') {
@@ -269,8 +296,8 @@ export class StatisticsComponent implements OnInit {
       this.chartService.setChartID(0);
       this.chartService.setChartTheme(translations['charts.statistics.application_count.name']);
 
-      this.getAccountedApplications();
-      this.getActiveApplications();
+      this.fetchAccountedApplications();
+      this.fetchActiveApplications();
     })
   }
   ngAfterViewInit() {
@@ -281,25 +308,35 @@ export class StatisticsComponent implements OnInit {
       window.addEventListener('resize', () => this.resizeChartInDiv(chartDiv));
     }
   }
+  previous: boolean = false;
+  ngAfterViewChecked() {
+    if (this.showFilter && !this.previous) {
+      //HANDLE SHOW/HIDE SYNC
+      (this.accountedDataMap.size > 5 || this.activeDataMap.size > 5) ? this.updateFilterNGModel('IPType', this.currentIPCategory, [...this.IPCategory.keys()]) : (this.currentIPCategory.length === 0) ? this.updateFilterNGModel('IPType', 'all') : this.updateFilterNGModel('IPType', this.currentIPCategory);
+    }
+    this.previous = this.showFilter;
+  }
 
-  getAccountedApplications() {
-    this.http.get('assets/statistics-data/jo-app.json').subscribe({
+  fetchAccountedApplications() {
+    this.chartService.getApplicationCount('total_applications').subscribe({
+    //this.http.get('assets/statistics-data/jo-app.json').subscribe({
       next: (response) => {
-        console.log("Response - getAccountedApplications()", response);
+        console.log("Response - fetchAccountedApplications()", response);
         this.accountedData = response;
         this.transformApplications(this.accountedData, 'accounted_application');
       },
-      error: (error) => { console.log("Error - getAccountedApplications()", error); }
+      error: (error) => { console.log("Error - fetchAccountedApplications()", error); }
     });
   }
-  getActiveApplications() {
-    this.http.get('assets/statistics-data/jo-app-active.json').subscribe({
+  fetchActiveApplications() {
+    this.chartService.getApplicationCount('active_applications').subscribe({
+    //this.http.get('assets/statistics-data/jo-app-active.json').subscribe({
       next: (response) => {
-        console.log("Response - getActiveApplications()", response);
+        console.log("Response - fetchActiveApplications()", response);
         this.activeData = response;
         this.transformApplications(this.activeData, 'active_application');
       },
-      error: (error) => { console.log("Error - getActiveApplications()", error); }
+      error: (error) => { console.log("Error - fetchActiveApplications()", error); }
     });
   }
   transformApplications(inputData, type: string) {
@@ -307,11 +344,15 @@ export class StatisticsComponent implements OnInit {
       this.IPCategory.set(IP.ipCategory, this.translationMap.get(IP.ipCategory));
       this.IPCategoryCount.set(IP.ipCategory, IP.dataBag.length);
       for (let applications of IP.dataBag) {
-        if (type === 'accounted_application') this.accountedDataMap.set(applications.applicationCategory, applications.count);
-        if (type === 'active_application') this.activeDataMap.set(applications.applicationCategory, applications.count);
+        if (type === 'accounted_application') this.accountedDataMap.set(applications.applicationCategory, applications.quantity);
+        if (type === 'active_application') this.activeDataMap.set(applications.applicationCategory, applications.quantity);
       }
     }
-    if (type === 'accounted_application') this.setSeriesData(type); //DEFAULT CHART DATA
+    if (this.IPCategory.size !== 0) {
+      if (this.accountedDataMap.size > 5) this.currentIPCategory = this.IPCategory.keys().next().value;
+      if (this.activeDataMap.size > 5) this.currentIPCategory = this.IPCategory.keys().next().value;
+    }
+    (this.currentIPCategory.length === 0) ? this.setSeriesData('accounted_application') : this.setSeriesData('accounted_active_application'); //DEFAULT CHART DATA
   }
 
   //CHART SERIES DATA
@@ -321,20 +362,20 @@ export class StatisticsComponent implements OnInit {
     let seriesData1 = [], seriesData2 = [];
     if (this.currentIPCategory.length === 0) {
       let chartDataMap = (seriesCode === 'accounted_application') ? this.accountedDataMap : this.activeDataMap;
-      for (let key of chartDataMap.keys()) this.seriesData.push([this.translationMap.get(key), chartDataMap.get(key)]);
+      for (let key of chartDataMap.keys()) this.seriesData.push([key, chartDataMap.get(key)]);
     }
     else {
       this.accountedData?.applicationBag.forEach((item: any) => {
         if (item.ipCategory === this.currentIPCategory) {
           for (let items of item.dataBag) {
-            seriesData1.push([this.translationMap.get(items.applicationCategory), this.accountedDataMap.get(items.applicationCategory)]);
+            seriesData1.push([items.applicationCategory, this.accountedDataMap.get(items.applicationCategory)]);
           }
         }
       });
       this.activeData?.applicationBag.forEach((item: any) => {
         if (item.ipCategory === this.currentIPCategory) {
           for (let items of item.dataBag) {
-            seriesData2.push([this.translationMap.get(items.applicationCategory), this.activeDataMap.get(items.applicationCategory)]);
+            seriesData2.push([items.applicationCategory, this.activeDataMap.get(items.applicationCategory)]);
           }
         }
       });
@@ -366,7 +407,7 @@ export class StatisticsComponent implements OnInit {
             data: (this.currentIPCategory.length === 0) ? this.seriesData.map(d => d[0]) : seriesData1.map(d => d[0])
           },
           {
-            data: Array.from(this.IPCategory.values())
+            data: (this.currentIPCategory.length === 0) ? Array.from(this.IPCategory.values()) : [this.translationMap.get(this.currentIPCategory)]
           }
         ],
         yAxis: {

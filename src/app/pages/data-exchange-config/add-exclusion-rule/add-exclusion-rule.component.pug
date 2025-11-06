@@ -8,7 +8,6 @@ app-layout([config]="layoutConfig")
     (stepChange)="onStepChange($event)"
   )
 
-  //- Step 0
   div(*ngIf="step === 0").w-full
     form([formGroup]="sourceCategoriesForm").w-full
       .w-full.grid.grid-cols-1.gap-6(class="md:grid-cols-2")
@@ -71,7 +70,7 @@ app-layout([config]="layoutConfig")
             .mt-1.text-sm.text-gray-500
               | Unpublished applications will be shared with the recipient system.
       
-      .w-full.mt-8.flex.justify-between
+      .w-full.mt-8.flex.justify-center.gap-4
         button.bg-gray-500.text-white.px-6.py-2.rounded-lg.transition-colors(
           class="hover:bg-gray-600",
           pButton,
@@ -88,7 +87,6 @@ app-layout([config]="layoutConfig")
           [disabled]="!sourceCategoriesForm.valid"
         )
 
-  //- Step 1 (formerly Step 2)
   div(*ngIf="step === 1").w-full
     p-tabs.w-full
       p-tablist
@@ -135,51 +133,7 @@ app-layout([config]="layoutConfig")
                   display="chip"
                 )
 
-
-    //- p-tabView.w-full
-    //-   p-tabPanel(
-    //-     *ngFor="let cat of selectedCategories",
-    //-     [header]="getCategoryLabel(cat)"
-    //-   )
-    //-     .mb-6
-    //-       b.text-lg.font-semibold.text-gray-800 Configure Distribution Rules for {{ getCategoryLabel(cat) }}
-    //-     p-accordion
-    //-       p-accordionTab(header="Event Code Inclusion")
-    //-         .mb-4.text-sm.text-gray-600
-    //-           | Choose which event codes should be distributed for {{ getCategoryLabel(cat) }}.
-    //-         .grid.grid-cols-1.gap-4(class="md:grid-cols-2")
-    //-           .col-span-1(
-    //-             *ngFor="let event of getEventCodesForCategory(cat); let i = index"
-    //-           )
-    //-             .flex.items-center
-    //-               p-checkbox(
-    //-                 [(ngModel)]="eventExclusions[cat]",
-    //-                 [value]="event.code",
-    //-                 [binary]="false",
-    //-                 inputId="event-{{ cat }}-{{ event.code }}"
-    //-               )
-    //-               label.ml-3.text-sm.text-gray-700(for="event-{{ cat }}-{{ event.code }}")
-    //-                 | {{ event.code }}: {{ event.label }}
-
-    //-       p-accordionTab(header="Document Inclusion")
-    //-         .flex.items-center
-    //-           p-checkbox(
-    //-            [(ngModel)]="enableDocumentExclusions[cat]",
-    //-            binary="true",
-    //-            inputId="enable-doc-{{ cat }}"
-    //-           )
-    //-           label.ml-3.text-sm.text-gray-700(for="enable-doc-{{ cat }}") Enable Document Inclusion
-    //-         .ml-6.mt-2.text-sm.text-gray-500
-    //-           | Document inclusion is enabled by default with all document types selected.
-    //-         .mt-4(*ngIf="enableDocumentExclusions[cat]")
-    //-           label.block.text-sm.font-medium.text-gray-700.mb-2 Select Document Types to Include
-    //-           p-multiSelect(
-    //-             [options]="getDocumentTypesForCategory(cat)",
-    //-             [(ngModel)]="documentExclusions[cat]",
-    //-             defaultLabel="Select Document Types",
-    //-             display="chip"
-    //-           )
-    .mt-8.flex.justify-between
+    .mt-8.flex.justify-center.gap-4
       button.bg-gray-500.text-white.px-6.py-2.rounded-lg.transition-colors(
         class="hover:bg-gray-600",
         pButton,
@@ -195,95 +149,96 @@ app-layout([config]="layoutConfig")
         (click)="nextStep()"
       )
 
-  //- Step 2 (formerly Step 3)
   div(*ngIf="step === 2")
     h3.text-2xl.font-bold.text-gray-800.mb-6 Review Your Distribution Rule Configuration
 
-    .bg-white.rounded-lg.shadow-md.p-6.mb-6
-      h4.text-lg.font-semibold.text-gray-700.mb-4 Basic Configuration
-      .grid.grid-cols-1.gap-6(class="md:grid-cols-2")
-        .col-span-1
-          b.text-gray-700 Originating Office:
-          br
-          | {{ getOfficeLabel(sourceCategoriesForm.value.office) }}
-        .col-span-1
-          b.text-gray-700 Recipient System:
-          br
-          | {{ getSystemLabel(sourceCategoriesForm.value.system) }}
-        .col-span-1
-          b.text-gray-700 Recipient Client ID:
-          br
-          | {{ sourceCategoriesForm.value.recipientClientId }}
-        .col-span-2.mt-4
-          b.text-gray-700 IP Category Types:
-          br
-          span.inline-block.bg-blue-100.text-blue-800.text-sm.px-3.py-1.rounded-full.mr-2.mb-2(*ngFor="let cat of selectedCategories")
-            | {{ getCategoryLabel(cat) }}
-        .col-span-2.mt-4
-          b.text-gray-700 Include Unpublished Applications:
-          br
-          i.pi([ngClass]="includeUnpublishedApplications ? 'pi-check-circle text-green-600' : 'pi-times-circle text-red-600'")
-          span.ml-2.text-sm.text-gray-700 {{ includeUnpublishedApplications ? 'Yes' : 'No' }}
-
-    .bg-white.rounded-lg.shadow-md.p-6.mb-6(*ngFor="let cat of selectedCategories")
-      h4.text-lg.font-semibold.text-gray-700.mb-4 {{ getCategoryLabel(cat) }} Distributions
-      .mb-6
-        h5.text-md.font-medium.text-gray-600.mb-3 Status Exclusions
-        .grid.grid-cols-1.gap-6(class="md:grid-cols-2")
+    .grid.grid-cols-1.gap-6(class="lg:grid-cols-3")
+      .bg-white.rounded-lg.shadow-md.p-6
+        h4.text-lg.font-semibold.text-gray-700.mb-4 Basic Configuration
+        .grid.grid-cols-1.gap-6(class="md:grid-cols-[auto_auto_1fr]")
           .col-span-1
+            b.text-gray-700 Originating Office:
+            br
+            | {{ getOfficeLabel(sourceCategoriesForm.value.office) }}
+          .col-span-1
+            b.text-gray-700 Recipient System:
+            br
+            | {{ getSystemLabel(sourceCategoriesForm.value.system) }}
+          .col-span-1
+            b.text-gray-700 Recipient Client ID:
+            br
+            | {{ sourceCategoriesForm.value.recipientClientId }}
+          .mt-4(class="md:col-span-3 col-span-1")
+            b.text-gray-700 IP Category Types:
+            br
+            span.inline-block.bg-blue-100.text-blue-800.text-sm.px-3.py-1.rounded-full.mr-2.mb-2(*ngFor="let cat of selectedCategories")
+              | {{ getCategoryLabel(cat) }}
+          .mt-4(class="md:col-span-3 col-span-1")
+            b.text-gray-700 Include Unpublished Applications:
+            br
             i.pi([ngClass]="includeUnpublishedApplications ? 'pi-check-circle text-green-600' : 'pi-times-circle text-red-600'")
-            span.ml-2.text-sm.text-gray-700 Include Unpublished Applications: 
-              b {{ includeUnpublishedApplications ? 'Yes' : 'No' }}
+            span.ml-2.text-sm.text-gray-700 {{ includeUnpublishedApplications ? 'Yes' : 'No' }}
 
-      .mb-6(*ngIf="eventExclusions[cat]?.length > 0")
-        h5.text-md.font-medium.text-gray-600.mb-3 Event Code Inclusion ({{ eventExclusions[cat]?.length }} selected)
-        .grid.grid-cols-1.gap-6(class="md:grid-cols-2")
-          .col-span-1(*ngFor="let eventCode of eventExclusions[cat]")
-            i.pi.pi-check-circle.text-green-600
-            span.ml-2.text-sm.text-gray-700 {{ getEventCodeLabel(eventCode) }}
+      .bg-white.rounded-lg.shadow-md.p-6(*ngIf="selectedCategories?.length")
+        ng-container(*ngIf="selectedCategories?.length")
+          ng-container(*ngIf="selectedCategories[0] as cat")
+            h4.text-lg.font-semibold.text-gray-700.mb-4 {{ getCategoryLabel(cat) }} Distributions
+            .mb-6
+              h5.text-md.font-medium.text-gray-600.mb-3 Status Exclusions
+              .grid.grid-cols-1.gap-6(class="md:grid-cols-2")
+                .col-span-1
+                  i.pi([ngClass]="includeUnpublishedApplications ? 'pi-check-circle text-green-600' : 'pi-times-circle text-red-600'")
+                  span.ml-2.text-sm.text-gray-700 Include Unpublished Applications: 
+                    b {{ includeUnpublishedApplications ? 'Yes' : 'No' }}
 
-      .mb-6(*ngIf="!eventExclusions[cat]?.length")
-        h5.text-md.font-medium.text-gray-600.mb-3 Event Code Inclusion
-        p.text-sm.text-gray-500 No event codes distributed for this category.
+            .mb-6(*ngIf="eventExclusions[cat]?.length > 0")
+              h5.text-md.font-medium.text-gray-600.mb-3 Event Code Inclusion ({{ eventExclusions[cat]?.length }} selected)
+              .grid.grid-cols-1.gap-6(class="md:grid-cols-2")
+                .col-span-1(*ngFor="let eventCode of eventExclusions[cat]")
+                  i.pi.pi-check-circle.text-green-600
+                  span.ml-2.text-sm.text-gray-700 {{ getEventCodeLabel(eventCode) }}
 
-      .mb-6(*ngIf="enableDocumentExclusions[cat]")
-        h5.text-md.font-medium.text-gray-600.mb-3 Document Inclusion ({{ documentExclusions[cat]?.length || 0 }} selected)
-        .grid.grid-cols-1.gap-6(*ngIf="documentExclusions[cat]?.length > 0" class="md:grid-cols-2")
-          .col-span-1(*ngFor="let docCode of documentExclusions[cat]")
-            i.pi.pi-check-circle.text-green-600
-            span.ml-2.text-sm.text-gray-700 {{ getDocumentTypeLabel(docCode) }}
-        p.text-sm.text-gray-500(*ngIf="!documentExclusions[cat]?.length")
-          | No document types selected for exclusion.
+            .mb-6(*ngIf="!eventExclusions[cat]?.length")
+              h5.text-md.font-medium.text-gray-600.mb-3 Event Code Inclusion
+              p.text-sm.text-gray-500 No event codes distributed for this category.
 
-      .mb-6(*ngIf="!enableDocumentExclusions[cat]")
-        h5.text-md.font-medium.text-gray-600.mb-3 Document Inclusion
-        p.text-sm.text-gray-500 Document inclusion is disabled for this category.
+            .mb-6(*ngIf="enableDocumentExclusions[cat]")
+              h5.text-md.font-medium.text-gray-600.mb-3 Document Inclusion ({{ documentExclusions[cat]?.length || 0 }} selected)
+              .grid.grid-cols-1.gap-6(*ngIf="documentExclusions[cat]?.length > 0" class="md:grid-cols-2")
+                .col-span-1(*ngFor="let docCode of documentExclusions[cat]")
+                  i.pi.pi-check-circle.text-green-600
+                  span.ml-2.text-sm.text-gray-700 {{ getDocumentTypeLabel(docCode) }}
+              p.text-sm.text-gray-500(*ngIf="!documentExclusions[cat]?.length")
+                | No document types selected for exclusion.
 
-    .bg-white.rounded-lg.shadow-md.p-6.mb-6
-      h4.text-lg.font-semibold.text-gray-700.mb-4 Configuration Summary
-      .overflow-x-auto
-        table.w-full.border-collapse.border.border-gray-200
-          thead
-            tr.bg-gray-50
-              th.border.border-gray-200.px-4.py-3.text-left.text-sm.font-medium.text-gray-700 IP Category
-              th.border.border-gray-200.px-4.py-3.text-left.text-sm.font-medium.text-gray-700 Include Unpublished Apps
-              th.border.border-gray-200.px-4.py-3.text-left.text-sm.font-medium.text-gray-700 Events Included
-              th.border.border-gray-200.px-4.py-3.text-left.text-sm.font-medium.text-gray-700 Documents Included
-          tbody
-            tr.border-b.border-gray-200(*ngFor="let cat of selectedCategories")
-              td.border.border-gray-200.px-4.py-3
-                b.text-gray-700 {{ getCategoryLabel(cat) }}
-              td.border.border-gray-200.px-4.py-3
-                i.pi([ngClass]="includeUnpublishedApplications ? 'pi-check-circle text-green-600' : 'pi-times-circle text-red-600'")
-                | {{ includeUnpublishedApplications ? 'Yes' : 'No' }}
-              td.border.border-gray-200.px-4.py-3
-                span.inline-block.px-2.py-1.text-xs.font-medium.rounded-full([ngClass]="eventExclusions[cat]?.length ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'")
-                  | {{ eventExclusions[cat]?.length || 0 }}
-              td.border.border-gray-200.px-4.py-3
-                span.inline-block.px-2.py-1.text-xs.font-medium.rounded-full([ngClass]="enableDocumentExclusions[cat] && documentExclusions[cat]?.length ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'")
-                  | {{ enableDocumentExclusions[cat] ? documentExclusions[cat]?.length || 0 : 0 }}
+            .mb-6(*ngIf="!enableDocumentExclusions[cat]")
+              h5.text-md.font-medium.text-gray-600.mb-3 Document Inclusion
+              p.text-sm.text-gray-500 Document inclusion is disabled for this category.
 
-    .mt-8.flex.justify-between
+      .bg-white.rounded-lg.shadow-md.p-6
+        h4.text-lg.font-semibold.text-gray-700.mb-4 Configuration Summary
+        .grid.grid-cols-1.gap-6(*ngFor="let cat of selectedCategories")
+          .col-span-1
+            b.text-gray-700 IP Category:
+            br
+            span.inline-block.bg-blue-100.text-blue-800.text-sm.px-3.py-1.rounded-full.mt-1 {{ getCategoryLabel(cat) }}
+          .col-span-1
+            b.text-gray-700 Include Unpublished Apps:
+            br
+            i.pi.mt-1([ngClass]="includeUnpublishedApplications ? 'pi-check-circle text-green-600' : 'pi-times-circle text-red-600'")
+            span.ml-2.text-sm.text-gray-700 {{ includeUnpublishedApplications ? 'Yes' : 'No' }}
+          .col-span-1
+            b.text-gray-700 Events Included:
+            br
+            span.inline-block.px-2.py-1.text-xs.font-medium.rounded-full.mt-1([ngClass]="eventExclusions[cat]?.length ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'")
+              | {{ eventExclusions[cat]?.length || 0 }}
+          .col-span-1
+            b.text-gray-700 Documents Included:
+            br
+            span.inline-block.px-2.py-1.text-xs.font-medium.rounded-full.mt-1([ngClass]="enableDocumentExclusions[cat] && documentExclusions[cat]?.length ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'")
+              | {{ enableDocumentExclusions[cat] ? documentExclusions[cat]?.length || 0 : 0 }}
+
+    .mt-8.flex.justify-center.gap-4
       button.bg-gray-500.text-white.px-6.py-2.rounded-lg.transition-colors(
         class="hover:bg-gray-600",
         pButton,

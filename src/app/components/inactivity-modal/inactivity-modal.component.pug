@@ -1,0 +1,45 @@
+ng-container(*ngIf="inactivity$ | async as inactivityState")
+  .inactivity-modal-overlay(*ngIf="inactivityState.isModalVisible")
+    .inactivity-modal-container
+      .inactivity-modal-icon
+        i.pi.pi-clock
+      h2.inactivity-modal-title {{ 'common.components.inactivityModal.title' | translate }}
+      p.inactivity-modal-message(*ngIf="!inactivityState.isExpired")
+        | {{ 'common.components.inactivityModal.messageActive' | translate }}
+      p.inactivity-modal-message(*ngIf="inactivityState.isExpired")
+        | {{ 'common.components.inactivityModal.messageExpired' | translate }}
+      .inactivity-timer(*ngIf="!inactivityState.isExpired")
+        span.timer-display {{ formattedTime }}
+      p-divider
+      .inactivity-modal-actions
+        button.p-button.p-component.p-button-primary.stay-active-btn(
+          pButton
+          type="button",
+          [label]="('common.components.inactivityModal.stayActive' | translate)",
+          (click)="onStayActive()",
+          *ngIf="!inactivityState.isExpired"
+        )
+        button.p-button.p-component.p-button-danger.stay-active-btn(
+          pButton
+          type="button",
+          [label]="('common.components.inactivityModal.logout' | translate)",
+          (click)="onLogout()",
+          *ngIf="!inactivityState.isExpired"
+        )
+        button.p-button.p-component.p-button-secondary.stay-active-btn(
+          pButton
+          type="button",
+          [label]="('common.components.inactivityModal.ok' | translate)",
+          (click)="onStayActive()",
+          *ngIf="inactivityState.isExpired"
+        )
+        button.p-button.p-component.p-button-danger.stay-active-btn(
+          pButton
+          type="button",
+          [label]="('common.components.inactivityModal.logout' | translate)",
+          (click)="onLogout()",
+          *ngIf="inactivityState.isExpired"
+        )
+
+
+

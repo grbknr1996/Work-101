@@ -126,71 +126,47 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
     this.filterConfigs = [
       {
-        key: 'active',
-        label: this.ms.translate('userManagement.groups.active'),
-        type: 'checkbox',
-        section: this.ms.translate('userManagement.groups.statusSection'),
+        key: 'groupName',
+        label:
+          this.ms.translate('userManagement.groups.groupName') || 'Group Name',
+        type: 'text',
+        placeholder: 'Enter group name',
+        section:
+          this.ms.translate('userManagement.groups.filterSection') || 'Filters',
       },
       {
-        key: 'inactive',
-        label: this.ms.translate('userManagement.groups.inactive'),
-        type: 'checkbox',
-        section: this.ms.translate('userManagement.groups.statusSection'),
+        key: 'description',
+        label:
+          this.ms.translate('userManagement.groups.description') ||
+          'Description',
+        type: 'text',
+        placeholder: 'Enter description',
+        section:
+          this.ms.translate('userManagement.groups.filterSection') || 'Filters',
       },
       {
-        key: 'business',
-        label: this.ms.translate('userManagement.groups.business'),
-        type: 'checkbox',
-        section: this.ms.translate('userManagement.groups.groupTypeSection'),
-      },
-      {
-        key: 'user',
-        label: this.ms.translate('userManagement.groups.user'),
-        type: 'checkbox',
-        section: this.ms.translate('userManagement.groups.groupTypeSection'),
-      },
-      {
-        key: 'createdOnRange',
-        label: this.ms.translate('userManagement.groups.createdDateRange'),
-        type: 'dateRange',
-        placeholder: this.ms.translate('userManagement.groups.selectDateRange'),
-        dateFormat: 'dd/mm/yy',
-        section: this.ms.translate('userManagement.groups.dateFiltersSection'),
-      },
-      {
-        key: 'updatedOnRange',
-        label: this.ms.translate('userManagement.groups.updatedDateRange'),
-        type: 'dateRange',
-        placeholder: this.ms.translate('userManagement.groups.selectDateRange'),
-        dateFormat: 'dd/mm/yy',
-        section: this.ms.translate('userManagement.groups.dateFiltersSection'),
-      },
-      {
-        key: 'groupCategory',
-        label: this.ms.translate('userManagement.groups.groupCategory'),
+        key: 'isActive',
+        label: this.ms.translate('userManagement.groups.status') || 'Status',
         type: 'radio',
         options: [
           {
-            label: this.ms.translate('userManagement.groups.allCategories'),
+            label:
+              this.ms.translate('userManagement.groups.active') || 'Active',
+            value: 'true',
+          },
+          {
+            label:
+              this.ms.translate('userManagement.groups.inactive') || 'Inactive',
+            value: 'false',
+          },
+          {
+            label: this.ms.translate('userManagement.groups.all') || 'All',
             value: 'all',
-          },
-          {
-            label: this.ms.translate('userManagement.groups.systemGroups'),
-            value: 'system',
-          },
-          {
-            label: this.ms.translate('userManagement.groups.customGroups'),
-            value: 'custom',
-          },
-          {
-            label: this.ms.translate('userManagement.groups.departmentGroups'),
-            value: 'department',
           },
         ],
         defaultValue: 'all',
-        section: this.ms.translate(
-          'userManagement.groups.groupCategorySection'
-        ),
+        section:
+          this.ms.translate('userManagement.groups.statusSection') || 'Status',
       },
     ];
     const currentPath = this.router.url;
@@ -292,8 +268,40 @@ export class GroupsComponent implements OnInit, OnDestroy {
       offset: this.currentPage * this.pageSize,
       sort: this.sortField,
       order: this.sortOrder === 1 ? 'asc' : 'desc',
-      exactMatchIndicator: false,
     };
+
+    // Apply filters from appliedFilters array
+    this.appliedFilters.forEach((filter) => {
+      switch (filter.key) {
+        case 'groupName':
+          if (filter.value && filter.value.toString().trim()) {
+            queryParams.groupName = filter.value.toString().trim();
+          }
+          break;
+        case 'description':
+          if (filter.value && filter.value.toString().trim()) {
+            queryParams.description = filter.value.toString().trim();
+          }
+          break;
+        case 'isActive':
+          // Do not send isActive parameter when 'all' is selected
+          // Only add isActive parameter for 'true' or 'false' values
+          if (
+            filter.value &&
+            filter.value !== 'all' &&
+            filter.value !== undefined &&
+            filter.value !== null
+          ) {
+            queryParams.isActive =
+              filter.value === 'true' || filter.value === true;
+          }
+          // When value is 'all', the isActive parameter is not added to queryParams at all
+          break;
+      }
+    });
+
+    // Set default exactMatchIndicator to false
+    queryParams.exactMatchIndicator = false;
 
     // Create a string representation of the request parameters
     const requestParamsString = JSON.stringify(queryParams);

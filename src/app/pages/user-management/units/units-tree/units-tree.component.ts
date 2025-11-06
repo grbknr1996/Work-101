@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TreeNode } from 'primeng/api';
 import { TreeModule } from 'primeng/tree';
@@ -25,10 +32,54 @@ export class UnitsTreeComponent implements OnInit {
   @Input() filter: boolean = false;
 
   treeNodes: TreeNode[] = [];
-  selectedNode: TreeNode | null = null;
+  private _selectedNode: TreeNode | null = null;
   allExpanded = true;
   loadingUnitDetails = false;
   private dataLoaded = false;
+  private lastSelectedNodeKey: string | null = null;
+  private preventingUnselection = false;
+
+  get selectedNode(): TreeNode | null {
+    return this._selectedNode;
+  }
+
+  set selectedNode(value: TreeNode | null) {
+    // If we're trying to clear a selection but it's the same node we want to keep selected, prevent it
+    // This prevents unselection when clicking on an already selected node
+    if (
+      value === null &&
+      this._selectedNode &&
+      this._selectedNode.key === this.lastSelectedNodeKey &&
+      !this.preventingUnselection
+    ) {
+      // Don't allow unselection of the same node - keep the current selection
+      this.preventingUnselection = true;
+      const nodeToKeep = this._selectedNode;
+      // Use setTimeout to ensure this happens after PrimeNG's binding update
+      setTimeout(() => {
+        if (
+          this._selectedNode === null &&
+          nodeToKeep.key === this.lastSelectedNodeKey
+        ) {
+          this._selectedNode = nodeToKeep;
+          this.cdr.detectChanges();
+        }
+        this.preventingUnselection = false;
+      }, 10);
+      return; // Don't update _selectedNode to null
+    }
+
+    // Normal selection - update the selected node (always allow this)
+    this._selectedNode = value;
+    if (value) {
+      // Update lastSelectedNodeKey when selecting a node
+      // This will be the same as what onNodeSelect set, which is fine
+      this.lastSelectedNodeKey = value.key;
+    } else if (value === null && !this.preventingUnselection) {
+      // Only clear lastSelectedNodeKey if we're actually unselecting (not preventing)
+      this.lastSelectedNodeKey = null;
+    }
+  }
 
   @Output() nodeSelected = new EventEmitter<{
     unit: UnitNode;
@@ -41,7 +92,8 @@ export class UnitsTreeComponent implements OnInit {
     private route: ActivatedRoute,
     private createUnitStateService: CreateUnitStateService,
     private toastService: ToastService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -61,6 +113,35 @@ export class UnitsTreeComponent implements OnInit {
   public refresh() {
     this.dataLoaded = false; // Reset flag to force reload
     this.loadUnitsTree();
+  }
+
+  /**
+   * Update the label of a specific node in the tree by its key
+   * This is called when a unit name is updated to immediately reflect the change
+   */
+  public updateNodeLabel(unitId: string, newName: string): void {
+    const updateNodeInTree = (nodes: TreeNode[]): boolean => {
+      for (const node of nodes) {
+        if (node.key === unitId) {
+          node.label = newName;
+          // Update the data as well to keep it in sync
+          if (node.data) {
+            node.data.name = newName;
+          }
+          return true;
+        }
+        if (node.children && updateNodeInTree(node.children)) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    if (updateNodeInTree(this.treeNodes)) {
+      // Trigger change detection to update the view
+      this.treeNodes = [...this.treeNodes];
+      this.cdr.detectChanges();
+    }
   }
 
   public clearData() {
@@ -182,6 +263,18 @@ export class UnitsTreeComponent implements OnInit {
     const unitNode: UnitNode = event.node.data;
     const unitCategory = this.determineUnitCategory(event.node);
 
+    // Store the selected node key to track it BEFORE setting selectedNode
+    // This ensures the setter can properly check if we're preventing unselection
+    const previousSelectedKey = this.lastSelectedNodeKey;
+    this.lastSelectedNodeKey = event.node.key;
+
+    // Ensure the node is selected - this will trigger the setter
+    // Temporarily allow unselection if we're selecting a different node
+    if (previousSelectedKey && previousSelectedKey !== event.node.key) {
+      this.preventingUnselection = false;
+    }
+    this.selectedNode = event.node;
+
     this.loadingUnitDetails = true;
 
     // Call API to get detailed unit information
@@ -230,7 +323,12 @@ export class UnitsTreeComponent implements OnInit {
   }
 
   onNodeUnselect(event: any) {
-    // Handle node unselection if needed
+    // The setter now handles preventing unselection of the same node
+    // This handler is kept for any additional logic if needed
+    if (event.node && event.node.key !== this.lastSelectedNodeKey) {
+      // If it's a different node being unselected, that's fine
+      // The selection will be handled by onNodeSelect
+    }
   }
 
   addNode(parentNode: TreeNode, event?: Event) {
@@ -284,7 +382,9 @@ export class UnitsTreeComponent implements OnInit {
               this.treeNodes = [...this.treeNodes];
               // Clear selection if the deleted node was selected
               if (this.selectedNode?.key === node.key) {
+                this.preventingUnselection = false; // Allow unselection for deletion
                 this.selectedNode = null;
+                this.lastSelectedNodeKey = null;
                 this.nodeSelected.emit({
                   unit: null as any,
                   category: 'Division',

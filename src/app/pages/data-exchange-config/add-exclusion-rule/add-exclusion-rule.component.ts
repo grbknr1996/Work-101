@@ -16,8 +16,8 @@ import { MechanicsService } from 'src/app/_services/mechanics.service';
 import { AuthService } from 'src/app/_services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { LayoutConfig } from '../../../components/app-layout/app-layout.component';
-import { BreadcrumbsComponent } from '../../../components/breadcrumbs/breadcrumbs.component';
 import { StepperStep } from '../../../components/configurable-stepper/configurable-stepper.component';
+import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
 
 @Component({
   selector: 'app-add-exclusion-rule',
@@ -268,13 +268,14 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
   constructor(
     private fb: FormBuilder,
     private dataExchaneService: DataExchangeConfigService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private sidebarService: SidebarMenuService
   ) {
     this.officeCode = this.route.snapshot.params['officeCode'] || 'default';
     this.langCode = this.route.snapshot.params['langCode'] || 'en';
 
     this.layoutConfig = {
-      appTitle: 'Create Exclusion Rule',
+      appTitle: '',
       showHeader: true,
       showSidebar: true,
       headerItems: [],
@@ -315,6 +316,13 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
     if (currentSystem) {
       this.selectedSystemCode.set(currentSystem);
     }
+
+    const currentPath = this.router.url;
+    const menuItems = this.sidebarService.generateConfigurationMenu(
+      currentPath,
+      ''
+    );
+    this.sidebarService.updateMenuItems(menuItems);
   }
 
   private loadConfigurationData(): void {

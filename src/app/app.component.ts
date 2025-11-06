@@ -8,6 +8,7 @@ import {
 import { Router } from '@angular/router';
 import { MechanicsService } from './_services/mechanics.service';
 import { HttpClient } from '@angular/common/http';
+import { InactivityService } from './_services/inactivity.service';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +24,8 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     public ms: MechanicsService,
-    public http: HttpClient
+    public http: HttpClient,
+    private inactivityService: InactivityService
   ) {}
 
   async ngOnInit() {}

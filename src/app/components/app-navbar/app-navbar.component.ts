@@ -44,6 +44,7 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
   title: string = 'IPAS Central';
   logo: string = '';
   selectedLanguage: string;
+  hideTitle: boolean = false;
   languageOptions: { label: string; value: string }[] = [];
   userMenuItems: MenuItem[] = [];
   notificationItems: MenuItem[] = [];
@@ -56,7 +57,8 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
   isSidebarOpen = false;
   showPlatformSelector: boolean = false;
   isWipoAdmin: boolean = false;
-
+  showMFAModal: boolean = false;
+  currentLoginId: string | null = null;
   private userSubscription: Subscription | null = null;
   private hasFetchedUserDetails: boolean = false;
 
@@ -70,6 +72,8 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
     this.checkScreenSize();
     this.logo = this.ms.getLogo();
     this.title = this.ms.getOfficeName();
+    const officeConfig = this.ms.getCurrentOfficeConfig();
+    this.hideTitle = officeConfig?.hideTitle === true;
     window.addEventListener('resize', this.onResize.bind(this));
   }
 
@@ -156,11 +160,14 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
       // Subscribe to office changes to update WIPO admin status
       this.ms.currentOffice$.subscribe((officeCode) => {
         this.isWipoAdmin = this.ms.isCurrentUserWipoAdmin();
+        const officeConfig = this.ms.getCurrentOfficeConfig();
+        this.hideTitle = officeConfig?.hideTitle === true;
         this.initializeMenuItems();
       });
 
       this.initializeMenuItems();
       this.loadNotifications();
+      this.resolveCurrentLoginId();
     } catch (error) {
       console.error('Error during initialization:', error);
     }
@@ -172,7 +179,19 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
       this.userSubscription.unsubscribe();
     }
   }
-
+  private resolveCurrentLoginId(): void {
+    this.auth.getEncodedTokens().subscribe({
+      next: (tokens) => {
+        try {
+          const payload = JSON.parse(atob(tokens.accessToken.split('.')[1]));
+          this.currentLoginId = payload?.username || null;
+        } catch {
+          this.currentLoginId = null;
+        }
+      },
+      error: () => (this.currentLoginId = null),
+    });
+  }
   onResize() {
     this.checkScreenSize();
   }
@@ -276,6 +295,15 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
         icon: 'pi pi-cog',
         routerLink: '/settings',
       },
+      {
+        label: this.ms.translate(
+          'common.components.mfaRegistrationModal.btnText'
+        ),
+        icon: 'pi pi-qrcode',
+        command: () => {
+          this.showMFAModal = true;
+        },
+      },
     ];
 
     // Only show "Change Platform Office" for WIPO admins
@@ -285,8 +313,6 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
         icon: 'pi pi-sync',
         command: () => {
           this.showPlatformSelector = true;
-          console.log('showPlatformSelector$$$$', this.showPlatformSelector);
-          console.log('Modal should now be visible');
         },
       });
     }
@@ -372,13 +398,8 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
 
   // Platform selector methods
   onPlatformSelected(platformCode: string): void {
-    console.log('Platform selected:', platformCode);
     this.showPlatformSelector = false;
 
-    // Refresh the page to ensure all components and services pick up the new platform
-    console.log(
-      'Platform selection completed, refreshing page to apply new platform context'
-    );
     setTimeout(() => {
       window.location.reload();
     }, 100); // Small delay to ensure the platform change is persisted

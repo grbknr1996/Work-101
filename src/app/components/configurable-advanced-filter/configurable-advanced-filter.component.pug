@@ -61,7 +61,6 @@
           .query-button-clear
             button.query-button-browse((click)="clearSearch()") {{"common.components.advancedFilter.clear"|translate}}
 
-        br
 
         .selection-box(*ngIf="selectedList.total > 0")
           .selection-header
@@ -70,7 +69,6 @@
               |  {{selectedList.groups}} {{"common.components.advancedFilter.selection.group"|translate}},  {{selectedList.levels}} {{"common.components.advancedFilter.selection.level"|translate}}
             button.clear-button((click)="clearSelection()") {{"common.components.advancedFilter.selection.clear"|translate}} ({{selectedList.total}})
 
-        br
 
         div(*ngFor="let level of levels; let k = index; let levellast = last")
           div(*ngIf="level.level === '1'; else level2Block")
@@ -209,28 +207,22 @@
 
         br
         br
-        br
-        br
-        br
-        br
-        br
-        br
 
-      .advanced-filter-actions
-        .flex.items-center.justify-end.gap-3.sticky.bottom-0
-          .action-buttons
-            button.p-button-outlined.p-button-secondary(
-              pButton,
-              type="button",
-              [label]="'common.components.advancedFilter.cancel'|translate",
-              (click)="onClose()"
-            )
-            button.p-button-primary(
-              pButton,
-              type="button",
-              [label]="'common.components.advancedFilter.search'|translate",
-              (click)="onSearch()"
-            )
+        .advanced-filter-actions
+          .flex.items-center.justify-end.gap-3.sticky.bottom-0
+            .action-buttons
+              button.p-button-outlined.p-button-secondary(
+                pButton,
+                type="button",
+                [label]="'common.components.advancedFilter.cancel'|translate",
+                (click)="onClose()"
+              )
+              button.p-button-primary(
+                pButton,
+                type="button",
+                [label]="'common.components.advancedFilter.search'|translate",
+                (click)="onSearch()"
+              )
 
     .template-dialog-overlay(*ngIf="showSaveTemplate")
       .template-dialog-container

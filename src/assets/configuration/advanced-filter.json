@@ -1,0 +1,183 @@
+{
+    "categories" : [
+        { "code": "all", "name": "All" },
+        { "code": "patents", "name": "Patents" },
+        { "code": "trademarks", "name": "Trademarks" },
+        { "code": "designs", "name": "Designs" },
+        { "code": "gazette", "name": "Gazette" },
+        { "code": "datapackages", "name": "Data Packages" },
+        { "code": "authorityfiles", "name": "Authority Files" }
+    ],
+    
+    "fieldOptionsFromDb": [
+        {
+        "key": "patents",
+        "options": [
+            {
+            "label": "Text Fields",
+            "code": "TXT",
+            "items": [
+                { "name": "Title", "code": "TTL", "fieldType": "text" },
+                { "name": "Description", "code": "DESC", "fieldType": "text" },
+                { "name": "Mark Name", "code": "MK", "fieldType": "text" },
+                { "name": "Title in Other Language", "code": "TTL_EN", "fieldType": "text" }
+            ]
+            },
+            {
+            "label": "Property",
+            "code": "PROP",
+            "items": [
+                { "name": "Application Id", "code": "AFNB", "fieldType": "text" },
+                { "name": "Filing Date", "code": "AFDT", "fieldType": "date" },
+                { "name": "Application Type", "code": "APP_TYP", "fieldType": "text" },
+                { "name": "Status", "code": "STLB", "fieldType": "text" }
+            ]
+            },
+            {
+            "label": "Classifications",
+            "code": "CLS",
+            "items": [
+                { "name": "Nice", "code": "NCL", "fieldType": "text" },
+                { "name": "Vienna", "code": "VCL", "fieldType": "text" },
+                { "name": "Locarno", "code": "LCL", "fieldType": "text" },
+                { "name": "IPC", "code": "IPC", "fieldType": "text" }
+            ]
+            },
+            {
+            "label": "Country",
+            "code": "COUNTRY",
+            "items": [
+                { "name": "Applicant Country", "code": "APCT", "fieldType": "text" },
+                { "name": "Priority Country", "code": "PCCT", "fieldType": "text" },
+                { "name": "Filing Country", "code": "AFCT", "fieldType": "text" },
+                { "name": "Publication Country", "code": "PUBCT", "fieldType": "text" }
+            ]
+            }
+        ]
+        },
+        {
+        "key": "trademarks",
+        "options": [
+            {
+            "label": "Text Fields",
+            "code": "TXT",
+            "items": [
+                { "name": "Title", "code": "TTL", "fieldType": "text" },
+                { "name": "Description", "code": "DESC", "fieldType": "text" },
+                { "name": "Mark Name", "code": "MK", "fieldType": "text" },
+                { "name": "Title in Other Language", "code": "TTL_EN", "fieldType": "text" }
+            ]
+            },
+            {
+            "label": "Property",
+            "code": "PROP",
+            "items": [
+                { "name": "Application Id", "code": "AFNB", "fieldType": "text" },
+                { "name": "Filing Date", "code": "AFDT", "fieldType": "date" },
+                { "name": "Application Type", "code": "APP_TYP", "fieldType": "text" },
+                { "name": "Status", "code": "STLB", "fieldType": "text" }
+            ]
+            },
+            {
+            "label": "Classifications",
+            "code": "CLS",
+            "items": [
+                { "name": "Nice", "code": "NCL", "fieldType": "text" },
+                { "name": "Vienna", "code": "VCL", "fieldType": "text" },
+                { "name": "Locarno", "code": "LCL", "fieldType": "text" },
+                { "name": "IPC", "code": "IPC", "fieldType": "text" }
+            ]
+            },
+            {
+            "label": "Country",
+            "code": "COUNTRY",
+            "items": [
+                { "name": "Applicant Country", "code": "APCT", "fieldType": "text" },
+                { "name": "Priority Country", "code": "PCCT", "fieldType": "text" },
+                { "name": "Filing Country", "code": "AFCT", "fieldType": "text" },
+                { "name": "Publication Country", "code": "PUBCT", "fieldType": "text" }
+            ]
+            }
+        ]
+        },
+        {
+        "key": "designs",
+        "options": [
+            {
+            "label": "Text Fields",
+            "code": "TXT",
+            "items": [
+                { "name": "Title", "code": "TTL", "fieldType": "text" },
+                { "name": "Description", "code": "DESC", "fieldType": "text" },
+                { "name": "Mark Name", "code": "MK", "fieldType": "text" },
+                { "name": "Title in Other Language", "code": "TTL_EN", "fieldType": "text" }
+            ]
+            },
+            {
+            "label": "Property",
+            "code": "PROP",
+            "items": [
+                { "name": "Application Id", "code": "AFNB", "fieldType": "text" },
+                { "name": "Filing Date", "code": "AFDT", "fieldType": "date" },
+                { "name": "Application Type", "code": "APP_TYP", "fieldType": "text" },
+                { "name": "Status", "code": "STLB", "fieldType": "text" }
+            ]
+            },
+            {
+            "label": "Classifications",
+            "code": "CLS",
+            "items": [
+                { "name": "Nice", "code": "NCL", "fieldType": "text" },
+                { "name": "Vienna", "code": "VCL", "fieldType": "text" },
+                { "name": "Locarno", "code": "LCL", "fieldType": "text" },
+                { "name": "IPC", "code": "IPC", "fieldType": "text" }
+            ]
+            },
+            {
+            "label": "Country",
+            "code": "COUNTRY",
+            "items": [
+                { "name": "Applicant Country", "code": "APCT", "fieldType": "text" },
+                { "name": "Priority Country", "code": "PCCT", "fieldType": "text" },
+                { "name": "Filing Country", "code": "AFCT", "fieldType": "text" },
+                { "name": "Publication Country", "code": "PUBCT", "fieldType": "text" }
+            ]
+            }
+        ]
+        },
+        {
+        "key": "datapackages",
+        "options": [
+            {
+            "label": "Text Fields",
+            "code": "TXT",
+            "items": [
+                { "name": "Application Id", "code": "applicationId", "fieldType": "text" }
+            ]
+            }
+        ]
+        },
+        {
+        "key": "authorityfiles",
+        "options": [
+            {
+            "label": "Text Fields",
+            "code": "text",
+            "items": [
+                { "name": "File Number", "code": "fileNumber", "fieldType": "text" },
+                { "name": "Publication Number", "code": "publicationNumber", "fieldType": "text" }
+            ]
+            },
+            {
+            "label": "Date Fields",
+            "code": "date",
+            "items": [
+                { "name": "Publication Date", "code": "publicationDate", "fieldType": "date" }
+            ]
+            }
+        ]
+        }
+    ]
+
+
+}

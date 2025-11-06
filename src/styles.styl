@@ -11,13 +11,15 @@ shtml, body, app-root
   display block
   // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
   min-height: -webkit-fill-available
-  height: calc(var(--vh, 1vh) * 100)
-
-  
+  height: calc(var(--vh, 1vh) * 100) 
+    
+@media screen and (min-width: 769px)
+  .p-breadcrumb-custom
+    --p-breadcrumb-padding 0.125rem 1rem 0.125rem 1rem
 
 body
   overflow auto
-  font-size 0.85rem
+  font-size 0.75rem
   margin 0 ;
   padding 0
   transition opacity 0.7s linear
@@ -105,6 +107,7 @@ body, .layout-wrapper, .layout-main
     color: var(--p-heading-color);
     font-weight: var(--p-heading-font-weight);
     line-height: var(--p-heading-line-height);
+    font-size 1rem
 
   font-family "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif
 
@@ -166,7 +169,7 @@ app-groups
     margin-left: 0.5rem
 
     .navbar-logo
-      height: 32px
+      height: 3rem
       margin-right: 0.75rem
 
     .navbar-title
@@ -243,6 +246,12 @@ app-groups
   .user-name
     margin: 0 0.5rem
     font-weight: 500
+
+  .user-button:hover
+    .user-name
+      color var(--p-primary-color)
+  .user-name:hover
+    color var(--p-primary-color)
 
 .mobile-menu
   .mobile-menu-header
@@ -504,7 +513,6 @@ $transition-duration = 0.3s
         
         .menu-label
           flex: 1
-          white-space: nowrap
           overflow: hidden
           text-overflow: ellipsis
         
@@ -656,7 +664,6 @@ $transition-duration = 0.3s
   @media screen and (max-width: 450px)
     padding 0
     margin-left 0
-
 .content-container
   background-color: white
   border-radius: 4px
@@ -842,6 +849,9 @@ $transition-duration = 0.3s
   align-items: center
   padding-top: 26px
   padding-left: 80px
+  @media (max-width: 480px)
+    padding-top: 86px
+    padding-left: 5px
 
   .advanced-header
     display flex
@@ -888,6 +898,7 @@ $transition-duration = 0.3s
 
   .query-template-box
     padding 0.5rem
+    margin-bottom 1rem
     background-color rgb(236, 253, 245)
     border-color rgb(167, 243, 208)
     border-width 1px
@@ -914,6 +925,8 @@ $transition-duration = 0.3s
     padding-right 0.75rem
     font-weight 500
     color rgb(4, 120, 87)
+    @media (max-width: 480px)
+      height 3rem
 
   .query-button-save
     display inline-flex
@@ -926,6 +939,8 @@ $transition-duration = 0.3s
     padding-right 0.75rem
     font-weight 500
     color rgb(255, 255, 255)
+    @media (max-width: 480px)
+      height 3rem
 
   .query-button-clear
     margin-top 0.75rem
@@ -976,14 +991,20 @@ $transition-duration = 0.3s
     display flex
     justify-content space-between
     align-items flex-start
+    @media (max-width: 480px)
+      display grid
 
   .template-left
     flex 1 1 0%
+    @media (max-width: 480px)
+      margin-bottom 0.25rem
 
   .template-right
     display flex
     gap 0.25rem
     margin-left 0.75rem
+    @media (max-width: 480px)
+      margin-left 0
 
   .template-title-box
     display flex
@@ -1028,7 +1049,7 @@ $transition-duration = 0.3s
     flex 1
     overflow-y auto
     padding 1rem 1rem 0rem 1.5rem
-    min-height 550px
+    min-height 350px
 
   .advanced-search-panel
     background white
@@ -1097,12 +1118,20 @@ $transition-duration = 0.3s
 
   .filter-group-header-text
     margin-bottom 0.75rem
+    margin-left 1rem
     gap 0.5rem
     color rgb(75, 85, 99)
+    @media (max-width: 480px)
+      display none
 
   .filter-field-line
+    align-items center
     margin-bottom 1rem
     gap 0.5rem
+    @media (max-width: 480px)
+      display flex
+      flex-direction column
+      align-items stretch
 
   .filter-field-select
     display flex
@@ -1134,6 +1163,8 @@ $transition-duration = 0.3s
     align-items center
     border-radius 0.375rem
     border-width 1px
+    @media (max-width: 480px)
+      align-self flex-end
 
   .filter-field-add
     display inline-flex
@@ -1147,6 +1178,8 @@ $transition-duration = 0.3s
     background-color rgb(3, 2, 19)
     border-color rgb(3, 2, 19)
     color rgb(255, 255, 255)
+    @media (max-width: 480px)
+      align-self flex-end
 
   .filter-operator-box
     display flex
@@ -1279,6 +1312,7 @@ $transition-duration = 0.3s
 
   .selection-box
     background-color #eff6ff
+    margin-bottom 1rem
     padding 0.75rem
     border 1px solid #bfdbfe
     border-radius 0.5rem
@@ -1455,8 +1489,8 @@ $transition-duration = 0.3s
 
   .advanced-filter-actions
     padding 1rem 1.5rem
-    border-top 1px solid #e5e7eb
-    background #f9fafb
+    width 40%
+    margin 0 auto
 
   .filter-section
     border-bottom 1px solid #f3f4f6
@@ -1574,9 +1608,21 @@ $transition-duration = 0.3s
 // User Stats Component Styles
 // ============================================
 .user-stats-container
-  display flex
-  flex-wrap wrap
-  width 100%
+
+  .stats-container
+    display flex
+    flex-wrap wrap
+    width 100%
+
+  .stats-accordion-header
+    padding 0
+
+  .stats-accordion-content
+    width 100%
+    padding 0.1rem
+
+    .p-accordioncontent-content
+      padding 0.1rem
 
   .user-stat-card
     flex 1
@@ -1642,6 +1688,94 @@ $transition-duration = 0.3s
       margin 0.25rem 0
 // ============================================
 // End of User Stats Component Styles
+// ============================================
+
+// ============================================
+// Package Stats Component Styles
+// ============================================
+
+.package-stats-container
+
+  .stats-container
+    display flex
+    flex-wrap wrap
+    width 100%
+
+  .stats-accordion-header
+    padding 0
+
+  .stats-accordion-content
+    width 100%
+    padding 0.1rem
+
+    .p-accordioncontent-content
+      padding 0.1rem
+  
+  .package-stat-card
+    flex 1
+    min-width 220px
+    margin 0.25rem
+    padding 0.675rem
+    border 1px solid #ddd
+    border-radius 4px
+    cursor pointer
+    transition all 0.2s ease
+
+    &:hover
+      box-shadow 0 4px 8px rgba(0, 0, 0, 0.1)
+
+    &.selected
+       background-color: rgba(59, 130, 246, 0.08);
+       border: 2px solid #3B82F6;
+       box-shadow: inset 0 0 0 2px rgba(59, 130, 246, 0.2);
+
+  .stat-header
+    display flex
+    justify-content space-between
+    align-items center
+    margin-bottom 0.15rem
+
+    .stat-label
+      font-weight bold
+      font-size 0.9rem
+
+  .stat-content
+    display flex
+    justify-content space-between
+    align-items center
+
+    .stat-count
+      font-size 1.25rem
+      font-weight 700
+
+    .stat-change
+      display flex
+      align-items center
+      font-weight 600
+      gap 0.25rem
+
+      i
+        font-size 0.75rem
+
+  .stat-countLabel
+      font-size 1rem
+      font-weight 400
+      
+  .stat-period
+    margin-top 0.15rem
+    font-size 0.8rem
+    color #666
+
+@media (max-width: 768px)
+  .package-stats-container
+    flex-direction column
+
+    .package-stat-card
+      width 100%
+      margin 0.25rem 0
+
+// ============================================
+// End of Package Stats Component Styles
 // ============================================
 
 // ============================================
@@ -1980,7 +2114,9 @@ app-user-accounts
 @media (max-width: 425px)
   .sidebar-container
     margin-top 6rem
-
+@media screen and (min-width: 1024px) and (max-width: 1024px)
+  .layout-main
+      margin-right 1rem
 // Ensure menu items are always visible and not clipped
 .menu-list, .submenu-list
   overflow visible !important
@@ -5526,7 +5662,7 @@ app-configurable-filter
 
   /* Header Section */
   .filter-header
-    padding 1.5rem 1.5rem 1rem 1.5rem
+    padding 1rem 1rem 1rem 1rem
     border-bottom 1px solid #e5e7eb
     background #f9fafb
 
@@ -7624,4 +7760,172 @@ work-in-progress
     font-size: 1.1rem
     color: var(--text-color-secondary, #666)
     margin-bottom: 2rem
+// ========================================
+// MFA Registration modal Component Styles
+// ========================================
+app-mfa-registration-modal
+  .mfa-container
+    display: flex
+    gap: 24px
+    align-items: flex-start
+
+  .mfa-left-section
+    flex: 0 0 320px
+    padding-right: 12px
+
+  .mfa-divider
+    align-self: stretch
+
+  .mfa-right-section
+    flex: 1 1 auto
+    min-width: 260px
+    padding-left: 12px
+
+  .qr-code-image
+    max-width: 240px
+    width: 100%
+    border: 1px solid #e0e0e0
+    padding: 8px
+    border-radius: 8px
+
+  .register-button
+    margin-top: 1rem
+
+  // Mobile responsiveness
+  @media (max-width: 768px)
+    .mfa-container
+      flex-direction: column
+      gap: 16px
+
+    .mfa-left-section
+      width: 100%
+      padding-right: 0
+      padding-bottom: 16px
+      border-bottom: 1px solid #e0e0e0
+
+    .mfa-divider
+      display: none
+
+    .mfa-right-section
+      width: 100%
+      padding-left: 0
+      padding-top: 16px
+
       
+// ============================================
+// Inactivity Modal Component Styles
+// ============================================
+app-inactivity-modal
+  .inactivity-modal-overlay
+    position fixed
+    top 0
+    left 0
+    width 100%
+    height 100%
+    background-color rgba(0, 0, 0, 0.7)
+    display flex
+    justify-content center
+    align-items center
+    z-index 10000
+    backdrop-filter blur(4px)
+
+  .inactivity-modal-container
+    background white
+    border-radius 12px
+    padding 40px
+    box-shadow 0 8px 32px rgba(0, 0, 0, 0.25)
+    text-align center
+    min-width 350px
+    max-width 450px
+    animation slideIn 0.3s ease-out
+
+  .inactivity-modal-icon
+    margin-bottom 20px
+    
+    i
+      font-size 64px
+      color #f59e0b
+      animation pulse 2s ease-in-out infinite
+
+  .inactivity-modal-title
+    font-size 24px
+    font-weight 600
+    color #333
+    margin 0 0 16px 0
+
+  .inactivity-modal-message
+    color #666
+    font-size 16px
+    margin 0 0 24px 0
+    line-height 1.5
+
+  .inactivity-timer
+    margin 24px 0
+    padding 20px
+    background-color #fef3c7
+    border-radius 8px
+    border 2px solid #fbbf24
+
+  .timer-display
+    font-size 48px
+    font-weight 700
+    color #d97706
+    font-family 'Courier New', monospace
+    letter-spacing 4px
+
+  .inactivity-modal-actions
+    margin-top 24px
+    display flex
+    justify-content center
+    gap 12px
+
+    .stay-active-btn
+      min-width 150px
+      height 44px
+      font-size 16px
+      font-weight 500
+
+ @keyframes slideIn
+  0%
+    transform translateY(-20px)
+    opacity 0
+  100%
+    transform translateY(0)
+    opacity 1
+
+ @keyframes pulse
+  0%, 100%
+    transform scale(1)
+    opacity 1
+  50%
+    transform scale(1.1)
+    opacity 0.8
+
+ @media (max-width: 768px)
+  app-inactivity-modal
+    .inactivity-modal-container
+      margin 20px
+      padding 30px
+      min-width auto
+      max-width 100%
+
+    .inactivity-modal-icon
+      i
+        font-size 48px
+
+    .inactivity-modal-title
+      font-size 20px
+
+    .inactivity-modal-message
+      font-size 14px
+
+    .timer-display
+      font-size 36px
+
+    .stay-active-btn
+      min-width 120px
+      height 40px
+      font-size 14px
+@media screen and (max-width 480px)
+  app-breadcrumbs
+    margin-top 2rem

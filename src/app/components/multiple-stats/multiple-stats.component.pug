@@ -1,25 +1,30 @@
-.user-stats-container
-  .user-stat-card(
-    *ngFor="let stat of multipleStats"
-    "[class.selected]"="selectedStat === stat.label"
-    "(click)"="selectStat(stat.label)"
-  )
-    div(*ngFor="let display of stat.displayLabel")
-      .stat-header
-        span.stat-label("[style.color]"="stat.color") {{ display }}
-        i("[class]"="stat.icon", "[style.color]"="stat.color")
-    
-    .stat-content
-      span.stat-count("[style.color]"="stat.color") {{ stat.count }}
+.package-stats-container
+  p-accordion(value="0")
+    p-accordion-panel(value="0")
+      p-accordion-header.stats-accordion-header {{"common.components.stats.statistics"|translate}}
+      p-accordion-content.stats-accordion-content
+        .stats-container
+          .package-stat-card(
+            *ngFor="let stat of multipleStats"
+            "[class.selected]"="selectedStat === stat.label"
+            "(click)"="selectStat(stat.label)"
+          )
+            div(*ngFor="let display of stat.displayLabel")
+              .stat-header
+                span.stat-label("[style.color]"="stat.color") {{ display }}
+                i("[class]"="stat.icon", "[style.color]"="stat.color")
+            
+            .stat-content
+              span.stat-count("[style.color]"="stat.color") {{ stat.count }}
 
-      span.stat-change("[style]"="stat.percentChange!=null ? '' : 'display:none;'")
-        i(
-          "[class]"="stat.percentChange!=null ? (stat.percentChange >= 0 ? 'pi pi-arrow-up' : 'pi pi-arrow-down') : ''"
-          "[style.color]"="stat.percentChange >= 0 ? '#16a34a' : '#dc2626'"
-        )
-        span("[style.color]"="stat.percentChange >= 0 ? '#16a34a' : '#dc2626'") {{ stat.percentChange }}%
-    
-    .stat-countLabel("[style.color]"="stat.color") {{ stat.countLabel }}
+              span.stat-change("[style]"="stat.percentChange!=null ? '' : 'display:none;'")
+                i(
+                  "[class]"="stat.percentChange!=null ? (stat.percentChange >= 0 ? 'pi pi-arrow-up' : 'pi pi-arrow-down') : ''"
+                  "[style.color]"="stat.percentChange >= 0 ? '#16a34a' : '#dc2626'"
+                )
+                span("[style.color]"="stat.percentChange >= 0 ? '#16a34a' : '#dc2626'") {{ stat.percentChange }}%
+            
+            .stat-countLabel("[style.color]"="stat.color") {{ stat.countLabel }}
 
-    div(*ngFor="let period of stat.periodList")
-      .stat-period {{ period }}
+            div(*ngFor="let period of stat.periodList")
+              .stat-period {{ period }}

@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="col-span-4 flex justify-end gap-2 filter-icons">
-      <p-button *ngFor="let act of actions" [icon]="act.icon" [outlined]="true" [text]="true" [pTooltip]="act.label" (click)="onActionClick(act.action)"></p-button>
+      <p-button *ngFor="let act of actions" [icon]="act.icon" [outlined]="true" [text]="true" [pTooltip]="act.label" appendTo="body" tooltipPosition="bottom" (click)="onActionClick(act.action)"></p-button>
       <app-configurable-filter [filters]="filters" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'common.components.filter.selectFilters'|translate" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>
       <p-button *ngIf="showDownloadIcon" icon="pi pi-file-pdf" [outlined]="true" [text]="true" (click)="onDownloadDetails()"></p-button>
       <p-button *ngIf="showInfoIcon" icon="pi pi-info-circle" [outlined]="true" [text]="true" (click)="onInfoDetails()"></p-button>

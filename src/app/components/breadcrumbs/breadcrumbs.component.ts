@@ -62,7 +62,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
   private updateHomeItem(): void {
     const officeCode = this.ms.getCurrentOffice() || 'default';
-    const defaultLang = this.ms.getDefaultLanguage() || 'en';
+    const defaultLang = this.ms.lang || this.ms.getDefaultLanguage() || 'en';
     this.home = {
       icon: 'pi pi-home',
       label: `${officeCode}`,

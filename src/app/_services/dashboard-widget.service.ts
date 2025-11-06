@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { PermissionService } from './permission.service';
 import { MechanicsService } from './mechanics.service';
 import { DASHBOARD_WIDGETS } from '../_constants/dashboard-widget.constant';
+import { configuration } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -58,6 +59,18 @@ export class DashboardWidgetService {
       .map((widget) => {
         const filteredItems = widget.items
           .filter((item) => {
+            // Check if this is the efilingReview widget
+            if (
+              item.label ===
+              'dashboard.widgets.receptionOperations.items.efilingReview'
+            ) {
+              const officeCode =
+                this.mechanicsService.getCurrentOffice() || 'default';
+              const officeConfig = configuration[officeCode];
+              // Hide if efilingEnabled is false, show if true or undefined (defaults to showing if not specified)
+              return officeConfig?.efilingEnabled !== false;
+            }
+
             if (
               item.requiredPermissions &&
               item.requiredPermissions.length > 0

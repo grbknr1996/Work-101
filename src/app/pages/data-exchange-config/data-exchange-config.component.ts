@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { LayoutConfig } from '../../components/app-layout/app-layout.component';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
+import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
 
 @Component({
   selector: 'app-data-exchange-config',
@@ -47,7 +48,8 @@ export class DataExchangeConfigComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    public ms: MechanicsService
+    public ms: MechanicsService,
+    private menuService: SidebarMenuService
   ) {
     this.officeCode = this.route.snapshot.params['officeCode'] || 'default';
     this.langCode = this.route.snapshot.params['langCode'] || 'en';
@@ -70,6 +72,12 @@ export class DataExchangeConfigComponent implements OnInit {
   ngOnInit(): void {
     // Load recipient systems count from assets configuration
     this.loadRecipientSystemsCount();
+    const currentPath = this.router.url;
+    const menuItems = this.menuService.generateConfigurationMenu(
+      currentPath,
+      ''
+    );
+    this.menuService.updateMenuItems(menuItems);
   }
 
   private loadRecipientSystemsCount(): void {
@@ -126,11 +134,11 @@ export class DataExchangeConfigComponent implements OnInit {
     return [
       {
         label: 'Configuration',
-        routerLink: `${basePath}/configuration`,
+        routerLink: `${basePath}/configuration/data-exchange/dashboard`,
       },
       {
-        label: 'Data Exchange',
-        routerLink: `${basePath}/configuration/data-exchange`,
+        label: 'Data Sharing',
+        routerLink: `${basePath}/configuration/data-exchange/dashboard`,
       },
     ];
   }

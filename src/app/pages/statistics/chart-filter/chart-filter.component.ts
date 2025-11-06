@@ -22,12 +22,22 @@ export class ChartFilterComponent implements OnInit {
   @Output() onHide = new EventEmitter<void>();
   hide() { this.onHide.emit(); }
 
+  @Output() anyFilterEvent = new EventEmitter<void>();
+  anyFilter(filter: any) { this.anyFilterEvent.emit(filter); }
+
   //PROPERTIES
   defaultFilters: chartFilterConfig[];
   finalFilters: chartFilterConfig[];
 
   constructor() { }
 
+  updateNGModel(key: string, model: any, options?: any) {
+    let target = this.finalFilters.find((item: any) => item.key === key);
+    target.model = model;
+    if (options) {
+      target.options = (target.options).filter((item: any) => options.indexOf(item.value) !== -1);
+    }
+  }
   ngOnInit() {
     this.translate.get([
       'charts.statistics.filters.type',
@@ -45,7 +55,10 @@ export class ChartFilterComponent implements OnInit {
       'charts.statistics.filters.originOption2',
       'charts.statistics.filters.compare',
       'charts.statistics.filters.compare1',
-      'charts.statistics.filters.compare2'
+      'charts.statistics.filters.compare2',
+      'charts.statistics.filters.trends_theme',
+      'charts.statistics.filters.trends_theme1',
+      'charts.statistics.filters.trends_theme2'
     ]).subscribe((translations) => {
       this.defaultFilters = [
         {
@@ -54,6 +67,17 @@ export class ChartFilterComponent implements OnInit {
           label: translations['charts.statistics.filters.compare'],
           type: 'checkbox',
           model: true
+        },
+        {
+          include: true,
+          key: 'trends_theme',
+          label: translations['charts.statistics.filters.trends_theme'],
+          type: 'dropdown',
+          model: 'tech',
+          options: [
+            { label: translations['charts.statistics.filters.trends_theme1'], value: 'tech' },
+            { label: translations['charts.statistics.filters.trends_theme2'], value: 'origin' }
+          ]
         },
         {
           include: true,

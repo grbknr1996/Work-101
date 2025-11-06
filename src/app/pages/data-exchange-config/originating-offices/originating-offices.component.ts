@@ -1,8 +1,6 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import {
-  LayoutConfig,
-} from '../../../components/app-layout/app-layout.component';
+import { LayoutConfig } from '../../../components/app-layout/app-layout.component';
 import { MechanicsService } from '../../../_services/mechanics.service';
 
 interface Office {
@@ -77,10 +75,10 @@ export class OriginatingOfficesComponent implements OnInit {
     return [
       {
         label: 'Configuration',
-        routerLink: `/${this.officeCode}/${this.langCode}/configuration`,
+        routerLink: `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard`,
       },
       {
-        label: 'Data Exchange',
+        label: 'Data Sharing',
         routerLink: `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard`,
       },
       {

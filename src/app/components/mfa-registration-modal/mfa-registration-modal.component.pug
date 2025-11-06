@@ -1,0 +1,77 @@
+p-dialog(
+  [header]="'common.components.mfaRegistrationModal.title' | translate",
+  [(visible)]="visible",
+  [modal]="true",
+  [style]="{ width: '90vw', maxWidth: '720px' }",
+  [draggable]="false",
+  [resizable]="false",
+  (onShow)="onShow()",
+  (onHide)="onHide()"
+)
+  .p-fluid(*ngIf="!loading && !errorMessage; else stateTpl")
+    .mfa-container
+      // Left Section: QR Code and Secret
+      .mfa-left-section
+        .p-field(style="text-align:center; margin-bottom: 1rem;")
+          img.qr-code-image(
+            *ngIf="qrCodeImageBase64",
+            [src]="'data:image/png;base64,' + qrCodeImageBase64",
+            [alt]="'common.components.mfaRegistrationModal.qrCodeAlt' | translate"
+          )
+
+        .p-field(*ngIf="secretCode")
+          label.p-mb-2(style="display:block; font-weight:600;") {{ 'common.components.mfaRegistrationModal.secretCode' | translate }}
+          .p-inputgroup
+            input(pInputText, [readonly]="true", [value]="secretCode")
+            button(
+              pButton,
+              type="button",
+              icon="pi pi-copy",
+              (click)="copySecretCode()",
+              [title]="'common.components.mfaRegistrationModal.copy' | translate"
+            )
+
+        p(style="margin-top: 1rem;")
+          | {{ 'common.components.mfaRegistrationModal.instructions' | translate }}
+
+      // Vertical Divider
+      p-divider(layout="vertical", styleClass="mfa-divider")
+
+      // Right Section: OTP Verification
+      .mfa-right-section
+        .p-field
+          label.p-mb-2(style="display:block; font-weight:600;") {{ 'common.components.mfaRegistrationModal.enterOtp' | translate }}
+          input(
+            pInputText,
+            [(ngModel)]="otpCode",
+            [placeholder]="'common.components.mfaRegistrationModal.otpPlaceholder' | translate",
+            maxlength="6",
+            class="otp-input"
+          )
+        .p-mt-3
+          button(
+            pButton,
+            type="button",
+            [label]="'common.components.mfaRegistrationModal.registerAndLogout' | translate",
+            icon="pi pi-qrcode",
+            (click)="onRegisterAndLogout()",
+            [disabled]="loading || !otpCode",
+            class="register-button"
+          )
+
+  ng-template(#stateTpl)
+    div(*ngIf="loading", class="p-d-flex p-jc-center p-ai-center", style="gap:8px;")
+      p-progressSpinner(styleClass="w-2rem h-2rem")
+      span {{ 'common.components.mfaRegistrationModal.loadingQrCode' | translate }}
+    div(*ngIf="!loading && errorMessage", class="p-error") {{ errorMessage }}
+
+  ng-template(pTemplate="footer")
+    .flex.items-center.gap-2.w-full(style="justify-content: flex-end;")
+      button(
+        pButton,
+        type="button",
+        [label]="'common.components.mfaRegistrationModal.close' | translate",
+        class="p-button-secondary",
+        (click)="onHide()",
+        [disabled]="loading"
+      )

@@ -6,7 +6,7 @@
   <div class="tw-filter-form grid grid-cols-1 md:grid-cols-3 lg:grid-cols-1 gap-4">
     <div class="tw-filter-section flex flex-col w-full" *ngFor="let filter of finalFilters">
       <label class="tw-filter-label text-base font-medium text-gray-800 mb-2" *ngIf="filter.type !== 'checkbox'">{{ filter.label }}</label>
-      <p-select *ngIf="filter.type === 'dropdown'" [options]="filter.options" [(ngModel)]="filter.model" styleClass="w-full tw-filter-select"></p-select>
+      <p-select *ngIf="filter.type === 'dropdown'" [options]="filter.options" [(ngModel)]="filter.model" styleClass="w-full tw-filter-select" (onChange)="anyFilter(filter)"></p-select>
       <p-datepicker class="tw-filter-datepicker w-full !flex" *ngIf="filter.type === 'yearrange'" [(ngModel)]="filter.model" selectionMode="range" view="year" dateFormat="yy" [yearNavigator]="true" [minDate]="filter.minDate" [maxDate]="filter.maxDate" [showIcon]="true" [readonlyInput]="true" styleClass="w-full flex-1"></p-datepicker>
       <div class="flex items-center space-x-2" *ngIf="filter.type === 'checkbox'">
         <p-checkbox [(ngModel)]="filter.model" [binary]="true"></p-checkbox>

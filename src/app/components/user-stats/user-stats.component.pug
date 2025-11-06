@@ -1,19 +1,24 @@
 .user-stats-container
-  .user-stat-card(
-    *ngFor="let stat of userStats"
-    "[class.selected]"="selectedStat === stat.key"
-    "(click)"="selectStat(stat.key)"
-  )
-    .stat-header
-      span.stat-label("[style.color]"="stat.color") {{ stat.label }}
-      i(
-        *ngIf="config.showIcons !== false"
-        "[class]"="stat.icon", 
-        "[style.color]"="stat.color"
-      )
-    
-    .stat-content
-      span.stat-count(
-        *ngIf="config.showCounts !== false"
-        "[style.color]"="stat.color"
-      ) {{ stat.count }}
+  p-accordion(value="0")
+      p-accordion-panel(value="0")
+        p-accordion-header.stats-accordion-header {{"common.components.stats.statistics"|translate}}
+        p-accordion-content.stats-accordion-content
+          .stats-container
+            .user-stat-card(
+              *ngFor="let stat of userStats"
+              "[class.selected]"="selectedStat === stat.key"
+              "(click)"="selectStat(stat.key)"
+            )
+              .stat-header
+                span.stat-label("[style.color]"="stat.color") {{ stat.label }}
+                i(
+                  *ngIf="config.showIcons !== false"
+                  "[class]"="stat.icon", 
+                  "[style.color]"="stat.color"
+                )
+              
+              .stat-content
+                span.stat-count(
+                  *ngIf="config.showCounts !== false"
+                  "[style.color]"="stat.color"
+                ) {{ stat.count }}

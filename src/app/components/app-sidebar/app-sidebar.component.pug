@@ -31,7 +31,7 @@
                   i.submenu-icon([ngClass]="subItem.icon")
                   span.submenu-label {{ subItem.displayLabel }}
                   span.submenu-badge(*ngIf="subItem.badge") {{ subItem.badge }}
-         
+        
   // Compact mode hover submenu container - shows when hovering items in compact mode
   .compact-hover-menu(*ngIf="compactMode && !isMobile")
     // Content populated via JavaScript on hover
