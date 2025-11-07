@@ -1181,5 +1181,84 @@
         "totalDebts": "Dettes"
       }
     }
+  },
+  "documentCapture": {
+    "breadcrumb": "Capture de documents",
+    "title": "Tableau de bord des lots de numérisation",
+    "buttons": {
+      "separator": "Séparateur",
+      "bookmark": "Signet",
+      "uploadDocuments": "Téléverser des documents"
+    },
+    "separatorSheet": "Feuille séparatrice",
+    "bookmarkPage": "Page de signets imprimable",
+    "bookmark": {
+      "selectLabel": "Sélectionner un signet",
+      "placeholder": "Sélectionner",
+      "includeText": "Inclure le nom du signet en texte lisible sous le QR code",
+      "generateButton": "Générer le QR Code",
+      "previewHeader": "Aperçu du signet",
+      "printButton": "Imprimer la page de signets",
+      "closeButton": "Fermer",
+      "setupHeader": "Instructions de configuration",
+      "setupSteps": [
+        "Sélectionnez le type de signet dans la liste",
+        "Imprimez les feuilles de signets avec les QR codes",
+        "Insérez les feuilles de signets entre les pages du document",
+        "Assurez-vous que les QR codes sont clairement visibles",
+        "Numérotez les pages séquentiellement"
+      ]
+    },
+    "stats": {
+      "totalBatches": "Lots totaux",
+      "pendingIndexing": "Indexation en attente",
+      "completedToday": "Terminés aujourd'hui",
+      "issuesDetected": "Problèmes détectés"
+    },
+    "search": {
+      "placeholder": "Rechercher par identifiant de lot",
+      "inputLabel": "Rechercher par identifiant de lot"
+    },
+    "filters": {
+      "lockedBy": "Verrouillé par",
+      "users": "Utilisateurs",
+      "capturedDateRange": "Plage de dates de capture",
+      "dateFiltersSection": "FILTRES DE DATE"
+    },
+    "table": {
+      "batchId": "Identifiant de lot",
+      "capturedOn": "Capturé le",
+      "modifiedOn": "Modifié le",
+      "lockedBy": "Verrouillé par",
+      "noOfDocs": "Nbre de documents",
+      "noOfPages": "Nbre de pages",
+      "status": "Statut",
+      "action": "Action",
+      "indexationView": "Vue d'indexation",
+      "download": "Télécharger",
+      "delete": "Supprimer"
+    },
+    "bookmarkOptions": {
+      "claims": "Revendications",
+      "coverLetter": "Lettre d'accompagnement",
+      "declarationOfUse": "Déclaration d'utilisation",
+      "description": "Description",
+      "drawings": "Dessins",
+      "idCard": "Carte d'identité",
+      "individualPassport": "Passeport individuel",
+      "other": "Autre",
+      "passportIdCard": "Passeport / Carte d'identité",
+      "paymentReceipt": "Reçu de paiement",
+      "powerOfAttorney": "Procuration",
+      "priorityDocument": "Document de priorité",
+      "publicResearchInstitute": "Institut de recherche public",
+      "smeCertificate": "Certificat PME"
+    },
+    "fileUpload": {
+      "dropOrChoose": "Déposez ou choisissez les fichiers ici pour l'indexation",
+      "choose": "Choisir",
+      "index": "Indexer",
+      "clear": "Effacer"
+    }
   }
 }

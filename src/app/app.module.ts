@@ -150,6 +150,10 @@ import { AuxiliaryRegisterComponent } from './pages/auxiliary-register/auxiliary
 import { MfaRegistrationModalComponent } from './components/mfa-registration-modal/mfa-registration-modal.component';
 import { InactivityModalComponent } from './components/inactivity-modal/inactivity-modal.component';
 import { HttpCacheInterceptor } from './_interceptors/http-cache.interceptor';
+import { MfaRegistrationComponent } from './pages/mfa-registration/mfa-registration.component';
+import { DocumentCaptureComponent } from './pages/document-capture/document-capture.component';
+import { BookmarkDialogComponent } from './components/BookmarkDialog/bookmark-dialog.component';
+import { ViewIndexationDocumentComponent } from './pages/document-capture/indexation-view/indexation-view.component';
 const WipoThemePreset = definePreset(Aura, {
   primitive: {
     fontFamily: '"Noto Sans", "Segoe UI", Roboto, Arial, sans-serif',
@@ -271,6 +275,10 @@ const WipoThemePreset = definePreset(Aura, {
     WorkInProgressComponent,
     MfaRegistrationModalComponent,
     InactivityModalComponent,
+    MfaRegistrationComponent,
+    DocumentCaptureComponent,
+    ViewIndexationDocumentComponent,
+    BookmarkDialogComponent
   ],
   imports: [
     AppRoutingModule,

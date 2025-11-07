@@ -42,7 +42,8 @@ export interface ColumnDefinition {
     | 'custom'
     | 'actions'
     | 'chip'
-    | 'checkbox';
+    | 'checkbox'
+    | 'url';
   filterDisplay?: 'menu' | 'row';
   filterMatchMode?: string;
   dateFormat?: string;
@@ -136,6 +137,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() showPdf: string = '';
 
   selectedRows: Signal<any[]> | any[] = [];
+  @Output() urlClick = new EventEmitter<{ rowData: any, col: any }>();
 
   // Cache for menu items to prevent regeneration
   private menuItemsCache = new Map<string, MenuItem[]>();
@@ -180,6 +182,10 @@ export class TableComponent implements OnInit, OnChanges {
 
   onActionClick(action: string, item: any) {
     this.actionClick.emit({ action, item });
+  }
+
+  onUrlClick(rowData: any, col: ColumnDefinition) {
+    this.urlClick.emit({ rowData, col });
   }
 
   onSelectionChange(event: Event) {

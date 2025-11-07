@@ -1,0 +1,66 @@
+p-dialog(
+  [header]="'documentCapture.bookmarkPage' | translate",
+  [(visible)]="visible",
+  [modal]="true",
+  [closable]="true",
+  [dismissableMask]="true",
+  (onHide)="close()",
+  [style]="{ width: '35rem', maxHeight: '85vh' }"
+)
+  p.text-sm.text-gray-600.mb-4
+    | {{ 'documentCapture.bookmark.includeText' | translate }}
+
+  p-card(class="mb-4")
+    .flex.flex-col.gap-3.mb-4
+      label.font-semibold(for="bookmarkSelect") {{ 'documentCapture.bookmark.selectLabel' | translate }}
+      p-dropdown(
+        id="bookmarkSelect",
+        [options]="bookmarkOptions",
+        [(ngModel)]="selectedBookmark",
+        [placeholder]="'documentCapture.bookmark.placeholder' | translate"
+      )
+
+    .flex.items-center.gap-2.mt-2
+      p-checkbox(
+        name="includeText",
+        inputId="includeText",
+        [(ngModel)]="includeBookmarkText",
+        binary="true"
+      )
+      label(for="includeText" class="p-checkbox-label")
+        | {{ 'documentCapture.bookmark.includeText' | translate }}
+
+    button.p-button.p-component.p-button-primary.w-full.mt-3(
+      type="button",
+      pButton,
+      icon="pi pi-qrcode",
+      [label]="'documentCapture.bookmark.generateButton' | translate",
+      (click)="onGenerate()"
+    )
+
+  p-card(header="{{ 'documentCapture.bookmark.previewHeader' | translate }}", class="mb-4 text-center")
+    .w-full.flex.justify-content-center.align-items-center.flex-column
+      .border-2.border-dashed.border-gray-300.p-4.w-12rem.h-12rem.flex.align-items-center.justify-content-center.mb-2
+        img(*ngIf="qrImageUrl" src="assets/images/qr-mock.png" alt="QR Code" style="width:110px; height:110px;")
+        i.pi.pi-qrcode.text-4xl.text-gray-500(*ngIf="!qrImageUrl")
+
+      span.block.mb-3.font-medium.text-center(*ngIf="includeBookmarkText && qrImageUrl")
+        | {{ selectedBookmark }}
+
+    .flex.justify-end.gap-2.mt-3
+      button.p-button.p-component.p-button-info(
+        type="button",
+        pButton,
+        icon="pi pi-print",
+        [label]="'documentCapture.bookmark.printButton' | translate",
+        (click)="onPrint()"
+      )
+      button.p-button.p-component.p-button-secondary(
+        type="button",
+        pButton,
+        [label]="'documentCapture.bookmark.closeButton' | translate",
+        (click)="close()"
+      )
+  p-card(header="{{ 'documentCapture.bookmark.setupHeader' | translate }}")
+            ol.pl-4.line-height-3(style="list-style-type: decimal; margin-left: 1.5rem;")
+                li(*ngFor="let step of setUpSteps") {{ step }}

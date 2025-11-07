@@ -51,6 +51,7 @@ import { EditorModule } from 'primeng/editor';
 import { Listbox } from 'primeng/listbox';
 import { FieldsetModule } from 'primeng/fieldset';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { FileUploadModule } from 'primeng/fileupload';
 
 const PrimeNGModules: any[] = [
   //PrimeNG
@@ -102,7 +103,8 @@ const PrimeNGModules: any[] = [
   EditorModule,
   Listbox,
   FieldsetModule,
-  ToggleButtonModule
+  ToggleButtonModule,
+  FileUploadModule,
 ];
 
 @NgModule({

@@ -652,7 +652,10 @@
           "processed": "Processed",
           "failed": "Failed",
           "partial": "Partial",
-          "inProgress": "In Progress"
+          "inProgress": "In Progress",
+          "success": "Success",
+          "failedRetry": "Failed Retry",
+          "failedNonRetry": "Failed Non Retry"
         }
       },
       "breadCrum": {
@@ -2981,6 +2984,85 @@
         "totalLicenses": "Licenses",
         "totalDebts": "Debts"
       }
+    }
+  },
+  "documentCapture": {
+    "breadcrumb": "Capture Documents",
+    "title": "Scanning Batch Dashboard",
+    "buttons": {
+      "separator": "Separator",
+      "bookmark": "Bookmark",
+      "uploadDocuments": "Upload Documents"
+    },
+    "separatorSheet": "Separator Sheet",
+    "bookmarkPage": "Printable Bookmark Page",
+    "bookmark": {
+      "selectLabel": "Select Bookmark",
+      "placeholder": "Select",
+      "includeText": "Include bookmark name as readable text below QR code",
+      "generateButton": "Generate QR Code",
+      "previewHeader": "Bookmark Preview",
+      "printButton": "Print Bookmark Page",
+      "closeButton": "Close",
+      "setupHeader": "Setup Instructions",
+      "setupSteps": [
+        "Select bookmark type from dropdown",
+        "Print bookmark sheets with QR codes",
+        "Insert bookmark sheets between document pages",
+        "Ensure QR codes are clearly visible",
+        "Number pages sequentially"
+      ]
+    },
+    "stats": {
+      "totalBatches": "Total Batches",
+      "pendingIndexing": "Pending Indexing",
+      "completedToday": "Completed Today",
+      "issuesDetected": "Issues Detected"
+    },
+    "search": {
+      "placeholder": "Search records by Batch ID",
+      "inputLabel": "Search records by Batch ID"
+    },
+    "filters": {
+      "lockedBy": "Locked By",
+      "users": "Users",
+      "capturedDateRange": "Captured Date Range",
+      "dateFiltersSection": "DATE FILTERS"
+    },
+    "table": {
+      "batchId": "Batch ID",
+      "capturedOn": "Captured On",
+      "modifiedOn": "Modified On",
+      "lockedBy": "Locked By",
+      "noOfDocs": "No. of Docs",
+      "noOfPages": "No. of Pages",
+      "status": "Status",
+      "action": "Action",
+      "indexationView": "Indexation View",
+      "download": "Download",
+      "delete": "Delete"
+    },
+    "bookmarkOptions": {
+      "claims": "Claims",
+      "coverLetter": "Cover Letter",
+      "declarationOfUse": "Declaration of Use",
+      "description": "Description",
+      "drawings": "Drawings",
+      "idCard": "ID Card",
+      "individualPassport": "Individual passport",
+      "other": "Other",
+      "passportIdCard": "Passport / Id Card",
+      "paymentReceipt": "Payment Receipt",
+      "powerOfAttorney": "Power of Attorney",
+      "priorityDocument": "Priority Document",
+      "publicResearchInstitute": "Public Research Institute",
+      "smeCertificate": "SME Certificate"
+    },
+    "fileUpload": {
+      "dropOrChoose": "Drop or Choose files here for Indexation",
+      "choose": "Choose",
+      "index": "Index",
+      "clear": "Clear"
     }
   }
 }

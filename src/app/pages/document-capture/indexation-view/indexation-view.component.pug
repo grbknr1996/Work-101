@@ -1,0 +1,178 @@
+app-layout
+  app-breadcrumbs([items]="breadcrumbItems")
+  .flex.justify-between.items-center.p-3.bg-white.shadow-sm.rounded-md.mb-4
+    .flex.gap-4.items-center
+      span.font-semibold.text-lg BatchID:
+        span.text-blue-600 {{ batchId }}
+      span Total Batch Pages:
+        span.font-bold 14
+      span Indexed documents:
+        span.font-bold.text-green-600 {{ indexedDocs }}
+      span Bookmarked documents:
+        span.font-bold.text-red-500 {{ bookmarkedDocs }}
+
+  // Main Panels Grid
+  .grid(class="grid-cols-12 gap-3 h-[calc(100vh-220px)]")
+
+    // LEFT PANEL — Doc list
+    .col-span-3.bg-white.rounded-md.shadow-sm.flex.flex-col
+
+      // Aligned top bar for left panel (empty for clean look)
+      .h-12.border-b.bg-gray-50.flex.items-center.px-2
+        .flex.gap-3
+            p-button(label="Merge", icon="pi pi-link", severity="primary", styleClass="p-button-sm", [disabled]="selectedDocCount < 2")
+            p-button(
+                label="Split",
+                icon="pi pi-share-alt",
+                severity="success",
+                styleClass="p-button-sm",
+                [disabled]="selectedDocCount !== 1",
+                (click)="openSplitDialog()"
+            )
+            p-button(label="Delete", icon="pi pi-trash", severity="danger", styleClass="p-button-sm", [disabled]="selectedDocCount === 0")
+
+      .flex-1.overflow-auto.p-2
+        div(
+          *ngFor="let doc of documents; let i = index",
+          class="border rounded-md p-2 mb-2 cursor-pointer hover:bg-gray-100",
+          [ngClass]="{'bg-blue-50 border-blue-500': selectedDoc===i}",
+          (click)="selectDoc(i)"
+        )
+          .flex.justify-between.items-center
+            .flex.items-center.gap-2
+              p-checkbox(
+                  class="mr-2",
+                  [ngModel]="selectedDocs.includes(i)",
+                  (onChange)="toggleDocSelection(i)",
+                  [binary]="true",
+                  (click)="$event.stopPropagation()"
+              )
+              span.text-xl.font-semibold {{ i + 1 }}
+            span.text-xs.text-gray-600 {{ doc.pages }} pages
+          div.mt-2.bg-gray-50.border.rounded-md.px-2.py-3.text-xs.font-medium.text-gray-700.h-10.ml-9.mb-4
+                | {{ doc.name }}
+
+    // MID PANEL — Thumbnails
+    .bg-white.rounded-md.shadow-sm.flex.flex-col(
+        [ngClass]="currentPage ? 'col-span-6' : 'col-span-9'"
+    )
+
+      // Top bar aligned with left & right
+      .h-12.border-b.bg-gray-50.flex.justify-between.items-center.px-2
+        span.font-medium.text-sm Document Pages - {{ selectedDocName }}
+        .flex.items-center.gap-4.ml-auto
+            p-checkbox(
+              binary="true",
+              [(ngModel)]="selectAllThumbs",
+              inputId="selectAllThumbs",
+              (onChange)="toggleSelectAll()"
+            )
+            label.text-sm(for="selectAllThumbs") Select All
+            p-button(
+              icon="pi pi-crop",
+              label="Crop",
+              styleClass="p-button-sm p-button-warning",
+              (click)="cropSelectedThumb()",
+              [disabled]="selectedThumbCount !== 1"
+            )
+            p-button(
+              icon="pi pi-trash",
+              label="Delete",
+              styleClass="p-button-sm p-button-danger",
+              (click)="deleteSelectedThumb()",
+              [disabled]="selectedThumbCount === 0"
+            )
+            p-button(icon="pi pi-download",styleClass="p-button-sm", severity="info")
+
+
+      .flex-1.overflow-auto.p-2
+        .grid.grid-cols-4.gap-2
+          div(*ngFor="let page of pageList; let p = index",
+              class="thumbnail-a4",
+              (click)="selectThumb(p)",
+              [ngClass]="{'border-blue-500 bg-blue-50': currentPage-1===p}"
+          )
+            p-checkbox(
+                *ngIf="page.type !== 'bookmark'",
+                class="absolute top-1 left-1 z-10",
+                [(ngModel)]="selectedThumbs[p]",
+                [binary]="true",
+                (onChange)="onThumbChange()",
+                (click)="$event.stopPropagation()"
+            )
+            ng-container(*ngIf="page.type === 'page'; else bookmarkBlock")
+              img(
+                  [src]="getThumbnailUrl(p)",
+                  alt="Page Thumbnail",
+                  class="w-full h-40 object-contain bg-gray-50 border rounded-md"
+                )
+              span.absolute.top-1.right-1.bg-blue-500.text-white.text-xs.font-semibold.rounded.px-2.py-1.shadow
+                | {{ getPageNumber(p) }}
+                
+            ng-template(#bookmarkBlock)
+              .relative.thumbnail-a4.bg-purple-50.rounded-2xl.flex.items-center.justify-center.text-purple-600.text-sm.font-semibold.overflow-hidden
+                // inner dashed layer
+                .absolute.inset-0.border-2.border-dashed.border-purple-400.rounded-2xl.pointer-events-none
+
+                // content
+                .flex.flex-col.items-center.justify-center.text-center.z-10
+                  i.pi.pi-qrcode.text-3xl.mb-2
+                  span Bookmark Sheet
+                  span.text-xs.text-purple-500 {{ page.bookmarkText }}
+
+                // label top-right
+                span.absolute.top-1.right-1.bg-purple-600.text-white.text-xs.font-semibold.rounded-md.px-2.py-1.z-10
+                  | Before Page {{ getNextPageNumber(p) }}
+
+                // delete button bottom-right
+                button.absolute.bottom-1.right-1.bg-red-500.text-white.rounded-full.p-1.shadow-sm.z-10(
+                  (click)="removeBookmark(p)"
+                )
+                  i.pi.pi-trash.text-xs
+
+            p-button.absolute.bottom-1.right-1(
+              *ngIf="page.type !== 'bookmark'",
+              icon="pi pi-plus",
+              styleClass="p-button-rounded p-button-text p-button-sm shadow-sm bg-white text-gray-700",
+              (click)="toggleBookmarkMenu($event, p)"
+            )
+
+    // RIGHT PANEL — Viewer
+    .col-span-3.bg-white.rounded-md.shadow-sm.flex.flex-col(*ngIf="currentPage")
+
+      // Top bar aligned
+      .h-12.border-b.bg-gray-50.flex.justify-between.items-center.px-2
+        span.font-semibold.text-sm Page Viewer
+        span.text-xs {{ currentPage }} / {{ totalPages }}
+
+      .flex.gap-2.p-2
+        p-button(icon="pi pi-search-minus")
+        p-button(icon="pi pi-refresh")
+        p-button(icon="pi pi-search-plus")
+        p-button.ml-auto(icon="pi pi-times",(click)="closeViewer()", pTooltip="Close Viewer", tooltipPosition="bottom")
+
+      .flex-1.border.rounded-md.flex.items-center.justify-center.bg-gray-50.m-2
+        img([src]="activePageUrl", class="max-w-full max-h-full object-contain")
+
+      .p-2.flex.gap-2.justify-center
+        p-button(icon="pi pi-chevron-left")
+        p-button(icon="pi pi-download")
+        p-button(icon="pi pi-print")
+        p-button(icon="pi pi-chevron-right")
+
+p-popover(#bookmarkPopover, [dismissable]="true")
+  .flex.flex-col.gap-1.p-2
+    p-button(
+      label="Insert Bookmark After",
+      icon="pi pi-qrcode",
+      styleClass="p-button-text p-button-sm",
+      (click)="insertBookmark('after')"
+    )
+    p-button(
+      label="Insert Bookmark Before",
+      icon="pi pi-qrcode",
+      styleClass="p-button-text p-button-sm",
+      (click)="insertBookmark('before')"
+    )
+
+app-bookmark-dialog(#bookmarkDialog, (generate)="insertBookmark($event)")

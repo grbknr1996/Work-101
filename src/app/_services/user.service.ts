@@ -12,8 +12,8 @@ export interface UserAccount {
   userName: string;
   loginId: string;
   email: string;
-  mfaRequired: boolean;
-  mfaValidationDone: boolean;
+  isMfaAuthRequired: boolean;
+  mfaStatus: null | 'Gauth';
   creationUserId: number;
   lastUpdateUserId: number;
   lastUpdateUserName: string;
@@ -34,8 +34,8 @@ export interface DetailedUserAccount {
   email: string;
   creationUserId: number;
   creationDate: string;
-  mfaRequired: boolean;
-  mfaValidationDone: boolean;
+  isMfaAuthRequired: boolean;
+  mfaStatus: null | 'Gauth';
   lastUpdateUserId: number;
   lastUpdateDate: string;
   cognitoStatus: string;
@@ -54,8 +54,8 @@ export interface UserUpdatePayload {
   signaturePicture?: string | ArrayBuffer | null;
   userEmail: string;
   signatureType?: string;
-  mfaRequired: boolean;
-  mfaValidationDone: boolean;
+  isMfaAuthRequired: boolean;
+  mfaStatus: null | 'Gauth';
   isActive: boolean;
   isLocked: boolean;
   indExternal: boolean;
@@ -854,6 +854,39 @@ export class UserService {
           ),
           error: error,
         });
+      })
+    );
+  }
+
+  /**
+   * Sync Cognito user data
+   * This method calls the cognitoSync endpoint to check if MFA registration is required
+   * Returns an observable that emits the response or throws an error with the error details
+   */
+  cognitoSync(): Observable<any> {
+    return this.getAuthHeaders().pipe(
+      switchMap((headers) =>
+        this.http.put<any>(
+          `${environment.backendUrl}/cognitoSync`,
+          {},
+          {
+            headers: headers,
+            observe: 'response',
+          }
+        )
+      ),
+      switchMap((response) => {
+        // If status is 200, return the response body
+        if (response.status === 200) {
+          return of(response.body || { success: true });
+        }
+        // For other success status codes, still return success
+        return of(response.body || { success: true });
+      }),
+      catchError((error) => {
+        // Don't use handleError here as we want to check the error code in the calling component
+        // Return the error so the caller can check for specific error codes
+        return throwError(() => error);
       })
     );
   }

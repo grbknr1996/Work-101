@@ -213,7 +213,7 @@ export class SidebarMenuService {
         id: 'document-capture',
         label: 'Pending Document Capture',
         icon: 'pi pi-file',
-        routerLink: this.getRouterLink(`/data-capture/documents`),
+        routerLink: this.getRouterLink(`/document-capture/documents`),
       },
       {
         id: 'daily-pending',

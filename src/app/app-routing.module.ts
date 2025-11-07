@@ -11,6 +11,13 @@ const routes: Routes = [
       (await import('./pages/auth-callback/auth-callback.module'))
         .AuthCallbackComponentModule,
   },
+  {
+    path: 'mfa-registration',
+    loadChildren: async () =>
+      (await import('./pages/mfa-registration/mfa-registration.module'))
+        .MfaRegistrationModule,
+    canActivate: [AuthGuard],
+  },
   // Logged-out route - handles logout redirect
   {
     path: 'logged-out',
@@ -241,6 +248,23 @@ const routes: Routes = [
     loadChildren: async () =>
       (await import('./pages/work-in-progress/work-in-progress.module'))
         .WorkInProgressModule,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: ':officeCode/:langCode/data-capture/documents',
+    loadChildren: async () =>
+      (
+        await import(
+          './pages/document-capture/document-capture.module'
+        )
+      ).DocumentCaptureModule,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: ':officeCode/:langCode/data-capture/documents/:batchId',
+    loadChildren: async () =>
+      (await import('./pages/document-capture/indexation-view/indexation-view.module'))
+        .ViewIndexationDocumentModule,
     canActivate: [AuthGuard],
   },
   // Work in Progress - Undeveloped Widget Routes

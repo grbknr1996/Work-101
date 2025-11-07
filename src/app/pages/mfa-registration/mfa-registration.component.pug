@@ -1,0 +1,7 @@
+.mfa-registration-page
+  app-mfa-registration-modal(
+    [(visible)]="showMFAModal",
+    [userId]="currentLoginId",
+    (registered)="onMfaRegistered()",
+    (visibleChange)="onModalVisibleChange($event)"
+  )

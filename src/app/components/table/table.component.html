@@ -106,6 +106,8 @@
             <ng-container *ngIf="col.display === 'custom'">
               <ng-container *ngTemplateOutlet="customCellTemplate" [context]="{ $implicit: rowData, field: col.field }"></ng-container>
             </ng-container>
+            <!--url Display-->
+            <ng-container *ngIf="col.display === 'url'"><span class="flex items-center text-blue-600 cursor-pointer hover:underline" (click)="onUrlClick(rowData, col.field)">{{ getValue(rowData, col.field) }}<i class="lucide lucide-external-link w-4 h-4 ml-1"></i></span></ng-container>
             <!-- Actions Display-->
             <ng-container *ngIf="col.display === 'actions' &amp;&amp; col.actions">
               <div class="flex justify-content-center">

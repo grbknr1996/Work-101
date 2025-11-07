@@ -2114,8 +2114,8 @@ app-user-accounts
 @media (max-width: 425px)
   .sidebar-container
     margin-top 6rem
-@media screen and (min-width: 1024px) and (max-width: 1024px)
-  .layout-main
+.layout-main
+  @media screen and (min-width: 1020px) and (max-width: 1440px)
       margin-right 1rem
 // Ensure menu items are always visible and not clipped
 .menu-list, .submenu-list
@@ -4623,29 +4623,7 @@ app-data-exchange-settings
           margin: 0
           font-weight: 500
 
-// Responsive Design
-@media (max-width: 768px)
-  app-data-exchange-config, app-originating-offices, app-recipient-systems, app-data-exchange-settings
-    .page-header
-      .header-content
-        flex-direction: column
-        align-items: flex-start
 
-      .header-actions
-        width: 100%
-        justify-content: flex-end
-
-    .summary-stats, .stats-section
-      grid-template-columns: 1fr
-
-    .navigation-grid
-      grid-template-columns: 1fr
-
-    .form-grid
-      grid-template-columns: 1fr
-
-    .status-grid
-      grid-template-columns: 1fr
 
 /////////////////////////////////////
 // DATA EXCHANGE CONFIGURATION STYLES
@@ -5910,7 +5888,10 @@ app-configurable-filter
     grid-column 1 / -1
 
   /* Smart layout for single items - make them span full width to prevent empty columns (excluding text fields) */
-  .filter-options:has(.checkbox-option):not(:has(.checkbox-option + .checkbox-option)) .checkbox-option,
+  .filter-options:has(.checkbox-option):not(:has(.checkbox-option + .checkbox-option)) .checkbox-option
+    grid-column 1 / -1
+    max-width 100%
+    justify-self center
   .filter-options:has(.date-option):not(:has(.date-option + .date-option)) .date-option,
   .filter-options:has(.number-option):not(:has(.number-option + .number-option)) .number-option
     grid-column 1 / -1
@@ -7870,7 +7851,6 @@ app-inactivity-modal
     font-size 48px
     font-weight 700
     color #d97706
-    font-family 'Courier New', monospace
     letter-spacing 4px
 
   .inactivity-modal-actions
@@ -7926,6 +7906,9 @@ app-inactivity-modal
       min-width 120px
       height 40px
       font-size 14px
-@media screen and (max-width 480px)
-  app-breadcrumbs
+
+app-breadcrumbs
+  .p-breadcrumb 
+    padding-left 0
+  @media screen and (max-width 480px)
     margin-top 2rem

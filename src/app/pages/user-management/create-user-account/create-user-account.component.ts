@@ -372,7 +372,7 @@ export class CreateUserAccountComponent implements OnInit {
           unit: '', // Not available in DetailedUserAccount interface
           security: {
             requirePasswordChange: false, // Not available in DetailedUserAccount interface
-            enableTwoFactor: userAccount.mfaRequired || false, // Use mfaRequired from DetailedUserAccount
+            enableTwoFactor: userAccount.isMfaAuthRequired || false, // Use isMfaAuthRequired from DetailedUserAccount
           },
         };
 
@@ -540,8 +540,8 @@ export class CreateUserAccountComponent implements OnInit {
           signatureType: formData.basicInfo.signatureType ?? '',
           isActive: formData.basicInfo.isActive, // Use isActive from form for status field
           isLocked: false,
-          mfaRequired: formData.security.enableTwoFactor || false,
-          mfaValidationDone: false,
+          isMfaAuthRequired: formData.security.enableTwoFactor || false,
+          mfaStatus: null,
           indExternal: formData.basicInfo.userType, // Set indExternal based on userType (boolean)
           userGroupBag: formData.assignedGroups.map((group: GroupItem) => ({
             groupId: parseInt(group.id),

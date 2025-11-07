@@ -1,0 +1,242 @@
+app-layout
+  app-breadcrumbs([items]="breadcrumbItems")
+  
+  .flex.justify-between.items-center.mb-6
+    h1.pt-4.text-xl.ml-4.col-span-3 {{ 'documentCapture.title' | translate }}
+
+    .flex.gap-2.mr-4
+      button.p-button.p-component.p-button-outlined(
+        type="button", 
+        pButton, 
+        [label]="'documentCapture.buttons.separator' | translate", 
+        icon="pi pi-bars", 
+        (click)="showSeparatorDialog()")
+      p-dialog(
+        [header]="'documentCapture.separatorSheet' | translate",
+        [(visible)]="separatorDialogVisible",
+        [modal]="true",
+        [style]="{ width: '25rem', maxHeight: '85vh' }",
+       )
+            .p-dialog-content.overflow-auto(style="max-height:65vh; display:flex; justify-content:center;")
+                img(
+                    src="assets/images/separator-sheet.png",
+                    alt="Separator Sheet",
+                    style="max-width:100%; border:1px solid #ddd;"
+                )
+            ng-template(pTemplate="footer")
+                .flex.justify-center.gap-3
+                    button.p-button.p-component.p-button-outlined(
+                        type="button",
+                        pButton,
+                        icon="pi pi-download",
+                        [label]="'documentCapture.table.download' | translate",
+                        (click)="downloadSeparator()"
+                    )
+                    button.p-button.p-component.p-button-outlined(
+                        type="button",
+                        pButton,
+                        icon="pi pi-print",
+                        [label]="'documentCapture.bookmark.printButton' | translate",
+                        (click)="printSeparator()"
+                    )
+      button.p-button.p-component.p-button-outlined(type="button", 
+      pButton, 
+      [label]="'documentCapture.buttons.bookmark' | translate", 
+      icon="pi pi-bookmark", 
+      (click)="showBookmarkDialog()")
+      p-dialog(
+        [header]="'documentCapture.bookmarkPage' | translate",
+        [(visible)]="bookmarkDialogVisible",
+        [modal]="true",
+        [closable]="true",
+        [dismissableMask]="true",
+        [style]="{ width: '35rem', maxHeight: '85vh' }"
+       )
+        p.text-sm.text-gray-600.mb-4
+            | {{ 'documentCapture.bookmark.includeText' | translate }}
+
+        p-card(class="mb-4")
+            .flex.flex-col.gap-3.mb-4
+                label.font-semibold(for="bookmarkSelect") {{ 'documentCapture.bookmark.selectLabel' | translate }}
+                p-dropdown(
+                id="bookmarkSelect",
+                [options]="bookmarkOptions",
+                [(ngModel)]="selectedBookmark",
+                [placeholder]="'documentCapture.bookmark.placeholder' | translate"
+            )
+
+            p-checkbox(
+                name="includeText",
+                inputId="includeText",
+                [(ngModel)]="includeBookmarkText",
+                binary="true"
+            )
+            label(for="includeText" class="p-checkbox-label")  {{ 'documentCapture.bookmark.includeText' | translate }}
+
+            button.p-button.p-component.p-button-primary.w-full.mt-2(
+                type="button",
+                pButton,
+                icon="pi pi-qrcode",
+                [label]="'documentCapture.bookmark.generateButton' | translate",
+                (click)="generateQRCode()"
+            )
+
+        p-card(header="{{ 'documentCapture.bookmark.previewHeader' | translate }}", class="mb-4 text-center")
+            div(class="w-full flex justify-content-center align-items-center flex-column")
+                div(class="border-2 border-dashed border-gray-300 p-4 w-12rem h-12rem flex align-items-center justify-content-center mb-2")
+                    img(*ngIf="qrImageUrl" src="assets/images/qr-mock.png" alt="QR Code" style="width:110px; height:110px;")
+                    i.pi.pi-qrcode.text-4xl.text-gray-500(*ngIf="!qrImageUrl")
+
+                span.block.mb-3.font-medium.text-center(*ngIf="includeBookmarkText && qrImageUrl") {{ selectedBookmark }}
+                //span.block.mb-3.text-gray-500 Bookmark Page
+            .flex.justify-end.gap-2.mt-3
+                button.p-button.p-component.p-button-info(
+                type="button",
+                pButton,
+                icon="pi pi-print",
+                [label]="'documentCapture.bookmark.printButton' | translate",
+                (click)="printBookmarkPage()"
+                )
+                button.p-button.p-component.p-button-secondary(
+                type="button",
+                pButton,
+                [label]="'documentCapture.bookmark.closeButton' | translate",
+                (click)="bookmarkDialogVisible=false"
+                )
+
+        p-card(header="{{ 'documentCapture.bookmark.setupHeader' | translate }}")
+            ol.pl-4.line-height-3(style="list-style-type: decimal; margin-left: 1.5rem;")
+                li(*ngFor="let step of setUpSteps") {{ step }}
+            
+      button.p-button.p-component.p-button-outlined(type="button", 
+      pButton, 
+      [label]="'documentCapture.buttons.uploadDocuments' | translate", 
+      icon="pi pi-upload", 
+      (click)="showFileUploadArea()")
+
+  .mb-4
+    .user-stats-container
+      .user-stat-card.fixed-width(
+        *ngFor="let stat of indexationStats"
+        "[class.selected]"="selectedStat === stat.label"
+        "(click)"="selectStat(stat.label)"
+      )
+        .stat-header
+          span.stat-label("[style.color]"="stat.color") {{ stat.label }}
+          i("[class]"="stat.icon", "[style.color]"="stat.color")
+        
+        .stat-content
+          span.stat-count("[style.color]"="stat.color") {{ stat.count }}
+        
+        .flex.justify-normal
+          .mr-1 {{ stat.periodText }} 
+
+  
+  .grid.grid-cols-6.mt-2
+    .col-span-6.grid.grid-cols-12.filter
+      .col-span-4
+        p-floatlabel(variant="on")
+          p-iconfield
+            p-inputicon.pi.pi-search
+            input.w-full(
+              id="on_label",
+              pInputText="",
+              [(ngModel)]="searchBar",
+              (ngModelChange)="onSearchChange($event)",
+              autocomplete="off"
+            )
+          label(for="on_label") {{ 'documentCapture.search.inputLabel' | translate }}
+      
+      .col-span-8.flex.justify-end.gap-2.filter-icons
+        app-configurable-filter(
+          [filters]="filterConfigs",
+          [showClearAll]="true",
+          [showApplyButton]="true",
+          [showFilterSelector]="true",
+          [filterSelectorPlaceholder]="'Select filters to display'",
+          (filterChange)="onFilterChange($event)",
+          (filterCleared)="onFilterCleared()",
+          (filterApplied)="onFilterApplied($event)",
+          (appliedFiltersChange)="onAppliedFiltersChange($event)"
+        )
+  
+  .mb-8.mt-1.w-full
+    app-filter-chips(
+      [appliedFilters]="appliedFilters",
+      [showClearAll]="true",
+      [clearAllLabel]="'Clear All'",
+      (chipRemove)="removeFilterChip($event)",
+      (clearAll)="clearAllFilters()"
+    )
+
+  .grid.grid-cols-6.mt-2
+    .col-span-12
+      app-table(
+        [columns]="tableColumns",
+        [data]="batchTableData",
+        [showSearchButton]="false",
+        [showClearButton]="false",
+        [paginator]="true",
+        [lazy]="true",
+        [rows]="pageSize",
+        [totalRecords]="totalRecords",
+        [rowsPerPageOptions]="[10, 25, 50, 100]",
+        [showCurrentPageReport]="true",
+        [currentPageReportTemplate]="'Showing {first} to 1 of 8 batches'",
+        (actionClick)="onActionClick($event.action, $event.item)",
+        (urlClick)="onUrlClick($event.rowData, $event.col.field)"
+      )
+
+  div(#fileUploadSection)
+
+    p-fileUpload.w-full.justify-center.items-center.text-center(
+        name="files",
+        accept="application/pdf",
+        [customUpload]="true",
+        (uploadHandler)="onFileUpload($event)",
+        [multiple]="true",
+        [showUploadButton]="false",
+        [showCancelButton]="false",
+        mode="advanced",
+        [auto]="false",
+        maxFileSize="1000000",
+        #fileUploader
+        )
+          ng-template(pTemplate="content")
+            .border-2.border-dashed.border-gray-400.rounded-lg.p-6.flex.flex-col.items-center.justify-center.w-full
+                i.pi.pi-upload.text-gray-500.mb-2(style="font-size:50px; line-height:1")
+                p.text-gray-600.font-medium.mb-4 {{ 'documentCapture.fileUpload.dropOrChoose' | translate }}
+
+
+                .flex.gap-3.justify-center.items-center
+                    p-button(
+                        [label]="'documentCapture.fileUpload.choose' | translate",
+                        icon="pi pi-folder-open",
+                        styleClass="p-button-warning",
+                        (onClick)="fileUploader.choose()"
+                    )
+                    p-button(
+                        [label]="'documentCapture.fileUpload.index' | translate",
+                        icon="pi pi-check",
+                        styleClass="p-button-success",
+                        (onClick)="indexFiles()"
+                    )
+                    p-button(
+                        [label]="'documentCapture.fileUpload.clear' | translate",
+                        icon="pi pi-trash",
+                        styleClass="p-button-secondary",
+                        (onClick)="fileUploader.clear()"
+                    )
+
+          ng-template(let-file pTemplate="file")
+            .w-full.mt-4
+            .flex.items-center.justify-between.w-full.p-2.rounded.border.border-gray-200.bg-white
+                .flex.items-center.gap-3
+                // small file icon + name & size
+                i.pi.pi-file.text-xl
+                .flex.flex-col
+                    span.text-sm.font-medium {{file.name}}
+                    small.text-xs.text-gray-600 {{(file.size / 1024) | number:'1.0-0'}} KB
+                .flex.items-center.gap-2
+                button.p-button.p-button-text(type="button", (click)="fileUploader.remove(file)")
+                    i.pi.pi-trash

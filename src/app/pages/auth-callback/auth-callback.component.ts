@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../_services/auth.service';
 import { MechanicsService } from '../../_services/mechanics.service';
 import { LoadingService } from '../../_services/loading.service';
+import { UserService } from '../../_services/user.service';
 import { configuration } from '../../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 
@@ -17,7 +18,8 @@ export class AuthCallbackComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private authService: AuthService,
     private ms: MechanicsService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
@@ -77,6 +79,19 @@ export class AuthCallbackComponent implements OnInit, OnDestroy {
         this.ms.setCurrentOffice(officeCode);
         this.ms.switchLang(langCode);
 
+        // Call cognitoSync API to check if MFA registration is required
+        try {
+          await firstValueFrom(this.userService.cognitoSync());
+        } catch (error: any) {
+          const errorResponse = error?.error;
+          if (errorResponse?.wipoErrorCode?.code === 'WIPO-CUS-16103') {
+            this.loadingService.hide();
+            this.router.navigate(['/mfa-registration']);
+            return;
+          }
+        }
+
+        // If cognitoSync succeeds or error is not MFA-related, proceed with normal flow
         // Hide loader before navigation
         this.loadingService.hide();
 
@@ -97,8 +112,6 @@ export class AuthCallbackComponent implements OnInit, OnDestroy {
         this.router.navigate(['/default/en/sign-in']);
       }
     } catch (error) {
-      console.error('Error handling auth callback:', error);
-
       this.loadingService.hide();
       this.router.navigate(['/default/en/sign-in']);
     }
