@@ -15,7 +15,16 @@
     "awsprod": "npm ci && npm run assets-cache-busting && pug --doctype html . && stylus-chokidar . && ng build --configuration awsprod --base-href / --deploy-url /",
     "awspreprod": "npm ci && npm run assets-cache-busting && pug --doctype html . && stylus-chokidar . && ng build --configuration awspreprod --base-href / --deploy-url /",
     "build-dev": "npm run awsdev",
-    "all": "npm ci && npm run awsdev && npm run awsacc && npm run awsprod && npm run awspreprod"
+    "all": "npm ci && npm run awsdev && npm run awsacc && npm run awsprod && npm run awspreprod",
+    "lint": "tslint -p tsconfig.json \"src/app/components/**/*.ts\" \"src/app/pages/**/*.ts\" \"src/app/modules/**/*.ts\"",
+    "lint:all": "tslint -p tsconfig.json \"src/**/*.ts\" --exclude \"src/app/_guards/**\" --exclude \"src/app/_services/**\" --exclude \"src/app/_interceptors/**\" --exclude \"src/app/_pipes/**\" --exclude \"src/app/_directives/**\" --exclude \"src/app/_constants/**\"",
+    "lint:fix": "tslint -p tsconfig.json \"src/app/components/**/*.ts\" \"src/app/pages/**/*.ts\" \"src/app/modules/**/*.ts\" --fix",
+    "lint:report": "tslint -p tsconfig.json \"src/app/components/**/*.ts\" \"src/app/pages/**/*.ts\" \"src/app/modules/**/*.ts\" --format json --out tslint-report.json",
+    "lint:verbose": "tslint -p tsconfig.json \"src/app/components/**/*.ts\" \"src/app/pages/**/*.ts\" \"src/app/modules/**/*.ts\" --format verbose",
+    "lint:html": "tslint -p tsconfig.json \"src/app/components/**/*.ts\" \"src/app/pages/**/*.ts\" \"src/app/modules/**/*.ts\" --format stylish",
+    "lint:html-report": "node generate-tslint-report.js",
+    "lint:file": "tslint -p tsconfig.json",
+    "lint:folder": "tslint -p tsconfig.json"
   },
   "private": true,
   "dependencies": {
@@ -72,6 +81,7 @@
     "postcss": "^8.5.3",
     "pug": "^3.0.2",
     "tailwindcss": "^3.4.17",
-    "tslint": "^6.1.3"
+    "tslint": "^6.1.3",
+    "tslint-html-report": "^2.2.0"
   }
 }

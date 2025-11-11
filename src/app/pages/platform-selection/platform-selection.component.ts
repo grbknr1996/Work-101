@@ -152,30 +152,8 @@ export class PlatformSelectionComponent implements OnInit, OnChanges {
     );
     this.mechanicsService.setWipoPlatform(this.selectedPlatform);
 
-    // Get platform configuration
-    const platformConfig = this.mechanicsService.getOfficeConfig(
-      this.selectedPlatform
-    );
-    if (!platformConfig) {
-      console.error('Platform configuration not found');
-      return;
-    }
-
-    // Navigate to the selected platform's dashboard
-    const langCode = platformConfig.defaultLanguage || 'en';
-    console.log(
-      'PlatformSelectionComponent - Navigating to:',
-      `/${this.selectedPlatform}/${langCode}/dashboard`
-    );
-
-    this.router
-      .navigate([`/${this.selectedPlatform}/${langCode}/dashboard`])
-      .then(() => {
-        console.log('PlatformSelectionComponent - Navigation successful');
-      })
-      .catch((error) => {
-        console.error('Navigation error:', error);
-      });
+    // Redirect to cognito-sync route after platform selection
+    this.router.navigate(['/cognito-sync']);
   }
 
   onLogout(): void {

@@ -113,6 +113,10 @@ export class UserAccountsComponent implements OnInit {
     showCloseButton: true,
   };
 
+  // View user details modal properties
+  showViewUserDialog = false;
+  selectedUserLoginId: string | null = null;
+
   constructor(
     private menuService: SidebarMenuService,
     private router: Router,
@@ -275,6 +279,12 @@ export class UserAccountsComponent implements OnInit {
         display: 'actions',
         actions: [
           {
+            label: this.ms.translate('userManagement.userAccounts.viewUser'),
+            icon: 'pi pi-eye',
+            action: 'view',
+            severity: 'info',
+          },
+          {
             label: this.ms.translate('userManagement.userAccounts.editUser'),
             icon: 'pi pi-pencil',
             action: 'edit',
@@ -387,6 +397,12 @@ export class UserAccountsComponent implements OnInit {
         display: 'actions',
         section: 'actions',
         actions: [
+          {
+            label: this.ms.translate('userManagement.userAccounts.viewUser'),
+            icon: 'pi pi-eye',
+            action: 'view',
+            severity: 'info',
+          },
           {
             label: this.ms.translate('userManagement.userAccounts.editUser'),
             icon: 'pi pi-pencil',
@@ -696,12 +712,23 @@ export class UserAccountsComponent implements OnInit {
 
   onActionClick(action: string, item: UserAccount) {
     switch (action) {
+      case 'view':
+        this.viewUser(item);
+        break;
       case 'edit':
         this.editUser(item);
         break;
       case 'resendVerification':
         this.resendVerificationEmail(item);
         break;
+    }
+  }
+
+  viewUser(user: UserAccount) {
+    this.selectedUserLoginId = user.loginId || null;
+    if (this.selectedUserLoginId) {
+      this.showViewUserDialog = true;
+      this.cdr.markForCheck();
     }
   }
 

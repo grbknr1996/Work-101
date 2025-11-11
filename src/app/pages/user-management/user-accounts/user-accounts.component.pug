@@ -98,3 +98,7 @@ app-modal(
   [config]="resendVerificationModalConfig",
   (visibleChange)="onResendVerificationModalClose()"
 )
+app-view-user-details(
+  [(visible)]="showViewUserDialog",
+  [loginId]="selectedUserLoginId"
+)

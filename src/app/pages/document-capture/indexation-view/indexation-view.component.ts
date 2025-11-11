@@ -19,7 +19,7 @@ export interface PageItem {
         CaptureDocumentService
     ],
     templateUrl: './indexation-view.component.html',
-    styleUrls: ['./indexation-view.component.css']
+    //styleUrls: ['./indexation-view.component.css']
 })
 export class ViewIndexationDocumentComponent implements OnInit {
     @ViewChild('bookmarkPopover') bookmarkPopover: any;

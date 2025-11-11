@@ -18,6 +18,13 @@ const routes: Routes = [
         .MfaRegistrationModule,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'cognito-sync',
+    loadChildren: async () =>
+      (await import('./pages/cognito-sync/cognito-sync.module'))
+        .CognitoSyncModule,
+    canActivate: [AuthGuard],
+  },
   // Logged-out route - handles logout redirect
   {
     path: 'logged-out',
@@ -62,6 +69,12 @@ const routes: Routes = [
     path: ':officeCode/:langCode/dashboard',
     loadChildren: async () =>
       (await import('./pages/dashboard/dashboard.module')).DashboardModule,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: ':officeCode/:langCode/profile',
+    loadChildren: async () =>
+      (await import('./pages/profile/profile.module')).ProfileModule,
     canActivate: [AuthGuard],
   },
   {
@@ -253,18 +266,18 @@ const routes: Routes = [
   {
     path: ':officeCode/:langCode/data-capture/documents',
     loadChildren: async () =>
-      (
-        await import(
-          './pages/document-capture/document-capture.module'
-        )
-      ).DocumentCaptureModule,
+      (await import('./pages/document-capture/document-capture.module'))
+        .DocumentCaptureModule,
     canActivate: [AuthGuard],
   },
   {
     path: ':officeCode/:langCode/data-capture/documents/:batchId',
     loadChildren: async () =>
-      (await import('./pages/document-capture/indexation-view/indexation-view.module'))
-        .ViewIndexationDocumentModule,
+      (
+        await import(
+          './pages/document-capture/indexation-view/indexation-view.module'
+        )
+      ).ViewIndexationDocumentModule,
     canActivate: [AuthGuard],
   },
   // Work in Progress - Undeveloped Widget Routes

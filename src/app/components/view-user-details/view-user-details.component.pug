@@ -1,0 +1,169 @@
+p-dialog(
+  [(visible)]="visible",
+  [modal]="true",
+  [style]="{ width: '90vw', maxWidth: '900px' }",
+  [draggable]="false",
+  [resizable]="true",
+  [closable]="true",
+  [header]="(userAccount?.userName || 'User Details') + ' - ' + (ms.translate('userManagement.userAccounts.viewUser') || 'View User')",
+  (onShow)="onShow()",
+  (onHide)="onHide()",
+  [styleClass]="'view-user-details-dialog'"
+)
+  .view-user-details-container(*ngIf="!loading && userAccount")
+    // Basic Information Section
+    .details-section
+      h3.section-title
+        i.pi.pi-user
+        | {{ ms.translate('profile.basicInfo') || 'Basic Information' }}
+      .details-grid
+        .detail-item
+          label.detail-label
+            i.pi.pi-user
+            | {{ ms.translate('profile.userName') || 'User Name' }}
+          .detail-value {{ userAccount.userName || '-' }}
+        .detail-item
+          label.detail-label
+            i.pi.pi-envelope
+            | {{ ms.translate('profile.email') || 'Email' }}
+          .detail-value {{ userAccount.email || '-' }}
+        .detail-item
+          label.detail-label
+            i.pi.pi-id-card
+            | {{ ms.translate('userManagement.userAccounts.loginId') || 'Login ID' }}
+          .detail-value {{ userAccount.loginId || '-' }}
+        .detail-item
+          label.detail-label
+            i.pi.pi-info-circle
+            | {{ ms.translate('userManagement.userAccounts.status') || 'Status' }}
+          .detail-value
+            span([ngClass]="getStatusChipClass()") {{ getComputedStatus() }}
+        .detail-item
+          label.detail-label
+            i.pi.pi-calendar
+            | {{ ms.translate('userManagement.userAccounts.createdOn') || 'Created On' }}
+          .detail-value {{ formatDate(userAccount.creationDate) }}
+        .detail-item
+          label.detail-label
+            i.pi.pi-calendar-plus
+            | {{ ms.translate('userManagement.userAccounts.updatedOn') || 'Last Updated' }}
+          .detail-value {{ formatDate(userAccount.lastUpdateDate) }}
+        .detail-item
+          label.detail-label
+            i.pi.pi-tag
+            | {{ ms.translate('profile.userType') || 'User Type' }}
+          .detail-value
+            span.user-type-display
+              span {{ userAccount.indExternal ? (ms.translate('profile.externalUser') ) : (ms.translate('profile.officeUser') ) }}
+
+    // Security Information Section
+    .details-section
+      h3.section-title
+        i.pi.pi-shield
+        | {{ ms.translate('profile.security') || 'Security' }}
+      .details-grid
+        .detail-item
+          label.detail-label
+            i.pi.pi-qrcode
+            | {{ ms.translate('profile.mfa') || 'Multi-Factor Authentication' }}
+          .detail-value
+            p-badge(
+              [value]="userAccount.isMfaAuthRequired ? (ms.translate('profile.enabled')) : (ms.translate('profile.disabled'))",
+              [severity]="userAccount.isMfaAuthRequired ? 'success' : 'warning'"
+            )
+        .detail-item(*ngIf="userAccount.mfaStatus")
+          label.detail-label
+            i.pi.pi-qrcode
+            | {{ ms.translate('profile.mfaStatus') }}
+          .detail-value {{ userAccount.mfaStatus }}
+        .detail-item
+          label.detail-label
+            i.pi.pi-lock
+            | {{ ms.translate('userManagement.userAccounts.locked') || 'Account Locked' }}
+          .detail-value
+            p-badge(
+              [value]="userAccount.isLocked ? (ms.translate('common.yes') || 'Yes') : (ms.translate('common.no') || 'No')",
+              [severity]="userAccount.isLocked ? 'danger' : 'success'"
+            )
+
+    // Signature Section
+    .details-section(*ngIf="userAccount.signaturePicture")
+      h3.section-title
+        i.pi.pi-pencil
+        | {{ ms.translate('profile.signature')  }}
+      .signature-container
+        img.signature-image(
+          *ngIf="getSignatureImageUrl()",
+          [src]="getSignatureImageUrl()",
+          alt="Signature"
+        )
+
+    // Groups and Units Section
+    .details-section
+      p-accordion
+        // Groups Panel
+        p-accordion-panel(value="0")
+          p-accordion-header
+            ng-template(#toggleicon, let-active="active")
+              i([class]="active ? 'pi pi-minus' : 'pi pi-plus'")
+            span.flex.items-center.gap-2.w-full
+              i.pi.pi-users
+              span.font-bold.whitespace-nowrap {{ ms.translate('profile.groups.title') || 'Groups' }}
+              p-badge([value]="getGroupsCount().toString()", class="ml-auto mr-2")
+          p-accordion-content
+            .groups-container(*ngIf="userAccount.userGroupBag && userAccount.userGroupBag.length > 0; else noGroups")
+              .group-item(*ngFor="let group of userAccount.userGroupBag")
+                .group-info
+                  .group-name {{ group.groupName }}
+                  .group-type
+                    span.group-type-badge {{ group.groupType }}
+            ng-template(#noGroups)
+              .no-groups-message
+                i.pi.pi-users
+                p.no-groups-text {{ ms.translate('profile.groups.noGroups') || 'No groups assigned' }}
+
+        // Units Panel
+        p-accordion-panel(value="1")
+          p-accordion-header
+            ng-template(#toggleicon, let-active="active")
+              i([class]="active ? 'pi pi-minus' : 'pi pi-plus'")
+            span.flex.items-center.gap-2.w-full
+              i.pi.pi-building
+              span.font-bold.whitespace-nowrap {{ ms.translate('profile.units.title') || 'Units' }}
+              p-badge([value]="getUnitsCount().toString()", class="ml-auto mr-2")
+          p-accordion-content
+            .units-container(*ngIf="userAccount.userUnitBag && userAccount.userUnitBag.length > 0; else noUnits")
+              .unit-item(*ngFor="let unit of userAccount.userUnitBag")
+                .unit-info
+                  .unit-name {{ unit.unitName }}
+                  .unit-details
+                    .unit-detail-row(*ngIf="unit.unitCategory")
+                      span.unit-detail-label {{ ms.translate('profile.units.category') || 'Category' }}:
+                      span.unit-detail-value {{ unit.unitCategory }}
+                    .unit-detail-row(*ngIf="unit.platformCode")
+                      span.unit-detail-label {{ ms.translate('profile.units.platformCode') || 'Platform Code' }}:
+                      span.unit-detail-value {{ unit.platformCode }}
+            ng-template(#noUnits)
+              .no-units-message
+                i.pi.pi-building
+                p.no-units-text {{ ms.translate('profile.units.noUnits') || 'No units assigned' }}
+
+  // Loading State
+  .loading-container(*ngIf="loading && !errorMessage")
+    i.pi.pi-spin.pi-spinner(style="font-size: 2rem")
+    p {{ ms.translate('userManagement.userAccounts.loadingUserDetails') || 'Loading user details...' }}
+
+  // Error State
+  .error-container(*ngIf="!loading && errorMessage && visible")
+    i.pi.pi-exclamation-triangle(style="font-size: 2rem; color: #ef4444")
+    p {{ errorMessage }}
+
+  ng-template(pTemplate="footer")
+    button(
+      pButton,
+      type="button",
+      [label]="ms.translate('common.close') || 'Close'",
+      icon="pi pi-times",
+      class="p-button-secondary",
+      (click)="onHide()"
+    )

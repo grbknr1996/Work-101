@@ -207,5 +207,9 @@
   i.pi.pi-building.no-unit-icon
   h3.no-unit-title {{ 'userManagement.units.noUnitSelected' | translate }}
   p.no-unit-desc {{ 'userManagement.units.selectUnitFromTree' | translate }}
+app-view-user-details(
+  [(visible)]="showViewUserDialog",
+  [loginId]="selectedUserLoginId"
+)
 
   

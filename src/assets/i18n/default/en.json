@@ -39,6 +39,8 @@
   },
   "common": {
     "goBack": "Go Back",
+    "close": "Close",
+    "no": "No",
     "components": {
       "inactivityModal": {
         "title": "Session Timeout Warning",
@@ -732,6 +734,58 @@
   },
   "user": {
     "profile": "Profile"
+  },
+  "profile": {
+    "title": "User Profile",
+    "basicInfo": "Basic Information",
+    "userName": "Username",
+    "telephone": "Telephone",
+    "initial": "Initial",
+    "email": "Email",
+    "signature": "Signature",
+    "noSignature": "No signature available",
+    "kenobiToken": "Kenobi Token",
+    "copy": "Copy",
+    "security": "Security",
+    "mfa": "MFA",
+    "mfaStatus": "MFA Status",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "mfaEnabled": "Multi-Factor Authentication is enabled",
+    "mfaNotEnabled": "Multi-Factor Authentication is not enabled",
+    "disableMfa": "Disable MFA",
+    "registerMfa": "Register MFA",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "choose": "Choose",
+    "removeSignature": "Remove Signature",
+    "emailVerification": {
+      "title": "Enter the Email to send the verification",
+      "message": "Please enter the email address to send the verification email.",
+      "email": "Verification e-mail",
+      "reEnterEmail": "Re enter Verification e-mail",
+      "reEnterEmailPlaceholder": "Re-enter the email address",
+      "send": "Send"
+    },
+    "userType": "User Type",
+    "externalUser": "External User",
+    "officeUser": "Office User",
+    "footerDescription": "User profile information is managed by the system administrator. Contact support for changes.",
+    "loading": "Loading profile...",
+    "errorLoading": "Error loading profile. Please try again later.",
+    "groups": {
+      "title": "Group Information",
+      "noGroups": "No groups assigned",
+      "groupName": "Group Name",
+      "groupType": "Group Type"
+    },
+    "units": {
+      "title": "Unit Information",
+      "noUnits": "No units assigned",
+      "category": "Category",
+      "platformCode": "Platform Code"
+    }
   },
   "wipopublish": {
     "news": {
@@ -2562,6 +2616,9 @@
       "creationDateRange": "Creation Date Range",
       "lastUpdateDateRange": "Last Update Date Range",
       "enterLoginId": "Enter login ID...",
+      "loadingUserDetails": "Loading user details...",
+      "unableToLoadUser": "Unable to load user details. Please try again later.",
+      "locked": "Locked",
       "enterUsername": "Enter username...",
       "enterEmail": "Enter email...",
       "fromToDate": "From - To (yyyy-mm-dd)",

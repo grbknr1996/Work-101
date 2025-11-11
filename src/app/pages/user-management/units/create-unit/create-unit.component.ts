@@ -803,39 +803,44 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    if (this.unitForm.valid && this.assignedUsers.head.length > 0) {
-      // Validate that we have at least one head user
-      if (!this.assignedUsers.head[0]?.userId) {
-        return;
-      }
+    // Mark all fields as touched to show validation errors
+    this.markFormGroupTouched();
 
-      // Validate unit category and parent relationships
-      const formValue = this.unitForm.value;
-      if (
-        formValue.unitCategory === 'Department' &&
-        !formValue.divisionUnitId
-      ) {
-        return;
-      }
-
-      if (
-        formValue.unitCategory === 'Section' &&
-        (!formValue.departmentUnitId || !formValue.divisionUnitId)
-      ) {
-        // For sections, we need to get the division ID from the department
-        if (formValue.departmentUnitId && !formValue.divisionUnitId) {
-          this.loadDivisionIdForSection(formValue.departmentUnitId, true);
-          return;
-        } else {
-          return;
-        }
-      }
-
-      // Submit the form
-      this.submitForm();
-    } else {
-      this.markFormGroupTouched();
+    // Check if form is valid and has required head user
+    if (!this.unitForm.valid) {
+      return; // Stop submission if form is invalid
     }
+
+    if (this.assignedUsers.head.length === 0) {
+      return; // Stop submission if no head user assigned
+    }
+
+    // Validate that we have at least one head user
+    if (!this.assignedUsers.head[0]?.userId) {
+      return;
+    }
+
+    // Validate unit category and parent relationships
+    const formValue = this.unitForm.value;
+    if (formValue.unitCategory === 'Department' && !formValue.divisionUnitId) {
+      return;
+    }
+
+    if (
+      formValue.unitCategory === 'Section' &&
+      (!formValue.departmentUnitId || !formValue.divisionUnitId)
+    ) {
+      // For sections, we need to get the division ID from the department
+      if (formValue.departmentUnitId && !formValue.divisionUnitId) {
+        this.loadDivisionIdForSection(formValue.departmentUnitId, true);
+        return;
+      } else {
+        return;
+      }
+    }
+
+    // Submit the form only if all validations pass
+    this.submitForm();
   }
 
   onCancel() {
@@ -846,6 +851,8 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
     Object.keys(this.unitForm.controls).forEach((key) => {
       const control = this.unitForm.get(key);
       control?.markAsTouched();
+      control?.markAsDirty();
+      control?.updateValueAndValidity();
     });
   }
 

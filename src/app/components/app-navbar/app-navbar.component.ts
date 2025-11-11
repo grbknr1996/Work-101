@@ -1,11 +1,4 @@
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  OnInit,
-  OnDestroy,
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 // PrimeNG imports
 
@@ -17,11 +10,10 @@ import { MenuItem } from 'primeng/api';
 import { MechanicsService } from '../../_services/mechanics.service';
 import { QueryParamsService } from 'src/app/_services/queryParams.service';
 import { AuthService, User } from 'src/app/_services/auth.service';
-import {
-  UserService,
-  DetailedUserAccount,
-} from 'src/app/_services/user.service';
+import { UserService, DetailedUserAccount } from 'src/app/_services/user.service';
+import { LoadingService } from '../../_services/loading.service';
 import { Subscription } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 interface MobileMenuItem {
   label: string;
@@ -67,7 +59,8 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
     private router: Router,
     private qs: QueryParamsService,
     private auth: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private loadingService: LoadingService
   ) {
     this.checkScreenSize();
     this.logo = this.ms.getLogo();
@@ -83,8 +76,7 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
     if (pathSegments.length >= 3 && pathSegments[2]) {
       const urlLang = pathSegments[2];
       const officeConfig = this.ms.getCurrentOfficeConfig();
-      const supportedLangs =
-        officeConfig?.supportedLanguages || this.ms.availableLangs;
+      const supportedLangs = officeConfig?.supportedLanguages || this.ms.availableLangs;
 
       if (supportedLangs.includes(urlLang)) {
         this.selectedLanguage = urlLang;
@@ -126,18 +118,13 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
 
       await this.initLanguageOptions();
 
-      this.userSubscription = this.auth.currentUser$.subscribe((user) => {
+      this.userSubscription = this.auth.currentUser$.subscribe(user => {
         this.currentUser = user;
         if (user) {
           // Prefer stored/display name and avoid overwriting with raw login/email during navigation
           const storedDisplayName = this.getStoredUserName();
 
-          this.userName =
-            this.userName ||
-            storedDisplayName ||
-            user.name ||
-            user.email ||
-            'User';
+          this.userName = this.userName || storedDisplayName || user.name || user.email || 'User';
           this.userInitial = this.userName.charAt(0).toUpperCase();
           // Use MechanicsService to check WIPO admin status
           this.isWipoAdmin = this.ms.isCurrentUserWipoAdmin();
@@ -158,7 +145,7 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
       });
 
       // Subscribe to office changes to update WIPO admin status
-      this.ms.currentOffice$.subscribe((officeCode) => {
+      this.ms.currentOffice$.subscribe(officeCode => {
         this.isWipoAdmin = this.ms.isCurrentUserWipoAdmin();
         const officeConfig = this.ms.getCurrentOfficeConfig();
         this.hideTitle = officeConfig?.hideTitle === true;
@@ -181,7 +168,7 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
   }
   private resolveCurrentLoginId(): void {
     this.auth.getEncodedTokens().subscribe({
-      next: (tokens) => {
+      next: tokens => {
         try {
           const payload = JSON.parse(atob(tokens.accessToken.split('.')[1]));
           this.currentLoginId = payload?.username || null;
@@ -210,26 +197,19 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
   }
 
   getLangLabel(langValue: string): string {
-    const langOption = this.languageOptions.find(
-      (lang) => lang.value === langValue
-    );
+    const langOption = this.languageOptions.find(lang => lang.value === langValue);
     return langOption ? langOption.label : langValue;
   }
 
   private async initLanguageOptions() {
     const availableLanguages = this.ms.availableLangs;
     if (availableLanguages?.length > 0) {
-      this.languageOptions = availableLanguages.map((lang) => ({
-        label:
-          this.ms.translate(`language.display.label.${lang}`) ||
-          lang.toUpperCase(),
+      this.languageOptions = availableLanguages.map(lang => ({
+        label: this.ms.translate(`language.display.label.${lang}`) || lang.toUpperCase(),
         value: lang,
       }));
 
-      if (
-        !this.selectedLanguage ||
-        !availableLanguages.includes(this.selectedLanguage)
-      ) {
+      if (!this.selectedLanguage || !availableLanguages.includes(this.selectedLanguage)) {
         this.selectedLanguage = this.ms.getDefaultLanguage();
       }
     } else {
@@ -252,8 +232,7 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
     try {
       const newLang = event.value;
       const officeConfig = this.ms.getCurrentOfficeConfig();
-      const supportedLangs =
-        officeConfig?.supportedLanguages || this.ms.availableLangs;
+      const supportedLangs = officeConfig?.supportedLanguages || this.ms.availableLangs;
 
       if (!supportedLangs.includes(newLang)) {
         return;
@@ -284,11 +263,14 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
   }
 
   private initializeMenuItems(): void {
+    const officeCode = this.ms.getCurrentOffice() || 'default';
+    const langCode = this.selectedLanguage || this.ms.getDefaultLanguage();
+
     this.userMenuItems = [
       {
         label: this.ms.translate('user.profile'),
         icon: 'pi pi-user',
-        routerLink: '/profile',
+        routerLink: `/${officeCode}/${langCode}/profile`,
       },
       {
         label: this.ms.translate('settings'),
@@ -296,9 +278,7 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
         routerLink: '/settings',
       },
       {
-        label: this.ms.translate(
-          'common.components.mfaRegistrationModal.btnText'
-        ),
+        label: this.ms.translate('common.components.mfaRegistrationModal.btnText'),
         icon: 'pi pi-qrcode',
         command: () => {
           this.showMFAModal = true;
@@ -331,7 +311,7 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
     // Add header items to mobile menu
     this.mobileMenuItems = [];
     if (this.items && this.items.length > 0) {
-      this.items.forEach((item) => {
+      this.items.forEach(item => {
         if (!item.separator) {
           this.mobileMenuItems.push({
             label: this.ms.translate(item.label),
@@ -378,7 +358,7 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
   }
 
   markAllNotificationsAsRead() {
-    this.notificationItems.forEach((item) => {
+    this.notificationItems.forEach(item => {
       if (item.styleClass) {
         item.styleClass = item.styleClass.replace('unread', '').trim();
       }
@@ -397,12 +377,48 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
   }
 
   // Platform selector methods
-  onPlatformSelected(platformCode: string): void {
+  async onPlatformSelected(platformCode: string): Promise<void> {
     this.showPlatformSelector = false;
 
-    setTimeout(() => {
-      window.location.reload();
-    }, 100); // Small delay to ensure the platform change is persisted
+    // Set the selected platform
+    this.ms.setWipoPlatform(platformCode);
+
+    // Show loading indicator
+    this.loadingService.show('Synchronizing with new platform...');
+
+    try {
+      // Call cognitoSync with error handling
+      await firstValueFrom(this.userService.cognitoSyncWithErrorHandling());
+
+      // If cognitoSync succeeds, navigate to the new platform's dashboard
+      const platformConfig = this.ms.getOfficeConfig(platformCode);
+      if (!platformConfig) {
+        console.error('Platform configuration not found');
+        this.loadingService.hide();
+        return;
+      }
+
+      const langCode = platformConfig.defaultLanguage || 'en';
+      this.loadingService.hide();
+
+      // Navigate to the new platform's dashboard
+      this.router
+        .navigate([`/${platformCode}/${langCode}/dashboard`])
+        .then(() => {
+          // Reload to ensure all services are updated with the new platform context
+          window.location.reload();
+        })
+        .catch(error => {
+          console.error('Navigation error:', error);
+          this.loadingService.hide();
+        });
+    } catch (error: any) {
+      // Error handling is done in cognitoSyncWithErrorHandling
+      // It will handle logout, MFA registration, or unauthorized navigation
+      console.error('Platform change cognitoSync error:', error);
+      this.loadingService.hide();
+      // Navigation is handled in the service for error cases
+    }
   }
 
   // User details persistence and retrieval
@@ -438,8 +454,7 @@ export class AppNavbarComponent implements OnInit, OnDestroy {
     this.hasFetchedUserDetails = true;
     this.userService.getUserAccount(loginIdentifier).subscribe({
       next: (detail: DetailedUserAccount) => {
-        const resolvedName =
-          detail?.userName || detail?.loginId || this.userName;
+        const resolvedName = detail?.userName || detail?.loginId || this.userName;
         if (resolvedName) {
           this.userName = resolvedName;
           this.userInitial = this.userName.charAt(0).toUpperCase();

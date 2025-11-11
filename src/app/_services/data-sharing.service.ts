@@ -117,7 +117,7 @@ export class DataExchangeService {
     platformCode: string,
     sharedDateStart: string,
     sharedDateEnd: string,
-    status: string[] = ['failed_retry', 'failed_nonretry', 'partial']
+    status: string[],
   ): Observable<SharedPackageResponse[]> {
     return this.getAccessToken().pipe(
       switchMap((token) => {

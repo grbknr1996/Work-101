@@ -1,0 +1,164 @@
+
+<app-layout [config]="layoutConfig">
+  <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
+  <div class="profile-container" *ngIf="!loading &amp;&amp; userAccount">
+    <div class="profile-header">
+      <h1 class="profile-title">{{ 'profile.title' | translate }}</h1>
+      <div class="profile-actions">
+        <button class="p-button-primary" *ngIf="!isEditMode" pButton type="button" label="{{ 'profile.edit' | translate }}" icon="pi pi-pencil" (click)="enterEditMode()"></button>
+        <div class="edit-actions" *ngIf="isEditMode">
+          <button class="p-button-secondary" pButton type="button" label="{{ 'profile.cancel' | translate }}" icon="pi pi-times" (click)="cancelEdit()"></button>
+          <button class="p-button-primary" pButton type="button" label="{{ 'profile.save' | translate }}" icon="pi pi-check" (click)="saveProfile()" [disabled]="!profileForm.valid || loading"></button>
+        </div>
+      </div>
+    </div>
+    <form [formGroup]="profileForm" *ngIf="profileForm">
+      <div class="profile-content">
+        <!-- Left Column-->
+        <div class="profile-column">
+          <div class="form-field-row">
+            <label for="userName"><i class="pi pi-user input-label-icon"></i>{{ 'profile.userName' | translate }}</label>
+            <input pInputText id="userName" formControlName="userName" [readonly]="!isEditMode" [class.readonly-input]="!isEditMode">
+          </div>
+          <div class="form-field-row">
+            <label for="email"><i class="pi pi-envelope input-label-icon"></i>{{ 'profile.email' | translate }}<span class="required">*</span></label>
+            <input pInputText id="email" formControlName="email" [readonly]="!isEditMode" [class.readonly-input]="!isEditMode">
+          </div>
+          <div class="form-field-row">
+            <label for="signature"><i class="pi pi-pencil input-label-icon"></i>{{ 'profile.signature' | translate }}</label>
+            <div class="signature-container" *ngIf="!isEditMode"><img class="signature-image" *ngIf="getSignatureImageUrl()" [src]="getSignatureImageUrl()" alt="Signature">
+              <div class="signature-placeholder" *ngIf="!getSignatureImageUrl()"><i class="pi pi-image"></i><span>{{ 'profile.noSignature' | translate }}</span></div>
+            </div>
+            <div class="signature-edit-container" *ngIf="isEditMode">
+              <div class="signature-preview-container"><img class="signature-image" *ngIf="profileForm.get('signaturePicture')?.value" [src]="profileForm.get('signaturePicture')?.value" alt="Signature Preview">
+                <div class="signature-placeholder" *ngIf="!profileForm.get('signaturePicture')?.value"><i class="pi pi-image"></i><span>{{ 'profile.noSignature' | translate }}</span></div>
+                <button class="p-button-danger p-button-sm signature-remove-btn" *ngIf="profileForm.get('signaturePicture')?.value" pButton type="button" icon="pi pi-trash" (click)="removeSignature()" [pTooltip]="'profile.removeSignature' | translate"></button>
+              </div>
+              <div class="signature-upload-actions">
+                <button class="p-button-warning" pButton type="button" label="{{ 'profile.choose' | translate }}" icon="pi pi-plus" (click)="signatureFileInput.click()"></button>
+                <input #signatureFileInput type="file" id="signatureFile" accept="image/*" (change)="onSignatureChange($event)" hidden>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Right Column-->
+        <div class="profile-column">
+          <div class="form-field-row">
+            <label for="telephone"><i class="pi pi-phone input-label-icon"></i>{{ 'profile.telephone' | translate }}</label>
+            <input pInputText id="telephone" formControlName="telephone" [readonly]="!isEditMode" [class.readonly-input]="!isEditMode">
+          </div>
+          <div class="form-field-row">
+            <label for="kenobiToken"><i class="pi pi-key input-label-icon"></i>{{ 'profile.kenobiToken' | translate }}</label>
+            <div class="kenobi-token-container">
+              <textarea pInputTextarea id="kenobiToken" formControlName="kenobiToken" [readonly]="!isEditMode" [class.readonly-textarea]="!isEditMode" rows="3"></textarea>
+              <button class="copy-button" *ngIf="!isEditMode" pButton type="button" icon="pi pi-copy" label="{{ 'profile.copy' | translate }}" (click)="copyKenobiToken()" [disabled]="!kenobiToken"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <!-- MFA Section-->
+    <div class="mfa-section">
+      <div class="mfa-info"><i class="pi pi-shield"></i><span *ngIf="userAccount.isMfaAuthRequired">{{ 'profile.mfaEnabled' | translate }}</span><span *ngIf="!userAccount.isMfaAuthRequired">{{ 'profile.mfaNotEnabled' | translate }}</span></div>
+      <div class="mfa-buttons">
+        <button class="p-button-danger" pButton type="button" label="{{ 'profile.disableMfa' | translate }}" icon="pi pi-times-circle" (click)="disableMfa()" [disabled]="loading || !userAccount.isMfaAuthRequired"></button>
+        <button class="p-button-primary" pButton type="button" label="{{ 'profile.registerMfa' | translate }}" icon="pi pi-qrcode" (click)="openMfaRegistrationModal()" [disabled]="loading || userAccount.isMfaAuthRequired"></button>
+      </div>
+    </div>
+    <!-- Groups & Units-->
+    <div class="groups-section">
+      <p-accordion>
+        <!-- Groups-->
+        <p-accordion-panel value="0">
+          <p-accordion-header>
+            <ng-template #toggleicon let-active="active"><i [class]="active ? 'pi pi-minus' : 'pi pi-plus'"></i></ng-template><span class="flex items-center gap-2 w-full"><i class="pi pi-users input-label-icon"></i><span class="font-bold whitespace-nowrap">{{ 'profile.groups.title' | translate }}</span>
+              <p-badge class="ml-auto mr-2" [value]="getGroupsCount().toString()"></p-badge></span>
+          </p-accordion-header>
+          <p-accordion-content>
+            <div class="groups-container" *ngIf="userAccount.userGroupBag &amp;&amp; userAccount.userGroupBag.length &gt; 0; else noGroups">
+              <div class="group-item" *ngFor="let group of userAccount.userGroupBag">
+                <div class="group-info">
+                  <div class="group-name">{{ group.groupName }}</div>
+                  <div class="group-type"><span class="group-type-badge">{{ group.groupType }}</span></div>
+                </div>
+              </div>
+            </div>
+            <ng-template #noGroups>
+              <div class="no-groups-message"><i class="pi pi-users"></i>
+                <p class="no-groups-text">{{ 'profile.groups.noGroups' | translate }}</p>
+              </div>
+            </ng-template>
+          </p-accordion-content>
+        </p-accordion-panel>
+        <!-- Units-->
+        <p-accordion-panel value="1">
+          <p-accordion-header>
+            <ng-template #toggleicon let-active="active"><i [class]="active ? 'pi pi-minus' : 'pi pi-plus'"></i></ng-template><span class="flex items-center gap-2 w-full"><i class="pi pi-building input-label-icon"></i><span class="font-bold whitespace-nowrap">{{ 'profile.units.title' | translate }}</span>
+              <p-badge class="ml-auto mr-2" [value]="getUnitsCount().toString()"></p-badge></span>
+          </p-accordion-header>
+          <p-accordion-content>
+            <div class="units-container" *ngIf="userAccount.userUnitBag &amp;&amp; userAccount.userUnitBag.length &gt; 0; else noUnits">
+              <div class="unit-item" *ngFor="let unit of userAccount.userUnitBag">
+                <div class="unit-info">
+                  <div class="unit-name">{{ unit.unitName }}</div>
+                  <div class="unit-details">
+                    <div class="unit-detail-row" *ngIf="unit.unitCategory"><span class="unit-detail-label">{{ 'profile.units.category' | translate }}:</span><span class="unit-detail-value">{{ unit.unitCategory }}</span></div>
+                    <div class="unit-detail-row" *ngIf="unit.platformCode"><span class="unit-detail-label">{{ 'profile.units.platformCode' | translate }}:</span><span class="unit-detail-value">{{ unit.platformCode }}</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ng-template #noUnits>
+              <div class="no-units-message"><i class="pi pi-building"></i>
+                <p class="no-units-text">{{ 'profile.units.noUnits' | translate }}</p>
+              </div>
+            </ng-template>
+          </p-accordion-content>
+        </p-accordion-panel>
+      </p-accordion>
+    </div>
+    <!-- User Type Section-->
+    <div class="user-type-section">
+      <div class="user-type-label"><span>{{ 'profile.userType' | translate }}</span></div>
+      <div class="user-type-options">
+        <div class="radio-option">
+          <input type="radio" id="externalUser" name="userType" [checked]="userAccount.indExternal" [disabled]="true">
+          <label for="externalUser">{{ 'profile.externalUser' | translate }}</label>
+        </div>
+        <div class="radio-option">
+          <input type="radio" id="officeUser" name="userType" [checked]="!userAccount.indExternal" [disabled]="true">
+          <label for="officeUser">{{ 'profile.officeUser' | translate }}</label>
+        </div>
+      </div>
+      <div class="footer-description"><span>{{ 'profile.footerDescription' | translate }}</span></div>
+    </div>
+  </div>
+  <!-- Loading-->
+  <div class="loading-container" *ngIf="loading"><i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    <p>{{ 'profile.loading' | translate }}</p>
+  </div>
+  <!-- Error-->
+  <div class="error-container" *ngIf="!loading &amp;&amp; !userAccount"><i class="pi pi-exclamation-triangle" style="font-size: 2rem; color: #ef4444"></i>
+    <p>{{ 'profile.errorLoading' | translate }}</p>
+  </div>
+  <!-- MFA Modal-->
+  <app-mfa-registration-modal [(visible)]="showMFAModal" [userId]="currentLoginId" (registered)="loadUserDetails()"></app-mfa-registration-modal>
+  <!-- Email Verification Dialog-->
+  <p-dialog [(visible)]="showEmailVerificationModal" [modal]="true" [style]="{ width: '32rem' }" [closable]="true" [draggable]="false" [resizable]="false" [header]="'profile.emailVerification.title' | translate">
+    <div class="email-verification-dialog">
+      <p class="email-verification-message">{{ 'profile.emailVerification.message' | translate }}</p>
+      <div class="form-field-row">
+        <label for="verificationEmail">{{ 'profile.emailVerification.email' | translate }}</label>
+        <input class="readonly-input" pInputText id="verificationEmail" [(ngModel)]="verificationEmail" [readonly]="true">
+      </div>
+      <div class="form-field-row">
+        <label for="reVerificationEmail">{{ 'profile.emailVerification.reEnterEmail' | translate }}</label>
+        <input pInputText id="reVerificationEmail" [(ngModel)]="reVerificationEmail" placeholder="{{ 'profile.emailVerification.reEnterEmailPlaceholder' | translate }}">
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <button class="p-button-secondary" pButton type="button" label="{{ 'profile.cancel' | translate }}" icon="pi pi-times" (click)="onEmailVerificationCancel()"></button>
+      <button class="p-button-primary" pButton type="button" label="{{ 'profile.emailVerification.send' | translate }}" icon="pi pi-send" (click)="onEmailVerificationConfirm()"></button>
+    </ng-template>
+  </p-dialog>
+</app-layout>

@@ -154,6 +154,8 @@ import { MfaRegistrationComponent } from './pages/mfa-registration/mfa-registrat
 import { DocumentCaptureComponent } from './pages/document-capture/document-capture.component';
 import { BookmarkDialogComponent } from './components/BookmarkDialog/bookmark-dialog.component';
 import { ViewIndexationDocumentComponent } from './pages/document-capture/indexation-view/indexation-view.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { ViewUserDetailsComponent } from './components/view-user-details/view-user-details.component';
 const WipoThemePreset = definePreset(Aura, {
   primitive: {
     fontFamily: '"Noto Sans", "Segoe UI", Roboto, Arial, sans-serif',
@@ -278,7 +280,9 @@ const WipoThemePreset = definePreset(Aura, {
     MfaRegistrationComponent,
     DocumentCaptureComponent,
     ViewIndexationDocumentComponent,
-    BookmarkDialogComponent
+    BookmarkDialogComponent,
+    ProfileComponent,
+    ViewUserDetailsComponent,
   ],
   imports: [
     AppRoutingModule,

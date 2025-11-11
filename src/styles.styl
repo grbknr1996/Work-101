@@ -5640,7 +5640,7 @@ app-configurable-filter
 
   /* Header Section */
   .filter-header
-    padding 1rem 1rem 1rem 1rem
+    padding 1rem 0.5rem 0rem 0.5rem
     border-bottom 1px solid #e5e7eb
     background #f9fafb
 
@@ -5788,7 +5788,6 @@ app-configurable-filter
       display flex
       flex-wrap wrap
       gap 0.25rem
-      padding 0.5rem
       border-bottom 1px solid #e5e7eb
       background #f9fafb
       border-radius 0
@@ -7906,9 +7905,641 @@ app-inactivity-modal
       min-width 120px
       height 40px
       font-size 14px
-
+// ============================================
+// Breadcrumb Component Styles
+// ============================================
 app-breadcrumbs
   .p-breadcrumb 
     padding-left 0
   @media screen and (max-width 480px)
     margin-top 2rem
+// ============================================
+// Validation Component Styles
+// ============================================
+app-validation-errors
+  .error-message
+    color red
+// ============================================
+// App profile Component Styles
+// ============================================
+app-profile
+  .profile-container
+    width 100%
+    max-width 100%
+    margin 0
+    padding 1.5rem
+    background white
+    border-radius 0.5rem
+    box-shadow 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1)
+
+  .profile-header
+    display flex
+    justify-content space-between
+    align-items center
+    margin-bottom 1.5rem
+    padding-bottom 0.75rem
+    border-bottom 0.125rem solid #e5e7eb
+
+  .profile-actions,
+  .edit-actions
+    display flex
+    gap 0.75rem
+    align-items center
+
+  .profile-title
+    font-weight 600
+    color #0067c0
+    margin 0
+
+  .profile-content
+    display flex
+    flex-wrap wrap
+    gap 1.5rem
+    margin-bottom 1.5rem
+
+  .profile-column
+    display flex
+    flex-direction column
+    flex 1 1 calc(50% - 0.75rem)
+    min-width 18rem
+    gap 1.25rem
+
+  .form-field-row
+    display flex
+    flex-direction column
+    gap 0.5rem
+
+    label
+      display flex
+      align-items center
+      gap 0.5rem
+      font-weight 600
+      color #374151
+
+  .input-label-icon
+    color #0067c0
+
+  .required
+    color #ef4444
+    margin-left 0.25rem
+
+  .readonly-input,
+  .readonly-textarea
+    background-color #f9fafb
+    border 0.0625rem solid #e5e7eb
+    color #6b7280
+    cursor not-allowed
+
+  .signature-container,
+  .signature-preview-container
+    min-height 7.5rem
+    max-height 9.375rem
+    border 0.0625rem solid #e5e7eb
+    border-radius 0.25rem
+    padding 1rem
+    background-color #f9fafb
+    display flex
+    align-items center
+    justify-content center
+
+  .signature-preview-container
+    position relative
+
+  .signature-image
+    max-width 100%
+    max-height 12.5rem
+    object-fit contain
+
+  .signature-placeholder
+    display flex
+    flex-direction column
+    align-items center
+    gap 0.5rem
+    color #9ca3af
+
+  .signature-edit-container
+    display flex
+    flex-direction column
+    gap 0.75rem
+
+  .signature-remove-btn
+    position absolute
+    top 0.5rem
+    right 0.5rem
+
+  .signature-upload-actions
+    display flex
+    gap 0.5rem
+    align-items center
+
+  .signature-upload-label
+    cursor pointer
+    margin 0
+
+  .kenobi-token-container
+    display flex
+    flex-direction column
+    gap 0.5rem
+
+  .copy-button
+    align-self flex-start
+    margin-top 0.25rem
+
+  .mfa-section
+    display flex
+    justify-content space-between
+    align-items center
+    padding 1rem
+    background-color #fef3c7
+    border 0.0625rem solid #fbbf24
+    border-radius 0.25rem
+    margin-bottom 1.5rem
+
+  .mfa-buttons
+    display flex
+    gap 0.75rem
+    align-items center
+
+  .mfa-info
+    display flex
+    align-items center
+    gap 0.5rem
+    color #92400e
+    font-weight 500
+
+  .user-type-section
+    padding-top 1.25rem
+    border-top 0.0625rem solid #e5e7eb
+
+  .user-type-label
+    margin-bottom 1rem
+    font-weight 600
+    color #374151
+
+  .user-type-options
+    display flex
+    gap 2rem
+    margin-bottom 1rem
+
+  .radio-option
+    display flex
+    align-items center
+    gap 0.5rem
+
+    input[type="radio"],
+    label
+      cursor not-allowed
+
+    label
+      color #6b7280
+
+  .footer-description
+    margin-top 1rem
+    color #6b7280
+
+  .groups-section
+    margin-top 1.5rem
+    padding-top 1.5rem
+    border-top 0.125rem solid #e5e7eb
+
+    ::ng-deep
+      .p-accordion
+        margin-top 0
+
+      .p-accordion-panel
+        margin-bottom 0.5rem
+
+      .p-accordion-header
+        padding 0.75rem 1rem
+
+        .flex
+          display flex
+          align-items center
+          gap 0.5rem
+          width 100%
+
+        .font-bold
+          font-weight 600
+
+        .whitespace-nowrap
+          white-space nowrap
+
+        .ml-auto
+          margin-left auto
+
+        .mr-2
+          margin-right 0.5rem
+
+        p-badge,
+        p-badge .p-badge
+          display inline-flex
+          align-items center
+          justify-content center
+          min-width 1.5rem
+          height 1.5rem
+          border-radius 50%
+          padding 0
+
+      .p-accordion-content
+        padding 1rem
+
+  .groups-container,
+  .units-container
+    display flex
+    flex-wrap wrap
+    gap 0.75rem
+    width 100%
+
+  .group-item,
+  .unit-item
+    flex 1 1 calc(33.333% - 0.5rem)
+    min-width 15rem
+    padding 0.75rem
+    background-color white
+    border-radius 0.5rem
+    box-shadow 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.05)
+    border 0.0625rem solid #e5e7eb
+    transition border-color 0.2s ease
+
+    &:hover
+      border-color #86efac
+
+  .group-item
+    display flex
+    align-items center
+    justify-content space-between
+
+  .unit-item
+    display flex
+    flex-direction column
+
+  .group-info
+    flex 1
+    display flex
+    flex-direction column
+    gap 0.5rem
+
+  .group-name
+    font-weight 500
+    color #111827
+
+  .group-type
+    display flex
+    align-items center
+
+  .group-type-badge
+    display inline-flex
+    align-items center
+    border-radius 9999px
+    font-weight 500
+    background-color #dcfce7
+    color #166534
+    padding 0.125rem 0.625rem
+
+  .no-groups-message,
+  .no-units-message
+    display flex
+    flex-direction column
+    align-items center
+    justify-content center
+    padding 4rem 1.5rem
+    color #6b7280
+    text-align center
+
+    i
+      margin-bottom 0.5rem
+      color #6b7280
+
+  .no-groups-text,
+  .no-units-text
+    margin 0
+
+  .unit-info
+    display flex
+    flex-direction column
+    gap 0.75rem
+
+  .unit-name
+    font-weight 600
+    color #111827
+
+  .unit-details
+    display flex
+    flex-direction column
+    gap 0.5rem
+
+  .unit-detail-row
+    display flex
+    gap 0.5rem
+
+  .unit-detail-label
+    font-weight 500
+    color #6b7280
+
+  .unit-detail-value
+    color #374151
+
+  .loading-container,
+  .error-container
+    display flex
+    flex-direction column
+    align-items center
+    justify-content center
+    min-height 25rem
+    gap 1rem
+    color #6b7280
+
+  .error-container
+    color #ef4444
+
+  .email-verification-dialog
+    display flex
+    flex-direction column
+    gap 1rem
+
+  .email-verification-message
+    margin-bottom 0.5rem
+    color #374151
+
+  @media (max-width: 48rem)
+    .profile-container
+      padding 1rem
+
+    .profile-content
+      flex-direction column
+      gap 1.25rem
+
+    .profile-column
+      flex 1 1 100%
+      min-width 100%
+
+    .mfa-section
+      flex-direction column
+      align-items flex-start
+      gap 1rem
+
+    .user-type-options
+      flex-direction column
+      gap 1rem
+
+    .groups-container,
+    .units-container
+      flex-direction column
+
+    .group-item,
+    .unit-item
+      flex 1 1 100%
+      min-width 100%
+// ============================================
+// View User Details Component Styles
+// ============================================
+app-view-user-details
+  .view-user-details-dialog
+    .p-dialog-content
+      padding 1.5rem
+      max-height 70vh
+      overflow-y auto
+
+  .view-user-details-container
+    display flex
+    flex-direction column
+    gap 1.5rem
+
+  .details-section
+    background #f8f9fa
+    border-radius 8px
+    padding 1.25rem
+    border 1px solid #e9ecef
+
+  .section-title
+    display flex
+    align-items center
+    gap 0.5rem
+    margin 0 0 1rem 0
+    font-size 1.1rem
+    font-weight 600
+    color #0067c0
+
+    i
+      font-size 1.2rem
+
+  .details-grid
+    display grid
+    grid-template-columns repeat(auto-fit, minmax(250px, 1fr))
+    gap 1rem
+
+  .detail-item
+    display flex
+    flex-direction column
+    gap 0.5rem
+
+  .detail-label
+    display flex
+    align-items center
+    gap 0.5rem
+    font-size 0.875rem
+    font-weight 500
+    color #6c757d
+
+    i
+      font-size 0.9rem
+      color #0067c0
+
+  .detail-value
+    font-size 1rem
+    color #212529
+    word-break break-word
+
+    span
+      display inline-block
+
+  .signature-container
+    display flex
+    justify-content center
+    align-items center
+    padding 1rem
+    background white
+    border-radius 4px
+    border 1px solid #dee2e6
+
+  .signature-image
+    max-width 100%
+    max-height 200px
+    object-fit contain
+
+  .groups-container,
+  .units-container
+    display flex
+    flex-direction column
+    gap 0.75rem
+
+  .group-item,
+  .unit-item
+    background white
+    border-radius 6px
+    padding 1rem
+    border 1px solid #dee2e6
+    transition box-shadow 0.2s
+
+    &:hover
+      box-shadow 0 2px 4px rgba(0, 0, 0, 0.1)
+
+  .group-info,
+  .unit-info
+    display flex
+    flex-direction column
+    gap 0.5rem
+
+  .group-name,
+  .unit-name
+    font-weight 600
+    color #212529
+    font-size 1rem
+
+  .group-type
+    display flex
+    gap 0.5rem
+
+  .group-type-badge
+    display inline-block
+    padding 0.25rem 0.75rem
+    background #e7f3ff
+    color #0067c0
+    border-radius 12px
+    font-size 0.75rem
+    font-weight 500
+
+  .unit-details
+    display flex
+    flex-direction column
+    gap 0.25rem
+    margin-top 0.5rem
+
+  .unit-detail-row
+    display flex
+    gap 0.5rem
+    font-size 0.875rem
+
+  .unit-detail-label
+    font-weight 500
+    color #6c757d
+
+  .unit-detail-value
+    color #212529
+
+  .no-groups-message,
+  .no-units-message
+    display flex
+    flex-direction column
+    align-items center
+    justify-content center
+    padding 2rem
+    color #6c757d
+    text-align center
+
+    i
+      font-size 3rem
+      margin-bottom 0.5rem
+      color #adb5bd
+
+  .no-groups-text,
+  .no-units-text
+    margin 0
+    font-size 0.9rem
+
+  .user-type-container
+    display flex
+    flex-direction column
+    gap 0.75rem
+
+  .user-type-option
+    display flex
+    align-items center
+    gap 0.75rem
+    padding 0.75rem
+    background white
+    border-radius 6px
+    border 1px solid #dee2e6
+
+    i.pi-check-circle
+      color #28a745
+      font-size 1.25rem
+
+    i.pi-circle
+      color #adb5bd
+      font-size 1.25rem
+
+    span
+      font-size 1rem
+      color #212529
+
+  .loading-container,
+  .error-container
+    display flex
+    flex-direction column
+    align-items center
+    justify-content center
+    padding 3rem
+    text-align center
+
+    i
+      margin-bottom 1rem
+
+    p
+      margin 0
+      color #6c757d
+      font-size 1rem
+
+  // Accordion Customization
+  ::ng-deep .p-accordion-header
+    padding 0.75rem 1rem
+
+  ::ng-deep .p-accordion-content
+    padding 1rem
+
+  // Responsive Design
+  @media (max-width: 768px)
+    .view-user-details-dialog
+      .p-dialog
+        width 95vw !important
+        margin 1rem
+
+      .p-dialog-content
+        padding 1rem
+        max-height 75vh
+
+    .details-grid
+      grid-template-columns 1fr
+      gap 0.75rem
+
+    .details-section
+      padding 1rem
+
+    .section-title
+      font-size 1rem
+
+    .group-item,
+    .unit-item
+      padding 0.75rem
+
+  @media (max-width: 480px)
+    .view-user-details-dialog
+      .p-dialog
+        width 100vw !important
+        height 100vh !important
+        margin 0
+        border-radius 0
+
+      .p-dialog-content
+        max-height calc(100vh - 120px)
+        padding 0.75rem
+
+    .details-section
+      padding 0.75rem
+
+    .section-title
+      font-size 0.95rem
+
+    .detail-label,
+    .detail-value
+      font-size 0.875rem

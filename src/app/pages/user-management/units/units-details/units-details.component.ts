@@ -54,6 +54,8 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
   newUser = { name: '', email: '' };
   isEditMode = false;
   userSelectionDialogVisible = false;
+  showViewUserDialog = false;
+  selectedUserLoginId: string | null = null;
 
   // Permissions data
   availablePermissions: any[] = [];
@@ -444,7 +446,11 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
   }
 
   viewUser(user: UserAssignment) {
-    // TODO: Implement view user functionality
+    // Use login if available, otherwise use email as fallback
+    this.selectedUserLoginId = user.login || user.email || null;
+    if (this.selectedUserLoginId) {
+      this.showViewUserDialog = true;
+    }
   }
 
   onUsersSelected(selectedUsers: UserAssignment[]) {

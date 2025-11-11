@@ -15,6 +15,7 @@ import {
   FilterValue,
   ConfigurableFilterBarComponent,
 } from '../../components/configurable-filter-bar/configurable-filter-bar.component';
+import { AdvancedFilterQuery } from 'src/app/components/advanced-filter-query/advanced-filter-query.component';
 
 @Component({
   selector: 'app-data-packages',
@@ -64,6 +65,20 @@ export class DataPackagesComponent implements OnInit {
   dateFilterRemoved = false;
   partialFilterRemoved = false;
   failedFilterRemoved = false;
+  failedNonRetryFilterRemoved = false;
+
+  //Setting value temp as there is no data for other county codes
+  countryCodeForService = "ph";
+
+  processedFlag = false;
+  failedFlag = false;
+  failedNonFlag = false;
+  partialFlag = false;
+  inProgressFlag = false;
+
+  statusArray: string[] = [];
+
+  statusTranslated;
 
   packageStats: {
     label: string; display: string; count: string; period: string; color: string; icon: string;
@@ -80,103 +95,6 @@ export class DataPackagesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
-    this.tableColumns = [
-      { field: 'globalZipId', header: this.ms.translate('dataService.dataSharing.table.filename'), sortable: true, },
-      { field: 'ipTypeCategory', header: this.ms.translate('dataService.dataSharing.table.category'), sortable: true },
-      { field: 'receivedDate', header: this.ms.translate('dataService.dataSharing.table.sharedDate') },
-      { field: 'updateDate', header: this.ms.translate('dataService.dataSharing.table.processedDate') },
-      {
-        field: 'status',
-        header: this.ms.translate('dataService.dataSharing.table.status'),
-        display: 'chip',
-        severity: (value) => {
-          if (value === 'Processed') {
-            return 'success';
-          } else if (value === 'Failed') {
-            return 'danger';
-          } else if (value === 'Partial') {
-            return 'warn';
-          } else {
-            return 'info';
-          }
-        },
-      },
-      { field: 'statusMessage.totalChildRecords', header: this.ms.translate('dataService.dataSharing.table.totalCount') },
-      { field: 'statusMessage.successCount', header: this.ms.translate('dataService.dataSharing.table.processedCount') },
-      {
-        field: 'actions',
-        header: this.ms.translate('dataService.dataSharing.table.actions.header'),
-        display: 'actions',
-        actions: [
-          {
-            label: this.ms.translate('dataService.dataSharing.table.actions.downloadPackageCsv'),
-            icon: 'pi pi-download',
-            action: 'downloadPackageCsv',
-            severity: 'info',
-          },
-          {
-            label: this.ms.translate('dataService.dataSharing.table.actions.downloadPackageJson'),
-            icon: 'pi pi-download',
-            action: 'downloadPackageJson',
-            severity: 'info',
-          },
-          {
-            label: this.ms.translate('dataService.dataSharing.table.actions.downloadFailureCsv'),
-            icon: 'pi pi-download',
-            action: 'downloadFailureCsv',
-            severity: 'info',
-          },
-          {
-            label: this.ms.translate('dataService.dataSharing.table.actions.downloadFailureJson'),
-            icon: 'pi pi-download',
-            action: 'downloadFailureJson',
-            severity: 'info',
-          },
-        ],
-      },
-    ];
-
-    this.filterConfigs = [
-      {
-        key: 'globalZipId',
-        label: this.ms.translate('dataService.dataSharing.table.filename'),
-        type: 'text',
-        section: this.ms.translate('common.components.filter.section.file'),
-      },
-      {
-        key: 'receivedDate',
-        label: this.ms.translate('dataService.dataSharing.table.sharedDate'),
-        type: 'dateRange',
-        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
-        dateFormat: 'yy-mm-dd',
-        section: this.ms.translate('common.components.filter.section.dateFilters'),
-      },
-      {
-        key: 'processed',
-        label: this.ms.translate('dataService.dataSharing.filter.status.processed'),
-        type: 'checkbox',
-        section: this.ms.translate('common.components.filter.section.status'),
-      },
-      {
-        key: 'failed',
-        label: this.ms.translate('dataService.dataSharing.filter.status.failed'),
-        type: 'checkbox',
-        section: this.ms.translate('common.components.filter.section.status'),
-      },
-      {
-        key: 'partial',
-        label: this.ms.translate('dataService.dataSharing.filter.status.partial'),
-        type: 'checkbox',
-        section: this.ms.translate('common.components.filter.section.status'),
-      },
-      {
-        key: 'inProgress',
-        label: this.ms.translate('dataService.dataSharing.filter.status.inProgress'),
-        type: 'checkbox',
-        section: this.ms.translate('common.components.filter.section.status'),
-      },
-    ];
 
     this.layoutConfig = {
       appTitle: this.ms.translate('common.components.app.title'),
@@ -238,25 +156,129 @@ export class DataPackagesComponent implements OnInit {
       this.cdr.markForCheck();
     });
 
-    this.statSelected = 'TOTAL IN MONTH';
-    let startDate = new Date();
-    startDate.setMonth(startDate.getMonth() - 1);
+    const currentPath = this.router.url;
+    const menuItems = this.menuService.generateConfigurationMenu(
+      currentPath,
+      this.applicationOfficeCode
+    );
+    this.menuService.updateMenuItems(menuItems);
 
-    let today = new Date();
+    //this.countryCodeForService = this.applicationOfficeCode;
 
-    // Helper function to format date as YYYY-MM-DD
-    function formatDate(date: Date): string {
-      const year = date.getFullYear();
-      const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
-      const day = date.getDate().toString().padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    }
+    this.statusTranslated = {
+      SUCCESS: this.ms.translate('dataService.dataSharing.filter.status.success'),
+      FAILED_RETRY: this.ms.translate('dataService.dataSharing.filter.status.failedRetry'),
+      FAILED_NONRETRY: this.ms.translate('dataService.dataSharing.filter.status.failedNonRetry'),
+      PARTIAL: this.ms.translate('dataService.dataSharing.filter.status.partial'),
+      IN_PROGRESS: this.ms.translate('dataService.dataSharing.filter.status.inProgress')
+    };
 
-    const formattedStartDate = formatDate(startDate);
-    const formattedToday = formatDate(today);
-    this.loadSharedPackages(formattedStartDate, formattedToday);
+    this.tableColumns = [
+      { field: 'globalZipId', header: this.ms.translate('dataService.dataSharing.table.filename'), sortable: true, },
+      { field: 'ipTypeCategory', header: this.ms.translate('dataService.dataSharing.table.category'), sortable: true },
+      { field: 'receivedDate', header: this.ms.translate('dataService.dataSharing.table.sharedDate') },
+      { field: 'updateDate', header: this.ms.translate('dataService.dataSharing.table.processedDate') },
+      {
+        field: 'status',
+        header: this.ms.translate('dataService.dataSharing.table.status'),
+        display: 'chip',
+        severity: (value) => {
+          if (value === this.statusTranslated['SUCCESS']) {
+            return 'success';
+          } else if (value === this.statusTranslated['FAILED_RETRY']) {
+            return 'danger';
+          } else if (value === this.statusTranslated['FAILED_NONRETRY']) {
+            return 'secondary';
+          } else if (value === this.statusTranslated['PARTIAL']) {
+            return 'warn';
+          } else {
+            return 'info';
+          }
+        },
+      },
+      { field: 'statusMessage.totalChildRecords', header: this.ms.translate('dataService.dataSharing.table.totalCount') },
+      { field: 'statusMessage.successCount', header: this.ms.translate('dataService.dataSharing.table.processedCount') },
+      {
+        field: 'actions',
+        header: this.ms.translate('dataService.dataSharing.table.actions.header'),
+        display: 'actions',
+        actions: [
+          {
+            label: this.ms.translate('dataService.dataSharing.table.actions.downloadPackageCsv'),
+            icon: 'pi pi-download',
+            action: 'downloadPackageCsv',
+            severity: 'info',
+          },
+          {
+            label: this.ms.translate('dataService.dataSharing.table.actions.downloadPackageJson'),
+            icon: 'pi pi-download',
+            action: 'downloadPackageJson',
+            severity: 'info',
+          },
+          {
+            label: this.ms.translate('dataService.dataSharing.table.actions.downloadFailureCsv'),
+            icon: 'pi pi-download',
+            action: 'downloadFailureCsv',
+            severity: 'info',
+          },
+          {
+            label: this.ms.translate('dataService.dataSharing.table.actions.downloadFailureJson'),
+            icon: 'pi pi-download',
+            action: 'downloadFailureJson',
+            severity: 'info',
+          },
+        ],
+      },
+    ];
 
-    this.dataService.getStatistics("ph").subscribe({
+    this.filterConfigs = [
+      {
+        key: 'globalZipId',
+        label: this.ms.translate('dataService.dataSharing.table.filename'),
+        type: 'text',
+        section: this.ms.translate('common.components.filter.section.file'),
+      },
+      {
+        key: 'receivedDate',
+        label: this.ms.translate('dataService.dataSharing.table.sharedDate'),
+        type: 'dateRange',
+        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
+        dateFormat: 'yy-mm-dd',
+        section: this.ms.translate('common.components.filter.section.dateFilters'),
+      },
+      {
+        key: 'SUCCESS',
+        label: this.statusTranslated['SUCCESS'],
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.status'),
+      },
+      {
+        key: 'FAILED_RETRY',
+        label: this.statusTranslated['FAILED_RETRY'],
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.status'),
+      },
+      {
+        key: 'FAILED_NONRETRY',
+        label: this.statusTranslated['FAILED_NONRETRY'],
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.status'),
+      },
+      {
+        key: 'PARTIAL',
+        label: this.statusTranslated['PARTIAL'],
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.status'),
+      },
+      {
+        key: 'IN_PROGRESS',
+        label: this.statusTranslated['IN_PROGRESS'],
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.status'),
+      },
+    ];
+
+    this.dataService.getStatistics(this.countryCodeForService).subscribe({
       next: (response) => {
         this.totalPackages = response.totalCount.toString();
         this.monthPackages = response.lastMonthCount.toString();
@@ -305,23 +327,28 @@ export class DataPackagesComponent implements OnInit {
 
     });
 
-    const currentPath = this.router.url;
-    const menuItems = this.menuService.generateConfigurationMenu(
-      currentPath,
-      this.applicationOfficeCode
-    );
-    this.menuService.updateMenuItems(menuItems);
-
-    //    this.maxDate = new Date();
-    //    this.maxDate.setDate(today.getDate() + 1);
-    //    this.defaultMaxDate = this.maxDate;
-
+    this.statSelected = 'TOTAL IN MONTH';
     this.permanentFilters();
+    
+    let today = new Date();
+    let startDate = new Date();
+    startDate.setMonth(startDate.getMonth() - 1);
+
+    const formattedStartDate = this.formatDate(startDate);
+    const formattedToday = this.formatDate(today);
+    this.loadSharedPackages(formattedStartDate, formattedToday);
   }
+
   private loadSharedPackages(startDate: string, endDate: string): void {
-    this.dataService.getSharedPackages('ph', startDate, endDate).subscribe({
+    this.prepareStatusArray();
+
+    this.dataService.getSharedPackages(this.countryCodeForService, startDate, endDate, this.statusArray).subscribe({
       next: (response) => {
         this.packagesData = response;
+        this.packagesData = this.packagesData.map(pkg => ({
+          ...pkg,
+          status: this.statusTranslated[pkg.status] || pkg.status
+        }));
         this.tableData = this.packagesData;
         this.cdr.detectChanges();
       },
@@ -329,6 +356,22 @@ export class DataPackagesComponent implements OnInit {
         console.error('Failed to fetch shared packages:', err);
       }
     });
+  }
+
+  private prepareStatusArray(){
+    this.processedFlag = this.appliedFilters.some(item => item.key === 'SUCCESS' && item.value === true);
+    this.failedFlag = this.appliedFilters.some(item => item.key === 'FAILED_RETRY' && item.value === true);
+    this.failedNonFlag = this.appliedFilters.some(item => item.key === 'FAILED_NONRETRY' && item.value === true);
+    this.partialFlag = this.appliedFilters.some(item => item.key === 'PARTIAL' && item.value === true);
+    this.inProgressFlag = this.appliedFilters.some(item => item.key === 'IN_PROGRESS' && item.value === true);
+
+    this.statusArray = [];
+
+    if (this.processedFlag) this.statusArray.push('SUCCESS');
+    if (this.failedFlag) this.statusArray.push('FAILED_RETRY');
+    if (this.failedNonFlag) this.statusArray.push('FAILED_NONRETRY');
+    if (this.partialFlag) this.statusArray.push('PARTIAL');
+    if (this.inProgressFlag) this.statusArray.push('IN_PROGRESS');
   }
 
   private permanentFilters(): void {
@@ -342,48 +385,30 @@ export class DataPackagesComponent implements OnInit {
     } else if (this.statSelected === 'TOTAL IN WEEK') {
       startDate.setDate(today.getDate() - 7);
     } else {
-      startDate = new Date(1991, 3, 20); 
+      startDate = new Date(1999, 0, 1); 
     }
-
 
     if (!this.dateFilterRemoved) {
       let dateFilter = { key: 'receivedDate', value: [startDate, today], type: 'dateRange' };
       this.appliedFilters = [...this.appliedFilters, dateFilter];
     }
 
+    if (!this.failedNonRetryFilterRemoved) {
+      let failedFilter = { key: 'FAILED_NONRETRY', value: true, type: 'checkbox' };
+      this.appliedFilters = [...this.appliedFilters, failedFilter];
+    }
+
     if (!this.failedFilterRemoved) {
-      let failedFilter = { key: 'failed', value: true, type: 'checkbox' };
+      let failedFilter = { key: 'FAILED_RETRY', value: true, type: 'checkbox' };
       this.appliedFilters = [...this.appliedFilters, failedFilter];
     }
 
     if (!this.partialFilterRemoved) {
-      let partialFilter = { key: 'partial', value: true, type: 'checkbox' };
+      let partialFilter = { key: 'PARTIAL', value: true, type: 'checkbox' };
       this.appliedFilters = [...this.appliedFilters, partialFilter];
     }
 
   }
-
-  //  onDateSelect(event: any) {
-  //    console.log('Selected Date:', this.date);
-  //
-  //    if(this.date[0]!=null){
-  //      let newStartDate = this.date[0];
-  //      let dateToSet = newStartDate.getDate();
-  //      dateToSet = dateToSet + 90;
-  //      this.maxDate.setFullYear(newStartDate.getFullYear());
-  //      this.maxDate.setMonth(newStartDate.getMonth());
-  //      this.maxDate.setDate(dateToSet);
-  //
-  //      //if(this.maxDate>this.defaultMaxDate){
-  //      //  this.maxDate = this.defaultMaxDate;
-  //      //}
-  //    }
-  //
-  //    if(this.date[0]!=null && this.date[1]!=null){
-  //       this.tableData = packagesData.filter(item => new Date(item.sharedDate) >= this.date[0] && new Date(item.sharedDate) <= this.date[1]);
-  //    }
-  //
-  //  }
 
   onActionClick(action: string, item: any) {
     console.log('Action clicked:', action, item);
@@ -407,8 +432,68 @@ export class DataPackagesComponent implements OnInit {
     console.log('Download details:', user);
   }
 
+  onStatSelect(statLabel: string) {
+    console.log('Stats Selected:', statLabel);
+    this.statSelected = statLabel;
+    this.dateFilterRemoved = false;
+    this.searchBar = '';
+    this.cdr.detectChanges();
+    this.filterByStats();
+  }
+
+  private filterByStats(): void {
+    const today = new Date();
+    let startDate: Date;
+
+    switch (this.statSelected) {
+      case 'TOTAL COUNT':
+        startDate = new Date('1999-01-01');
+        break;
+
+      case 'TOTAL IN YEAR':
+        startDate = new Date(today);
+        startDate.setFullYear(today.getFullYear() - 1);
+        break;
+
+      case 'TOTAL IN MONTH':
+        startDate = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+        break;
+
+      case 'TOTAL IN WEEK':
+        startDate = new Date();
+        startDate.setDate(today.getDate() - 7);
+        break;
+
+      default:
+        startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+        break;
+    }
+
+    const formattedStartDate = this.formatDate(startDate);
+    const formattedToday = this.formatDate(today);
+
+    // Update the appliedFilters with date range for UI
+     if (this.appliedFilters.some(f => f.key === 'receivedDate')) {
+       this.appliedFilters = this.appliedFilters.map(f =>
+         f.key === 'receivedDate' ? { ...f, value: [startDate, today] } : f
+       );
+     } else if (!this.dateFilterRemoved) {
+       const dateFilter = { key: 'receivedDate', value: [startDate, today], type: 'dateRange' };
+       this.appliedFilters = [...this.appliedFilters, dateFilter];
+     }
+
+    // Call service with formatted dates (server-side filtering)
+    this.loadSharedPackages(formattedStartDate, formattedToday);
+  }
+
+  filterSearch(value: string) {
+    console.log(value);
+    this.searchBar = value;
+    this.applyFilters();
+  }
+
   onFilterChange(filters: FilterValue[]): void {
-    console.log('Filter changed:', filters);
+    // console.log('Filter changed:', filters);
     // Don't apply filters or show red dot on change - only track changes
   }
 
@@ -430,8 +515,6 @@ export class DataPackagesComponent implements OnInit {
       yearStartDate.setMonth(0);
       yearStartDate.setDate(1);
 
-      console.log("dates " + weekStartDate + " -- " + monthStartDate + " ----- " + yearStartDate + " ------------ " + sDate);
-
       if (sDate >= weekStartDate) {
         this.statSelected = 'TOTAL IN WEEK';
       } else if (sDate >= monthStartDate) {
@@ -443,12 +526,17 @@ export class DataPackagesComponent implements OnInit {
       }
 
     }
-    if (filters.some(user => user.key === 'failed')) {
+
+    if (filters.some(user => user.key === 'FAILED_NONRETRY')) {
+      this.failedNonRetryFilterRemoved = true;
+    }
+    if (filters.some(user => user.key === 'FAILED_RETRY')) {
       this.failedFilterRemoved = true;
     }
-    if (filters.some(user => user.key === 'partial')) {
+    if (filters.some(user => user.key === 'PARTIAL')) {
       this.partialFilterRemoved = true;
     }
+
     this.permanentFilters();
     this.appliedFilters = [...this.appliedFilters, ...filters];
     this.applyFilters();
@@ -466,22 +554,164 @@ export class DataPackagesComponent implements OnInit {
   onFilterCleared(): void {
     console.log('Filters cleared');
     this.appliedFilters = [];
-    //this.permanentFilters();
+    this.permanentFilters();
     this.searchBar = '';
     this.configurableFilter.searchBar = '';
-    this.tableData = this.packagesData;
     this.filterByStats();
     this.cdr.detectChanges();
   }
 
   clearAllFilters(): void {
     this.appliedFilters = [];
-    //this.permanentFilters();
+    this.permanentFilters();
     this.searchBar = '';
     this.configurableFilter.searchBar = '';
     this.tableData = this.packagesData;
     this.configurableFilter.clearAllFilters();
     this.cdr.detectChanges();
+  }
+
+  removeDefaultFilter(filterKey: string): void {
+
+    if (filterKey === 'FAILED_RETRY') {
+      this.failedFilterRemoved = true;
+    } else if (filterKey === 'FAILED_NONRETRY') {
+      this.failedNonRetryFilterRemoved = true;
+    } else if (filterKey === 'PARTIAL') {
+      this.partialFilterRemoved = true;
+    } else if (filterKey === 'receivedDate') {
+      this.dateFilterRemoved = true;
+    }
+  }
+
+  private applyFilters(): void {
+
+    const today = new Date();
+    let startDate: Date;
+
+    switch (this.statSelected) {
+      case 'TOTAL COUNT':
+        startDate = new Date('1999-01-01');
+        break;
+      case 'TOTAL IN YEAR':
+        startDate = new Date(today);
+        startDate.setFullYear(today.getFullYear() - 1);
+        break;
+      case 'TOTAL IN MONTH':
+        startDate = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+        break;
+      case 'TOTAL IN WEEK':
+        startDate = new Date();
+        startDate.setDate(today.getDate() - 7);
+        break;
+      default:
+        startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+        break;
+    }
+
+    const formattedStartDate = this.formatDate(startDate);
+    const formattedToday = this.formatDate(today);
+
+    this.prepareStatusArray();
+
+    this.dataService.getSharedPackages(this.countryCodeForService, formattedStartDate, formattedToday, this.statusArray).subscribe({
+      next: (response) => {
+        this.packagesData = response;
+        this.packagesData = this.packagesData.map(pkg => ({
+          ...pkg,
+          status: this.statusTranslated[pkg.status] || pkg.status
+        }));
+        this.tableData = this.packagesData;
+
+        let filtered = [...this.tableData];
+
+        console.log("searchBar " + this.searchBar)
+        if (this.searchBar && this.searchBar.trim()) {
+          filtered = filtered.filter(
+            (item) =>
+              item.globalZipId?.toLowerCase().includes(this.searchBar)
+          );
+        }
+
+        this.appliedFilters.forEach((filter) => {
+          switch (filter.key) {
+            case 'globalZipId':
+              if (filter.value != '') {
+                filtered = filtered.filter((item) =>
+                  item.globalZipId.includes(filter.value)
+                );
+              }
+              break;
+            case 'receivedDate':
+              if (
+                filter.value &&
+                Array.isArray(filter.value) &&
+                filter.value.length === 2
+              ) {
+                const [startDate, endDate] = filter.value;
+                console.log(startDate+" -- "+endDate)
+                if (startDate && endDate) {
+                  filtered = filtered.filter((item) => {
+                    const itemDate = new Date(item.receivedDate);
+                    return itemDate >= startDate && itemDate <= endDate;
+                  });
+                }
+              }
+              break;
+          }
+        });
+
+        this.tableData = filtered;
+
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Failed to fetch shared packages:', err);
+      }
+    });
+  }
+
+  onAdvancedFilterSearch(advancedFilterQuery: AdvancedFilterQuery): void {
+    console.log(advancedFilterQuery);
+
+    const levelJoin = advancedFilterQuery.levelList.some(f => f.orOperator) ? " OR " : " AND ";
+    let query = advancedFilterQuery.levelList
+      .map(level => {
+        const groupQueries = level.group_list.map(group => {
+
+          const fileJoin = group.file_list.some(f => f.orOperator) ? " OR " : " AND ";
+          const fileQueries = group.file_list.map(file => {
+            const field = file.field.code;
+            const op = file.connecting.code.toUpperCase();
+            const val =
+              file.fieldType === "text"
+                ? `'${file.value}'`
+                : ( op === "DATERANGE"
+                  ? file.value.map(v => `'${new Date(v).toLocaleDateString('en-CA', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit'
+                      })}'`).join(" AND ") 
+                  : `'${new Date(file.value).toLocaleDateString('en-CA', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit'
+                      })}'` 
+                  );
+
+            return `${field} ${op} ${val}`;
+          });
+          
+          return `(${fileQueries.join(fileJoin)})`;
+        });
+
+        return `(${groupQueries.join(levelJoin)})`;
+      })
+      .join(levelJoin);
+
+    console.log(query);
+    //TODO need to apply this query to the output
+
   }
 
   getFilterDisplayValue(filter: FilterValue): string {
@@ -516,16 +746,6 @@ export class DataPackagesComponent implements OnInit {
     }
   }
 
-  removeDefaultFilter(filterKey: string): void {
-    if (filterKey === 'failed') {
-      this.failedFilterRemoved = true;
-    } else if (filterKey === 'partial') {
-      this.partialFilterRemoved = true;
-    } else if (filterKey === 'receivedDate') {
-      this.dateFilterRemoved = true;
-    }
-  }
-
   removeFilterChip(filterKey: string): void {
     console.log('removeFilterChip ' + filterKey);
 
@@ -543,155 +763,11 @@ export class DataPackagesComponent implements OnInit {
     }
   }
 
-  filterSearch(value: string) {
-    console.log(value);
-    this.searchBar = value;
-    this.applyFilters();
-  }
-
-  searchByFilter(): void {
-    this.tableData = this.tableData.filter((item) =>
-      item.globalZipId?.toLowerCase().includes(this.searchBar)
-    );
-  }
-
-  onStatSelect(statLabel: string) {
-    console.log('Stats Selected:', statLabel);
-    this.statSelected = statLabel;
-    this.dateFilterRemoved = false;
-    this.cdr.detectChanges();
-    this.applyFilters();
-  }
-
-  private filterByStats(): void {
-    const today = new Date();
-    let startDate: Date;
-
-    switch (this.statSelected) {
-      case 'TOTAL COUNT':
-        startDate = new Date('1999-12-31');
-        break;
-
-      case 'TOTAL IN YEAR':
-        startDate = new Date(today);
-        startDate.setFullYear(today.getFullYear() - 1);
-        break;
-
-      case 'TOTAL IN MONTH':
-        startDate = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
-        break;
-
-      case 'TOTAL IN WEEK':
-        startDate = new Date();
-        startDate.setDate(today.getDate() - 7);
-        break;
-
-      default:
-        startDate = new Date(today.getFullYear(), today.getMonth(), 1);
-        break;
-    }
-
-    const formattedStartDate = this.formatDate(startDate);
-    const formattedToday = this.formatDate(today);
-
-    // Update the appliedFilters with date range for UI
-    if (this.appliedFilters.some(f => f.key === 'receivedDate')) {
-      this.appliedFilters = this.appliedFilters.map(f =>
-        f.key === 'receivedDate' ? { ...f, value: [startDate, today] } : f
-      );
-    } else if (!this.dateFilterRemoved) {
-      const dateFilter = { key: 'receivedDate', value: [startDate, today], type: 'dateRange' };
-      this.appliedFilters = [...this.appliedFilters, dateFilter];
-    }
-
-    // Call service with formatted dates (server-side filtering)
-    this.loadSharedPackages(formattedStartDate, formattedToday);
-  }
-
-
-
   private formatDate(date: Date): string {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // month is 0-based
     const day = date.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
-  }
-
-
-
-  private applyFilters(): void {
-    this.filterByStats();
-    //this.searchByFilter();
-    let filtered = [...this.tableData];
-
-    console.log("searchBar " + this.searchBar)
-    if (this.searchBar && this.searchBar.trim()) {
-      filtered = filtered.filter(
-        (item) =>
-          item.globalZipId?.toLowerCase().includes(this.searchBar) ||
-          item.status?.toLowerCase().includes(this.searchBar)
-      );
-    }
-
-    this.appliedFilters.forEach((filter) => {
-      switch (filter.key) {
-        case 'search':
-          if (filter.value && filter.value.trim()) {
-            const searchTerm = filter.value.toLowerCase().trim();
-            filtered = filtered.filter(
-              (item) =>
-                item.globalZipId.toLowerCase().includes(searchTerm) ||
-                item.status?.toLowerCase().includes(searchTerm)
-            );
-          }
-          break;
-        case 'globalZipId':
-          if (filter.value != '') {
-            filtered = filtered.filter((item) =>
-              item.globalZipId.includes(filter.value)
-            );
-          }
-          break;
-        case 'receivedDate':
-          if (
-            filter.value &&
-            Array.isArray(filter.value) &&
-            filter.value.length === 2
-          ) {
-            const [startDate, endDate] = filter.value;
-            if (startDate && endDate) {
-              filtered = filtered.filter((item) => {
-                const itemDate = new Date(item.receivedDate);
-                return itemDate >= startDate && itemDate <= endDate;
-              });
-            }
-          }
-          break;
-      }
-    });
-
-    filtered = this.booleanFilters(filtered);
-
-    this.tableData = filtered;
-  }
-
-  private booleanFilters(filtered: any): any {
-
-    let processedFlag = this.appliedFilters.some(item => item.key === 'processed' && item.value === true);
-    let failedFlag = this.appliedFilters.some(item => item.key === 'failed' && item.value === true);
-    let partialFlag = this.appliedFilters.some(item => item.key === 'partial' && item.value === true);
-    let inProgressFlag = this.appliedFilters.some(item => item.key === 'inProgress' && item.value === true);
-
-    if (processedFlag || failedFlag || partialFlag || inProgressFlag) {
-      filtered = filtered.filter((item) =>
-        (processedFlag && item.status == 'Processed') ||
-        (failedFlag && item.status == 'Failed') ||
-        (partialFlag && item.status == 'Partial') ||
-        (inProgressFlag && item.status == 'In Progress')
-      );
-    }
-
-    return filtered;
   }
 
 }

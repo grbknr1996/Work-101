@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Observable, switchMap, of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -27,6 +28,22 @@ export interface UserAccount {
   imageUrl?: string;
 }
 
+export interface UserUnit {
+  platformCode: string | null;
+  unitName: string;
+  unitId: string | null;
+  unitCategory: string;
+  departmentUnitId: string | null;
+  divisionUnitId: string | null;
+  headUser: any | null;
+  deputyHeadUsers: any | null;
+  staffUsers: any | null;
+  createdBy: string | null;
+  createdDate: string | null;
+  lastUpdateBy: string | null;
+  lastUpdateDate: string | null;
+}
+
 export interface DetailedUserAccount {
   userId: number;
   userName: string;
@@ -40,6 +57,7 @@ export interface DetailedUserAccount {
   lastUpdateDate: string;
   cognitoStatus: string;
   userGroupBag?: UserGroupBag[];
+  userUnitBag?: UserUnit[];
   isActive: boolean;
   isLocked: boolean;
   indExternal: boolean;
@@ -205,7 +223,8 @@ export class UserService {
     private http: HttpClient,
     private authService: AuthService,
     private toastService: ToastService,
-    private ms: MechanicsService
+    private ms: MechanicsService,
+    private router: Router
   ) {}
 
   /**
@@ -886,6 +905,62 @@ export class UserService {
       catchError((error) => {
         // Don't use handleError here as we want to check the error code in the calling component
         // Return the error so the caller can check for specific error codes
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
+   * Sync Cognito user data with automatic error handling
+   * This method calls cognitoSync and handles errors automatically:
+   * - 400 with "invalid_client": Logs out the user
+   * - 403 with "WIPO-CUS-16103": Navigates to MFA registration
+   * - 401: Shows error message and navigates to unauthorized page
+   * Returns an observable that emits success or handles errors internally
+   */
+  cognitoSyncWithErrorHandling(): Observable<any> {
+    return this.cognitoSync().pipe(
+      catchError((error: any) => {
+        const errorResponse = error?.error;
+        const status = error?.status;
+        const errorCode = errorResponse?.wipoErrorCode?.code;
+        const errorMessage = errorResponse?.message || error?.message || 'An unexpected error occurred';
+
+        // Handle 400 with "invalid_client" - Logout user
+        // Error format: "Client error : invalid_client"
+        if (status === 400 && errorMessage?.toLowerCase().includes('invalid_client')) {
+          console.error('Invalid client error, logging out user');
+          this.authService.logout().subscribe({
+            next: () => {
+              this.router.navigate(['/default/en/sign-in']);
+            },
+            error: () => {
+              this.router.navigate(['/default/en/sign-in']);
+            }
+          });
+          return throwError(() => new Error('Invalid client - user logged out'));
+        }
+
+        // Handle 403 with "WIPO-CUS-16103" - Navigate to MFA registration
+        if (status === 403 && errorCode === 'WIPO-CUS-16103') {
+          console.log('MFA registration required, navigating to MFA registration');
+          this.router.navigate(['/mfa-registration']);
+          return throwError(() => new Error('MFA registration required'));
+        }
+
+        // Handle 401 - Show error and navigate to unauthorized page
+        if (status === 401) {
+          const officeCode = this.ms.getCurrentOffice() || 'default';
+          const langCode = this.ms.getDefaultLanguage() || 'en';
+          this.toastService.showError(
+            'Unauthorized',
+            errorMessage || 'You are not authorized to access this resource.'
+          );
+          this.router.navigate([`/${officeCode}/${langCode}/unauthorized`]);
+          return throwError(() => new Error('Unauthorized'));
+        }
+
+        // For other errors, re-throw to let the caller handle
         return throwError(() => error);
       })
     );

@@ -37,3 +37,4 @@
 </app-layout>
 <!-- Resend Verification Email Modal-->
 <app-modal [(visible)]="showResendVerificationModal" [config]="resendVerificationModalConfig" (visibleChange)="onResendVerificationModalClose()"></app-modal>
+<app-view-user-details [(visible)]="showViewUserDialog" [loginId]="selectedUserLoginId"></app-view-user-details>

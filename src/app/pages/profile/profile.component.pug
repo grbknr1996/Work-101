@@ -1,0 +1,319 @@
+app-layout([config]="layoutConfig")
+  app-breadcrumbs([items]="breadcrumbItems")
+
+  .profile-container(*ngIf="!loading && userAccount")
+    .profile-header
+      h1.profile-title {{ 'profile.title' | translate }}
+      .profile-actions
+        button(
+          *ngIf="!isEditMode",
+          pButton,
+          type="button",
+          label="{{ 'profile.edit' | translate }}",
+          icon="pi pi-pencil",
+          class="p-button-primary",
+          (click)="enterEditMode()"
+        )
+        .edit-actions(*ngIf="isEditMode")
+          button(
+            pButton,
+            type="button",
+            label="{{ 'profile.cancel' | translate }}",
+            icon="pi pi-times",
+            class="p-button-secondary",
+            (click)="cancelEdit()"
+          )
+          button(
+            pButton,
+            type="button",
+            label="{{ 'profile.save' | translate }}",
+            icon="pi pi-check",
+            class="p-button-primary",
+            (click)="saveProfile()",
+            [disabled]="!profileForm.valid || loading"
+          )
+
+    form([formGroup]="profileForm", *ngIf="profileForm")
+      .profile-content
+        // Left Column
+        .profile-column
+          .form-field-row
+            label(for="userName")
+              i.pi.pi-user.input-label-icon
+              | {{ 'profile.userName' | translate }}
+            input(
+              pInputText,
+              id="userName",
+              formControlName="userName",
+              [readonly]="!isEditMode",
+              [class.readonly-input]="!isEditMode"
+            )
+
+          .form-field-row
+            label(for="email")
+              i.pi.pi-envelope.input-label-icon
+              | {{ 'profile.email' | translate }}
+              span.required *
+            input(
+              pInputText,
+              id="email",
+              formControlName="email",
+              [readonly]="!isEditMode",
+              [class.readonly-input]="!isEditMode"
+            )
+
+          .form-field-row
+            label(for="signature")
+              i.pi.pi-pencil.input-label-icon
+              | {{ 'profile.signature' | translate }}
+            .signature-container(*ngIf="!isEditMode")
+              img(
+                *ngIf="getSignatureImageUrl()",
+                [src]="getSignatureImageUrl()",
+                alt="Signature",
+                class="signature-image"
+              )
+              .signature-placeholder(*ngIf="!getSignatureImageUrl()")
+                i.pi.pi-image
+                span {{ 'profile.noSignature' | translate }}
+            .signature-edit-container(*ngIf="isEditMode")
+              .signature-preview-container
+                img(
+                  *ngIf="profileForm.get('signaturePicture')?.value",
+                  [src]="profileForm.get('signaturePicture')?.value",
+                  alt="Signature Preview",
+                  class="signature-image"
+                )
+                .signature-placeholder(*ngIf="!profileForm.get('signaturePicture')?.value")
+                  i.pi.pi-image
+                  span {{ 'profile.noSignature' | translate }}
+                button(
+                  *ngIf="profileForm.get('signaturePicture')?.value",
+                  pButton,
+                  type="button",
+                  icon="pi pi-trash",
+                  class="p-button-danger p-button-sm signature-remove-btn",
+                  (click)="removeSignature()",
+                  [pTooltip]="'profile.removeSignature' | translate"
+                )
+              .signature-upload-actions
+                button(
+                  pButton,
+                  type="button",
+                  label="{{ 'profile.choose' | translate }}",
+                  icon="pi pi-plus",
+                  class="p-button-warning",
+                  (click)="signatureFileInput.click()"
+                )
+                input(
+                  #signatureFileInput,
+                  type="file",
+                  id="signatureFile",
+                  accept="image/*",
+                  (change)="onSignatureChange($event)",
+                  hidden
+                )
+
+        // Right Column
+        .profile-column
+          .form-field-row
+            label(for="telephone")
+              i.pi.pi-phone.input-label-icon
+              | {{ 'profile.telephone' | translate }}
+            input(
+              pInputText,
+              id="telephone",
+              formControlName="telephone",
+              [readonly]="!isEditMode",
+              [class.readonly-input]="!isEditMode"
+            )
+
+          .form-field-row
+            label(for="kenobiToken")
+              i.pi.pi-key.input-label-icon
+              | {{ 'profile.kenobiToken' | translate }}
+            .kenobi-token-container
+              textarea(
+                pInputTextarea,
+                id="kenobiToken",
+                formControlName="kenobiToken",
+                [readonly]="!isEditMode",
+                [class.readonly-textarea]="!isEditMode",
+                rows="3"
+              )
+              button(
+                *ngIf="!isEditMode",
+                pButton,
+                type="button",
+                icon="pi pi-copy",
+                label="{{ 'profile.copy' | translate }}",
+                (click)="copyKenobiToken()",
+                class="copy-button",
+                [disabled]="!kenobiToken"
+              )
+
+    // MFA Section
+    .mfa-section
+      .mfa-info
+        i.pi.pi-shield
+        span(*ngIf="userAccount.isMfaAuthRequired") {{ 'profile.mfaEnabled' | translate }}
+        span(*ngIf="!userAccount.isMfaAuthRequired") {{ 'profile.mfaNotEnabled' | translate }}
+      .mfa-buttons
+        button(
+          pButton,
+          type="button",
+          label="{{ 'profile.disableMfa' | translate }}",
+          icon="pi pi-times-circle",
+          class="p-button-danger",
+          (click)="disableMfa()",
+          [disabled]="loading || !userAccount.isMfaAuthRequired"
+        )
+        button(
+          pButton,
+          type="button",
+          label="{{ 'profile.registerMfa' | translate }}",
+          icon="pi pi-qrcode",
+          class="p-button-primary",
+          (click)="openMfaRegistrationModal()",
+          [disabled]="loading || userAccount.isMfaAuthRequired"
+        )
+
+    // Groups & Units
+    .groups-section
+      p-accordion
+        // Groups
+        p-accordion-panel(value="0")
+          p-accordion-header
+            ng-template(#toggleicon, let-active="active")
+              i([class]="active ? 'pi pi-minus' : 'pi pi-plus'")
+            span.flex.items-center.gap-2.w-full
+              i.pi.pi-users.input-label-icon
+              span.font-bold.whitespace-nowrap {{ 'profile.groups.title' | translate }}
+              p-badge([value]="getGroupsCount().toString()", class="ml-auto mr-2")
+          p-accordion-content
+            .groups-container(*ngIf="userAccount.userGroupBag && userAccount.userGroupBag.length > 0; else noGroups")
+              .group-item(*ngFor="let group of userAccount.userGroupBag")
+                .group-info
+                  .group-name {{ group.groupName }}
+                  .group-type
+                    span.group-type-badge {{ group.groupType }}
+            ng-template(#noGroups)
+              .no-groups-message
+                i.pi.pi-users
+                p.no-groups-text {{ 'profile.groups.noGroups' | translate }}
+
+        // Units
+        p-accordion-panel(value="1")
+          p-accordion-header
+            ng-template(#toggleicon, let-active="active")
+              i([class]="active ? 'pi pi-minus' : 'pi pi-plus'")
+            span.flex.items-center.gap-2.w-full
+              i.pi.pi-building.input-label-icon
+              span.font-bold.whitespace-nowrap {{ 'profile.units.title' | translate }}
+              p-badge([value]="getUnitsCount().toString()", class="ml-auto mr-2")
+          p-accordion-content
+            .units-container(*ngIf="userAccount.userUnitBag && userAccount.userUnitBag.length > 0; else noUnits")
+              .unit-item(*ngFor="let unit of userAccount.userUnitBag")
+                .unit-info
+                  .unit-name {{ unit.unitName }}
+                  .unit-details
+                    .unit-detail-row(*ngIf="unit.unitCategory")
+                      span.unit-detail-label {{ 'profile.units.category' | translate }}:
+                      span.unit-detail-value {{ unit.unitCategory }}
+                    .unit-detail-row(*ngIf="unit.platformCode")
+                      span.unit-detail-label {{ 'profile.units.platformCode' | translate }}:
+                      span.unit-detail-value {{ unit.platformCode }}
+            ng-template(#noUnits)
+              .no-units-message
+                i.pi.pi-building
+                p.no-units-text {{ 'profile.units.noUnits' | translate }}
+
+    // User Type Section
+    .user-type-section
+      .user-type-label
+        span {{ 'profile.userType' | translate }}
+      .user-type-options
+        .radio-option
+          input(
+            type="radio",
+            id="externalUser",
+            name="userType",
+            [checked]="userAccount.indExternal",
+            [disabled]="true"
+          )
+          label(for="externalUser") {{ 'profile.externalUser' | translate }}
+        .radio-option
+          input(
+            type="radio",
+            id="officeUser",
+            name="userType",
+            [checked]="!userAccount.indExternal",
+            [disabled]="true"
+          )
+          label(for="officeUser") {{ 'profile.officeUser' | translate }}
+      .footer-description
+        span {{ 'profile.footerDescription' | translate }}
+
+  // Loading
+  .loading-container(*ngIf="loading")
+    i.pi.pi-spin.pi-spinner(style="font-size: 2rem")
+    p {{ 'profile.loading' | translate }}
+
+  // Error
+  .error-container(*ngIf="!loading && !userAccount")
+    i.pi.pi-exclamation-triangle(style="font-size: 2rem; color: #ef4444")
+    p {{ 'profile.errorLoading' | translate }}
+
+  // MFA Modal
+  app-mfa-registration-modal(
+    [(visible)]="showMFAModal",
+    [userId]="currentLoginId",
+    (registered)="loadUserDetails()"
+  )
+
+  // Email Verification Dialog
+  p-dialog(
+    [(visible)]="showEmailVerificationModal",
+    [modal]="true",
+    [style]="{ width: '32rem' }",
+    [closable]="true",
+    [draggable]="false",
+    [resizable]="false",
+    [header]="'profile.emailVerification.title' | translate"
+  )
+    .email-verification-dialog
+      p.email-verification-message {{ 'profile.emailVerification.message' | translate }}
+      .form-field-row
+        label(for="verificationEmail") {{ 'profile.emailVerification.email' | translate }}
+        input(
+          pInputText,
+          id="verificationEmail",
+          [(ngModel)]="verificationEmail",
+          [readonly]="true",
+          class="readonly-input"
+        )
+      .form-field-row
+        label(for="reVerificationEmail") {{ 'profile.emailVerification.reEnterEmail' | translate }}
+        input(
+          pInputText,
+          id="reVerificationEmail",
+          [(ngModel)]="reVerificationEmail",
+          placeholder="{{ 'profile.emailVerification.reEnterEmailPlaceholder' | translate }}"
+        )
+    ng-template(pTemplate="footer")
+      button(
+        pButton,
+        type="button",
+        label="{{ 'profile.cancel' | translate }}",
+        icon="pi pi-times",
+        class="p-button-secondary",
+        (click)="onEmailVerificationCancel()"
+      )
+      button(
+        pButton,
+        type="button",
+        label="{{ 'profile.emailVerification.send' | translate }}",
+        icon="pi pi-send",
+        class="p-button-primary",
+        (click)="onEmailVerificationConfirm()"
+      )
