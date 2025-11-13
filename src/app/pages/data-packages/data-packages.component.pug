@@ -25,6 +25,13 @@ app-layout
           [getDisplayValue]="getFilterDisplayValue.bind(this)",
           (chipRemove)="removeFilterChip($event)",
           (clearAll)="clearAllFilters()",
-          (removeDefaultFilter)="removeDefaultFilter($event)"
+          (removeDefaultFilter)="removeDefaultFilter($event)",
+          [showAdvancedSearch]="true",
+          [showAdvancedSearchQuery]="true",
+          [category]="'datapackages'",
+          [categorySelection]="false",
+          [templateSelection]="false",
+          [levelCreationAllowed]="false",
+          (advancedFilterSearch)="onAdvancedFilterSearch($event)"
         )
   app-table([columns]="tableColumns", [data]="tableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false") 

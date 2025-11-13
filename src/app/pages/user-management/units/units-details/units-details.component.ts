@@ -163,10 +163,29 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['unit']) {
-      this.selectedRoleIndex = 0;
-      this.selectedTabIndex = 0;
-      // Update mobile dropdown selection
-      this.selectedRoleLabel = this.roleLabels[this.selectedRoleIndex];
+      // Reset edit mode when switching to a different unit
+      const previousUnit = changes['unit'].previousValue;
+      const currentUnit = changes['unit'].currentValue;
+
+      // If the unit ID changed (different unit selected), reset edit mode
+      // Only reset if it's actually a different unit (not just a reference update)
+      if (previousUnit?.id !== currentUnit?.id) {
+        this.isEditMode = false;
+        // Reset form to cancel any unsaved changes
+        if (this.unit) {
+          this.unitForm.patchValue({
+            unitName: this.unit.name,
+          });
+        }
+
+        // Only reset role and tab selection when switching to a completely different unit
+        this.selectedRoleIndex = 0;
+        this.selectedTabIndex = 0;
+        // Update mobile dropdown selection
+        this.selectedRoleLabel = this.roleLabels[this.selectedRoleIndex];
+      }
+
+      // Always update data when unit changes (even if same ID, data might have changed)
       if (this.unit) {
         // Load existing permissions for the current role
         this.loadCurrentRolePermissions();
@@ -384,14 +403,9 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
 
   cancelEdit() {
     this.isEditMode = false;
-    // Reset form to original unit name
-    if (this.unit) {
-      this.unitForm.patchValue({
-        unitName: this.unit.name,
-      });
-    }
-    // Reload the current role actions from unit data
-    this.mapActionsFromUnitData();
+    // Reload the original unit data from server to restore all changes
+    // This will reset users, permissions, actions, and unit name to their original state
+    this.reloadUnitData();
   }
 
   reloadUnitData() {
@@ -404,6 +418,9 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
       (this.unitCategory as 'Division' | 'Department' | 'Section') ||
       this.getUnitCategory();
 
+    // Store the current unit ID to check if it's the same unit
+    const currentUnitId = this.unit.id;
+
     // Reload unit details from API
     this.unitsService.getUnitDetails(this.unit.id, unitCategory).subscribe({
       next: (unitDetails) => {
@@ -412,23 +429,30 @@ export class UnitDetailsComponent implements OnChanges, OnInit {
           unitDetails,
           unitCategory
         );
-        // Update the local unit reference
-        this.unit = updatedUnit;
-        // Reload the current role actions from the updated unit data
-        this.mapActionsFromUnitData();
-        // Reload permissions from the updated unit data
-        this.mapPermissionsFromUnitData();
-        // Reload permissions for the current role
-        this.loadCurrentRolePermissions();
-        // Update form with the latest unit name
-        this.unitForm.patchValue({
-          unitName: this.unit.name,
-        });
-        // Emit the updated unit to parent component so it can update its reference
-        this.unitDataUpdated.emit({
-          unit: updatedUnit,
-          category: unitCategory,
-        });
+
+        // Only update if it's still the same unit (prevent issues if user switched units during reload)
+        if (updatedUnit.id === currentUnitId) {
+          // Update the local unit reference
+          this.unit = updatedUnit;
+          // Reload the current role actions from the updated unit data
+          this.mapActionsFromUnitData();
+          // Reload permissions from the updated unit data
+          this.mapPermissionsFromUnitData();
+          // Reload permissions for the current role
+          this.loadCurrentRolePermissions();
+          // Update form with the latest unit name
+          this.unitForm.patchValue({
+            unitName: this.unit.name,
+          });
+          // Emit the updated unit to parent component so it can update its reference
+          // Use setTimeout to avoid change detection issues with tree selection
+          setTimeout(() => {
+            this.unitDataUpdated.emit({
+              unit: updatedUnit,
+              category: unitCategory,
+            });
+          }, 0);
+        }
       },
       error: (error) => {
         console.error('Error reloading unit data:', error);

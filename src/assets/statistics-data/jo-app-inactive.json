@@ -1,137 +1,137 @@
 {
     "wipoPlatformCode": "vc",
     "description": "Total Accounted Applications",
-    "applicationStatus": "all",
-    "producedDateTime": "2025-11-11T11:35:15.979Z",
-    "totalQuantity": 9853,
+    "applicationStatus": "inactive",
+    "producedDateTime": "2025-11-11T11:33:57.805Z",
+    "totalQuantity": 1238,
     "applicationBag": [
         {
             "ipCategory": "P",
-            "totalQuantity": 1012,
+            "totalQuantity": 56,
             "dataBag": [
                 {
                     "applicationCategory": "PA-FA",
-                    "quantity": 10
+                    "quantity": 0
                 },
                 {
                     "applicationCategory": "PA-RA",
-                    "quantity": 28
-                },
-                {
-                    "applicationCategory": "PT-NP",
-                    "quantity": 743
+                    "quantity": 0
                 },
                 {
                     "applicationCategory": "PT-PP",
-                    "quantity": 109
+                    "quantity": 0
                 },
                 {
                     "applicationCategory": "PT-UM",
-                    "quantity": 3
+                    "quantity": 0
+                },
+                {
+                    "applicationCategory": "PT-NP",
+                    "quantity": 42
                 },
                 {
                     "applicationCategory": "PT2-PN",
-                    "quantity": 116
+                    "quantity": 14
                 },
                 {
                     "applicationCategory": "PT3-PN",
-                    "quantity": 3
+                    "quantity": 0
                 }
             ]
         },
         {
             "ipCategory": "T",
-            "totalQuantity": 8438,
+            "totalQuantity": 1158,
             "dataBag": [
                 {
-                    "applicationCategory": "CC-MC",
-                    "quantity": 227
-                },
-                {
-                    "applicationCategory": "CM-CM",
-                    "quantity": 84
-                },
-                {
                     "applicationCategory": "CM-FM",
-                    "quantity": 11
+                    "quantity": 0
                 },
                 {
                     "applicationCategory": "FM-SS",
-                    "quantity": 13
+                    "quantity": 0
                 },
                 {
                     "applicationCategory": "GM-GG",
-                    "quantity": 11
+                    "quantity": 0
                 },
                 {
                     "applicationCategory": "PM-PM",
-                    "quantity": 18
+                    "quantity": 0
                 },
                 {
                     "applicationCategory": "SM-SM",
-                    "quantity": 26
+                    "quantity": 0
                 },
                 {
                     "applicationCategory": "SO-SO",
-                    "quantity": 63
+                    "quantity": 0
                 },
                 {
                     "applicationCategory": "SS-SS",
-                    "quantity": 9
-                },
-                {
-                    "applicationCategory": "T1-TR",
-                    "quantity": 18
-                },
-                {
-                    "applicationCategory": "T2-MT",
-                    "quantity": 20
+                    "quantity": 0
                 },
                 {
                     "applicationCategory": "T3-T3",
-                    "quantity": 9
+                    "quantity": 0
                 },
                 {
                     "applicationCategory": "TM-ST",
-                    "quantity": 23
-                },
-                {
-                    "applicationCategory": "TM-TM",
-                    "quantity": 7898
+                    "quantity": 0
                 },
                 {
                     "applicationCategory": "TT-SM",
-                    "quantity": 8
+                    "quantity": 0
+                },
+                {
+                    "applicationCategory": "CC-MC",
+                    "quantity": 4
+                },
+                {
+                    "applicationCategory": "CM-CM",
+                    "quantity": 2
+                },
+                {
+                    "applicationCategory": "T1-TR",
+                    "quantity": 2
+                },
+                {
+                    "applicationCategory": "T2-MT",
+                    "quantity": 1
+                },
+                {
+                    "applicationCategory": "TM-TM",
+                    "quantity": 1149
                 }
             ]
         },
         {
             "ipCategory": "D",
-            "totalQuantity": 403,
+            "totalQuantity": 24,
             "dataBag": [
                 {
                     "applicationCategory": "ID-ID",
-                    "quantity": 352
+                    "quantity": 19
                 },
                 {
                     "applicationCategory": "ID-RD",
-                    "quantity": 25
+                    "quantity": 0
                 },
                 {
                     "applicationCategory": "ID1-FD",
-                    "quantity": 14
+                    "quantity": 3
                 },
                 {
                     "applicationCategory": "ID2-D1",
-                    "quantity": 2
+                    "quantity": 1
                 },
                 {
                     "applicationCategory": "ID2-DD",
-                    "quantity": 4
+                    "quantity": 1
                 },
                 {
                     "applicationCategory": "ID3-DN",
-                    "quantity": 6
+                    "quantity": 0
                 }
             ]
         }

@@ -54,7 +54,7 @@ p-dialog(
             | {{ ms.translate('profile.userType') || 'User Type' }}
           .detail-value
             span.user-type-display
-              span {{ userAccount.indExternal ? (ms.translate('profile.externalUser') ) : (ms.translate('profile.officeUser') ) }}
+              span {{ userAccount.isExternal ? (ms.translate('profile.externalUser') ) : (ms.translate('profile.officeUser') ) }}
 
     // Security Information Section
     .details-section

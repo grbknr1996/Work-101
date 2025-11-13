@@ -7,7 +7,7 @@
       <app-chart-filter [actualFilters]="filters" [show]="showFilter" (onHide)="showFilter = false" (anyFilterEvent)="anyFilterEvent($event)"></app-chart-filter>
     </div>
     <div class="tw-chart-wrapper w-full flex justify-center items-center lg:justify-start lg:items-center lg:w-[70%] transition-all duration-300">
-      <div echarts [(options)]="chartOption" (chartInit)="onChartEvent($event, 'chartInit')" (chartClick)="onChartEvent($event, 'chartClick')" (chartLegendSelectChanged)="onChartEvent($event, 'chartLegendSelectChanged')" [ngStyle]="{'height.px' : chartHeightFunc(), 'width.px' : chartWidthFunc()}" #chartContainer></div>
+      <div echarts [(options)]="chartOption" (chartInit)="onChartEvent($event, 'chartInit')" (chartClick)="onChartEvent($event, 'chartClick')" (chartLegendSelectChanged)="onChartEvent($event, 'chartLegendSelectChanged')" [ngStyle]="{'width.px' : chartWidthFunc()}" #chartContainer></div>
     </div>
   </div>
 </app-layout>

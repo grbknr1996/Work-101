@@ -241,6 +241,12 @@ export class ProcessActionsComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   get cleanSelectedRoleActions(): any[] {
+    // In view mode, return directSelectedActions since processActions is not loaded
+    if (!this.isEditMode) {
+      return this.directSelectedActions;
+    }
+
+    // In edit mode, map from processActions
     return Array.from(this.selectedActionsSet)
       .map((actionKey) => {
         const [actionType, processType] = actionKey.split('|');
@@ -253,7 +259,9 @@ export class ProcessActionsComponent implements OnInit, OnDestroy, OnChanges {
       .filter((action) => action !== undefined);
   }
 
-  private getActionKey(action: ProcessAction): string {
+  private getActionKey(
+    action: ProcessAction | { actionType: string; processType?: string | null }
+  ): string {
     const processType = action.processType || 'null';
     return `${action.actionType}|${processType}`;
   }

@@ -71,7 +71,7 @@ export class DataExchangeConfigService {
           'Content-Type': 'application/json',
         });
 
-        const dataServicesUrl = `${environment.appUrl}/data-services/v1/distribution-exclusion`;
+        const dataServicesUrl = `${environment.appUrl}/${environment.distributionRulesPath}`;
 
         return this.http
           .get<DataExchangeResponse>(dataServicesUrl, {

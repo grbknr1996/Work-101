@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { UserService } from 'src/app/_services/user.service';
 import { UserAssignment } from 'src/app/_services/units.service';
+import { MechanicsService } from 'src/app/_services/mechanics.service';
 
 export interface UserSelectionItem {
   userId: number;
@@ -32,6 +33,7 @@ export class UserSelectionDialogComponent implements OnInit, OnChanges {
   availableUsers: UserSelectionItem[] = [];
   filteredUsers: UserSelectionItem[] = [];
   searchText = '';
+  searchType: 'userName' | 'loginId' | 'email' = 'userName';
   loading = false;
 
   // Persistent selection state across pages
@@ -43,17 +45,43 @@ export class UserSelectionDialogComponent implements OnInit, OnChanges {
   pageSize = 20;
   totalPages = 0;
 
-  constructor(private userService: UserService) {}
+  // Search type options for dropdown
+  searchTypeOptions: { label: string; value: string }[] = [];
+
+  constructor(private userService: UserService, private ms: MechanicsService) {}
 
   // Make Math available in template
   Math = Math;
 
   ngOnInit() {
-    // Don't load users immediately - load them only when dialog becomes visible
+    // Initialize search type options with translations
+    this.searchTypeOptions = [
+      {
+        label: this.ms.translate(
+          'userManagement.units.userSelectionDialog.searchTypes.username'
+        ),
+        value: 'userName',
+      },
+      {
+        label: this.ms.translate(
+          'userManagement.units.userSelectionDialog.searchTypes.loginId'
+        ),
+        value: 'loginId',
+      },
+      {
+        label: this.ms.translate(
+          'userManagement.units.userSelectionDialog.searchTypes.email'
+        ),
+        value: 'email',
+      },
+    ];
   }
 
   ngOnChanges() {
     if (this.visible) {
+      // Reset search when dialog opens
+      this.searchText = '';
+      this.searchType = 'userName';
       // Load users when dialog opens
       this.loadUsers();
 
@@ -68,14 +96,34 @@ export class UserSelectionDialogComponent implements OnInit, OnChanges {
     }
   }
 
-  private loadUsers(page: number = 0) {
+  private loadUsers(
+    page: number = 0,
+    searchQuery?: string,
+    searchType?: 'userName' | 'loginId' | 'email'
+  ) {
     this.loading = true;
     this.currentPage = page;
 
-    const params = {
+    const params: any = {
       limit: this.pageSize,
       offset: page * this.pageSize,
+      exactMatchIndicator: false, // Allow partial matching
     };
+
+    // Add search parameters if search text is provided
+    if (searchQuery && searchQuery.trim()) {
+      const trimmedSearch = searchQuery.trim();
+      const type = searchType || this.searchType;
+
+      // Set the appropriate search parameter based on search type
+      if (type === 'userName') {
+        params.userName = trimmedSearch;
+      } else if (type === 'loginId') {
+        params.loginId = trimmedSearch;
+      } else if (type === 'email') {
+        params.email = trimmedSearch;
+      }
+    }
 
     this.userService.getUserAccounts(params).subscribe({
       next: (response) => {
@@ -84,7 +132,7 @@ export class UserSelectionDialogComponent implements OnInit, OnChanges {
           (member) => member.userId
         );
 
-        this.availableUsers = response.userAccounts
+        let users = response.userAccounts
           .filter((user) => !currentUserIds.includes(user.userId))
           .map((user) => ({
             userId: user.userId,
@@ -94,6 +142,28 @@ export class UserSelectionDialogComponent implements OnInit, OnChanges {
             selected: this.selectedUserIds.has(user.userId),
           }));
 
+        // Additional client-side filtering if search is active
+        // This ensures we filter by the exact field selected
+        if (searchQuery && searchQuery.trim()) {
+          const searchLower = searchQuery.toLowerCase().trim();
+          const type = searchType || this.searchType;
+
+          users = users.filter((user) => {
+            if (type === 'userName') {
+              return user.userName.toLowerCase().includes(searchLower);
+            } else if (type === 'loginId') {
+              return user.loginId.toLowerCase().includes(searchLower);
+            } else if (type === 'email') {
+              return user.email.toLowerCase().includes(searchLower);
+            }
+            return true;
+          });
+        }
+
+        this.availableUsers = users;
+        // Use the total from API response (which includes filtered count when searching)
+        // If searching, the API should return the total count of matching users
+        // Otherwise, use the total user account quantity
         this.totalUsers =
           response.query.totalUserAccountQuantity ||
           response.userAccounts.length;
@@ -109,21 +179,21 @@ export class UserSelectionDialogComponent implements OnInit, OnChanges {
   }
 
   onSearch() {
+    // Perform search immediately when button is clicked
     if (!this.searchText.trim()) {
-      this.filteredUsers = [...this.availableUsers];
+      // If search is cleared, reload all users
+      this.currentPage = 0;
+      this.loadUsers(0);
     } else {
-      const searchLower = this.searchText.toLowerCase();
-      this.filteredUsers = this.availableUsers.filter(
-        (user) =>
-          user.userName.toLowerCase().includes(searchLower) ||
-          user.loginId.toLowerCase().includes(searchLower) ||
-          user.email.toLowerCase().includes(searchLower)
-      );
+      // Perform search with current search type
+      this.currentPage = 0;
+      this.loadUsers(0, this.searchText, this.searchType);
     }
-    // Ensure selections are preserved in filtered results
-    this.filteredUsers.forEach((user) => {
-      user.selected = this.selectedUserIds.has(user.userId);
-    });
+  }
+
+  onSearchTypeChange() {
+    // When search type changes, don't automatically search
+    // User needs to click search button to perform search
   }
 
   onPageChange(event: any) {
@@ -136,9 +206,14 @@ export class UserSelectionDialogComponent implements OnInit, OnChanges {
       this.totalPages = Math.ceil(this.totalUsers / this.pageSize);
     }
 
-    // Load users for the new page
+    // Load users for the new page with current search query and type
     if (page >= 0 && page < this.totalPages && page !== this.currentPage) {
-      this.loadUsers(page);
+      const searchQuery = this.searchText.trim() || undefined;
+      this.loadUsers(
+        page,
+        searchQuery,
+        searchQuery ? this.searchType : undefined
+      );
     }
   }
 
@@ -234,12 +309,35 @@ export class UserSelectionDialogComponent implements OnInit, OnChanges {
       user.selected = false;
     });
     this.searchText = '';
+    this.searchType = 'userName';
+    this.currentPage = 0;
     this.filteredUsers = [...this.availableUsers];
     this.visibleChange.emit(false);
   }
 
   getRoleLabel(): string {
     return this.role.charAt(0).toUpperCase() + this.role.slice(1);
+  }
+
+  getSearchPlaceholder(): string {
+    switch (this.searchType) {
+      case 'userName':
+        return this.ms.translate(
+          'userManagement.units.userSelectionDialog.searchPlaceholders.username'
+        );
+      case 'loginId':
+        return this.ms.translate(
+          'userManagement.units.userSelectionDialog.searchPlaceholders.loginId'
+        );
+      case 'email':
+        return this.ms.translate(
+          'userManagement.units.userSelectionDialog.searchPlaceholders.email'
+        );
+      default:
+        return this.ms.translate(
+          'userManagement.units.userSelectionDialog.searchPlaceholders.default'
+        );
+    }
   }
 
   getFilteredSelectedCount(): number {
@@ -270,9 +368,8 @@ export class UserSelectionDialogComponent implements OnInit, OnChanges {
 
   private showHeadUserLimitMessage(): void {
     // You can use a toast service or console log for now
-    console.warn(
-      'Only one head user can be selected. Please deselect the current head user first.'
+    const message = this.ms.translate(
+      'userManagement.units.userSelectionDialog.headUserLimitWarning'
     );
-    // TODO: Replace with proper toast notification
   }
 }

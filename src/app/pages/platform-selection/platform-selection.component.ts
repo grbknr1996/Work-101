@@ -145,11 +145,6 @@ export class PlatformSelectionComponent implements OnInit, OnChanges {
       return;
     }
 
-    // Set the selected platform
-    console.log(
-      'PlatformSelectionComponent - Setting WIPO platform to:',
-      this.selectedPlatform
-    );
     this.mechanicsService.setWipoPlatform(this.selectedPlatform);
 
     // Redirect to cognito-sync route after platform selection

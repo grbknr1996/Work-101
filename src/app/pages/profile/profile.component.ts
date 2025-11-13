@@ -160,7 +160,7 @@ export class ProfileComponent implements OnInit {
       mfaStatus: null,
       isActive: this.userAccount.isActive,
       isLocked: this.userAccount.isLocked,
-      indExternal: this.userAccount.indExternal,
+      isExternal: this.userAccount.isExternal,
       userGroupBag: this.userAccount.userGroupBag?.map((group) => ({
         groupId: group.groupId,
         groupName: group.groupName,
@@ -398,7 +398,7 @@ export class ProfileComponent implements OnInit {
       mfaStatus: this.userAccount.mfaStatus,
       isActive: this.userAccount.isActive,
       isLocked: this.userAccount.isLocked,
-      indExternal: this.userAccount.indExternal,
+      isExternal: this.userAccount.isExternal,
       userGroupBag: this.userAccount.userGroupBag?.map((group) => ({
         groupId: group.groupId,
         groupName: group.groupName,

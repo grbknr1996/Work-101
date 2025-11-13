@@ -653,10 +653,10 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
     return [
       {
         label: 'Configuration',
-        routerLink: `/${this.officeCode}/${this.langCode}/configuration`,
+        routerLink: `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard`,
       },
       {
-        label: 'Data Exchange',
+        label: 'Data Sharing',
         routerLink: `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard`,
       },
       {

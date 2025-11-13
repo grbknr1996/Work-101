@@ -60,7 +60,7 @@ export interface DetailedUserAccount {
   userUnitBag?: UserUnit[];
   isActive: boolean;
   isLocked: boolean;
-  indExternal: boolean;
+  isExternal: boolean;
   signaturePicture?: string;
   signatureType?: string;
 }
@@ -76,7 +76,7 @@ export interface UserUpdatePayload {
   mfaStatus: null | 'Gauth';
   isActive: boolean;
   isLocked: boolean;
-  indExternal: boolean;
+  isExternal: boolean;
   userGroupBag?: {
     groupId: number;
     groupName: string;
@@ -98,7 +98,7 @@ export interface UserCreationPayload {
   clientAppId?: string | null;
   signaturePicture?: string;
   signatureType?: string;
-  indExternal: boolean;
+  isExternal: boolean;
   isActive?: boolean; // Add status field for active/inactive
   userGroupsBag: UserGroupBag[];
 }
@@ -667,14 +667,13 @@ export class UserService {
   deleteUserGroup(groupId: number): Observable<void> {
     return this.getAuthHeaders()
       .pipe(
-        switchMap((headers) =>
-          this.http.delete<void>(
-            `${environment.backendUrl}/groups/${groupId}`,
-            {
-              headers: headers,
-            }
-          )
-        ),
+        switchMap((headers) => {
+          const params = new HttpParams().set('groupId', groupId.toString());
+          return this.http.delete<void>(`${environment.backendUrl}/groups`, {
+            params: params,
+            headers: headers,
+          });
+        }),
         catchError((error) =>
           this.handleError(error, `Deleting user group ${groupId}`)
         )
@@ -924,11 +923,17 @@ export class UserService {
         const errorResponse = error?.error;
         const status = error?.status;
         const errorCode = errorResponse?.wipoErrorCode?.code;
-        const errorMessage = errorResponse?.message || error?.message || 'An unexpected error occurred';
+        const errorMessage =
+          errorResponse?.message ||
+          error?.message ||
+          'An unexpected error occurred';
 
         // Handle 400 with "invalid_client" - Logout user
         // Error format: "Client error : invalid_client"
-        if (status === 400 && errorMessage?.toLowerCase().includes('invalid_client')) {
+        if (
+          status === 400 &&
+          errorMessage?.toLowerCase().includes('invalid_client')
+        ) {
           console.error('Invalid client error, logging out user');
           this.authService.logout().subscribe({
             next: () => {
@@ -936,14 +941,18 @@ export class UserService {
             },
             error: () => {
               this.router.navigate(['/default/en/sign-in']);
-            }
+            },
           });
-          return throwError(() => new Error('Invalid client - user logged out'));
+          return throwError(
+            () => new Error('Invalid client - user logged out')
+          );
         }
 
         // Handle 403 with "WIPO-CUS-16103" - Navigate to MFA registration
         if (status === 403 && errorCode === 'WIPO-CUS-16103') {
-          console.log('MFA registration required, navigating to MFA registration');
+          console.log(
+            'MFA registration required, navigating to MFA registration'
+          );
           this.router.navigate(['/mfa-registration']);
           return throwError(() => new Error('MFA registration required'));
         }

@@ -238,7 +238,7 @@ app-layout([config]="layoutConfig")
             type="radio",
             id="externalUser",
             name="userType",
-            [checked]="userAccount.indExternal",
+            [checked]="userAccount.isExternal",
             [disabled]="true"
           )
           label(for="externalUser") {{ 'profile.externalUser' | translate }}
@@ -247,7 +247,7 @@ app-layout([config]="layoutConfig")
             type="radio",
             id="officeUser",
             name="userType",
-            [checked]="!userAccount.indExternal",
+            [checked]="!userAccount.isExternal",
             [disabled]="true"
           )
           label(for="officeUser") {{ 'profile.officeUser' | translate }}

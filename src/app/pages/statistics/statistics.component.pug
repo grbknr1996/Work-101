@@ -9,4 +9,4 @@ app-layout([config]="layout")
 
         //-CHART: >=992 or <992
         div(class="tw-chart-wrapper w-full flex justify-center items-center lg:justify-start lg:items-center lg:w-[70%] transition-all duration-300")
-            div(echarts, [(options)]="chartOption", (chartInit)="onChartEvent($event, 'chartInit')", (chartClick)="onChartEvent($event, 'chartClick')", (chartLegendSelectChanged)="onChartEvent($event, 'chartLegendSelectChanged')", [ngStyle]="{'height.px' : chartHeightFunc(), 'width.px' : chartWidthFunc()}", #chartContainer)
+            div(echarts, [(options)]="chartOption", (chartInit)="onChartEvent($event, 'chartInit')", (chartClick)="onChartEvent($event, 'chartClick')", (chartLegendSelectChanged)="onChartEvent($event, 'chartLegendSelectChanged')", [ngStyle]="{'width.px' : chartWidthFunc()}", #chartContainer)

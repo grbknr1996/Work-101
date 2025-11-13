@@ -90,7 +90,7 @@ export class PermissionService {
           Authorization: `Bearer ${accessToken}`,
           'wipo-platform-code': platformCode,
           'Content-Type': 'application/json',
-          ttl: 100000,
+          [ttl]: 100000,
         });
 
         const url = `${environment.backendUrl}/permissions?userId=${username}`;

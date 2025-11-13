@@ -23,6 +23,7 @@ import { instanceType } from '../utils';
 import * as awsAmplify from 'aws-amplify';
 import { environment } from '../../environments/environment';
 import { MechanicsService } from './mechanics.service';
+import { AUTH_FLOW_ROUTES } from '../_constants/common.constant';
 
 export interface User {
   id: string;
@@ -59,6 +60,15 @@ export class AuthService {
 
   private tempUser: any = null; // Store user during challenges
 
+  /**
+   * Checks if the current route is part of the auth flow and should handle its own navigation
+   * @param currentUrl - The current router URL
+   * @returns true if the route should be excluded from Hub listener navigation
+   */
+  private shouldSkipHubNavigation(currentUrl: string): boolean {
+    return AUTH_FLOW_ROUTES.some((route) => currentUrl.includes(route));
+  }
+
   constructor(
     private router: Router,
     private mechanicsService: MechanicsService
@@ -87,6 +97,11 @@ export class AuthService {
         case 'signedIn':
           this.checkAuthStatus().subscribe((isAuthenticated) => {
             if (isAuthenticated) {
+              // Check if current route should handle its own navigation flow
+              if (this.shouldSkipHubNavigation(this.router.url)) {
+                return;
+              }
+
               const currentState = this.authStateSubject.value;
               const officeCode = currentState.officeCode || 'xx';
 
@@ -464,7 +479,6 @@ export class AuthService {
       })
     ).pipe(
       tap(() => {
-        console.log('Local signOut completed, clearing auth state...');
         this.clearAuth();
         localStorage.clear();
         sessionStorage.clear();
@@ -474,29 +488,21 @@ export class AuthService {
           const currentState = this.authStateSubject.value;
           const officeCode = currentState.officeCode || 'default';
           const officeConfig = configuration[officeCode];
-          console.log('Office config:', officeConfig);
 
           // Get the post-logout redirect URI
           const postLogoutUri =
             environment.cognito?.postLogoutRedirectUri ||
             window.location.origin;
 
-          console.log('Post logout URI:', postLogoutUri);
-
           // Encode the logout URI
           const signoutUrl = encodeURIComponent(postLogoutUri);
-          console.log('Encoded signout URL:', signoutUrl);
 
           // Cognito configuration
-          const cognitoDomain =
-            environment.cognito?.authority ||
-            'auth.iims.ipobs.dev.web1.wipo.int';
-          const clientId =
-            environment.cognito?.clientId || '7vp4nvcrpsttatcg8lf7cds7g4';
+          const cognitoDomain = environment.cognito?.authority;
+          const clientId = environment.cognito?.clientId;
 
           // Construct the federated sign-out URL
           const federatedSignOutUrl = `https://${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${signoutUrl}`;
-          console.log('Federated sign-out URL:', federatedSignOutUrl);
 
           // Use setTimeout to ensure the redirect happens after the current execution context
           setTimeout(() => {
@@ -504,8 +510,6 @@ export class AuthService {
             window.location.href = federatedSignOutUrl;
           }, 100);
         } catch (error) {
-          console.error('Error during logout process:', error);
-          // Fallback to local logout if federated logout fails
           const currentState = this.authStateSubject.value;
           const officeCode = currentState.officeCode || 'default';
           const officeConfig = configuration[officeCode];
@@ -514,7 +518,6 @@ export class AuthService {
         }
       }),
       catchError((error) => {
-        console.error('Logout error:', error);
         this.setError(error.message || 'Logout failed');
         this.setLoading(false);
         return throwError(() => error);

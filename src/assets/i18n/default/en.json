@@ -41,6 +41,7 @@
     "goBack": "Go Back",
     "close": "Close",
     "no": "No",
+    "sync": "Synchronizing user data...",
     "components": {
       "inactivityModal": {
         "title": "Session Timeout Warning",
@@ -2555,8 +2556,9 @@
         "D": "Industrial Designs",
         "P": "Patents",
         "T": "Trademarks",
-        "accounted_application": "ACCOUNTED APPLICATIONS",
-        "active_application": "ACTIVE APPLICATIONS"
+        "accounted_application": "ACCOUNTED",
+        "active_application": "ACTIVE",
+        "inactive_application": "INACTIVE"
       },
       "trends": {
         "tech": "TRENDS OF SECTORS",
@@ -2800,6 +2802,13 @@
       "deleteUnit": "Delete Unit",
       "unitDeletedSuccess": "Unit deleted successfully",
       "unitDeletedFailed": "Failed to delete unit. Please try again.",
+      "noUsersForRole": "No users assigned to {{role}} role",
+      "noUsersDescription": "There are no users currently assigned to this role. Click the button above to add users.",
+      "noPermissionsForRole": "No permissions assigned to {{role}} role",
+      "noPermissionsDescription": "There are no permission sets currently assigned to this role.",
+      "noPermissionsSelected": "No permissions selected. Use the dropdown above to select permission sets for this role.",
+      "noActionsForRole": "No actions assigned to {{role}} role",
+      "noActionsDescription": "There are no process actions currently assigned to this role.",
       "createUnit": {
         "title": "Create New Unit",
         "type": "Type",
@@ -2853,6 +2862,34 @@
         "processTypes": {
           "noteActions": "Note Actions"
         }
+      },
+      "userSelectionDialog": {
+        "header": "Add {{role}} Members",
+        "currentMembersInfo": "Currently {{count}} member(s) assigned to {{role}} role",
+        "selectOneHeadUser": "Select One Head User ({{count}} selected)",
+        "selectAll": "Select All ({{count}} selected)",
+        "headUserLimitInfo": "Only one head user can be assigned to this role",
+        "loadingUsers": "Loading users...",
+        "noUsersFound": "No users found",
+        "tryAdjustingSearch": "Try adjusting your search criteria",
+        "paginationReport": "Showing {first} to {last} of {totalRecords} users",
+        "headUserSelected": "{{count}} head user selected",
+        "usersSelected": "{{count}} user(s) selected for {{role}} role",
+        "cancel": "Cancel",
+        "addSelected": "Add Selected",
+        "search": "Search",
+        "searchTypes": {
+          "username": "Username",
+          "loginId": "Login ID",
+          "email": "Email"
+        },
+        "searchPlaceholders": {
+          "username": "Search by username...",
+          "loginId": "Search by login ID...",
+          "email": "Search by email...",
+          "default": "Search users..."
+        },
+        "headUserLimitWarning": "Only one head user can be selected. Please deselect the current head user first."
       }
     }
   },

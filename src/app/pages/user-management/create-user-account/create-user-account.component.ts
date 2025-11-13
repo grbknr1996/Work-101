@@ -345,12 +345,10 @@ export class CreateUserAccountComponent implements OnInit {
     // Load user account data
     this.userService.getUserAccount(this.userId).subscribe({
       next: (userAccount: DetailedUserAccount) => {
-        console.log('User account loaded:', userAccount);
-
         // Map DetailedUserAccount to form structure
         const userData = {
           basicInfo: {
-            userType: userAccount.indExternal, // Map indExternal to userType (boolean)
+            userType: userAccount.isExternal, // Map isExternal to userType (boolean)
             username: userAccount.userName || '',
             email: userAccount.email || '',
             telephone: '', // Not available in DetailedUserAccount interface
@@ -542,7 +540,7 @@ export class CreateUserAccountComponent implements OnInit {
           isLocked: false,
           isMfaAuthRequired: formData.security.enableTwoFactor || false,
           mfaStatus: null,
-          indExternal: formData.basicInfo.userType, // Set indExternal based on userType (boolean)
+          isExternal: formData.basicInfo.userType, // Set isExternal based on userType (boolean)
           userGroupBag: formData.assignedGroups.map((group: GroupItem) => ({
             groupId: parseInt(group.id),
             groupName: group.name,
@@ -595,7 +593,7 @@ export class CreateUserAccountComponent implements OnInit {
           clientAppId: formData.basicInfo.clientId || null,
           signaturePicture: formData.basicInfo.signaturePicture || null,
           signatureType: formData.basicInfo.signatureType ?? null,
-          indExternal: formData.basicInfo.userType,
+          isExternal: formData.basicInfo.userType,
           isActive: formData.basicInfo.isActive, // Use isActive from form for status field
           userGroupsBag: formData.assignedGroups.map((group: GroupItem) => ({
             groupId: parseInt(group.id),

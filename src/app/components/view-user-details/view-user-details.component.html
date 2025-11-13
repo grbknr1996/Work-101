@@ -31,7 +31,7 @@
         </div>
         <div class="detail-item">
           <label class="detail-label"><i class="pi pi-tag"></i>{{ ms.translate('profile.userType') || 'User Type' }}</label>
-          <div class="detail-value"><span class="user-type-display"><span>{{ userAccount.indExternal ? (ms.translate('profile.externalUser') ) : (ms.translate('profile.officeUser') ) }}</span></span></div>
+          <div class="detail-value"><span class="user-type-display"><span>{{ userAccount.isExternal ? (ms.translate('profile.externalUser') ) : (ms.translate('profile.officeUser') ) }}</span></span></div>
         </div>
       </div>
     </div>

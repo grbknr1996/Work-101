@@ -122,11 +122,11 @@
       <div class="user-type-label"><span>{{ 'profile.userType' | translate }}</span></div>
       <div class="user-type-options">
         <div class="radio-option">
-          <input type="radio" id="externalUser" name="userType" [checked]="userAccount.indExternal" [disabled]="true">
+          <input type="radio" id="externalUser" name="userType" [checked]="userAccount.isExternal" [disabled]="true">
           <label for="externalUser">{{ 'profile.externalUser' | translate }}</label>
         </div>
         <div class="radio-option">
-          <input type="radio" id="officeUser" name="userType" [checked]="!userAccount.indExternal" [disabled]="true">
+          <input type="radio" id="officeUser" name="userType" [checked]="!userAccount.isExternal" [disabled]="true">
           <label for="officeUser">{{ 'profile.officeUser' | translate }}</label>
         </div>
       </div>

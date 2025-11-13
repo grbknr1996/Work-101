@@ -58,6 +58,8 @@ export class StatisticsComponent implements OnInit {
   accountedDataMap = new Map();
   activeData: any;
   activeDataMap = new Map();
+  inActiveData: any;
+  inActiveDataMap = new Map();
   IPCategory = new Map();
   IPCategoryCount = new Map(); //TO DEVELOP
   currentIPCategory: string = '';
@@ -83,7 +85,7 @@ export class StatisticsComponent implements OnInit {
   //CHART-NAVBAR
   onFilter() { this.showFilter = !this.showFilter; }
   onReset() {
-    if (this.accountedDataMap.size > 5 || this.activeDataMap.size > 5) {
+    if (this.accountedDataMap.size > 5) {
       this.currentIPCategory = this.IPCategory.keys().next().value;
       this.setSeriesData('accounted_active_application'); //DEFAULT CHART DATA
       if (this.showFilter) this.updateFilterNGModel('IPType', this.currentIPCategory); //INITIAL
@@ -117,11 +119,11 @@ export class StatisticsComponent implements OnInit {
     if (type === 'chartInit') this.chartInstance = event;
     if (type === 'chartClick') {
       //IP Categories - Axis Drilldown
-      if (event.componentType === 'xAxis') {
+      if (event.componentType === 'xAxis' && this.accountedDataMap.size <= 5) {
         this.currentIPCategory = '';
         this.IPCategory.forEach((value, key) => { if (value === event.value) this.currentIPCategory = key; }); //To Use Later
         this.setSeriesData('accounted_active_application'); //ENTER COMPARISON VIEW
-        if (this.showFilter) if (this.accountedDataMap.size <= 5 || this.activeDataMap.size <= 5) this.updateFilterNGModel('IPType', this.currentIPCategory);
+        if (this.showFilter) this.updateFilterNGModel('IPType', this.currentIPCategory);
       }
       //Application Categories - Bar Drilldown
       if (event.componentType === 'series') {
@@ -150,13 +152,34 @@ export class StatisticsComponent implements OnInit {
         fontWeight: 500
       },
       grid: {
-        top: '15%',
+        top: '10%',
         left: '15%',
-        right: '15%',
+        right: '1%',
         bottom: '10%',
         containLabel: true
       },
-      xAxis: [
+      xAxis: {
+        name: 'Application Count',
+        nameLocation: 'middle',
+        nameGap: 35,
+        nameTextStyle: {
+          fontWeight: 'bold',
+          fontFamily: this.fontFamily,
+          fontSize: 16
+        },
+        type: 'value',
+        min: 0,
+        max: 0,
+        interval: 0,
+        axisLabel: {
+          fontFamily: this.fontFamily,
+          fontSize: 16
+        },
+        splitLine: {
+          show: false
+        }
+      },
+      yAxis: [
         {
           type: 'category',
           triggerEvent: false,
@@ -167,6 +190,9 @@ export class StatisticsComponent implements OnInit {
             formatter: (params: string) => {
               return params.split(' ').join('\n');
             }
+          },
+          splitLine: {
+            show: true
           }
         },
         {
@@ -181,24 +207,6 @@ export class StatisticsComponent implements OnInit {
           }
         }
       ],
-      yAxis: {
-        name: 'Application Count',
-        nameLocation: 'end',
-        nameGap: 35,
-        nameTextStyle: {
-          fontWeight: 'bold',
-          fontFamily: this.fontFamily,
-          fontSize: 16
-        },
-        type: 'value',
-        min: 0,
-        max: 0,
-        interval: 0,
-        axisLabel: {
-          fontFamily: this.fontFamily,
-          fontSize: 16
-        }
-      },
       legend: {
         data: [],
         selected: [],
@@ -210,10 +218,13 @@ export class StatisticsComponent implements OnInit {
       },
       label: {
         show: true,
-        position: 'top',
+        position: 'right',
         fontFamily: this.fontFamily,
         fontSize: 15,
-        color: '#000'
+        color: '#000',
+        formatter: (params: any) => {
+          if (params.data === 0) return '';
+        }
       },
       tooltip: {
         trigger: 'item',
@@ -222,19 +233,30 @@ export class StatisticsComponent implements OnInit {
           fontSize: 15
         },
         formatter: function (params: any) {
-          return `<span style="font-size:14px;">${params.value[0]}: ${params.value[1]}</span>`
+          return `<span style="font-size:14px;">${params.seriesName}<br>${params.name}: ${params.value}</span>`
         }
       },
       series: [
         {
           name: this.translationMap.get('accounted_application'),
-          type: 'bar'
+          type: 'bar',
+          barWidth: 20,
+          barCategoryGap: '15%'
         },
         {
           name: this.translationMap.get('active_application'),
-          type: 'bar'
+          type: 'bar',
+          barWidth: 20,
+          barCategoryGap: '15%'
+        },
+        {
+          name: this.translationMap.get('inactive_application'),
+          type: 'bar',
+          barWidth: 20,
+          barCategoryGap: '15%'
         }
-      ]
+      ],
+      color: ['#7eb0d5', '#b2e061', '#fd7f6f']
     };
   }
   chartHeightFunc() { return this.chartHeight; }
@@ -279,7 +301,8 @@ export class StatisticsComponent implements OnInit {
       'charts.statistics.application_count.P',
       'charts.statistics.application_count.T',
       'charts.statistics.application_count.accounted_application',
-      'charts.statistics.application_count.active_application'
+      'charts.statistics.application_count.active_application',
+      'charts.statistics.application_count.inactive_application'
     ]).subscribe((translations) => {
       this.translationMap.set("ID-ND", translations['charts.statistics.application_count.ID-ND']);
       this.translationMap.set("ID-NI", translations['charts.statistics.application_count.ID-NI']);
@@ -291,6 +314,7 @@ export class StatisticsComponent implements OnInit {
       this.translationMap.set("T", translations['charts.statistics.application_count.T']);
       this.translationMap.set("accounted_application", translations['charts.statistics.application_count.accounted_application']);
       this.translationMap.set("active_application", translations['charts.statistics.application_count.active_application']);
+      this.translationMap.set("inactive_application", translations['charts.statistics.application_count.inactive_application']);
 
       //COMMUNICATE WITH COMMON
       this.chartService.setChartID(0);
@@ -298,6 +322,7 @@ export class StatisticsComponent implements OnInit {
 
       this.fetchAccountedApplications();
       this.fetchActiveApplications();
+      this.fetchInactiveApplications();
     })
   }
   ngAfterViewInit() {
@@ -312,14 +337,14 @@ export class StatisticsComponent implements OnInit {
   ngAfterViewChecked() {
     if (this.showFilter && !this.previous) {
       //HANDLE SHOW/HIDE SYNC
-      (this.accountedDataMap.size > 5 || this.activeDataMap.size > 5) ? this.updateFilterNGModel('IPType', this.currentIPCategory, [...this.IPCategory.keys()]) : (this.currentIPCategory.length === 0) ? this.updateFilterNGModel('IPType', 'all') : this.updateFilterNGModel('IPType', this.currentIPCategory);
+      (this.accountedDataMap.size > 5) ? this.updateFilterNGModel('IPType', this.currentIPCategory, [...this.IPCategory.keys()]) : (this.currentIPCategory.length === 0) ? this.updateFilterNGModel('IPType', 'all') : this.updateFilterNGModel('IPType', this.currentIPCategory);
     }
     this.previous = this.showFilter;
   }
 
   fetchAccountedApplications() {
-    this.chartService.getApplicationCount('total_applications').subscribe({
-    //this.http.get('assets/statistics-data/jo-app.json').subscribe({
+    //this.chartService.getApplicationCount('total_applications').subscribe({
+    this.http.get('assets/statistics-data/jo-app.json').subscribe({
       next: (response) => {
         console.log("Response - fetchAccountedApplications()", response);
         this.accountedData = response;
@@ -329,14 +354,25 @@ export class StatisticsComponent implements OnInit {
     });
   }
   fetchActiveApplications() {
-    this.chartService.getApplicationCount('active_applications').subscribe({
-    //this.http.get('assets/statistics-data/jo-app-active.json').subscribe({
+    //this.chartService.getApplicationCount('active_applications').subscribe({
+    this.http.get('assets/statistics-data/jo-app-active.json').subscribe({
       next: (response) => {
         console.log("Response - fetchActiveApplications()", response);
         this.activeData = response;
         this.transformApplications(this.activeData, 'active_application');
       },
       error: (error) => { console.log("Error - fetchActiveApplications()", error); }
+    });
+  }
+  fetchInactiveApplications() {
+    //this.chartService.getApplicationCount('inactive_applications').subscribe({
+    this.http.get('assets/statistics-data/jo-app-inactive.json').subscribe({
+      next: (response) => {
+        console.log("Response - fetchInactiveApplications()", response);
+        this.inActiveData = response;
+        this.transformApplications(this.inActiveData, 'inactive_application');
+      },
+      error: (error) => { console.log("Error - fetchInactiveApplications()", error); }
     });
   }
   transformApplications(inputData, type: string) {
@@ -346,11 +382,11 @@ export class StatisticsComponent implements OnInit {
       for (let applications of IP.dataBag) {
         if (type === 'accounted_application') this.accountedDataMap.set(applications.applicationCategory, applications.quantity);
         if (type === 'active_application') this.activeDataMap.set(applications.applicationCategory, applications.quantity);
+        if (type === 'inactive_application') this.inActiveDataMap.set(applications.applicationCategory, applications.quantity);
       }
     }
     if (this.IPCategory.size !== 0) {
       if (this.accountedDataMap.size > 5) this.currentIPCategory = this.IPCategory.keys().next().value;
-      if (this.activeDataMap.size > 5) this.currentIPCategory = this.IPCategory.keys().next().value;
     }
     (this.currentIPCategory.length === 0) ? this.setSeriesData('accounted_application') : this.setSeriesData('accounted_active_application'); //DEFAULT CHART DATA
   }
@@ -359,9 +395,9 @@ export class StatisticsComponent implements OnInit {
   setSeriesData(seriesCode: string) {
     //CHART SERIES
     this.seriesData = [];
-    let seriesData1 = [], seriesData2 = [];
+    let seriesData1 = [], seriesData2 = [], seriesData3 = [];
     if (this.currentIPCategory.length === 0) {
-      let chartDataMap = (seriesCode === 'accounted_application') ? this.accountedDataMap : this.activeDataMap;
+      let chartDataMap = (seriesCode === 'accounted_application') ? this.accountedDataMap : (seriesCode === 'active_application') ? this.activeDataMap : this.inActiveDataMap;
       for (let key of chartDataMap.keys()) this.seriesData.push([key, chartDataMap.get(key)]);
     }
     else {
@@ -379,20 +415,31 @@ export class StatisticsComponent implements OnInit {
           }
         }
       });
+      this.inActiveData?.applicationBag.forEach((item: any) => {
+        if (item.ipCategory === this.currentIPCategory) {
+          for (let items of item.dataBag) {
+            seriesData3.push([items.applicationCategory, this.inActiveDataMap.get(items.applicationCategory)]);
+          }
+        }
+      });
     }
+
+    //SORT
+    if (this.seriesData.length !== 0) this.seriesData = new Map([...this.seriesData].sort(([a], [b]) => a.localeCompare(b)));
+    if (seriesData1.length !== 0) seriesData1 = [...seriesData1].sort(([a], [b]) => a.localeCompare(b));
+    if (seriesData2.length !== 0) seriesData2 = [...seriesData2].sort(([a], [b]) => a.localeCompare(b));
+    if (seriesData3.length !== 0) seriesData3 = [...seriesData3].sort(([a], [b]) => a.localeCompare(b));
 
     //CHART LEGEND
     if (seriesCode === 'accounted_active_application') {
       this.chartLegendSelected = {
         [this.translationMap.get('accounted_application')]: true,
-        [this.translationMap.get('active_application')]: true
+        [this.translationMap.get('active_application')]: true,
+        [this.translationMap.get('inactive_application')]: true
       }
     }
     else {
-      this.chartLegendSelected = {
-        [this.translationMap.get('accounted_application')]: (seriesCode === 'accounted_application') ? true : false,
-        [this.translationMap.get('active_application')]: (seriesCode === 'active_application') ? true : false
-      }
+      this.chartLegendSelected[this.translationMap.get(this.currentLegend)] = !this.chartLegendSelected[this.translationMap.get(this.currentLegend)];
     }
 
     //DYNAMIC CHART HEIGHT
@@ -402,66 +449,65 @@ export class StatisticsComponent implements OnInit {
     setTimeout(() => {
       //2DBAR
       this.chartInstance.setOption({
-        xAxis: [
+        xAxis: {
+          name: (this.currentIPCategory.length === 0) ? this.chartOption.xAxis.name : `${this.translationMap.get(this.currentIPCategory)}\n\n${this.chartOption.xAxis.name}`,
+          max: (this.currentIPCategory.length === 0) ? this.calculateSpacing((this.seriesData.map(d => d[1]))).max : this.calculateSpacing((seriesData1.map(d => d[1]))).max,
+          interval: (this.currentIPCategory.length === 0) ? this.calculateSpacing((this.seriesData.map(d => d[1]))).interval : this.calculateSpacing((seriesData1.map(d => d[1]))).interval
+        },
+        yAxis: [
           {
             data: (this.currentIPCategory.length === 0) ? this.seriesData.map(d => d[0]) : seriesData1.map(d => d[0])
           },
           {
-            data: (this.currentIPCategory.length === 0) ? Array.from(this.IPCategory.values()) : [this.translationMap.get(this.currentIPCategory)]
+            show: (this.currentIPCategory.length === 0) ? true : false,
+            data: (this.currentIPCategory.length === 0) ? Array.from(this.IPCategory.values()) : []
           }
         ],
-        yAxis: {
-          max: (this.currentIPCategory.length === 0) ? this.calculateSpacing((this.seriesData.map(d => d[1]))).max : this.calculateSpacing((seriesData1.map(d => d[1]))).max,
-          interval: (this.currentIPCategory.length === 0) ? this.calculateSpacing((this.seriesData.map(d => d[1]))).interval : this.calculateSpacing((seriesData1.map(d => d[1]))).interval
-        },
         legend: {
-          data: [this.translationMap.get('accounted_application'), this.translationMap.get('active_application')],
+          data: [this.translationMap.get('accounted_application'), this.translationMap.get('active_application'), this.translationMap.get('inactive_application')],
           selected: this.chartLegendSelected
         },
         series: [
           {
             name: this.translationMap.get('accounted_application'),
-            data: (seriesCode === 'accounted_active_application') ? seriesData1 : (seriesCode === 'accounted_application' && this.currentIPCategory.length !== 0) ? seriesData1 : this.seriesData
+            data: (seriesCode === 'accounted_active_application') ? seriesData1.map(d => d[1]) : (this.currentIPCategory.length !== 0) ? seriesData1.map(d => d[1]) : this.seriesData.map(d => d[1])
           },
           {
             name: this.translationMap.get('active_application'),
-            data: (seriesCode === 'accounted_active_application') ? seriesData2 : (seriesCode === 'active_application' && this.currentIPCategory.length !== 0) ? seriesData2 : this.seriesData
-          }
+            data: (seriesCode === 'accounted_active_application') ? seriesData2.map(d => d[1]) : (this.currentIPCategory.length !== 0) ? seriesData2.map(d => d[1]) : this.seriesData.map(d => d[1])
+          },
+          {
+            name: this.translationMap.get('inactive_application'),
+            data: (seriesCode === 'accounted_active_application') ? seriesData3.map(d => d[1]) : (this.currentIPCategory.length !== 0) ? seriesData3.map(d => d[1]) : this.seriesData.map(d => d[1])
+          },
         ],
         notMerge: false
-      }, { devicePixelRatio: this.utility.findPixelRatio() })
+      }, { devicePixelRatio: this.utility.findPixelRatio() }),
+        this.adjustChartHeight();
     }, 100);
   }
 
-  //?
-  calculateSpacing(input: number[], minTicks = 5) {
+  adjustChartHeight() {
+    const barWidth = 20 + 5 + 10;
+    const data = this.IPCategoryCount.get(this.currentIPCategory);
+    const adjustedHeight = (data * 3) * barWidth + 120;
+    const chartDiv = this.chartContainer.nativeElement;
+    chartDiv.style.height = adjustedHeight + 'px';
+    if (this.chartInstance) this.chartInstance.resize();
+  }
+  calculateSpacing(input: number[]) {
     if (!input || input.length === 0) return { max: 0, interval: 0 };
 
-    const maximumData = Math.max(...input);
-    if (maximumData === 0) return { max: 1, interval: 1 };
+    const max = Math.max(...input);
+    if (max === 0) return { max: 1, interval: 1 };
 
-    const magnitude = Math.pow(10, Math.floor(Math.log10(maximumData)));
-    let roundedMax = Math.ceil(maximumData / magnitude) * magnitude;
+    if (max < 100) return { max: 100, interval: (100 / 5) };
 
-    const niceFractions = [1, 2, 5, 10];
-    let interval = magnitude;
-
-    for (const frac of niceFractions) {
-      console.log("frac, roundedMax, magnitude", frac, roundedMax, magnitude);
-      const tickCount = Math.ceil(roundedMax / (frac * magnitude));
-      console.log("tickCount", tickCount);
-      if (tickCount <= minTicks) {
-        interval = frac * magnitude;
-        console.log("interval", interval);
-        break;
-      }
-    }
-    const ticks = Math.ceil(roundedMax / interval);
-    if (ticks < minTicks) {
-      roundedMax = interval * minTicks;
-    }
-
-    return { max: roundedMax, interval: interval };
+    let scale = Math.pow(10, (max.toString().length) - 2);
+    let givenHundred = max / scale;
+    let check = max % scale;
+    if (check !== 0) givenHundred = givenHundred + 1;
+    return { max: (givenHundred * scale), interval: (givenHundred * scale) };
   }
 
   ngOnDestroy() {

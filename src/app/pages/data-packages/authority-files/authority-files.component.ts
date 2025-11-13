@@ -169,13 +169,7 @@ export class AuthorityFilesComponent implements OnInit {
         icon: 'pi pi-download',
         action: 'downloadExceptionList',
         severity: 'info',
-      },
-      {
-        label: this.ms.translate('dataService.authorityFiles.table.actions.uploadException'),
-        icon: 'pi pi-upload',
-        action: 'uploadExceptionList',
-        severity: 'info',
-      },
+      }
     ];
 
     this.layoutConfig = {

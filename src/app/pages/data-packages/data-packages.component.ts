@@ -233,12 +233,6 @@ export class DataPackagesComponent implements OnInit {
 
     this.filterConfigs = [
       {
-        key: 'globalZipId',
-        label: this.ms.translate('dataService.dataSharing.table.filename'),
-        type: 'text',
-        section: this.ms.translate('common.components.filter.section.file'),
-      },
-      {
         key: 'receivedDate',
         label: this.ms.translate('dataService.dataSharing.table.sharedDate'),
         type: 'dateRange',

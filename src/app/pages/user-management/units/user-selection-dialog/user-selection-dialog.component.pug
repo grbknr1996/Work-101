@@ -10,32 +10,39 @@ p-dialog(
   ng-template(pTemplate="header")
     .flex.align-items-center.gap-2
       i.pi.pi-users(style="font-size: 1.2rem")
-      span Add {{ getRoleLabel() }} Members
+      span {{ 'userManagement.units.userSelectionDialog.header' | translate: {role: getRoleLabel()} }}
 
   .p-fluid
     // Search Section
     .mb-4
-      .flex.gap-2
-        input(
+      .flex.gap-2.align-items-center
+        p-dropdown(
+          [options]="searchTypeOptions",
+          [(ngModel)]="searchType",
+          (onChange)="onSearchTypeChange()",
+          [style]="{ width: '150px' }",
+          optionLabel="label",
+          optionValue="value"
+        )
+        input.text-sm(
           pInputText,
           [(ngModel)]="searchText",
-          (input)="onSearch()",
-          placeholder="Search users by name, login, or email...",
-          style="flex: 1",
-          class="text-sm"
+          [placeholder]="getSearchPlaceholder()",
+          (keyup.enter)="onSearch()",
+          style="flex: 1"
         )
         button.p-button-outlined(
           pButton,
           icon="pi pi-search",
           (click)="onSearch()",
-          title="Search"
+          [title]="'userManagement.units.userSelectionDialog.search' | translate"
         )
 
     // Current Members Info
     .mb-3(*ngIf="currentMembers.length > 0")
       .flex.align-items-center.gap-2
         i.pi.pi-info-circle.text-blue-500.text-xs
-        span.text-xs.text-gray-600 Currently {{ currentMembers.length }} member(s) assigned to {{ getRoleLabel() }} role
+        span.text-xs.text-gray-600 {{ 'userManagement.units.userSelectionDialog.currentMembersInfo' | translate: {count: currentMembers.length, role: getRoleLabel()} }}
 
     // Select All
     .mb-3
@@ -47,14 +54,14 @@ p-dialog(
           [disabled]="filteredUsers.length === 0"
         )
         label.text-xs.font-medium
-          span(*ngIf="role === 'head'") Select One Head User ({{ selectedCount }} selected)
-          span(*ngIf="role !== 'head'") Select All ({{ selectedCount }} selected)
+          span(*ngIf="role === 'head'") {{ 'userManagement.units.userSelectionDialog.selectOneHeadUser' | translate: {count: selectedCount} }}
+          span(*ngIf="role !== 'head'") {{ 'userManagement.units.userSelectionDialog.selectAll' | translate: {count: selectedCount} }}
 
     // Head User Limit Info
     .mb-3(*ngIf="role === 'head'")
       .flex.align-items-center.gap-2
         i.pi.pi-info-circle.text-blue-500.text-xs
-        span.text-xs.text-gray-600 Only one head user can be assigned to this role
+        span.text-xs.text-gray-600 {{ 'userManagement.units.userSelectionDialog.headUserLimitInfo' | translate }}
 
     // Users List
     .border-1.border-gray-200.border-round.user-list-container(
@@ -63,13 +70,13 @@ p-dialog(
       // Loading State
       .loading-state(*ngIf="loading")
         i.pi.pi-spin.pi-spinner
-        span Loading users...
+        span {{ 'userManagement.units.userSelectionDialog.loadingUsers' | translate }}
 
       // Empty State
       .empty-state(*ngIf="!loading && filteredUsers.length === 0")
         i.pi.pi-search.text-3xl.mb-3.block
-        .text-sm.font-medium.mb-2 No users found
-        .text-xs Try adjusting your search criteria
+        .text-sm.font-medium.mb-2 {{ 'userManagement.units.userSelectionDialog.noUsersFound' | translate }}
+        .text-xs {{ 'userManagement.units.userSelectionDialog.tryAdjustingSearch' | translate }}
 
       // User List Items
       .p-2(*ngIf="!loading && filteredUsers.length > 0")
@@ -112,7 +119,7 @@ p-dialog(
         [totalRecords]="totalUsers",
         [first]="currentPage * pageSize",
         [showCurrentPageReport]="true",
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users",
+        [currentPageReportTemplate]="'userManagement.units.userSelectionDialog.paginationReport' | translate",
         (onPageChange)="onPageChange($event)",
         [disabled]="loading",
         styleClass="p-paginator-sm",
@@ -125,20 +132,20 @@ p-dialog(
         .flex.align-items-center.gap-2
           i.pi.pi-check-circle.text-blue-600.text-sm
           span.font-medium.text-blue-800.text-sm
-            span(*ngIf="role === 'head'") {{ selectedCount }} head user selected
-            span(*ngIf="role !== 'head'") {{ selectedCount }} user(s) selected for {{ getRoleLabel() }} role
+            span(*ngIf="role === 'head'") {{ 'userManagement.units.userSelectionDialog.headUserSelected' | translate: {count: selectedCount} }}
+            span(*ngIf="role !== 'head'") {{ 'userManagement.units.userSelectionDialog.usersSelected' | translate: {count: selectedCount, role: getRoleLabel()} }}
 
   ng-template(pTemplate="footer")
     .flex.justify-content-end.gap-2
       button.p-button-outlined(
         pButton,
-        label="Cancel",
+        [label]="'userManagement.units.userSelectionDialog.cancel' | translate",
         icon="pi pi-times",
         (click)="onCancel()"
       )
       button.p-button-primary(
         pButton,
-        label="Add Selected",
+        [label]="'userManagement.units.userSelectionDialog.addSelected' | translate",
         icon="pi pi-plus",
         [disabled]="selectedCount === 0",
         (click)="onAddSelected()"

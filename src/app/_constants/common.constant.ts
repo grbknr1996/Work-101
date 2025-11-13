@@ -21,3 +21,14 @@ export const CACHE_HEADERS = {
   CACHE_TTL: 'X-WIPO-Cache-TTL',
   CACHE_INVALIDATE: 'X-WIPO-Cache-Invalidate',
 } as const;
+
+/**
+ * Routes that handle their own navigation flow and should not be interrupted
+ * by the Hub listener's automatic navigation after sign-in
+ */
+export const AUTH_FLOW_ROUTES = [
+  '/auth-callback',
+  '/cognito-sync',
+  '/platform-selection',
+  '/mfa-registration',
+] as const;

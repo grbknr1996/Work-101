@@ -36,12 +36,13 @@ export class CognitoSyncComponent implements OnInit, OnDestroy {
     try {
       // Call cognitoSync with error handling
       await firstValueFrom(this.userService.cognitoSyncWithErrorHandling());
-      
+
       // If cognitoSync succeeds, navigate to dashboard
       const officeCode = this.ms.getCurrentOffice() || 'default';
-      const officeConfig = configuration[officeCode] || configuration['default'];
+      const officeConfig =
+        configuration[officeCode] || configuration['default'];
       const langCode = officeConfig?.defaultLanguage || 'en';
-      
+
       this.loadingService.hide();
       this.router.navigate([`/${officeCode}/${langCode}/dashboard`]);
     } catch (error: any) {
@@ -52,7 +53,4 @@ export class CognitoSyncComponent implements OnInit, OnDestroy {
     }
   }
 }
-
-
-
 

@@ -156,6 +156,7 @@ import { BookmarkDialogComponent } from './components/BookmarkDialog/bookmark-di
 import { ViewIndexationDocumentComponent } from './pages/document-capture/indexation-view/indexation-view.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ViewUserDetailsComponent } from './components/view-user-details/view-user-details.component';
+import { CognitoSyncComponent } from './pages/cognito-sync/cognito-sync.component';
 const WipoThemePreset = definePreset(Aura, {
   primitive: {
     fontFamily: '"Noto Sans", "Segoe UI", Roboto, Arial, sans-serif',
@@ -199,6 +200,7 @@ const WipoThemePreset = definePreset(Aura, {
     PageNotfoundComponent,
     NbFormatter,
     AuthCallbackComponent,
+    CognitoSyncComponent,
     AuthSignoutComponent,
     AppLayoutComponent,
     ToastComponent,
