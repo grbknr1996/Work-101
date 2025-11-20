@@ -1,0 +1,23 @@
+
+<p-dialog [header]="'documentCapture.cropDialog.header' | translate:{ pageNumber: pageNumber }" [(visible)]="visible" [modal]="true" appendTo="body" [baseZIndex]="10000" [style]="{ width: '40rem' }" [closable]="true" (onHide)="onClose()" [contentStyle]="{ 'max-height': '65vh', overflow: 'auto' }">
+  <ul class="bullet-text">
+    <li>{{ 'documentCapture.cropDialog.bullet1' | translate }}</li>
+    <li>{{ 'documentCapture.cropDialog.bullet2' | translate }}</li>
+    <li>{{ 'documentCapture.cropDialog.bullet3' | translate }}</li>
+  </ul>
+  <div class="flex items-center gap-2 my-3">
+    <button class="p-button p-button-outlined p-button-sm" type="button" pButton icon="pi pi-minus" (click)="zoomOut()"></button>
+    <button class="p-button p-button-outlined p-button-sm" type="button" pButton icon="pi pi-plus" (click)="zoomIn()"></button><span class="ml-2 font-medium">{{ 'documentCapture.cropDialog.selection' | translate }}</span><span class="ml-1">{{ zoomLevel }}%</span><span class="ml-4 font-medium">{{ 'documentCapture.cropDialog.rotate' | translate }}</span>
+    <button class="p-button p-button-text p-button-sm" type="button" pButton icon="pi pi-refresh" (click)="rotateLeft()"></button><span class="mx-1">{{ fineTune }}°</span>
+    <button class="p-button p-button-text p-button-sm" type="button" pButton icon="pi pi-refresh" style="transform: scaleX(-1)" (click)="rotateRight()"></button>
+  </div><span class="text-sm text-gray-500">{{ 'documentCapture.cropDialog.fineTune' | translate }}: {{ fineTune }}</span>
+  <p-slider class="w-full" [(ngModel)]="fineTune" [min]="0" [max]="360" [step]="1"> </p-slider><span class="text-xs text-gray-500 ml-1">{{ fineTune }}°
+    <image-cropper *ngIf="imageChangedEvent" [imageURL]="imageUrl" [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [transform]="{ rotate: fineTune, scale: zoomScale }" [resizeToWidth]="600" format="png" [allowMoveImage]="allowMoveImage" (imageLoaded)="imageLoaded($event)" (imageCropped)="imageCropped($event)" (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()"></image-cropper></span>
+  <!-- move buttons to dialog footer so they're always visible-->
+  <ng-template pTemplate="footer"></ng-template>
+  <div class="flex justify-end gap-2 w-full">
+    <button class="p-button p-button-outlined p-button-sm" type="button" pButton [label]="'documentCapture.cropDialog.resetAll' | translate" (click)="resetAll()"></button>
+    <button class="p-button p-button-text p-button-sm" type="button" pButton [label]="'documentCapture.cropDialog.cancel' | translate" (click)="onClose()"></button>
+    <button class="p-button p-button-sm p-button-primary" type="button" pButton [label]="'documentCapture.cropDialog.saveCroppedImage' | translate" (click)="saveCroppedImage()"></button>
+  </div>
+</p-dialog>

@@ -9,4 +9,3 @@ const routes: Routes = [{ path: '', component: CognitoSyncComponent }];
   exports: [RouterModule],
 })
 export class CognitoSyncComponentRoutingModule {}
-

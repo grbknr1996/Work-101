@@ -668,43 +668,51 @@ export class DataPackagesComponent implements OnInit {
   onAdvancedFilterSearch(advancedFilterQuery: AdvancedFilterQuery): void {
     console.log(advancedFilterQuery);
 
-    const levelJoin = advancedFilterQuery.levelList.some(f => f.orOperator) ? " OR " : " AND ";
-    let query = advancedFilterQuery.levelList
-      .map(level => {
-        const groupQueries = level.group_list.map(group => {
+    let applicationId;
+    for (const level of advancedFilterQuery.levelList) {
+      for (const group of level.group_list) {
+        for (const file of group.file_list) {
+          if (file.field?.code === "applicationId") {
+            const value = file.value;
+            const op = file.connecting?.code;
+            switch (op) {
+              case "equals":
+                applicationId =  value;
+                break;
+              case "like":
+                applicationId =  `%25${value}%25`;
+                break;
+              case "starts":
+                applicationId =  `${value}%25`;
+                break;
+              case "ends":
+                applicationId =  `%25${value}`;
+                break;
+              default:
+                applicationId =  value;
+                break;
+            }
+          }
+        }
+      }
+    }
 
-          const fileJoin = group.file_list.some(f => f.orOperator) ? " OR " : " AND ";
-          const fileQueries = group.file_list.map(file => {
-            const field = file.field.code;
-            const op = file.connecting.code.toUpperCase();
-            const val =
-              file.fieldType === "text"
-                ? `'${file.value}'`
-                : ( op === "DATERANGE"
-                  ? file.value.map(v => `'${new Date(v).toLocaleDateString('en-CA', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit'
-                      })}'`).join(" AND ") 
-                  : `'${new Date(file.value).toLocaleDateString('en-CA', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit'
-                      })}'` 
-                  );
+    this.tableData = [];
+    this.statSelected = 'TOTAL COUNT';
 
-            return `${field} ${op} ${val}`;
-          });
-          
-          return `(${fileQueries.join(fileJoin)})`;
-        });
-
-        return `(${groupQueries.join(levelJoin)})`;
-      })
-      .join(levelJoin);
-
-    console.log(query);
+    console.log(applicationId);
     //TODO need to apply this query to the output
+    this.dataService.getGlobalZipIdsByApplicationId(applicationId).subscribe({
+      next: (response) => {
+        this.tableData = response;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Failed to fetch shared packages for the application id:', err);
+      }
+    });
+
+    this.appliedFilters = [];
 
   }
 

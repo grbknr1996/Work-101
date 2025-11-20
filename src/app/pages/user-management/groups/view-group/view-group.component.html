@@ -1,0 +1,66 @@
+
+<p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '90vw', maxWidth: '900px' }" [draggable]="false" [resizable]="true" [closable]="true" [header]="(groupDetails?.groupName || 'Group Details') + ' - ' + (ms.translate('userManagement.groups.viewGroup') || 'View Group')" (onShow)="onShow()" (onHide)="onHide()" [styleClass]="'view-group-details-dialog'">
+  <div class="view-group-details-container" *ngIf="!loading &amp;&amp; groupDetails">
+    <!-- Basic Information Section-->
+    <div class="details-section">
+      <h3 class="section-title"><i class="pi pi-info-circle"></i>{{ ms.translate('userManagement.groups.basicInformation') || 'Basic Information' }}</h3>
+      <div class="details-grid">
+        <div class="detail-item">
+          <label class="detail-label"><i class="pi pi-tag"></i>{{ ms.translate('userManagement.groups.groupName') || 'Group Name' }}</label>
+          <div class="detail-value">{{ groupDetails.groupName || '-' }}</div>
+        </div>
+        <div class="detail-item">
+          <label class="detail-label"><i class="pi pi-id-card"></i>{{ ms.translate('userManagement.groups.groupId') || 'Group ID' }}</label>
+          <div class="detail-value">{{ groupDetails.groupId || '-' }}</div>
+        </div>
+        <div class="detail-item">
+          <label class="detail-label"><i class="pi pi-tags"></i>{{ ms.translate('userManagement.groups.type') || 'Group Type' }}</label>
+          <div class="detail-value"><span [ngClass]="getGroupTypeChipClass()">{{ getGroupTypeLabel() }}</span></div>
+        </div>
+        <div class="detail-item">
+          <label class="detail-label"><i class="pi pi-info-circle"></i>{{ ms.translate('userManagement.groups.description') || 'Description' }}</label>
+          <div class="detail-value">{{ groupDetails.description || '-' }}</div>
+        </div>
+        <div class="detail-item">
+          <label class="detail-label"><i class="pi pi-check-circle"></i>{{ ms.translate('userManagement.groups.status') || 'Status' }}</label>
+          <div class="detail-value"><span [ngClass]="getStatusChipClass()">{{ getStatusLabel() }}</span></div>
+        </div>
+        <div class="detail-item" *ngIf="groupDetails.platformCode">
+          <label class="detail-label"><i class="pi pi-globe"></i>{{ ms.translate('userManagement.groups.platformCode') || 'Platform Code' }}</label>
+          <div class="detail-value">{{ groupDetails.platformCode || '-' }}</div>
+        </div>
+      </div>
+    </div>
+    <!-- Members Section-->
+    <div class="details-section">
+      <h3 class="section-title"><i class="pi pi-users"></i>{{ ms.translate('userManagement.groups.members') || 'Group Members' }}
+        <p-badge class="ml-2" [value]="getMembersCount().toString()" [severity]="getMembersCount() &gt; 0 ? 'info' : 'secondary'"></p-badge>
+      </h3>
+      <div class="members-container" *ngIf="groupDetails.userIdBag &amp;&amp; groupDetails.userIdBag.length &gt; 0; else noMembers">
+        <div class="member-card" *ngFor="let member of groupDetails.userIdBag">
+          <div class="member-card-header"><i class="pi pi-user"></i><span class="member-card-name">{{ member.userName || '-' }}</span></div>
+          <div class="member-card-body">
+            <div class="member-card-detail" *ngIf="member.email"><i class="pi pi-envelope"></i><span class="member-card-text" [title]="member.email">{{ member.email }}</span></div>
+            <div class="member-card-detail" *ngIf="member.login"><i class="pi pi-id-card"></i><span class="member-card-text" [title]="member.login">{{ member.login }}</span></div>
+          </div>
+        </div>
+      </div>
+      <ng-template #noMembers>
+        <div class="no-members-message"><i class="pi pi-users"></i>
+          <p class="no-members-text">{{ ms.translate('userManagement.groups.noMembers') || 'No members in this group' }}</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+  <!-- Loading State-->
+  <div class="loading-container" *ngIf="loading &amp;&amp; !errorMessage"><i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    <p>{{ ms.translate('userManagement.groups.loadingGroupDetails') || 'Loading group details...' }}</p>
+  </div>
+  <!-- Error State-->
+  <div class="error-container" *ngIf="!loading &amp;&amp; errorMessage &amp;&amp; visible"><i class="pi pi-exclamation-triangle" style="font-size: 2rem; color: #ef4444"></i>
+    <p>{{ errorMessage }}</p>
+  </div>
+  <ng-template pTemplate="footer">
+    <button class="p-button-secondary" pButton type="button" [label]="ms.translate('common.close') || 'Close'" icon="pi pi-times" (click)="onHide()"></button>
+  </ng-template>
+</p-dialog>

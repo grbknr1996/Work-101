@@ -27,4 +27,8 @@ export class FilterChipsComponent {
   getFilterDisplayValue(filter: FilterValue): string {
     return this.getDisplayValue(filter);
   }
+
+  get displayedFilters() {
+    return this.appliedFilters.filter(f => f.type !== 'checkbox' || f.value !== false);
+  }
 }

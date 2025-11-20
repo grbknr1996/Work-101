@@ -1,9 +1,9 @@
 // Filter Chips Container
-.filter-chips-container(*ngIf="appliedFilters.length > 0")
+.filter-chips-container(*ngIf="displayedFilters.length > 0")
   .filter-chips-content
     .filter-chips-list
       p-chip(
-        *ngFor="let filter of appliedFilters",
+        *ngFor="let filter of displayedFilters",
         [label]="getFilterDisplayValue(filter)",
         [removable]="true",
         (onRemove)="onChipRemove(filter.key)",

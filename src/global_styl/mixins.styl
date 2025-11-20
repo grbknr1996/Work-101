@@ -1,0 +1,238 @@
+// ============================================
+// UTILITY MIXINS
+// ============================================
+// This file contains reusable utility mixins based on STYLUS_MIXINS_GUIDE.md
+// Import this file in your stylesheets to use these mixins
+// @import 'global_styl/mixins'
+
+// ============================================
+// FLEXBOX MIXINS
+// ============================================
+
+// Flex center (horizontal and vertical centering)
+flex-center()
+  display flex
+  align-items center
+  justify-content center
+
+// Flex between (space-between with center alignment)
+flex-between()
+  display flex
+  align-items center
+  justify-content space-between
+
+// Flex start (flex-start with center alignment)
+flex-start()
+  display flex
+  align-items center
+  justify-content flex-start
+
+// Flex end (flex-end with center alignment)
+flex-end()
+  display flex
+  align-items center
+  justify-content flex-end
+
+// Flex column (vertical flex container)
+flex-column()
+  display flex
+  flex-direction column
+
+// Flex row (horizontal flex container)
+flex-row()
+  display flex
+  flex-direction row
+
+// Flex center column (centered content in vertical flex)
+flex-center-column()
+  display flex
+  flex-direction column
+  align-items center
+  justify-content center
+
+// Flex between column (space-between in vertical flex)
+flex-between-column()
+  display flex
+  flex-direction column
+  justify-content space-between
+
+// ============================================
+// POSITIONING MIXINS
+// ============================================
+
+// Absolute center (centers an absolutely positioned element)
+absolute-center()
+  position absolute
+  top 50%
+  left 50%
+  transform translate(-50%, -50%)
+
+// Absolute full (fills parent with absolute positioning)
+absolute-full()
+  position absolute
+  top 0
+  left 0
+  right 0
+  bottom 0
+
+// Fixed full (fills viewport with fixed positioning)
+fixed-full()
+  position fixed
+  top 0
+  left 0
+  right 0
+  bottom 0
+
+// ============================================
+// SPACING MIXINS
+// ============================================
+
+// Spacing (sets padding with vertical and horizontal values)
+spacing(vertical, horizontal = vertical)
+  padding vertical horizontal
+
+// Margin center (centers element horizontally with auto margins)
+margin-center()
+  margin 0 auto
+
+// ============================================
+// BORDER MIXINS
+// ============================================
+
+// Border radius (sets border radius)
+border-radius(radius)
+  border-radius radius
+
+// Border circle (creates a circle - border-radius 50%)
+border-circle()
+  border-radius 50%
+
+// Border full (creates a fully rounded border - 9999px)
+border-full()
+  border-radius 9999px
+
+// Border theme (creates a border with theme defaults)
+border-theme(width = 1px, color = #e9ecef)
+  border width solid color
+
+// ============================================
+// TRANSITION MIXINS
+// ============================================
+
+// Transition fast (0.2s transition)
+transition-fast(property = all)
+  transition property 0.2s ease
+
+// Transition base (0.3s transition)
+transition-base(property = all)
+  transition property 0.3s ease
+
+// Transition slow (0.7s transition)
+transition-slow(property = all)
+  transition property 0.7s ease
+
+// Transition background color (transitions background-color specifically)
+transition-bg()
+  transition background-color 0.2s ease
+
+// Transition color (transitions color specifically)
+transition-color()
+  transition color 0.2s ease
+
+// ============================================
+// COMPONENT PATTERN MIXINS
+// ============================================
+
+// Card style (creates a card-style component)
+card-style(padding = 1.5rem, radius = 4px, shadow = 0 1px 3px rgba(0, 0, 0, 0.1))
+  padding padding
+  border-radius radius
+  box-shadow shadow
+
+// Button base (base button styles)
+button-base(padding = 0.75rem 1rem, radius = 4px)
+  padding padding
+  border-radius radius
+  cursor pointer
+  user-select none
+  transition all 0.2s ease
+
+// Button flex (common button flex pattern - inline-flex with center alignment)
+button-flex()
+  display inline-flex
+  align-items center
+  justify-content center
+
+// Hover background (adds hover background color)
+hover-bg(bg-color = #f8f9fa)
+  &:hover
+    background-color bg-color
+
+// Hover color (adds hover text color)
+hover-color(color)
+  &:hover
+    color color
+
+// ============================================
+// TEXT MIXINS
+// ============================================
+
+// Text ellipsis (truncates text with ellipsis)
+text-ellipsis()
+  overflow hidden
+  text-overflow ellipsis
+  white-space nowrap
+
+// Text center (centers text)
+text-center()
+  text-align center
+
+// ============================================
+// SIZE MIXINS
+// ============================================
+
+// Size (sets width and height, height defaults to width)
+size(width, height = width)
+  width width
+  height height
+
+// Square (creates a square element)
+square(size)
+  width size
+  height size
+
+// ============================================
+// OVERFLOW MIXINS
+// ============================================
+
+// Scrollable (makes element scrollable)
+scrollable(direction = 'y')
+  if direction == 'y'
+    overflow-y auto
+  else if direction == 'x'
+    overflow-x auto
+  else
+    overflow auto
+
+// ============================================
+// Z-INDEX MIXINS
+// ============================================
+
+// Z-layer (sets z-index based on theme layers)
+z-layer(layer)
+  if layer == 'base'
+    z-index 1
+  else if layer == 'dropdown'
+    z-index 100
+  else if layer == 'sticky'
+    z-index 200
+  else if layer == 'fixed'
+    z-index 300
+  else if layer == 'modal'
+    z-index 500
+  else if layer == 'navbar'
+    z-index 999
+  else if layer == 'sidebar'
+    z-index 99
+  else
+    z-index 1

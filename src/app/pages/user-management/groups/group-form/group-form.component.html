@@ -26,7 +26,8 @@
           <div>
             <div class="field mb-4">
               <label class="font-semibold mb-1 block" for="description">{{ 'userManagement.groupForm.description' | translate }}</label>
-              <textarea class="w-full" id="description" pInputTextarea [(ngModel)]="formData.description" rows="4" placeholder="Enter group description..."></textarea>
+              <textarea class="w-full" id="description" pInputTextarea [(ngModel)]="formData.description" rows="4" [placeholder]="'userManagement.groupForm.enterDescriptionPlaceholder'| translate" maxlength="255"></textarea>
+              <div class="text-sm text-gray-500 mt-1 text-right">{{ getDescriptionLength() }}/255 {{ 'userManagement.groupForm.characters' | translate }}</div>
             </div>
             <div class="field mb-4">
               <label class="font-semibold mb-1 block">{{ 'userManagement.groupForm.status' | translate }}</label>

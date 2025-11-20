@@ -80,7 +80,7 @@ export class DataExchangeService {
           'Content-Type': 'application/json',
         });
 
-        const dataServicesUrl = `${environment.dataServicesApi}/data-services/v1/shared-packages/applications?applicationId=${applicationId}`;
+        const dataServicesUrl = `${environment.dataServicesApi}/applications?applicationId=${applicationId}`;
 
         return this.http
           .get<GlobalZipResponse>(dataServicesUrl, { headers })

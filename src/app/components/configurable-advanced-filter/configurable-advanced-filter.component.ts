@@ -37,13 +37,21 @@ export interface QueryTemplate{
 })
 export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
 
-  @Input() visible: boolean = false;
+  // simple mode will have only one field selection
+  // basic mode will use for simple add or queries
+  // medium mode will have all advanced features except template and category option
+  // advanced mode will have all features
+  @Input() advancedFilterMode: 'simple' | 'basic' | 'medium' |'advanced'  = "advanced";
   @Input() category: string = "all";
-  @Input() categorySelection: boolean = false;
-  @Input() templateSelection: boolean = true;
-  @Input() levelCreationAllowed: boolean = true;
-
+  
   @Output() advancedFilterSearch = new EventEmitter<AdvancedFilterQuery>();
+
+  visible: boolean = false;
+
+  categorySelection: boolean = false;
+  templateSelection: boolean = true;
+  levelCreationAllowed: boolean = true;
+  addGroupAllowed: boolean = true;
 
   private destroy$ = new Subject<void>();
 
@@ -72,12 +80,46 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.setFlagsBasedOnMode(this.advancedFilterMode);
     this.initializeForm();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private setFlagsBasedOnMode(mode: 'simple' | 'basic' | 'medium' | 'advanced'): void {
+    switch (mode) {
+      case 'simple':
+        this.categorySelection = false;
+        this.templateSelection = false;
+        this.levelCreationAllowed = false;
+        this.addGroupAllowed = false;
+        break;
+
+      case 'basic':
+        this.categorySelection = false;
+        this.templateSelection = false;
+        this.levelCreationAllowed = false;
+        this.addGroupAllowed = true;
+        break;
+
+      case 'medium':
+        this.categorySelection = false;
+        this.templateSelection = false;
+        this.levelCreationAllowed = true;
+        this.addGroupAllowed = true;
+        break;
+
+      case 'advanced':
+      default:
+        this.categorySelection = true;
+        this.templateSelection = true;
+        this.levelCreationAllowed = true;
+        this.addGroupAllowed = true;
+        break;
+    }
   }
 
   private initializeForm(): void {

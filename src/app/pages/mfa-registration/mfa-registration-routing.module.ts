@@ -9,4 +9,3 @@ const routes: Routes = [{ path: '', component: MfaRegistrationComponent }];
   exports: [RouterModule],
 })
 export class MfaRegistrationComponentRoutingModule {}
-

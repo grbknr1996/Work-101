@@ -10,21 +10,13 @@
     "angularWatch": "ng serve --proxy-config proxy.conf.json --configuration devQuick",
     "assets-cache-busting": "node ./assets-cache-busting.js",
     "dev": "npm run assets-cache-busting && concurrently \"npm run pugWatch\" \"npm run stylusWatch\" \"npm run angularWatch\" --names \"Pug,Stylus,Angular\"",
+    "lint:styles": "stylelint \"src/**/*.styl\"",
     "awsdev": "npm ci && npm run assets-cache-busting && pug --doctype html . && stylus-chokidar . && ng build --configuration awsdev --base-href / --deploy-url /",
     "awsacc": "npm ci && npm run assets-cache-busting && pug --doctype html . && stylus-chokidar . && ng build --configuration awsacc --base-href / --deploy-url /",
     "awsprod": "npm ci && npm run assets-cache-busting && pug --doctype html . && stylus-chokidar . && ng build --configuration awsprod --base-href / --deploy-url /",
     "awspreprod": "npm ci && npm run assets-cache-busting && pug --doctype html . && stylus-chokidar . && ng build --configuration awspreprod --base-href / --deploy-url /",
     "build-dev": "npm run awsdev",
-    "all": "npm ci && npm run awsdev && npm run awsacc && npm run awsprod && npm run awspreprod",
-    "lint": "tslint -p tsconfig.json \"src/app/components/**/*.ts\" \"src/app/pages/**/*.ts\" \"src/app/modules/**/*.ts\"",
-    "lint:all": "tslint -p tsconfig.json \"src/**/*.ts\" --exclude \"src/app/_guards/**\" --exclude \"src/app/_services/**\" --exclude \"src/app/_interceptors/**\" --exclude \"src/app/_pipes/**\" --exclude \"src/app/_directives/**\" --exclude \"src/app/_constants/**\"",
-    "lint:fix": "tslint -p tsconfig.json \"src/app/components/**/*.ts\" \"src/app/pages/**/*.ts\" \"src/app/modules/**/*.ts\" --fix",
-    "lint:report": "tslint -p tsconfig.json \"src/app/components/**/*.ts\" \"src/app/pages/**/*.ts\" \"src/app/modules/**/*.ts\" --format json --out tslint-report.json",
-    "lint:verbose": "tslint -p tsconfig.json \"src/app/components/**/*.ts\" \"src/app/pages/**/*.ts\" \"src/app/modules/**/*.ts\" --format verbose",
-    "lint:html": "tslint -p tsconfig.json \"src/app/components/**/*.ts\" \"src/app/pages/**/*.ts\" \"src/app/modules/**/*.ts\" --format stylish",
-    "lint:html-report": "node generate-tslint-report.js",
-    "lint:file": "tslint -p tsconfig.json",
-    "lint:folder": "tslint -p tsconfig.json"
+    "all": "npm ci && npm run awsdev && npm run awsacc && npm run awsprod && npm run awspreprod"
   },
   "private": true,
   "dependencies": {
@@ -57,6 +49,7 @@
     "filenamify": "^6.0.0",
     "ngx-echarts": "^19.0.0",
     "ngx-extended-pdf-viewer": "^25.6.0-alpha.3",
+    "ngx-image-cropper": "^9.1.5",
     "ngx-translate-multi-http-loader": "^19.0.2",
     "primeicons": "^7.0.0",
     "primeng": "^19.0.10",
@@ -79,9 +72,11 @@
     "autoprefixer": "^10.4.21",
     "codelyzer": "^6.0.2",
     "postcss": "^8.5.3",
+    "postcss-styl": "^0.12.3",
     "pug": "^3.0.2",
+    "stylelint": "^16.25.0",
+    "stylelint-stylus": "^1.0.0",
     "tailwindcss": "^3.4.17",
-    "tslint": "^6.1.3",
-    "tslint-html-report": "^2.2.0"
+    "tslint": "^6.1.3"
   }
 }

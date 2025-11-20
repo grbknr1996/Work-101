@@ -53,4 +53,3 @@ export class CognitoSyncComponent implements OnInit, OnDestroy {
     }
   }
 }
-

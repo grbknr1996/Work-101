@@ -91,9 +91,7 @@ export class ConfigurableFilterBarComponent {
   @Input() showAdvancedSearchQuery: boolean = false;
   @Input() selectedQuery: AdvancedFilterQuery | null = null;
   @Input() category: string = "All";
-  @Input() categorySelection: boolean = false;
-  @Input() templateSelection: boolean = true;
-  @Input() levelCreationAllowed: boolean = true;
+  @Input() advancedFilterMode: 'simple' | 'basic' | 'medium' |'advanced'  = "advanced";
 
   @Output() filterChange = new EventEmitter<FilterValue[]>();
   @Output() filterCleared = new EventEmitter<void>();

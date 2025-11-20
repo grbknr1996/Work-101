@@ -23,10 +23,8 @@
       .col-span-4.advanced-button
         div(*ngIf="showAdvancedSearch")
           app-configurable-advanced-filter(
-            [category]="category", 
-            [categorySelection]="categorySelection", 
-            [templateSelection]="templateSelection",
-            [levelCreationAllowed]="levelCreationAllowed",
+            [advancedFilterMode]="advancedFilterMode",
+            [category]="category",
             (advancedFilterSearch)="onAdvancedFilterSearch($event)"
           )
       .col-span-4.flex.justify-end.gap-2.filter-icons

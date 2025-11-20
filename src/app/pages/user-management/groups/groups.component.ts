@@ -54,7 +54,10 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   // Dialog visibility
   deleteGroupDialog: boolean = false;
+  viewGroupDialog: boolean = false;
   selectedGroup: UserGroup | null = null;
+  selectedGroupId: number | null = null;
+  selectedGroupType: string | null = null;
 
   breadcrumbItems = [];
 
@@ -109,16 +112,30 @@ export class GroupsComponent implements OnInit, OnDestroy {
         display: 'actions',
         actions: [
           {
+            label: this.ms.translate('userManagement.groups.view'),
+            icon: 'pi pi-eye',
+            action: 'view',
+            severity: 'info',
+          },
+          {
             label: this.ms.translate('userManagement.groups.edit'),
             icon: 'pi pi-pencil',
             action: 'edit',
             severity: 'info',
+            visible: (item: UserGroup) => {
+              // Hide edit action for business groups
+              return item.groupType?.toUpperCase() !== 'BUSINESS';
+            },
           },
           {
             label: this.ms.translate('userManagement.groups.delete'),
             icon: 'pi pi-trash',
             action: 'delete',
             severity: 'danger',
+            visible: (item: UserGroup) => {
+              // Hide delete action for business groups
+              return item.groupType?.toUpperCase() !== 'BUSINESS';
+            },
           },
         ],
       },
@@ -143,6 +160,29 @@ export class GroupsComponent implements OnInit, OnDestroy {
         placeholder: 'Enter description',
         section:
           this.ms.translate('userManagement.groups.filterSection') || 'Filters',
+      },
+      {
+        key: 'groupType',
+        label: this.ms.translate('userManagement.groups.type') || 'Group Type',
+        type: 'radio',
+        options: [
+          {
+            label: this.ms.translate('userManagement.groups.business'),
+            value: 'business',
+          },
+          {
+            label: this.ms.translate('userManagement.groups.user'),
+            value: 'user',
+          },
+          {
+            label: this.ms.translate('userManagement.groups.all') || 'All',
+            value: 'all',
+          },
+        ],
+        defaultValue: 'all',
+        section:
+          this.ms.translate('userManagement.groups.typeSection') ||
+          'Group Type',
       },
       {
         key: 'isActive',
@@ -211,6 +251,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
     const { action: actionType, item } = action;
 
     switch (actionType) {
+      case 'view':
+        this.openViewGroupDialog(item);
+        break;
       case 'edit':
         this.openEditGroupDialog(item);
         break;
@@ -282,6 +325,19 @@ export class GroupsComponent implements OnInit, OnDestroy {
           if (filter.value && filter.value.toString().trim()) {
             queryParams.description = filter.value.toString().trim();
           }
+          break;
+        case 'groupType':
+          // Do not send groupType parameter when 'all' is selected
+          // Only add groupType parameter for 'business' or 'user' values
+          if (
+            filter.value &&
+            filter.value !== 'all' &&
+            filter.value !== undefined &&
+            filter.value !== null
+          ) {
+            queryParams.groupType = filter.value.toString().toLowerCase();
+          }
+          // When value is 'all', the groupType parameter is not added to queryParams at all
           break;
         case 'isActive':
           // Do not send isActive parameter when 'all' is selected
@@ -395,6 +451,13 @@ export class GroupsComponent implements OnInit, OnDestroy {
     ]);
   }
 
+  // View group
+  openViewGroupDialog(group: UserGroup) {
+    this.selectedGroupId = group.groupId;
+    this.selectedGroupType = group.groupType || null;
+    this.viewGroupDialog = true;
+  }
+
   // Delete group
   openDeleteGroupDialog(group: UserGroup) {
     this.selectedGroup = group;
@@ -498,6 +561,32 @@ export class GroupsComponent implements OnInit, OnDestroy {
           }: ${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}`;
         }
         return filterConfig.label;
+      case 'radio':
+        // For isActive filter, show "Active" or "Inactive" instead of "true"/"false"
+        if (filter.key === 'isActive') {
+          if (filter.value === 'true' || filter.value === true) {
+            return `${filterConfig.label}: ${
+              this.ms.translate('userManagement.groups.active') || 'Active'
+            }`;
+          } else if (filter.value === 'false' || filter.value === false) {
+            return `${filterConfig.label}: ${
+              this.ms.translate('userManagement.groups.inactive') || 'Inactive'
+            }`;
+          } else if (filter.value === 'all') {
+            return `${filterConfig.label}: ${
+              this.ms.translate('userManagement.groups.all') || 'All'
+            }`;
+          }
+        }
+        // For other radio filters, find the option label
+        const option = filterConfig.options?.find(
+          (opt: any) =>
+            opt.value === filter.value || opt.value === filter.value?.toString()
+        );
+        if (option) {
+          return `${filterConfig.label}: ${option.label}`;
+        }
+        return `${filterConfig.label}: ${filter.value}`;
       default:
         return `${filterConfig.label}: ${filter.value}`;
     }

@@ -92,3 +92,10 @@ app-layout
             icon="pi pi-trash",
             (click)="deleteGroup()"
           )
+
+      // View Group Dialog
+      app-view-group(
+        [(visible)]="viewGroupDialog",
+        [groupId]="selectedGroupId",
+        [groupType]="selectedGroupType"
+      )

@@ -43,8 +43,10 @@ app-layout
                 [(ngModel)]="formData.description",
                 class="w-full",
                 rows="4",
-                placeholder="Enter group description..."
+                [placeholder]="'userManagement.groupForm.enterDescriptionPlaceholder'| translate",
+                maxlength="255"
               )
+              .text-sm.text-gray-500.mt-1.text-right {{ getDescriptionLength() }}/255 {{ 'userManagement.groupForm.characters' | translate }}
             .field.mb-4
               label.font-semibold.mb-1.block {{ 'userManagement.groupForm.status' | translate }}
               .flex.items-center.gap-4.mt-2

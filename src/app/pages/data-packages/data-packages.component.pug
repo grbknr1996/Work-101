@@ -29,9 +29,7 @@ app-layout
           [showAdvancedSearch]="true",
           [showAdvancedSearchQuery]="true",
           [category]="'datapackages'",
-          [categorySelection]="false",
-          [templateSelection]="false",
-          [levelCreationAllowed]="false",
+          [advancedFilterMode]="'simple'",
           (advancedFilterSearch)="onAdvancedFilterSearch($event)"
         )
   app-table([columns]="tableColumns", [data]="tableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false") 

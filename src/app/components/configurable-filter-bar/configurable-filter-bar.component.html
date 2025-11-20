@@ -15,7 +15,7 @@
     </div>
     <div class="col-span-4 advanced-button">
       <div *ngIf="showAdvancedSearch">
-        <app-configurable-advanced-filter [category]="category" [categorySelection]="categorySelection" [templateSelection]="templateSelection" [levelCreationAllowed]="levelCreationAllowed" (advancedFilterSearch)="onAdvancedFilterSearch($event)"></app-configurable-advanced-filter>
+        <app-configurable-advanced-filter [advancedFilterMode]="advancedFilterMode" [category]="category" (advancedFilterSearch)="onAdvancedFilterSearch($event)"></app-configurable-advanced-filter>
       </div>
     </div>
     <div class="col-span-4 flex justify-end gap-2 filter-icons">

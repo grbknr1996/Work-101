@@ -1,16 +1,16 @@
 // Cambodia MOC Office Specific Styles
 .kh-moc
-  $kh-moc-primary = #1A365D  // MOC Dark Blue
-  $kh-moc-secondary = #C53030  // MOC Red
-  $kh-moc-accent = #ECC94B  // MOC Yellow
-  $kh-moc-text = #2D3748
-  $kh-moc-light = #EDF2F7
+  $kh-moc-primary = #1a365d  // MOC Dark Blue
+  $kh-moc-secondary = #c53030  // MOC Red
+  $kh-moc-accent = #ecc94b  // MOC Yellow
+  $kh-moc-text = #2d3748
+  $kh-moc-light = #edf2f7
 
   // Header and Navigation
   .app-navbar
     background-color $kh-moc-primary
     box-shadow 0 2px 10px rgba(26, 54, 93, 0.2)
-    
+
     .navbar-title
       color white
       font-weight 600
@@ -21,13 +21,13 @@
   .sidebar-container
     background-color $kh-moc-light
     border-right 1px solid rgba(26, 54, 93, 0.1)
-    
+
     .menu-item
       &.menu-item-active
         > .menu-link
           background-color rgba(26, 54, 93, 0.1)
           color $kh-moc-primary
-          
+
           &::before
             background-color $kh-moc-primary
 
@@ -36,7 +36,7 @@
     &.p-button-primary
       background-color $kh-moc-primary
       border-color $kh-moc-primary
-      
+
       &:hover
         background-color darken($kh-moc-primary, 10%)
         border-color darken($kh-moc-primary, 10%)
@@ -46,7 +46,7 @@
     border 1px solid rgba(26, 54, 93, 0.1)
     background-color white
     box-shadow 0 2px 4px rgba(26, 54, 93, 0.05)
-    
+
     .widget-title
       color $kh-moc-primary
       font-weight 600
@@ -63,20 +63,20 @@
   .dashboard-heading
     background-color $kh-moc-primary
     color white
-    
+
     .dashboard-title
       color white
       font-weight 600
       text-transform uppercase
       letter-spacing 1px
-    
+
     .dashboard-subtitle
       color rgba(255, 255, 255, 0.9)
 
   // User Stats
   .user-stat-card
     border 1px solid rgba(26, 54, 93, 0.1)
-    
+
     &.selected
       border 2px solid $kh-moc-primary
       box-shadow 0 0 0 1px $kh-moc-primary

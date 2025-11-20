@@ -35,6 +35,8 @@
           <button class="p-button-danger" pButton pRipple [label]="'userManagement.groups.delete' | translate" icon="pi pi-trash" (click)="deleteGroup()"></button>
         </ng-template>
       </p-dialog>
+      <!-- View Group Dialog-->
+      <app-view-group [(visible)]="viewGroupDialog" [groupId]="selectedGroupId" [groupType]="selectedGroupType"></app-view-group>
     </div>
   </div>
 </app-layout>

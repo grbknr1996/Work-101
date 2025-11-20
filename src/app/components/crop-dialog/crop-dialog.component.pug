@@ -1,0 +1,58 @@
+p-dialog(
+  [header]="'documentCapture.cropDialog.header' | translate:{ pageNumber: pageNumber }",
+  [(visible)]="visible",
+  [modal]="true",
+  appendTo="body",
+  [baseZIndex]="10000",
+  [style]="{ width: '40rem' }",
+  [closable]="true",
+  (onHide)="onClose()",
+  [contentStyle]="{ 'max-height': '65vh', overflow: 'auto' }"
+)
+  ul.bullet-text
+    li {{ 'documentCapture.cropDialog.bullet1' | translate }}
+    li {{ 'documentCapture.cropDialog.bullet2' | translate }}
+    li {{ 'documentCapture.cropDialog.bullet3' | translate }}
+
+  .flex.items-center.gap-2.my-3
+    button.p-button.p-button-outlined.p-button-sm(type="button",pButton,icon="pi pi-minus", (click)="zoomOut()")
+    button.p-button.p-button-outlined.p-button-sm(type="button",pButton,icon="pi pi-plus", (click)="zoomIn()")
+    span.ml-2.font-medium {{ 'documentCapture.cropDialog.selection' | translate }}
+    span.ml-1 {{ zoomLevel }}%
+    span.ml-4.font-medium {{ 'documentCapture.cropDialog.rotate' | translate }}
+    button.p-button.p-button-text.p-button-sm(type="button",pButton,icon="pi pi-refresh", (click)="rotateLeft()")
+    span.mx-1 {{ fineTune }}°
+    button.p-button.p-button-text.p-button-sm(type="button",pButton,icon="pi pi-refresh", style="transform: scaleX(-1)", (click)="rotateRight()")
+
+  span.text-sm.text-gray-500 {{ 'documentCapture.cropDialog.fineTune' | translate }}: {{ fineTune }}
+  p-slider(
+    [(ngModel)]="fineTune",
+    [min]="0",
+    [max]="360",
+    [step]="1",
+    class="w-full"
+  ) 
+  span.text-xs.text-gray-500.ml-1 {{ fineTune }}°
+
+
+    image-cropper(
+        *ngIf="imageChangedEvent",
+       [imageURL]="imageUrl",
+       [imageChangedEvent]="imageChangedEvent",
+       [maintainAspectRatio]="true",
+       [transform]="{ rotate: fineTune, scale: zoomScale }",
+       [resizeToWidth]="600",
+       format="png",
+       [allowMoveImage]="allowMoveImage",
+       (imageLoaded)="imageLoaded($event)",
+       (imageCropped)="imageCropped($event)",
+       (cropperReady)="cropperReady()",
+       (loadImageFailed)="loadImageFailed()"
+    )
+
+  // move buttons to dialog footer so they're always visible
+  ng-template(pTemplate="footer")
+  .flex.justify-end.gap-2.w-full
+    button.p-button.p-button-outlined.p-button-sm(type="button",pButton,[label]="'documentCapture.cropDialog.resetAll' | translate", (click)="resetAll()")
+    button.p-button.p-button-text.p-button-sm(type="button",pButton,[label]="'documentCapture.cropDialog.cancel' | translate", (click)="onClose()")
+    button.p-button.p-button-sm.p-button-primary(type="button",pButton,[label]="'documentCapture.cropDialog.saveCroppedImage' | translate", (click)="saveCroppedImage()")

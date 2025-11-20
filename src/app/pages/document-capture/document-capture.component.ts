@@ -93,12 +93,18 @@ export class DocumentCaptureComponent implements OnInit {
         key: 'admin',
         label: this.ms.translate('documentCapture.filters.lockedBy') + ' - Admin',
         type: 'checkbox',
-        section: this.ms.translate('documentCapture.filters.dateFiltersSection') || 'FILTERS'
+        section: this.ms.translate('documentCapture.filters.lockedBy') || 'FILTERS'
       },
       {
         key: 'user',
-        label: this.ms.translate('documentCapture.filters.lockedBy') + ' - User',
+        label: this.ms.translate('documentCapture.filters.lockedBy') + ' - user',
         type: 'checkbox',
+        section: this.ms.translate('documentCapture.filters.lockedBy') || 'FILTERS'
+      },
+      {
+        key: 'capturedDateRange',
+        label: this.ms.translate('documentCapture.filters.capturedDateRange'),
+        type: 'dateRange',
         section: this.ms.translate('documentCapture.filters.dateFiltersSection') || 'FILTERS'
       }
     ];
@@ -167,7 +173,7 @@ export class DocumentCaptureComponent implements OnInit {
       this.breadcrumbItems = [
         {
           label: this.ms.translate('documentCapture.breadcrumb'),
-          routerLink: `/${officeCode}/${langCode}/document-capture`,
+          routerLink: `/${officeCode}/${langCode}/data-capture/documents`,
         }
       ];
       this.cdr.markForCheck();

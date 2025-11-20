@@ -61,13 +61,13 @@
                     </div>
                     <div class="filter-group-name">{{group.group_name}}</div><span class="group-selection-badge" *ngIf="group.selected">{{"common.components.advancedFilter.selection.forGrouping"|translate}}</span>
                   </div>
-                  <button class="filter-group-delete" (click)="removeGroup(level.levelId,group.group)"><i class="pi pi-times" pButtonIcon></i></button>
+                  <button class="filter-group-delete" *ngIf="addGroupAllowed" (click)="removeGroup(level.levelId,group.group)"><i class="pi pi-times" pButtonIcon></i></button>
                 </div>
                 <div class="grid grid-cols-12 filter-group-header-text">
                   <div class="col-span-3">{{"common.components.advancedFilter.field"|translate}}</div>
                   <div class="col-span-3">{{"common.components.advancedFilter.strategy"|translate}}</div>
                   <div class="col-span-3">{{"common.components.advancedFilter.value"|translate}}</div>
-                  <div class="col-span-3">{{"common.components.advancedFilter.actions"|translate}}</div>
+                  <div class="col-span-3" *ngIf="addGroupAllowed">{{"common.components.advancedFilter.actions"|translate}}</div>
                 </div>
                 <div *ngFor="let file of group.file_list; let i = index; let last = last">
                   <div class="grid grid-cols-12 filter-field-line">
@@ -88,7 +88,7 @@
                       <input class="filter-field-value" *ngIf="file.fieldType == 'text'" [placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate" [(ngModel)]="file.value">
                       <p-datePicker class="w-full date-calendar" *ngIf="file.fieldType == 'date'" [(ngModel)]="file.value" [placeholder]="'common.components.advancedFilter.datePlaceholder'|translate" [dateFormat]="searchDateFormat || 'yy-mm-dd'" [selectionMode]="file.connecting.code === 'dateRange' ? 'range' : 'single'" [showIcon]="true" [showButtonBar]="true" [touchUI]="false" [readonlyInput]="true"></p-datePicker>
                     </div>
-                    <div class="col-span-3 flex gap-1">
+                    <div class="col-span-3 flex gap-1" *ngIf="addGroupAllowed">
                       <button class="filter-field-delete" (click)="removeField(level.levelId, group.group, file.fieldId)"><i class="pi pi-trash" pButtonIcon></i></button>
                       <button class="filter-field-add" *ngIf="last" (click)="addField(level.levelId, group.group)"><i class="pi pi-plus" pButtonIcon></i></button>
                     </div>
@@ -130,7 +130,7 @@
                         </div>
                         <div class="filter-group-name">{{group.group_name}}</div>
                       </div>
-                      <button class="filter-group-delete" (click)="removeGroup(level.levelId,group.group)"><i class="pi pi-times" pButtonIcon></i></button>
+                      <button class="filter-group-delete" *ngIf="addGroupAllowed" (click)="removeGroup(level.levelId,group.group)"><i class="pi pi-times" pButtonIcon></i></button>
                     </div>
                     <div class="grid grid-cols-12 filter-group-header-text">
                       <div class="col-span-3">{{"common.components.advancedFilter.field"|translate}}</div>
@@ -157,7 +157,7 @@
                           <input class="filter-field-value" *ngIf="file.fieldType == 'text'" [placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate" [(ngModel)]="file.value">
                           <p-datePicker class="w-full date-calendar" *ngIf="file.fieldType == 'date'" [(ngModel)]="file.value" [placeholder]="'common.components.advancedFilter.datePlaceholder'|translate" [dateFormat]="searchDateFormat || 'yy-mm-dd'" [selectionMode]="file.connecting.code === 'dateRange' ? 'range' : 'single'" [showIcon]="true" [showButtonBar]="true" [touchUI]="false" [readonlyInput]="true"></p-datePicker>
                         </div>
-                        <div class="col-span-3 flex gap-1">
+                        <div class="col-span-3 flex gap-1" *ngIf="addGroupAllowed">
                           <button class="filter-field-delete" (click)="removeField(level.levelId, group.group, file.fieldId)"><i class="pi pi-trash" pButtonIcon></i></button>
                           <button class="filter-field-add" *ngIf="last" (click)="addField(level.levelId, group.group)"><i class="pi pi-plus" pButtonIcon></i></button>
                         </div>
@@ -181,7 +181,7 @@
             </div>
           </ng-template>
         </div>
-        <div class="filter-group-add-line">
+        <div class="filter-group-add-line" *ngIf="addGroupAllowed">
           <button class="filter-group-add-button" (click)="addGroup()"><i class="pi pi-plus" pButtonIcon></i>{{"common.components.advancedFilter.addFilterGroup"|translate}}</button>
         </div><br><br>
         <div class="advanced-filter-actions">

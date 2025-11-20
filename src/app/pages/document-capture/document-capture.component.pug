@@ -115,7 +115,7 @@ app-layout
       (click)="showFileUploadArea()")
 
   .mb-4
-    .user-stats-container
+    .user-stats-container.flex.flex-wrap.gap-4.justify-between
       .user-stat-card.fixed-width(
         *ngFor="let stat of indexationStats"
         "[class.selected]"="selectedStat === stat.label"

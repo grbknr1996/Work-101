@@ -34,9 +34,7 @@ app-layout([config]="layoutConfig")
           [showAdvancedSearch]="true",
           [showAdvancedSearchQuery]="true",
           [category]="'authorityfiles'",
-          [categorySelection]="false",
-          [templateSelection]="false",
-          [levelCreationAllowed]="false",
+          [advancedFilterMode]="'basic'",
           (advancedFilterSearch)="onAdvancedFilterSearch($event)"
         )
 

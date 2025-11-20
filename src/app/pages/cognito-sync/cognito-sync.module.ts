@@ -6,4 +6,3 @@ import { CognitoSyncComponentRoutingModule } from './cognito-sync-routing.module
   imports: [CommonModule, CognitoSyncComponentRoutingModule],
 })
 export class CognitoSyncModule {}
-

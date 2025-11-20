@@ -2,7 +2,11 @@
 <app-layout>
   <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
   <div class="flex justify-between items-center p-3 bg-white shadow-sm rounded-md mb-4">
-    <div class="flex gap-4 items-center"><span class="font-semibold text-lg">BatchID:<span class="text-blue-600">{{ batchId }}</span></span><span>Total Batch Pages:<span class="font-bold">14</span></span><span>Indexed documents:<span class="font-bold text-green-600">{{ indexedDocs }}</span></span><span>Bookmarked documents:<span class="font-bold text-red-500">{{ bookmarkedDocs }}</span></span></div>
+    <div class="flex gap-4 items-center"><span class="font-semibold text-lg">{{ 'documentCapture.indexationView.batchIdLabel' | translate }}<span class="text-blue-600">{{ batchId }}</span></span><span>{{ 'documentCapture.indexationView.totalBatchPages' | translate }}<span class="font-bold">14</span></span><span>{{ 'documentCapture.indexationView.indexedDocuments' | translate }}<span class="font-bold text-green-600">{{ indexedDocs }}</span></span><span>{{ 'documentCapture.indexationView.bookmarkedDocuments' | translate }}<span class="font-bold text-red-500">{{ bookmarkedDocs }}</span></span></div>
+    <div class="flex gap-3 ml-auto">
+      <p-button [label]="'documentCapture.indexationView.buttons.cancel' | translate" styleClass="p-button-text p-button-sm" (click)="cancelIndexation()"></p-button>
+      <p-button [label]="'documentCapture.indexationView.buttons.saveBatch' | translate" icon="pi pi-file" styleClass="p-button-success p-button-sm" (click)="SaveBatch()"></p-button>
+    </div>
   </div>
   <!-- Main Panels Grid-->
   <div class="grid grid-cols-12 gap-3 h-[calc(100vh-220px)]">
@@ -11,9 +15,9 @@
       <!-- Aligned top bar for left panel (empty for clean look)-->
       <div class="h-12 border-b bg-gray-50 flex items-center px-2">
         <div class="flex gap-3">
-          <p-button label="Merge" icon="pi pi-link" severity="primary" styleClass="p-button-sm" [disabled]="selectedDocCount &lt; 2"></p-button>
-          <p-button label="Split" icon="pi pi-share-alt" severity="success" styleClass="p-button-sm" [disabled]="selectedDocCount !== 1" (click)="openSplitDialog()"></p-button>
-          <p-button label="Delete" icon="pi pi-trash" severity="danger" styleClass="p-button-sm" [disabled]="selectedDocCount === 0"></p-button>
+          <p-button [label]="'documentCapture.indexationView.buttons.merge' | translate" icon="pi pi-link" severity="primary" styleClass="p-button-sm" [disabled]="selectedDocCount &lt; 2" (click)="mergeSelectedDocuments()"></p-button>
+          <p-button [label]="'documentCapture.indexationView.buttons.split' | translate" icon="pi pi-share-alt" severity="success" styleClass="p-button-sm" [disabled]="selectedDocCount !== 1" (click)="openSplitDialog()"></p-button>
+          <p-button [label]="'documentCapture.indexationView.buttons.delete' | translate" icon="pi pi-trash" severity="danger" styleClass="p-button-sm" (click)="confirmDeleteDocument()" [disabled]="selectedDocCount === 0"></p-button>
         </div>
       </div>
       <div class="flex-1 overflow-auto p-2">
@@ -21,49 +25,61 @@
           <div class="flex justify-between items-center">
             <div class="flex items-center gap-2">
               <p-checkbox class="mr-2" [ngModel]="selectedDocs.includes(i)" (onChange)="toggleDocSelection(i)" [binary]="true" (click)="$event.stopPropagation()"></p-checkbox><span class="text-xl font-semibold">{{ i + 1 }}</span>
-            </div><span class="text-xs text-gray-600">{{ doc.pages }} pages</span>
+            </div><span class="text-xs text-gray-600">{{ doc.pages }} {{ 'documentCapture.indexationView.documentPagesSuffix' ? ('documentCapture.indexationView.documentPagesSuffix' | translate) : '' }}</span>
           </div>
-          <div class="mt-2 bg-gray-50 border rounded-md px-2 py-3 text-xs font-medium text-gray-700 h-10 ml-9 mb-4">{{ doc.name }}</div>
+          <div class="mt-2 bg-gray-50 border rounded-md px-2 py-3 text-xs font-medium text-gray-700 h-10 ml-9 mb-4"><span class="flex-1 outline-none block truncate" [attr.contenteditable]="doc.isEditing" (blur)="disableEditing(doc, $event)" (keydown.enter)="disableEditing(doc, $event)" [ngClass]="{ 'cursor-text': doc.isEditing, 'cursor-pointer': !doc.isEditing }">{{ doc.name }}
+              <p-button *ngIf="!doc.isEditing" icon="pi pi-pencil" styleClass="p-button-text p-button-sm text-gray-500 hover:text-gray-700" (click)="enableEditing(doc)"></p-button></span></div>
         </div>
       </div>
     </div>
     <!-- MID PANEL — Thumbnails-->
     <div class="bg-white rounded-md shadow-sm flex flex-col" [ngClass]="currentPage ? 'col-span-6' : 'col-span-9'">
       <!-- Top bar aligned with left & right-->
-      <div class="h-12 border-b bg-gray-50 flex justify-between items-center px-2"><span class="font-medium text-sm">Document Pages - {{ selectedDocName }}</span>
-        <div class="flex items-center gap-4 ml-auto">
-          <p-checkbox binary="true" [(ngModel)]="selectAllThumbs" inputId="selectAllThumbs" (onChange)="toggleSelectAll()"></p-checkbox>
-          <label class="text-sm" for="selectAllThumbs">Select All</label>
-          <p-button icon="pi pi-crop" label="Crop" styleClass="p-button-sm p-button-warning" (click)="cropSelectedThumb()" [disabled]="selectedThumbCount !== 1"></p-button>
-          <p-button icon="pi pi-trash" label="Delete" styleClass="p-button-sm p-button-danger" (click)="deleteSelectedThumb()" [disabled]="selectedThumbCount === 0"></p-button>
+      <div class="h-12 border-b bg-gray-50 flex justify-between items-center px-2"><span class="font-medium text-sm">{{ 'documentCapture.indexationView.documentPages' | translate:{ name: selectedDocName } }}</span>
+        <div class="flex items-center gap-4 ml-auto" *ngIf="!showSplitDialog"></div>
+        <div class="flex items-center gap-4 ml-auto" *ngIf="!showSplitDialog">
+          <p-button icon="pi pi-crop" [label]="'documentCapture.indexationView.buttons.crop' | translate" styleClass="p-button-sm p-button-warning" (click)="cropSelectedThumb()" [disabled]="selectedThumbCount !== 1"></p-button>
+          <p-button icon="pi pi-trash" [label]="'documentCapture.indexationView.buttons.deletePage' | translate" styleClass="p-button-sm p-button-danger" (click)="deleteSelectedThumb()" [disabled]="selectedThumbCount === 0"></p-button>
           <p-button icon="pi pi-download" styleClass="p-button-sm" severity="info"></p-button>
+        </div>
+        <div class="flex items-center gap-4 ml-auto" *ngIf="showSplitDialog">
+          <div class="flex items-center gap-3"><i class="pi pi-cut text-green-600 text-xl"></i><span class="font-medium text-green-700">  </span><span class="text-gray-700 font-semibold">{{ 'documentCapture.indexationView.splitModeDividers' | translate:{ count: splitPoints.length } }}</span>
+            <p-button [label]="'documentCapture.indexationView.buttons.cancel' | translate" icon="pi pi-times" styleClass="p-button-text p-button-sm" (click)="cancelSplitMode()"></p-button>
+            <p-button [label]="'documentCapture.indexationView.buttons.applySplit' | translate" icon="pi pi-check" styleClass="p-button-success p-button-sm" (click)="applySplit()"></p-button>
+          </div>
         </div>
       </div>
       <div class="flex-1 overflow-auto p-2">
-        <div class="grid grid-cols-4 gap-2">
-          <div class="thumbnail-a4" *ngFor="let page of pageList; let p = index" (click)="selectThumb(p)" [ngClass]="{'border-blue-500 bg-blue-50': currentPage-1===p}">
-            <p-checkbox class="absolute top-1 left-1 z-10" *ngIf="page.type !== 'bookmark'" [(ngModel)]="selectedThumbs[p]" [binary]="true" (onChange)="onThumbChange()" (click)="$event.stopPropagation()"></p-checkbox>
-            <ng-container *ngIf="page.type === 'page'; else bookmarkBlock"><img class="w-full h-40 object-contain bg-gray-50 border rounded-md" [src]="getThumbnailUrl(p)" alt="Page Thumbnail"><span class="absolute top-1 right-1 bg-blue-500 text-white text-xs font-semibold rounded px-2 py-1 shadow">{{ getPageNumber(p) }}</span></ng-container>
-            <ng-template #bookmarkBlock>
-              <div class="relative thumbnail-a4 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600 text-sm font-semibold overflow-hidden">
-                <!-- inner dashed layer-->
-                <div class="absolute inset-0 border-2 border-dashed border-purple-400 rounded-2xl pointer-events-none"></div>
-                <!-- content-->
-                <div class="flex flex-col items-center justify-center text-center z-10"><i class="pi pi-qrcode text-3xl mb-2"></i><span>Bookmark Sheet</span><span class="text-xs text-purple-500">{{ page.bookmarkText }}</span></div>
-                <!-- label top-right--><span class="absolute top-1 right-1 bg-purple-600 text-white text-xs font-semibold rounded-md px-2 py-1 z-10">Before Page {{ getNextPageNumber(p) }}</span>
-                <!-- delete button bottom-right-->
-                <button class="absolute bottom-1 right-1 bg-red-500 text-white rounded-full p-1 shadow-sm z-10" (click)="removeBookmark(p)"><i class="pi pi-trash text-xs"></i></button>
+        <div class="p-3 bg-green-50 text-green-700 text-sm rounded-md mb-3 flex items-center gap-2" *ngIf="showSplitDialog"><i class="pi pi-info-circle text-green-600"></i><span><strong>{{ 'documentCapture.indexationView.splitModeActiveTitle' | translate }}:</strong> {{ 'documentCapture.indexationView.splitModeDescription' | translate }}</span></div>
+        <div class="grid grid-cols-4 items-center" [ngClass]="showSplitDialog ? 'gap-16' : 'gap-4'">
+          <ng-container *ngFor="let page of pageList; let p = index">
+            <div class="split-div">
+              <div class="relative thumbnail-a4" (click)="selectThumb(p)" [ngClass]="{'border-blue-500 bg-blue-50': currentPage-1===p}">
+                <p-checkbox class="absolute top-1 left-1 z-10" *ngIf="page.type !== 'bookmark' &amp;&amp; !showSplitDialog" [(ngModel)]="selectedThumbs[p]" [binary]="true" (onChange)="onThumbChange()" (click)="$event.stopPropagation()"></p-checkbox>
+                <ng-container *ngIf="page.type === 'page'; else bookmarkBlock"><img class="w-full h-40 object-contain bg-gray-50 border rounded-md" [src]="getThumbnailUrl(p)" alt="Page Thumbnail"><span class="absolute top-1 right-1 thumbnail-badge">{{ getPageNumber(p) }}</span></ng-container>
+                <ng-template #bookmarkBlock>
+                  <div class="relative thumbnail-a4 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600 text-sm font-semibold overflow-hidden">
+                    <!-- inner dashed layer-->
+                    <div class="absolute inset-0 border-2 border-dashed border-purple-400 rounded-2xl pointer-events-none"></div>
+                    <!-- content-->
+                    <div class="flex flex-col items-center justify-center text-center z-10"><i class="pi pi-qrcode text-3xl mb-2"></i><span>{{ 'documentCapture.indexationView.bookmarkSheet' | translate }}</span><span class="text-xs text-purple-500">{{ page.bookmarkText }}</span></div>
+                    <!-- label top-right--><span class="absolute top-1 right-1 bg-purple-600 text-white text-xs font-semibold rounded-md px-2 py-1 z-10">{{ 'documentCapture.indexationView.beforePageLabel' | translate:{ page: getNextPageNumber(p) } }}</span>
+                    <!-- delete button bottom-right-->
+                    <button class="absolute bottom-1 right-1 bg-red-500 text-white rounded-full p-1 shadow-sm z-10" (click)="removeBookmark(p)"><i class="pi pi-trash text-xs"></i></button>
+                  </div>
+                </ng-template>
+                <p-button class="absolute bottom-1 right-1" *ngIf="page.type !== 'bookmark'" icon="pi pi-plus" styleClass="p-button-rounded p-button-text p-button-sm shadow-sm bg-white text-gray-700" (click)="toggleBookmarkMenu($event, p)"></p-button>
               </div>
-            </ng-template>
-            <p-button class="absolute bottom-1 right-1" *ngIf="page.type !== 'bookmark'" icon="pi pi-plus" styleClass="p-button-rounded p-button-text p-button-sm shadow-sm bg-white text-gray-700" (click)="toggleBookmarkMenu($event, p)"></p-button>
-          </div>
+              <div class="split-divider" *ngIf="showSplitDialog &amp;&amp; p &lt; pageList.length - 1" (click)="onSplitClick($event, p)" [ngClass]="{'active': splitPoints.includes(p)}"><i class="pi pi-scissors mr-1"></i> {{ 'documentCapture.indexationView.split' | translate }}</div>
+            </div>
+          </ng-container>
         </div>
       </div>
     </div>
     <!-- RIGHT PANEL — Viewer-->
     <div class="col-span-3 bg-white rounded-md shadow-sm flex flex-col" *ngIf="currentPage">
       <!-- Top bar aligned-->
-      <div class="h-12 border-b bg-gray-50 flex justify-between items-center px-2"><span class="font-semibold text-sm">Page Viewer</span><span class="text-xs">{{ currentPage }} / {{ totalPages }}</span></div>
+      <div class="h-12 border-b bg-gray-50 flex justify-between items-center px-2"><span class="font-semibold text-sm">{{ 'documentCapture.indexationView.pageViewerTitle' | translate }}</span><span class="text-xs">{{ currentPage }} / {{ totalPages }}</span></div>
       <div class="flex gap-2 p-2">
         <p-button icon="pi pi-search-minus"></p-button>
         <p-button icon="pi pi-refresh"></p-button>
@@ -82,8 +98,16 @@
 </app-layout>
 <p-popover #bookmarkPopover [dismissable]="true">
   <div class="flex flex-col gap-1 p-2">
-    <p-button label="Insert Bookmark After" icon="pi pi-qrcode" styleClass="p-button-text p-button-sm" (click)="insertBookmark('after')"></p-button>
-    <p-button label="Insert Bookmark Before" icon="pi pi-qrcode" styleClass="p-button-text p-button-sm" (click)="insertBookmark('before')"></p-button>
+    <p-button [label]="'documentCapture.indexationView.buttons.insertBookmarkAfter' | translate" icon="pi pi-qrcode" styleClass="p-button-text p-button-sm" (click)="insertBookmark('after')"></p-button>
+    <p-button [label]="'documentCapture.indexationView.buttons.insertBookmarkBefore' | translate" icon="pi pi-qrcode" styleClass="p-button-text p-button-sm" (click)="insertBookmark('before')"></p-button>
   </div>
 </p-popover>
+<p-dialog [header]="'documentCapture.indexationView.confirmDeleteTitle' | translate" [(visible)]="showDeleteDialog" [modal]="true" [closable]="false" [dismissableMask]="true" styleClass="confirm-delete-dialog">
+  <p class="text-sm text-gray-600 mb-4">{{ deleteType === 'page' ? ('documentCapture.indexationView.confirmDeleteMessagePages' | translate:{ count: selectedThumbCount }) : ('documentCapture.indexationView.confirmDeleteMessageDocuments' | translate:{ count: selectedDocCount }) }}</p>
+  <div class="flex justify-end gap-2">
+    <p-button [label]="'documentCapture.indexationView.buttons.cancel' | translate" styleClass="p-button-text p-button-sm" (click)="showDeleteDialog = false"></p-button>
+    <p-button [label]="'documentCapture.indexationView.buttons.delete' | translate" icon="pi pi-trash" styleClass="p-button-danger p-button-sm" (click)="proceedDelete()"></p-button>
+  </div>
+</p-dialog>
 <app-bookmark-dialog #bookmarkDialog (generate)="insertBookmark($event)"></app-bookmark-dialog>
+<app-crop-dialog #cropDialog [imageUrl]="1"></app-crop-dialog>

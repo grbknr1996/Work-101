@@ -20,7 +20,7 @@ import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
 // https://github.com/ngx-translate/core
 // AoT requires an exported function for factories
 import cacheBusting from '../../assets-cache-busting.json';
-import { instanceType } from './utils';
+import { getOfficeThemePreset, instanceType } from './utils';
 export function HttpLoaderFactory(http: HttpBackend) {
   return new MultiTranslateHttpLoader(http, [
     {
@@ -157,36 +157,9 @@ import { ViewIndexationDocumentComponent } from './pages/document-capture/indexa
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ViewUserDetailsComponent } from './components/view-user-details/view-user-details.component';
 import { CognitoSyncComponent } from './pages/cognito-sync/cognito-sync.component';
-const WipoThemePreset = definePreset(Aura, {
-  primitive: {
-    fontFamily: '"Noto Sans", "Segoe UI", Roboto, Arial, sans-serif',
-    fontSize: '14px',
-  },
-  semantic: {
-    primary: {
-      50: '#e6f0f9',
-      100: '#cce0f3',
-      200: '#99c2e6',
-      300: '#66a3da',
-      400: '#3385cd',
-      500: '#0067c0', // WIPO blue
-      600: '#0052a3',
-      700: '#003e87',
-      800: '#00296a',
-      900: '#00154e',
-      950: '#000a32',
-    },
-    text: {
-      fontWeight: '400',
-      lineHeight: '1.5',
-    },
-    heading: {
-      fontWeight: '600',
-      lineHeight: '1.2',
-      color: '#0067c0',
-    },
-  },
-});
+import { ImageCropperComponent } from 'ngx-image-cropper';
+import { CropDialogComponent } from './components/crop-dialog/crop-dialog.component';
+import { ViewGroupComponent } from './pages/user-management/groups/view-group/view-group.component';
 
 @NgModule({
   declarations: [
@@ -285,6 +258,8 @@ const WipoThemePreset = definePreset(Aura, {
     BookmarkDialogComponent,
     ProfileComponent,
     ViewUserDetailsComponent,
+    CropDialogComponent,
+    ViewGroupComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -307,6 +282,7 @@ const WipoThemePreset = definePreset(Aura, {
     PrimeNGModule,
     EChartsModule,
     NgxExtendedPdfViewerModule,
+    ImageCropperComponent,
   ],
   providers: [
     {
@@ -331,7 +307,7 @@ const WipoThemePreset = definePreset(Aura, {
     },
     providePrimeNG({
       theme: {
-        preset: WipoThemePreset,
+        preset: getOfficeThemePreset(instanceType()),
         options: {
           prefix: 'p',
           darkModeSelector: '.app-dark',

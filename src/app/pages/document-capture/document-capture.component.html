@@ -46,7 +46,7 @@
     </div>
   </div>
   <div class="mb-4">
-    <div class="user-stats-container">
+    <div class="user-stats-container flex flex-wrap gap-4 justify-between">
       <div class="user-stat-card fixed-width" *ngFor="let stat of indexationStats" [class.selected]="selectedStat === stat.label" (click)="selectStat(stat.label)">
         <div class="stat-header"><span class="stat-label" [style.color]="stat.color">{{ stat.label }}</span><i [class]="stat.icon" [style.color]="stat.color"></i></div>
         <div class="stat-content"><span class="stat-count" [style.color]="stat.color">{{ stat.count }}</span></div>

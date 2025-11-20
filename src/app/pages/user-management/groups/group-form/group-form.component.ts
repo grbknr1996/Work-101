@@ -45,7 +45,7 @@ interface FormData {
 @Component({
   selector: 'app-group-form',
   templateUrl: './group-form.component.html',
-  standalone: false
+  standalone: false,
 })
 export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
   @Input() group: UserGroup | null = null;
@@ -720,5 +720,8 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
     if (this.usersLoaded) {
       this.loadAvailableUsers();
     }
+  }
+  getDescriptionLength(): number {
+    return this.formData.description ? this.formData.description.length : 0;
   }
 }

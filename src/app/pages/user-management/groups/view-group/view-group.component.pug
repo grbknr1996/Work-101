@@ -1,0 +1,109 @@
+p-dialog(
+  [(visible)]="visible",
+  [modal]="true",
+  [style]="{ width: '90vw', maxWidth: '900px' }",
+  [draggable]="false",
+  [resizable]="true",
+  [closable]="true",
+  [header]="(groupDetails?.groupName || 'Group Details') + ' - ' + (ms.translate('userManagement.groups.viewGroup') || 'View Group')",
+  (onShow)="onShow()",
+  (onHide)="onHide()",
+  [styleClass]="'view-group-details-dialog'"
+)
+  .view-group-details-container(*ngIf="!loading && groupDetails")
+
+    // Basic Information Section
+    .details-section
+      h3.section-title
+        i.pi.pi-info-circle
+        | {{ ms.translate('userManagement.groups.basicInformation') || 'Basic Information' }}
+
+      .details-grid
+        .detail-item
+          label.detail-label
+            i.pi.pi-tag
+            | {{ ms.translate('userManagement.groups.groupName') || 'Group Name' }}
+          .detail-value {{ groupDetails.groupName || '-' }}
+
+        .detail-item
+          label.detail-label
+            i.pi.pi-id-card
+            | {{ ms.translate('userManagement.groups.groupId') || 'Group ID' }}
+          .detail-value {{ groupDetails.groupId || '-' }}
+
+        .detail-item
+          label.detail-label
+            i.pi.pi-tags
+            | {{ ms.translate('userManagement.groups.type') || 'Group Type' }}
+          .detail-value
+            span([ngClass]="getGroupTypeChipClass()") {{ getGroupTypeLabel() }}
+
+        .detail-item
+          label.detail-label
+            i.pi.pi-info-circle
+            | {{ ms.translate('userManagement.groups.description') || 'Description' }}
+          .detail-value {{ groupDetails.description || '-' }}
+
+        .detail-item
+          label.detail-label
+            i.pi.pi-check-circle
+            | {{ ms.translate('userManagement.groups.status') || 'Status' }}
+          .detail-value
+            span([ngClass]="getStatusChipClass()") {{ getStatusLabel() }}
+
+        .detail-item(*ngIf="groupDetails.platformCode")
+          label.detail-label
+            i.pi.pi-globe
+            | {{ ms.translate('userManagement.groups.platformCode') || 'Platform Code' }}
+          .detail-value {{ groupDetails.platformCode || '-' }}
+
+    // Members Section
+    .details-section
+      h3.section-title
+        i.pi.pi-users
+        | {{ ms.translate('userManagement.groups.members') || 'Group Members' }}
+        p-badge.ml-2(
+          [value]="getMembersCount().toString()",
+          [severity]="getMembersCount() > 0 ? 'info' : 'secondary'"
+        )
+
+      .members-container(
+        *ngIf="groupDetails.userIdBag && groupDetails.userIdBag.length > 0; else noMembers"
+      )
+        .member-card(*ngFor="let member of groupDetails.userIdBag")
+          .member-card-header
+            i.pi.pi-user
+            span.member-card-name {{ member.userName || '-' }}
+
+          .member-card-body
+            .member-card-detail(*ngIf="member.email")
+              i.pi.pi-envelope
+              span.member-card-text([title]="member.email") {{ member.email }}
+
+            .member-card-detail(*ngIf="member.login")
+              i.pi.pi-id-card
+              span.member-card-text([title]="member.login") {{ member.login }}
+
+      ng-template(#noMembers)
+        .no-members-message
+          i.pi.pi-users
+          p.no-members-text {{ ms.translate('userManagement.groups.noMembers') || 'No members in this group' }}
+
+  // Loading State
+  .loading-container(*ngIf="loading && !errorMessage")
+    i.pi.pi-spin.pi-spinner(style="font-size: 2rem")
+    p {{ ms.translate('userManagement.groups.loadingGroupDetails') || 'Loading group details...' }}
+
+  // Error State
+  .error-container(*ngIf="!loading && errorMessage && visible")
+    i.pi.pi-exclamation-triangle(style="font-size: 2rem; color: #ef4444")
+    p {{ errorMessage }}
+
+  ng-template(pTemplate="footer")
+    button.p-button-secondary(
+      pButton,
+      type="button",
+      [label]="ms.translate('common.close') || 'Close'",
+      icon="pi pi-times",
+      (click)="onHide()"
+    )

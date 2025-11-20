@@ -2630,7 +2630,13 @@
     "groups": {
       "title": "User Groups",
       "manageGroups": "Manage and view all user groups in the system",
+      "typeSection": "TYPE",
       "all": "All",
+      "viewGroup": "View Group",
+      "groupId": "Group ID",
+      "statusSection": "STATUS",
+      "view": "View",
+
       "filterSection": "SEARCH",
       "clearAll": "CLEAR ALL",
       "createGroup": "Create Group",
@@ -2658,19 +2664,27 @@
       "userFilter": "User",
       "createdDateRange": "Created Date Range",
       "updatedDateRange": "Updated Date Range",
+      "basicInformation": "Basic Information",
+      "members": "Group Members",
+      "noMembers": "No members in this group",
+      "platformCode": "Platform Code",
+      "loadingGroupDetails": "Loading group details...",
+      "unableToLoadGroup": "Unable to load group details. Please try again later.",
       "groupCategory": "Group Category",
       "allCategories": "All Categories",
       "systemGroups": "System Groups",
       "customGroups": "Custom Groups",
       "departmentGroups": "Department Groups",
       "selectDateRange": "Select date range",
-      "statusSection": "STATUS",
+
       "groupTypeSection": "GROUP TYPE",
       "dateFiltersSection": "DATE FILTERS",
       "groupCategorySection": "GROUP CATEGORY"
     },
     "groupForm": {
       "editGroup": "Edit Group",
+      "enterDescriptionPlaceholder": "Enter group description...",
+      "characters": "characters",
       "updateGroupInfo": "Update group information and settings",
       "createNewGroup": "Create a new user group with members and permissions",
       "basicInfo": "Basic Info",
@@ -3119,7 +3133,7 @@
     },
     "filters": {
       "lockedBy": "Locked By",
-      "users": "Users",
+      "user": "user",
       "capturedDateRange": "Captured Date Range",
       "dateFiltersSection": "DATE FILTERS"
     },
@@ -3157,6 +3171,53 @@
       "choose": "Choose",
       "index": "Index",
       "clear": "Clear"
+    },
+    "indexationView": {
+      "batchIdLabel": "Batch ID:",
+      "totalBatchPages": "Total Batch Pages:",
+      "indexedDocuments": "Indexed documents:",
+      "bookmarkedDocuments": "Bookmarked documents:",
+      "split": "Split",
+      "buttons": {
+        "cancel": "Cancel",
+        "saveBatch": "Save Batch",
+        "merge": "Merge",
+        "split": "Split",
+        "delete": "Delete",
+        "crop": "Crop",
+        "deletePage": "Delete",
+        "applySplit": "Apply Split",
+        "insertBookmarkAfter": "Insert Bookmark After",
+        "insertBookmarkBefore": "Insert Bookmark Before"
+      },
+      "documentPages": "Document Pages - {{name}}",
+      "documentPagesSuffix": "pages",
+      "splitModeActiveTitle": "Split Mode Active",
+      "splitModeDescription": "Click between any two pages to add or remove split dividers. The document will be split at each divider.",
+      "splitModeDividers": "{{count}} dividers",
+      "pageViewerTitle": "Page Viewer",
+      "closeViewer": "Close Viewer",
+      "insertBookmarkAfter": "Insert Bookmark After",
+      "insertBookmarkBefore": "Insert Bookmark Before",
+      "bookmarkSheet": "Bookmark Sheet",
+      "beforePageLabel": "Before Page {{page}}",
+      "confirmDeleteTitle": "Confirm Delete?",
+      "confirmDeleteMessagePages": "This action cannot be undone. This will permanently delete {{count}} page(s).",
+      "confirmDeleteMessageDocuments": "This action cannot be undone. This will permanently delete {{count}} document(s)."
+    },
+    "cropDialog": {
+      "header": "Crop & Rotate Page {{pageNumber}}",
+      "bullet1": "Drag the corner/edge handles to resize",
+      "bullet2": "Drag inside the selection to move",
+      "bullet3": "Use controls below to adjust",
+      "selection": "Selection",
+      "rotate": "Rotate",
+      "fineTune": "Fine tune",
+      "resetAll": "Reset All",
+      "cancel": "Cancel",
+      "saveCroppedImage": "Save Cropped Image",
+      "cropperReady": "Cropper ready",
+      "loadImageFailed": "Failed to load image"
     }
   }
 }
