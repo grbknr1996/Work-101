@@ -3,10 +3,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, switchMap, of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { AuthService } from './auth.service';
 import { ToastService } from './toast.service';
 import { MechanicsService } from './mechanics.service';
-import { getAuthHeaders, handleError } from '../utils';
+import { handleError } from '../utils';
 import { CACHE_HEADERS } from '../_constants/common.constant';
 
 export interface UserAssignment {
@@ -179,7 +178,6 @@ export interface UnitNode {
 export class UnitsService {
   constructor(
     private http: HttpClient,
-    private authService: AuthService,
     private toastService: ToastService,
     private mechanicsService: MechanicsService
   ) {}
@@ -194,24 +192,17 @@ export class UnitsService {
    * Get units from API endpoint {{baseUrl}}/units/queries
    */
   getUnits(): Observable<UnitsQueryResponse> {
-    return getAuthHeaders(this.authService).pipe(
-      switchMap((headers) => {
-        // Add no-cache header to skip HTTP caching for units tree
-        const headersWithNoCache = headers.set(
-          CACHE_HEADERS.NO_CACHE,
-          'no-cache'
-        );
-        return this.http.get<UnitsQueryResponse>(
-          `${environment.backendUrl}/units/queries`,
-          {
-            headers: headersWithNoCache,
-          }
-        );
-      }),
-      catchError((error) =>
-        handleError(error, '', this.toastService, this.mechanicsService)
-      )
-    );
+    // Add no-cache header to skip HTTP caching for units tree
+    const headers = new HttpHeaders().set(CACHE_HEADERS.NO_CACHE, 'no-cache');
+    return this.http
+      .get<UnitsQueryResponse>(`${environment.backendUrl}/units/queries`, {
+        headers: headers,
+      })
+      .pipe(
+        catchError((error) =>
+          handleError(error, '', this.toastService, this.mechanicsService)
+        )
+      );
   }
 
   /**
@@ -223,28 +214,21 @@ export class UnitsService {
     unitId: string,
     unitCategory: UnitCategory
   ): Observable<UnitDetailsResponse> {
-    return getAuthHeaders(this.authService).pipe(
-      switchMap((headers) => {
-        // Add no-cache header to skip HTTP caching for unit details
-        const headersWithNoCache = headers.set(
-          CACHE_HEADERS.NO_CACHE,
-          'no-cache'
-        );
-        return this.http.get<UnitDetailsResponse>(
-          `${environment.backendUrl}/units`,
-          {
-            headers: headersWithNoCache,
-            params: {
-              unitId: unitId,
-              unitCategory: unitCategory,
-            },
-          }
-        );
-      }),
-      catchError((error) =>
-        handleError(error, '', this.toastService, this.mechanicsService)
-      )
-    );
+    // Add no-cache header to skip HTTP caching for unit details
+    const headers = new HttpHeaders().set(CACHE_HEADERS.NO_CACHE, 'no-cache');
+    return this.http
+      .get<UnitDetailsResponse>(`${environment.backendUrl}/units`, {
+        headers: headers,
+        params: {
+          unitId: unitId,
+          unitCategory: unitCategory,
+        },
+      })
+      .pipe(
+        catchError((error) =>
+          handleError(error, '', this.toastService, this.mechanicsService)
+        )
+      );
   }
 
   /**
@@ -252,20 +236,13 @@ export class UnitsService {
    * Based on API endpoint: {{baseUrl}}/units (POST)
    */
   createUnit(unitData: CreateUnitRequest): Observable<CreateUnitResponse> {
-    return getAuthHeaders(this.authService).pipe(
-      switchMap((headers) =>
-        this.http.post<CreateUnitResponse>(
-          `${environment.backendUrl}/units`,
-          unitData,
-          {
-            headers: headers,
-          }
+    return this.http
+      .post<CreateUnitResponse>(`${environment.backendUrl}/units`, unitData)
+      .pipe(
+        catchError((error) =>
+          handleError(error, '', this.toastService, this.mechanicsService)
         )
-      ),
-      catchError((error) =>
-        handleError(error, '', this.toastService, this.mechanicsService)
-      )
-    );
+      );
   }
 
   /**
@@ -510,35 +487,33 @@ export class UnitsService {
   }
 
   deleteUnit(unitId: string, unitCategory: UnitCategory): Observable<boolean> {
-    return getAuthHeaders(this.authService).pipe(
-      switchMap((headers) =>
-        this.http.delete(`${environment.backendUrl}/units`, {
-          headers: headers,
-          params: {
-            unitId: unitId,
-            unitCategory: unitCategory,
-          },
-        })
-      ),
-      switchMap(() => {
-        this.toastService.showSuccess(
-          'Success',
-          this.mechanicsService.translate(
-            'userManagement.units.unitDeletedSuccess'
-          )
-        );
-        return of(true);
-      }),
-      catchError((error) => {
-        this.toastService.showError(
-          'Error',
-          this.mechanicsService.translate(
-            'userManagement.units.unitDeletedFailed'
-          )
-        );
-        return of(false);
+    return this.http
+      .delete(`${environment.backendUrl}/units`, {
+        params: {
+          unitId: unitId,
+          unitCategory: unitCategory,
+        },
       })
-    );
+      .pipe(
+        switchMap(() => {
+          this.toastService.showSuccess(
+            'Success',
+            this.mechanicsService.translate(
+              'userManagement.units.unitDeletedSuccess'
+            )
+          );
+          return of(true);
+        }),
+        catchError((error) => {
+          this.toastService.showError(
+            'Error',
+            this.mechanicsService.translate(
+              'userManagement.units.unitDeletedFailed'
+            )
+          );
+          return of(false);
+        })
+      );
   }
 
   updateUnit(unit: UnitNode): Observable<UnitNode> {
@@ -574,42 +549,36 @@ export class UnitsService {
         [],
     };
 
-    return getAuthHeaders(this.authService).pipe(
-      switchMap((headers) =>
-        this.http.put<any>(
-          `${environment.backendUrl}/units/update`,
-          updateRequest,
-          {
-            headers: headers,
-            observe: 'response', // This ensures we get the full response including status
+    return this.http
+      .put<any>(`${environment.backendUrl}/units/update`, updateRequest, {
+        observe: 'response', // This ensures we get the full response including status
+      })
+      .pipe(
+        switchMap((response) => {
+          // Handle both 200 (with body) and 204 (no content) responses
+          if (response.status === 204 || response.status === 200) {
+            this.toastService.showSuccess(
+              'Success',
+              this.mechanicsService.translate(
+                'userManagement.units.unitUpdatedSuccess'
+              )
+            );
+            // Return the updated unit
+            return of(unit);
           }
-        )
-      ),
-      switchMap((response) => {
-        // Handle both 200 (with body) and 204 (no content) responses
-        if (response.status === 204 || response.status === 200) {
+          // For other success status codes, still treat as success
           this.toastService.showSuccess(
             'Success',
             this.mechanicsService.translate(
               'userManagement.units.unitUpdatedSuccess'
             )
           );
-          // Return the updated unit
           return of(unit);
-        }
-        // For other success status codes, still treat as success
-        this.toastService.showSuccess(
-          'Success',
-          this.mechanicsService.translate(
-            'userManagement.units.unitUpdatedSuccess'
-          )
-        );
-        return of(unit);
-      }),
-      catchError((error) =>
-        handleError(error, '', this.toastService, this.mechanicsService)
-      )
-    );
+        }),
+        catchError((error) =>
+          handleError(error, '', this.toastService, this.mechanicsService)
+        )
+      );
   }
 
   private getUnitCategoryFromId(unitId: string): UnitCategory {

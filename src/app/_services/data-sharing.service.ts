@@ -5,9 +5,9 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
   AuthTokenResponse,
-  GlobalZipResponse,  // Interface for Global Zip API response
   StatisticsResponse,  // Interface for Statistics API response
-  SharedPackageResponse,  // Interface for SharedPackage API response
+  SharedPackageResponse,
+  GlobalZipItem,
 } from '../interfaces';
 
 @Injectable({
@@ -17,7 +17,7 @@ export class DataExchangeService {
   private accessTokenSubject = new BehaviorSubject<string | null>(null);
   public accessToken$ = this.accessTokenSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /**
    * Get authentication token
@@ -72,7 +72,7 @@ export class DataExchangeService {
    * Get global zip ids by application ID
    * @param applicationId The application ID to search for
    */
-  getGlobalZipIdsByApplicationId(applicationId: string): Observable<GlobalZipResponse[]> {
+  getGlobalZipIdsByApplicationId(applicationId: string): Observable<GlobalZipItem[]> {
     return this.getAccessToken().pipe(
       switchMap((token) => {
         const headers = new HttpHeaders({
@@ -80,32 +80,56 @@ export class DataExchangeService {
           'Content-Type': 'application/json',
         });
 
-        const dataServicesUrl = `${environment.dataServicesApi}/applications?applicationId=${applicationId}`;
-
-        return this.http
-          .get<GlobalZipResponse>(dataServicesUrl, { headers })
-          .pipe(
-            map((response) => {
-              console.log('Global zip API response received:', {
-                hasData: !!response.data,
-                dataLength: response.data?.length || 0,
-                message: response.message,
-              });
-              if (response.data && Array.isArray(response.data)) {
-                return response.data;
-              }
-              return [];
-            }),
-            catchError((error) => {
-              console.error('Failed to fetch global zip ids:', error);
-              return throwError(
-                () => new Error('Failed to fetch global zip ids')
-              );
-            })
-          );
+        const url = `${environment.dataServicesApi}/applications?applicationId=${applicationId}`;
+        return this.http.get<GlobalZipItem[]>(url, { headers }).pipe(
+          map((response) => {
+            console.log('Global zip API response received:', response);
+            console.log('Global zip API response received:', {
+              hasData: Array.isArray(response),
+              dataLength: response.length,
+            });
+            return response;
+          }),
+          catchError((error) => {
+            console.error('Failed to fetch global zip ids:', error);
+            return throwError(() => new Error('Failed to fetch global zip ids'));
+          })
+        );
       })
     );
   }
+
+  getGlobalZipDetails(zipList: GlobalZipItem[]): Observable<SharedPackageResponse[]> {
+  return this.getAccessToken().pipe(
+    switchMap((token) => {
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      });
+
+      const url = `${environment.dataServicesApi}/details`;
+
+      console.log("Calling Global Zip Details API with request body:", zipList);
+
+      return this.http.post<SharedPackageResponse[]>(url, zipList, { headers }).pipe(
+        map((response) => {
+          console.log("Global Zip Details API response:", response);
+          console.log("Response metadata:", {
+            isArray: Array.isArray(response),
+            length: Array.isArray(response) ? response.length : 0,
+          });
+          return response || [];
+        }),
+        catchError((error) => {
+          console.error("Failed to fetch Global Zip details:", error);
+          return throwError(() => new Error("Failed to fetch Global Zip details"));
+        })
+      );
+    })
+  );
+}
+
+
   /**
    * Get shared packages based on platform code, date range, and status filters
    * @param platformCode Platform code like 'kh-moc'
@@ -126,7 +150,7 @@ export class DataExchangeService {
           'Content-Type': 'application/json',
         });
 
-       
+
         const statusParams = status.map((s) => `status=${s}`).join('&');
         const dataServicesUrl = `${environment.dataServicesApi}/shared-dates?platformCode=${platformCode}&sharedDateStart=${sharedDateStart}&sharedDateEnd=${sharedDateEnd}&${statusParams}`;
 

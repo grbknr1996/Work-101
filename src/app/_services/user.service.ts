@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, switchMap, of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -259,33 +259,6 @@ export class UserService {
   }
 
   /**
-   * Get the authorization headers with Bearer token
-   */
-  private getAuthHeaders(): Observable<HttpHeaders> {
-    return this.authService.getEncodedTokens().pipe(
-      switchMap((tokens) => {
-        const officeCode = this.authService.getCurrentOfficeCode();
-        if (tokens && tokens.accessToken) {
-          const headers = new HttpHeaders({
-            Authorization: `Bearer ${tokens.accessToken}`,
-            'Content-Type': 'application/json',
-            'wipo-platform-code': officeCode,
-          });
-          return of(headers);
-        } else {
-          console.error('No access token available');
-          // Return headers without authorization - this will likely result in a 401
-          const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'wipo-platform-code': officeCode,
-          });
-          return of(headers);
-        }
-      })
-    );
-  }
-
-  /**
    * Get user accounts with filter criteria
    * Based on the API endpoint: {{baseUrl}}/queries?loginId=vc_gkonardf730&active=true&exactMatchIndicator=true&limit=10&offset=10&sort=userName&order=asc&wipo-platform-code=vc
    */
@@ -362,43 +335,35 @@ export class UserService {
       );
     }
 
-    return this.getAuthHeaders().pipe(
-      switchMap((headers) =>
-        this.http.get<UserQueryResponse>(`${environment.backendUrl}/queries`, {
-          params: httpParams,
-          headers: headers,
-        })
-      ),
-      catchError((error) => this.handleError(error, 'Loading user accounts'))
-    );
+    return this.http
+      .get<UserQueryResponse>(`${environment.backendUrl}/queries`, {
+        params: httpParams,
+      })
+      .pipe(
+        catchError((error) => this.handleError(error, 'Loading user accounts'))
+      );
   }
 
   /**
    * Get a single user account by login ID
    */
   getUserAccount(loginId: string): Observable<DetailedUserAccount> {
-    return this.getAuthHeaders().pipe(
-      switchMap((headers) =>
-        this.http.get<DetailedUserAccount>(
-          `${environment.backendUrl}?userId=${loginId}`,
-          {
-            headers: headers,
+    return this.http
+      .get<DetailedUserAccount>(`${environment.backendUrl}?userId=${loginId}`)
+      .pipe(
+        switchMap((response) => {
+          if (response && response.userGroupBag) {
+            return of(response);
+          } else {
+            return throwError(
+              () => new Error(`User account with login ID ${loginId} not found`)
+            );
           }
+        }),
+        catchError((error) =>
+          this.handleError(error, `Loading user account ${loginId}`)
         )
-      ),
-      switchMap((response) => {
-        if (response && response.userGroupBag) {
-          return of(response);
-        } else {
-          return throwError(
-            () => new Error(`User account with login ID ${loginId} not found`)
-          );
-        }
-      }),
-      catchError((error) =>
-        this.handleError(error, `Loading user account ${loginId}`)
-      )
-    );
+      );
   }
 
   /**
@@ -407,13 +372,9 @@ export class UserService {
   createUserAccount(userData: UserCreationPayload): Observable<UserAccount> {
     console.log('Creating user account with data:', userData);
 
-    return this.getAuthHeaders()
+    return this.http
+      .post<UserAccount>(`${environment.backendUrl}`, userData)
       .pipe(
-        switchMap((headers) =>
-          this.http.post<UserAccount>(`${environment.backendUrl}`, userData, {
-            headers: headers,
-          })
-        ),
         catchError((error) => this.handleError(error, 'Creating user account'))
       )
       .pipe(
@@ -434,14 +395,11 @@ export class UserService {
     loginId: string,
     userData: UserUpdatePayload
   ): Observable<any> {
-    return this.getAuthHeaders()
+    return this.http
+      .put<any>(`${environment.backendUrl}`, userData, {
+        observe: 'response', // This ensures we get the full response including status
+      })
       .pipe(
-        switchMap((headers) =>
-          this.http.put<any>(`${environment.backendUrl}`, userData, {
-            headers: headers,
-            observe: 'response', // This ensures we get the full response including status
-          })
-        ),
         catchError((error) =>
           this.handleError(error, `Updating user account ${loginId}`)
         )
@@ -475,13 +433,9 @@ export class UserService {
    * Delete a user account
    */
   deleteUserAccount(loginId: string): Observable<void> {
-    return this.getAuthHeaders()
+    return this.http
+      .delete<void>(`${environment.backendUrl}/users/${loginId}`)
       .pipe(
-        switchMap((headers) =>
-          this.http.delete<void>(`${environment.backendUrl}/users/${loginId}`, {
-            headers: headers,
-          })
-        ),
         catchError((error) =>
           this.handleError(error, `Deleting user account ${loginId}`)
         )
@@ -504,15 +458,11 @@ export class UserService {
     loginId: string,
     isActive: boolean
   ): Observable<UserAccount> {
-    return this.getAuthHeaders()
+    return this.http
+      .patch<UserAccount>(`${environment.backendUrl}/users/${loginId}/status`, {
+        isActive: isActive,
+      })
       .pipe(
-        switchMap((headers) =>
-          this.http.patch<UserAccount>(
-            `${environment.backendUrl}/users/${loginId}/status`,
-            { isActive: isActive },
-            { headers: headers }
-          )
-        ),
         catchError((error) =>
           this.handleError(
             error,
@@ -587,34 +537,28 @@ export class UserService {
       );
     }
 
-    return this.getAuthHeaders().pipe(
-      switchMap((headers) => {
-        const finalOptions =
-          Object.keys(params).length > 0
-            ? { params: httpParams, headers: headers }
-            : { headers: headers };
+    const finalOptions =
+      Object.keys(params).length > 0 ? { params: httpParams } : {};
 
-        return this.http.get<UserGroupQueryResponse>(
-          `${environment.backendUrl}/groups/queries`,
-          finalOptions
-        );
-      }),
-      catchError((error) => this.handleError(error, 'Loading user groups'))
-    );
+    return this.http
+      .get<UserGroupQueryResponse>(
+        `${environment.backendUrl}/groups/queries`,
+        finalOptions
+      )
+      .pipe(
+        catchError((error) => this.handleError(error, 'Loading user groups'))
+      );
   }
 
   /**
    * Create a new user group
    */
   createUserGroup(groupData: CreateGroupRequest): Observable<any> {
-    return this.getAuthHeaders()
+    return this.http
+      .post<any>(`${environment.backendUrl}/groups`, groupData, {
+        observe: 'response',
+      })
       .pipe(
-        switchMap((headers) =>
-          this.http.post<any>(`${environment.backendUrl}/groups`, groupData, {
-            headers: headers,
-            observe: 'response',
-          })
-        ),
         catchError((error) =>
           this.handleError(error, `Creating user group ${groupData.groupName}`)
         )
@@ -638,14 +582,11 @@ export class UserService {
    * Update an existing user group
    */
   updateUserGroup(groupData: UpdateGroupRequest): Observable<any> {
-    return this.getAuthHeaders()
+    return this.http
+      .put<any>(`${environment.backendUrl}/groups`, groupData, {
+        observe: 'response',
+      })
       .pipe(
-        switchMap((headers) =>
-          this.http.put<any>(`${environment.backendUrl}/groups`, groupData, {
-            headers: headers,
-            observe: 'response',
-          })
-        ),
         catchError((error) =>
           this.handleError(error, `Updating user group ${groupData.groupId}`)
         )
@@ -665,15 +606,12 @@ export class UserService {
    * Delete a user group
    */
   deleteUserGroup(groupId: number): Observable<void> {
-    return this.getAuthHeaders()
+    const params = new HttpParams().set('groupId', groupId.toString());
+    return this.http
+      .delete<void>(`${environment.backendUrl}/groups`, {
+        params: params,
+      })
       .pipe(
-        switchMap((headers) => {
-          const params = new HttpParams().set('groupId', groupId.toString());
-          return this.http.delete<void>(`${environment.backendUrl}/groups`, {
-            params: params,
-            headers: headers,
-          });
-        }),
         catchError((error) =>
           this.handleError(error, `Deleting user group ${groupId}`)
         )
@@ -694,21 +632,16 @@ export class UserService {
    * Based on the API endpoint: {{baseUrl}}/groups/members?groupId={groupId}
    */
   getGroupMembers(groupId: number): Observable<GroupWithMembers> {
-    return this.getAuthHeaders().pipe(
-      switchMap((headers) => {
-        const params = new HttpParams().set('groupId', groupId.toString());
-        return this.http.get<GroupWithMembers>(
-          `${environment.backendUrl}/groups/members`,
-          {
-            params: params,
-            headers: headers,
-          }
-        );
-      }),
-      catchError((error) =>
-        this.handleError(error, `Loading group members for group ${groupId}`)
-      )
-    );
+    const params = new HttpParams().set('groupId', groupId.toString());
+    return this.http
+      .get<GroupWithMembers>(`${environment.backendUrl}/groups/members`, {
+        params: params,
+      })
+      .pipe(
+        catchError((error) =>
+          this.handleError(error, `Loading group members for group ${groupId}`)
+        )
+      );
   }
 
   /**
@@ -721,17 +654,9 @@ export class UserService {
       email: email,
     };
 
-    return this.getAuthHeaders()
+    return this.http
+      .put<any>(`${environment.backendUrl}/emails/verification`, payload)
       .pipe(
-        switchMap((headers) =>
-          this.http.put<any>(
-            `${environment.backendUrl}/emails/verification`,
-            payload,
-            {
-              headers: headers,
-            }
-          )
-        ),
         catchError((error) =>
           this.handleError(error, `Resending verification email for ${loginId}`)
         )
@@ -752,14 +677,13 @@ export class UserService {
    * Based on the API endpoint: {{baseUrl}}/stats
    */
   getUserStats(): Observable<UserStats> {
-    return this.getAuthHeaders().pipe(
-      switchMap((headers) =>
-        this.http.get<UserStats>(`${environment.backendUrl}/stats`, {
-          headers: headers,
-        })
-      ),
-      catchError((error) => this.handleError(error, 'Loading user statistics'))
-    );
+    return this.http
+      .get<UserStats>(`${environment.backendUrl}/stats`)
+      .pipe(
+        catchError((error) =>
+          this.handleError(error, 'Loading user statistics')
+        )
+      );
   }
 
   /**
@@ -842,38 +766,31 @@ export class UserService {
       email: email,
     };
 
-    return this.getAuthHeaders().pipe(
-      switchMap((headers) =>
-        this.http.put<any>(
-          `${environment.backendUrl}/emails/verification`,
-          payload,
-          {
-            headers: headers,
-          }
-        )
-      ),
-      switchMap((response) => {
-        return of({
-          success: true,
-          modalConfig: this.getResendVerificationSuccessModalConfig(email),
-          response: response,
-        });
-      }),
-      catchError((error) => {
-        const errorMessage =
-          error.error?.message ||
-          error.message ||
-          'An unexpected error occurred';
-        return of({
-          success: false,
-          modalConfig: this.getResendVerificationErrorModalConfig(
-            email,
-            errorMessage
-          ),
-          error: error,
-        });
-      })
-    );
+    return this.http
+      .put<any>(`${environment.backendUrl}/emails/verification`, payload)
+      .pipe(
+        switchMap((response) => {
+          return of({
+            success: true,
+            modalConfig: this.getResendVerificationSuccessModalConfig(email),
+            response: response,
+          });
+        }),
+        catchError((error) => {
+          const errorMessage =
+            error.error?.message ||
+            error.message ||
+            'An unexpected error occurred';
+          return of({
+            success: false,
+            modalConfig: this.getResendVerificationErrorModalConfig(
+              email,
+              errorMessage
+            ),
+            error: error,
+          });
+        })
+      );
   }
 
   /**
@@ -882,31 +799,27 @@ export class UserService {
    * Returns an observable that emits the response or throws an error with the error details
    */
   cognitoSync(): Observable<any> {
-    return this.getAuthHeaders().pipe(
-      switchMap((headers) =>
-        this.http.put<any>(
-          `${environment.backendUrl}/cognitoSync`,
-          {},
-          {
-            headers: headers,
-            observe: 'response',
+    return this.http
+      .put<any>(
+        `${environment.backendUrl}/cognitoSync`,
+        {},
+        { observe: 'response' }
+      )
+      .pipe(
+        switchMap((response) => {
+          // If status is 200, return the response body
+          if (response.status === 200) {
+            return of(response.body || { success: true });
           }
-        )
-      ),
-      switchMap((response) => {
-        // If status is 200, return the response body
-        if (response.status === 200) {
+          // For other success status codes, still return success
           return of(response.body || { success: true });
-        }
-        // For other success status codes, still return success
-        return of(response.body || { success: true });
-      }),
-      catchError((error) => {
-        // Don't use handleError here as we want to check the error code in the calling component
-        // Return the error so the caller can check for specific error codes
-        return throwError(() => error);
-      })
-    );
+        }),
+        catchError((error) => {
+          // Don't use handleError here as we want to check the error code in the calling component
+          // Return the error so the caller can check for specific error codes
+          return throwError(() => error);
+        })
+      );
   }
 
   /**
@@ -967,6 +880,20 @@ export class UserService {
           );
           this.router.navigate([`/${officeCode}/${langCode}/unauthorized`]);
           return throwError(() => new Error('Unauthorized'));
+        }
+
+        // Handle 503 - Service Unavailable
+        if (status === 503) {
+          this.toastService.showError(
+            'Service Unavailable',
+            errorMessage ||
+              'The service is temporarily unavailable. Please try again later.'
+          );
+          // Preserve the original error with status code for component handling
+          const serviceUnavailableError: any = new Error('Service Unavailable');
+          serviceUnavailableError.status = 503;
+          serviceUnavailableError.error = errorResponse;
+          return throwError(() => serviceUnavailableError);
         }
 
         // For other errors, re-throw to let the caller handle

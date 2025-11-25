@@ -1,7 +1,7 @@
-import { Injectable, signal, computed, effect } from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, throwError, from } from 'rxjs';
-import { catchError, tap, map, switchMap, retry } from 'rxjs/operators';
+import { catchError, tap, map, switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { LoadingService } from './loading.service';
 import { fetchAuthSession } from 'aws-amplify/auth';
@@ -57,11 +57,11 @@ export class PermissionService {
     this.setError(null);
 
     return from(fetchAuthSession()).pipe(
-      map((accessToken) => {
-        if (!accessToken.tokens?.accessToken) {
+      map((session) => {
+        if (!session.tokens?.accessToken) {
           throw new Error('No access token available');
         }
-        const token = accessToken.tokens.accessToken.toString();
+        const token = session.tokens.accessToken.toString();
         return token;
       }),
       // Extract username from JWT token
@@ -75,21 +75,16 @@ export class PermissionService {
             throw new Error('No username found in token');
           }
 
-          return { accessToken, username };
+          return username;
         } catch (error) {
           throw new Error('Failed to decode JWT token');
         }
       }),
       // Make the actual API call
-      //take from username
-      switchMap(({ accessToken, username }) => {
-        // Extract platform code from username (format: xx_username)
-        const platformCode = username.split('_')[0];
+      // Auth headers (Authorization, wipo-platform-code, Content-Type) are added by AuthInterceptor
+      switchMap((username) => {
         const ttl = CACHE_HEADERS.CACHE_TTL;
         const headers = new HttpHeaders({
-          Authorization: `Bearer ${accessToken}`,
-          'wipo-platform-code': platformCode,
-          'Content-Type': 'application/json',
           [ttl]: 100000,
         });
 
@@ -107,7 +102,6 @@ export class PermissionService {
         this.isLoaded.set(true);
         this.error.set(null);
       }),
-      retry(3),
       catchError((error) => {
         console.error('Error fetching user permissions:', error);
         this.setError(error.message || 'Failed to fetch permissions');

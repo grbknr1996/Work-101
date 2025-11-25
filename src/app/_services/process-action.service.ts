@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError, BehaviorSubject } from 'rxjs';
-import { catchError, map, switchMap, shareReplay, tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { catchError, map, shareReplay, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { AuthService } from './auth.service';
+import { logger } from '../logger';
+import { handleError } from '../utils';
+import { ToastService } from './toast.service';
+import { MechanicsService } from './mechanics.service';
 
 export interface ProcessType {
   id: string;
@@ -29,59 +32,11 @@ export class ProcessActionService {
     [processType: string]: ProcessAction[];
   }> | null = null;
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
-
-  /**
-   * Handle HTTP errors and show appropriate messages
-   */
-  private handleError(error: any, operation: string): Observable<never> {
-    let errorMessage = 'An unexpected error occurred';
-
-    if (error.status === 401) {
-      errorMessage = 'Authentication failed. Please log in again.';
-    } else if (error.status === 403) {
-      errorMessage = "You don't have permission to perform this action.";
-    } else if (error.status === 404) {
-      errorMessage = 'The requested resource was not found.';
-    } else if (error.status === 0) {
-      errorMessage = 'Network error. Please check your connection.';
-    } else if (error.status >= 500) {
-      errorMessage = 'Server error. Please try again later.';
-    } else {
-      errorMessage =
-        error.message || error.error?.message || 'Unknown error occurred';
-    }
-
-    console.error(`${operation} failed:`, error);
-    return throwError(() => new Error(errorMessage));
-  }
-
-  /**
-   * Get the authorization headers with Bearer token
-   */
-  private getAuthHeaders(): Observable<HttpHeaders> {
-    return this.authService.getEncodedTokens().pipe(
-      map((tokens) => {
-        const officeCode = this.authService.getCurrentOfficeCode();
-
-        if (tokens && tokens.accessToken) {
-          return new HttpHeaders({
-            Authorization: `Bearer ${tokens.accessToken}`,
-            'Content-Type': 'application/json',
-            'wipo-platform-code': officeCode,
-          });
-        } else {
-          console.warn(
-            'No access token available, making request without authorization'
-          );
-          return new HttpHeaders({
-            'Content-Type': 'application/json',
-            'wipo-platform-code': officeCode,
-          });
-        }
-      })
-    );
-  }
+  constructor(
+    private http: HttpClient,
+    private toastService: ToastService,
+    private ms: MechanicsService
+  ) {}
 
   /**
    * Get process types from the configuration API
@@ -91,22 +46,21 @@ export class ProcessActionService {
   getProcessTypes(): Observable<ProcessType> {
     // Return cached observable if it exists
     if (this.processTypesCache$) {
-      console.log('Returning cached process types');
+      logger.log('Returning cached process types');
       return this.processTypesCache$;
     }
 
-    console.log('Fetching process types from API...');
+    logger.log('Fetching process types from API...');
     const configUrl = `${environment.configUrl}/configurations/process-category/process-types`;
 
-    this.processTypesCache$ = this.getAuthHeaders().pipe(
-      switchMap((headers) =>
-        this.http.get<ProcessType>(configUrl, { headers })
-      ),
+    this.processTypesCache$ = this.http.get<ProcessType>(configUrl).pipe(
       map((response) => {
-        console.log('Process types response received:', response);
+        logger.log('Process types response received:', response);
         return response;
       }),
-      catchError((error) => this.handleError(error, 'Loading process types')),
+      catchError((error) =>
+        handleError(error, 'Loading process types', this.toastService, this.ms)
+      ),
       shareReplay(1) // Cache the result and share it with all subscribers
     );
 
@@ -120,15 +74,19 @@ export class ProcessActionService {
   getProcessActions(): Observable<ProcessAction[]> {
     const configUrl = `${environment.configUrl}/configurations/process-category/process-types/action-types`;
 
-    return this.getAuthHeaders().pipe(
-      switchMap((headers) =>
-        this.http.get<ProcessAction[]>(configUrl, { headers })
-      ),
+    return this.http.get<ProcessAction[]>(configUrl).pipe(
       map((response) => {
-        console.log('Process actions response received:', response);
+        logger.log('Process actions response received:', response);
         return response;
       }),
-      catchError((error) => this.handleError(error, 'Loading process actions'))
+      catchError((error) =>
+        handleError(
+          error,
+          'Loading process actions',
+          this.toastService,
+          this.ms
+        )
+      )
     );
   }
 
@@ -139,11 +97,11 @@ export class ProcessActionService {
   getGroupedActions(): Observable<{ [processType: string]: ProcessAction[] }> {
     // Return cached observable if it exists
     if (this.groupedActionsCache$) {
-      console.log('Returning cached grouped actions');
+      logger.log('Returning cached grouped actions');
       return this.groupedActionsCache$;
     }
 
-    console.log('Fetching grouped actions from API...');
+    logger.log('Fetching grouped actions from API...');
     this.groupedActionsCache$ = this.getProcessActions().pipe(
       map((actions) => {
         const grouped: { [processType: string]: ProcessAction[] } = {};
@@ -155,7 +113,7 @@ export class ProcessActionService {
           }
           grouped[processType].push(action);
         });
-        console.log('Grouped actions processed:', grouped);
+        logger.log('Grouped actions processed:', grouped);
         return grouped;
       }),
       shareReplay(1) // Cache the result and share it with all subscribers
@@ -169,7 +127,7 @@ export class ProcessActionService {
    * Useful when data needs to be refreshed
    */
   clearCache(): void {
-    console.log('Clearing process action service cache');
+    logger.log('Clearing process action service cache');
     this.processTypesCache$ = null;
     this.groupedActionsCache$ = null;
   }

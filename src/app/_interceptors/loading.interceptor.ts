@@ -15,7 +15,7 @@ import {
   LOADER_URL_PATTERNS,
   SKIP_GLOBAL_LOADER_HEADER,
 } from '../_constants/common.constant';
-
+import { logger } from '../logger';
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
   private activeRequests = 0;
@@ -40,7 +40,7 @@ export class LoadingInterceptor implements HttpInterceptor {
 
     if (this.shouldShowLoader(request)) {
       this.activeRequests++;
-      console.log(`Loading started. Active requests: ${this.activeRequests}`);
+      logger.log(`Loading started. Active requests: ${this.activeRequests}`);
       this.loadingService.show(
         this.ms.translate('common.components.table.loading')
       );
@@ -50,12 +50,12 @@ export class LoadingInterceptor implements HttpInterceptor {
       tap(
         (event) => {
           if (event instanceof HttpResponse) {
-            console.log(`Response received for: ${request.url}`);
+            logger.log(`Response received for: ${request.url}`);
           }
         },
         (error) => {
           if (error instanceof HttpErrorResponse) {
-            console.error('API Error:', error);
+            logger.error('API Error:', error);
           }
         }
       ),

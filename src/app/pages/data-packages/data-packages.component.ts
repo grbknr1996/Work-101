@@ -45,10 +45,6 @@ export class DataPackagesComponent implements OnInit {
   packagesData: any;
   tableData: any;
 
-  //  date: Date | undefined;
-  //  maxDate: Date;
-  //  defaultMaxDate: Date;
-
   officeCode;
   officeCodeParam;
   applicationOfficeCode = '';
@@ -111,16 +107,13 @@ export class DataPackagesComponent implements OnInit {
     };
 
     this.route.params.subscribe((params) => {
-      const officeCode =
-        params['officeCode'] || this.ms.getCurrentOffice() || 'default';
+      const officeCode = params['officeCode'] || this.ms.getCurrentOffice() || 'default';
       const langCode = params['langCode'] || 'en';
 
       this.officeCodeParam = this.route.snapshot.params['office'];
-
-      console.log('officeCodeParam ', this.officeCodeParam);
-
+      //console.log('officeCodeParam ', this.officeCodeParam);
       this.officeCode = officeCode;
-      console.log('officeCode ', this.officeCode);
+      //console.log('officeCode ', this.officeCode);
 
       if (
         officeCode == 'default' &&
@@ -164,6 +157,8 @@ export class DataPackagesComponent implements OnInit {
     this.menuService.updateMenuItems(menuItems);
 
     //this.countryCodeForService = this.applicationOfficeCode;
+
+    this.statSelected = 'TOTAL IN MONTH';
 
     this.statusTranslated = {
       SUCCESS: this.ms.translate('dataService.dataSharing.filter.status.success'),
@@ -239,6 +234,7 @@ export class DataPackagesComponent implements OnInit {
         placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
         dateFormat: 'yy-mm-dd',
         section: this.ms.translate('common.components.filter.section.dateFilters'),
+        defaultValue: this.dateRangeFilter()
       },
       {
         key: 'SUCCESS',
@@ -251,18 +247,21 @@ export class DataPackagesComponent implements OnInit {
         label: this.statusTranslated['FAILED_RETRY'],
         type: 'checkbox',
         section: this.ms.translate('common.components.filter.section.status'),
+        defaultValue: true
       },
       {
         key: 'FAILED_NONRETRY',
         label: this.statusTranslated['FAILED_NONRETRY'],
         type: 'checkbox',
         section: this.ms.translate('common.components.filter.section.status'),
+        defaultValue: true
       },
       {
         key: 'PARTIAL',
         label: this.statusTranslated['PARTIAL'],
         type: 'checkbox',
         section: this.ms.translate('common.components.filter.section.status'),
+        defaultValue: true
       },
       {
         key: 'IN_PROGRESS',
@@ -312,7 +311,7 @@ export class DataPackagesComponent implements OnInit {
             icon: 'pi pi-spinner',
           },
         ];
-        console.log('response for statistics:', response);
+        // console.log('response for statistics:', response);
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -321,7 +320,6 @@ export class DataPackagesComponent implements OnInit {
 
     });
 
-    this.statSelected = 'TOTAL IN MONTH';
     this.permanentFilters();
     
     let today = new Date();
@@ -336,6 +334,7 @@ export class DataPackagesComponent implements OnInit {
   private loadSharedPackages(startDate: string, endDate: string): void {
     this.prepareStatusArray();
 
+    //console.log("status "+this.statusArray);
     this.dataService.getSharedPackages(this.countryCodeForService, startDate, endDate, this.statusArray).subscribe({
       next: (response) => {
         this.packagesData = response;
@@ -368,7 +367,38 @@ export class DataPackagesComponent implements OnInit {
     if (this.inProgressFlag) this.statusArray.push('IN_PROGRESS');
   }
 
-  private permanentFilters(): void {
+  private permanentFilters(filters?: FilterValue[]): void {
+    let dateArray = this.dateRangeFilter();
+
+    if (!this.dateFilterRemoved) {
+      let dateFilter = { key: 'receivedDate', value: dateArray, type: 'dateRange' };
+      this.appliedFilters = [...this.appliedFilters, dateFilter];
+    }
+
+    if (!this.failedNonRetryFilterRemoved) {
+      let failedFilter = { key: 'FAILED_NONRETRY', value: true, type: 'checkbox' };
+      if (!filters?.some(f => f.key === failedFilter.key)) {
+        this.appliedFilters = [...this.appliedFilters, failedFilter];
+      }
+    }
+
+    if (!this.failedFilterRemoved) {
+      let failedFilter = { key: 'FAILED_RETRY', value: true, type: 'checkbox' };
+      if (!filters?.some(f => f.key === failedFilter.key)) {
+        this.appliedFilters = [...this.appliedFilters, failedFilter];
+      }
+    }
+
+    if (!this.partialFilterRemoved) {
+      let partialFilter = { key: 'PARTIAL', value: true, type: 'checkbox' };
+      if (!filters?.some(f => f.key === partialFilter.key)) {
+        this.appliedFilters = [...this.appliedFilters, partialFilter];
+      }
+    }
+
+  }
+
+  private dateRangeFilter(): any {
     let today = new Date();
     let startDate = new Date(today); // clone 'today' to avoid modifying it directly
 
@@ -381,31 +411,12 @@ export class DataPackagesComponent implements OnInit {
     } else {
       startDate = new Date(1999, 0, 1); 
     }
-
-    if (!this.dateFilterRemoved) {
-      let dateFilter = { key: 'receivedDate', value: [startDate, today], type: 'dateRange' };
-      this.appliedFilters = [...this.appliedFilters, dateFilter];
-    }
-
-    if (!this.failedNonRetryFilterRemoved) {
-      let failedFilter = { key: 'FAILED_NONRETRY', value: true, type: 'checkbox' };
-      this.appliedFilters = [...this.appliedFilters, failedFilter];
-    }
-
-    if (!this.failedFilterRemoved) {
-      let failedFilter = { key: 'FAILED_RETRY', value: true, type: 'checkbox' };
-      this.appliedFilters = [...this.appliedFilters, failedFilter];
-    }
-
-    if (!this.partialFilterRemoved) {
-      let partialFilter = { key: 'PARTIAL', value: true, type: 'checkbox' };
-      this.appliedFilters = [...this.appliedFilters, partialFilter];
-    }
-
+    
+    return [startDate, today];
   }
 
   onActionClick(action: string, item: any) {
-    console.log('Action clicked:', action, item);
+    // console.log('Action clicked:', action, item);
     switch (action) {
       case 'downloadPackageCsv':
         this.downloadDetails(item);
@@ -423,11 +434,11 @@ export class DataPackagesComponent implements OnInit {
   }
 
   downloadDetails(user: any) {
-    console.log('Download details:', user);
+    // console.log('Download details:', user);
   }
 
   onStatSelect(statLabel: string) {
-    console.log('Stats Selected:', statLabel);
+    // console.log('Stats Selected:', statLabel);
     this.statSelected = statLabel;
     this.dateFilterRemoved = false;
     this.searchBar = '';
@@ -467,21 +478,23 @@ export class DataPackagesComponent implements OnInit {
     const formattedToday = this.formatDate(today);
 
     // Update the appliedFilters with date range for UI
-     if (this.appliedFilters.some(f => f.key === 'receivedDate')) {
-       this.appliedFilters = this.appliedFilters.map(f =>
-         f.key === 'receivedDate' ? { ...f, value: [startDate, today] } : f
-       );
-     } else if (!this.dateFilterRemoved) {
-       const dateFilter = { key: 'receivedDate', value: [startDate, today], type: 'dateRange' };
-       this.appliedFilters = [...this.appliedFilters, dateFilter];
-     }
+    if (this.appliedFilters.some(f => f.key === 'receivedDate')) {
+      this.appliedFilters = this.appliedFilters.map(f =>
+        f.key === 'receivedDate' ? { ...f, value: [startDate, today] } : f
+      );
+    } else if (!this.dateFilterRemoved) {
+      const dateFilter = { key: 'receivedDate', value: [startDate, today], type: 'dateRange' };
+      this.appliedFilters = [...this.appliedFilters, dateFilter];
+    }
+
+    this.configurableFilter.changeFilterValue('receivedDate', [startDate, today]);
 
     // Call service with formatted dates (server-side filtering)
     this.loadSharedPackages(formattedStartDate, formattedToday);
   }
 
   filterSearch(value: string) {
-    console.log(value);
+    // console.log(value);
     this.searchBar = value;
     this.applyFilters();
   }
@@ -492,7 +505,7 @@ export class DataPackagesComponent implements OnInit {
   }
 
   onFilterApplied(filters: FilterValue[]): void {
-    console.log('Filters applied:', filters);
+    // console.log('Filters applied:', filters);
     this.appliedFilters = [];
     if (filters.some(user => user.key === 'receivedDate')) {
       this.dateFilterRemoved = true;
@@ -521,32 +534,34 @@ export class DataPackagesComponent implements OnInit {
 
     }
 
-    if (filters.some(user => user.key === 'FAILED_NONRETRY')) {
+//    console.log("filters "+filters);
+   if (filters.some(item => item.key === 'FAILED_NONRETRY' && item.value == false)) {
       this.failedNonRetryFilterRemoved = true;
-    }
-    if (filters.some(user => user.key === 'FAILED_RETRY')) {
+   }
+   if (filters.some(item => item.key === 'FAILED_RETRY' && item.value == false)) {
       this.failedFilterRemoved = true;
-    }
-    if (filters.some(user => user.key === 'PARTIAL')) {
+   }
+   if (filters.some(item => item.key === 'PARTIAL' && item.value == false)) {
       this.partialFilterRemoved = true;
-    }
+   }
 
-    this.permanentFilters();
+    this.permanentFilters(filters);
     this.appliedFilters = [...this.appliedFilters, ...filters];
+
     this.applyFilters();
     this.cdr.detectChanges();
   }
 
   onAppliedFiltersChange(filters: FilterValue[]): void {
-    console.log('onAppliedFiltersChange:', filters);
+    // console.log('onAppliedFiltersChange:', filters);
     this.appliedFilters = [];
-    this.permanentFilters();
+    this.permanentFilters(filters);
     this.appliedFilters = [...this.appliedFilters, ...filters];
     this.cdr.detectChanges();
   }
 
   onFilterCleared(): void {
-    console.log('Filters cleared');
+    // console.log('Filters cleared');
     this.appliedFilters = [];
     this.permanentFilters();
     this.searchBar = '';
@@ -619,14 +634,14 @@ export class DataPackagesComponent implements OnInit {
 
         let filtered = [...this.tableData];
 
-        console.log("searchBar " + this.searchBar)
+        //console.log("searchBar " + this.searchBar)
+        //console.log("packagesData " + this.packagesData)
         if (this.searchBar && this.searchBar.trim()) {
           filtered = filtered.filter(
             (item) =>
               item.globalZipId?.toLowerCase().includes(this.searchBar)
           );
         }
-
         this.appliedFilters.forEach((filter) => {
           switch (filter.key) {
             case 'globalZipId':
@@ -643,7 +658,7 @@ export class DataPackagesComponent implements OnInit {
                 filter.value.length === 2
               ) {
                 const [startDate, endDate] = filter.value;
-                console.log(startDate+" -- "+endDate)
+                // console.log(startDate+" -- "+endDate)
                 if (startDate && endDate) {
                   filtered = filtered.filter((item) => {
                     const itemDate = new Date(item.receivedDate);
@@ -656,7 +671,7 @@ export class DataPackagesComponent implements OnInit {
         });
 
         this.tableData = filtered;
-
+        // console.log("tableData filtered" + this.tableData)
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -666,7 +681,7 @@ export class DataPackagesComponent implements OnInit {
   }
 
   onAdvancedFilterSearch(advancedFilterQuery: AdvancedFilterQuery): void {
-    console.log(advancedFilterQuery);
+    // console.log(advancedFilterQuery);
 
     let applicationId;
     for (const level of advancedFilterQuery.levelList) {
@@ -700,7 +715,7 @@ export class DataPackagesComponent implements OnInit {
     this.tableData = [];
     this.statSelected = 'TOTAL COUNT';
 
-    console.log(applicationId);
+    // console.log(applicationId);
     //TODO need to apply this query to the output
     this.dataService.getGlobalZipIdsByApplicationId(applicationId).subscribe({
       next: (response) => {
@@ -749,7 +764,7 @@ export class DataPackagesComponent implements OnInit {
   }
 
   removeFilterChip(filterKey: string): void {
-    console.log('removeFilterChip ' + filterKey);
+    // console.log('removeFilterChip ' + filterKey);
 
     // Find the filter config to get the display value
     const filterConfig = this.filterConfigs.find((f) => f.key === filterKey);

@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.service';
+import { logger } from '../logger';
 
 export interface PermissionSet {
   permissionSetId: number;
@@ -49,45 +50,15 @@ export class PermissionSetService {
   }
 
   /**
-   * Get the authorization headers with Bearer token
-   */
-  private getAuthHeaders(): Observable<HttpHeaders> {
-    return this.authService.getEncodedTokens().pipe(
-      map((tokens) => {
-        const officeCode = this.authService.getCurrentOfficeCode();
-
-        if (tokens && tokens.accessToken) {
-          return new HttpHeaders({
-            Authorization: `Bearer ${tokens.accessToken}`,
-            'Content-Type': 'application/json',
-            'wipo-platform-code': officeCode,
-          });
-        } else {
-          console.warn(
-            'No access token available, making request without authorization'
-          );
-          return new HttpHeaders({
-            'Content-Type': 'application/json',
-            'wipo-platform-code': officeCode,
-          });
-        }
-      })
-    );
-  }
-
-  /**
    * Get permission sets from the configuration API
    * Based on API endpoint: {{configUrl}}/configurations/permissionset
    */
   getPermissionSets(): Observable<PermissionSet[]> {
     const configUrl = `${environment.configUrl}/configurations/permissionset`;
 
-    return this.getAuthHeaders().pipe(
-      switchMap((headers) =>
-        this.http.get<PermissionSet[]>(configUrl, { headers })
-      ),
+    return this.http.get<PermissionSet[]>(configUrl).pipe(
       map((response) => {
-        console.log('Permission sets response received:', response);
+        logger.log('Permission sets response received:', response);
         return response;
       }),
       catchError((error) => this.handleError(error, 'Loading permission sets'))

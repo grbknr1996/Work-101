@@ -12,6 +12,9 @@ import { configuration } from '../../../environments/environment';
   standalone: false,
 })
 export class CognitoSyncComponent implements OnInit, OnDestroy {
+  errorMessage: string | null = null;
+  showError: boolean = false;
+
   constructor(
     private userService: UserService,
     private router: Router,
@@ -21,7 +24,7 @@ export class CognitoSyncComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Show global loader with sync message
-    this.loadingService.show('Synchronizing user data...');
+    this.loadingService.show(this.ms.translate('common.sync'));
 
     // Handle the cognito sync
     this.handleCognitoSync();
@@ -49,7 +52,27 @@ export class CognitoSyncComponent implements OnInit, OnDestroy {
       // Error handling is done in cognitoSyncWithErrorHandling
       // It will handle logout, MFA registration, or unauthorized navigation
       this.loadingService.hide();
-      // Navigation is handled in the service
+
+      // Check if it's a 503 error and show message in the UI
+      if (error?.status === 503 || error?.message === 'Service Unavailable') {
+        this.showError = true;
+        // Use translation key for error message, fallback to server message or default
+        const serverMessage = error?.error?.message || error?.message;
+        this.errorMessage =
+          serverMessage ||
+          this.ms.translate('common.cognitoSync.error.message');
+      }
+      // Navigation is handled in the service for other errors
     }
+  }
+
+  retrySync(): void {
+    // Reset error state
+    this.showError = false;
+    this.errorMessage = null;
+
+    // Show loading and retry
+    this.loadingService.show(this.ms.translate('common.sync'));
+    this.handleCognitoSync();
   }
 }

@@ -21,6 +21,7 @@ export const environment = {
   ],
   env: 'awsdev',
   efillingUrl: 'https://ipoffice-efiling-dev.ipobs.dev.web1.wipo.int/sign-in',
+  enableLogging: false,
   appUrl: 'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int',
   distributionRulesPath: 'data-services/v1/distribution-exclusion',
   dataServicesApi:

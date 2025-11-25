@@ -1,6 +1,5 @@
 //ANGULAR CORE
 import { Component, OnInit, inject, ViewChild, ElementRef } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
 //TRANSLATE
@@ -37,7 +36,6 @@ export class StatisticsComponent implements OnInit {
   @ViewChild(ChartFilterComponent, { static: false }) chartFilterC!: ChartFilterComponent;
 
   //DI
-  private http = inject(HttpClient);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
@@ -102,6 +100,7 @@ export class StatisticsComponent implements OnInit {
       if (filter.model === 'all') this.onReset();
       else {
         this.currentIPCategory = filter.model;
+        this.currentLegend = 'accounted_active_application';
         this.setSeriesData();
       }
     }
@@ -143,10 +142,10 @@ export class StatisticsComponent implements OnInit {
         fontWeight: 500
       },
       grid: {
-        top: '10%',
-        left: '5%',
+        top: '30',
+        left: '5',
         right: '20%',
-        bottom: '10%',
+        bottom: '30',
         containLabel: true
       },
       xAxis: {
@@ -300,9 +299,7 @@ export class StatisticsComponent implements OnInit {
       this.chartService.setChartID(0);
       this.chartService.setChartTheme(translations['charts.statistics.application_count.name']);
 
-      this.fetchAccountedApplications();
-      this.fetchActiveApplications();
-      this.fetchInactiveApplications();
+      this.fetchApplicationCount('accounted_applications');
     })
   }
   ngAfterViewInit() {
@@ -322,34 +319,18 @@ export class StatisticsComponent implements OnInit {
     this.previous = this.showFilter;
   }
 
-  fetchAccountedApplications() {
-    this.chartService.getApplicationCount('total_applications').subscribe({
+  fetchApplicationCount(key: string) {
+    this.chartService.getApplicationCount(key).subscribe({
       next: (response) => {
-        console.log("Response - fetchAccountedApplications()", response);
-        this.accountedData = response;
-        this.transformApplications(this.accountedData, 'accounted_application');
+        console.log("Response - fetchApplicationCount()", response);
+        let data: any = response;
+        (data.sectionBag.section).forEach((item: any) => {
+          if (item.dataCategory === 'total') { this.accountedData = item.data; this.transformApplications(this.accountedData, 'accounted_application'); }
+          if (item.dataCategory === 'active') { this.activeData = item.data; this.transformApplications(this.activeData, 'active_application'); }
+          if (item.dataCategory === 'inactive') { this.inActiveData = item.data; this.transformApplications(this.inActiveData, 'inactive_application'); }
+        })
       },
-      error: (error) => { console.log("Error - fetchAccountedApplications()", error); }
-    });
-  }
-  fetchActiveApplications() {
-    this.chartService.getApplicationCount('active_applications').subscribe({
-      next: (response) => {
-        console.log("Response - fetchActiveApplications()", response);
-        this.activeData = response;
-        this.transformApplications(this.activeData, 'active_application');
-      },
-      error: (error) => { console.log("Error - fetchActiveApplications()", error); }
-    });
-  }
-  fetchInactiveApplications() {
-    this.chartService.getApplicationCount('inactive_applications').subscribe({
-      next: (response) => {
-        console.log("Response - fetchInactiveApplications()", response);
-        this.inActiveData = response;
-        this.transformApplications(this.inActiveData, 'inactive_application');
-      },
-      error: (error) => { console.log("Error - fetchInactiveApplications()", error); }
+      error: (error) => { console.log("Error - fetchApplicationCount()", error); }
     });
   }
   transformApplications(inputData, type: string) {
@@ -363,24 +344,26 @@ export class StatisticsComponent implements OnInit {
         codes = codes.sort(([a], [b]) => (a.localeCompare(b)));
         this.IPAppMap.set(IP.ipCategory, codes);
       }
+      //SORT - L1
+      this.IPCategoryCount = new Map([...this.IPCategoryCount].sort(([a], [b]) => a.localeCompare(b)));
     }
-    //SORT - L1
-    this.IPCategoryCount = new Map([...this.IPCategoryCount].sort(([a], [b]) => a.localeCompare(b)));
-    for (let IP of this.IPCategoryCount.keys()) {
-      let block = [];
-      (inputData.applicationBag).forEach((item: any) => { if (IP === item.ipCategory) block = item.dataBag; });
-      for (let codeOrder of this.IPAppMap.get(IP)) {
-        let value = 0;
-        block.forEach((applications: any) => { if (codeOrder === applications.applicationCategory) value = applications.quantity; });
-        if (type === 'accounted_application') this.accountedDataMap.set(codeOrder, value);
-        if (type === 'active_application') this.activeDataMap.set(codeOrder, value);
-        if (type === 'inactive_application') this.inActiveDataMap.set(codeOrder, value);
+    if (this.IPCategoryCount.size !== 0) {
+      for (let IP of this.IPCategoryCount.keys()) {
+        let block = [];
+        (inputData.applicationBag).forEach((item: any) => { if (IP === item.ipCategory) block = item.dataBag; });
+        for (let codeOrder of this.IPAppMap.get(IP)) {
+          let value = 0;
+          block.forEach((applications: any) => { if (codeOrder === applications.applicationCategory) value = applications.quantity; });
+          if (type === 'accounted_application') this.accountedDataMap.set(codeOrder, value);
+          if (type === 'active_application') this.activeDataMap.set(codeOrder, value);
+          if (type === 'inactive_application') this.inActiveDataMap.set(codeOrder, value);
+        }
       }
+      if (this.IPCategory.size !== 0) {
+        if (this.accountedDataMap.size > 5) this.currentIPCategory = this.IPCategory.keys().next().value;
+      }
+      this.setSeriesData(); //DEFAULT CHART DATA
     }
-    if (this.IPCategory.size !== 0) {
-      if (this.accountedDataMap.size > 5) this.currentIPCategory = this.IPCategory.keys().next().value;
-    }
-    this.setSeriesData(); //DEFAULT CHART DATA
   }
 
   //CHART SERIES DATA

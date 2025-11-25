@@ -21,6 +21,7 @@ export const environment = {
   ],
   env: 'localhost',
   efillingUrl: 'https://ipoffice-efiling-dev.ipobs.dev.web1.wipo.int/sign-in',
+  enableLogging: true,
   appUrl: 'https://localhost:4200',
   distributionRulesPath: 'data-services/v1/distribution-exclusion',
   configUrl: '/services/offices',

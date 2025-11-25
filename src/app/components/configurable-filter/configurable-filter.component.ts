@@ -109,6 +109,10 @@ export class ConfigurableFilterComponent implements OnInit, OnDestroy {
     this.filterForm = this.fb.group(formControls);
   }
 
+  changeFilterValue(key: string, value: any) {
+    this.filterForm.patchValue({ [key]: value });
+  }
+
   private initializeFilterSelector(): void {
     // Initially select all filters
     this.selectedFilters = this.filters.map((filter) => filter.key);

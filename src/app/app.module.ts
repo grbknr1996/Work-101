@@ -160,6 +160,8 @@ import { CognitoSyncComponent } from './pages/cognito-sync/cognito-sync.componen
 import { ImageCropperComponent } from 'ngx-image-cropper';
 import { CropDialogComponent } from './components/crop-dialog/crop-dialog.component';
 import { ViewGroupComponent } from './pages/user-management/groups/view-group/view-group.component';
+import { RetryInterceptor } from './_interceptors/retry.interceptor';
+import { AuthInterceptor } from './_interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -292,6 +294,11 @@ import { ViewGroupComponent } from './pages/user-management/groups/view-group/vi
     },
     {
       provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
       useClass: LoadingInterceptor,
       multi: true,
     },
@@ -303,6 +310,11 @@ import { ViewGroupComponent } from './pages/user-management/groups/view-group/vi
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpCacheInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: RetryInterceptor,
       multi: true,
     },
     providePrimeNG({

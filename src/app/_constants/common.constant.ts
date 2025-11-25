@@ -32,3 +32,20 @@ export const AUTH_FLOW_ROUTES = [
   '/platform-selection',
   '/mfa-registration',
 ] as const;
+
+/// Retry Interceptor Constants
+export const DEFAULT_MAX_RETRIES = 3;
+export const DEFAULT_RETRY_DELAY = 1000; // 1 second in milliseconds
+export const DEFAULT_EXPONENTIAL_BACKOFF = true;
+export const RETRYABLE_STATUS_CODES = [500, 502, 503, 504]; // Server errors
+export const NON_RETRYABLE_STATUS_CODES = [400, 401, 403, 404, 422]; // Client errors that shouldn't be retried
+export const SKIP_RETRY_HEADER = 'X-WIPO-Skip-Retry';
+export const CUSTOM_RETRY_COUNT_HEADER = 'X-WIPO-Retry-Count';
+export const CUSTOM_RETRY_DELAY_HEADER = 'X-WIPO-Retry-Delay';
+
+//Auth token
+export const SKIP_AUTHORIZATION_TOKEN_HEADER = 'X-WIPO-Skip-Auth-token';
+export const AUTH_SKIP_ENDPOINTS: string[] = [
+  'data-services',
+  'distribution-rules',
+];

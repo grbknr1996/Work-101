@@ -146,10 +146,13 @@ export interface ExclusionRuleFilters {
   ipCategory?: string;
   originatingOfficeCode?: string;
 }
-export interface GlobalZipResponse {
-  message: any;
-  data: any[];
+export interface GlobalZipItem {
+  officeCode: string;
+  receivedOn: string;
+  packageName: string;
+  ipType: string;
 }
+
 export interface StatisticsResponse {
   totalCount: number;
   lastYearCount: number;

@@ -290,31 +290,6 @@ export const handleError = (
 /**
  * Get the authorization headers with Bearer token
  */
-export const getAuthHeaders = (
-  authService: AuthService
-): Observable<HttpHeaders> => {
-  return authService.getEncodedTokens().pipe(
-    switchMap((tokens) => {
-      const officeCode = authService.getCurrentOfficeCode();
-      if (tokens && tokens.accessToken) {
-        const headers = new HttpHeaders({
-          Authorization: `Bearer ${tokens.accessToken}`,
-          'Content-Type': 'application/json',
-          'wipo-platform-code': officeCode,
-        });
-        return of(headers);
-      } else {
-        console.error('No access token available');
-        // Return headers without authorization - this will likely result in a 401
-        const headers = new HttpHeaders({
-          'Content-Type': 'application/json',
-          'wipo-platform-code': officeCode,
-        });
-        return of(headers);
-      }
-    })
-  );
-};
 
 const WipoThemePreset = definePreset(Aura, {
   primitive: {

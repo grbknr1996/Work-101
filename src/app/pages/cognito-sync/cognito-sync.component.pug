@@ -1,4 +1,17 @@
 .div.flex.justify-center.align-items-center(style="min-height: 100vh;")
   .text-center
-    p-progressSpinner
-    p.mt-3 {{"common.sync"|translate}}
+    div(*ngIf="!showError")
+      p-progressSpinner
+      p.mt-3 {{"common.sync"|translate}}
+    div(*ngIf="showError", class="error-container")
+      i.pi.pi-exclamation-triangle(style="font-size: 3rem; color: #f44336;")
+      h3.mt-3.mb-2 {{"common.cognitoSync.error.title"|translate}}
+      p.error-message.mb-4 {{ errorMessage || ("common.cognitoSync.error.message"|translate) }}
+      button(
+        pButton,
+        type="button",
+        [label]="'common.retry' | translate",
+        icon="pi pi-refresh",
+        class="p-button-primary",
+        (click)="retrySync()"
+      )

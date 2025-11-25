@@ -137,6 +137,10 @@ export class ConfigurableFilterBarComponent {
     this.configurableFilter.onClearAll();
   }
 
+  changeFilterValue(key: string, value: any) {
+    this.configurableFilter.changeFilterValue(key, value);
+  }
+
   removeFilterChip(filterKey: string): void {
     this.removeDefaultFilter.emit(filterKey);
     this.configurableFilter.removeFilterChip(filterKey);
