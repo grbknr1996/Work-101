@@ -12,12 +12,23 @@ p-dialog(
 
   p-card(class="mb-4")
     .flex.flex-col.gap-3.mb-4
+
+      label.font-semibold(for="ipTypeSelect") {{ 'documentCapture.bookmark.selectIPType' | translate }}
+      p-dropdown(
+        id="ipTypeSelect",
+        [options]="ipTypes",
+        [(ngModel)]="selectedIpType",
+        (onChange)="onIpTypeChange()",
+        [placeholder]="'documentCapture.bookmark.selectIPType' | translate"
+      )
+
       label.font-semibold(for="bookmarkSelect") {{ 'documentCapture.bookmark.selectLabel' | translate }}
       p-dropdown(
         id="bookmarkSelect",
-        [options]="bookmarkOptions",
+        [options]="filteredBookmarkOptions",
         [(ngModel)]="selectedBookmark",
-        [placeholder]="'documentCapture.bookmark.placeholder' | translate"
+        [placeholder]="'documentCapture.bookmark.placeholder' | translate",
+        [disabled]="!selectedIpType"
       )
 
     .flex.items-center.gap-2.mt-2
@@ -39,8 +50,8 @@ p-dialog(
     )
 
   p-card(header="{{ 'documentCapture.bookmark.previewHeader' | translate }}", class="mb-4 text-center")
-    .w-full.flex.justify-content-center.align-items-center.flex-column
-      .border-2.border-dashed.border-gray-300.p-4.w-12rem.h-12rem.flex.align-items-center.justify-content-center.mb-2
+    .w-full.flex.flex-column.justify-center.items-center
+      .flex.justify-center.items-center.border-2.border-dashed.border-gray-300.p-4.w-12rem.h-12rem.mb-2
         img(*ngIf="qrImageUrl" src="assets/images/qr-mock.png" alt="QR Code" style="width:110px; height:110px;")
         i.pi.pi-qrcode.text-4xl.text-gray-500(*ngIf="!qrImageUrl")
 
@@ -61,6 +72,3 @@ p-dialog(
         [label]="'documentCapture.bookmark.closeButton' | translate",
         (click)="close()"
       )
-  p-card(header="{{ 'documentCapture.bookmark.setupHeader' | translate }}")
-            ol.pl-4.line-height-3(style="list-style-type: decimal; margin-left: 1.5rem;")
-                li(*ngFor="let step of setUpSteps") {{ step }}

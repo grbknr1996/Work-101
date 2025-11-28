@@ -138,6 +138,7 @@
         "actions": "Actions",
         "fieldPlaceholder": "Select Field",
         "strategyPlaceholder": "Select Search Strategy",
+        "ipTypePlaceholder": "Select Ip Type",
         "valuePlaceholder": "Enter the value to search",
         "datePlaceholder": "Select date",
         "toggle": {
@@ -200,6 +201,11 @@
             "fileNumber": "File Number",
             "publicationNumber": "Publication Number",
             "publicationDate": "Publication Date"
+          },
+          "applicationTypes": {
+            "patents": "Patents",
+            "trademarks": "Trademarks",
+            "designs": "Designs"
           }
         }
       },
@@ -313,7 +319,8 @@
         "title": "Publication",
         "items": {
           "pendingJournals": "Journals",
-          "pendingPublications": "Decision Actions"
+          "pendingPublications": "Decision Actions",
+          "onlinePublications": "Online Journals"
         }
       },
       "dataServices": {
@@ -3073,6 +3080,11 @@
         "cancel": "Cancel",
         "submit": "Record"
       }
+    },
+    "approval": {
+      "backgroundTitle": "Legal Background",
+      "comments": "Review Comments",
+      "outcomes": "Actions to Overcome"
     }
   },
   "systemConfiguration": {
@@ -3120,14 +3132,7 @@
       "previewHeader": "Bookmark Preview",
       "printButton": "Print Bookmark Page",
       "closeButton": "Close",
-      "setupHeader": "Setup Instructions",
-      "setupSteps": [
-        "Select bookmark type from dropdown",
-        "Print bookmark sheets with QR codes",
-        "Insert bookmark sheets between document pages",
-        "Ensure QR codes are clearly visible",
-        "Number pages sequentially"
-      ]
+      "selectIPType": "Select IP Type"
     },
     "stats": {
       "totalBatches": "Total Batches",
@@ -3178,13 +3183,13 @@
       "dropOrChoose": "Drop or Choose files here for Indexation",
       "choose": "Choose",
       "index": "Index",
-      "clear": "Clear"
+      "clear": "Clear All"
     },
     "indexationView": {
       "batchIdLabel": "Batch ID:",
       "totalBatchPages": "Total Batch Pages:",
-      "indexedDocuments": "Indexed documents:",
-      "bookmarkedDocuments": "Bookmarked documents:",
+      "indexedDocuments": "Indexed document(s):",
+      "bookmarkedDocuments": "Bookmarked document(s):",
       "split": "Split",
       "buttons": {
         "cancel": "Cancel",
@@ -3196,8 +3201,12 @@
         "deletePage": "Delete",
         "applySplit": "Apply Split",
         "insertBookmarkAfter": "Insert Bookmark After",
-        "insertBookmarkBefore": "Insert Bookmark Before"
+        "insertBookmarkBefore": "Insert Bookmark Before",
+        "close": "Close"
       },
+      "fullPageView": "Click to display in full screen height",
+      "deleteLogo": "Delete Logo",
+      "attachLogo": "Attach Logo",
       "documentPages": "Document Pages - {{name}}",
       "documentPagesSuffix": "pages",
       "splitModeActiveTitle": "Split Mode Active",
@@ -3211,7 +3220,16 @@
       "beforePageLabel": "Before Page {{page}}",
       "confirmDeleteTitle": "Confirm Delete?",
       "confirmDeleteMessagePages": "This action cannot be undone. This will permanently delete {{count}} page(s).",
-      "confirmDeleteMessageDocuments": "This action cannot be undone. This will permanently delete {{count}} document(s)."
+      "confirmDeleteMessageDocuments": "This action cannot be undone. This will permanently delete {{count}} document(s).",
+      "mergeDialog": {
+        "header": "Merge Documents",
+        "message": "Select which document ID should be used for the merged document",
+        "selectDocumentId": "Choose Document ID",
+        "selectPlaceholder": "Select a document ID",
+        "confirm": "Merge",
+        "cancel": "Cancel"
+      },
+      "documentLogoLabel": "LogoImage"
     },
     "cropDialog": {
       "header": "Crop & Rotate Page {{pageNumber}}",
@@ -3223,7 +3241,7 @@
       "fineTune": "Fine tune",
       "resetAll": "Reset All",
       "cancel": "Cancel",
-      "saveCroppedImage": "Save Cropped Image",
+      "saveCroppedImage": "Save Logo Image",
       "cropperReady": "Cropper ready",
       "loadImageFailed": "Failed to load image"
     }

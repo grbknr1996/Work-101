@@ -1,0 +1,47 @@
+ng-container
+  .mb-4
+    h2.text-lg.font-semibold.mb-2 {{ 'taskManagement.approval.backgroundTitle' | translate }}
+    p-tree(
+      [value]="legalBackgroundItems",
+      selectionMode="checkbox",
+      [(selection)]="selectedLegalItems",
+      [propagateSelectionUp]="true",
+      [propagateSelectionDown]="true"
+    )
+
+  .w-full.p-4
+
+    .grid.grid-cols-1.gap-6.mb-4
+      div
+        label.block.text-sm.font-medium.mb-1 {{ 'taskManagement.approval.comments' | translate }}
+        p-editor([(ngModel)]="reviewComments", [style]="{height:'150px'}")
+
+      div
+        label.block.text-sm.font-medium.mb-1 {{ 'taskManagement.approval.outcomes' | translate }}
+        p-editor([(ngModel)]="actionsToOvercome", [style]="{height:'150px'}")
+
+    .grid.grid-cols-1(class="md:grid-cols-3 gap-4 items-end mb-4")
+      div
+        label.block.text-sm.font-medium.mb-1 {{ 'taskManagement.recordAction.nextResponsibleUserUnit' | translate }}
+        p-dropdown.w-full(
+          [options]="units",
+          optionLabel="unitName",
+          optionValue="id",
+          [(ngModel)]="selectedUnitId",
+          (onChange)="onUnitChange($event.value)",
+          placeholder="Select Unit"
+        )
+
+      div
+        label.block.text-sm.font-medium.mb-1 {{ 'taskManagement.recordAction.nextResponsibleUser' | translate }}
+        p-dropdown.w-full(
+          [options]="members",
+          optionLabel="name",
+          optionValue="id",
+          [(ngModel)]="selectedMemberId",
+          placeholder="Select User"
+        )
+
+      .flex.justify-end.gap-3
+        p-button([label]="'taskManagement.recordAction.btn.cancel' | translate", icon="pi pi-times", (onClick)="cancelAction()")
+        p-button([label]="'taskManagement.recordAction.btn.submit' | translate", icon="pi pi-check", (onClick)="assignAction()")

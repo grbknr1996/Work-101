@@ -53,6 +53,7 @@ import { FieldsetModule } from 'primeng/fieldset';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { FileUploadModule } from 'primeng/fileupload';
 import { SliderModule } from 'primeng/slider';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 const PrimeNGModules: any[] = [
   //PrimeNG
@@ -106,7 +107,8 @@ const PrimeNGModules: any[] = [
   FieldsetModule,
   ToggleButtonModule,
   FileUploadModule,
-  SliderModule
+  SliderModule,
+  AutoCompleteModule
 ];
 
 @NgModule({

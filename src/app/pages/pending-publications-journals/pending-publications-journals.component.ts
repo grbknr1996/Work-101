@@ -42,12 +42,12 @@ enum IpTypes {
 }
 
 @Component({
-  selector: 'app-journal-publication',
+  selector: 'app-publication-journal',
   standalone:false,
   providers: [],
-  templateUrl: './journal-publication.component.html',
+  templateUrl: './pending-publications-journals.component.html',
 })
-export class JournalPublicationComponent implements OnInit, OnChanges {
+export class PendingPublicationsComponent implements OnInit, OnChanges {
   @ViewChild(ConfigurableFilterComponent)
   configurableFilter!: ConfigurableFilterComponent;
   @Input() totalUsers: number = 591;
@@ -236,11 +236,11 @@ export class JournalPublicationComponent implements OnInit, OnChanges {
       this.breadcrumbItems = [
         {
           label: 'Publication',
-          routerLink: `/${officeCode}/${langCode}/publication`,
+          routerLink: `/${officeCode}/${langCode}/publications`,
         },
         {
           label: 'Pending Publication',
-          routerLink: `/${officeCode}/${langCode}/publication/pending`,
+          routerLink: `/${officeCode}/${langCode}/publications/pending`,
         },
       ];
 

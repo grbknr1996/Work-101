@@ -28,13 +28,6 @@ app-layout
                     button.p-button.p-component.p-button-outlined(
                         type="button",
                         pButton,
-                        icon="pi pi-download",
-                        [label]="'documentCapture.table.download' | translate",
-                        (click)="downloadSeparator()"
-                    )
-                    button.p-button.p-component.p-button-outlined(
-                        type="button",
-                        pButton,
                         icon="pi pi-print",
                         [label]="'documentCapture.bookmark.printButton' | translate",
                         (click)="printSeparator()"
@@ -44,69 +37,6 @@ app-layout
       [label]="'documentCapture.buttons.bookmark' | translate", 
       icon="pi pi-bookmark", 
       (click)="showBookmarkDialog()")
-      p-dialog(
-        [header]="'documentCapture.bookmarkPage' | translate",
-        [(visible)]="bookmarkDialogVisible",
-        [modal]="true",
-        [closable]="true",
-        [dismissableMask]="true",
-        [style]="{ width: '35rem', maxHeight: '85vh' }"
-       )
-        p.text-sm.text-gray-600.mb-4
-            | {{ 'documentCapture.bookmark.includeText' | translate }}
-
-        p-card(class="mb-4")
-            .flex.flex-col.gap-3.mb-4
-                label.font-semibold(for="bookmarkSelect") {{ 'documentCapture.bookmark.selectLabel' | translate }}
-                p-dropdown(
-                id="bookmarkSelect",
-                [options]="bookmarkOptions",
-                [(ngModel)]="selectedBookmark",
-                [placeholder]="'documentCapture.bookmark.placeholder' | translate"
-            )
-
-            p-checkbox(
-                name="includeText",
-                inputId="includeText",
-                [(ngModel)]="includeBookmarkText",
-                binary="true"
-            )
-            label(for="includeText" class="p-checkbox-label")  {{ 'documentCapture.bookmark.includeText' | translate }}
-
-            button.p-button.p-component.p-button-primary.w-full.mt-2(
-                type="button",
-                pButton,
-                icon="pi pi-qrcode",
-                [label]="'documentCapture.bookmark.generateButton' | translate",
-                (click)="generateQRCode()"
-            )
-
-        p-card(header="{{ 'documentCapture.bookmark.previewHeader' | translate }}", class="mb-4 text-center")
-            div(class="w-full flex justify-content-center align-items-center flex-column")
-                div(class="border-2 border-dashed border-gray-300 p-4 w-12rem h-12rem flex align-items-center justify-content-center mb-2")
-                    img(*ngIf="qrImageUrl" src="assets/images/qr-mock.png" alt="QR Code" style="width:110px; height:110px;")
-                    i.pi.pi-qrcode.text-4xl.text-gray-500(*ngIf="!qrImageUrl")
-
-                span.block.mb-3.font-medium.text-center(*ngIf="includeBookmarkText && qrImageUrl") {{ selectedBookmark }}
-                //span.block.mb-3.text-gray-500 Bookmark Page
-            .flex.justify-end.gap-2.mt-3
-                button.p-button.p-component.p-button-info(
-                type="button",
-                pButton,
-                icon="pi pi-print",
-                [label]="'documentCapture.bookmark.printButton' | translate",
-                (click)="printBookmarkPage()"
-                )
-                button.p-button.p-component.p-button-secondary(
-                type="button",
-                pButton,
-                [label]="'documentCapture.bookmark.closeButton' | translate",
-                (click)="bookmarkDialogVisible=false"
-                )
-
-        p-card(header="{{ 'documentCapture.bookmark.setupHeader' | translate }}")
-            ol.pl-4.line-height-3(style="list-style-type: decimal; margin-left: 1.5rem;")
-                li(*ngFor="let step of setUpSteps") {{ step }}
             
       button.p-button.p-component.p-button-outlined(type="button", 
       pButton, 
@@ -182,7 +112,7 @@ app-layout
         [totalRecords]="totalRecords",
         [rowsPerPageOptions]="[10, 25, 50, 100]",
         [showCurrentPageReport]="true",
-        [currentPageReportTemplate]="'Showing {first} to 1 of 8 batches'",
+        [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} Batches'",
         (actionClick)="onActionClick($event.action, $event.item)",
         (urlClick)="onUrlClick($event.rowData, $event.col.field)"
       )
@@ -204,7 +134,7 @@ app-layout
         )
           ng-template(pTemplate="content")
             .border-2.border-dashed.border-gray-400.rounded-lg.p-6.flex.flex-col.items-center.justify-center.w-full
-                i.pi.pi-upload.text-gray-500.mb-2(style="font-size:50px; line-height:1")
+                i.pi.pi-upload.text-gray-500.mb-4(style="font-size:50px; line-height:1")
                 p.text-gray-600.font-medium.mb-4 {{ 'documentCapture.fileUpload.dropOrChoose' | translate }}
 
 
@@ -240,3 +170,5 @@ app-layout
                 .flex.items-center.gap-2
                 button.p-button.p-button-text(type="button", (click)="fileUploader.remove(file)")
                     i.pi.pi-trash
+
+app-bookmark-dialog(#bookmarkDialog)

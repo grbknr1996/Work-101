@@ -16,8 +16,9 @@
   <!-- move buttons to dialog footer so they're always visible-->
   <ng-template pTemplate="footer"></ng-template>
   <div class="flex justify-end gap-2 w-full">
-    <button class="p-button p-button-outlined p-button-sm" type="button" pButton [label]="'documentCapture.cropDialog.resetAll' | translate" (click)="resetAll()"></button>
+    <!--button.p-button.p-button-outlined.p-button-sm(type="button",pButton,[label]="'documentCapture.cropDialog.resetAll' | translate", (click)="resetAll()")-->
     <button class="p-button p-button-text p-button-sm" type="button" pButton [label]="'documentCapture.cropDialog.cancel' | translate" (click)="onClose()"></button>
     <button class="p-button p-button-sm p-button-primary" type="button" pButton [label]="'documentCapture.cropDialog.saveCroppedImage' | translate" (click)="saveCroppedImage()"></button>
+    <button class="p-button p-button-sm p-button-primary" type="button" pButton label="Save Number" (click)="saveNumber()"></button>
   </div>
 </p-dialog>

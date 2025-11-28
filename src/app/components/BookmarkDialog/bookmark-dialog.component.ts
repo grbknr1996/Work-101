@@ -15,6 +15,82 @@ export class BookmarkDialogComponent implements OnInit {
   bookmarkOptions: { label: string; value: string }[] = [];
   @Output() generate = new EventEmitter<{ value: string, includeText: boolean }>();
   @Output() closed = new EventEmitter<void>();
+  selectedIpType: string | null = null;
+  filteredBookmarkOptions: { label: string; value: string }[] = [];
+  ipTypes = [
+    { label: 'Patent', value: 'PATENT' },
+    { label: 'Trademark', value: 'TRADEMARK' },
+    { label: 'Designs', value: 'DESIGNS' },
+    { label: 'Other IP Registrations', value: 'OTHER_IP_REGISTRATIONS' },
+    { label: 'Post-filing', value: 'POST_FILING' },
+    { label: 'Office Documents', value: 'OFFICE_DOCUMENTS' }
+  ];
+
+    translationKeyMap: Record<string, string> = {
+    "Claims": "claims",
+    "Cover Letter": "coverLetter",
+    "Declaration of Use": "declarationOfUse",
+    "Description": "description",
+    "Drawings": "drawings",
+    "ID Card": "idCard",
+    "Individual Passport": "individualPassport",
+    "Other": "other",
+    "Passport / ID Card": "passportIdCard",
+    "Payment Receipt": "paymentReceipt",
+    "Power of Attorney": "powerOfAttorney",
+    "Priority Document": "priorityDocument",
+    "Public Research Institute": "publicResearchInstitute",
+    "SME Certificate": "smeCertificate"
+  };
+  bookmarkCategoryMap: Record<string, string[]> = {
+    PATENT: [
+      "Claims",
+      "Cover Letter",
+      "Description",
+      "Drawings",
+      "Other",
+      "Payment Receipt",
+      "Power of Attorney",
+      "Priority Document"
+    ],
+    TRADEMARK: [
+      "Cover Letter",
+      "Declaration of Use",
+      "Other",
+      "Payment Receipt",
+      "Power of Attorney",
+      "SME Certificate"
+    ],
+    DESIGNS: [
+      "Cover Letter",
+      "Other",
+      "Payment Receipt",
+      "Power of Attorney"
+    ],
+    OTHER_IP_REGISTRATIONS: [
+      "Cover Letter",
+      "Other",
+      "Payment Receipt",
+      "Power of Attorney",
+      "Public Research Institute"
+    ],
+    POST_FILING: [
+      "Cover Letter",
+      "Declaration of Use",
+      "Other",
+      "Payment Receipt",
+      "Power of Attorney"
+    ],
+    OFFICE_DOCUMENTS: [
+      "Cover Letter",
+      "ID Card",
+      "Individual Passport",
+      "Other",
+      "Passport / ID Card",
+      "Payment Receipt",
+      "Power of Attorney"
+    ]
+  };
 
   constructor(
     public ms: MechanicsService, 
@@ -24,24 +100,13 @@ export class BookmarkDialogComponent implements OnInit {
   ngOnInit(): void {
     console.log('BookmarkDialogComponent initialized');
     // populate translated options
-    this.setUpSteps = this.ms.translate('documentCapture.bookmark.setupSteps');
-    this.bookmarkOptions = [
-      { label: this.ms.translate('documentCapture.bookmarkOptions.claims'), value: 'Claims' },
-      { label: this.ms.translate('documentCapture.bookmarkOptions.coverLetter'), value: 'Cover Letter' },
-      { label: this.ms.translate('documentCapture.bookmarkOptions.declarationOfUse'), value: 'Declaration of Use' },
-      { label: this.ms.translate('documentCapture.bookmarkOptions.description'), value: 'Description' },
-      { label: this.ms.translate('documentCapture.bookmarkOptions.drawings'), value: 'Drawings' },
-      { label: this.ms.translate('documentCapture.bookmarkOptions.idCard'), value: 'ID Card' },
-      { label: this.ms.translate('documentCapture.bookmarkOptions.individualPassport'), value: 'Individual passport' },
-      { label: this.ms.translate('documentCapture.bookmarkOptions.other'), value: 'Other' },
-      { label: this.ms.translate('documentCapture.bookmarkOptions.passportIdCard'), value: 'Passport / Id Card' },
-      { label: this.ms.translate('documentCapture.bookmarkOptions.paymentReceipt'), value: 'Payment Receipt' },
-      { label: this.ms.translate('documentCapture.bookmarkOptions.powerOfAttorney'), value: 'Power of Attorney' },
-      { label: this.ms.translate('documentCapture.bookmarkOptions.priorityDocument'), value: 'Priority Document' },
-      { label: this.ms.translate('documentCapture.bookmarkOptions.publicResearchInstitute'), value: 'Public Research Institute' },
-      { label: this.ms.translate('documentCapture.bookmarkOptions.smeCertificate'), value: 'SME Certificate' }
-    ];
+    this.bookmarkOptions = Object.keys(this.translationKeyMap).map(name => ({
+      label: this.ms.translate(`documentCapture.bookmarkOptions.${this.translationKeyMap[name]}`),
+      value: name
+    }));
+
   }
+
 
   open(initial?: { selectedBookmark?: string, includeText?: boolean }) {
     if (initial) {
@@ -70,4 +135,14 @@ export class BookmarkDialogComponent implements OnInit {
     // consumer can implement printing via event or call window.print here
     window.print();
   }
+
+  onIpTypeChange() {
+    const items = this.bookmarkCategoryMap[this.selectedIpType || ''] || [];
+
+    this.filteredBookmarkOptions = items.map(item => ({
+      label: this.ms.translate('documentCapture.bookmarkOptions.' + this.translationKeyMap[item]),
+      value: item
+    }));
+  }
+
 }

@@ -213,7 +213,7 @@ export class SidebarMenuService {
         id: 'document-capture',
         label: 'Pending Document Capture',
         icon: 'pi pi-file',
-        routerLink: this.getRouterLink(`/document-capture/documents`),
+        routerLink: this.getRouterLink(`/data-capture/documents`),
       },
       {
         id: 'daily-pending',
@@ -306,18 +306,25 @@ export class SidebarMenuService {
         routerLink: this.getRouterLink('/dashboard'),
       },
       {
-        id: 'pending-journals',
-        label: 'Pending Journals',
-        icon: 'pi pi-clock',
-        routerLink: this.getRouterLink('/publication/journals'),
+        id: 'publications-journals',
+        label: 'Publications Journals',
+        icon: 'pi pi-list-check',
+        routerLink: this.getRouterLink('/publications/journals'),
         styleClass: lastPart.includes('journals') ? 'active' : '',
       },
       {
         id: 'pending-publications',
         label: 'Pending Publications',
-        icon: 'pi pi-list-check',
-        routerLink: this.getRouterLink('/publication/pending'),
+        icon: 'pi pi-file-edit',
+        routerLink: this.getRouterLink('/publications/pending'),
         styleClass: lastPart.includes('pending') ? 'active' : '',
+      },
+      {
+        id: 'online-journals',
+        label: 'Online Journals',
+        icon: 'pi pi-globe',
+        routerLink: this.getRouterLink('/publications/online-journals'),
+        styleClass: lastPart.includes('online') ? 'active' : '',
       },
     ];
   }

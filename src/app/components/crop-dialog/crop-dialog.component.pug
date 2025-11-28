@@ -36,7 +36,7 @@ p-dialog(
 
 
     image-cropper(
-        *ngIf="imageChangedEvent",
+       *ngIf="imageChangedEvent",
        [imageURL]="imageUrl",
        [imageChangedEvent]="imageChangedEvent",
        [maintainAspectRatio]="true",
@@ -53,6 +53,8 @@ p-dialog(
   // move buttons to dialog footer so they're always visible
   ng-template(pTemplate="footer")
   .flex.justify-end.gap-2.w-full
-    button.p-button.p-button-outlined.p-button-sm(type="button",pButton,[label]="'documentCapture.cropDialog.resetAll' | translate", (click)="resetAll()")
+    //button.p-button.p-button-outlined.p-button-sm(type="button",pButton,[label]="'documentCapture.cropDialog.resetAll' | translate", (click)="resetAll()")
     button.p-button.p-button-text.p-button-sm(type="button",pButton,[label]="'documentCapture.cropDialog.cancel' | translate", (click)="onClose()")
     button.p-button.p-button-sm.p-button-primary(type="button",pButton,[label]="'documentCapture.cropDialog.saveCroppedImage' | translate", (click)="saveCroppedImage()")
+    button.p-button.p-button-sm.p-button-primary(type="button",pButton,label="Save Number",(click)="saveNumber()")
+

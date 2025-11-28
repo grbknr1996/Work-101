@@ -1,18 +1,18 @@
 app-layout
   app-breadcrumbs([items]="breadcrumbItems")
   .flex.justify-between.items-center.p-3.bg-white.shadow-sm.rounded-md.mb-4
-    .flex.gap-4.items-center
-      span.font-semibold.text-lg {{ 'documentCapture.indexationView.batchIdLabel' | translate }}
+    .flex.gap-4.items-center.text-lg
+      span.font-semibold {{ 'documentCapture.indexationView.batchIdLabel' | translate }}
         span.text-blue-600 {{ batchId }}
       span {{ 'documentCapture.indexationView.totalBatchPages' | translate }}
-        span.font-bold 14
+        span.font-bold 22
       span {{ 'documentCapture.indexationView.indexedDocuments' | translate }}
         span.font-bold.text-green-600 {{ indexedDocs }}
       span {{ 'documentCapture.indexationView.bookmarkedDocuments' | translate }}
         span.font-bold.text-red-500 {{ bookmarkedDocs }}
     .flex.gap-3.ml-auto
       p-button(
-        [label]="'documentCapture.indexationView.buttons.cancel' | translate",
+        [label]="'documentCapture.indexationView.buttons.close' | translate",
         styleClass="p-button-text p-button-sm",
         (click)="cancelIndexation()"
       )
@@ -57,15 +57,27 @@ app-layout
               [disabled]="selectedDocCount === 0"
             )
 
+      .flex.items-center.justify-between.bg-yellow-50.border.border-yellow-200.px-3.py-2.rounded.mb-2(*ngIf="completedDocuments.size > 0")
+          span.text-sm.text-yellow-700 {{ hiddenDocumentsCount }} documents hidden
+          p-button(
+            [icon]="showAllDocuments ? 'pi pi-eye-slash' : 'pi pi-eye'",
+            [label]="showAllDocuments ? 'Show pending' : 'Show all'",
+            severity="secondary",
+            styleClass="p-button-text p-button-sm",
+            (click)="toggleShowAllDocuments()",
+            tooltipPosition="bottom"
+          )
+
       .flex-1.overflow-auto.p-2
         div(
-          *ngFor="let doc of documents; let i = index",
-          class="border rounded-md p-2 mb-2 cursor-pointer hover:bg-gray-100",
+          *ngFor="let doc of visibleDocuments; let i = index"
+          class="border rounded-md p-1 mb-2 cursor-pointer hover:bg-gray-100",
           [ngClass]="{'bg-blue-50 border-blue-500': selectedDoc===i}",
           (click)="selectDoc(i)"
         )
           .flex.justify-between.items-center
             .flex.items-center.gap-2
+              span.text-xl.font-semibold {{ doc.documentNumber }}
               p-checkbox(
                   class="mr-2",
                   [ngModel]="selectedDocs.includes(i)",
@@ -73,23 +85,40 @@ app-layout
                   [binary]="true",
                   (click)="$event.stopPropagation()"
               )
-              span.text-xl.font-semibold {{ i + 1 }}
-            span.text-xs.text-gray-600 {{ doc.pages }} {{ 'documentCapture.indexationView.documentPagesSuffix' ? ('documentCapture.indexationView.documentPagesSuffix' | translate) : '' }}
-          div.mt-2.bg-gray-50.border.rounded-md.px-2.py-3.text-xs.font-medium.text-gray-700.h-10.ml-9.mb-4
-              span.flex-1(
-                  [attr.contenteditable]="doc.isEditing",
-                  (blur)="disableEditing(doc, $event)",
-                  (keydown.enter)="disableEditing(doc, $event)",
-                   class="outline-none block truncate",
-                   [ngClass]="{ 'cursor-text': doc.isEditing, 'cursor-pointer': !doc.isEditing }",
-                ) {{ doc.name }}
+              div.mt-2.text-sm.font-medium.text-gray-700.h-10.mb-4
+                p-autoComplete(
+                    [(ngModel)]="doc.name",
+                    [suggestions]="filteredDocIds",
+                    (completeMethod)="searchDocIds($event)",
+                    [forceSelection]="false",
+                    [dropdown]="false",
+                    placeholder="file / document id ",
+                    class="w-full text-xs",
+                    (blur)="disableEditing(doc)",
+                    (keydown.enter)="disableEditing(doc)",
+                    [disabled]="completedDocuments.has(documents.indexOf(doc))",
+                    (onSelect)="onDocNameSelected(i, $event)"
+                ) 
+            span.text-xs.text-gray-600 {{ doc.pages }}P
+          
+          div.text-blue-600.cursor-pointer.logo-hover.text-sm.font-medium.ml-9
+            a(*ngIf="croppedImages.get(doc.name)", (click)="viewCroppedImage(doc, i)") 
+              | {{ 'documentCapture.indexationView.documentLogoLabel' | translate }}
+              p-button.ml-2(
+                icon="pi pi-trash",
+                styleClass="p-button-text p-button-sm text-gray-500 hover:text-gray-700",
+                (click)="deleteCroppedImage(doc, i); $event.stopPropagation()",
+                [pTooltip]="'documentCapture.indexationView.deleteLogo' | translate", tooltipPosition="right"
+              )
+            p-button.ml-2(
+                *ngIf="doc.name && isTrademark(doc.name) && !croppedImages.get(doc.name)",
+                [label]="'documentCapture.indexationView.attachLogo' | translate",
+                icon="pi pi-upload",
+                severity="secondary",
+                styleClass="p-button-sm mt-1",
+                (click)="attachLogo(doc)"
+            )
 
-                p-button(
-                  *ngIf="!doc.isEditing",
-                  icon="pi pi-pencil",
-                  styleClass="p-button-text p-button-sm text-gray-500 hover:text-gray-700",
-                  (click)="enableEditing(doc)"
-                )
 
     // MID PANEL — Thumbnails
     .bg-white.rounded-md.shadow-sm.flex.flex-col(
@@ -99,7 +128,6 @@ app-layout
       // Top bar aligned with left & right
       .h-12.border-b.bg-gray-50.flex.justify-between.items-center.px-2
         span.font-medium.text-sm {{ 'documentCapture.indexationView.documentPages' | translate:{ name: selectedDocName } }}
-        .flex.items-center.gap-4.ml-auto(*ngIf="!showSplitDialog")
         .flex.items-center.gap-4.ml-auto(*ngIf="!showSplitDialog")
             p-button(
               icon="pi pi-crop",
@@ -112,10 +140,9 @@ app-layout
               icon="pi pi-trash",
               [label]="'documentCapture.indexationView.buttons.deletePage' | translate",
               styleClass="p-button-sm p-button-danger",
-              (click)="deleteSelectedThumb()",
+              (click)="deleteSelectedThumb($event)",
               [disabled]="selectedThumbCount === 0"
             )
-            p-button(icon="pi pi-download",styleClass="p-button-sm", severity="info")
 
         .flex.items-center.gap-4.ml-auto(*ngIf="showSplitDialog")
           .flex.items-center.gap-3
@@ -165,7 +192,8 @@ app-layout
                 img(
                     [src]="getThumbnailUrl(p)",
                     alt="Page Thumbnail",
-                    class="w-full h-40 object-contain bg-gray-50 border rounded-md"
+                    class="w-full h-40 object-contain bg-gray-50 border rounded-md cursor-pointer",
+                    [pTooltip]="'documentCapture.indexationView.fullPageView' | translate"
                   )
                 span.absolute.top-1.right-1.thumbnail-badge
                   | {{ getPageNumber(p) }}
@@ -206,7 +234,7 @@ app-layout
                 |  {{ 'documentCapture.indexationView.split' | translate }}
 
     // RIGHT PANEL — Viewer
-    .col-span-3.bg-white.rounded-md.shadow-sm.flex.flex-col(*ngIf="currentPage")
+    .col-span-3.bg-white.rounded-md.shadow-sm.flex.flex-col.page-viewer(*ngIf="currentPage")
 
       // Top bar aligned
       .h-12.border-b.bg-gray-50.flex.justify-between.items-center.px-2
@@ -214,19 +242,26 @@ app-layout
         span.text-xs {{ currentPage }} / {{ totalPages }}
 
       .flex.gap-2.p-2
-        p-button(icon="pi pi-search-minus")
-        p-button(icon="pi pi-refresh")
-        p-button(icon="pi pi-search-plus")
-        p-button.ml-auto(icon="pi pi-times",(click)="closeViewer()", pTooltip="Close Viewer", tooltipPosition="bottom")
+        p-button(icon="pi pi-search-minus", (click)="zoomOut()")
+        p-button(icon="pi pi-refresh", (click)="resetZoom()")
+        p-button(icon="pi pi-search-plus", (click)="zoomIn()")
+        p-button.ml-auto(icon="pi pi-times",(click)="closeViewer()", [pTooltip]="'documentCapture.indexationView.closeViewer' | translate", tooltipPosition="bottom")
 
-      .flex-1.border.rounded-md.flex.items-center.justify-center.bg-gray-50.m-2
-        img([src]="activePageUrl", class="max-w-full max-h-full object-contain")
+      .flex-1.border.rounded-md.flex.bg-gray-50.m-2.relative
+        .image-wrapper
+          img(
+            [src]="activePageUrl",
+            class="zoom-img",
+            [style.width.%]="zoomLevel * 100",
+            [style.height.%]="zoomLevel * 100",
+            (wheel)="onWheelZoom($event)"
+          )
 
-      .p-2.flex.gap-2.justify-center
-        p-button(icon="pi pi-chevron-left")
-        p-button(icon="pi pi-download")
-        p-button(icon="pi pi-print")
-        p-button(icon="pi pi-chevron-right")
+      //- .p-2.flex.gap-2.justify-center
+      //-   p-button(icon="pi pi-chevron-left")
+      //-   p-button(icon="pi pi-download")
+      //-   p-button(icon="pi pi-print")
+      //-   p-button(icon="pi pi-chevron-right")
 
 p-popover(#bookmarkPopover, [dismissable]="true")
   .flex.flex-col.gap-1.p-2
@@ -267,5 +302,46 @@ p-dialog(
       (click)="proceedDelete()"
     )
 
+
+// Merge Dialog
+p-dialog(
+  [header]="'documentCapture.indexationView.mergeDialog.header' | translate",
+  [(visible)]="showMergeDialog",
+  [modal]="true",
+  [closable]="true",
+  (onHide)="cancelMerge()",
+  [baseZIndex]="10000",
+  [style]="{ width: '30rem', height: '25rem' }"
+)
+  .mb-4
+    p.text-sm.text-gray-600.mb-3
+      | {{ 'documentCapture.indexationView.mergeDialog.message' | translate }}
+
+    p.text-sm.font-medium.mb-2
+      | {{ 'documentCapture.indexationView.mergeDialog.selectDocumentId' | translate }}
+
+    p-dropdown(
+      [(ngModel)]="selectedMergeId",
+      [options]="mergeDocIds",
+      [showClear]="false",
+      [styleClass]="'w-full'",
+      placeholder="{{ 'documentCapture.indexationView.mergeDialog.selectPlaceholder' | translate }}"
+    )
+
+  ng-template(pTemplate="footer")
+    .flex.justify-end.gap-2
+      p-button(
+        [label]="'documentCapture.indexationView.mergeDialog.cancel' | translate",
+        styleClass="p-button-text p-button-sm",
+        (click)="cancelMerge()"
+      )
+      p-button(
+        [label]="'documentCapture.indexationView.mergeDialog.confirm' | translate",
+        icon="pi pi-check",
+        styleClass="p-button-success p-button-sm",
+        (click)="confirmMerge()",
+        [disabled]="!selectedMergeId"
+      )
+
 app-bookmark-dialog(#bookmarkDialog, (generate)="insertBookmark($event)")
-app-crop-dialog(#cropDialog [imageUrl]="selectedImageUrl" [pageNumber]="1")
+app-crop-dialog(#cropDialog [imageUrl]="selectedImageUrl" [pageNumber]="currentPage", (imageSaved)="onImageSaved($event)", (numberExtracted)="onNumberExtracted($event)")

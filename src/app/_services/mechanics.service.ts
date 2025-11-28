@@ -9,11 +9,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService, TranslationChangeEvent } from '@ngx-translate/core';
 import { configuration, environment } from '../../environments/environment';
 import packagejson from '../../../package.json';
+import cacheBusting from '../../../assets-cache-busting.json';
+import { logger } from '../logger';
 
-import { BehaviorSubject, Observable, firstValueFrom, map, take } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, map, take } from 'rxjs';
 
 const localesMapping = {
-  // for Intl.DateTimeFormat and language switching
   ar: 'ar-LB',
   de: 'de-DE',
   en: 'en-US',
@@ -167,21 +168,8 @@ export class MechanicsService {
 
     // Initialize WIPO platform from localStorage
     const savedWipoPlatform = localStorage.getItem('wipoPlatform');
-    console.log(
-      'MechanicsService - Constructor - Loading WIPO platform from localStorage:',
-      savedWipoPlatform
-    );
-
     if (savedWipoPlatform && configuration[savedWipoPlatform]) {
-      console.log(
-        'MechanicsService - Constructor - Setting WIPO platform from localStorage:',
-        savedWipoPlatform
-      );
       this.wipoPlatformSubject.next(savedWipoPlatform);
-    } else {
-      console.log(
-        'MechanicsService - Constructor - No valid WIPO platform found in localStorage'
-      );
     }
 
     // Initialize user's actual office (this will be updated by AuthService)
@@ -202,7 +190,6 @@ export class MechanicsService {
 
     // Subscribe to language changes
     this.ts.onLangChange.subscribe((event: TranslationChangeEvent) => {
-      console.log('Language changed:', event.lang);
       this.translations = event.translations;
       this.defaultTranslation = this.ts.translations[defaultLang];
 
@@ -290,13 +277,12 @@ export class MechanicsService {
 
     try {
       this.endpoint = window.location.pathname.split('/')[2];
-      // console.log(`${l}Found endpoint : '${this.endpoint}'`);
     } catch (err) {
-      console.error(errMsg);
+      logger.error(errMsg);
     }
 
     if (!this.endpoint) {
-      console.error(errMsg);
+      logger.error(errMsg);
     }
 
     // console.log(`${l}Found endpoint='${this.endpoint}'`)
@@ -386,10 +372,9 @@ export class MechanicsService {
       routeLang = window.location.pathname.split('/')[2];
       if (routeLang) {
         routeLang = routeLang.toLowerCase();
-        console.log(`${l}Found lang from URL: ${routeLang}`);
       }
     } catch (err) {
-      console.warn(`${l}Could not parse language from URL`);
+      logger.warn(`${l}Could not parse language from URL`);
     }
 
     // Priority: 1. Explicitly passed lang, 2. URL lang, 3. Default lang
@@ -400,11 +385,9 @@ export class MechanicsService {
 
     // Verify language is supported
     if (!this.availableLangs.includes(lang)) {
-      console.warn(`Language not supported '${lang}'! Falling back to default`);
+      logger.warn(`Language not supported '${lang}'! Falling back to default`);
       lang = defaultLang;
     }
-
-    console.log(`${l}Using language: ${lang}`);
 
     // Update the language in this service
     this.lang = lang;
@@ -417,42 +400,157 @@ export class MechanicsService {
 
     // Create and store the translation loading promise
     this.currentTranslationLoad = new Promise<void>((resolve, reject) => {
-      this.ts.use(lang).subscribe({
-        next: () => {
-          console.log(`${l}Translations loaded for ${lang}`);
-          this.translationsLoaded$.next(true);
-          this.currentTranslationLoad = null;
-          resolve();
-        },
-        error: (err) => {
-          console.error(`${l}Error loading translations for ${lang}:`, err);
-          // Fallback to default language
+      // Load translations based on current office, with fallback to default
+      this.loadTranslationsForOffice(officeType, lang)
+        .then((mergedTranslations) => {
+          // Set the merged translations in TranslateService
+          this.ts.setTranslation(lang, mergedTranslations, true);
+          this.ts.use(lang).subscribe({
+            next: () => {
+              this.translationsLoaded$.next(true);
+              this.currentTranslationLoad = null;
+              resolve();
+            },
+            error: (err) => {
+              logger.error(`${l}Error setting translations:`, err);
+              this.currentTranslationLoad = null;
+              reject(err);
+            },
+          });
+        })
+        .catch((err) => {
+          logger.error(`${l}Error loading translations:`, err);
+          // Fallback to default language if current language fails
           if (lang !== defaultLang) {
-            console.log(`${l}Falling back to default language ${defaultLang}`);
-            this.ts.use(defaultLang).subscribe({
-              next: () => {
-                this.translationsLoaded$.next(true);
-                this.currentTranslationLoad = null;
-                resolve();
-              },
-              error: (fallbackErr) => {
-                console.error(
+            this.loadTranslationsForOffice(officeType, defaultLang)
+              .then((mergedTranslations) => {
+                this.ts.setTranslation(defaultLang, mergedTranslations, true);
+                this.ts.use(defaultLang).subscribe({
+                  next: () => {
+                    this.lang = defaultLang;
+                    this.translationsLoaded$.next(true);
+                    this.currentTranslationLoad = null;
+                    resolve();
+                  },
+                  error: (fallbackErr) => {
+                    logger.error(
+                      `${l}Error loading fallback translations:`,
+                      fallbackErr
+                    );
+                    this.currentTranslationLoad = null;
+                    reject(fallbackErr);
+                  },
+                });
+              })
+              .catch((fallbackErr) => {
+                logger.error(
                   `${l}Error loading fallback translations:`,
                   fallbackErr
                 );
                 this.currentTranslationLoad = null;
                 reject(fallbackErr);
-              },
-            });
+              });
           } else {
             this.currentTranslationLoad = null;
             reject(err);
           }
-        },
-      });
+        });
     });
 
     return this.currentTranslationLoad;
+  }
+
+  /**
+   * Load translations for a specific office and language
+   * First tries to load office-specific translations, then falls back to default
+   * Merges office-specific translations over default translations
+   */
+  private async loadTranslationsForOffice(
+    officeCode: string,
+    lang: string
+  ): Promise<any> {
+    const l = `ms.loadTranslationsForOffice() - `;
+    const cacheBustingSuffix = `?_=${cacheBusting['i18n']}`;
+
+    // Paths for office-specific and default translations
+    const officeTranslationPath = `./assets/i18n/${officeCode}/${lang}.json${cacheBustingSuffix}`;
+    const defaultTranslationPath = `./assets/i18n/default/${lang}.json${cacheBustingSuffix}`;
+
+    // Load both translations in parallel using fetch API to avoid circular dependency
+    // Office-specific is optional (may not exist), default is required
+    try {
+      const [officeTranslations, defaultTranslations] = await Promise.all([
+        // Load office-specific translation (optional)
+        fetch(officeTranslationPath)
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              return {};
+            }
+          })
+          .catch(() => {
+            return {}; // Return empty object if office-specific translation doesn't exist
+          }),
+        // Load default translation (required)
+        fetch(defaultTranslationPath)
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              logger.error(
+                `${l}Error loading default translation: HTTP ${response.status}`
+              );
+              return {};
+            }
+          })
+          .catch((err) => {
+            logger.error(`${l}Error loading default translation:`, err);
+            return {}; // Return empty object as fallback
+          }),
+      ]);
+
+      // Merge translations: office-specific overrides default
+      const mergedTranslations = this.deepMerge(
+        defaultTranslations,
+        officeTranslations
+      );
+
+      return mergedTranslations;
+    } catch (error) {
+      logger.error(`${l}Error loading translations:`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Deep merge two objects, with source overriding target
+   */
+  private deepMerge(target: any, source: any): any {
+    const output = { ...target };
+
+    if (this.isObject(target) && this.isObject(source)) {
+      Object.keys(source).forEach((key) => {
+        if (this.isObject(source[key])) {
+          if (!(key in target)) {
+            Object.assign(output, { [key]: source[key] });
+          } else {
+            output[key] = this.deepMerge(target[key], source[key]);
+          }
+        } else {
+          Object.assign(output, { [key]: source[key] });
+        }
+      });
+    }
+
+    return output;
+  }
+
+  /**
+   * Check if value is an object
+   */
+  private isObject(item: any): boolean {
+    return item && typeof item === 'object' && !Array.isArray(item);
   }
 
   dateToHuman(dateString: string): string {
@@ -589,7 +687,7 @@ export class MechanicsService {
 
       return 'ok';
     } catch (error) {
-      console.error(`${l}Error waiting for translations:`, error);
+      logger.error(`${l}Error waiting for translations:`, error);
       return 'error';
     }
   }
@@ -626,22 +724,8 @@ export class MechanicsService {
    * Set current office from external source (e.g., AuthService) to avoid circular dependency
    */
   setCurrentOfficeFromAuth(officeCode: string): void {
-    console.log(
-      'MechanicsService - setCurrentOfficeFromAuth called with:',
-      officeCode
-    );
-
     if (officeCode && officeCode !== 'default') {
-      console.log(
-        'MechanicsService - Setting current office from auth to:',
-        officeCode
-      );
       this.setCurrentOffice(officeCode);
-    } else {
-      console.log(
-        'MechanicsService - Invalid office code from auth, not setting:',
-        officeCode
-      );
     }
   }
 
@@ -649,21 +733,9 @@ export class MechanicsService {
    * Set the user's actual office from authentication (this should not change when switching platforms)
    */
   setUserActualOffice(officeCode: string): void {
-    console.log(
-      'MechanicsService - setUserActualOffice called with:',
-      officeCode
-    );
-
     if (officeCode && officeCode !== 'default') {
-      console.log(
-        'MechanicsService - Setting user actual office to:',
-        officeCode
-      );
       this.userActualOfficeSubject.next(officeCode);
     } else {
-      console.log(
-        'MechanicsService - Invalid office code for user actual office, using xx'
-      );
       this.userActualOfficeSubject.next('xx');
     }
   }
@@ -679,40 +751,12 @@ export class MechanicsService {
    * Set WIPO admin selected platform
    */
   setWipoPlatform(platformCode: string): void {
-    console.log(
-      'MechanicsService - setWipoPlatform called with:',
-      platformCode
-    );
-
     const platform = configuration[platformCode];
     if (platform && typeof platform === 'object') {
-      console.log('MechanicsService - Setting WIPO platform to:', platformCode);
       this.wipoPlatformSubject.next(platformCode);
       localStorage.setItem('wipoPlatform', platformCode);
-
-      // For WIPO admins, when they select a platform, DO NOT change the current office
-      // This preserves their WIPO admin status while allowing them to view different platforms
-      if (this.isCurrentUserWipoAdmin()) {
-        console.log(
-          'MechanicsService - WIPO admin selected platform, keeping current office unchanged to preserve admin status'
-        );
-        // Don't call setCurrentOffice here - just keep the platform selection
-      }
-
-      console.log(
-        'MechanicsService - Platform set, current office is now:',
-        this.getCurrentOffice()
-      );
-
-      // Debug localStorage state
-      console.log(
-        'MechanicsService - localStorage wipoPlatform after setting:',
-        localStorage.getItem('wipoPlatform')
-      );
     } else {
-      console.warn(
-        `Platform code '${platformCode}' not found in configuration`
-      );
+      logger.warn(`Platform code '${platformCode}' not found in configuration`);
     }
   }
 

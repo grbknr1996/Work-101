@@ -38,12 +38,12 @@ enum IpTypes {
 }
 
 @Component({
-  selector: 'app-online-publication-journal',
+  selector: 'app-pending-publication-journal',
   standalone: false,
   providers: [CapitalizeWordsPipe],
-  templateUrl: './online-publication-journal.component.html',
+  templateUrl: './publications-journals.component.html',
 })
-export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
+export class PublicationsJournalsComponent implements OnInit, OnChanges {
   @ViewChild(ConfigurableFilterComponent)
   configurableFilter!: ConfigurableFilterComponent;
 
@@ -148,7 +148,7 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
         {
           label: 'Publish Online',
           icon: 'pi pi-globe',
-          action: 'globe',
+          action: 'online',
           severity: 'info',
           visible: (item: JournalPublication) => item.actions.includes("globe"),
         },
@@ -249,11 +249,11 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
       this.breadcrumbItems = [
         {
           label: 'Publication',
-          routerLink: `/${officeCode}/${langCode}/publication`,
+          routerLink: `/${officeCode}/${langCode}/publications`,
         },
         {
           label: 'Publication Journals',
-          routerLink: `/${officeCode}/${langCode}/publication/journals`,
+          routerLink: `/${officeCode}/${langCode}/publications/journals`,
         },
       ];
 
@@ -460,10 +460,24 @@ export class OnlinePublicationJournalComponent implements OnInit, OnChanges {
       const langCode = params['langCode'] || 'en';
 
           switch (action) {
+            case 'add':
+              this.journalPublicationService.setSelectedItems(item.journalCode);
+              this.router.navigate(
+                [`/${officeCode}/${langCode}/publications/pending`],
+                { state: { backup: item.journalCode } }
+              );
+              break;
             case 'edit':
               this.journalPublicationService.setSelectedItems(item.journalCode);
               this.router.navigate(
-                [`/${officeCode}/${langCode}/publication/pending`],
+                [`/${officeCode}/${langCode}/publications/pending`],
+                { state: { backup: item.journalCode } }
+              );
+              break;
+            case 'online':
+              this.journalPublicationService.setSelectedItems(item.journalCode);
+              this.router.navigate(
+                [`/${officeCode}/${langCode}/publications/online-journals`],
                 { state: { backup: item.journalCode } }
               );
               break;

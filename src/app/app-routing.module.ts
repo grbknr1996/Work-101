@@ -157,20 +157,30 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: ':officeCode/:langCode/publication/pending',
+    path: ':officeCode/:langCode/publications/pending',
     loadChildren: async () =>
-      (await import('./pages/journal-publication/journal-publication.module'))
-        .JournalPublicationComponentModule,
+      (await import('./pages/pending-publications-journals/pending-publications-journals.module'))
+        .PendingPublicationsModule,
     canActivate: [AuthGuard],
   },
   {
-    path: ':officeCode/:langCode/publication/journals',
+    path: ':officeCode/:langCode/publications/journals',
     loadChildren: async () =>
       (
         await import(
-          './pages/online-publication-journal/online-publication-journal.module'
+          './pages/publications-journals/publications-journals.module'
         )
-      ).OnlinePublicationJournalComponentModule,
+      ).PublicationsJournalsJournalModule,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: ':officeCode/:langCode/publications/online-journals',
+    loadChildren: async () =>
+      (
+        await import(
+          './pages/online-publication-journals/online-publication-journals.module'
+        )
+      ).OnlinePublicationJournalsModule,
     canActivate: [AuthGuard],
   },
   {

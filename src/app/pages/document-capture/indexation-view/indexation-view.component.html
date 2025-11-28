@@ -2,9 +2,9 @@
 <app-layout>
   <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
   <div class="flex justify-between items-center p-3 bg-white shadow-sm rounded-md mb-4">
-    <div class="flex gap-4 items-center"><span class="font-semibold text-lg">{{ 'documentCapture.indexationView.batchIdLabel' | translate }}<span class="text-blue-600">{{ batchId }}</span></span><span>{{ 'documentCapture.indexationView.totalBatchPages' | translate }}<span class="font-bold">14</span></span><span>{{ 'documentCapture.indexationView.indexedDocuments' | translate }}<span class="font-bold text-green-600">{{ indexedDocs }}</span></span><span>{{ 'documentCapture.indexationView.bookmarkedDocuments' | translate }}<span class="font-bold text-red-500">{{ bookmarkedDocs }}</span></span></div>
+    <div class="flex gap-4 items-center text-lg"><span class="font-semibold">{{ 'documentCapture.indexationView.batchIdLabel' | translate }}<span class="text-blue-600">{{ batchId }}</span></span><span>{{ 'documentCapture.indexationView.totalBatchPages' | translate }}<span class="font-bold">22</span></span><span>{{ 'documentCapture.indexationView.indexedDocuments' | translate }}<span class="font-bold text-green-600">{{ indexedDocs }}</span></span><span>{{ 'documentCapture.indexationView.bookmarkedDocuments' | translate }}<span class="font-bold text-red-500">{{ bookmarkedDocs }}</span></span></div>
     <div class="flex gap-3 ml-auto">
-      <p-button [label]="'documentCapture.indexationView.buttons.cancel' | translate" styleClass="p-button-text p-button-sm" (click)="cancelIndexation()"></p-button>
+      <p-button [label]="'documentCapture.indexationView.buttons.close' | translate" styleClass="p-button-text p-button-sm" (click)="cancelIndexation()"></p-button>
       <p-button [label]="'documentCapture.indexationView.buttons.saveBatch' | translate" icon="pi pi-file" styleClass="p-button-success p-button-sm" (click)="SaveBatch()"></p-button>
     </div>
   </div>
@@ -20,15 +20,24 @@
           <p-button [label]="'documentCapture.indexationView.buttons.delete' | translate" icon="pi pi-trash" severity="danger" styleClass="p-button-sm" (click)="confirmDeleteDocument()" [disabled]="selectedDocCount === 0"></p-button>
         </div>
       </div>
+      <div class="flex items-center justify-between bg-yellow-50 border border-yellow-200 px-3 py-2 rounded mb-2" *ngIf="completedDocuments.size &gt; 0"><span class="text-sm text-yellow-700">{{ hiddenDocumentsCount }} documents hidden</span>
+        <p-button [icon]="showAllDocuments ? 'pi pi-eye-slash' : 'pi pi-eye'" [label]="showAllDocuments ? 'Show pending' : 'Show all'" severity="secondary" styleClass="p-button-text p-button-sm" (click)="toggleShowAllDocuments()" tooltipPosition="bottom"></p-button>
+      </div>
       <div class="flex-1 overflow-auto p-2">
-        <div class="border rounded-md p-2 mb-2 cursor-pointer hover:bg-gray-100" *ngFor="let doc of documents; let i = index" [ngClass]="{'bg-blue-50 border-blue-500': selectedDoc===i}" (click)="selectDoc(i)">
+        <div class="border rounded-md p-1 mb-2 cursor-pointer hover:bg-gray-100" *ngFor="let doc of visibleDocuments; let i = index" [ngClass]="{'bg-blue-50 border-blue-500': selectedDoc===i}" (click)="selectDoc(i)">
           <div class="flex justify-between items-center">
-            <div class="flex items-center gap-2">
-              <p-checkbox class="mr-2" [ngModel]="selectedDocs.includes(i)" (onChange)="toggleDocSelection(i)" [binary]="true" (click)="$event.stopPropagation()"></p-checkbox><span class="text-xl font-semibold">{{ i + 1 }}</span>
-            </div><span class="text-xs text-gray-600">{{ doc.pages }} {{ 'documentCapture.indexationView.documentPagesSuffix' ? ('documentCapture.indexationView.documentPagesSuffix' | translate) : '' }}</span>
+            <div class="flex items-center gap-2"><span class="text-xl font-semibold">{{ doc.documentNumber }}</span>
+              <p-checkbox class="mr-2" [ngModel]="selectedDocs.includes(i)" (onChange)="toggleDocSelection(i)" [binary]="true" (click)="$event.stopPropagation()"></p-checkbox>
+              <div class="mt-2 text-sm font-medium text-gray-700 h-10 mb-4">
+                <p-autoComplete class="w-full text-xs" [(ngModel)]="doc.name" [suggestions]="filteredDocIds" (completeMethod)="searchDocIds($event)" [forceSelection]="false" [dropdown]="false" placeholder="file / document id " (blur)="disableEditing(doc)" (keydown.enter)="disableEditing(doc)" [disabled]="completedDocuments.has(documents.indexOf(doc))" (onSelect)="onDocNameSelected(i, $event)"> </p-autoComplete>
+              </div>
+            </div><span class="text-xs text-gray-600">{{ doc.pages }}P</span>
           </div>
-          <div class="mt-2 bg-gray-50 border rounded-md px-2 py-3 text-xs font-medium text-gray-700 h-10 ml-9 mb-4"><span class="flex-1 outline-none block truncate" [attr.contenteditable]="doc.isEditing" (blur)="disableEditing(doc, $event)" (keydown.enter)="disableEditing(doc, $event)" [ngClass]="{ 'cursor-text': doc.isEditing, 'cursor-pointer': !doc.isEditing }">{{ doc.name }}
-              <p-button *ngIf="!doc.isEditing" icon="pi pi-pencil" styleClass="p-button-text p-button-sm text-gray-500 hover:text-gray-700" (click)="enableEditing(doc)"></p-button></span></div>
+          <div class="text-blue-600 cursor-pointer logo-hover text-sm font-medium ml-9"><a *ngIf="croppedImages.get(doc.name)" (click)="viewCroppedImage(doc, i)">
+               {{ 'documentCapture.indexationView.documentLogoLabel' | translate }}
+              <p-button class="ml-2" icon="pi pi-trash" styleClass="p-button-text p-button-sm text-gray-500 hover:text-gray-700" (click)="deleteCroppedImage(doc, i); $event.stopPropagation()" [pTooltip]="'documentCapture.indexationView.deleteLogo' | translate" tooltipPosition="right"></p-button></a>
+            <p-button class="ml-2" *ngIf="doc.name &amp;&amp; isTrademark(doc.name) &amp;&amp; !croppedImages.get(doc.name)" [label]="'documentCapture.indexationView.attachLogo' | translate" icon="pi pi-upload" severity="secondary" styleClass="p-button-sm mt-1" (click)="attachLogo(doc)"></p-button>
+          </div>
         </div>
       </div>
     </div>
@@ -36,11 +45,9 @@
     <div class="bg-white rounded-md shadow-sm flex flex-col" [ngClass]="currentPage ? 'col-span-6' : 'col-span-9'">
       <!-- Top bar aligned with left & right-->
       <div class="h-12 border-b bg-gray-50 flex justify-between items-center px-2"><span class="font-medium text-sm">{{ 'documentCapture.indexationView.documentPages' | translate:{ name: selectedDocName } }}</span>
-        <div class="flex items-center gap-4 ml-auto" *ngIf="!showSplitDialog"></div>
         <div class="flex items-center gap-4 ml-auto" *ngIf="!showSplitDialog">
           <p-button icon="pi pi-crop" [label]="'documentCapture.indexationView.buttons.crop' | translate" styleClass="p-button-sm p-button-warning" (click)="cropSelectedThumb()" [disabled]="selectedThumbCount !== 1"></p-button>
-          <p-button icon="pi pi-trash" [label]="'documentCapture.indexationView.buttons.deletePage' | translate" styleClass="p-button-sm p-button-danger" (click)="deleteSelectedThumb()" [disabled]="selectedThumbCount === 0"></p-button>
-          <p-button icon="pi pi-download" styleClass="p-button-sm" severity="info"></p-button>
+          <p-button icon="pi pi-trash" [label]="'documentCapture.indexationView.buttons.deletePage' | translate" styleClass="p-button-sm p-button-danger" (click)="deleteSelectedThumb($event)" [disabled]="selectedThumbCount === 0"></p-button>
         </div>
         <div class="flex items-center gap-4 ml-auto" *ngIf="showSplitDialog">
           <div class="flex items-center gap-3"><i class="pi pi-cut text-green-600 text-xl"></i><span class="font-medium text-green-700">  </span><span class="text-gray-700 font-semibold">{{ 'documentCapture.indexationView.splitModeDividers' | translate:{ count: splitPoints.length } }}</span>
@@ -56,7 +63,7 @@
             <div class="split-div">
               <div class="relative thumbnail-a4" (click)="selectThumb(p)" [ngClass]="{'border-blue-500 bg-blue-50': currentPage-1===p}">
                 <p-checkbox class="absolute top-1 left-1 z-10" *ngIf="page.type !== 'bookmark' &amp;&amp; !showSplitDialog" [(ngModel)]="selectedThumbs[p]" [binary]="true" (onChange)="onThumbChange()" (click)="$event.stopPropagation()"></p-checkbox>
-                <ng-container *ngIf="page.type === 'page'; else bookmarkBlock"><img class="w-full h-40 object-contain bg-gray-50 border rounded-md" [src]="getThumbnailUrl(p)" alt="Page Thumbnail"><span class="absolute top-1 right-1 thumbnail-badge">{{ getPageNumber(p) }}</span></ng-container>
+                <ng-container *ngIf="page.type === 'page'; else bookmarkBlock"><img class="w-full h-40 object-contain bg-gray-50 border rounded-md cursor-pointer" [src]="getThumbnailUrl(p)" alt="Page Thumbnail" [pTooltip]="'documentCapture.indexationView.fullPageView' | translate"><span class="absolute top-1 right-1 thumbnail-badge">{{ getPageNumber(p) }}</span></ng-container>
                 <ng-template #bookmarkBlock>
                   <div class="relative thumbnail-a4 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600 text-sm font-semibold overflow-hidden">
                     <!-- inner dashed layer-->
@@ -77,21 +84,17 @@
       </div>
     </div>
     <!-- RIGHT PANEL — Viewer-->
-    <div class="col-span-3 bg-white rounded-md shadow-sm flex flex-col" *ngIf="currentPage">
+    <div class="col-span-3 bg-white rounded-md shadow-sm flex flex-col page-viewer" *ngIf="currentPage">
       <!-- Top bar aligned-->
       <div class="h-12 border-b bg-gray-50 flex justify-between items-center px-2"><span class="font-semibold text-sm">{{ 'documentCapture.indexationView.pageViewerTitle' | translate }}</span><span class="text-xs">{{ currentPage }} / {{ totalPages }}</span></div>
       <div class="flex gap-2 p-2">
-        <p-button icon="pi pi-search-minus"></p-button>
-        <p-button icon="pi pi-refresh"></p-button>
-        <p-button icon="pi pi-search-plus"></p-button>
-        <p-button class="ml-auto" icon="pi pi-times" (click)="closeViewer()" pTooltip="Close Viewer" tooltipPosition="bottom"></p-button>
+        <p-button icon="pi pi-search-minus" (click)="zoomOut()"></p-button>
+        <p-button icon="pi pi-refresh" (click)="resetZoom()"></p-button>
+        <p-button icon="pi pi-search-plus" (click)="zoomIn()"></p-button>
+        <p-button class="ml-auto" icon="pi pi-times" (click)="closeViewer()" [pTooltip]="'documentCapture.indexationView.closeViewer' | translate" tooltipPosition="bottom"></p-button>
       </div>
-      <div class="flex-1 border rounded-md flex items-center justify-center bg-gray-50 m-2"><img class="max-w-full max-h-full object-contain" [src]="activePageUrl"></div>
-      <div class="p-2 flex gap-2 justify-center">
-        <p-button icon="pi pi-chevron-left"></p-button>
-        <p-button icon="pi pi-download"></p-button>
-        <p-button icon="pi pi-print"></p-button>
-        <p-button icon="pi pi-chevron-right"></p-button>
+      <div class="flex-1 border rounded-md flex bg-gray-50 m-2 relative">
+        <div class="image-wrapper"><img class="zoom-img" [src]="activePageUrl" [style.width.%]="zoomLevel * 100" [style.height.%]="zoomLevel * 100" (wheel)="onWheelZoom($event)"></div>
       </div>
     </div>
   </div>
@@ -109,5 +112,19 @@
     <p-button [label]="'documentCapture.indexationView.buttons.delete' | translate" icon="pi pi-trash" styleClass="p-button-danger p-button-sm" (click)="proceedDelete()"></p-button>
   </div>
 </p-dialog>
+<!-- Merge Dialog-->
+<p-dialog [header]="'documentCapture.indexationView.mergeDialog.header' | translate" [(visible)]="showMergeDialog" [modal]="true" [closable]="true" (onHide)="cancelMerge()" [baseZIndex]="10000" [style]="{ width: '30rem', height: '25rem' }">
+  <div class="mb-4">
+    <p class="text-sm text-gray-600 mb-3">{{ 'documentCapture.indexationView.mergeDialog.message' | translate }}</p>
+    <p class="text-sm font-medium mb-2">{{ 'documentCapture.indexationView.mergeDialog.selectDocumentId' | translate }}</p>
+    <p-dropdown [(ngModel)]="selectedMergeId" [options]="mergeDocIds" [showClear]="false" [styleClass]="'w-full'" placeholder="{{ 'documentCapture.indexationView.mergeDialog.selectPlaceholder' | translate }}"></p-dropdown>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-2">
+      <p-button [label]="'documentCapture.indexationView.mergeDialog.cancel' | translate" styleClass="p-button-text p-button-sm" (click)="cancelMerge()"></p-button>
+      <p-button [label]="'documentCapture.indexationView.mergeDialog.confirm' | translate" icon="pi pi-check" styleClass="p-button-success p-button-sm" (click)="confirmMerge()" [disabled]="!selectedMergeId"></p-button>
+    </div>
+  </ng-template>
+</p-dialog>
 <app-bookmark-dialog #bookmarkDialog (generate)="insertBookmark($event)"></app-bookmark-dialog>
-<app-crop-dialog #cropDialog [imageUrl]="1"></app-crop-dialog>
+<app-crop-dialog #cropDialog [imageUrl]="currentPage" (imageSaved)="onImageSaved($event)" (numberExtracted)="onNumberExtracted($event)"></app-crop-dialog>

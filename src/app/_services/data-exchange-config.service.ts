@@ -8,6 +8,7 @@ import {
   DataExchangeResponse,
   ExclusionRule,
 } from '../interfaces';
+import { SKIP_AUTHORIZATION_TOKEN_HEADER } from '../_constants/common.constant';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +29,7 @@ export class DataExchangeConfigService {
     const headers = new HttpHeaders({
       Authorization: `Basic ${credentials}`,
       'Content-Type': 'application/x-www-form-urlencoded',
+      [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true',
     });
 
     const body = 'grant_type=client_credentials';
@@ -69,6 +71,7 @@ export class DataExchangeConfigService {
         const headers = new HttpHeaders({
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
+          [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true',
         });
 
         const dataServicesUrl = `${environment.appUrl}/${environment.distributionRulesPath}`;
@@ -135,6 +138,7 @@ export class DataExchangeConfigService {
         const headers = new HttpHeaders({
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
+          [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true',
         });
 
         // Use correct endpoint for distribution exclusion rules

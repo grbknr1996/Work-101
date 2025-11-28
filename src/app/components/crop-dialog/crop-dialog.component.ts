@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
 
@@ -10,6 +10,7 @@ import { MechanicsService } from 'src/app/_services/mechanics.service';
 export class CropDialogComponent implements OnInit {
     @Input() imageUrl!: string;
     @Input() pageNumber!: number;
+    @Input() documentIndex!: number;
     visible: boolean = false;
     zoomLevel: number = 100;
     rotation: number = 0;
@@ -18,6 +19,8 @@ export class CropDialogComponent implements OnInit {
     visibleChange = new EventEmitter<boolean>();
     croppedImage: string = '';
     imageChangedEvent: any = '';
+    @Output() imageSaved = new EventEmitter<string>();
+    @Output() numberExtracted = new EventEmitter<{ index: number; number: string }>();
 
     constructor(
         public ms: MechanicsService,
@@ -25,19 +28,13 @@ export class CropDialogComponent implements OnInit {
     ) { }
 
     async ngOnInit(): Promise<void> {
-        console.log("crop dialog box called");
+        console.log("crop dialog box called", this.imageUrl, this.pageNumber);
         if (this.imageUrl) {
             console.log("recieved image url", this.imageUrl);
             this.loadImageAsEvent(this.imageUrl);
         }
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes['imageUrl'] && changes['imageUrl'].currentValue) {
-            // whenever parent updates imageUrl, convert it to a fake file event
-            this.loadImageAsEvent(changes['imageUrl'].currentValue);
-        }
-    }
 
     private loadImageAsEvent(url: string) {
         console.log("Loading image as event:", url);
@@ -103,8 +100,24 @@ export class CropDialogComponent implements OnInit {
         this.zoomScale = 1;
     }
     imageCropped(event: ImageCroppedEvent) {
-        this.croppedImage = event.base64!;
+    console.log("Image cropped:", event);
+
+    if (event.base64) {
+        this.croppedImage = event.base64;
+        return;
     }
+
+    // Fallback if cropper returns blob instead of base64
+    if (event.blob) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+        this.croppedImage = reader.result as string; // base64 output
+        console.log("Converted base64:", this.croppedImage);
+        };
+        reader.readAsDataURL(event.blob);
+    }
+    }
+
 
     fileChangeEvent(event: any): void {
         this.imageChangedEvent = event;
@@ -123,7 +136,30 @@ export class CropDialogComponent implements OnInit {
 
     saveCroppedImage() {
         // TODO: Implement actual cropping logic
-        console.log('Saving cropped image...');
+        console.log('Saving cropped image...', this.croppedImage);
+        this.imageSaved.emit(this.croppedImage);
         this.visible = false;
+    }
+
+    saveNumber() {
+        // Mock OCR: Generate random document number
+    const mockNumber = this.generateMockDocumentNumber();
+        console.log('Mock OCR extracted number:', mockNumber);
+        
+        // Emit the extracted number with document index
+        this.numberExtracted.emit({
+            index: this.documentIndex,
+            number: mockNumber
+        });
+        
+        this.visible = false;
+    }
+
+    private generateMockDocumentNumber(): string {
+        const prefixes = ['VC-D', 'VC-T', 'VC-P'];
+        const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+        const year = new Date().getFullYear();
+        const number = String(Math.floor(Math.random() * 900) + 100);
+        return `${prefix}-${year}-${number}`;
     }
 }

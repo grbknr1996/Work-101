@@ -149,10 +149,10 @@
         "key": "datapackages",
         "options": [
             {
-            "label": "Text Fields",
-            "code": "TXT",
+            "label": "Application Type",
+            "code": "application",
             "items": [
-                { "name": "Application Id", "code": "applicationId", "fieldType": "text" }
+                { "name": "Application Id", "code": "applicationId", "fieldType": "application" }
             ]
             }
         ]

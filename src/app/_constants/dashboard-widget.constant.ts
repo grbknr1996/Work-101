@@ -159,14 +159,20 @@ export const DASHBOARD_WIDGETS: DashboardWidget[] = [
     items: [
       {
         icon: 'pi-file-edit',
-        label: 'dashboard.widgets.publication.items.pendingPublications',
-        link: '/publication/pending',
+        label: 'dashboard.widgets.publication.items.pendingJournals',
+        link: '/publications/journals',
         requiredPermissions: ['publication_dashboard_view'],
       },
       {
         icon: 'pi-clock',
-        label: 'dashboard.widgets.publication.items.pendingJournals',
-        link: '/publication/journals',
+        label: 'dashboard.widgets.publication.items.pendingPublications',
+        link: '/publications/pending',
+        requiredPermissions: ['publication_dashboard_view'],
+      },
+      {
+        icon: 'pi-globe',
+        label: 'dashboard.widgets.publication.items.onlinePublications',
+        link: '/publications/online-journals',
         requiredPermissions: ['publication_dashboard_view'],
       },
     ],

@@ -1,0 +1,31 @@
+
+<div class="approval-review-container">
+  <p-card class="mb-3 shadow-2 border-round-md" *ngFor="let item of approvalReviewData">
+    <!-- ---- CARD TITLE ------>
+    <ng-template pTemplate="title">
+      <div class="flex w-full align-items-center">
+        <div class="flex-1"><span class="text-lg font-semibold text-gray-900">{{ item.reviewerName }}</span></div>
+        <div class="flex justify-content-end" style="min-width: 150px;"><span class="text-sm text-gray-600" *ngIf="item.reviewDate">{{ item.reviewDate }}</span></div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+      <!-- Legal Background-->
+      <div class="mb-3" *ngIf="item.legalBackground">
+        <div class="font-semibold mb-1">{{ 'taskManagement.approval.backgroundTitle' | translate }}</div>
+        <div class="text-700">{{ item.legalBackground }}</div>
+      </div>
+      <p-divider *ngIf="item.legalBackground"></p-divider>
+      <!-- Review Comments-->
+      <div class="mb-3" *ngIf="item.reviewComments">
+        <div class="font-semibold mb-1">{{ 'taskManagement.approval.comments' | translate }}</div>
+        <div class="text-700">{{ item.reviewComments }}</div>
+      </div>
+      <p-divider *ngIf="item.reviewComments"></p-divider>
+      <!-- Actions to Overcome-->
+      <div class="mb-3" *ngIf="item.actionsToOvercome">
+        <div class="font-semibold mb-1">{{ 'taskManagement.approval.outcomes' | translate }}</div>
+        <div class="text-700">{{ item.actionsToOvercome }}</div>
+      </div>
+    </ng-template>
+  </p-card>
+</div>

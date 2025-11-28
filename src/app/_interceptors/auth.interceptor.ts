@@ -4,8 +4,9 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
+  HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators';
 import { AuthService } from '../_services/auth.service';
 import {
@@ -49,10 +50,28 @@ export class AuthInterceptor implements HttpInterceptor {
         return next.handle(modifiedRequest);
       }),
       catchError((error) => {
-        logger.error('Error in AuthInterceptor:', error);
-        // If token retrieval fails, proceed without token
-        //const headers = this.buildHeaders(request, null);
-        //const modifiedRequest = request.clone({ setHeaders: headers });
+        // CRITICAL FIX: If this is an HttpErrorResponse (HTTP error from the server like 403, 401, etc.),
+        // we MUST re-throw it instead of making a fallback request.
+        //
+        // Why? Previously, when a 403 error occurred, the catchError would catch it and make a
+        // fallback request via next.handle(request) without tokens. This fallback request would
+        // go through the interceptor chain again, potentially get retried, and result in a 401
+        // (because it has no auth token). This caused the original 403 error to be lost and
+        // replaced with a 401, preventing proper error handling (e.g., navigation to MFA page).
+        //
+        // By checking if the error is an HttpErrorResponse and re-throwing it, we ensure that:
+        // 1. The original HTTP error (403) is preserved and passed to the error handler
+        // 2. No unnecessary fallback request is made that would mask the original error
+        // 3. The error handler can properly detect 403 and navigate to MFA registration page
+        if (error instanceof HttpErrorResponse) {
+          logger.error('Error in AuthInterceptor (HTTP error):', error);
+          return throwError(() => error);
+        }
+
+        logger.error(
+          'Error in AuthInterceptor (token retrieval failed):',
+          error
+        );
         return next.handle(request);
       })
     );
@@ -86,7 +105,7 @@ export class AuthInterceptor implements HttpInterceptor {
     }
 
     if (tokens?.idToken) {
-      headers['wipoipas-id-token'] = tokens.idToken;
+      headers['wipo-id-token'] = tokens.idToken;
     }
 
     return headers;

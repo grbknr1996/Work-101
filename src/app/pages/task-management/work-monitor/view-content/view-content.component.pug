@@ -12,6 +12,7 @@ app-layout
             img(src='assets/icons/threePanelsView.svg', alt="Three Vertical", style="width: 24px; height: 24px;")
         p-button(severity="secondary", text (click)="changeLayout('two')")
             img(src='assets/icons/twoPanels.svg', alt="Two Panel", style="width: 24px; height: 24px;")
+        p-button(icon="pi pi-check-circle",pTooltip="Approve",tooltipPosition="bottom", severity="secondary",text (click)="changeLayout('approveAction')")
         p-button(icon="pi pi-arrow-right-arrow-left", pTooltip="Switch Sides",tooltipPosition="bottom", severity="secondary", text (click)="switchSides()")
 
   ng-container(*ngIf="expandedPanelIndex === null; else expandedPanelView")
@@ -23,12 +24,14 @@ app-layout
             app-biblio-data(*ngIf="panel === 'Bibliographic Data'")
             app-record-actions(*ngIf="panel === 'Action Recorder'", [showLayout]="false")
             app-task-history(*ngIf="panel === 'File History'", [showLayout]="false")
+            app-approval-review(*ngIf="panel === 'Approval Review'")
         .col-6.flex.flex-column
           div(*ngFor="let panel of panelContents.slice(2,4); let i = index").flex-1.border.surface-border.m-2.p-3.panel-scrollable
             app-panel-header-icons([panelName]="panel", [panelIndex]="i + 2", [panelTypes]="panelTypes", (switchContent)="switchPanelContent(i + 2, $event.content)", [isExpanded]="expandedPanelIndex === i", (expandPanel)="toggleExpandPanel(i + 2)")
             app-biblio-data(*ngIf="panel === 'Bibliographic Data'")
             app-record-actions(*ngIf="panel === 'Action Recorder'", [showLayout]="false")
             app-task-history(*ngIf="panel === 'File History'", [showLayout]="false")
+            app-approval-review(*ngIf="panel === 'Approval Review'")
 
       div(*ngIf="expandedPanelIndex !== null").expanded-panel-overlay
         .expanded-panel-content
@@ -42,17 +45,20 @@ app-layout
         *ngSwitchCase="'three-hv'" 
         style="display: flex; flex-direction: row;"
         )
+        div(style="flex: 1; height: 100%; display: flex; flex-direction: column;").border.surface-border.m-2.p-3.panel-scrollable
+          app-panel-header-icons([panelName]="panelContents[2]", [panelIndex]="2", [panelTypes]="panelTypes", (switchContent)="switchPanelContent(2, $event.content)", (expandPanel)="expandPanel(2)")
+          app-biblio-data(*ngIf="panelContents[2] === 'Bibliographic Data'")
+          app-record-actions(*ngIf="panelContents[2] === 'Action Recorder'", [showLayout]="false")
+          app-task-history(*ngIf="panelContents[2] === 'File History'", [showLayout]="false")
+          app-approval-review(*ngIf="panelContents[2] === 'Approval Review'")
+
         div(style="flex: 1; display: flex; flex-direction: column; height: 100%;")
           div(*ngFor="let panel of panelContents.slice(0,2); let i = index", style="flex: 1;").border.surface-border.m-2.p-3.panel-scrollable
             app-panel-header-icons([panelName]="panel", [panelIndex]="i", [panelTypes]="panelTypes", (switchContent)="switchPanelContent(i, $event.content)", (expandPanel)="expandPanel(i)")
             app-biblio-data(*ngIf="panel === 'Bibliographic Data'")
             app-record-actions(*ngIf="panel === 'Action Recorder'", [showLayout]="false")
             app-task-history(*ngIf="panel === 'File History'", [showLayout]="false")
-        div(style="flex: 1; height: 100%; display: flex; flex-direction: column;").border.surface-border.m-2.p-3.panel-scrollable
-          app-panel-header-icons([panelName]="panelContents[2]", [panelIndex]="2", [panelTypes]="panelTypes", (switchContent)="switchPanelContent(2, $event.content)", (expandPanel)="expandPanel(2)")
-          app-biblio-data(*ngIf="panelContents[2] === 'Bibliographic Data'")
-          app-record-actions(*ngIf="panelContents[2] === 'Action Recorder'", [showLayout]="false")
-          app-task-history(*ngIf="panelContents[2] === 'File History'", [showLayout]="false")
+            app-approval-review(*ngIf="panel === 'Approval Review'")
 
       div(*ngSwitchCase="'three-v'").flex.h-screen.three-v
         div(*ngFor="let panel of panelContents; let i= index").flex-1.border.surface-border.m-2.p-3.panel-scrollable
@@ -61,6 +67,7 @@ app-layout
             app-biblio-data(*ngIf="panel === 'Bibliographic Data'")
             app-record-actions(*ngIf="panel === 'Action Recorder'", [showLayout]="false")
             app-task-history(*ngIf="panel === 'File History'", [showLayout]="false")
+            app-approval-review(*ngIf="panel === 'Approval Review'")
 
       div(*ngSwitchCase="'two'").flex.h-screen.two-panel
         div(*ngFor="let panel of panelContents; let i = index").flex-1.border.surface-border.m-2.p-3.panel-scrollable
@@ -68,6 +75,15 @@ app-layout
           app-biblio-data(*ngIf="panel === 'Bibliographic Data'")
           app-record-actions(*ngIf="panel === 'Action Recorder'", [showLayout]="false")
           app-task-history(*ngIf="panel === 'File History'", [showLayout]="false")
+          app-approval-review(*ngIf="panel === 'Approval Review'")
+
+      div(*ngSwitchCase="'approveAction'").flex.h-screen.two-panel
+        div(*ngFor="let panel of panelContents; let i = index").flex-1.border.surface-border.m-2.p-3.panel-scrollable
+          app-panel-header-icons([panelName]="panel", [panelIndex]="i", [panelTypes]="panelTypes", (switchContent)="switchPanelContent(i, $event.content)", (expandPanel)="expandPanel(i)")
+          app-biblio-data(*ngIf="panel === 'Bibliographic Data'")
+          app-approval-recorder(*ngIf="panel === 'Action Recorder'")
+          app-task-history(*ngIf="panel === 'File History'", [showLayout]="false")
+          app-approval-review(*ngIf="panel === 'Approval Review'") 
 
   ng-template(#expandedPanelView)
     .full-screen-panel
@@ -75,3 +91,4 @@ app-layout
       app-biblio-data(*ngIf="panelContents[expandedPanelIndex!] === 'Bibliographic Data'")
       app-record-actions(*ngIf="panelContents[expandedPanelIndex!] === 'Action Recorder'", [showLayout]="false")
       app-task-history(*ngIf="panelContents[expandedPanelIndex!] === 'File History'", [showLayout]="false")
+      app-approval-review(*ngIf="panelContents[expandedPanelIndex!] === 'Approval Review'")

@@ -19,19 +19,23 @@ export class ViewContentComponent implements OnInit {
         { type: 'Document Viewer', icon: 'pi-eye', tooltip: 'View Document' },
         { type: 'Bibliographic Data', icon: 'pi-book', tooltip: 'Bibliographic Data' },
         { type: 'Action Recorder', icon: 'pi-comment', tooltip: 'Action Record' },
+        { type: 'Approval Review', icon: 'pi-check-circle', tooltip: 'Approval Review' },
         { type: 'Expand Panel', icon: 'pi-window-maximize clickable-icon', tooltip: 'Expand Panel' },
     ];
 
     breadcrumbItems: any[] = [];
     expandedPanelIndex: number | null = null;
 
-    layoutMode: 'four' | 'three-hv' | 'three-v' | 'two' = 'four';
+    layoutMode: 'four' | 'three-hv' | 'three-v' | 'two' | 'approveAction' = 'four';
     leftSideFirst: boolean = true;
 
     panelsThreeV = ['File History', 'Bibliographic Data', 'Action Recorder'];
     panelsThreeHv = ['File History', 'Bibliographic Data', 'Action Recorder'];
     panelsFour = ['File History', 'Bibliographic Data', 'Document Viewer', 'Action Recorder'];
     panelsTwo = ['File History', 'Document Viewer'];
+    reviewerpanel = ['Action Recorder', 'Bibliographic Data', 'Approval Review'];
+    approveActionPanel = ['Approval Review', 'Action Recorder'];
+
 
     panelContents: string[] = ['File History', 'Bibliographic Data', 'Document Viewer', 'Action Recorder'];
     documentId: string | null = null;
@@ -76,7 +80,7 @@ export class ViewContentComponent implements OnInit {
         });
     }
 
-    changeLayout(mode: 'four' | 'three-hv' | 'three-v' | 'two') {
+    changeLayout(mode: 'four' | 'three-hv' | 'three-v' | 'two' | 'approveAction') {
         this.expandedPanelIndex = null;
         console.log("the selected mode:", mode)
         this.layoutMode = mode;
@@ -88,7 +92,10 @@ export class ViewContentComponent implements OnInit {
             this.panelContents = [...this.panelsFour];
         } else if (mode === 'two') {
             this.panelContents = [...this.panelsTwo];
+        } else if (mode === 'approveAction') {
+            this.panelContents = [...this.approveActionPanel];
         }
+        this.cdr.detectChanges();
     }
 
     switchSides() {
@@ -100,6 +107,12 @@ export class ViewContentComponent implements OnInit {
     }
 
     switchPanelContent(panelIndex: number, newContent: string) {
+          if (newContent === 'Approval Review' && this.layoutMode === 'four') {
+            this.layoutMode = 'three-hv';
+            this.panelContents = [...this.reviewerpanel];
+            this.cdr.detectChanges();
+            return;
+        }
         const targetIndex = this.expandedPanelIndex !== null ? this.expandedPanelIndex : panelIndex;
         if (this.panelContents[targetIndex] === newContent) return;
 

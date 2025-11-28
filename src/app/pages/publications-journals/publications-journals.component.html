@@ -1,0 +1,42 @@
+
+<app-layout>
+  <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
+  <div class="flex justify-between">
+    <h1 class="pt-4 text-xl ml-4 col-span-3">Publication Journals</h1>
+  </div>
+  <div class="mb-4">
+    <div class="user-stats-container">
+      <div class="user-stat-card fixed-width" *ngFor="let stat of userStats" [class.selected]="selectedStat === stat.label" (click)="selectStat(stat.label)">
+        <div class="stat-header"><span class="stat-label" [style.color]="stat.color">{{ stat.label }}</span><i [class]="stat.icon" [style.color]="stat.color"></i></div>
+        <div class="stat-content"><span class="stat-count" [style.color]="stat.color">{{ stat.count }}</span></div>
+        <div class="flex justify-normal">
+          <div class="mr-1">{{ stat.periodText }} </div><b class="p-0">{{stat.period}}</b>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid grid-cols-6 mt-2">
+    <div class="col-span-6 grid grid-cols-12 filter">
+      <div class="col-span-4">
+        <p-floatlabel variant="on">
+          <p-iconfield>
+            <p-inputicon class="pi pi-search"></p-inputicon>
+            <input class="w-full" id="on_label" pInputText="" [(ngModel)]="searchBar" autocomplete="off">
+          </p-iconfield>
+          <label for="on_label">Search</label>
+        </p-floatlabel>
+      </div>
+      <div class="col-span-8 flex justify-end gap-2 filter-icons">
+        <app-configurable-filter [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'Select filters to display'" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>
+      </div>
+    </div>
+  </div>
+  <div class="mb-8 mt-1 w-full">
+    <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="true" [clearAllLabel]="'Clear All'" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-filter-chips>
+  </div>
+  <div class="grid grid-cols-6 mt-2">
+    <div class="col-span-12">
+      <app-table [columns]="tableColumns" [data]="tableData" [globalFilterFields]="globalFilterFields" [showSearchButton]="false" [showClearButton]="false" [paginator]="true" [lazy]="true" [rows]="pageSize" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} Journals'" (actionClick)="onActionClick($event.action, $event.item)" (onLazyLoad)="onLazyLoad($event)"></app-table>
+    </div>
+  </div>
+</app-layout>

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { JournalPublicationComponentRoutingModule } from './journal-publication-routing.module';
+import { PendingPublicationsRoutingModule } from './pending-publications-journals-routing.module';
 import { CapitalizeWordsPipe } from 'src/app/_pipes/capitalize-words.pipe';
 
 
@@ -9,10 +9,10 @@ import { CapitalizeWordsPipe } from 'src/app/_pipes/capitalize-words.pipe';
 	declarations: [],
 	imports: [
 		CommonModule,
-		JournalPublicationComponentRoutingModule
+		PendingPublicationsRoutingModule
 	],
 	providers: [
 		CapitalizeWordsPipe
 	]
 })
-export class JournalPublicationComponentModule { }
+export class PendingPublicationsModule { }

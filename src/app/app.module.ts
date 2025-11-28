@@ -117,15 +117,11 @@ import { TrendsHistoryComponent } from './pages/statistics/trends/trends-history
 import { OriginsComponent } from './pages/statistics/origins/origins.component';
 //-----
 import { RenewalReminderComponent } from './pages/renewal-reminder/renewal-reminder.component';
-import { JournalPublicationComponent } from './pages/journal-publication/journal-publication.component';
-import { OnlinePublicationJournalComponent } from './pages/online-publication-journal/online-publication-journal.component';
 import { FeeConfigComponent } from './pages/fee-config/fee-config.component';
 import { FeeCalculatorComponent } from './pages/fee-calculator/fee-calculator.component';
 import { SelectOfficeComponent } from './pages/data-packages/select-office/select-office.component';
 import { DataPackagesComponent } from './pages/data-packages/data-packages.component';
 import { AuthorityFilesComponent } from './pages/data-packages/authority-files/authority-files.component';
-import { RecipientSystemsComponent } from './pages/data-exchange-config/recipient-systems/recipient-systems.component';
-import { OriginatingOfficesComponent } from './pages/data-exchange-config/originating-offices/originating-offices.component';
 import { DistributionRulesComponent } from './pages/data-exchange-config/distribution-rules/distribution-rules.component';
 import { DataExchangeConfigComponent } from './pages/data-exchange-config/data-exchange-config.component';
 import { AddExclusionRuleComponent } from './pages/data-exchange-config/add-exclusion-rule/add-exclusion-rule.component';
@@ -162,6 +158,11 @@ import { CropDialogComponent } from './components/crop-dialog/crop-dialog.compon
 import { ViewGroupComponent } from './pages/user-management/groups/view-group/view-group.component';
 import { RetryInterceptor } from './_interceptors/retry.interceptor';
 import { AuthInterceptor } from './_interceptors/auth.interceptor';
+import { OnlinePublicationJournalsComponent } from './pages/online-publication-journals/online-publication-journals.component';
+import { PublicationsJournalsComponent } from './pages/publications-journals/publications-journals.component';
+import { PendingPublicationsComponent } from './pages/pending-publications-journals/pending-publications-journals.component';
+import { ApprovalReviewComponent } from './pages/task-management/work-monitor/view-content/approval-review/approval-review.component';
+import { ApprovalRecorderComponent } from './pages/task-management/work-monitor/view-content/approval-recorder/approval-recorder.component';
 
 @NgModule({
   declarations: [
@@ -230,15 +231,14 @@ import { AuthInterceptor } from './_interceptors/auth.interceptor';
     //-----
     MultipleStatsComponent,
     RenewalReminderComponent,
-    JournalPublicationComponent,
-    OnlinePublicationJournalComponent,
+    PendingPublicationsComponent,
+    PublicationsJournalsComponent,
+    OnlinePublicationJournalsComponent,
     FeeConfigComponent,
     FeeCalculatorComponent,
     SelectOfficeComponent,
     DataPackagesComponent,
     AuthorityFilesComponent,
-    RecipientSystemsComponent,
-    OriginatingOfficesComponent,
     DistributionRulesComponent,
     DataExchangeConfigComponent,
     AddExclusionRuleComponent,
@@ -261,6 +261,8 @@ import { AuthInterceptor } from './_interceptors/auth.interceptor';
     ProfileComponent,
     ViewUserDetailsComponent,
     CropDialogComponent,
+    ApprovalReviewComponent,
+    ApprovalRecorderComponent,
     ViewGroupComponent,
   ],
   imports: [

@@ -4,6 +4,7 @@ import { ConfigurableFilterComponent, FilterConfig, FilterValue } from 'src/app/
 import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
 import { BatchItem, CaptureDocumentService } from 'src/app/_services/capture-document.service';
+import { BookmarkDialogComponent } from 'src/app/components/BookmarkDialog/bookmark-dialog.component';
 
 
 interface UploadEvent {
@@ -12,7 +13,7 @@ interface UploadEvent {
 }
 
 @Component({
-  selector: 'app-work-monitor',
+  selector: 'app-document-capture',
   standalone: false,
   providers: [
     CaptureDocumentService
@@ -22,6 +23,8 @@ interface UploadEvent {
 export class DocumentCaptureComponent implements OnInit {
   @ViewChild(ConfigurableFilterComponent)
   configurableFilter!: ConfigurableFilterComponent;
+  @ViewChild(BookmarkDialogComponent)
+  bookmarkDialog!: BookmarkDialogComponent;
   @ViewChild('fileUploadSection') fileUploadSection!: ElementRef;
 
   breadcrumbItems = [];
@@ -43,7 +46,6 @@ export class DocumentCaptureComponent implements OnInit {
   tableColumns = [];
   batchTableData = [];
   separatorDialogVisible: boolean = false;
-  bookmarkDialogVisible: boolean = false;
   selectedBookmark: string | null = null;
   includeBookmarkText = false;
   qrCodeImage: string | null = null;
@@ -90,15 +92,11 @@ export class DocumentCaptureComponent implements OnInit {
     this.bookmarkDialogInfo = this.ms.translate('documentCapture.bookmark.previewHeader') || '';
     this.filterConfigs = [
       {
-        key: 'admin',
-        label: this.ms.translate('documentCapture.filters.lockedBy') + ' - Admin',
-        type: 'checkbox',
-        section: this.ms.translate('documentCapture.filters.lockedBy') || 'FILTERS'
-      },
-      {
-        key: 'user',
-        label: this.ms.translate('documentCapture.filters.lockedBy') + ' - user',
-        type: 'checkbox',
+        key: 'users',
+        label: this.ms.translate('documentCapture.filters.lockedBy'),
+        type: 'multiSelect',
+        placeholder: 'Select user',
+        options: [],
         section: this.ms.translate('documentCapture.filters.lockedBy') || 'FILTERS'
       },
       {
@@ -128,12 +126,6 @@ export class DocumentCaptureComponent implements OnInit {
             severity: 'info',
           },
           {
-            label: this.ms.translate('documentCapture.table.download'),
-            icon: 'pi pi-download',
-            action: 'download',
-            severity: 'info',
-          },
-          {
             label: this.ms.translate('documentCapture.table.delete'),
             icon: 'pi pi-trash',
             action: 'delete',
@@ -145,10 +137,25 @@ export class DocumentCaptureComponent implements OnInit {
   }
   ngOnInit() {
 
+    const currentPath = this.router.url;
+        const menuItems = this.menuService.generateDataCaptureMenu(currentPath);
+        this.menuService.updateMenuItems(menuItems);
+
     this.CaptureDocumentService.getBatches().then(batches => {
       this.batchTableData = batches || [];
       this.originalBatchTableData = (batches || []).slice();
       this.totalRecords = this.batchTableData.length;
+
+    const userList = [...new Set(
+      (batches || [])
+        .map(b => b.lockedBy)
+        .filter(u => u && u.toLowerCase() !== 'admin')
+    )];
+
+    const userFilter = this.filterConfigs.find(f => f.key === 'users');
+      if (userFilter) {
+        userFilter.options = userList.map(u => ({ label: u, value: u }));
+      }
       this.cdr.markForCheck();
     });
 
@@ -160,7 +167,7 @@ export class DocumentCaptureComponent implements OnInit {
     // initialize allFilters so chip list and syncing works
     this.allFilters = this.filterConfigs.map(f => ({
       key: f.key,
-      value: f.type === 'checkbox' ? false : null,
+      value: f.type === 'dropdown' ? false : null,
       type: f.type
     }));
     this.syncAppliedFilters();
@@ -183,17 +190,21 @@ export class DocumentCaptureComponent implements OnInit {
   applyFilters(filters: FilterValue[]): void {
     let filtered = this.originalBatchTableData.slice();
 
-    // locked by - checkbox keys 'admin' and 'user'
-    const activeLockedBy = (filters || [])
-      .filter(f => f.type === 'checkbox' && f.value === true)
-      .map(f => f.key.toLowerCase());
+    const userFilter = filters.find(f => f.key === 'users');
 
-    if (activeLockedBy.length > 0) {
+    if (userFilter && userFilter.value) {
+
+      // Supports single-select or multi-select
+      const selectedUsers = Array.isArray(userFilter.value)
+        ? userFilter.value.map(u => u.toLowerCase())
+        : [userFilter.value.toLowerCase()];
+
       filtered = filtered.filter(item => {
-        const locked = (item.lockedBy || '').toString().toLowerCase();
-        return activeLockedBy.includes(locked);
+        const lockedUser = (item.lockedBy || '').toLowerCase();
+        return selectedUsers.includes(lockedUser);
       });
     }
+
 
     // captured date range filter
     const dateFilter = (filters || []).find(f => f.key === 'capturedDateRange' && f.value);
@@ -293,12 +304,22 @@ export class DocumentCaptureComponent implements OnInit {
   onActionClick(action: string, item: any) {
     console.log("action: ", action, " item: ", item);
     if (action === 'view' && item && item.batchId) {
-     // navigate to indexation view for this batch
       const officeCode = this.route.snapshot.params['officeCode'] || this.ms.getCurrentOffice() || 'default';
       const langCode = this.route.snapshot.params['langCode'] || 'en';
       this.router.navigate(['/', officeCode, langCode, 'data-capture', 'documents', item.batchId]);
     }
+    if (action === 'delete' && item && item.batchId) {
+       this.deleteBatchMock(item.batchId);
+    }
   }
+
+  deleteBatchMock(batchId: string) {
+    this.batchTableData = this.batchTableData.filter(b => b.batchId !== batchId);
+    this.originalBatchTableData = this.originalBatchTableData.filter(b => b.batchId !== batchId);
+    this.totalRecords = this.batchTableData.length;
+    console.log(`Mock delete performed for batchId: ${batchId}`);
+  }
+
 
   onUrlClick(rowData: any, col: any) {
     const batchId = rowData['batchId'];
@@ -322,7 +343,7 @@ export class DocumentCaptureComponent implements OnInit {
     console.log("Print separator sheet");
   }
   showBookmarkDialog() {
-    this.bookmarkDialogVisible = true;
+    this.bookmarkDialog.open();
   }
 
   generateQRCode() {
@@ -353,7 +374,6 @@ export class DocumentCaptureComponent implements OnInit {
   }
 
   showFileUploadArea() {
-    this.bookmarkDialogVisible = false;
     this.separatorDialogVisible = false;
 
     setTimeout(() => {

@@ -5,10 +5,11 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import {
   AuthTokenResponse,
-  StatisticsResponse,  // Interface for Statistics API response
+  StatisticsResponse, // Interface for Statistics API response
   SharedPackageResponse,
   GlobalZipItem,
 } from '../interfaces';
+import { SKIP_AUTHORIZATION_TOKEN_HEADER } from '../_constants/common.constant';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,7 @@ export class DataExchangeService {
   private accessTokenSubject = new BehaviorSubject<string | null>(null);
   public accessToken$ = this.accessTokenSubject.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Get authentication token
@@ -29,6 +30,7 @@ export class DataExchangeService {
     const headers = new HttpHeaders({
       Authorization: `Basic ${credentials}`,
       'Content-Type': 'application/x-www-form-urlencoded',
+      [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true',
     });
 
     const body = 'grant_type=client_credentials';
@@ -72,12 +74,15 @@ export class DataExchangeService {
    * Get global zip ids by application ID
    * @param applicationId The application ID to search for
    */
-  getGlobalZipIdsByApplicationId(applicationId: string): Observable<GlobalZipItem[]> {
+  getGlobalZipIdsByApplicationId(
+    applicationId: string
+  ): Observable<GlobalZipItem[]> {
     return this.getAccessToken().pipe(
       switchMap((token) => {
         const headers = new HttpHeaders({
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
+          [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true',
         });
 
         const url = `${environment.dataServicesApi}/applications?applicationId=${applicationId}`;
@@ -92,43 +97,54 @@ export class DataExchangeService {
           }),
           catchError((error) => {
             console.error('Failed to fetch global zip ids:', error);
-            return throwError(() => new Error('Failed to fetch global zip ids'));
+            return throwError(
+              () => new Error('Failed to fetch global zip ids')
+            );
           })
         );
       })
     );
   }
 
-  getGlobalZipDetails(zipList: GlobalZipItem[]): Observable<SharedPackageResponse[]> {
-  return this.getAccessToken().pipe(
-    switchMap((token) => {
-      const headers = new HttpHeaders({
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      });
+  getGlobalZipDetails(
+    zipList: GlobalZipItem[]
+  ): Observable<SharedPackageResponse[]> {
+    return this.getAccessToken().pipe(
+      switchMap((token) => {
+        const headers = new HttpHeaders({
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true',
+        });
 
-      const url = `${environment.dataServicesApi}/details`;
+        const url = `${environment.dataServicesApi}/details`;
 
-      console.log("Calling Global Zip Details API with request body:", zipList);
+        console.log(
+          'Calling Global Zip Details API with request body:',
+          zipList
+        );
 
-      return this.http.post<SharedPackageResponse[]>(url, zipList, { headers }).pipe(
-        map((response) => {
-          console.log("Global Zip Details API response:", response);
-          console.log("Response metadata:", {
-            isArray: Array.isArray(response),
-            length: Array.isArray(response) ? response.length : 0,
-          });
-          return response || [];
-        }),
-        catchError((error) => {
-          console.error("Failed to fetch Global Zip details:", error);
-          return throwError(() => new Error("Failed to fetch Global Zip details"));
-        })
-      );
-    })
-  );
-}
-
+        return this.http
+          .post<SharedPackageResponse[]>(url, zipList, { headers })
+          .pipe(
+            map((response) => {
+              console.log('Global Zip Details API response:', response);
+              console.log('Response metadata:', {
+                isArray: Array.isArray(response),
+                length: Array.isArray(response) ? response.length : 0,
+              });
+              return response || [];
+            }),
+            catchError((error) => {
+              console.error('Failed to fetch Global Zip details:', error);
+              return throwError(
+                () => new Error('Failed to fetch Global Zip details')
+              );
+            })
+          );
+      })
+    );
+  }
 
   /**
    * Get shared packages based on platform code, date range, and status filters
@@ -141,15 +157,15 @@ export class DataExchangeService {
     platformCode: string,
     sharedDateStart: string,
     sharedDateEnd: string,
-    status: string[],
+    status: string[]
   ): Observable<SharedPackageResponse[]> {
     return this.getAccessToken().pipe(
       switchMap((token) => {
         const headers = new HttpHeaders({
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
+          [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true',
         });
-
 
         const statusParams = status.map((s) => `status=${s}`).join('&');
         const dataServicesUrl = `${environment.dataServicesApi}/shared-dates?platformCode=${platformCode}&sharedDateStart=${sharedDateStart}&sharedDateEnd=${sharedDateEnd}&${statusParams}`;
@@ -166,7 +182,9 @@ export class DataExchangeService {
             }),
             catchError((error) => {
               console.error('Failed to fetch shared packages:', error);
-              return throwError(() => new Error('Failed to fetch shared packages'));
+              return throwError(
+                () => new Error('Failed to fetch shared packages')
+              );
             })
           );
       })
@@ -183,6 +201,7 @@ export class DataExchangeService {
         const headers = new HttpHeaders({
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
+          [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true',
         });
 
         const dataServicesUrl = `${environment.dataServicesApi}/counts?platformCode=${platformCode}`;
