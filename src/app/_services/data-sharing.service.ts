@@ -24,9 +24,7 @@ export class DataExchangeService {
    * Get authentication token
    */
   private getAuthToken(): Observable<string> {
-    const credentials = btoa(
-      `${environment.authApiUsername}:${environment.authApiPassword}`
-    );
+    const credentials = btoa(`${environment.authApiUsername}:${environment.authApiPassword}`);
     const headers = new HttpHeaders({
       Authorization: `Basic ${credentials}`,
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -35,26 +33,24 @@ export class DataExchangeService {
 
     const body = 'grant_type=client_credentials';
 
-    return this.http
-      .post<AuthTokenResponse>(environment.authApi, body, { headers })
-      .pipe(
-        map((response) => {
-          console.log('Auth API response received:', {
-            hasToken: !!response.access_token,
-            expiresIn: response.expires_in,
-            tokenType: response.token_type,
-          });
-          if (response.access_token) {
-            this.accessTokenSubject.next(response.access_token);
-            return response.access_token;
-          }
-          throw new Error('No access token received');
-        }),
-        catchError((error) => {
-          console.error('Authentication failed:', error);
-          return throwError(() => new Error('Failed to authenticate'));
-        })
-      );
+    return this.http.post<AuthTokenResponse>(environment.authApi, body, { headers }).pipe(
+      map(response => {
+        console.log('Auth API response received:', {
+          hasToken: !!response.access_token,
+          expiresIn: response.expires_in,
+          tokenType: response.token_type,
+        });
+        if (response.access_token) {
+          this.accessTokenSubject.next(response.access_token);
+          return response.access_token;
+        }
+        throw new Error('No access token received');
+      }),
+      catchError(error => {
+        console.error('Authentication failed:', error);
+        return throwError(() => new Error('Failed to authenticate'));
+      })
+    );
   }
 
   /**
@@ -74,11 +70,9 @@ export class DataExchangeService {
    * Get global zip ids by application ID
    * @param applicationId The application ID to search for
    */
-  getGlobalZipIdsByApplicationId(
-    applicationId: string
-  ): Observable<GlobalZipItem[]> {
+  getGlobalZipIdsByApplicationId(applicationId: string): Observable<GlobalZipItem[]> {
     return this.getAccessToken().pipe(
-      switchMap((token) => {
+      switchMap(token => {
         const headers = new HttpHeaders({
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -87,7 +81,7 @@ export class DataExchangeService {
 
         const url = `${environment.dataServicesApi}/applications?applicationId=${applicationId}`;
         return this.http.get<GlobalZipItem[]>(url, { headers }).pipe(
-          map((response) => {
+          map(response => {
             console.log('Global zip API response received:', response);
             console.log('Global zip API response received:', {
               hasData: Array.isArray(response),
@@ -95,22 +89,18 @@ export class DataExchangeService {
             });
             return response;
           }),
-          catchError((error) => {
+          catchError(error => {
             console.error('Failed to fetch global zip ids:', error);
-            return throwError(
-              () => new Error('Failed to fetch global zip ids')
-            );
+            return throwError(() => new Error('Failed to fetch global zip ids'));
           })
         );
       })
     );
   }
 
-  getGlobalZipDetails(
-    zipList: GlobalZipItem[]
-  ): Observable<SharedPackageResponse[]> {
+  getGlobalZipDetails(zipList: GlobalZipItem[]): Observable<SharedPackageResponse[]> {
     return this.getAccessToken().pipe(
-      switchMap((token) => {
+      switchMap(token => {
         const headers = new HttpHeaders({
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -119,29 +109,22 @@ export class DataExchangeService {
 
         const url = `${environment.dataServicesApi}/details`;
 
-        console.log(
-          'Calling Global Zip Details API with request body:',
-          zipList
-        );
+        console.log('Calling Global Zip Details API with request body:', zipList);
 
-        return this.http
-          .post<SharedPackageResponse[]>(url, zipList, { headers })
-          .pipe(
-            map((response) => {
-              console.log('Global Zip Details API response:', response);
-              console.log('Response metadata:', {
-                isArray: Array.isArray(response),
-                length: Array.isArray(response) ? response.length : 0,
-              });
-              return response || [];
-            }),
-            catchError((error) => {
-              console.error('Failed to fetch Global Zip details:', error);
-              return throwError(
-                () => new Error('Failed to fetch Global Zip details')
-              );
-            })
-          );
+        return this.http.post<SharedPackageResponse[]>(url, zipList, { headers }).pipe(
+          map(response => {
+            console.log('Global Zip Details API response:', response);
+            console.log('Response metadata:', {
+              isArray: Array.isArray(response),
+              length: Array.isArray(response) ? response.length : 0,
+            });
+            return response || [];
+          }),
+          catchError(error => {
+            console.error('Failed to fetch Global Zip details:', error);
+            return throwError(() => new Error('Failed to fetch Global Zip details'));
+          })
+        );
       })
     );
   }
@@ -160,33 +143,29 @@ export class DataExchangeService {
     status: string[]
   ): Observable<SharedPackageResponse[]> {
     return this.getAccessToken().pipe(
-      switchMap((token) => {
+      switchMap(token => {
         const headers = new HttpHeaders({
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
           [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true',
         });
 
-        const statusParams = status.map((s) => `status=${s}`).join('&');
+        const statusParams = status.map(s => `status=${s}`).join('&');
         const dataServicesUrl = `${environment.dataServicesApi}/shared-dates?platformCode=${platformCode}&sharedDateStart=${sharedDateStart}&sharedDateEnd=${sharedDateEnd}&${statusParams}`;
 
-        return this.http
-          .get<SharedPackageResponse[]>(dataServicesUrl, { headers })
-          .pipe(
-            map((response) => {
-              console.log('Shared packages API response received:', response);
-              if (response && Array.isArray(response)) {
-                return response;
-              }
-              throw new Error('No shared packages found');
-            }),
-            catchError((error) => {
-              console.error('Failed to fetch shared packages:', error);
-              return throwError(
-                () => new Error('Failed to fetch shared packages')
-              );
-            })
-          );
+        return this.http.get<SharedPackageResponse[]>(dataServicesUrl, { headers }).pipe(
+          map(response => {
+            console.log('Shared packages API response received:', response);
+            if (response && Array.isArray(response)) {
+              return response;
+            }
+            throw new Error('No shared packages found');
+          }),
+          catchError(error => {
+            console.error('Failed to fetch shared packages:', error);
+            return throwError(() => new Error('Failed to fetch shared packages'));
+          })
+        );
       })
     );
   }
@@ -197,7 +176,7 @@ export class DataExchangeService {
    */
   getStatistics(platformCode: string): Observable<StatisticsResponse> {
     return this.getAccessToken().pipe(
-      switchMap((token) => {
+      switchMap(token => {
         const headers = new HttpHeaders({
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -206,21 +185,19 @@ export class DataExchangeService {
 
         const dataServicesUrl = `${environment.dataServicesApi}/counts?platformCode=${platformCode}`;
 
-        return this.http
-          .get<StatisticsResponse>(dataServicesUrl, { headers })
-          .pipe(
-            map((response) => {
-              console.log('Statistics API response received:', response);
-              if (response) {
-                return response;
-              }
-              throw new Error('No statistics data found');
-            }),
-            catchError((error) => {
-              console.error('Failed to fetch statistics:', error);
-              return throwError(() => new Error('Failed to fetch statistics'));
-            })
-          );
+        return this.http.get<StatisticsResponse>(dataServicesUrl, { headers }).pipe(
+          map(response => {
+            console.log('Statistics API response received:', response);
+            if (response) {
+              return response;
+            }
+            throw new Error('No statistics data found');
+          }),
+          catchError(error => {
+            console.error('Failed to fetch statistics:', error);
+            return throwError(() => new Error('Failed to fetch statistics'));
+          })
+        );
       })
     );
   }
