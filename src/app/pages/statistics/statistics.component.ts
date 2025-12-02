@@ -271,11 +271,6 @@ export class StatisticsComponent implements OnInit {
     this.chartSettings();
     this.translate.get([
       'charts.statistics.application_count.name',
-      'charts.statistics.application_count.ID-ND',
-      'charts.statistics.application_count.ID-NI',
-      'charts.statistics.application_count.PA-NP',
-      'charts.statistics.application_count.PA-PT',
-      'charts.statistics.application_count.TM-PR',
       'charts.statistics.application_count.D',
       'charts.statistics.application_count.P',
       'charts.statistics.application_count.T',
@@ -283,11 +278,6 @@ export class StatisticsComponent implements OnInit {
       'charts.statistics.application_count.active_application',
       'charts.statistics.application_count.inactive_application'
     ]).subscribe((translations) => {
-      this.translationMap.set("ID-ND", translations['charts.statistics.application_count.ID-ND']);
-      this.translationMap.set("ID-NI", translations['charts.statistics.application_count.ID-NI']);
-      this.translationMap.set("PA-NP", translations['charts.statistics.application_count.PA-NP']);
-      this.translationMap.set("PA-PT", translations['charts.statistics.application_count.PA-PT']);
-      this.translationMap.set("TM-PR", translations['charts.statistics.application_count.TM-PR']);
       this.translationMap.set("D", translations['charts.statistics.application_count.D']);
       this.translationMap.set("P", translations['charts.statistics.application_count.P']);
       this.translationMap.set("T", translations['charts.statistics.application_count.T']);

@@ -47,6 +47,7 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
   // Role labels for buttons
   roleLabels: { label: string; value: 'head' | 'deputy' | 'staff' }[] = [];
+  selectedRoleLabel: any = null; // For mobile dropdown
 
   // User assignment properties
   assignedUsers = {
@@ -91,6 +92,7 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
   // State management
   private stateSubscription: Subscription = new Subscription();
+  private isNavigatingAway = false;
 
   constructor(
     private fb: FormBuilder,
@@ -101,7 +103,7 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
     private menuService: SidebarMenuService,
     private messageService: MessageService,
     private stateService: CreateUnitStateService,
-    private ms: MechanicsService,
+    public ms: MechanicsService,
     private toastService: ToastService,
     private permissionSetService: PermissionSetService,
     private processActionService: ProcessActionService
@@ -167,6 +169,9 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
         value: 'staff',
       },
     ];
+
+    // Initialize selected role label for mobile dropdown
+    this.selectedRoleLabel = this.roleLabels[this.selectedRoleIndex];
   }
 
   private setupBreadcrumbs() {
@@ -372,6 +377,12 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
           )
         );
 
+        // Reset form validation state before clearing state to prevent validation errors from showing
+        this.resetFormValidationState();
+
+        // Set flag to prevent form patching during navigation
+        this.isNavigatingAway = true;
+
         // Clear the state after successful creation
         this.stateService.clearState();
 
@@ -419,6 +430,9 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
     this.selectedRole = this.roleLabels[index].value;
     this.selectedTabIndex = '0'; // Reset to Users tab when switching roles
 
+    // Update mobile dropdown selection
+    this.selectedRoleLabel = this.roleLabels[index];
+
     // Ensure the role permissions array is initialized
     if (!this.rolePermissions[this.selectedRole]) {
       this.rolePermissions[this.selectedRole] = [];
@@ -426,6 +440,16 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
 
     // Force change detection by creating a new array reference
     this.rolePermissions = { ...this.rolePermissions };
+  }
+
+  // Mobile dropdown change handler
+  onRoleDropdownChange(event: any) {
+    const selectedIndex = this.roleLabels.findIndex(
+      (role) => role.value === event.value.value
+    );
+    if (selectedIndex !== -1) {
+      this.selectRole(selectedIndex);
+    }
   }
 
   getRoleUserCount(role: string): number {
@@ -844,6 +868,7 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
   }
 
   onCancel() {
+    this.isNavigatingAway = true;
     this.router.navigate(['../'], { relativeTo: this.route });
   }
 
@@ -852,6 +877,15 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
       const control = this.unitForm.get(key);
       control?.markAsTouched();
       control?.markAsDirty();
+      control?.updateValueAndValidity();
+    });
+  }
+
+  private resetFormValidationState() {
+    Object.keys(this.unitForm.controls).forEach((key) => {
+      const control = this.unitForm.get(key);
+      control?.markAsUntouched();
+      control?.markAsPristine();
       control?.updateValueAndValidity();
     });
   }
@@ -906,8 +940,10 @@ export class CreateUnitComponent implements OnInit, OnDestroy {
       this.rolePermissions = { ...state.rolePermissions };
       this.roleActions = { ...state.roleActions };
 
-      // Update form with saved data
-      this.unitForm.patchValue(state.formData, { emitEvent: false });
+      // Update form with saved data only if not navigating away
+      if (!this.isNavigatingAway) {
+        this.unitForm.patchValue(state.formData, { emitEvent: false });
+      }
     });
   }
 

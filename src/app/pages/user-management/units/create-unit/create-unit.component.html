@@ -38,9 +38,14 @@
     </div>
     <!-- Role Selector-->
     <div class="role-selector">
-      <p-buttonGroup>
+      <!-- Desktop: Button Group-->
+      <p-buttonGroup class="role-buttons-desktop" *ngIf="!ms.isMobileView">
         <button class="role-button" pButton *ngFor="let role of roleLabels; let i = index" [label]="role.label" [class.p-button-outlined]="selectedRoleIndex !== i" [class.p-button-primary]="selectedRoleIndex === i" (click)="selectRole(i)"></button>
       </p-buttonGroup>
+      <!-- Mobile: Dropdown-->
+      <div class="role-dropdown-mobile" *ngIf="ms.isMobileView">
+        <p-dropdown [options]="roleLabels" [(ngModel)]="selectedRoleLabel" optionLabel="label" (onChange)="onRoleDropdownChange($event)" placeholder="Select Role" styleClass="w-full" [style]="{ width: '100%' }"></p-dropdown>
+      </div>
     </div>
     <!-- Tabs for Users, Permissions, Actions-->
     <p-tabs class="tabs-container" [value]="selectedTabIndex" (onChange)="onTabChange($event)">

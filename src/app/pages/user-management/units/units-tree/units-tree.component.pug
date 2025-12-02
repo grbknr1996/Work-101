@@ -48,8 +48,9 @@
             [title]="'userManagement.units.addSubUnit' | translate"
           )
           
-          // Delete Button
+          // Delete Button (only show if node has no children)
           button.p-button-text.p-button-sm.units-tree-delete-btn(
+            *ngIf="!node.children || node.children.length === 0",
             pButton,
             icon="pi pi-trash",
             (click)="deleteNode(node, $event)",

@@ -17,8 +17,8 @@
         <div class="units-tree-actions">
           <!-- Add Button (only show if not Section level)-->
           <button class="p-button-text p-button-sm units-tree-action-btn" *ngIf="getLevelChipInfo(node).iconClass !== 'pi pi-list'" pButton icon="pi pi-plus" (click)="addNode(node, $event)" [title]="'userManagement.units.addSubUnit' | translate"></button>
-          <!-- Delete Button-->
-          <button class="p-button-text p-button-sm units-tree-delete-btn" pButton icon="pi pi-trash" (click)="deleteNode(node, $event)" [title]="'userManagement.units.deleteUnit' | translate"></button>
+          <!-- Delete Button (only show if node has no children)-->
+          <button class="p-button-text p-button-sm units-tree-delete-btn" *ngIf="!node.children || node.children.length === 0" pButton icon="pi pi-trash" (click)="deleteNode(node, $event)" [title]="'userManagement.units.deleteUnit' | translate"></button>
         </div>
       </div>
     </ng-template>

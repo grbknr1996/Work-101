@@ -313,13 +313,6 @@ export class SidebarMenuService {
         styleClass: lastPart.includes('journals') ? 'active' : '',
       },
       {
-        id: 'pending-publications',
-        label: 'Pending Publications',
-        icon: 'pi pi-file-edit',
-        routerLink: this.getRouterLink('/publications/pending'),
-        styleClass: lastPart.includes('pending') ? 'active' : '',
-      },
-      {
         id: 'online-journals',
         label: 'Online Journals',
         icon: 'pi pi-globe',

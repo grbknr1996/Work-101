@@ -7429,14 +7429,43 @@ app-unit-details
 // Create Unit  Component Styles
 // ============================================
 app-create-unit
-  .breadcrumbs-container
-    margin-top 1.5rem
-    margin-bottom 1rem
+  @media (max-width 768px)
+    .create-unit-container
+      padding 1rem
+      margin 1rem 0
+
+    .unit-header
+      .header-content
+        flex-direction column
+        align-items flex-start
+        gap 1rem
+
+      .header-info
+        flex-direction column
+        gap 0.5rem
+        width 100%
+
+    .unit-info-section
+      flex-direction column
+      gap 1rem
+
+      .info-field
+        width 100%
+
+      .unit-name-field
+        width 100%
+
+    .role-selector
+      flex-direction column
+      gap 0.5rem
+
+    .form-actions
+      flex-direction column
+      gap 0.5rem
+
 
   .create-unit-container
     width 100%
-    margin 2rem 0
-    padding 2rem
     background #fff
     border-radius 1rem
     box-shadow 0 2px 8px rgba(0, 0, 0, 0.04)
