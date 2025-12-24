@@ -1,1 +1,9 @@
-<div class="global-loader-overlay" *ngIf="(loading$ | async)?.isLoading"><div class="global-loader-container"><div class="global-loader-spinner"><div class="spinner"></div></div><div class="global-loader-message" *ngIf="(loading$ | async)?.message">{{ (loading$ | async)?.message }}</div></div></div>
+
+<div class="global-loader-overlay" *ngIf="(loading$ | async)?.isLoading">
+  <div class="global-loader-container">
+    <div class="global-loader-spinner">
+      <div class="spinner"></div>
+    </div>
+    <div class="global-loader-message" *ngIf="(loading$ | async)?.message">{{ (loading$ | async)?.message }}</div>
+  </div>
+</div>

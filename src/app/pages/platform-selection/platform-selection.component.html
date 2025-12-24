@@ -1,1 +1,30 @@
-<div class="platform-selection-container { 'modal-overlay': isModal }"><div class="platform-selection-modal"><div class="modal-header"><div class="header-left"><div class="header-icon"><i class="pi pi-cog"></i></div><div class="header-text"><h2>{{ 'platformSelection.title' | translate }}</h2><p class="subtitle">{{ 'platformSelection.subtitle' | translate }}</p><span class="info-text">{{ availablePlatforms.length }} {{ 'platformSelection.officesAvailable' | translate }}</span></div></div><button class="close-button" (click)="isModal ? onClose() : onLogout()"><i class="pi pi-times"></i></button></div><div class="modal-body"><div class="search-section"><label for="platform-search">{{ 'platformSelection.search.label' | translate }}</label><div class="search-input-container"><input class="search-input" id="platform-search" type="text" [placeholder]="'platformSelection.search.placeholder' | translate" [(ngModel)]="searchTerm" (input)="onSearch()"><button class="search-toggle" (click)="toggleSearch()"><i class="pi pi-chevron-up" *ngIf="!isSearchCollapsed"></i><i class="pi pi-chevron-down" *ngIf="isSearchCollapsed"></i></button></div></div><div class="platform-list" *ngIf="!isSearchCollapsed"><div class="platform-item" *ngFor="let platform of filteredPlatforms" [class.selected]="selectedPlatform === platform.officeCode" (click)="onPlatformSelect(platform.officeCode)"><span class="platform-name">{{ platform.name }}</span><span class="platform-code">({{ platform.officeCode.toUpperCase() }})</span></div></div></div><div class="modal-footer"><button class="btn btn-primary" [disabled]="!selectedPlatform" (click)="onContinue()"><span>{{ 'platformSelection.continue' | translate }}</span></button></div></div></div>
+
+<div class="platform-selection-container { 'modal-overlay': isModal }">
+  <div class="platform-selection-modal">
+    <div class="modal-header">
+      <div class="header-left">
+        <div class="header-icon"><i class="pi pi-cog"></i></div>
+        <div class="header-text">
+          <h2>{{ 'platformSelection.title' | translate }}</h2>
+          <p class="subtitle">{{ 'platformSelection.subtitle' | translate }}</p><span class="info-text">{{ availablePlatforms.length }} {{ 'platformSelection.officesAvailable' | translate }}</span>
+        </div>
+      </div>
+      <button class="close-button" (click)="isModal ? onClose() : onLogout()"><i class="pi pi-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="search-section">
+        <label for="platform-search">{{ 'platformSelection.search.label' | translate }}</label>
+        <div class="search-input-container">
+          <input class="search-input" id="platform-search" type="text" [placeholder]="'platformSelection.search.placeholder' | translate" [(ngModel)]="searchTerm" (input)="onSearch()">
+          <button class="search-toggle" (click)="toggleSearch()"><i class="pi pi-chevron-up" *ngIf="!isSearchCollapsed"></i><i class="pi pi-chevron-down" *ngIf="isSearchCollapsed"></i></button>
+        </div>
+      </div>
+      <div class="platform-list" *ngIf="!isSearchCollapsed">
+        <div class="platform-item" *ngFor="let platform of filteredPlatforms" [class.selected]="selectedPlatform === platform.officeCode" (click)="onPlatformSelect(platform.officeCode)"><span class="platform-name">{{ platform.name }}</span><span class="platform-code">({{ platform.officeCode.toUpperCase() }})</span></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" [disabled]="!selectedPlatform" (click)="onContinue()"><span>{{ 'platformSelection.continue' | translate }}</span></button>
+    </div>
+  </div>
+</div>

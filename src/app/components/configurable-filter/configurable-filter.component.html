@@ -1,1 +1,92 @@
-<!-- Filter Component Container--><div class="filter-component-container"><!-- Filter Button - Right Side--><button class="p-button-outlined p-button-secondary filter-button" pButton type="button" icon="pi pi-sliders-h" [class.has-active-filters]="hasActiveFilters" (click)="toggleFilter()" [pTooltip]="'configurableFilter.openFilter' | translate" tooltipPosition="bottom" tooltipStyleClass="text-xs px-2 py-1" style="background-color: transparent; border: none;"></button><!-- Filter Overlay--><div class="filter-overlay" *ngIf="visible"><div class="filter-panel filter-panel-left"><!-- Close Button - Positioned at top right corner--><button class="p-button-text p-button-sm close-button-overlay" pButton type="button" icon="pi pi-times" [pTooltip]="'configurableFilter.close' | translate" tooltipPosition="bottom" tooltipStyleClass="text-xs px-2 py-1" (click)="onClose()"></button><!-- Header with Filter Selector and Icons--><div class="filter-header" *ngIf="showFilterSelector"><div class="filter-selector-section"><label class="filter-selector-label">{{ 'configurableFilter.displayFilters' | translate }}:</label><div class="filter-selector-controls"><p-multiSelect class="filter-selector" [options]="getFilterSelectorOptions()" [(ngModel)]="selectedFilters" [placeholder]="filterSelectorPlaceholder" [showClear]="false" [showFilter]="true" (onChange)="onFilterSelectorChange()" optionLabel="label" optionValue="value" appendTo="body"></p-multiSelect></div></div></div><!-- Filter Content--><div class="filter-content"><form class="filter-form" [formGroup]="filterForm"><div class="filter-tabs"><div class="tab-navigation"><div class="tab-header" *ngFor="let sectionKey of getSectionKeys(); let i = index" [class.active]="activeTab === i.toString()" (click)="onTabChange({value: i.toString()})">{{ sectionKey }}</div></div><div class="tab-content"><div class="tab-panel" *ngFor="let sectionKey of getSectionKeys(); let i = index" [class.active]="activeTab === i.toString()"><div class="filter-options"><div class="filter-option" *ngFor="let filter of getFiltersBySection()[sectionKey]"><!-- Checkbox Type--><div class="checkbox-option" *ngIf="filter.type === 'checkbox'"><p-checkbox [formControlName]="filter.key" [binary]="true" [inputId]="filter.key"></p-checkbox><label class="checkbox-label" [for]="filter.key">{{ filter.label | translate }}</label></div><!-- Radio Type--><div class="radio-option" *ngIf="filter.type === 'radio'"><label class="filter-label">{{ filter.label | translate }}</label><div class="radio-group"><div class="radio-item" *ngFor="let option of filter.options; let i = index"><p-radioButton [formControlName]="filter.key" [value]="option.value" [inputId]="filter.key + '_' + i" [name]="filter.key"></p-radioButton><label class="radio-label" [for]="filter.key + '_' + i">{{ option.label | translate }}</label></div></div></div><!-- Multi-Select Type--><div class="multiselect-option" *ngIf="filter.type === 'multiSelect'"><label class="filter-label">{{ filter.label | translate }}</label><p-multiSelect class="w-full" [formControlName]="filter.key" [options]="filter.options || []" [placeholder]="filter.placeholder || ('configurableFilter.selectOptions' | translate)" [showClear]="filter.showClear !== false" [showFilter]="filter.showFilter !== false" [filterBy]="filter.filterBy || 'label'" [optionLabel]="filter.optionLabel || 'label'" [optionValue]="filter.optionValue || 'value'" appendTo="body"></p-multiSelect></div><!-- Dropdown Type--><div class="dropdown-option" *ngIf="filter.type === 'dropdown'"><label class="filter-label">{{ filter.label | translate }}</label><p-dropdown class="w-full" [formControlName]="filter.key" [options]="filter.options || []" [placeholder]="filter.placeholder || ('configurableFilter.selectOption' | translate)" [showClear]="filter.showClear !== false" [filter]="filter.showFilter !== false" [filterBy]="filter.filterBy || 'label'" [optionLabel]="filter.optionLabel || 'label'" [optionValue]="filter.optionValue || 'value'" appendTo="body"></p-dropdown></div><!-- Text Input Type--><div class="text-option" *ngIf="filter.type === 'text'"><label class="filter-label">{{ filter.label | translate }}</label><input class="w-full" pInputText [formControlName]="filter.key" [placeholder]="filter.placeholder || ('configurableFilter.enterText' | translate)"></div><!-- Number Input Type--><div class="number-option" *ngIf="filter.type === 'number'"><label class="filter-label">{{ filter.label | translate }}</label><p-inputNumber class="w-full" [formControlName]="filter.key" [placeholder]="filter.placeholder || ('configurableFilter.enterNumber' | translate)" [min]="filter.min" [max]="filter.max" [step]="filter.step"></p-inputNumber></div><!-- Date Input Type--><div class="date-option" *ngIf="filter.type === 'date'"><label class="filter-label">{{ filter.label | translate }}</label><p-datePicker class="w-full date-calendar" [formControlName]="filter.key" [placeholder]="filter.placeholder || ('configurableFilter.selectDate' | translate)" [dateFormat]="filter.dateFormat || 'dd/mm/yy'" [showClear]="filter.showClear !== false" [showIcon]="true" [showButtonBar]="true" [touchUI]="false" appendTo="body"></p-datePicker></div><!-- Date Range Input Type--><div class="daterange-option" *ngIf="filter.type === 'dateRange'"><label class="filter-label">{{ filter.label | translate }}</label><p-datePicker class="w-full date-range-calendar" [formControlName]="filter.key" [placeholder]="filter.placeholder || ('configurableFilter.selectDateRange' | translate)" [dateFormat]="filter.dateFormat || 'dd/mm/yy'" [showClear]="filter.showClear !== false" selectionMode="range" [showIcon]="true" [showButtonBar]="true" [touchUI]="false" [class.error]="hasDateRangeError(filter.key)" appendTo="body"></p-datePicker><small class="error-message" *ngIf="hasDateRangeError(filter.key)">{{ getDateRangeError(filter.key) }}</small></div></div></div></div></div></div></form></div><!-- Action Buttons--><div class="filter-actions" *ngIf="showClearAll || showApplyButton"><div class="action-buttons"><button class="p-button-outlined p-button-secondary" *ngIf="showClearAll" pButton type="button" [label]="'configurableFilter.clearAll' | translate" (click)="onClearAll()"></button><button class="p-button-primary" *ngIf="showApplyButton" pButton type="button" [label]="'configurableFilter.apply' | translate" (click)="onApplyFilters()"></button></div></div></div></div></div>
+
+<!-- Filter Component Container-->
+<div class="filter-component-container">
+  <!-- Filter Button - Right Side-->
+  <button class="p-button-outlined p-button-secondary filter-button" pButton type="button" icon="pi pi-sliders-h" [class.has-active-filters]="hasActiveFilters" (click)="toggleFilter()" [pTooltip]="'configurableFilter.openFilter' | translate" tooltipPosition="bottom" tooltipStyleClass="text-xs px-2 py-1" style="background-color: transparent; border: none;"></button>
+  <!-- Filter Overlay-->
+  <div class="filter-overlay" *ngIf="visible">
+    <div class="filter-panel filter-panel-left">
+      <!-- Close Button - Positioned at top right corner-->
+      <button class="p-button-text p-button-sm close-button-overlay" pButton type="button" icon="pi pi-times" [pTooltip]="'configurableFilter.close' | translate" tooltipPosition="bottom" tooltipStyleClass="text-xs px-2 py-1" (click)="onClose()"></button>
+      <!-- Header with Filter Selector and Icons-->
+      <div class="filter-header" *ngIf="showFilterSelector">
+        <div class="filter-selector-section">
+          <label class="filter-selector-label">{{ 'configurableFilter.displayFilters' | translate }}:</label>
+          <div class="filter-selector-controls">
+            <p-multiSelect class="filter-selector" [options]="getFilterSelectorOptions()" [(ngModel)]="selectedFilters" [placeholder]="filterSelectorPlaceholder" [showClear]="false" [showFilter]="true" (onChange)="onFilterSelectorChange()" optionLabel="label" optionValue="value" appendTo="body"></p-multiSelect>
+          </div>
+        </div>
+      </div>
+      <!-- Filter Content-->
+      <div class="filter-content">
+        <form class="filter-form" [formGroup]="filterForm">
+          <div class="filter-tabs">
+            <div class="tab-navigation">
+              <div class="tab-header" *ngFor="let sectionKey of getSectionKeys(); let i = index" [class.active]="activeTab === i.toString()" (click)="onTabChange({value: i.toString()})">{{ sectionKey }}</div>
+            </div>
+            <div class="tab-content">
+              <div class="tab-panel" *ngFor="let sectionKey of getSectionKeys(); let i = index" [class.active]="activeTab === i.toString()">
+                <div class="filter-options">
+                  <div class="filter-option" *ngFor="let filter of getFiltersBySection()[sectionKey]">
+                    <!-- Checkbox Type-->
+                    <div class="checkbox-option" *ngIf="filter.type === 'checkbox'">
+                      <p-checkbox [formControlName]="filter.key" [binary]="true" [inputId]="filter.key"></p-checkbox>
+                      <label class="checkbox-label" [for]="filter.key">{{ filter.label | translate }}</label>
+                    </div>
+                    <!-- Radio Type-->
+                    <div class="radio-option" *ngIf="filter.type === 'radio'">
+                      <label class="filter-label">{{ filter.label | translate }}</label>
+                      <div class="radio-group">
+                        <div class="radio-item" *ngFor="let option of filter.options; let i = index">
+                          <p-radioButton [formControlName]="filter.key" [value]="option.value" [inputId]="filter.key + '_' + i" [name]="filter.key"></p-radioButton>
+                          <label class="radio-label" [for]="filter.key + '_' + i">{{ option.label | translate }}</label>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Multi-Select Type-->
+                    <div class="multiselect-option" *ngIf="filter.type === 'multiSelect'">
+                      <label class="filter-label">{{ filter.label | translate }}</label>
+                      <p-multiSelect class="w-full" [formControlName]="filter.key" [options]="filter.options || []" [placeholder]="filter.placeholder || ('configurableFilter.selectOptions' | translate)" [showClear]="filter.showClear !== false" [showFilter]="filter.showFilter !== false" [filterBy]="filter.filterBy || 'label'" [optionLabel]="filter.optionLabel || 'label'" [optionValue]="filter.optionValue || 'value'" appendTo="body"></p-multiSelect>
+                    </div>
+                    <!-- Dropdown Type-->
+                    <div class="dropdown-option" *ngIf="filter.type === 'dropdown'">
+                      <label class="filter-label">{{ filter.label | translate }}</label>
+                      <p-dropdown class="w-full" [formControlName]="filter.key" [options]="filter.options || []" [placeholder]="filter.placeholder || ('configurableFilter.selectOption' | translate)" [showClear]="filter.showClear !== false" [filter]="filter.showFilter !== false" [filterBy]="filter.filterBy || 'label'" [optionLabel]="filter.optionLabel || 'label'" [optionValue]="filter.optionValue || 'value'" appendTo="body"></p-dropdown>
+                    </div>
+                    <!-- Text Input Type-->
+                    <div class="text-option" *ngIf="filter.type === 'text'">
+                      <label class="filter-label">{{ filter.label | translate }}</label>
+                      <input class="w-full" pInputText [formControlName]="filter.key" [placeholder]="filter.placeholder || ('configurableFilter.enterText' | translate)">
+                    </div>
+                    <!-- Number Input Type-->
+                    <div class="number-option" *ngIf="filter.type === 'number'">
+                      <label class="filter-label">{{ filter.label | translate }}</label>
+                      <p-inputNumber class="w-full" [formControlName]="filter.key" [placeholder]="filter.placeholder || ('configurableFilter.enterNumber' | translate)" [min]="filter.min" [max]="filter.max" [step]="filter.step"></p-inputNumber>
+                    </div>
+                    <!-- Date Input Type-->
+                    <div class="date-option" *ngIf="filter.type === 'date'">
+                      <label class="filter-label">{{ filter.label | translate }}</label>
+                      <p-datePicker class="w-full date-calendar" [formControlName]="filter.key" [placeholder]="filter.placeholder || ('configurableFilter.selectDate' | translate)" [dateFormat]="filter.dateFormat || 'dd/mm/yy'" [showClear]="filter.showClear !== false" [showIcon]="true" [showButtonBar]="true" [touchUI]="false" appendTo="body"></p-datePicker>
+                    </div>
+                    <!-- Date Range Input Type-->
+                    <div class="daterange-option" *ngIf="filter.type === 'dateRange'">
+                      <label class="filter-label">{{ filter.label | translate }}</label>
+                      <p-datePicker class="w-full date-range-calendar" [formControlName]="filter.key" [placeholder]="filter.placeholder || ('configurableFilter.selectDateRange' | translate)" [dateFormat]="filter.dateFormat || 'dd/mm/yy'" [showClear]="filter.showClear !== false" selectionMode="range" [showIcon]="true" [showButtonBar]="true" [touchUI]="false" [class.error]="hasDateRangeError(filter.key)" appendTo="body"></p-datePicker><small class="error-message" *ngIf="hasDateRangeError(filter.key)">{{ getDateRangeError(filter.key) }}</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- Action Buttons-->
+      <div class="filter-actions" *ngIf="showClearAll || showApplyButton">
+        <div class="action-buttons">
+          <button class="p-button-outlined p-button-secondary" *ngIf="showClearAll" pButton type="button" [label]="'configurableFilter.clearAll' | translate" (click)="onClearAll()"></button>
+          <button class="p-button-primary" *ngIf="showApplyButton" pButton type="button" [label]="'configurableFilter.apply' | translate" (click)="onApplyFilters()"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

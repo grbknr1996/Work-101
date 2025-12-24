@@ -1,1 +1,16 @@
-<div class="configurable-stepper"><div class="stepper-container"><div class="stepper-steps"><div class="stepper-step" *ngFor="let step of steps; let i = index" [class.active]="isStepActive(step.value)" [class.completed]="isStepCompleted(step.value)" [class.clickable]="isStepClickable(step.value)" (click)="onStepClick(step.value)"><div class="step-icon-container"><div class="step-icon"><i [class]="step.icon"></i></div></div><div class="step-label">{{ step.label }}</div><div class="step-connector" *ngIf="i &lt; steps.length - 1"><div class="connector-line"> </div></div></div></div></div></div>
+
+<div class="configurable-stepper">
+  <div class="stepper-container">
+    <div class="stepper-steps">
+      <div class="stepper-step" *ngFor="let step of steps; let i = index" [class.active]="isStepActive(step.value)" [class.completed]="isStepCompleted(step.value)" [class.clickable]="isStepClickable(step.value)" (click)="onStepClick(step.value)">
+        <div class="step-icon-container">
+          <div class="step-icon"><i [class]="step.icon"></i></div>
+        </div>
+        <div class="step-label">{{ step.label }}</div>
+        <div class="step-connector" *ngIf="i &lt; steps.length - 1">
+          <div class="connector-line"> </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

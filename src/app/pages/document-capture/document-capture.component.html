@@ -1,1 +1,80 @@
-<app-layout><app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs><div class="flex justify-between items-center mb-6"><h1 class="pt-4 text-xl ml-4 col-span-3">{{ 'documentCapture.title' | translate }}</h1><div class="flex gap-2 mr-4"><button class="p-button p-component p-button-outlined" type="button" pButton [label]="'documentCapture.buttons.separator' | translate" icon="pi pi-bars" (click)="showSeparatorDialog()"></button><p-dialog [header]="'documentCapture.separatorSheet' | translate" [(visible)]="separatorDialogVisible" [modal]="true" [style]="{ width: '25rem', maxHeight: '85vh' }"><div class="p-dialog-content overflow-auto" style="max-height:65vh; display:flex; justify-content:center;"><img src="assets/images/separator-sheet.png" alt="Separator Sheet" style="max-width:100%; border:1px solid #ddd;"></div><ng-template pTemplate="footer"><div class="flex justify-center gap-3"><button class="p-button p-component p-button-outlined" type="button" pButton icon="pi pi-print" [label]="'documentCapture.bookmark.printButton' | translate" (click)="printSeparator()"></button></div></ng-template></p-dialog><button class="p-button p-component p-button-outlined" type="button" pButton [label]="'documentCapture.buttons.bookmark' | translate" icon="pi pi-bookmark" (click)="showBookmarkDialog()"></button><button class="p-button p-component p-button-outlined" type="button" pButton [label]="'documentCapture.buttons.uploadDocuments' | translate" icon="pi pi-upload" (click)="showFileUploadArea()"></button></div></div><div class="mb-4"><div class="user-stats-container flex flex-wrap gap-4 justify-between"><div class="user-stat-card fixed-width" *ngFor="let stat of indexationStats" [class.selected]="selectedStat === stat.label" (click)="selectStat(stat.label)"><div class="stat-header"><span class="stat-label" [style.color]="stat.color">{{ stat.label }}</span><i [class]="stat.icon" [style.color]="stat.color"></i></div><div class="stat-content"><span class="stat-count" [style.color]="stat.color">{{ stat.count }}</span></div><div class="flex justify-normal"><div class="mr-1">{{ stat.periodText }} </div></div></div></div></div><div class="grid grid-cols-6 mt-2"><div class="col-span-6 grid grid-cols-12 filter"><div class="col-span-4"><p-floatlabel variant="on"><p-iconfield><p-inputicon class="pi pi-search"></p-inputicon><input class="w-full" id="on_label" pInputText="" [(ngModel)]="searchBar" (ngModelChange)="onSearchChange($event)" autocomplete="off"></p-iconfield><label for="on_label">{{ 'documentCapture.search.inputLabel' | translate }}</label></p-floatlabel></div><div class="col-span-8 flex justify-end gap-2 filter-icons"><app-configurable-filter [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'Select filters to display'" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter></div></div></div><div class="mb-8 mt-1 w-full"><app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="true" [clearAllLabel]="'Clear All'" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-filter-chips></div><div class="grid grid-cols-6 mt-2"><div class="col-span-12"><app-table [columns]="tableColumns" [data]="batchTableData" [showSearchButton]="false" [showClearButton]="false" [paginator]="true" [lazy]="true" [rows]="pageSize" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} Batches'" (actionClick)="onActionClick($event.action, $event.item)" (urlClick)="onUrlClick($event.rowData, $event.col.field)"></app-table></div></div><div #fileUploadSection><p-fileUpload class="w-full justify-center items-center text-center" name="files" accept="application/pdf" [customUpload]="true" (uploadHandler)="onFileUpload($event)" [multiple]="true" [showUploadButton]="false" [showCancelButton]="false" mode="advanced" [auto]="false" maxFileSize="1000000" #fileUploader><ng-template pTemplate="content"><div class="border-2 border-dashed border-gray-400 rounded-lg p-6 flex flex-col items-center justify-center w-full"><i class="pi pi-upload text-gray-500 mb-4" style="font-size:50px; line-height:1"></i><p class="text-gray-600 font-medium mb-4">{{ 'documentCapture.fileUpload.dropOrChoose' | translate }}</p><div class="flex gap-3 justify-center items-center"><p-button [label]="'documentCapture.fileUpload.choose' | translate" icon="pi pi-folder-open" styleClass="p-button-warning" (onClick)="fileUploader.choose()"></p-button><p-button [label]="'documentCapture.fileUpload.index' | translate" icon="pi pi-check" styleClass="p-button-success" (onClick)="indexFiles()"></p-button><p-button [label]="'documentCapture.fileUpload.clear' | translate" icon="pi pi-trash" styleClass="p-button-secondary" (onClick)="fileUploader.clear()"></p-button></div></div></ng-template><ng-template let-file pTemplate="file"><div class="w-full mt-4"></div><div class="flex items-center justify-between w-full p-2 rounded border border-gray-200 bg-white"><div class="flex items-center gap-3"></div><!-- small file icon + name & size--><i class="pi pi-file text-xl"></i><div class="flex flex-col"><span class="text-sm font-medium">{{file.name}}</span><small class="text-xs text-gray-600">{{(file.size / 1024) | number:'1.0-0'}} KB</small></div><div class="flex items-center gap-2"></div><button class="p-button p-button-text" type="button" (click)="fileUploader.remove(file)"><i class="pi pi-trash"></i></button></div></ng-template></p-fileUpload></div></app-layout><app-bookmark-dialog #bookmarkDialog></app-bookmark-dialog>
+
+<app-layout>
+  <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="pt-4 text-xl ml-4 col-span-3">{{ 'documentCapture.title' | translate }}</h1>
+    <div class="flex gap-2 mr-4">
+      <button class="p-button p-component p-button-outlined" type="button" pButton [label]="'documentCapture.buttons.separator' | translate" icon="pi pi-bars" (click)="showSeparatorDialog()"></button>
+      <p-dialog [header]="'documentCapture.separatorSheet' | translate" [(visible)]="separatorDialogVisible" [modal]="true" [style]="{ width: '25rem', maxHeight: '85vh' }">
+        <div class="p-dialog-content overflow-auto" style="max-height:65vh; display:flex; justify-content:center;"><img src="assets/images/separator-sheet.png" alt="Separator Sheet" style="max-width:100%; border:1px solid #ddd;"></div>
+        <ng-template pTemplate="footer">
+          <div class="flex justify-center gap-3">
+            <button class="p-button p-component p-button-outlined" type="button" pButton icon="pi pi-print" [label]="'documentCapture.bookmark.printButton' | translate" (click)="printSeparator()"></button>
+          </div>
+        </ng-template>
+      </p-dialog>
+      <button class="p-button p-component p-button-outlined" type="button" pButton [label]="'documentCapture.buttons.bookmark' | translate" icon="pi pi-bookmark" (click)="showBookmarkDialog()"></button>
+      <button class="p-button p-component p-button-outlined" type="button" pButton [label]="'documentCapture.buttons.uploadDocuments' | translate" icon="pi pi-upload" (click)="showFileUploadArea()"></button>
+    </div>
+  </div>
+  <div class="mb-4">
+    <div class="user-stats-container flex flex-wrap gap-4 justify-between">
+      <div class="user-stat-card fixed-width" *ngFor="let stat of indexationStats" [class.selected]="selectedStat === stat.label" (click)="selectStat(stat.label)">
+        <div class="stat-header"><span class="stat-label" [style.color]="stat.color">{{ stat.label }}</span><i [class]="stat.icon" [style.color]="stat.color"></i></div>
+        <div class="stat-content"><span class="stat-count" [style.color]="stat.color">{{ stat.count }}</span></div>
+        <div class="flex justify-normal">
+          <div class="mr-1">{{ stat.periodText }} </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid grid-cols-6 mt-2">
+    <div class="col-span-6 grid grid-cols-12 filter">
+      <div class="col-span-4">
+        <p-floatlabel variant="on">
+          <p-iconfield>
+            <p-inputicon class="pi pi-search"></p-inputicon>
+            <input class="w-full" id="on_label" pInputText="" [(ngModel)]="searchBar" (ngModelChange)="onSearchChange($event)" autocomplete="off">
+          </p-iconfield>
+          <label for="on_label">{{ 'documentCapture.search.inputLabel' | translate }}</label>
+        </p-floatlabel>
+      </div>
+      <div class="col-span-8 flex justify-end gap-2 filter-icons">
+        <app-configurable-filter [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'Select filters to display'" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>
+      </div>
+    </div>
+  </div>
+  <div class="mb-8 mt-1 w-full">
+    <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="true" [clearAllLabel]="'Clear All'" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-filter-chips>
+  </div>
+  <div class="grid grid-cols-6 mt-2">
+    <div class="col-span-12">
+      <app-table [columns]="tableColumns" [data]="batchTableData" [showSearchButton]="false" [showClearButton]="false" [paginator]="true" [lazy]="true" [rows]="pageSize" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} Batches'" (actionClick)="onActionClick($event.action, $event.item)" (urlClick)="onUrlClick($event.rowData, $event.col.field)"></app-table>
+    </div>
+  </div>
+  <div #fileUploadSection>
+    <p-fileUpload class="w-full justify-center items-center text-center" name="files" accept="application/pdf" [customUpload]="true" (uploadHandler)="onFileUpload($event)" [multiple]="true" [showUploadButton]="false" [showCancelButton]="false" mode="advanced" [auto]="false" maxFileSize="1000000" #fileUploader>
+      <ng-template pTemplate="content">
+        <div class="border-2 border-dashed border-gray-400 rounded-lg p-6 flex flex-col items-center justify-center w-full"><i class="pi pi-upload text-gray-500 mb-4" style="font-size:50px; line-height:1"></i>
+          <p class="text-gray-600 font-medium mb-4">{{ 'documentCapture.fileUpload.dropOrChoose' | translate }}</p>
+          <div class="flex gap-3 justify-center items-center">
+            <p-button [label]="'documentCapture.fileUpload.choose' | translate" icon="pi pi-folder-open" styleClass="p-button-warning" (onClick)="fileUploader.choose()"></p-button>
+            <p-button [label]="'documentCapture.fileUpload.index' | translate" icon="pi pi-check" styleClass="p-button-success" (onClick)="indexFiles()"></p-button>
+            <p-button [label]="'documentCapture.fileUpload.clear' | translate" icon="pi pi-trash" styleClass="p-button-secondary" (onClick)="fileUploader.clear()"></p-button>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template let-file pTemplate="file">
+        <div class="w-full mt-4"></div>
+        <div class="flex items-center justify-between w-full p-2 rounded border border-gray-200 bg-white">
+          <div class="flex items-center gap-3"></div>
+          <!-- small file icon + name & size--><i class="pi pi-file text-xl"></i>
+          <div class="flex flex-col"><span class="text-sm font-medium">{{file.name}}</span><small class="text-xs text-gray-600">{{(file.size / 1024) | number:'1.0-0'}} KB</small></div>
+          <div class="flex items-center gap-2"></div>
+          <button class="p-button p-button-text" type="button" (click)="fileUploader.remove(file)"><i class="pi pi-trash"></i></button>
+        </div>
+      </ng-template>
+    </p-fileUpload>
+  </div>
+</app-layout>
+<app-bookmark-dialog #bookmarkDialog></app-bookmark-dialog>

@@ -1,1 +1,19 @@
-<app-layout [config]="layoutConfig"><app-breadcrumbs [items]="getBreadcrumbItems()"></app-breadcrumbs><div class="data-exchange-config-heading pb-10"><h1>{{"dataService.dataExchangeConfiguration.title" | translate}}</h1><p>{{"dataService.dataExchangeConfiguration.sub_title" | translate}}</p></div><div class="summary-stats"><div class="stat-card" *ngFor="let card of summaryCards" (click)="onSummaryCardClick(card)" [style.cursor]="card.clickable ? 'pointer' : 'default'"><div class="stat-content"><div class="stat-icon" [ngStyle]="{'background': 'linear-gradient(135deg, ' + card.color + ' 0%, ' + card.color + 'dd 100%)'}"><i [class]="card.icon"></i></div><div class="stat-info"><div class="stat-number" *ngIf="card.count !== null">{{ card.count }}</div><div class="stat-label">{{ card.title | translate }}</div></div></div></div></div></app-layout>
+
+<app-layout [config]="layoutConfig">
+  <app-breadcrumbs [items]="getBreadcrumbItems()"></app-breadcrumbs>
+  <div class="data-exchange-config-heading pb-10">
+    <h1>{{"dataService.dataExchangeConfiguration.title" | translate}}</h1>
+    <p>{{"dataService.dataExchangeConfiguration.sub_title" | translate}}</p>
+  </div>
+  <div class="summary-stats">
+    <div class="stat-card" *ngFor="let card of summaryCards" (click)="onSummaryCardClick(card)" [style.cursor]="card.clickable ? 'pointer' : 'default'">
+      <div class="stat-content">
+        <div class="stat-icon" [ngStyle]="{'background': 'linear-gradient(135deg, ' + card.color + ' 0%, ' + card.color + 'dd 100%)'}"><i [class]="card.icon"></i></div>
+        <div class="stat-info">
+          <div class="stat-number" *ngIf="card.count !== null">{{ card.count }}</div>
+          <div class="stat-label">{{ card.title | translate }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-layout>

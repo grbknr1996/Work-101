@@ -1,1 +1,136 @@
-<app-layout [config]="layoutConfig"><app-breadcrumbs [items]="getBreadcrumbItems()"></app-breadcrumbs><h2 class="text-2xl font-bold text-blue-800 mb-6">{{ "addExclusionRules.title" |  translate }}</h2><app-configurable-stepper class="mb-8" [steps]="steps" [activeStep]="step" (stepChange)="onStepChange($event)"></app-configurable-stepper><div class="w-full" *ngIf="step === 0"><form class="w-full" [formGroup]="sourceCategoriesForm"><div class="w-full grid grid-cols-1 gap-6 md:grid-cols-2"><div class="col-span-1"><label class="block text-sm font-medium text-gray-700 mb-2">{{ "addExclusionRules.formFields.originatingOffice" |  translate }}</label><p-dropdown class="w-full" [options]="originatingOffices()" formControlName="office" [placeholder]="ms.translate('addExclusionRules.formFields.originatingOfficePlaceholder')"></p-dropdown><small class="text-sm text-gray-500 mt-1 block">{{ "addExclusionRules.formFields.originatingOfficeValidationMessage" |  translate }}</small></div><div class="col-span-1"><label class="block text-sm font-medium text-gray-700 mb-2">{{ "addExclusionRules.formFields.recipientSystem" |  translate }}</label><p-dropdown class="w-full" [options]="recipientOffices()" formControlName="system" [placeholder]="ms.translate('addExclusionRules.formFields.recipientSystemPlaceholder')" (onChange)="onRecipientSystemChange()"></p-dropdown></div></div><div class="w-full mt-6 grid grid-cols-1 gap-6 md:grid-cols-2"><div class="col-span-1"><label class="block text-sm font-medium text-gray-700 mb-2">{{ "addExclusionRules.formFields.IPTypeCategory" |  translate }}</label><p-dropdown class="w-full" [options]="ipCategories()" formControlName="categories" [placeholder]="ms.translate('addExclusionRules.formFields.IPTypeCategoryPlaceholder')" (onChange)="onIpCategoryChange()"></p-dropdown><p-message *ngIf="sourceCategoriesForm.value.categories" severity="success" [text]="ms.translate('addExclusionRules.formFields.IPTypeCategoryValidationMessage1') + ' ' + getCategoryLabel(sourceCategoriesForm.value.categories) + '. ' + ms.translate('addExclusionRules.formFields.IPTypeCategoryValidationMessage2') + '.'"></p-message></div><div class="col-span-1"><label class="block text-sm font-medium text-gray-700 mb-2">{{ "addExclusionRules.formFields.recipientClientID" |  translate }}</label><input class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" type="text" formControlName="recipientClientId" [placeholder]="ms.translate('addExclusionRules.formFields.recipientClientIDPlaceholder')"><small class="text-sm text-gray-500 mt-1 block">{{ "addExclusionRules.formFields.recipientClientIdValidationMessage1" |  translate }}</small><small class="p-error text-red-600 text-sm mt-1 block" *ngIf="sourceCategoriesForm.get('recipientClientId')?.invalid &amp;&amp; sourceCategoriesForm.get('recipientClientId')?.touched">{{ "addExclusionRules.formFields.recipientClientIdValidationMessage2" |  translate }}</small></div></div><div class="w-full mt-6"><div class="w-full flex items-start"><p-checkbox [(ngModel)]="includeUnpublishedApplications" [ngModelOptions]="{standalone: true}" binary="true" inputId="include-unpublished"></p-checkbox><div class="ml-3 flex-1"><label class="text-sm text-gray-700" for="include-unpublished">{{ "addExclusionRules.formFields.publishOrUnpublishCheckbox" |  translate }}</label><div class="mt-1 text-sm text-gray-500">{{ "addExclusionRules.formFields.publishOrUnpublishCheckboxMessaage" |  translate }}.</div></div></div></div><div class="w-full mt-8 flex justify-center gap-4"><button class="bg-gray-500 text-white px-6 py-2 rounded-lg transition-colors hover:bg-gray-600" pButton type="button" [label]="ms.translate('addExclusionRules.button.cancel')" (click)="cancel()"></button><button class="bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors hover:bg-blue-700" pButton type="button" [label]="ms.translate('addExclusionRules.button.next')" (click)="nextStep()" [disabled]="!sourceCategoriesForm.valid"></button></div></form></div><div class="w-full" *ngIf="step === 1"><p-tabs class="w-full"><p-tablist><p-tab *ngFor="let cat of selectedCategories">{{getCategoryLabel(cat)}}</p-tab></p-tablist><p-tabpanels><p-tabpanel *ngFor="let cat of selectedCategories"><div class="mb-6"><b class="text-lg font-semibold text-gray-800">{{ "addExclusionRules.categoryAndDistributionStep.configureRules" |  translate }} {{ getCategoryLabel(cat) }}</b></div><p-accordion><p-accordionTab header="Event Code Inclusion"><div class="mb-4 text-sm text-gray-600">{{ "addExclusionRules.categoryAndDistributionStep.chooseRules" |  translate }} {{ getCategoryLabel(cat) }}.</div><div class="grid grid-cols-1 gap-4 md:grid-cols-2"><div class="col-span-1" *ngFor="let event of getEventCodesForCategory(cat); let i = index"><div class="flex items-center"><p-checkbox [(ngModel)]="eventExclusions[cat]" [value]="event.code" [binary]="false" inputId="event-{{ cat }}-{{ event.code }}"></p-checkbox><label class="ml-3 text-sm text-gray-700" for="event-{{ cat }}-{{ event.code }}">{{ event.code }}: {{ event.label }}</label></div></div></div></p-accordionTab><p-accordionTab header="Document Inclusion"><div class="flex items-center"><p-checkbox [(ngModel)]="enableDocumentExclusions[cat]" binary="true" inputId="enable-doc-{{ cat }}"></p-checkbox><label class="ml-3 text-sm text-gray-700" for="enable-doc-{{ cat }}">{{ "addExclusionRules.categoryAndDistributionStep.documentInclusionChecbox.label" |  translate }}</label></div><div class="ml-6 mt-2 text-sm text-gray-500">{{ "addExclusionRules.categoryAndDistributionStep.documentInclusionChecbox.message" |  translate }}.</div><div class="mt-4" *ngIf="enableDocumentExclusions[cat]"><label class="block text-sm font-medium text-gray-700 mb-2">{{ "addExclusionRules.categoryAndDistributionStep.documentInclusionMultiSelect.label" |  translate }}</label><p-multiSelect [options]="getDocumentTypesForCategory(cat)" [(ngModel)]="documentExclusions[cat]" [defaultLabel]="ms.translate('addExclusionRules.documentInclusionMultiSelect.label2')" display="chip"></p-multiSelect></div></p-accordionTab></p-accordion></p-tabpanel></p-tabpanels></p-tabs><div class="mt-8 flex justify-center gap-4"><button class="bg-gray-500 text-white px-6 py-2 rounded-lg transition-colors hover:bg-gray-600" pButton type="button" [label]="ms.translate('addExclusionRules.button.back')" (click)="prevStep()"></button><button class="bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors hover:bg-blue-700" pButton type="button" [label]="ms.translate('addExclusionRules.button.next')" (click)="nextStep()"></button></div></div><div *ngIf="step === 2"><h3 class="text-2xl font-bold text-gray-800 mb-6">{{ "addExclusionRules.reviewStep.title" |  translate }}</h3><div class="grid grid-cols-1 gap-6 lg:grid-cols-2"><div class="bg-white rounded-lg shadow-md p-6"><h4 class="text-lg font-semibold text-gray-700 mb-4">{{ "addExclusionRules.reviewStep.basicConfiguration" |  translate }}</h4><div class="grid grid-cols-1 gap-6 md:grid-cols-[auto_auto_1fr]"><div class="col-span-1"><b class="text-base text-gray-700">{{ "addExclusionRules.reviewStep.originatingOffice" |  translate }}:</b><br><div class="text-lg">{{ sourceCategoriesForm.get('office').value }}</div></div><div class="col-span-1"><b class="text-base text-gray-700">{{ "addExclusionRules.reviewStep.recipientSystem" |  translate }}:</b><br><div class="text-lg">{{ sourceCategoriesForm.get('system').value }}</div></div><div class="col-span-1"><b class="text-base text-gray-700">{{ "addExclusionRules.reviewStep.recipientClientID" |  translate }}:</b><br><div class="text-lg">{{ sourceCategoriesForm.get('recipientClientId').value }}</div></div><div class="mt-4 md:col-span-3 col-span-1"><b class="text-base text-gray-700">{{ "addExclusionRules.reviewStep.IPCategoryTypes" |  translate }}:</b><br><br><span class="inline-block bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full mr-2 mb-2" *ngFor="let cat of selectedCategories">{{ getCategoryLabel(cat) }}</span></div><div class="mt-4 md:col-span-3 col-span-1"><b class="text-base text-gray-700">{{ "addExclusionRules.reviewStep.includeUnpublishedApplications" |  translate }}:</b><br><br><i class="pi" [ngClass]="includeUnpublishedApplications ? 'pi-check-circle text-green-600' : 'pi-times-circle text-red-600'"></i><span class="ml-2 text-sm text-gray-700">{{ includeUnpublishedApplications ? ms.translate('addExclusionRules.reviewStep.yes') : ms.translate('addExclusionRules.reviewStep.no') }}</span></div></div></div><div class="bg-white rounded-lg shadow-md p-6" *ngIf="selectedCategories?.length"><ng-container *ngIf="selectedCategories?.length"><ng-container *ngIf="selectedCategories[0] as cat"><div class="mb-6" *ngIf="eventExclusions[cat]?.length &gt; 0"><h5 class="text-md font-medium text-gray-600 mb-3">{{ "addExclusionRules.reviewStep.eventCodeInclusion" |  translate }} ({{ eventExclusions[cat]?.length }} {{ "addExclusionRules.reviewStep.selected" |  translate }})</h5><div class="grid grid-cols-1 gap-6 md:grid-cols-3"><div class="col-span-1" *ngFor="let eventCode of eventExclusions[cat]"><i class="pi pi-check-circle text-green-600"></i><span class="ml-2 text-sm text-gray-700">{{ getEventCodeLabel(eventCode) }}</span></div></div></div><div class="mb-6" *ngIf="!eventExclusions[cat]?.length"><h5 class="text-md font-medium text-gray-600 mb-3"> {{ "addExclusionRules.reviewStep.eventCodeInclusion" |  translate }}</h5><p class="text-sm text-gray-500"> {{ "addExclusionRules.reviewStep.noEventCodes" |  translate }}.</p></div><div class="mb-6" *ngIf="enableDocumentExclusions[cat]"><h5 class="text-md font-medium text-gray-600 mb-3">{{ "addExclusionRules.reviewStep.documentInclusion" |  translate }} ({{ documentExclusions[cat]?.length || 0 }} {{ "addExclusionRules.reviewStep.selected" |  translate }})</h5><div class="grid grid-cols-1 gap-6 md:grid-cols-2" *ngIf="documentExclusions[cat]?.length &gt; 0"><div class="col-span-1" *ngFor="let docCode of documentExclusions[cat]"><i class="pi pi-check-circle text-green-600"></i><span class="ml-2 text-sm text-gray-700">{{ getDocumentTypeLabel(docCode) }}</span></div></div><p class="text-sm text-gray-500" *ngIf="!documentExclusions[cat]?.length">{{ "addExclusionRules.reviewStep.noDocuments" |  translate }}.</p></div><div class="mb-6" *ngIf="!enableDocumentExclusions[cat]"><h5 class="text-md font-medium text-gray-600 mb-3">{{ "addExclusionRules.reviewStep.documentInclusion" |  translate }}</h5><p class="text-sm text-gray-500">{{ "addExclusionRules.reviewStep.documentInclusionMessage" |  translate }}.</p></div></ng-container></ng-container></div></div><div class="mt-8 flex justify-center gap-4"><button class="bg-gray-500 text-white px-6 py-2 rounded-lg transition-colors hover:bg-gray-600" pButton type="button" [label]="ms.translate('addExclusionRules.button.back')" (click)="prevStep()"></button><button class="bg-green-600 text-white px-6 py-2 rounded-lg transition-colors hover:bg-green-700" pButton type="button" [label]="ms.translate('addExclusionRules.button.addRule')" (click)="addRule()"></button></div></div></app-layout>
+
+<app-layout [config]="layoutConfig">
+  <app-breadcrumbs [items]="getBreadcrumbItems()"></app-breadcrumbs>
+  <h2 class="text-2xl font-bold text-blue-800 mb-6">{{ "addExclusionRules.title" |  translate }}</h2>
+  <app-configurable-stepper class="mb-8" [steps]="steps" [activeStep]="step" (stepChange)="onStepChange($event)"></app-configurable-stepper>
+  <div class="w-full" *ngIf="step === 0">
+    <form class="w-full" [formGroup]="sourceCategoriesForm">
+      <div class="w-full grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div class="col-span-1">
+          <label class="block text-sm font-medium text-gray-700 mb-2">{{ "addExclusionRules.formFields.originatingOffice" |  translate }}</label>
+          <p-dropdown class="w-full" [options]="originatingOffices()" formControlName="office" [placeholder]="ms.translate('addExclusionRules.formFields.originatingOfficePlaceholder')"></p-dropdown><small class="text-sm text-gray-500 mt-1 block">{{ "addExclusionRules.formFields.originatingOfficeValidationMessage" |  translate }}</small>
+        </div>
+        <div class="col-span-1">
+          <label class="block text-sm font-medium text-gray-700 mb-2">{{ "addExclusionRules.formFields.recipientSystem" |  translate }}</label>
+          <p-dropdown class="w-full" [options]="recipientOffices()" formControlName="system" [placeholder]="ms.translate('addExclusionRules.formFields.recipientSystemPlaceholder')" (onChange)="onRecipientSystemChange()"></p-dropdown>
+        </div>
+      </div>
+      <div class="w-full mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div class="col-span-1">
+          <label class="block text-sm font-medium text-gray-700 mb-2">{{ "addExclusionRules.formFields.IPTypeCategory" |  translate }}</label>
+          <p-dropdown class="w-full" [options]="ipCategories()" formControlName="categories" [placeholder]="ms.translate('addExclusionRules.formFields.IPTypeCategoryPlaceholder')" (onChange)="onIpCategoryChange()"></p-dropdown>
+          <p-message *ngIf="sourceCategoriesForm.value.categories" severity="success" [text]="ms.translate('addExclusionRules.formFields.IPTypeCategoryValidationMessage1') + ' ' + getCategoryLabel(sourceCategoriesForm.value.categories) + '. ' + ms.translate('addExclusionRules.formFields.IPTypeCategoryValidationMessage2') + '.'"></p-message>
+        </div>
+        <div class="col-span-1">
+          <label class="block text-sm font-medium text-gray-700 mb-2">{{ "addExclusionRules.formFields.recipientClientID" |  translate }}</label>
+          <input class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" type="text" formControlName="recipientClientId" [placeholder]="ms.translate('addExclusionRules.formFields.recipientClientIDPlaceholder')"><small class="text-sm text-gray-500 mt-1 block">{{ "addExclusionRules.formFields.recipientClientIdValidationMessage1" |  translate }}</small><small class="p-error text-red-600 text-sm mt-1 block" *ngIf="sourceCategoriesForm.get('recipientClientId')?.invalid &amp;&amp; sourceCategoriesForm.get('recipientClientId')?.touched">{{ "addExclusionRules.formFields.recipientClientIdValidationMessage2" |  translate }}</small>
+        </div>
+      </div>
+      <div class="w-full mt-6">
+        <div class="w-full flex items-start">
+          <p-checkbox [(ngModel)]="includeUnpublishedApplications" [ngModelOptions]="{standalone: true}" binary="true" inputId="include-unpublished"></p-checkbox>
+          <div class="ml-3 flex-1">
+            <label class="text-sm text-gray-700" for="include-unpublished">{{ "addExclusionRules.formFields.publishOrUnpublishCheckbox" |  translate }}</label>
+            <div class="mt-1 text-sm text-gray-500">{{ "addExclusionRules.formFields.publishOrUnpublishCheckboxMessaage" |  translate }}.</div>
+          </div>
+        </div>
+      </div>
+      <div class="w-full mt-8 flex justify-center gap-4">
+        <button class="bg-gray-500 text-white px-6 py-2 rounded-lg transition-colors hover:bg-gray-600" pButton type="button" [label]="ms.translate('addExclusionRules.button.cancel')" (click)="cancel()"></button>
+        <button class="bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors hover:bg-blue-700" pButton type="button" [label]="ms.translate('addExclusionRules.button.next')" (click)="nextStep()" [disabled]="!sourceCategoriesForm.valid"></button>
+      </div>
+    </form>
+  </div>
+  <div class="w-full" *ngIf="step === 1">
+    <p-tabs class="w-full">
+      <p-tablist>
+        <p-tab *ngFor="let cat of selectedCategories">{{getCategoryLabel(cat)}}</p-tab>
+      </p-tablist>
+      <p-tabpanels>
+        <p-tabpanel *ngFor="let cat of selectedCategories">
+          <div class="mb-6"><b class="text-lg font-semibold text-gray-800">{{ "addExclusionRules.categoryAndDistributionStep.configureRules" |  translate }} {{ getCategoryLabel(cat) }}</b></div>
+          <p-accordion>
+            <p-accordionTab header="Event Code Inclusion">
+              <div class="mb-4 text-sm text-gray-600">{{ "addExclusionRules.categoryAndDistributionStep.chooseRules" |  translate }} {{ getCategoryLabel(cat) }}.</div>
+              <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div class="col-span-1" *ngFor="let event of getEventCodesForCategory(cat); let i = index">
+                  <div class="flex items-center">
+                    <p-checkbox [(ngModel)]="eventExclusions[cat]" [value]="event.code" [binary]="false" inputId="event-{{ cat }}-{{ event.code }}"></p-checkbox>
+                    <label class="ml-3 text-sm text-gray-700" for="event-{{ cat }}-{{ event.code }}">{{ event.code }}: {{ event.label }}</label>
+                  </div>
+                </div>
+              </div>
+            </p-accordionTab>
+            <p-accordionTab header="Document Inclusion">
+              <div class="flex items-center">
+                <p-checkbox [(ngModel)]="enableDocumentExclusions[cat]" binary="true" inputId="enable-doc-{{ cat }}"></p-checkbox>
+                <label class="ml-3 text-sm text-gray-700" for="enable-doc-{{ cat }}">{{ "addExclusionRules.categoryAndDistributionStep.documentInclusionChecbox.label" |  translate }}</label>
+              </div>
+              <div class="ml-6 mt-2 text-sm text-gray-500">{{ "addExclusionRules.categoryAndDistributionStep.documentInclusionChecbox.message" |  translate }}.</div>
+              <div class="mt-4" *ngIf="enableDocumentExclusions[cat]">
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ "addExclusionRules.categoryAndDistributionStep.documentInclusionMultiSelect.label" |  translate }}</label>
+                <p-multiSelect [options]="getDocumentTypesForCategory(cat)" [(ngModel)]="documentExclusions[cat]" [defaultLabel]="ms.translate('addExclusionRules.documentInclusionMultiSelect.label2')" display="chip"></p-multiSelect>
+              </div>
+            </p-accordionTab>
+          </p-accordion>
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+    <div class="mt-8 flex justify-center gap-4">
+      <button class="bg-gray-500 text-white px-6 py-2 rounded-lg transition-colors hover:bg-gray-600" pButton type="button" [label]="ms.translate('addExclusionRules.button.back')" (click)="prevStep()"></button>
+      <button class="bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors hover:bg-blue-700" pButton type="button" [label]="ms.translate('addExclusionRules.button.next')" (click)="nextStep()"></button>
+    </div>
+  </div>
+  <div *ngIf="step === 2">
+    <h3 class="text-2xl font-bold text-gray-800 mb-6">{{ "addExclusionRules.reviewStep.title" |  translate }}</h3>
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h4 class="text-lg font-semibold text-gray-700 mb-4">{{ "addExclusionRules.reviewStep.basicConfiguration" |  translate }}</h4>
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-[auto_auto_1fr]">
+          <div class="col-span-1"><b class="text-base text-gray-700">{{ "addExclusionRules.reviewStep.originatingOffice" |  translate }}:</b><br>
+            <div class="text-lg">{{ sourceCategoriesForm.get('office').value }}</div>
+          </div>
+          <div class="col-span-1"><b class="text-base text-gray-700">{{ "addExclusionRules.reviewStep.recipientSystem" |  translate }}:</b><br>
+            <div class="text-lg">{{ sourceCategoriesForm.get('system').value }}</div>
+          </div>
+          <div class="col-span-1"><b class="text-base text-gray-700">{{ "addExclusionRules.reviewStep.recipientClientID" |  translate }}:</b><br>
+            <div class="text-lg">{{ sourceCategoriesForm.get('recipientClientId').value }}</div>
+          </div>
+          <div class="mt-4 md:col-span-3 col-span-1"><b class="text-base text-gray-700">{{ "addExclusionRules.reviewStep.IPCategoryTypes" |  translate }}:</b><br><br><span class="inline-block bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full mr-2 mb-2" *ngFor="let cat of selectedCategories">{{ getCategoryLabel(cat) }}</span></div>
+          <div class="mt-4 md:col-span-3 col-span-1"><b class="text-base text-gray-700">{{ "addExclusionRules.reviewStep.includeUnpublishedApplications" |  translate }}:</b><br><br><i class="pi" [ngClass]="includeUnpublishedApplications ? 'pi-check-circle text-green-600' : 'pi-times-circle text-red-600'"></i><span class="ml-2 text-sm text-gray-700">{{ includeUnpublishedApplications ? ms.translate('addExclusionRules.reviewStep.yes') : ms.translate('addExclusionRules.reviewStep.no') }}</span></div>
+        </div>
+      </div>
+      <div class="bg-white rounded-lg shadow-md p-6" *ngIf="selectedCategories?.length">
+        <ng-container *ngIf="selectedCategories?.length">
+          <ng-container *ngIf="selectedCategories[0] as cat">
+            <div class="mb-6" *ngIf="eventExclusions[cat]?.length &gt; 0">
+              <h5 class="text-md font-medium text-gray-600 mb-3">{{ "addExclusionRules.reviewStep.eventCodeInclusion" |  translate }} ({{ eventExclusions[cat]?.length }} {{ "addExclusionRules.reviewStep.selected" |  translate }})</h5>
+              <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+                <div class="col-span-1" *ngFor="let eventCode of eventExclusions[cat]"><i class="pi pi-check-circle text-green-600"></i><span class="ml-2 text-sm text-gray-700">{{ getEventCodeLabel(eventCode) }}</span></div>
+              </div>
+            </div>
+            <div class="mb-6" *ngIf="!eventExclusions[cat]?.length">
+              <h5 class="text-md font-medium text-gray-600 mb-3"> {{ "addExclusionRules.reviewStep.eventCodeInclusion" |  translate }}</h5>
+              <p class="text-sm text-gray-500"> {{ "addExclusionRules.reviewStep.noEventCodes" |  translate }}.</p>
+            </div>
+            <div class="mb-6" *ngIf="enableDocumentExclusions[cat]">
+              <h5 class="text-md font-medium text-gray-600 mb-3">{{ "addExclusionRules.reviewStep.documentInclusion" |  translate }} ({{ documentExclusions[cat]?.length || 0 }} {{ "addExclusionRules.reviewStep.selected" |  translate }})</h5>
+              <div class="grid grid-cols-1 gap-6 md:grid-cols-2" *ngIf="documentExclusions[cat]?.length &gt; 0">
+                <div class="col-span-1" *ngFor="let docCode of documentExclusions[cat]"><i class="pi pi-check-circle text-green-600"></i><span class="ml-2 text-sm text-gray-700">{{ getDocumentTypeLabel(docCode) }}</span></div>
+              </div>
+              <p class="text-sm text-gray-500" *ngIf="!documentExclusions[cat]?.length">{{ "addExclusionRules.reviewStep.noDocuments" |  translate }}.</p>
+            </div>
+            <div class="mb-6" *ngIf="!enableDocumentExclusions[cat]">
+              <h5 class="text-md font-medium text-gray-600 mb-3">{{ "addExclusionRules.reviewStep.documentInclusion" |  translate }}</h5>
+              <p class="text-sm text-gray-500">{{ "addExclusionRules.reviewStep.documentInclusionMessage" |  translate }}.</p>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+    <div class="mt-8 flex justify-center gap-4">
+      <button class="bg-gray-500 text-white px-6 py-2 rounded-lg transition-colors hover:bg-gray-600" pButton type="button" [label]="ms.translate('addExclusionRules.button.back')" (click)="prevStep()"></button>
+      <button class="bg-green-600 text-white px-6 py-2 rounded-lg transition-colors hover:bg-green-700" pButton type="button" [label]="ms.translate('addExclusionRules.button.addRule')" (click)="addRule()"></button>
+    </div>
+  </div>
+</app-layout>

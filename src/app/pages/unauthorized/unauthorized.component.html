@@ -1,3 +1,4 @@
+
 <div class="flex justify-center align-items-center" style="
     min-height: 100vh;
     background: linear-gradient(
@@ -6,4 +7,32 @@
       var(--p-primary-600) 25%
     );
     padding: 1rem;
-  "><p-card class="max-w-25rem text-center shadow-8"><ng-template pTemplate="header"><div class="flex justify-content-center p-3"><i class="pi pi-shield-exclamation text-6xl text-red-500 animate-pulse"></i></div></ng-template><ng-template pTemplate="title"><h1 class="text-2xl font-bold text-gray-800 m-0">{{ 'unauthorized.title' | translate }}</h1></ng-template><ng-template pTemplate="content"><div class="text-gray-600 line-height-2 mb-3"><p class="text-base mb-2">{{ 'unauthorized.message1' | translate }}</p><p class="text-base">{{ 'unauthorized.message2' | translate }}</p></div><p-divider></p-divider><div class="flex justify-center mb-3"><p-chip [label]="'unauthorized.chip' | translate" severity="danger" styleClass="text-sm"></p-chip></div></ng-template><ng-template pTemplate="footer"><div class="flex flex-column gap-2 sm"><flex-row class="sm"><justify-content-center><p-button icon="pi pi-arrow-left" [label]="'unauthorized.back' | translate" severity="primary" (onClick)="goBack()" styleClass="w-full sm:w-auto text-sm"></p-button></justify-content-center></flex-row></div></ng-template></p-card></div>
+  ">
+  <p-card class="max-w-25rem text-center shadow-8">
+    <ng-template pTemplate="header">
+      <div class="flex justify-content-center p-3"><i class="pi pi-shield-exclamation text-6xl text-red-500 animate-pulse"></i></div>
+    </ng-template>
+    <ng-template pTemplate="title">
+      <h1 class="text-2xl font-bold text-gray-800 m-0">{{ 'unauthorized.title' | translate }}</h1>
+    </ng-template>
+    <ng-template pTemplate="content">
+      <div class="text-gray-600 line-height-2 mb-3">
+        <p class="text-base mb-2">{{ 'unauthorized.message1' | translate }}</p>
+        <p class="text-base">{{ 'unauthorized.message2' | translate }}</p>
+      </div>
+      <p-divider></p-divider>
+      <div class="flex justify-center mb-3">
+        <p-chip [label]="'unauthorized.chip' | translate" severity="danger" styleClass="text-sm"></p-chip>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <div class="flex flex-column gap-2 sm">
+        <flex-row class="sm">
+          <justify-content-center>
+            <p-button icon="pi pi-arrow-left" [label]="'unauthorized.back' | translate" severity="primary" (onClick)="goBack()" styleClass="w-full sm:w-auto text-sm"></p-button>
+          </justify-content-center>
+        </flex-row>
+      </div>
+    </ng-template>
+  </p-card>
+</div>

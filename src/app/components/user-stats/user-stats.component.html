@@ -1,1 +1,16 @@
-<div class="user-stats-container"><p-accordion value="0"><p-accordion-panel value="0"><p-accordion-header class="stats-accordion-header">{{"common.components.stats.statistics"|translate}}</p-accordion-header><p-accordion-content class="stats-accordion-content"><div class="stats-container"><div class="user-stat-card" *ngFor="let stat of userStats" [class.selected]="selectedStat === stat.key" (click)="selectStat(stat.key)"><div class="stat-header"><span class="stat-label" [style.color]="stat.color">{{ stat.label }}</span><i *ngIf="config.showIcons !== false" [class]="stat.icon" [style.color]="stat.color"></i></div><div class="stat-content"><span class="stat-count" *ngIf="config.showCounts !== false" [style.color]="stat.color">{{ stat.count }}</span></div></div></div></p-accordion-content></p-accordion-panel></p-accordion></div>
+
+<div class="user-stats-container">
+  <p-accordion value="0">
+    <p-accordion-panel value="0">
+      <p-accordion-header class="stats-accordion-header">{{"common.components.stats.statistics"|translate}}</p-accordion-header>
+      <p-accordion-content class="stats-accordion-content">
+        <div class="stats-container">
+          <div class="user-stat-card" *ngFor="let stat of userStats" [class.selected]="selectedStat === stat.key" (click)="selectStat(stat.key)">
+            <div class="stat-header"><span class="stat-label" [style.color]="stat.color">{{ stat.label }}</span><i *ngIf="config.showIcons !== false" [class]="stat.icon" [style.color]="stat.color"></i></div>
+            <div class="stat-content"><span class="stat-count" *ngIf="config.showCounts !== false" [style.color]="stat.color">{{ stat.count }}</span></div>
+          </div>
+        </div>
+      </p-accordion-content>
+    </p-accordion-panel>
+  </p-accordion>
+</div>

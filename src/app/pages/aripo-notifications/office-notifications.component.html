@@ -1,1 +1,43 @@
-<app-layout [config]="layoutConfig"><app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs><div class="user-accounts-header"><h1>{{"notifications.office.title"|translate}}</h1></div><app-package-stats [packageStats]="packageStats" (statSelected)="onStatSelect($event)" [selectedStat]="statSelected"></app-package-stats><app-configurable-filter-bar [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'notifications.office.filter.placeHolder'|translate" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)" [showSearchBar]="true" [searchBar]="searchBar" (filterSearch)="filterSearch($event)" [searchLabel]="'notifications.office.filter.search'|translate" [showDownloadIcon]="false" [appliedFilters]="appliedFilters" [clearAllLabel]="'common.components.filter.clearAll'|translate" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-configurable-filter-bar><p-tabs [(value)]="selectedTab"><p-tablist>@for (category of categories; track category.ipType) {<p-tab [value]="category.ipType"><div (click)="onHeaderClick($event, category.ipType)"><div class="category-label">{{ category.display | capitalizeWords }}<p-badge [value]="category.count"></p-badge></div></div></p-tab>}</p-tablist><p-tabpanels>@for (category of categories; track category.ipType) {<p-tabpanel [value]="category.ipType"><app-table [columns]="tableColumns" [data]="acknowledgeData" (actionClick)="onActionClick($event.action, $event.item)" [showClearButton]="false" [showSearch]="false"></app-table></p-tabpanel>}</p-tabpanels></p-tabs><p-dialog [header]="'notifications.office.dialog.header'|translate" [(visible)]="showEditDialog" [modal]="true" [draggable]="false" [resizable]="false"><form class="office-form" [formGroup]="acknowledgeForm"><div class="form-field"><label for="acknowledge">{{"notifications.office.dialog.date"|translate}}</label><p-calendar class="w-full date-calendar" id="'notifications.acknowledge.dialog.placeHolder'|translate" [dateFormat]="'yy/mm/dd'" [showClear]="true" [showIcon]="true" [showButtonBar]="true" [touchUI]="false"></p-calendar></div></form><ng-template pTemplate="footer"><button class="p-button-text" pButton type="button" [label]="'common.components.modal.cancel'|translate" (click)="onCancel()"></button><button pButton type="button" [label]="'common.components.modal.update'|translate" (click)="onSaveOffice()"></button></ng-template></p-dialog><p-dialog [header]="'notifications.office.dialog.information'|translate" [(visible)]="showInfoDialog" [modal]="true" [draggable]="false" [resizable]="false"><div>{{"notifications.office.dialog.message"|translate}}     </div><ng-template pTemplate="footer"><button class="p-button-text" pButton type="button" [label]="'common.components.modal.cancel'|translate" (click)="onCancel()"></button></ng-template></p-dialog></app-layout>
+
+<app-layout [config]="layoutConfig">
+  <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
+  <div class="user-accounts-header">
+    <h1>{{"notifications.office.title"|translate}}</h1>
+  </div>
+  <app-package-stats [packageStats]="packageStats" (statSelected)="onStatSelect($event)" [selectedStat]="statSelected"></app-package-stats>
+  <app-configurable-filter-bar [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'notifications.office.filter.placeHolder'|translate" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)" [showSearchBar]="true" [searchBar]="searchBar" (filterSearch)="filterSearch($event)" [searchLabel]="'notifications.office.filter.search'|translate" [showDownloadIcon]="false" [appliedFilters]="appliedFilters" [clearAllLabel]="'common.components.filter.clearAll'|translate" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-configurable-filter-bar>
+  <p-tabs [(value)]="selectedTab">
+    <p-tablist>@for (category of categories; track category.ipType) {
+      <p-tab [value]="category.ipType">
+        <div (click)="onHeaderClick($event, category.ipType)">
+          <div class="category-label">{{ category.display | capitalizeWords }}
+            <p-badge [value]="category.count"></p-badge>
+          </div>
+        </div>
+      </p-tab>}
+    </p-tablist>
+    <p-tabpanels>@for (category of categories; track category.ipType) {
+      <p-tabpanel [value]="category.ipType">
+        <app-table [columns]="tableColumns" [data]="acknowledgeData" (actionClick)="onActionClick($event.action, $event.item)" [showClearButton]="false" [showSearch]="false"></app-table>
+      </p-tabpanel>}
+    </p-tabpanels>
+  </p-tabs>
+  <p-dialog [header]="'notifications.office.dialog.header'|translate" [(visible)]="showEditDialog" [modal]="true" [draggable]="false" [resizable]="false">
+    <form class="office-form" [formGroup]="acknowledgeForm">
+      <div class="form-field">
+        <label for="acknowledge">{{"notifications.office.dialog.date"|translate}}</label>
+        <p-calendar class="w-full date-calendar" id="'notifications.acknowledge.dialog.placeHolder'|translate" [dateFormat]="'yy/mm/dd'" [showClear]="true" [showIcon]="true" [showButtonBar]="true" [touchUI]="false"></p-calendar>
+      </div>
+    </form>
+    <ng-template pTemplate="footer">
+      <button class="p-button-text" pButton type="button" [label]="'common.components.modal.cancel'|translate" (click)="onCancel()"></button>
+      <button pButton type="button" [label]="'common.components.modal.update'|translate" (click)="onSaveOffice()"></button>
+    </ng-template>
+  </p-dialog>
+  <p-dialog [header]="'notifications.office.dialog.information'|translate" [(visible)]="showInfoDialog" [modal]="true" [draggable]="false" [resizable]="false">
+    <div>{{"notifications.office.dialog.message"|translate}}     </div>
+    <ng-template pTemplate="footer">
+      <button class="p-button-text" pButton type="button" [label]="'common.components.modal.cancel'|translate" (click)="onCancel()"></button>
+    </ng-template>
+  </p-dialog>
+</app-layout>

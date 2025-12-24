@@ -1,1 +1,136 @@
-<div class="table-card-container"><!-- Sort Controls Bar--><div class="controls-bar mb-4"><div class="sort-container"><label class="sort-label">Sort by:</label><p-dropdown [options]="sortOptions" [(ngModel)]="selectedSortField" optionLabel="label" optionValue="value" placeholder="Select field to sort" (onChange)="onSortFieldChange($event)" styleClass="w-full"></p-dropdown></div><div class="controls-right"><button class="p-button-outlined p-button-sm" pButton type="button" [icon]="sortOrder === 1 ? 'pi pi-sort-amount-up' : 'pi pi-sort-amount-down'" (click)="toggleSortOrder()" pTooltip="Toggle sort order"></button></div></div><!-- Loading State--><div class="loading-container text-center p-4" *ngIf="loading"><i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i><p class="mt-2">Loading...</p></div><!-- Cards Grid--><div class="cards-grid" *ngIf="!loading"><div class="card-item" *ngFor="let item of getCurrentData(); trackBy: trackByFn"><p-card styleClass="h-full"><ng-template pTemplate="header"><!-- Card Header Section--><div class="card-header"><div class="header-left"><div class="avatar-section"><p-avatar *ngIf="getAvatarField()" [image]="isValidImageUrl(getValue(item, getAvatarField())) ? getValue(item, getAvatarField()) : null" [label]="!isValidImageUrl(getValue(item, getAvatarField())) ? getValue(item, getAvatarField()) : null" [alt]="getValue(item, getNameField()) || getValue(item, 'userName') || 'User'" size="large" shape="circle"></p-avatar><div class="avatar-fallback" *ngIf="!getAvatarField()"><i class="pi pi-image" style="font-size: 2rem; color: var(--p-tag-contrast-color)"></i></div></div><div class="header-info"><h3 class="header-title">{{ getValue(item, getNameField()) || getValue(item, 'userName') || 'User' }}</h3><div class="header-subtitle"><p-tag *ngIf="getStatusField()" [value]="getStatusValue(item)" [severity]="getStatusSeverity(item)" styleClass="text-xs"></p-tag></div></div></div><div class="header-right"><!-- Actions Menu in Header--><div class="actions-section"><ng-container *ngFor="let col of columns"><ng-container *ngIf="col.display === 'actions' &amp;&amp; col.actions"><!-- Actions as dropdown--><ng-container *ngIf="col.showAsDropdown !== false"><button class="p-button-rounded p-button-text p-button-plain header-actions-btn" pButton type="button" icon="pi pi-ellipsis-v" (click)="menu.toggle($event); $event.stopPropagation()"></button><p-menu #menu [popup]="true" appendTo="body" [model]="getMenuItems(col.actions, item)"></p-menu></ng-container></ng-container></ng-container></div></div></div></ng-template><ng-template pTemplate="content"><!-- Card Content with Organized Sections--><div class="card-content"><!-- Card Body Section--><div class="card-section body-section"><div class="content-row" *ngFor="let col of getColumnsBySection('body')" [ngClass]="col.customClass"><div class="field-label">{{ col.label }}</div><div class="field-value"><!-- Text Display--><ng-container *ngIf="col.display === 'text' || !col.display">{{ getValue(item, col.field) }}</ng-container><!-- Date Display--><ng-container *ngIf="col.display === 'date'">{{ getValue(item, col.field) | date : col.dateFormat || 'MM/dd/yyyy' }}</ng-container><!-- Currency Display--><ng-container *ngIf="col.display === 'currency'">{{ getValue(item, col.field) | currency : col.currency || 'USD' : 'symbol' }}</ng-container><!-- Tag Display--><ng-container *ngIf="col.display === 'tag'"><p-tag [value]="getValue(item, col.field)" [severity]="col.severity ? col.severity(getValue(item, col.field)) : 'success'"></p-tag></ng-container><!-- Progress Display--><ng-container *ngIf="col.display === 'progress'"><p-progressBar [value]="getValue(item, col.field)" [showValue]="false"></p-progressBar></ng-container><!-- Icon Display--><ng-container *ngIf="col.display === 'icon'"><i class="pi" [ngClass]="col.iconClass ? col.iconClass(getValue(item, col.field)) : ''" style="font-size: 1.5rem"></i></ng-container><!-- Boolean Display--><ng-container *ngIf="col.display === 'boolean'"><div class="text-center"><i class="pi" [ngClass]="{ 'text-green-500 pi-check-circle': getValue(item, col.field), 'text-red-500 pi-times-circle': !getValue(item, col.field) }"></i></div></ng-container><!-- Custom Template--><ng-container *ngIf="col.display === 'custom'"><ng-container *ngTemplateOutlet="customCellTemplate" [context]="{ $implicit: item, field: col.field }"></ng-container></ng-container></div></div></div><!-- Card Info Section--><div class="card-section info-section"><div class="content-row" *ngFor="let col of getColumnsBySection('info')" [ngClass]="col.customClass"><div class="field-label">{{ col.label }}</div><div class="field-value"><!-- Text Display--><ng-container *ngIf="col.display === 'text' || !col.display">{{ getValue(item, col.field) }}</ng-container><!-- Date Display--><ng-container *ngIf="col.display === 'date'&amp;&amp; getValue(item, col.field) &amp;&amp; getValue(item, col.field) !== '-'">{{ getValue(item, col.field) | date : col.dateFormat || 'MM/dd/yyyy' }}</ng-container><!-- Currency Display--><ng-container *ngIf="col.display === 'currency'">{{ getValue(item, col.field) | currency : col.currency || 'USD' : 'symbol' }}</ng-container><!-- Tag Display--><ng-container *ngIf="col.display === 'tag'"><p-tag [value]="getValue(item, col.field)" [severity]="col.severity ? col.severity(getValue(item, col.field)) : 'success'"></p-tag></ng-container><!-- Progress Display--><ng-container *ngIf="col.display === 'progress'"><p-progressBar [value]="getValue(item, col.field)" [showValue]="false"></p-progressBar></ng-container><!-- Icon Display--><ng-container *ngIf="col.display === 'icon'"><i class="pi" [ngClass]="col.iconClass ? col.iconClass(getValue(item, col.field)) : ''" style="font-size: 1.5rem"></i></ng-container><!-- Boolean Display--><ng-container *ngIf="col.display === 'boolean'"><div class="text-center"><i class="pi" [ngClass]="{ 'text-green-500 pi-check-circle': getValue(item, col.field), 'text-red-500 pi-times-circle': !getValue(item, col.field) }"></i></div></ng-container><!-- Custom Template--><ng-container *ngIf="col.display === 'custom'"><ng-container *ngTemplateOutlet="customCellTemplate" [context]="{ $implicit: item, field: col.field }"></ng-container></ng-container></div></div></div></div></ng-template><ng-template pTemplate="footer"><!-- Card Footer - Empty for now, actions moved to header--></ng-template></p-card></div></div><!-- Empty State--><div class="empty-state text-center p-8" *ngIf="!loading &amp;&amp; getCurrentData().length === 0"><i class="pi pi-inbox" style="font-size: 3rem; color: #6c757d; margin-bottom: 1rem"></i><h3 class="text-lg font-semibold text-gray-700 mb-2">{{"common.components.table.noDataFound"|translate}}</h3><p class="text-gray-500">{{ emptyMessage | translate }}</p></div><!-- Pagination--><div class="pagination-container mt-6" *ngIf="paginator &amp;&amp; totalRecords &gt; 0"><p-paginator [rows]="rows" [totalRecords]="totalRecords" [rowsPerPageOptions]="rowsPerPageOptions" [showCurrentPageReport]="showCurrentPageReport" [currentPageReportTemplate]="currentPageReportTemplate|translate" (onPageChange)="onPageChange($event)" (onLazyLoad)="onLazyLoad.emit($event)"></p-paginator></div></div>
+
+<div class="table-card-container">
+  <!-- Sort Controls Bar-->
+  <div class="controls-bar mb-4">
+    <div class="sort-container">
+      <label class="sort-label">Sort by:</label>
+      <p-dropdown [options]="sortOptions" [(ngModel)]="selectedSortField" optionLabel="label" optionValue="value" placeholder="Select field to sort" (onChange)="onSortFieldChange($event)" styleClass="w-full"></p-dropdown>
+    </div>
+    <div class="controls-right">
+      <button class="p-button-outlined p-button-sm" pButton type="button" [icon]="sortOrder === 1 ? 'pi pi-sort-amount-up' : 'pi pi-sort-amount-down'" (click)="toggleSortOrder()" pTooltip="Toggle sort order"></button>
+    </div>
+  </div>
+  <!-- Loading State-->
+  <div class="loading-container text-center p-4" *ngIf="loading"><i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    <p class="mt-2">Loading...</p>
+  </div>
+  <!-- Cards Grid-->
+  <div class="cards-grid" *ngIf="!loading">
+    <div class="card-item" *ngFor="let item of getCurrentData(); trackBy: trackByFn">
+      <p-card styleClass="h-full">
+        <ng-template pTemplate="header">
+          <!-- Card Header Section-->
+          <div class="card-header">
+            <div class="header-left">
+              <div class="avatar-section">
+                <p-avatar *ngIf="getAvatarField()" [image]="isValidImageUrl(getValue(item, getAvatarField())) ? getValue(item, getAvatarField()) : null" [label]="!isValidImageUrl(getValue(item, getAvatarField())) ? getValue(item, getAvatarField()) : null" [alt]="getValue(item, getNameField()) || getValue(item, 'userName') || 'User'" size="large" shape="circle"></p-avatar>
+                <div class="avatar-fallback" *ngIf="!getAvatarField()"><i class="pi pi-image" style="font-size: 2rem; color: var(--p-tag-contrast-color)"></i></div>
+              </div>
+              <div class="header-info">
+                <h3 class="header-title">{{ getValue(item, getNameField()) || getValue(item, 'userName') || 'User' }}</h3>
+                <div class="header-subtitle">
+                  <p-tag *ngIf="getStatusField()" [value]="getStatusValue(item)" [severity]="getStatusSeverity(item)" styleClass="text-xs"></p-tag>
+                </div>
+              </div>
+            </div>
+            <div class="header-right">
+              <!-- Actions Menu in Header-->
+              <div class="actions-section">
+                <ng-container *ngFor="let col of columns">
+                  <ng-container *ngIf="col.display === 'actions' &amp;&amp; col.actions">
+                    <!-- Actions as dropdown-->
+                    <ng-container *ngIf="col.showAsDropdown !== false">
+                      <button class="p-button-rounded p-button-text p-button-plain header-actions-btn" pButton type="button" icon="pi pi-ellipsis-v" (click)="menu.toggle($event); $event.stopPropagation()"></button>
+                      <p-menu #menu [popup]="true" appendTo="body" [model]="getMenuItems(col.actions, item)"></p-menu>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="content">
+          <!-- Card Content with Organized Sections-->
+          <div class="card-content">
+            <!-- Card Body Section-->
+            <div class="card-section body-section">
+              <div class="content-row" *ngFor="let col of getColumnsBySection('body')" [ngClass]="col.customClass">
+                <div class="field-label">{{ col.label }}</div>
+                <div class="field-value">
+                  <!-- Text Display-->
+                  <ng-container *ngIf="col.display === 'text' || !col.display">{{ getValue(item, col.field) }}</ng-container>
+                  <!-- Date Display-->
+                  <ng-container *ngIf="col.display === 'date'">{{ getValue(item, col.field) | date : col.dateFormat || 'MM/dd/yyyy' }}</ng-container>
+                  <!-- Currency Display-->
+                  <ng-container *ngIf="col.display === 'currency'">{{ getValue(item, col.field) | currency : col.currency || 'USD' : 'symbol' }}</ng-container>
+                  <!-- Tag Display-->
+                  <ng-container *ngIf="col.display === 'tag'">
+                    <p-tag [value]="getValue(item, col.field)" [severity]="col.severity ? col.severity(getValue(item, col.field)) : 'success'"></p-tag>
+                  </ng-container>
+                  <!-- Progress Display-->
+                  <ng-container *ngIf="col.display === 'progress'">
+                    <p-progressBar [value]="getValue(item, col.field)" [showValue]="false"></p-progressBar>
+                  </ng-container>
+                  <!-- Icon Display-->
+                  <ng-container *ngIf="col.display === 'icon'"><i class="pi" [ngClass]="col.iconClass ? col.iconClass(getValue(item, col.field)) : ''" style="font-size: 1.5rem"></i></ng-container>
+                  <!-- Boolean Display-->
+                  <ng-container *ngIf="col.display === 'boolean'">
+                    <div class="text-center"><i class="pi" [ngClass]="{ 'text-green-500 pi-check-circle': getValue(item, col.field), 'text-red-500 pi-times-circle': !getValue(item, col.field) }"></i></div>
+                  </ng-container>
+                  <!-- Custom Template-->
+                  <ng-container *ngIf="col.display === 'custom'">
+                    <ng-container *ngTemplateOutlet="customCellTemplate" [context]="{ $implicit: item, field: col.field }"></ng-container>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+            <!-- Card Info Section-->
+            <div class="card-section info-section">
+              <div class="content-row" *ngFor="let col of getColumnsBySection('info')" [ngClass]="col.customClass">
+                <div class="field-label">{{ col.label }}</div>
+                <div class="field-value">
+                  <!-- Text Display-->
+                  <ng-container *ngIf="col.display === 'text' || !col.display">{{ getValue(item, col.field) }}</ng-container>
+                  <!-- Date Display-->
+                  <ng-container *ngIf="col.display === 'date'&amp;&amp; getValue(item, col.field) &amp;&amp; getValue(item, col.field) !== '-'">{{ getValue(item, col.field) | date : col.dateFormat || 'MM/dd/yyyy' }}</ng-container>
+                  <!-- Currency Display-->
+                  <ng-container *ngIf="col.display === 'currency'">{{ getValue(item, col.field) | currency : col.currency || 'USD' : 'symbol' }}</ng-container>
+                  <!-- Tag Display-->
+                  <ng-container *ngIf="col.display === 'tag'">
+                    <p-tag [value]="getValue(item, col.field)" [severity]="col.severity ? col.severity(getValue(item, col.field)) : 'success'"></p-tag>
+                  </ng-container>
+                  <!-- Progress Display-->
+                  <ng-container *ngIf="col.display === 'progress'">
+                    <p-progressBar [value]="getValue(item, col.field)" [showValue]="false"></p-progressBar>
+                  </ng-container>
+                  <!-- Icon Display-->
+                  <ng-container *ngIf="col.display === 'icon'"><i class="pi" [ngClass]="col.iconClass ? col.iconClass(getValue(item, col.field)) : ''" style="font-size: 1.5rem"></i></ng-container>
+                  <!-- Boolean Display-->
+                  <ng-container *ngIf="col.display === 'boolean'">
+                    <div class="text-center"><i class="pi" [ngClass]="{ 'text-green-500 pi-check-circle': getValue(item, col.field), 'text-red-500 pi-times-circle': !getValue(item, col.field) }"></i></div>
+                  </ng-container>
+                  <!-- Custom Template-->
+                  <ng-container *ngIf="col.display === 'custom'">
+                    <ng-container *ngTemplateOutlet="customCellTemplate" [context]="{ $implicit: item, field: col.field }"></ng-container>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <!-- Card Footer - Empty for now, actions moved to header-->
+        </ng-template>
+      </p-card>
+    </div>
+  </div>
+  <!-- Empty State-->
+  <div class="empty-state text-center p-8" *ngIf="!loading &amp;&amp; getCurrentData().length === 0"><i class="pi pi-inbox" style="font-size: 3rem; color: #6c757d; margin-bottom: 1rem"></i>
+    <h3 class="text-lg font-semibold text-gray-700 mb-2">{{"common.components.table.noDataFound"|translate}}</h3>
+    <p class="text-gray-500">{{ emptyMessage | translate }}</p>
+  </div>
+  <!-- Pagination-->
+  <div class="pagination-container mt-6" *ngIf="paginator &amp;&amp; totalRecords &gt; 0">
+    <p-paginator [rows]="rows" [totalRecords]="totalRecords" [rowsPerPageOptions]="rowsPerPageOptions" [showCurrentPageReport]="showCurrentPageReport" [currentPageReportTemplate]="currentPageReportTemplate|translate" (onPageChange)="onPageChange($event)" (onLazyLoad)="onLazyLoad.emit($event)"></p-paginator>
+  </div>
+</div>

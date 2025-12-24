@@ -1,1 +1,25 @@
-<app-layout [config]="layoutConfig"><app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs><div class="user-accounts-header"><h1>{{"dataCapture.title"|translate}}</h1></div><app-multiple-stats [multipleStats]="packageStats" (statSelected)="onStatSelect($event)" [selectedStat]="statSelected"></app-multiple-stats><app-configurable-filter-bar [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'dataCapture.filter.placeHolder'|translate" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)" [showSearchBar]="true" [searchBar]="searchBar" (filterSearch)="filterSearch($event)" [searchLabel]="'dataCapture.filter.search'|translate" [showDownloadIcon]="false" [appliedFilters]="appliedFilters" [clearAllLabel]="'common.components.filter.clearAll'|translate" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-configurable-filter-bar><p-tabs [(value)]="selectedTab"><p-tablist>@for (category of categories; track category.ipType) {<p-tab [value]="category.ipType"><div (click)="onHeaderClick($event, category.ipType)"><div class="category-label">{{ category.display | capitalizeWords }}<p-badge [value]="category.count"></p-badge></div></div></p-tab>}</p-tablist><p-tabpanels>@for (category of categories; track category.ipType) {<p-tabpanel [value]="category.ipType"><app-table [columns]="tableColumns" [data]="tableData" (actionClick)="onActionClick($event.action, $event.item)" [showClearButton]="false" [showSearch]="false"></app-table></p-tabpanel>}</p-tabpanels></p-tabs></app-layout>
+
+<app-layout [config]="layoutConfig">
+  <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
+  <div class="user-accounts-header">
+    <h1>{{"dataCapture.title"|translate}}</h1>
+  </div>
+  <app-multiple-stats [multipleStats]="packageStats" (statSelected)="onStatSelect($event)" [selectedStat]="statSelected"></app-multiple-stats>
+  <app-configurable-filter-bar [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'dataCapture.filter.placeHolder'|translate" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)" [showSearchBar]="true" [searchBar]="searchBar" (filterSearch)="filterSearch($event)" [searchLabel]="'dataCapture.filter.search'|translate" [showDownloadIcon]="false" [appliedFilters]="appliedFilters" [clearAllLabel]="'common.components.filter.clearAll'|translate" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()"></app-configurable-filter-bar>
+  <p-tabs [(value)]="selectedTab">
+    <p-tablist>@for (category of categories; track category.ipType) {
+      <p-tab [value]="category.ipType">
+        <div (click)="onHeaderClick($event, category.ipType)">
+          <div class="category-label">{{ category.display | capitalizeWords }}
+            <p-badge [value]="category.count"></p-badge>
+          </div>
+        </div>
+      </p-tab>}
+    </p-tablist>
+    <p-tabpanels>@for (category of categories; track category.ipType) {
+      <p-tabpanel [value]="category.ipType">
+        <app-table [columns]="tableColumns" [data]="tableData" (actionClick)="onActionClick($event.action, $event.item)" [showClearButton]="false" [showSearch]="false"></app-table>
+      </p-tabpanel>}
+    </p-tabpanels>
+  </p-tabs>
+</app-layout>

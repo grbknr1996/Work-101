@@ -1,10 +1,100 @@
-<app-layout><app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs><div class="flex justify-between"><div><h1 class="pt-4 text-xl ml-4">{{ "onlinePublicationJournals.title" | translate }}</h1><p class="pt-2 pb-2 ml-4 font-light">{{ "onlinePublicationJournals.subTitle" | translate }}</p></div><div class="mr-4"><p-button (click)="showDialog()" label="Full Extraction" size="large" icon="pi pi-bolt" severity="help"></p-button></div></div><p-panel class="w-full mt-4" [toggleable]="true"><ng-template #header=""><div class="flex items-center gap-2"><div class="font-bold text-lg">{{ "onlinePublicationJournals.regularIncrementalExtraction.title" | translate }}</div></div></ng-template><div class="grid grid-cols-12 items-stretch gap-4 mt-2"><ng-container *ngFor="let execution of executions.regularExtraction"><p-card class="col-span-4"><div class="flex justify-between"><div class="text-lg font-semibold mb-6">{{ execution?.category | capitalizeWords }}</div><div class="w-2"><div class="rounded-full h-3.5 w-3.5" [ngClass]="{ 
+
+<app-layout>
+  <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
+  <div class="flex justify-between">
+    <div>
+      <h1 class="pt-4 text-xl ml-4">{{ "onlinePublicationJournals.title" | translate }}</h1>
+      <p class="pt-2 pb-2 ml-4 font-light">{{ "onlinePublicationJournals.subTitle" | translate }}</p>
+    </div>
+    <div class="mr-4">
+      <p-button (click)="showDialog()" label="Full Extraction" size="large" icon="pi pi-bolt" severity="help"></p-button>
+    </div>
+  </div>
+  <p-panel class="w-full mt-4" [toggleable]="true">
+    <ng-template #header="">
+      <div class="flex items-center gap-2">
+        <div class="font-bold text-lg">{{ "onlinePublicationJournals.regularIncrementalExtraction.title" | translate }}</div>
+      </div>
+    </ng-template>
+    <div class="grid grid-cols-12 items-stretch gap-4 mt-2">
+      <ng-container *ngFor="let execution of executions.regularExtraction">
+        <p-card class="col-span-4">
+          <div class="flex justify-between">
+            <div class="text-lg font-semibold mb-6">{{ execution?.category | capitalizeWords }}</div>
+            <div class="w-2">
+              <div class="rounded-full h-3.5 w-3.5" [ngClass]="{ 
                                 'bg-green-600': execution?.status === &quot;completed&quot;,
                                 'bg-orange-600': execution?.status === &quot;processing&quot;
-                            }"></div></div></div><div class="grid grid-cols-6 gap-2"><div class="col-span-6 lg:col-span-3"><div class="text-base font-light mb-2">{{ "onlinePublicationJournals.regularIncrementalExtraction.lastExecution" | translate }}</div><div class="text-lg font-medium mb-4">{{ execution?.lastExecution }}</div></div><div class="col-span-6 lg:col-span-3"><div class="text-base font-light mb-2">{{ "onlinePublicationJournals.regularIncrementalExtraction.totalApplications" | translate }}</div><div class="text-lg font-medium mb-4">{{ execution?.totalApplications }}</div></div></div><div class="text-base font-light mb-2">{{ "onlinePublicationJournals.regularIncrementalExtraction.nextPublication" | translate }}</div><div class="flex justify-start gap-4"><p-progress-spinner *ngIf="execution?.status === 'processing'" ariaLabel="loading" [style]="{ width: '25px', height: '25px' }"></p-progress-spinner><div class="text-lg font-medium mb-4" [ngClass]="{'text-orange-600': execution?.status === 'processing'}">{{ execution?.nextPublication }}</div></div></p-card></ng-container></div></p-panel><p-panel class="w-full mt-4" [toggleable]="true"><ng-template #header=""><div class="flex items-center gap-2"><div class="font-bold text-lg">{{ "onlinePublicationJournals.fullExtraction.title" | translate }}</div></div></ng-template><div class="grid grid-cols-12 items-stretch gap-4 mt-2"><ng-container *ngFor="let execution of executions.fullExtraction"><p-card class="col-span-4"><div class="flex justify-between"><div class="text-lg font-semibold mb-6">{{ execution?.category | capitalizeWords }}</div><div class="w-2"><div class="rounded-full h-3.5 w-3.5" [ngClass]="{ 
+                            }"></div>
+            </div>
+          </div>
+          <div class="grid grid-cols-6 gap-2">
+            <div class="col-span-6 lg:col-span-3">
+              <div class="text-base font-light mb-2">{{ "onlinePublicationJournals.regularIncrementalExtraction.lastExecution" | translate }}</div>
+              <div class="text-lg font-medium mb-4">{{ execution?.lastExecution }}</div>
+            </div>
+            <div class="col-span-6 lg:col-span-3">
+              <div class="text-base font-light mb-2">{{ "onlinePublicationJournals.regularIncrementalExtraction.totalApplications" | translate }}</div>
+              <div class="text-lg font-medium mb-4">{{ execution?.totalApplications }}</div>
+            </div>
+          </div>
+          <div class="text-base font-light mb-2">{{ "onlinePublicationJournals.regularIncrementalExtraction.nextPublication" | translate }}</div>
+          <div class="flex justify-start gap-4">
+            <p-progress-spinner *ngIf="execution?.status === 'processing'" ariaLabel="loading" [style]="{ width: '25px', height: '25px' }"></p-progress-spinner>
+            <div class="text-lg font-medium mb-4" [ngClass]="{'text-orange-600': execution?.status === 'processing'}">{{ execution?.nextPublication }}</div>
+          </div>
+        </p-card>
+      </ng-container>
+    </div>
+  </p-panel>
+  <p-panel class="w-full mt-4" [toggleable]="true">
+    <ng-template #header="">
+      <div class="flex items-center gap-2">
+        <div class="font-bold text-lg">{{ "onlinePublicationJournals.fullExtraction.title" | translate }}</div>
+      </div>
+    </ng-template>
+    <div class="grid grid-cols-12 items-stretch gap-4 mt-2">
+      <ng-container *ngFor="let execution of executions.fullExtraction">
+        <p-card class="col-span-4">
+          <div class="flex justify-between">
+            <div class="text-lg font-semibold mb-6">{{ execution?.category | capitalizeWords }}</div>
+            <div class="w-2">
+              <div class="rounded-full h-3.5 w-3.5" [ngClass]="{ 
                                 'bg-green-600': execution?.status === &quot;completed&quot;,
                                 'bg-orange-600': execution?.status === &quot;processing&quot;
-                            }"></div></div></div><div class="grid grid-cols-6 gap-2"><div class="col-span-6 lg:col-span-3"><div class="text-base font-light mb-2">{{ "onlinePublicationJournals.fullExtraction.lastFullExtraction" | translate }}</div><div class="text-lg font-medium mb-4">{{ execution?.lastFullExecution }}</div></div><div class="col-span-6 lg:col-span-3"><div class="text-base font-light mb-2">{{ "onlinePublicationJournals.fullExtraction.totalApplications" | translate }}</div><div class="text-lg font-medium mb-4">{{ execution?.totalApplications }}</div></div></div><div class="text-base font-light mb-2">{{ "onlinePublicationJournals.fullExtraction.nextPublication" | translate }}</div><div class="flex justify-start gap-4"><p-progress-spinner *ngIf="execution?.status === 'processing'" ariaLabel="loading" [style]="{ width: '25px', height: '25px' }"></p-progress-spinner><div class="text-lg font-medium mb-4" [ngClass]="{'text-orange-600': execution?.status === 'processing'}">{{ "onlinePublicationJournals.fullExtraction.inProgress" | translate }}: {{ execution?.nextPublication }}</div></div><p-progressbar *ngIf="execution?.status === 'processing'" [value]="execution?.progressPercentage"></p-progressbar></p-card></ng-container></div></p-panel><div class="flex justify-start items-center gap-2 pt-8 pb-8"><div class="pi"><svg class="lucide lucide-activity w-5 h-5 text-gray-700" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg></div><div class="font-medium text-2xl">{{ "onlinePublicationJournals.progressAndActivityFeed" | translate }}</div></div><div class="flex flex-col gap-1" *ngFor="let item of executions?.activityFeed"><p-card class="w-full" [ngStyle]="{
+                            }"></div>
+            </div>
+          </div>
+          <div class="grid grid-cols-6 gap-2">
+            <div class="col-span-6 lg:col-span-3">
+              <div class="text-base font-light mb-2">{{ "onlinePublicationJournals.fullExtraction.lastFullExtraction" | translate }}</div>
+              <div class="text-lg font-medium mb-4">{{ execution?.lastFullExecution }}</div>
+            </div>
+            <div class="col-span-6 lg:col-span-3">
+              <div class="text-base font-light mb-2">{{ "onlinePublicationJournals.fullExtraction.totalApplications" | translate }}</div>
+              <div class="text-lg font-medium mb-4">{{ execution?.totalApplications }}</div>
+            </div>
+          </div>
+          <div class="text-base font-light mb-2">{{ "onlinePublicationJournals.fullExtraction.nextPublication" | translate }}</div>
+          <div class="flex justify-start gap-4">
+            <p-progress-spinner *ngIf="execution?.status === 'processing'" ariaLabel="loading" [style]="{ width: '25px', height: '25px' }"></p-progress-spinner>
+            <div class="text-lg font-medium mb-4" [ngClass]="{'text-orange-600': execution?.status === 'processing'}">{{ "onlinePublicationJournals.fullExtraction.inProgress" | translate }}: {{ execution?.nextPublication }}</div>
+          </div>
+          <p-progressbar *ngIf="execution?.status === 'processing'" [value]="execution?.progressPercentage"></p-progressbar>
+        </p-card>
+      </ng-container>
+    </div>
+  </p-panel>
+  <div class="flex justify-start items-center gap-2 pt-8 pb-8">
+    <div class="pi">
+      <svg class="lucide lucide-activity w-5 h-5 text-gray-700" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path>
+      </svg>
+    </div>
+    <div class="font-medium text-2xl">{{ "onlinePublicationJournals.progressAndActivityFeed" | translate }}</div>
+  </div>
+  <div class="flex flex-col gap-1" *ngFor="let item of executions?.activityFeed">
+    <p-card class="w-full" [ngStyle]="{
                 '--p-card-background': item?.status === 'completed' ? '#D4FFD6' :
                                     item?.status === 'processing' ? '#FFF3CC' :
                                     item?.status === 'scheduled' ? '#DCEBFF' : '#FFFFFF',
@@ -12,7 +102,71 @@
                 '--p-surface-card': item?.status === 'completed' ? '#D4FFD6' :
                                     item?.status === 'processing' ? '#FFF3CC' :
                                     item?.status === 'scheduled' ? '#DCEBFF' : '#FFFFFF'
-            }"><div class="flex flex-col gap-2"><div class="flex justify-start items-center gap-4"><i style="font-size: 1.5rem" [ngClass]="{
+            }">
+      <div class="flex flex-col gap-2">
+        <div class="flex justify-start items-center gap-4"><i style="font-size: 1.5rem" [ngClass]="{
                         'pi pi-check-circle': item?.status === 'completed',
                         'pi pi-clock': item?.status === 'scheduled'
-                    }"></i><div class="pi pt-2 pb-2" *ngIf="item?.status === 'processing'"><svg class="lucide lucide-activity w-5 h-5 text-gray-700" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg></div><div><p-tag [value]="item?.category" [style]="{ border: '2px solid #383838ff'}"></p-tag></div><div><p-tag [value]="item?.status" [style]="{ border: '2px solid #383838ff'}"></p-tag></div></div><div class="font-medium text-xl">{{ item?.message }}</div><div *ngIf="item?.status === 'processing'"><p-progressbar *ngIf="item?.status === 'processing'" [value]="item?.progressPercentage"></p-progressbar></div><div class="font-light text-lg">{{ item?.updatedAt }}</div></div></p-card></div></app-layout><p-dialog class="full-extraction-dialog" [header]="ms.translate('onlinePublicationJournals.fullExtraction.title')" [modal]="true" [(visible)]="visible" [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"><div class="flex justify-start"><div class="font-semibold text-lg text-yellow-600 bg-yellow-100 border-2 border-yellow-500 rounded-xl p-8"><i class="pi pi-exclamation-triangle"> </i>&nbsp;&nbsp;{{ "onlinePublicationJournals.fullExtractionDialog.warningMessage" | translate }}.</div></div><div class="font-bold text-xl py-4">{{ "onlinePublicationJournals.fullExtractionDialog.selectIpType" | translate }}</div><div class="flex flex-row justify-start items-center gap-4"><div class="border-2 border-black-500 rounded-xl text-lg p-4" *ngFor="let category of ipTypes"><p-checkbox [inputId]="category" name="group" [value]="category" [(ngModel)]="selectedIpTypes"></p-checkbox><label class="ml-2" [for]="category">{{ category | capitalizeWords }}</label></div></div><div class="font-bold text-xl pt-4">{{ "onlinePublicationJournals.fullExtractionDialog.dateRange" | translate }}</div><div class="grid grid-cols-6 gap-2 mb-8"><div class="col-span-3"><div><label class="font-light text-base block mb-2" for="startDateDisplay">{{ "onlinePublicationJournals.fullExtractionDialog.startDate" | translate }}</label><p-datepicker [(ngModel)]="startDate" [showIcon]="true" inputId="startDateDisplay" [showOnFocus]="false"></p-datepicker></div></div><div class="col-span-3"><div> <label class="font-light text-base block mb-2" for="endDateDisplay">{{ "onlinePublicationJournals.fullExtractionDialog.endDate" | translate }}</label><p-datepicker [(ngModel)]="endDate" [showIcon]="true" inputId="endDateDisplay" [showOnFocus]="false"></p-datepicker></div></div></div><div class="font-semibold bg-gray-100 border-2 border-black-500 rounded-xl p-8 mb-8"><div class="flex justify-start gap-2"><div class="font-bold text-xl">{{ "onlinePublicationJournals.fullExtractionDialog.dateRange" | translate }}:</div><div class="font-light text-xl">{{ startDate | date: 'yyyy-MM-dd' }} {{ startDate && endDate ? ms.translate('onlinePublicationJournals.fullExtractionDialog.to') : "" }} {{ endDate | date: 'yyyy-MM-dd' }}</div></div><div class="flex justify-start gap-2"><div class="font-bold text-xl">{{ "onlinePublicationJournals.fullExtractionDialog.selectIpType" | translate }}:</div><div class="font-light text-xl">{{ selectedIpTypes.length }} {{ "onlinePublicationJournals.fullExtractionDialog.of" | translate }} {{ ipTypes.length }}</div></div></div><ng-template #footer=""><p-button [label]="ms.translate('onlinePublicationJournals.fullExtractionDialog.cancelLabel')" severity="secondary" size="large" (click)="visible = false"></p-button><p-button [label]="ms.translate('onlinePublicationJournals.fullExtractionDialog.startFullExtractionLabel')" severity="help" size="large" (click)="visible = false"></p-button></ng-template></p-dialog>
+                    }"></i>
+          <div class="pi pt-2 pb-2" *ngIf="item?.status === 'processing'">
+            <svg class="lucide lucide-activity w-5 h-5 text-gray-700" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path>
+            </svg>
+          </div>
+          <div>
+            <p-tag [value]="item?.category" [style]="{ border: '2px solid #383838ff'}"></p-tag>
+          </div>
+          <div>
+            <p-tag [value]="item?.status" [style]="{ border: '2px solid #383838ff'}"></p-tag>
+          </div>
+        </div>
+        <div class="font-medium text-xl">{{ item?.message }}</div>
+        <div *ngIf="item?.status === 'processing'">
+          <p-progressbar *ngIf="item?.status === 'processing'" [value]="item?.progressPercentage"></p-progressbar>
+        </div>
+        <div class="font-light text-lg">{{ item?.updatedAt }}</div>
+      </div>
+    </p-card>
+  </div>
+</app-layout>
+<p-dialog class="full-extraction-dialog" [header]="ms.translate('onlinePublicationJournals.fullExtraction.title')" [modal]="true" [(visible)]="visible" [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+  <div class="flex justify-start">
+    <div class="font-semibold text-lg text-yellow-600 bg-yellow-100 border-2 border-yellow-500 rounded-xl p-8"><i class="pi pi-exclamation-triangle"> </i>&nbsp;&nbsp;{{ "onlinePublicationJournals.fullExtractionDialog.warningMessage" | translate }}.</div>
+  </div>
+  <div class="font-bold text-xl py-4">{{ "onlinePublicationJournals.fullExtractionDialog.selectIpType" | translate }}</div>
+  <div class="flex flex-row justify-start items-center gap-4">
+    <div class="border-2 border-black-500 rounded-xl text-lg p-4" *ngFor="let category of ipTypes">
+      <p-checkbox [inputId]="category" name="group" [value]="category" [(ngModel)]="selectedIpTypes"></p-checkbox>
+      <label class="ml-2" [for]="category">{{ category | capitalizeWords }}</label>
+    </div>
+  </div>
+  <div class="font-bold text-xl pt-4">{{ "onlinePublicationJournals.fullExtractionDialog.dateRange" | translate }}</div>
+  <div class="grid grid-cols-6 gap-2 mb-8">
+    <div class="col-span-3">
+      <div>
+        <label class="font-light text-base block mb-2" for="startDateDisplay">{{ "onlinePublicationJournals.fullExtractionDialog.startDate" | translate }}</label>
+        <p-datepicker [(ngModel)]="startDate" [showIcon]="true" inputId="startDateDisplay" [showOnFocus]="false"></p-datepicker>
+      </div>
+    </div>
+    <div class="col-span-3">
+      <div> 
+        <label class="font-light text-base block mb-2" for="endDateDisplay">{{ "onlinePublicationJournals.fullExtractionDialog.endDate" | translate }}</label>
+        <p-datepicker [(ngModel)]="endDate" [showIcon]="true" inputId="endDateDisplay" [showOnFocus]="false"></p-datepicker>
+      </div>
+    </div>
+  </div>
+  <div class="font-semibold bg-gray-100 border-2 border-black-500 rounded-xl p-8 mb-8">
+    <div class="flex justify-start gap-2">
+      <div class="font-bold text-xl">{{ "onlinePublicationJournals.fullExtractionDialog.dateRange" | translate }}:</div>
+      <div class="font-light text-xl">{{ startDate | date: 'yyyy-MM-dd' }} {{ startDate && endDate ? ms.translate('onlinePublicationJournals.fullExtractionDialog.to') : "" }} {{ endDate | date: 'yyyy-MM-dd' }}</div>
+    </div>
+    <div class="flex justify-start gap-2">
+      <div class="font-bold text-xl">{{ "onlinePublicationJournals.fullExtractionDialog.selectIpType" | translate }}:</div>
+      <div class="font-light text-xl">{{ selectedIpTypes.length }} {{ "onlinePublicationJournals.fullExtractionDialog.of" | translate }} {{ ipTypes.length }}</div>
+    </div>
+  </div>
+  <ng-template #footer="">
+    <p-button [label]="ms.translate('onlinePublicationJournals.fullExtractionDialog.cancelLabel')" severity="secondary" size="large" (click)="visible = false"></p-button>
+    <p-button [label]="ms.translate('onlinePublicationJournals.fullExtractionDialog.startFullExtractionLabel')" severity="help" size="large" (click)="visible = false"></p-button>
+  </ng-template>
+</p-dialog>

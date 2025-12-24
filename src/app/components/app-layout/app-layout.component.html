@@ -1,4 +1,39 @@
-<!-- Header/Navbar--><div class="layout-wrapper"><app-navbar *ngIf="config.showHeader" [title]="config.appTitle" [items]="config.headerItems" [fixed]="config.fixedHeader" [showSidebar]="config.showSidebar" (toggleSidebarEvent)="toggleSidebar($event)"></app-navbar></div><!-- Main Content Area--><div class="layout-main" [style]="config.showSidebar ? 'margin-left: 3rem' : 'margin-left: 0'"><!-- Sidebar--><app-sidebar *ngIf="config.showSidebar" [visible]="sidebarVisible" [fixed]="config.fixedSidebar" [items]="config.sidebarItems"></app-sidebar><!-- Sidebar overlay for mobile--><div class="sidebar-overlay" *ngIf="sidebarVisible &amp;&amp; ms.isMobileView" (click)="sidebarVisible = false"></div><!-- Content area--><div class="layout-content" [ngStyle]="{'margin-left': sidebarVisible ? '3rem' : '1rem','padding':'1rem'}"><app-toast></app-toast><!-- Breadcrumbs--><!--div.breadcrumbs-container(*ngIf="ms.breadcrumbs")p-breadcrumb(
-  [model]="breadcrumbItems",
-  [home]="breadcrumbHome")
---><!-- Loading overlay--><div class="loading-overlay" *ngIf="ms.isLoading"><div class="loading-spinner"><p-progressSpinner></p-progressSpinner></div><div class="loading-text">{{ ms.translate("loading") }}</div></div><!-- Main content--><ng-content></ng-content></div></div><!-- Footer--><footer class="layout-footer" *ngIf="config.footerText"><div class="footer-content"><p>{{ config.footerText }}</p></div></footer><app-scroller></app-scroller>
+
+<!-- Header/Navbar-->
+<div class="layout-wrapper">
+  <app-navbar *ngIf="config.showHeader" [title]="config.appTitle" [items]="config.headerItems" [fixed]="config.fixedHeader" [showSidebar]="config.showSidebar" (toggleSidebarEvent)="toggleSidebar($event)"></app-navbar>
+</div>
+<!-- Main Content Area-->
+<div class="layout-main" [style]="config.showSidebar ? 'margin-left: 3rem' : 'margin-left: 0'">
+  <!-- Sidebar-->
+  <app-sidebar *ngIf="config.showSidebar" [visible]="sidebarVisible" [fixed]="config.fixedSidebar" [items]="config.sidebarItems"></app-sidebar>
+  <!-- Sidebar overlay for mobile-->
+  <div class="sidebar-overlay" *ngIf="sidebarVisible &amp;&amp; ms.isMobileView" (click)="sidebarVisible = false"></div>
+  <!-- Content area-->
+  <div class="layout-content" [ngStyle]="{'margin-left': sidebarVisible ? '3rem' : '1rem','padding':'1rem'}">
+    <app-toast></app-toast>
+    <!-- Breadcrumbs-->
+    <!--div.breadcrumbs-container(*ngIf="ms.breadcrumbs")
+    p-breadcrumb(
+      [model]="breadcrumbItems",
+      [home]="breadcrumbHome")
+    
+    -->
+    <!-- Loading overlay-->
+    <div class="loading-overlay" *ngIf="ms.isLoading">
+      <div class="loading-spinner">
+        <p-progressSpinner></p-progressSpinner>
+      </div>
+      <div class="loading-text">{{ ms.translate("loading") }}</div>
+    </div>
+    <!-- Main content-->
+    <ng-content></ng-content>
+  </div>
+</div>
+<!-- Footer-->
+<footer class="layout-footer" *ngIf="config.footerText">
+  <div class="footer-content">
+    <p>{{ config.footerText }}</p>
+  </div>
+</footer>
+<app-scroller></app-scroller>

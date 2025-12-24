@@ -1,1 +1,23 @@
-<app-layout [config]="layoutConfig"><app-breadcrumbs></app-breadcrumbs><!-- Error State--><div class="flex justify-center items-center min-h-[60vh] p-5" *ngIf="permissionError"><div class="bg-white rounded-xl p-10 text-center shadow-2xl max-w-md w-full"><div class="mb-5"><i class="pi pi-exclamation-circle text-8xl text-red-500" style="font-size: 20pt"></i></div><h2 class="text-xl font-semibold text-gray-800 mb-4">{{ 'dashboard.permissionError.title' | translate }}</h2><p class="text-gray-600 text-xs leading-relaxed mb-8">{{ errorMessage | translate }}</p><button class="min-w-[120px] h-10 hover:transform hover:-translate-y-0.5 hover:shadow-lg transition-all duration-200" pButton type="button" [label]="'dashboard.permissionError.retryButton' | translate" size="small" icon="pi pi-refresh" (click)="retryPermissions()"></button></div></div><div *ngIf="!permissionError"><div class="dashboard-heading"><h1 class="dashboard-title">{{ 'dashboard.title' | translate }}</h1></div><div class="widgets-grid"><div class="widget-wrapper" *ngFor="let widget of widgets"><app-widget [icon]="widget.icon" [title]="widget.title" [items]="widget.items" [showBadge]="widget.showBadge" [badge]="widget.badge" [hoverEffect]="'shadow'"></app-widget></div></div></div></app-layout>
+
+<app-layout [config]="layoutConfig">
+  <app-breadcrumbs></app-breadcrumbs>
+  <!-- Error State-->
+  <div class="flex justify-center items-center min-h-[60vh] p-5" *ngIf="permissionError">
+    <div class="bg-white rounded-xl p-10 text-center shadow-2xl max-w-md w-full">
+      <div class="mb-5"><i class="pi pi-exclamation-circle text-8xl text-red-500" style="font-size: 20pt"></i></div>
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">{{ 'dashboard.permissionError.title' | translate }}</h2>
+      <p class="text-gray-600 text-xs leading-relaxed mb-8">{{ errorMessage | translate }}</p>
+      <button class="min-w-[120px] h-10 hover:transform hover:-translate-y-0.5 hover:shadow-lg transition-all duration-200" pButton type="button" [label]="'dashboard.permissionError.retryButton' | translate" size="small" icon="pi pi-refresh" (click)="retryPermissions()"></button>
+    </div>
+  </div>
+  <div *ngIf="!permissionError">
+    <div class="dashboard-heading">
+      <h1 class="dashboard-title">{{ 'dashboard.title' | translate }}</h1>
+    </div>
+    <div class="widgets-grid">
+      <div class="widget-wrapper" *ngFor="let widget of widgets">
+        <app-widget [icon]="widget.icon" [title]="widget.title" [items]="widget.items" [showBadge]="widget.showBadge" [badge]="widget.badge" [hoverEffect]="'shadow'"></app-widget>
+      </div>
+    </div>
+  </div>
+</app-layout>

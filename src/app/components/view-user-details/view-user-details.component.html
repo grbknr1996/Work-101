@@ -1,1 +1,129 @@
-<p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '90vw', maxWidth: '900px' }" [draggable]="false" [resizable]="true" [closable]="true" [header]="(userAccount?.userName || 'User Details') + ' - ' + (ms.translate('userManagement.userAccounts.viewUser') || 'View User')" (onShow)="onShow()" (onHide)="onHide()" [styleClass]="'view-user-details-dialog'"><div class="view-user-details-container" *ngIf="!loading &amp;&amp; userAccount"><!-- Basic Information Section--><div class="details-section"><h3 class="section-title"><i class="pi pi-user"></i>{{ ms.translate('profile.basicInfo') || 'Basic Information' }}</h3><div class="details-grid"><div class="detail-item"><label class="detail-label"><i class="pi pi-user"></i>{{ ms.translate('profile.userName') || 'User Name' }}</label><div class="detail-value">{{ userAccount.userName || '-' }}</div></div><div class="detail-item"><label class="detail-label"><i class="pi pi-envelope"></i>{{ ms.translate('profile.email') || 'Email' }}</label><div class="detail-value">{{ userAccount.email || '-' }}</div></div><div class="detail-item"><label class="detail-label"><i class="pi pi-id-card"></i>{{ ms.translate('userManagement.userAccounts.loginId') || 'Login ID' }}</label><div class="detail-value">{{ userAccount.loginId || '-' }}</div></div><div class="detail-item"><label class="detail-label"><i class="pi pi-info-circle"></i>{{ ms.translate('userManagement.userAccounts.status') || 'Status' }}</label><div class="detail-value"><span [ngClass]="getStatusChipClass()">{{ getComputedStatus() }}</span></div></div><div class="detail-item"><label class="detail-label"><i class="pi pi-calendar"></i>{{ ms.translate('userManagement.userAccounts.createdOn') || 'Created On' }}</label><div class="detail-value">{{ formatDate(userAccount.creationDate) }}</div></div><div class="detail-item"><label class="detail-label"><i class="pi pi-calendar-plus"></i>{{ ms.translate('userManagement.userAccounts.updatedOn') || 'Last Updated' }}</label><div class="detail-value">{{ formatDate(userAccount.lastUpdateDate) }}</div></div><div class="detail-item"><label class="detail-label"><i class="pi pi-tag"></i>{{ ms.translate('profile.userType') || 'User Type' }}</label><div class="detail-value"><span class="user-type-display"><span>{{ userAccount.isExternal ? (ms.translate('profile.externalUser') ) : (ms.translate('profile.officeUser') ) }}</span></span></div></div></div></div><!-- Security Information Section--><div class="details-section"><h3 class="section-title"><i class="pi pi-shield"></i>{{ ms.translate('profile.security') || 'Security' }}</h3><div class="details-grid"><div class="detail-item"><label class="detail-label"><i class="pi pi-qrcode"></i>{{ ms.translate('profile.mfa') || 'Multi-Factor Authentication' }}</label><div class="detail-value"><p-badge [value]="userAccount.isMfaAuthRequired ? (ms.translate('profile.enabled')) : (ms.translate('profile.disabled'))" [severity]="userAccount.isMfaAuthRequired ? 'success' : 'warning'"></p-badge></div></div><div class="detail-item" *ngIf="userAccount.mfaStatus"><label class="detail-label"><i class="pi pi-qrcode"></i>{{ ms.translate('profile.mfaStatus') }}</label><div class="detail-value">{{ userAccount.mfaStatus }}</div></div><div class="detail-item"><label class="detail-label"><i class="pi pi-lock"></i>{{ ms.translate('userManagement.userAccounts.locked') || 'Account Locked' }}</label><div class="detail-value"><p-badge [value]="userAccount.isLocked ? (ms.translate('common.yes') || 'Yes') : (ms.translate('common.no') || 'No')" [severity]="userAccount.isLocked ? 'danger' : 'success'"></p-badge></div></div></div></div><!-- Signature Section--><div class="details-section" *ngIf="userAccount.signaturePicture"><h3 class="section-title"><i class="pi pi-pencil"></i>{{ ms.translate('profile.signature')  }}</h3><div class="signature-container"><img class="signature-image" *ngIf="getSignatureImageUrl()" [src]="getSignatureImageUrl()" alt="Signature"></div></div><!-- Groups and Units Section--><div class="details-section"><p-accordion><!-- Groups Panel--><p-accordion-panel value="0"><p-accordion-header><ng-template #toggleicon let-active="active"><i [class]="active ? 'pi pi-minus' : 'pi pi-plus'"></i></ng-template><span class="flex items-center gap-2 w-full"><i class="pi pi-users"></i><span class="font-bold whitespace-nowrap">{{ ms.translate('profile.groups.title') || 'Groups' }}</span><p-badge class="ml-auto mr-2" [value]="getGroupsCount().toString()"></p-badge></span></p-accordion-header><p-accordion-content><div class="groups-container" *ngIf="userAccount.userGroupBag &amp;&amp; userAccount.userGroupBag.length &gt; 0; else noGroups"><div class="group-item" *ngFor="let group of userAccount.userGroupBag"><div class="group-info"><div class="group-name">{{ group.groupName }}</div><div class="group-type"><span class="group-type-badge">{{ group.groupType }}</span></div></div></div></div><ng-template #noGroups><div class="no-groups-message"><i class="pi pi-users"></i><p class="no-groups-text">{{ ms.translate('profile.groups.noGroups') || 'No groups assigned' }}</p></div></ng-template></p-accordion-content></p-accordion-panel><!-- Units Panel--><p-accordion-panel value="1"><p-accordion-header><ng-template #toggleicon let-active="active"><i [class]="active ? 'pi pi-minus' : 'pi pi-plus'"></i></ng-template><span class="flex items-center gap-2 w-full"><i class="pi pi-building"></i><span class="font-bold whitespace-nowrap">{{ ms.translate('profile.units.title') || 'Units' }}</span><p-badge class="ml-auto mr-2" [value]="getUnitsCount().toString()"></p-badge></span></p-accordion-header><p-accordion-content><div class="units-container" *ngIf="userAccount.userUnitBag &amp;&amp; userAccount.userUnitBag.length &gt; 0; else noUnits"><div class="unit-item" *ngFor="let unit of userAccount.userUnitBag"><div class="unit-info"><div class="unit-name">{{ unit.unitName }}</div><div class="unit-details"><div class="unit-detail-row" *ngIf="unit.unitCategory"><span class="unit-detail-label">{{ ms.translate('profile.units.category') || 'Category' }}:</span><span class="unit-detail-value">{{ unit.unitCategory }}</span></div><div class="unit-detail-row" *ngIf="unit.platformCode"><span class="unit-detail-label">{{ ms.translate('profile.units.platformCode') || 'Platform Code' }}:</span><span class="unit-detail-value">{{ unit.platformCode }}</span></div></div></div></div></div><ng-template #noUnits><div class="no-units-message"><i class="pi pi-building"></i><p class="no-units-text">{{ ms.translate('profile.units.noUnits') || 'No units assigned' }}</p></div></ng-template></p-accordion-content></p-accordion-panel></p-accordion></div></div><!-- Loading State--><div class="loading-container" *ngIf="loading &amp;&amp; !errorMessage"><i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i><p>{{ ms.translate('userManagement.userAccounts.loadingUserDetails') || 'Loading user details...' }}</p></div><!-- Error State--><div class="error-container" *ngIf="!loading &amp;&amp; errorMessage &amp;&amp; visible"><i class="pi pi-exclamation-triangle" style="font-size: 2rem; color: #ef4444"></i><p>{{ errorMessage }}</p></div><ng-template pTemplate="footer"><button class="p-button-secondary" pButton type="button" [label]="ms.translate('common.close') || 'Close'" icon="pi pi-times" (click)="onHide()"></button></ng-template></p-dialog>
+
+<p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '90vw', maxWidth: '900px' }" [draggable]="false" [resizable]="true" [closable]="true" [header]="(userAccount?.userName || 'User Details') + ' - ' + (ms.translate('userManagement.userAccounts.viewUser') || 'View User')" (onShow)="onShow()" (onHide)="onHide()" [styleClass]="'view-user-details-dialog'">
+  <div class="view-user-details-container" *ngIf="!loading &amp;&amp; userAccount">
+    <!-- Basic Information Section-->
+    <div class="details-section">
+      <h3 class="section-title"><i class="pi pi-user"></i>{{ ms.translate('profile.basicInfo') || 'Basic Information' }}</h3>
+      <div class="details-grid">
+        <div class="detail-item">
+          <label class="detail-label"><i class="pi pi-user"></i>{{ ms.translate('profile.userName') || 'User Name' }}</label>
+          <div class="detail-value">{{ userAccount.userName || '-' }}</div>
+        </div>
+        <div class="detail-item">
+          <label class="detail-label"><i class="pi pi-envelope"></i>{{ ms.translate('profile.email') || 'Email' }}</label>
+          <div class="detail-value">{{ userAccount.email || '-' }}</div>
+        </div>
+        <div class="detail-item">
+          <label class="detail-label"><i class="pi pi-id-card"></i>{{ ms.translate('userManagement.userAccounts.loginId') || 'Login ID' }}</label>
+          <div class="detail-value">{{ userAccount.loginId || '-' }}</div>
+        </div>
+        <div class="detail-item">
+          <label class="detail-label"><i class="pi pi-info-circle"></i>{{ ms.translate('userManagement.userAccounts.status') || 'Status' }}</label>
+          <div class="detail-value"><span [ngClass]="getStatusChipClass()">{{ getComputedStatus() }}</span></div>
+        </div>
+        <div class="detail-item">
+          <label class="detail-label"><i class="pi pi-calendar"></i>{{ ms.translate('userManagement.userAccounts.createdOn') || 'Created On' }}</label>
+          <div class="detail-value">{{ formatDate(userAccount.creationDate) }}</div>
+        </div>
+        <div class="detail-item">
+          <label class="detail-label"><i class="pi pi-calendar-plus"></i>{{ ms.translate('userManagement.userAccounts.updatedOn') || 'Last Updated' }}</label>
+          <div class="detail-value">{{ formatDate(userAccount.lastUpdateDate) }}</div>
+        </div>
+        <div class="detail-item">
+          <label class="detail-label"><i class="pi pi-tag"></i>{{ ms.translate('profile.userType') || 'User Type' }}</label>
+          <div class="detail-value"><span class="user-type-display"><span>{{ userAccount.isExternal ? (ms.translate('profile.externalUser') ) : (ms.translate('profile.officeUser') ) }}</span></span></div>
+        </div>
+      </div>
+    </div>
+    <!-- Security Information Section-->
+    <div class="details-section">
+      <h3 class="section-title"><i class="pi pi-shield"></i>{{ ms.translate('profile.security') || 'Security' }}</h3>
+      <div class="details-grid">
+        <div class="detail-item">
+          <label class="detail-label"><i class="pi pi-qrcode"></i>{{ ms.translate('profile.mfa') || 'Multi-Factor Authentication' }}</label>
+          <div class="detail-value">
+            <p-badge [value]="userAccount.isMfaAuthRequired ? (ms.translate('profile.enabled')) : (ms.translate('profile.disabled'))" [severity]="userAccount.isMfaAuthRequired ? 'success' : 'warning'"></p-badge>
+          </div>
+        </div>
+        <div class="detail-item" *ngIf="userAccount.mfaStatus">
+          <label class="detail-label"><i class="pi pi-qrcode"></i>{{ ms.translate('profile.mfaStatus') }}</label>
+          <div class="detail-value">{{ userAccount.mfaStatus }}</div>
+        </div>
+        <div class="detail-item">
+          <label class="detail-label"><i class="pi pi-lock"></i>{{ ms.translate('userManagement.userAccounts.locked') || 'Account Locked' }}</label>
+          <div class="detail-value">
+            <p-badge [value]="userAccount.isLocked ? (ms.translate('common.yes') || 'Yes') : (ms.translate('common.no') || 'No')" [severity]="userAccount.isLocked ? 'danger' : 'success'"></p-badge>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Signature Section-->
+    <div class="details-section" *ngIf="userAccount.signaturePicture">
+      <h3 class="section-title"><i class="pi pi-pencil"></i>{{ ms.translate('profile.signature')  }}</h3>
+      <div class="signature-container"><img class="signature-image" *ngIf="getSignatureImageUrl()" [src]="getSignatureImageUrl()" alt="Signature"></div>
+    </div>
+    <!-- Groups and Units Section-->
+    <div class="details-section">
+      <p-accordion>
+        <!-- Groups Panel-->
+        <p-accordion-panel value="0">
+          <p-accordion-header>
+            <ng-template #toggleicon let-active="active"><i [class]="active ? 'pi pi-minus' : 'pi pi-plus'"></i></ng-template><span class="flex items-center gap-2 w-full"><i class="pi pi-users"></i><span class="font-bold whitespace-nowrap">{{ ms.translate('profile.groups.title') || 'Groups' }}</span>
+              <p-badge class="ml-auto mr-2" [value]="getGroupsCount().toString()"></p-badge></span>
+          </p-accordion-header>
+          <p-accordion-content>
+            <div class="groups-container" *ngIf="userAccount.userGroupBag &amp;&amp; userAccount.userGroupBag.length &gt; 0; else noGroups">
+              <div class="group-item" *ngFor="let group of userAccount.userGroupBag">
+                <div class="group-info">
+                  <div class="group-name">{{ group.groupName }}</div>
+                  <div class="group-type"><span class="group-type-badge">{{ group.groupType }}</span></div>
+                </div>
+              </div>
+            </div>
+            <ng-template #noGroups>
+              <div class="no-groups-message"><i class="pi pi-users"></i>
+                <p class="no-groups-text">{{ ms.translate('profile.groups.noGroups') || 'No groups assigned' }}</p>
+              </div>
+            </ng-template>
+          </p-accordion-content>
+        </p-accordion-panel>
+        <!-- Units Panel-->
+        <p-accordion-panel value="1">
+          <p-accordion-header>
+            <ng-template #toggleicon let-active="active"><i [class]="active ? 'pi pi-minus' : 'pi pi-plus'"></i></ng-template><span class="flex items-center gap-2 w-full"><i class="pi pi-building"></i><span class="font-bold whitespace-nowrap">{{ ms.translate('profile.units.title') || 'Units' }}</span>
+              <p-badge class="ml-auto mr-2" [value]="getUnitsCount().toString()"></p-badge></span>
+          </p-accordion-header>
+          <p-accordion-content>
+            <div class="units-container" *ngIf="userAccount.userUnitBag &amp;&amp; userAccount.userUnitBag.length &gt; 0; else noUnits">
+              <div class="unit-item" *ngFor="let unit of userAccount.userUnitBag">
+                <div class="unit-info">
+                  <div class="unit-name">{{ unit.unitName }}</div>
+                  <div class="unit-details">
+                    <div class="unit-detail-row" *ngIf="unit.unitCategory"><span class="unit-detail-label">{{ ms.translate('profile.units.category') || 'Category' }}:</span><span class="unit-detail-value">{{ unit.unitCategory }}</span></div>
+                    <div class="unit-detail-row" *ngIf="unit.platformCode"><span class="unit-detail-label">{{ ms.translate('profile.units.platformCode') || 'Platform Code' }}:</span><span class="unit-detail-value">{{ unit.platformCode }}</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ng-template #noUnits>
+              <div class="no-units-message"><i class="pi pi-building"></i>
+                <p class="no-units-text">{{ ms.translate('profile.units.noUnits') || 'No units assigned' }}</p>
+              </div>
+            </ng-template>
+          </p-accordion-content>
+        </p-accordion-panel>
+      </p-accordion>
+    </div>
+  </div>
+  <!-- Loading State-->
+  <div class="loading-container" *ngIf="loading &amp;&amp; !errorMessage"><i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    <p>{{ ms.translate('userManagement.userAccounts.loadingUserDetails') || 'Loading user details...' }}</p>
+  </div>
+  <!-- Error State-->
+  <div class="error-container" *ngIf="!loading &amp;&amp; errorMessage &amp;&amp; visible"><i class="pi pi-exclamation-triangle" style="font-size: 2rem; color: #ef4444"></i>
+    <p>{{ errorMessage }}</p>
+  </div>
+  <ng-template pTemplate="footer">
+    <button class="p-button-secondary" pButton type="button" [label]="ms.translate('common.close') || 'Close'" icon="pi pi-times" (click)="onHide()"></button>
+  </ng-template>
+</p-dialog>

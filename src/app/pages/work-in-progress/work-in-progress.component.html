@@ -1,1 +1,12 @@
-<app-layout [config]="layoutConfig"><div class="container"><div class="main-container"><i class="pi pi-cog pi-spin icon"></i><h1 class="title">{{ 'workInProgress.title' | translate }}</h1><p class="description">{{ 'workInProgress.subtitle' | translate }}</p><div class="back-button-container"><button class="p-button-outlined p-button-secondary" pButton type="button" (click)="goBack()" icon="pi pi-arrow-left" [label]="ms.translate('common.goBack')"></button></div></div></div></app-layout>
+
+<app-layout [config]="layoutConfig">
+  <div class="container">
+    <div class="main-container"><i class="pi pi-cog pi-spin icon"></i>
+      <h1 class="title">{{ 'workInProgress.title' | translate }}</h1>
+      <p class="description">{{ 'workInProgress.subtitle' | translate }}</p>
+      <div class="back-button-container">
+        <button class="p-button-outlined p-button-secondary" pButton type="button" (click)="goBack()" icon="pi pi-arrow-left" [label]="ms.translate('common.goBack')"></button>
+      </div>
+    </div>
+  </div>
+</app-layout>
