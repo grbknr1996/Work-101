@@ -1,3 +1,1 @@
-
-<div class="panel-header"><span class="panel-title">{{ panelName }}</span><span class="icon-group">
-    <ng-container *ngFor="let pt of panelTypes"><i class="pi clickable-icon" [ngClass]="pt.type === 'Expand Panel' ? (isExpanded ? 'pi-window-minimize' : 'pi-window-maximize') : pt.icon" [pTooltip]="pt.type === 'Expand Panel' ? (isExpanded ? 'Minimize Panel' : 'Expand Panel') : pt.tooltip" tooltipPosition="bottom" (click)="changePanelView(pt.type)"></i></ng-container></span></div>
+<div class="panel-header"><span class="panel-title">{{ panelName }}</span><span class="icon-group"><ng-container *ngFor="let pt of panelTypes"><i class="pi clickable-icon" [ngClass]="pt.type === 'Expand Panel' ? (isExpanded ? 'pi-window-minimize' : 'pi-window-maximize') : pt.icon" [pTooltip]="pt.type === 'Expand Panel' ? (isExpanded ? 'Minimize Panel' : 'Expand Panel') : pt.tooltip" tooltipPosition="bottom" (click)="changePanelView(pt.type)"></i></ng-container></span></div>

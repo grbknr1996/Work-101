@@ -1,0 +1,91 @@
+app-layout([config]="layoutConfig")
+    app-breadcrumbs([items]="getBreadcrumbItems()")
+
+    .flex.justify-center.items-center.mt-8
+        p-card([style]="{ width: '25rem', overflow: 'hidden' }")
+            ng-template(#title="") {{ "recipients.addRecipients.title" | translate }}
+            form([formGroup]="recipientForm").flex.flex-col.gap-4.mt-4.p-2
+                .flex.flex-col.gap-2
+                    label(for="recipientCode", class="font-semibold text-lg") {{ "recipients.addRecipients.recipientCode" | translate }}
+                    input(
+                        id="recipientCode",
+                        type="text", 
+                        pInputText="", 
+                        pSize="large",
+                        formControlName="recipientCode"
+                    )
+                .flex.flex-col.gap-2
+                    label(for="recipientName", class="font-semibold text-lg") {{ "recipients.addRecipients.recipientName" | translate }}
+                    input(
+                        id="recipientName",
+                        type="text", 
+                        pInputText="",
+                        pSize="large",
+                        formControlName="recipientName"
+                    )
+                .flex.gap-4.mt-2
+                    p-button(
+                        [label]="ms.translate('recipients.addRecipients.cancel')", 
+                        severity="secondary", 
+                        class="w-full", 
+                        [outlined]="true", 
+                        styleClass="w-full",
+                        (click)="distributionRulePageRoute()"
+                    )
+                    p-button(
+                        type="submit", 
+                        [disabled]="!recipientForm.valid",
+                        [label]="ms.translate('recipients.addRecipients.save')", 
+                        class="w-full", 
+                        styleClass="w-full",
+                        (click)="addRecipient()"
+                    )
+
+p-dialog(
+    [modal]="true", 
+    [(visible)]="visibleDialog",
+    [style]="{ 'width': '40rem' }"
+    )
+    ng-template(#header="")
+        div(*ngIf="recipientSaveResponse?.clientDetail").inline-flex.items-center.justify-center.gap-2
+            i(
+                class="pi pi-check-circle", 
+                style="font-size: 1.5rem"
+            )
+            span.font-bold.whitespace-nowrap.text-lg {{ "recipients.addRecipients.created" | translate }}
+        div(*ngIf="recipientSaveResponse?.error").inline-flex.items-center.justify-center.gap-2
+            i(
+                class="pi pi-exclamation-triangle", 
+                style="font-size: 1.5rem"
+            )
+            span.font-bold.whitespace-nowrap.text-lg {{ "recipients.addRecipients.duplicateEntry" | translate }}
+    div(*ngIf="recipientSaveResponse?.clientDetail").flex.justify-end
+    p-toast
+    div(*ngIf="recipientSaveResponse?.clientDetail")
+        div(#copyRecipientDetails='').flex.flex-col.border.border-green-300.bg-green-100.rounded-xl.px-5.py-4.mb-2.shadow-sm
+            .font-bold.text-xl {{ "recipients.addRecipients.successRecipientCreationDialog.recipientName" | translate }}:
+            .font-medium.text-lg.mb-2 {{ recipientSaveResponse?.clientDetail?.recipientName }}
+            .font-bold.text-xl {{ "recipients.addRecipients.successRecipientCreationDialog.clientId" | translate }}:
+            .font-medium.text-lg.mb-2 {{ recipientSaveResponse?.clientDetail?.recipientClientId }}
+            .font-bold.text-xl {{ "recipients.addRecipients.successRecipientCreationDialog.clientSecret" | translate }}:
+            .font-medium.text-lg {{ recipientSaveResponse?.clientDetail?.recipientClientSecret }}
+        .flex.justify-center.gap-2
+            p-button(
+                icon="pi pi-copy",
+                [label]="ms.translate('recipients.addRecipients.copy')", 
+                (click)="copyDivContent(copyRecipientDetails)"
+            )
+            p-button(
+                severity="secondary",
+                [label]="ms.translate('recipients.addRecipients.ok')", 
+                (click)="closeDialog()"
+            )
+    div(*ngIf="recipientSaveResponse?.error")
+        .flex.flex-col.gap-4.border.border-yellow-300.bg-yellow-100.rounded-xl.px-5.py-4.mb-4.shadow-sm
+            .font-bold.text-lg {{ recipientSaveResponse?.error }}
+        .flex.justify-center
+            p-button(
+                [label]="ms.translate('recipients.addRecipients.ok')", 
+                (click)="visibleDialog = false"
+            )
+        

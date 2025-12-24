@@ -38,14 +38,6 @@ app-layout
               label(for="on_label") Search
           
           .col-span-8.flex.justify-end.gap-2.filter-icons
-            button.p-button-text.p-button-sm(
-              pButton,
-              type="button",
-              [icon]="isCardView ? 'pi pi-list' : 'pi pi-th-large'",
-              (click)="toggleView()",
-              pTooltip="Toggle between table and card view",
-              style="color: var(--p-button-outlined-secondary-color)"
-            )
             app-configurable-filter(
               [filters]="filterConfigs",
               [showClearAll]="true",
@@ -88,7 +80,7 @@ app-layout
               | @for (category of categories; track category.ipType) {
               p-tabpanel.grid.grid-cols-12.gap-3([value]="category.ipType")
                 .col-span-12.flex.justify-between.p-4.items-center.table-selections
-                  .text-base.font-bold Selected: 0
+                  .text-base.font-bold Selected: {{ selectedItems.length }}
                   .flex.items-center.gap-2
                     .text-base.font-bold Journal Code:
                     p-select(
@@ -140,6 +132,7 @@ app-layout
                   app-table(
                     [columns]="tableColumns",
                     [data]="category.data",
+                    [dataKey]="category.fileId",
                     [globalFilterFields]="globalFilterFields",
                     [showSearchButton]="false",
                     [showClearButton]="false",
@@ -147,7 +140,8 @@ app-layout
                     [lazy]="true",
                     [rows]="pageSize",
                     [totalRecords]="totalRecords",
-                    [(selection)]="selectedRows",
+                    [selectedRows]="selectedItems",
+                    (selectionChange)="onSelectionChange($event)",
                     [rowsPerPageOptions]="[10, 25, 50, 100]",
                     [showCurrentPageReport]="true",
                     [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} publications'",

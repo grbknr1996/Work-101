@@ -2,4 +2,230 @@ app-layout
     app-breadcrumbs([items]="breadcrumbItems")
 
     .flex.justify-between
-        h1.pt-4.ml-4 Online Publication Journals
+        div
+            h1.pt-4.text-xl.ml-4 {{ "onlinePublicationJournals.title" | translate }}
+            p.pt-2.pb-2.ml-4.font-light {{ "onlinePublicationJournals.subTitle" | translate }}
+        .mr-4
+            p-button(
+                (click)="showDialog()", 
+                label="Full Extraction",
+                size="large",
+                icon="pi pi-bolt", 
+                severity="help"
+            )
+
+    p-panel([toggleable]="true").w-full.mt-4
+        ng-template(#header="")
+            .flex.items-center.gap-2
+                .font-bold.text-lg {{ "onlinePublicationJournals.regularIncrementalExtraction.title" | translate }}
+        .grid.grid-cols-12.items-stretch.gap-4.mt-2
+            ng-container(*ngFor="let execution of executions.regularExtraction")
+                p-card.col-span-4
+                    .flex.justify-between
+                        .text-lg.font-semibold.mb-6 {{ execution?.category | capitalizeWords }}
+                        .w-2
+                            .rounded-full(class='h-3.5 w-3.5', [ngClass]=`{ 
+                                'bg-green-600': execution?.status === "completed",
+                                'bg-orange-600': execution?.status === "processing"
+                            }`)
+                    .grid.grid-cols-6.gap-2
+                        .col-span-6(class="lg:col-span-3")
+                            .text-base.font-light.mb-2 {{ "onlinePublicationJournals.regularIncrementalExtraction.lastExecution" | translate }}
+                            .text-lg.font-medium.mb-4 {{ execution?.lastExecution }}
+                        .col-span-6(class="lg:col-span-3")
+                            .text-base.font-light.mb-2 {{ "onlinePublicationJournals.regularIncrementalExtraction.totalApplications" | translate }}
+                            .text-lg.font-medium.mb-4 {{ execution?.totalApplications }}
+                    .text-base.font-light.mb-2 {{ "onlinePublicationJournals.regularIncrementalExtraction.nextPublication" | translate }}
+                    .flex.justify-start.gap-4
+                        p-progress-spinner(
+                            *ngIf="execution?.status === 'processing'", 
+                            ariaLabel="loading", 
+                            [style]="{ width: '25px', height: '25px' }"
+                        )
+                        .text-lg.font-medium.mb-4(
+                            [ngClass]="{'text-orange-600': execution?.status === 'processing'}"
+                        ) {{ execution?.nextPublication }}
+
+    p-panel([toggleable]="true").w-full.mt-4
+        ng-template(#header="")
+            .flex.items-center.gap-2
+                .font-bold.text-lg {{ "onlinePublicationJournals.fullExtraction.title" | translate }}
+        .grid.grid-cols-12.items-stretch.gap-4.mt-2
+            ng-container(*ngFor="let execution of executions.fullExtraction")
+                p-card.col-span-4
+                    .flex.justify-between
+                        .text-lg.font-semibold.mb-6 {{ execution?.category | capitalizeWords }}
+                        .w-2
+                            .rounded-full(class='h-3.5 w-3.5', [ngClass]=`{ 
+                                'bg-green-600': execution?.status === "completed",
+                                'bg-orange-600': execution?.status === "processing"
+                            }`)
+                    .grid.grid-cols-6.gap-2
+                        .col-span-6(class="lg:col-span-3")
+                            .text-base.font-light.mb-2 {{ "onlinePublicationJournals.fullExtraction.lastFullExtraction" | translate }}
+                            .text-lg.font-medium.mb-4 {{ execution?.lastFullExecution }}
+                        .col-span-6(class="lg:col-span-3")
+                            .text-base.font-light.mb-2 {{ "onlinePublicationJournals.fullExtraction.totalApplications" | translate }}
+                            .text-lg.font-medium.mb-4 {{ execution?.totalApplications }}
+                    .text-base.font-light.mb-2 {{ "onlinePublicationJournals.fullExtraction.nextPublication" | translate }}
+                    .flex.justify-start.gap-4
+                        p-progress-spinner(
+                            *ngIf="execution?.status === 'processing'", 
+                            ariaLabel="loading", 
+                            [style]="{ width: '25px', height: '25px' }"
+                        )
+                        .text-lg.font-medium.mb-4(
+                            [ngClass]="{'text-orange-600': execution?.status === 'processing'}"
+                        ) {{ "onlinePublicationJournals.fullExtraction.inProgress" | translate }}: {{ execution?.nextPublication }}
+                    p-progressbar(
+                        *ngIf="execution?.status === 'processing'",
+                        [value]="execution?.progressPercentage"
+                    )
+
+    .flex.justify-start.items-center.gap-2.pt-8.pb-8
+        div.pi
+            svg(
+                xmlns="http://www.w3.org/2000/svg", 
+                width="24", height="24", 
+                viewBox="0 0 24 24", 
+                fill="none", 
+                stroke="currentColor", 
+                stroke-width="2", 
+                stroke-linecap="round", 
+                stroke-linejoin="round", 
+                class="lucide lucide-activity w-5 h-5 text-gray-700", 
+                aria-hidden="true"
+            )
+                path(
+                    d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"
+                )
+        .font-medium.text-2xl {{ "onlinePublicationJournals.progressAndActivityFeed" | translate }}
+
+    div.flex.flex-col.gap-1(*ngFor="let item of executions?.activityFeed")
+        p-card.w-full([ngStyle]=`{
+                '--p-card-background': item?.status === 'completed' ? '#D4FFD6' :
+                                    item?.status === 'processing' ? '#FFF3CC' :
+                                    item?.status === 'scheduled' ? '#DCEBFF' : '#FFFFFF',
+
+                '--p-surface-card': item?.status === 'completed' ? '#D4FFD6' :
+                                    item?.status === 'processing' ? '#FFF3CC' :
+                                    item?.status === 'scheduled' ? '#DCEBFF' : '#FFFFFF'
+            }`)
+            .flex.flex-col.gap-2
+                .flex.justify-start.items-center.gap-4
+                    i(style="font-size: 1.5rem", [ngClass]=`{
+                        'pi pi-check-circle': item?.status === 'completed',
+                        'pi pi-clock': item?.status === 'scheduled'
+                    }`)
+                    div.pi.pt-2.pb-2(*ngIf="item?.status === 'processing'")
+                        svg(
+                            xmlns="http://www.w3.org/2000/svg", 
+                            width="24", height="24", 
+                            viewBox="0 0 24 24", 
+                            fill="none", 
+                            stroke="currentColor", 
+                            stroke-width="2", 
+                            stroke-linecap="round", 
+                            stroke-linejoin="round", 
+                            class="lucide lucide-activity w-5 h-5 text-gray-700", 
+                            aria-hidden="true"
+                        )
+                            path(
+                                d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"
+                            )
+
+                    div
+                        p-tag(
+                            [value]="item?.category",  
+                            [style]="{ border: '2px solid #383838ff'}"
+                        )
+                    div
+                        p-tag(
+                            [value]="item?.status",
+                             [style]="{ border: '2px solid #383838ff'}"
+                        )
+                .font-medium.text-xl {{ item?.message }}
+                div(*ngIf="item?.status === 'processing'")
+                    p-progressbar(
+                        *ngIf="item?.status === 'processing'",
+                        [value]="item?.progressPercentage"
+                    )
+                .font-light.text-lg {{ item?.updatedAt }}
+
+
+p-dialog(
+    [header]="ms.translate('onlinePublicationJournals.fullExtraction.title')", 
+    [modal]="true", 
+    [(visible)]="visible", 
+    [style]="{ width: '50rem' }",
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }",
+    class="full-extraction-dialog"
+)
+    .flex.justify-start
+        .font-semibold.text-lg.text-yellow-600.bg-yellow-100.border-2.border-yellow-500.rounded-xl.p-8
+            i(class="pi pi-exclamation-triangle") 
+            | &nbsp;&nbsp;{{ "onlinePublicationJournals.fullExtractionDialog.warningMessage" | translate }}.
+
+    .font-bold.text-xl.py-4 {{ "onlinePublicationJournals.fullExtractionDialog.selectIpType" | translate }}
+    .flex.flex-row.justify-start.items-center.gap-4
+        div.border-2.border-black-500.rounded-xl.text-lg.p-4(*ngFor="let category of ipTypes")
+            p-checkbox(
+                [inputId]="category",
+                name="group",
+                [value]="category", 
+                [(ngModel)]="selectedIpTypes"
+            )
+            label(
+                [for]="category", 
+                class="ml-2"
+            ) {{ category | capitalizeWords }}
+
+    .font-bold.text-xl.pt-4 {{ "onlinePublicationJournals.fullExtractionDialog.dateRange" | translate }}
+    .grid.grid-cols-6.gap-2.mb-8
+        .col-span-3
+            div
+                label(
+                    for="startDateDisplay", 
+                    class="font-light text-base block mb-2"
+                ) {{ "onlinePublicationJournals.fullExtractionDialog.startDate" | translate }}
+                p-datepicker(
+                    [(ngModel)]="startDate",
+                    [showIcon]="true", 
+                    inputId="startDateDisplay", 
+                    [showOnFocus]="false"
+                )
+        .col-span-3
+            div 
+                label(
+                    for="endDateDisplay", 
+                    class="font-light text-base block mb-2"
+                ) {{ "onlinePublicationJournals.fullExtractionDialog.endDate" | translate }}
+                p-datepicker(
+                    [(ngModel)]="endDate",
+                    [showIcon]="true", 
+                    inputId="endDateDisplay", 
+                    [showOnFocus]="false"
+                )
+
+    .font-semibold.bg-gray-100.border-2.border-black-500.rounded-xl.p-8.mb-8
+        .flex.justify-start.gap-2
+            div.font-bold.text-xl {{ "onlinePublicationJournals.fullExtractionDialog.dateRange" | translate }}:
+            div.font-light.text-xl {{ startDate | date: 'yyyy-MM-dd' }} {{ startDate && endDate ? ms.translate('onlinePublicationJournals.fullExtractionDialog.to') : "" }} {{ endDate | date: 'yyyy-MM-dd' }}
+        .flex.justify-start.gap-2
+            div.font-bold.text-xl {{ "onlinePublicationJournals.fullExtractionDialog.selectIpType" | translate }}:
+            div.font-light.text-xl {{ selectedIpTypes.length }} {{ "onlinePublicationJournals.fullExtractionDialog.of" | translate }} {{ ipTypes.length }}
+
+
+    ng-template(#footer="")
+        p-button(
+            [label]="ms.translate('onlinePublicationJournals.fullExtractionDialog.cancelLabel')", 
+            severity="secondary",
+            size="large",
+            (click)="visible = false"
+        )
+        p-button(
+            [label]="ms.translate('onlinePublicationJournals.fullExtractionDialog.startFullExtractionLabel')",
+            severity="help",
+            size="large",
+            (click)="visible = false"
+        )

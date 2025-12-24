@@ -59,6 +59,7 @@ export class StatisticsComponent implements OnInit {
   inActiveData: any;
   inActiveDataMap = new Map();
   IPCategory = new Map();
+  //|//
   IPCategoryCount = new Map();
   currentIPCategory: string = '';
   IPAppMap = new Map();
@@ -324,9 +325,10 @@ export class StatisticsComponent implements OnInit {
     });
   }
   transformApplications(inputData, type: string) {
+    let recordIPCategory = new Map();
     if (type === 'accounted_application') {
       for (let IP of inputData.applicationBag) {
-        this.IPCategory.set(IP.ipCategory, this.translationMap.get(IP.ipCategory));
+        recordIPCategory.set(IP.ipCategory, this.translationMap.get(IP.ipCategory));
         this.IPCategoryCount.set(IP.ipCategory, IP.dataBag.length); //L1
         let codes = [];
         for (let applications of IP.dataBag) codes.push(applications.applicationCategory); //L2
@@ -334,6 +336,13 @@ export class StatisticsComponent implements OnInit {
         codes = codes.sort(([a], [b]) => (a.localeCompare(b)));
         this.IPAppMap.set(IP.ipCategory, codes);
       }
+      //SORT - IPCategory
+      let order = ['T', 'P', 'D'], result1 = new Map(), result2 = new Map();
+      for (let item of order) {
+        if (recordIPCategory.has(item)) result1.set(item, recordIPCategory.get(item));
+        else result2.set(item, recordIPCategory.get(item));
+      }
+      this.IPCategory = new Map([...result1, ...result2]);
       //SORT - L1
       this.IPCategoryCount = new Map([...this.IPCategoryCount].sort(([a], [b]) => a.localeCompare(b)));
     }
@@ -490,7 +499,7 @@ export class StatisticsComponent implements OnInit {
     let givenHundred = max / scale;
     let check = max % scale;
     if (check !== 0) givenHundred = givenHundred + 1;
-    return { max: (givenHundred * scale), interval: (givenHundred * scale) };
+    return { max: Math.round((givenHundred * scale)), interval: Math.round((givenHundred * scale)) };
   }
 
   ngOnDestroy() {

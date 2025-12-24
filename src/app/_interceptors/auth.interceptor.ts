@@ -23,6 +23,9 @@ export class AuthInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    if (request.body instanceof FormData) {
+      return next.handle(request);
+    }
     // Check if we should skip adding authorization token (via header)
     const shouldSkipToken = request.headers.has(
       SKIP_AUTHORIZATION_TOKEN_HEADER

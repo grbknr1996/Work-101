@@ -24,6 +24,7 @@ export const environment = {
   enableLogging: true,
   appUrl: 'https://localhost:4200',
   distributionRulesPath: 'data-sharing/v1/data-distributions',
+  recipientsPath: 'data-sharing/v1/appClient',
   configUrl: '/services/offices',
   backendUrl: '/services/users',
   dataServicesApi: '/data-services/v1/packages',
@@ -32,6 +33,10 @@ export const environment = {
   authApi: 'https://auth.iims.ipobs.dev.web1.wipo.int/oauth2/token',
   authApiUsername: '160dg69c2ekjev3fh80msmome9',
   authApiPassword: '1llb7572v5595lmkeb25ouv57mn435iumnr05vrmeo0oo19me43b',
+  similaritySearchApi: '/search/registry',
+  similaritySearchImage: '/search/image',
+  similarityTextToImage: '/search/text-to-image',
+  analyzeApi: '/analyze',
   cognito: {
     region: 'eu-central-1',
     userPoolId: 'eu-central-1_aIn5Yy5c5',

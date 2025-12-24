@@ -15,9 +15,10 @@ app-layout
           (filterCleared)="onFilterCleared()",
           (filterApplied)="onFilterApplied($event)",
           (appliedFiltersChange)="onAppliedFiltersChange($event)",
-          [showSearchBar]="true",
-          [searchBar]="searchBar",
-          (filterSearch)="filterSearch($event)",
+          [showAutoComplete]="true",
+          [autoCompleteSuggestions]="autoCompleteSuggestions",
+          (searchItemSelected)="searchItemSelected($event)",
+          (autoCompleteSearch)="autoCompleteSearch($event)",
           [searchLabel]="'dataService.dataSharing.filter.search'|translate",
           [showDownloadIcon]="false",
           [filterClearAll]="false",
@@ -32,4 +33,4 @@ app-layout
           [advancedFilterMode]="'simple'",
           (advancedFilterSearch)="onAdvancedFilterSearch($event)"
         )
-  app-table([columns]="tableColumns", [data]="tableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false") 
+  app-table([columns]="tableColumns", [data]="tableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false", [emptyMessage]="emptyMessage") 

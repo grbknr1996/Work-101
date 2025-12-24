@@ -1,30 +1,45 @@
 app-layout([config]="layoutConfig")
   app-breadcrumbs([items]="getBreadcrumbItems()")
+
+  .flex.justify-between.py-4
+    h1.pt-4.text-xl.ml-4.col-span-3 {{ "distributionRules.title" | translate }}
+    .flex.gap-2
+      p-button(
+        [label]="ms.translate('distributionRules.addRuleButton')", 
+        icon="pi pi-plus",
+        (click)="addRule()"
+        )
+      p-button(
+        *ngIf="isWipoAdmin",
+        [label]="ms.translate('distributionRules.addRecipientButton')", 
+        icon="pi pi-plus",
+        (click)="addRecipient()"
+      )
   
-  .summary-stats
-    .stat-card
-      .stat-content
-        .stat-icon(style="background: linear-gradient(135deg, #0d47a1 0%, #0d47a1dd 100%)")
-          i.pi.pi-shield
-        .stat-info
-          .stat-number {{ activeRulesCount() }}
-          .stat-label Allowed Unpublished Applications
+  //- .summary-stats
+  //-   .stat-card
+  //-     .stat-content
+  //-       .stat-icon(style="background: linear-gradient(135deg, #0d47a1 0%, #0d47a1dd 100%)")
+  //-         i.pi.pi-shield
+  //-       .stat-info
+  //-         .stat-number {{ activeRulesCount() }}
+  //-         .stat-label Allowed Unpublished Applications
     
-    .stat-card
-      .stat-content
-        .stat-icon(style="background: linear-gradient(135deg, #1565c0 0%, #1565c0dd 100%)")
-          i.pi.pi-building
-        .stat-info
-          .stat-number {{ officesCoveredCount() }}
-          .stat-label Offices Covered
+  //-   .stat-card
+  //-     .stat-content
+  //-       .stat-icon(style="background: linear-gradient(135deg, #1565c0 0%, #1565c0dd 100%)")
+  //-         i.pi.pi-building
+  //-       .stat-info
+  //-         .stat-number {{ officesCoveredCount() }}
+  //-         .stat-label Offices Covered
     
-    .stat-card
-      .stat-content
-        .stat-icon(style="background: linear-gradient(135deg, #1976d2 0%, #1976d2dd 100%)")
-          i.pi.pi-list
-        .stat-info
-          .stat-number {{ totalRulesCount() }}
-          .stat-label Total Rules
+  //-   .stat-card
+  //-     .stat-content
+  //-       .stat-icon(style="background: linear-gradient(135deg, #1976d2 0%, #1976d2dd 100%)")
+  //-         i.pi.pi-list
+  //-       .stat-info
+  //-         .stat-number {{ totalRulesCount() }}
+  //-         .stat-label Total Rules
   
   .filter-section(style="background: #e5f3f7; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center")     
     .filter-controls
@@ -52,111 +67,175 @@ app-layout([config]="layoutConfig")
     (clearAll)="onFilterChipsClearAll()"
   )
   
-  .distribution-rules-header(class="mt-3")
-    h2 Distribution Rules
-    button.add-rule-btn(type="button", (click)="addRule()")
-      i.pi.pi-plus
-      |  Add Rule
+  //- .distribution-rules-header(class="mt-3")
+  //-   h2 Distribution Rules
+  //-   p-button(label="Profile", icon="pi pi-plus")
+  //-   button.add-rule-btn(type="button", (click)="addRule()")
+  //-     i.pi.pi-plus
+  //-     |  Add Rule
   
-  .card
-    p-table(
-      #dt,
-      [value]="distributionRulesData()",
-      [rowHover]="true",
-      [rows]="10",
-      [rowsPerPageOptions]="[10, 25, 50]",
-      [paginator]="true",
-      [showCurrentPageReport]="true",
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries",
-      [resizableColumns]="false",
-      [reorderableColumns]="false",
-      responsiveLayout="scroll",
-      styleClass="p-datatable-sm"
-    )
-      ng-template(pTemplate="header")
-        tr
-          th(pSortableColumn="originatingOfficeName", style="width: 12%", *ngIf="isWipoAdmin")
-            .flex.items-center
-              | Originating Office
-              p-sortIcon(field="originatingOfficeName")
-          
-          th(pSortableColumn="recipientName", style="width: 12%")
-            .flex.items-center
-              | Recipient Name
-              p-sortIcon(field="recipientName")
-          
-          th(style="width: 12%") IP Category
-          th(style="width: 15%") Included Application Type
-          th(style="width: 18%") Documents Included
-          th(style="width: 14%") Event Codes
-          th(style="width: 5%") Actions
-      
-      ng-template(pTemplate="body", let-rowData)
-        tr
-          td(*ngIf="isWipoAdmin") {{ rowData.originatingOfficeName }}
-          td {{ rowData.recipientName }}
-          
-          td
-            span.exclusion-chip(
-              style="background: #e3f2fd; color: #1976d2; padding: 4px 12px; border-radius: 16px; font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
+  p-tabs(value="distributionRules")
+    p-tablist
+      | @for (tab of tabs; track tab.value) {
+      p-tab(
+        *ngIf="tab.show",
+        [value]="tab.value"
+      ) {{ tab.title }}
+      | }
+    p-tabpanels
+      | @for (tab of tabs; track tab.value) {
+      p-tabpanel(
+        *ngIf="tab.show",
+        [value]="tab.value"
+        )
+        .card(*ngIf="tab.value === 'distributionRules'; else elseBlock")
+          p-table(
+            #dt="",
+            [value]="tab.content()",
+            [rowHover]="true",
+            [rows]="10",
+            [rowsPerPageOptions]="[10, 25, 50]",
+            [paginator]="true",
+            sortField="recipientName",
+            [sortOrder]="1",
+            showFirstLastIcon="false",
+            paginatorPosition="both",
+            [showCurrentPageReport]="true",
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries",
+            [resizableColumns]="false",
+            [reorderableColumns]="false",
+            responsiveLayout="scroll",
+            styleClass="p-datatable-sm"
+          )
+            ng-template(pTemplate="header")
+              tr
+                th(pSortableColumn="originatingOfficeName", style="width: 12%", *ngIf="isWipoAdmin")
+                  .flex.items-center
+                    | {{ "distributionRules.distributionRulesTab.distributionRulesTable.originatingOffice" | translate }}
+                    p-sortIcon(field="originatingOfficeName")
+                
+                th(pSortableColumn="recipientName", style="width: 12%")
+                  .flex.items-center
+                    | {{ "distributionRules.distributionRulesTab.distributionRulesTable.recipientName" | translate }}
+                    p-sortIcon(field="recipientName")
+                
+                th(style="width: 12%") {{ "distributionRules.distributionRulesTab.distributionRulesTable.IPCategory" | translate }}
+                th(style="width: 15%") {{ "distributionRules.distributionRulesTab.distributionRulesTable.includedApplicationType" | translate }}
+                th(style="width: 18%") {{ "distributionRules.distributionRulesTab.distributionRulesTable.documentsIncluded" | translate }}
+                th(style="width: 14%") {{ "distributionRules.distributionRulesTab.distributionRulesTable.eventCodes" | translate }}
+                th(style="width: 5%") {{ "distributionRules.distributionRulesTab.distributionRulesTable.actions" | translate }}
+            
+            ng-template(pTemplate="body", let-rowData)
+              tr
+                td(*ngIf="isWipoAdmin") {{ rowData.originatingOfficeName }}
+                td {{ rowData.recipientName }}
+                
+                td
+                  span.exclusion-chip(
+                    style="background: #e3f2fd; color: #1976d2; padding: 4px 12px; border-radius: 16px; font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
+                  )
+                    i.pi.pi-file(style="font-size: 10px")
+                    | {{ rowData.ipCategory }}
+                
+                td
+                  span.status-badge(
+                    [class.status-active]="rowData.unpublishedApplication",
+                    [class.status-inactive]="!rowData.unpublishedApplication",
+                    [style.background-color]="rowData.unpublishedApplication ? '#ffebee' : '#e8f5e8'",
+                    [style.color]="rowData.unpublishedApplication ? '#c62828' : '#2e7d32'",
+                    style="padding: 4px 12px; border-radius: 16px; font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
+                  )
+                    i([class]="rowData.unpublishedApplication ? 'pi pi-exclamation-triangle' : 'pi pi-eye'", style="font-size: 10px")
+                    | {{ rowData.unpublishedApplication ? 'Unpublished' : 'Published' }}
+                
+                td
+                  .document-list(style="display: flex; flex-wrap: wrap; gap: 4px")
+                    span.document-item(
+                      *ngFor="let doc of rowData.documentList",
+                      style="background: #e3f2fd; color: #1976d2; padding: 4px 12px; border-radius: 16px; font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
+                    )
+                      i.pi.pi-file-text(style="font-size: 10px")
+                      | {{ doc }}
+                    span.no-documents(
+                      *ngIf="!rowData.documentList || rowData.documentList.length === 0",
+                      style="color: #757575; font-style: italic; font-size: 11px"
+                    ) {{ "distributionRules.distributionRulesTab.distributionRulesTable.noDocumentsIncluded" | translate }}
+                
+                td
+                  .event-codes(style="display: flex; flex-wrap: wrap; gap: 4px")
+                    span.event-code-item(
+                      *ngFor="let code of rowData.eventCodes",
+                      style="background: #ede7f6; color: #5e35b1; padding: 4px 12px; border-radius: 16px; font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
+                    )
+                      i.pi.pi-tag(style="font-size: 10px")
+                      | {{ code }}
+                    span.no-events(
+                      *ngIf="!rowData.eventCodes || rowData.eventCodes.length === 0",
+                      style="color: #757575; font-style: italic; font-size: 11px"
+                    ) {{ "distributionRules.distributionRulesTab.distributionRulesTable.noEvents" | translate }}
+                
+                td
+                  .flex.gap-2.justify-content-center
+                    button.p-button-rounded.p-button-text(
+                      pButton,
+                      icon="pi pi-pencil",
+                      severity="info",
+                      (click)="onActionClick({ action: 'edit', item: rowData })",
+                      aria-label="Edit rule"
+                    )
+                    button.p-button-rounded.p-button-text(
+                      pButton,
+                      icon="pi pi-trash",
+                      severity="danger",
+                      (click)="onActionClick({ action: 'delete', item: rowData })",
+                      aria-label="Delete rule"
+                    )
+            
+            ng-template(pTemplate="emptymessage")
+              tr
+                td(colspan="7") No distribution rules found.
+
+        ng-template(#elseBlock="")
+          .card
+            p-table(
+              #dt="",
+              [value]="tab.content()",
+              [rowHover]="true",
+              [rows]="10",
+              [rowsPerPageOptions]="[10, 25, 50]",
+              [paginator]="true",
+              sortField="recipientName",
+              [sortOrder]="1",
+              showFirstLastIcon="false",
+              paginatorPosition="both",
+              [showCurrentPageReport]="true",
+              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries",
+              [resizableColumns]="false",
+              [reorderableColumns]="false",
+              responsiveLayout="scroll",
+              styleClass="p-datatable-sm"
             )
-              i.pi.pi-file(style="font-size: 10px")
-              | {{ rowData.ipCategory }}
-          
-          td
-            span.status-badge(
-              [class.status-active]="rowData.unpublishedApplication",
-              [class.status-inactive]="!rowData.unpublishedApplication",
-              [style.background-color]="rowData.unpublishedApplication ? '#ffebee' : '#e8f5e8'",
-              [style.color]="rowData.unpublishedApplication ? '#c62828' : '#2e7d32'",
-              style="padding: 4px 12px; border-radius: 16px; font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
-            )
-              i([class]="rowData.unpublishedApplication ? 'pi pi-exclamation-triangle' : 'pi pi-eye'", style="font-size: 10px")
-              | {{ rowData.unpublishedApplication ? 'Unpublished' : 'Published' }}
-          
-          td
-            .document-list(style="display: flex; flex-wrap: wrap; gap: 4px")
-              span.document-item(
-                *ngFor="let doc of rowData.documentList",
-                style="background: #e3f2fd; color: #1976d2; padding: 4px 12px; border-radius: 16px; font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
-              )
-                i.pi.pi-file-text(style="font-size: 10px")
-                | {{ doc }}
-              span.no-documents(
-                *ngIf="!rowData.documentList || rowData.documentList.length === 0",
-                style="color: #757575; font-style: italic; font-size: 11px"
-              ) No documents included
-          
-          td
-            .event-codes(style="display: flex; flex-wrap: wrap; gap: 4px")
-              span.event-code-item(
-                *ngFor="let code of rowData.eventCodes",
-                style="background: #ede7f6; color: #5e35b1; padding: 4px 12px; border-radius: 16px; font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
-              )
-                i.pi.pi-tag(style="font-size: 10px")
-                | {{ code }}
-              span.no-events(
-                *ngIf="!rowData.eventCodes || rowData.eventCodes.length === 0",
-                style="color: #757575; font-style: italic; font-size: 11px"
-              ) No events
-          
-          td
-            .flex.gap-2.justify-content-center
-              button.p-button-rounded.p-button-text(
-                pButton,
-                icon="pi pi-pencil",
-                severity="info",
-                (click)="onActionClick({ action: 'edit', item: rowData })",
-                aria-label="Edit rule"
-              )
-              button.p-button-rounded.p-button-text(
-                pButton,
-                icon="pi pi-trash",
-                severity="danger",
-                (click)="onActionClick({ action: 'delete', item: rowData })",
-                aria-label="Delete rule"
-              )
-      
-      ng-template(pTemplate="emptymessage")
-        tr
-          td(colspan="7") No distribution rules found.
+              ng-template(pTemplate="header")
+                tr
+                  th(pSortableColumn="recipientName", style="width: 12%")
+                    .flex.items-center
+                      | {{ "distributionRules.RecipientsTab.RecipientsTable.recipientName" | translate }}
+                      p-sortIcon(field="recipientName")
+                  
+                  th(style="width: 12%") {{ "distributionRules.RecipientsTab.RecipientsTable.recipientCode" | translate }}
+                  th(style="width: 15%") {{ "distributionRules.RecipientsTab.RecipientsTable.clientId" | translate }}
+                  th(style="width: 18%") {{ "distributionRules.RecipientsTab.RecipientsTable.createdOn" | translate }}
+
+              ng-template(pTemplate="body", let-rowData)
+                tr
+                  td {{ rowData.recipientName }}
+                  td {{ rowData.recipientCode }}
+                  td {{ rowData.recipientClientId }}
+                  
+                  td {{ rowData.updatedOn | date:'yyyy-MM-dd' }}
+              
+              ng-template(pTemplate="emptymessage")
+                tr
+                  td(colspan="7") {{ "distributionRules.RecipientsTab.RecipientsTable.noRecipientsFound" | translate }}.
+
+      | }

@@ -72,6 +72,7 @@ export interface ColumnDefinition {
   iconClass?: (value: any) => string;
   tooltipText?: string;
   headerDisplay?: string;
+  size?:  'normal' | string;
 }
 
 export interface Action {
@@ -105,6 +106,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() rowsPerPageOptions: number[] = [10, 25, 50];
   @Input() loading: boolean = false;
   @Input() paginator: boolean = true;
+  @Input() showFirstLastIcon: boolean = false;
   @Input() globalFilterFields: string[] = [];
   @Input() showCurrentPageReport: boolean = false;
   @Input() currentPageReportTemplate: string =

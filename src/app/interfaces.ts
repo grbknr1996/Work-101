@@ -121,6 +121,7 @@ export interface AuthTokenResponse {
   access_token: string;
   expires_in: number;
   token_type: string;
+  id_token: string;
 }
 
 export interface ExclusionRule {
@@ -167,6 +168,7 @@ export interface SharedPackageResponse {
   updateDate: string;
   status: string;
   statusMessage: StatusMessage;
+  errorMessage: string;
 }
 export interface StatusMessage {
   totalChildRecords: number;
@@ -174,4 +176,16 @@ export interface StatusMessage {
   processingCount: number;
   failedNonRetryCount: number;
   successCount: number;
+}
+
+export interface Recipient {
+  recipientClientId: string;
+  recipientCode: string;
+  recipientName: string;
+  updatedOn: string;
+}
+
+export interface RecipientsResponse {
+  message: string;
+  data: Recipient[] 
 }

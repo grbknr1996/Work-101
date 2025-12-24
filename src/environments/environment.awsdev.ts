@@ -24,6 +24,7 @@ export const environment = {
   enableLogging: false,
   appUrl: 'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int',
   distributionRulesPath: 'data-sharing/v1/data-distributions',
+  recipientsPath: 'data-sharing/v1/appClient',
   dataServicesApi:
     'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/data-services/v1/packages',
   feesConditionsUrl:
@@ -37,6 +38,13 @@ export const environment = {
     'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/services/offices',
   backendUrl:
     'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/services/users',
+  similaritySearchApi:
+    'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/search/registry',
+  similaritySearchImage:
+    'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/search/image',
+  similarityTextToImage:
+    'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/search/text-to-image',
+  analyzeApi: '/analyze',
   cognito: {
     region: 'eu-central-1',
     userPoolId: 'eu-central-1_aIn5Yy5c5',

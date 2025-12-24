@@ -31,8 +31,18 @@ export class ChartService {
   }
 
   getApplicationCount(key: string) {
-    return this.http.get(
-      `${this.statisticsAPIPrefix}/applications/counts?widgetCode=${key}`
-    );
+    return this.http.get(`${this.statisticsAPIPrefix}/applications/counts?widgetCode=${key}`);
+  }
+  getOriginGroup(key: string) {
+    return this.http.get(`${this.statisticsAPIPrefix}/applications/counts?widgetCode=${key}`);
+  }
+  getOrigin(key: string) {
+    return this.http.get(`${this.statisticsAPIPrefix}/applications/counts?widgetCode=${key}`);
+  }
+  getApplicants(key: string) {
+    return this.http.get(`${this.statisticsAPIPrefix}/applications/counts?widgetCode=${key}`);
+  }
+  getRepresentatives(key: string) {
+    return this.http.get(`${this.statisticsAPIPrefix}/applications/counts?widgetCode=${key}`);
   }
 }

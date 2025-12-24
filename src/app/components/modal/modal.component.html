@@ -1,13 +1,1 @@
-
-<p-dialog [header]="config.header" [(visible)]="visible" [modal]="true" [style]="{ width: config.width || '500px' }" [draggable]="false" [resizable]="false" (onHide)="onClose()">
-  <div class="modal-content">
-    <div class="modal-icon" *ngIf="config.showIcon"><i [class]="config.iconClass || 'pi pi-info-circle'" [style]="{ 'font-size': config.iconSize || '3rem', color: config.iconColor || '#2196f3' }"></i></div>
-    <div class="modal-message" [innerHTML]="config.content"></div>
-  </div>
-  <ng-template pTemplate="footer">
-    <div class="modal-buttons" *ngIf="config.buttons &amp;&amp; config.buttons.length &gt; 0">
-      <button *ngFor="let button of config.buttons" pButton type="button" [label]="button.label" [icon]="button.icon" [class]="button.class || 'p-button-secondary'" (click)="onButtonClick(button)"></button>
-    </div>
-    <button class="p-button-primary" *ngIf="(!config.buttons || config.buttons.length === 0) &amp;&amp; config.showCloseButton !== false" pButton type="button" [label]="config.closeButtonText || 'Close'" (click)="onClose()"></button>
-  </ng-template>
-</p-dialog>
+<p-dialog [header]="config.header" [(visible)]="visible" [modal]="true" [style]="{ width: config.width || '500px' }" [draggable]="false" [resizable]="false" (onHide)="onClose()"><div class="modal-content"><div class="modal-icon" *ngIf="config.showIcon"><i [class]="config.iconClass || 'pi pi-info-circle'" [style]="{ 'font-size': config.iconSize || '3rem', color: config.iconColor || '#2196f3' }"></i></div><div class="modal-message" [innerHTML]="config.content"></div></div><ng-template pTemplate="footer"><div class="modal-buttons" *ngIf="config.buttons &amp;&amp; config.buttons.length &gt; 0"><button *ngFor="let button of config.buttons" pButton type="button" [label]="button.label" [icon]="button.icon" [class]="button.class || 'p-button-secondary'" (click)="onButtonClick(button)"></button></div><button class="p-button-primary" *ngIf="(!config.buttons || config.buttons.length === 0) &amp;&amp; config.showCloseButton !== false" pButton type="button" [label]="config.closeButtonText || 'Close'" (click)="onClose()"></button></ng-template></p-dialog>

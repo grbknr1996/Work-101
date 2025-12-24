@@ -18,7 +18,11 @@ export class DataExchangeService {
   private accessTokenSubject = new BehaviorSubject<string | null>(null);
   public accessToken$ = this.accessTokenSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+
+  private idTokenSubject = new BehaviorSubject<string | null>(null);
+  public idToken$ = this.idTokenSubject.asObservable();
+
+  constructor(private http: HttpClient) { }
 
   /**
    * Get authentication token
@@ -44,11 +48,13 @@ export class DataExchangeService {
             expiresIn: response.expires_in,
             tokenType: response.token_type,
           });
-          if (response.access_token) {
-            this.accessTokenSubject.next(response.access_token);
-            return response.access_token;
-          }
-          throw new Error('No access token received');
+          if (!response.access_token) throw new Error('No access token received');
+
+          this.accessTokenSubject.next(response.access_token);
+          this.idTokenSubject.next(response.id_token ?? null);
+
+          return response.access_token;
+
         }),
         catchError((error) => {
           console.error('Authentication failed:', error);
@@ -74,18 +80,24 @@ export class DataExchangeService {
    * Get global zip ids by application ID
    * @param applicationId The application ID to search for
    */
-  getGlobalZipIdsByApplicationId(
-    applicationId: string
-  ): Observable<GlobalZipItem[]> {
+  getGlobalZipIdsByApplicationId(platformCode: string, ipType: string, applicationId: string): Observable<GlobalZipItem[]> {
     return this.getAccessToken().pipe(
       switchMap((token) => {
-        const headers = new HttpHeaders({
+        const idToken = this.idTokenSubject.value;
+
+        const headersConfig: Record<string, string> = {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true',
-        });
+          [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true'
+        };
 
-        const url = `${environment.dataServicesApi}/applications?applicationId=${applicationId}`;
+        if (idToken) {
+          headersConfig['Wipo-Id-Token'] = idToken;
+        }
+
+        const headers = new HttpHeaders(headersConfig);
+
+        const url = `${environment.dataServicesApi}?platformCode=${platformCode}&ipType=${ipType}&applicationId=${applicationId}`;
         return this.http.get<GlobalZipItem[]>(url, { headers }).pipe(
           map((response) => {
             console.log('Global zip API response received:', response);
@@ -111,11 +123,19 @@ export class DataExchangeService {
   ): Observable<SharedPackageResponse[]> {
     return this.getAccessToken().pipe(
       switchMap((token) => {
-        const headers = new HttpHeaders({
+        const idToken = this.idTokenSubject.value;
+
+        const headersConfig: Record<string, string> = {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true',
-        });
+          [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true'
+        };
+
+        if (idToken) {
+          headersConfig['Wipo-Id-Token'] = idToken;
+        }
+
+        const headers = new HttpHeaders(headersConfig);
 
         const url = `${environment.dataServicesApi}/details`;
 
@@ -161,14 +181,70 @@ export class DataExchangeService {
   ): Observable<SharedPackageResponse[]> {
     return this.getAccessToken().pipe(
       switchMap((token) => {
-        const headers = new HttpHeaders({
+        const idToken = this.idTokenSubject.value;
+
+        const headersConfig: Record<string, string> = {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true',
-        });
+          [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true'
+        };
+
+        if (idToken) {
+          headersConfig['Wipo-Id-Token'] = idToken;
+        }
+
+        const headers = new HttpHeaders(headersConfig);
 
         const statusParams = status.map((s) => `status=${s}`).join('&');
-        const dataServicesUrl = `${environment.dataServicesApi}/shared-dates?platformCode=${platformCode}&sharedDateStart=${sharedDateStart}&sharedDateEnd=${sharedDateEnd}&${statusParams}`;
+        const dataServicesUrl = `${environment.dataServicesApi}?platformCode=${platformCode}&sharedDateStart=${sharedDateStart}&sharedDateEnd=${sharedDateEnd}&${statusParams}&ipType=patents`;
+
+        return this.http
+          .get<SharedPackageResponse[]>(dataServicesUrl, { headers })
+          .pipe(
+            map((response) => {
+              console.log('Shared packages API response received:', response);
+              if (response && Array.isArray(response)) {
+                return response;
+              }
+              throw new Error('No shared packages found');
+            }),
+            catchError((error) => {
+              console.error('Failed to fetch shared packages:', error);
+              return throwError(
+                () => new Error('Failed to fetch shared packages')
+              );
+            })
+          );
+      })
+    );
+  }
+
+  /**
+   * Get shared packages based on platform code and zip name
+   * @param platformCode Platform code like 'ph'
+   * @param zipName zip name starts with
+   */
+  getSharedPackagesByZipName(
+    platformCode: string,
+    zipName: string
+  ): Observable<SharedPackageResponse[]> {
+    return this.getAccessToken().pipe(
+      switchMap((token) => {
+        const idToken = this.idTokenSubject.value;
+
+        const headersConfig: Record<string, string> = {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true'
+        };
+
+        if (idToken) {
+          headersConfig['Wipo-Id-Token'] = idToken;
+        }
+
+        const headers = new HttpHeaders(headersConfig);
+
+        const dataServicesUrl = `${environment.dataServicesApi}/zipNames?platformCode=${platformCode}&zipName=${zipName}`;
 
         return this.http
           .get<SharedPackageResponse[]>(dataServicesUrl, { headers })
@@ -198,11 +274,19 @@ export class DataExchangeService {
   getStatistics(platformCode: string): Observable<StatisticsResponse> {
     return this.getAccessToken().pipe(
       switchMap((token) => {
-        const headers = new HttpHeaders({
+        const idToken = this.idTokenSubject.value;
+
+        const headersConfig: Record<string, string> = {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true',
-        });
+          [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true'
+        };
+
+        if (idToken) {
+          headersConfig['Wipo-Id-Token'] = idToken;
+        }
+
+        const headers = new HttpHeaders(headersConfig);
 
         const dataServicesUrl = `${environment.dataServicesApi}/counts?platformCode=${platformCode}`;
 
@@ -225,10 +309,53 @@ export class DataExchangeService {
     );
   }
 
+
+  getApplicationsList(platformCode: string, ipType: string, applicationId: string): Observable<String[]> {
+    return this.getAccessToken().pipe(
+      switchMap((token) => {
+        const idToken = this.idTokenSubject.value;
+
+        const headersConfig: Record<string, string> = {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true'
+        };
+
+        if (idToken) {
+          headersConfig['Wipo-Id-Token'] = idToken;
+        }
+
+        const headers = new HttpHeaders(headersConfig);
+
+        const applicationServicesUrl = `${environment.dataServicesApi}/applications?platformCode=${platformCode}&ipType=${ipType}&applicationId=${applicationId}`;
+
+        return this.http
+          .get<String[]>(applicationServicesUrl, { headers })
+          .pipe(
+            map((response) => {
+              console.log('Get Application List API response received:', response);
+              if (response && Array.isArray(response)) {
+                return response;
+              }
+              throw new Error('No Application List found');
+            }),
+            catchError((error) => {
+              console.error('Failed to fetch application List:', error);
+              return throwError(() => new Error('Failed to fetch application List'));
+            })
+          );
+      })
+    );
+  }
+
   /**
    * Clear stored access token
    */
   clearAccessToken(): void {
     this.accessTokenSubject.next(null);
+  }
+
+  clearIdToken(): void {
+    this.idTokenSubject.next(null);
   }
 }

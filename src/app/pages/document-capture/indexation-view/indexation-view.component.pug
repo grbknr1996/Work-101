@@ -1,15 +1,19 @@
 app-layout
   app-breadcrumbs([items]="breadcrumbItems")
   .flex.justify-between.items-center.p-3.bg-white.shadow-sm.rounded-md.mb-4
-    .flex.gap-4.items-center.text-lg
-      span.font-semibold {{ 'documentCapture.indexationView.batchIdLabel' | translate }}
-        span.text-blue-600 {{ batchId }}
-      span {{ 'documentCapture.indexationView.totalBatchPages' | translate }}
-        span.font-bold 22
-      span {{ 'documentCapture.indexationView.indexedDocuments' | translate }}
-        span.font-bold.text-green-600 {{ indexedDocs }}
-      span {{ 'documentCapture.indexationView.bookmarkedDocuments' | translate }}
-        span.font-bold.text-red-500 {{ bookmarkedDocs }}
+    .flex.justify-start.items-center.text-base.gap-4
+      div
+        span.font-semibold {{ 'documentCapture.indexationView.batchIdLabel' | translate }}
+        span.text-blue-600 &nbsp;&nbsp;{{ batchId }}
+      div
+        span.font-medium {{ 'documentCapture.indexationView.totalBatchPages' | translate }}
+        span.font-bold &nbsp;&nbsp;22
+      div
+        span.font-medium {{ 'documentCapture.indexationView.indexedDocuments' | translate }}
+        span.font-bold.text-green-600 &nbsp;&nbsp;{{ indexedDocs }}
+      div
+        span.font-medium {{ 'documentCapture.indexationView.bookmarkedDocuments' | translate }}
+        span.font-bold.text-red-500 &nbsp;&nbsp;{{ bookmarkedDocs }}
     .flex.gap-3.ml-auto
       p-button(
         [label]="'documentCapture.indexationView.buttons.close' | translate",

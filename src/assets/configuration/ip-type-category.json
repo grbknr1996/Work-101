@@ -1,0 +1,176 @@
+{
+    "ipTypeCategoryBag": [
+        {
+            "ipTypeCategory": "copyright",
+            "ipTypeLabel": "Copyright",
+            "documentTypeBag": [
+                {
+                    "documentCode": "SER",
+                    "documentName": "Search Report"
+                },
+                {
+                    "documentCode": "EXR",
+                    "documentName": "Examination Report"
+                }
+            ]
+        },
+        {
+            "ipTypeCategory": "gi",
+            "ipTypeLabel": "Geographical Indications",
+            "documentTypeBag": [
+                {
+                    "documentCode": "SER",
+                    "documentName": "Search Report"
+                },
+                {
+                    "documentCode": "EXR",
+                    "documentName": "Examination Report"
+                }
+            ]
+        },
+        {
+            "ipTypeCategory": "design",
+            "ipTypeLabel": "Industrial Designs",
+            "documentTypeBag": [
+                {
+                    "documentCode": "SER",
+                    "documentName": "Search Report"
+                },
+                {
+                    "documentCode": "EXR",
+                    "documentName": "Examination Report"
+                }
+            ]
+        },
+        {
+            "ipTypeCategory": "patent",
+            "ipTypeLabel": "Patents",
+            "documentTypeBag": [
+                {
+                    "documentCode": "SPE",
+                    "documentName": "Specification"
+                },
+                {
+                    "documentCode": "CLM",
+                    "documentName": "Claims"
+                },
+                {
+                    "documentCode": "DESCR",
+                    "documentName": "Description"
+                },
+                {
+                    "documentCode": "AMN-CLM",
+                    "documentName": "Amended Claims"
+                },
+                {
+                    "documentCode": "AMN-DESCR",
+                    "documentName": "Amended Description"
+                },
+                {
+                    "documentCode": "SER",
+                    "documentName": "Search Report"
+                },
+                {
+                    "documentCode": "EXR",
+                    "documentName": "Examination Report"
+                }
+            ]
+        },
+        {
+            "ipTypeCategory": "trademark",
+            "ipTypeLabel": "Trademarks",
+            "documentTypeBag": [
+                {
+                    "documentCode": "SER",
+                    "documentName": "Search Report"
+                },
+                {
+                    "documentCode": "EXR",
+                    "documentName": "Examination Report"
+                }
+            ]
+        }
+    ],
+    "eventTypeBag": [
+        {
+            "eventCode": "A10",
+            "eventLabel": "Application filed"
+        },
+        {
+            "eventCode": "B10",
+            "eventLabel": "Application discontinued"
+        },
+        {
+            "eventCode": "C10",
+            "eventLabel": "Application revived"
+        },
+        {
+            "eventCode": "D10",
+            "eventLabel": "Search and/or examination requested or commenced"
+        },
+        {
+            "eventCode": "E10",
+            "eventLabel": "Pre-registration review requested"
+        },
+        {
+            "eventCode": "F10",
+            "eventLabel": "Industrial design registered"
+        },
+        {
+            "eventCode": "H10",
+            "eventLabel": "IP right ceased"
+        },
+        {
+            "eventCode": "K10",
+            "eventLabel": "IP right revived"
+        },
+        {
+            "eventCode": "L10",
+            "eventLabel": "IP right review requested"
+        },
+        {
+            "eventCode": "M10",
+            "eventLabel": "IP right maintained"
+        },
+        {
+            "eventCode": "N10",
+            "eventLabel": "Application or IP right terminated"
+        },
+        {
+            "eventCode": "P10",
+            "eventLabel": "Document modified"
+        },
+        {
+            "eventCode": "Q10",
+            "eventLabel": "Document published"
+        },
+        {
+            "eventCode": "R10",
+            "eventLabel": "Party data change recorded"
+        },
+        {
+            "eventCode": "S10",
+            "eventLabel": "Licensing information recorded"
+        },
+        {
+            "eventCode": "T10",
+            "eventLabel": "Administrative procedure adjusted"
+        },
+        {
+            "eventCode": "U10",
+            "eventLabel": "Fee paid"
+        },
+        {
+            "eventCode": "V10",
+            "eventLabel": "Appeal requested"
+        },
+        {
+            "eventCode": "W10",
+            "eventLabel": "Other event occurred"
+        },
+        {
+            "eventCode": "Y10",
+            "eventLabel": "Event information corrected or deleted"
+        }
+    ]
+}

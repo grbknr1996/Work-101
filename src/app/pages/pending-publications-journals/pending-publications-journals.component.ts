@@ -90,7 +90,7 @@ export class PendingPublicationsComponent implements OnInit, OnChanges {
 
   selectedFileId;
 
-  selectedRows;
+  selectedItems: any[] = [];
 
   journalCode: string;
 
@@ -557,5 +557,11 @@ export class PendingPublicationsComponent implements OnInit, OnChanges {
       case 'published':
         return { severity: 'success', value: 'published' };
     }
-  };
+  }
+
+  onSelectionChange(item: any) {
+    this.selectedItems = item;
+    console.info("slectedItems: ", this.selectedItems);
+  }
+
 }

@@ -42,7 +42,8 @@ div(*ngIf="show", class="tw-filter-container bg-gray-100 p-4 w-full flex flex-co
             div(*ngIf="filter.type === 'checkbox'", class="flex items-center space-x-2")
                 p-checkbox(
                     [(ngModel)]="filter.model",
-                    [binary]="true"
+                    [binary]="true",
+                    (onChange)="anyFilter(filter)"
                 )
                 label(class="text-sm font-semibold text-gray-700") {{ filter.label }}
 
@@ -52,6 +53,7 @@ div(*ngIf="show", class="tw-filter-container bg-gray-100 p-4 w-full flex flex-co
                     p-radiobutton(
                         [name]="filter.key",
                         [value]="option.value",
-                        [(ngModel)]="filter.model"
+                        [(ngModel)]="filter.model",
+                        (onClick)="anyFilter(filter)"
                     )
                     label(class="tw-filter-option-label text-sm text-gray-700") {{ option.label }}

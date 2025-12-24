@@ -115,6 +115,7 @@ import { ChartFilterComponent } from './pages/statistics/chart-filter/chart-filt
 import { TrendsComponent } from './pages/statistics/trends/trends.component';
 import { TrendsHistoryComponent } from './pages/statistics/trends/trends-history/trends-history.component';
 import { OriginsComponent } from './pages/statistics/origins/origins.component';
+import { TopTenComponent } from './pages/statistics/top-ten/top-ten.component';
 //-----
 import { RenewalReminderComponent } from './pages/renewal-reminder/renewal-reminder.component';
 import { FeeConfigComponent } from './pages/fee-config/fee-config.component';
@@ -163,6 +164,8 @@ import { PublicationsJournalsComponent } from './pages/publications-journals/pub
 import { PendingPublicationsComponent } from './pages/pending-publications-journals/pending-publications-journals.component';
 import { ApprovalReviewComponent } from './pages/task-management/work-monitor/view-content/approval-review/approval-review.component';
 import { ApprovalRecorderComponent } from './pages/task-management/work-monitor/view-content/approval-recorder/approval-recorder.component';
+import { TrademarkSimilaritySearchComponent } from './pages/trademark-similarity-search/similarity-search.component';
+import { AddRecipientComponent } from './pages/data-exchange-config/add-recipient/add-recipient.component';
 
 @NgModule({
   declarations: [
@@ -228,6 +231,7 @@ import { ApprovalRecorderComponent } from './pages/task-management/work-monitor/
     TrendsComponent,
     TrendsHistoryComponent,
     OriginsComponent,
+    TopTenComponent,
     //-----
     MultipleStatsComponent,
     RenewalReminderComponent,
@@ -264,6 +268,8 @@ import { ApprovalRecorderComponent } from './pages/task-management/work-monitor/
     ApprovalReviewComponent,
     ApprovalRecorderComponent,
     ViewGroupComponent,
+    TrademarkSimilaritySearchComponent,
+    AddRecipientComponent
   ],
   imports: [
     AppRoutingModule,
@@ -333,4 +339,4 @@ import { ApprovalRecorderComponent } from './pages/task-management/work-monitor/
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

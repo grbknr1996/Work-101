@@ -12,7 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LayoutConfig } from '../../../components/app-layout/app-layout.component';
 import { DataExchangeConfigService } from '../../../_services/data-exchange-config.service';
 import { LoadingService } from '../../../_services/loading.service';
-import { ExclusionRule } from '../../../interfaces';
+import { ExclusionRule, Recipient } from '../../../interfaces';
 import { HttpClient } from '@angular/common/http';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
 import {
@@ -36,12 +36,16 @@ export class DistributionRulesComponent implements OnInit {
   officeCode: string;
   langCode: string;
   isWipoAdmin = false;
+  tabs: { title: string; value: string; content: any, show: boolean }[] = [];
 
   // Create a data signal for the rules
-  public rulesData = signal<ExclusionRule[]>([]);
+  // public rulesData = signal<ExclusionRule[]>([]);
+
+  // Create a data signal for the recipients
+  // public recipientsData = signal<Recipient[]>([]);
 
   // Add signal for configuration data
-  public configData = signal<any>(null);
+  // public configData = signal<any>(null);
 
   // Filter configuration
   filterConfigs = computed((): FilterConfig[] => {
@@ -104,10 +108,16 @@ export class DistributionRulesComponent implements OnInit {
   searchBar: string = '';
 
   distributionRulesData = computed(() => {
-    const rules = this.rulesData();
+    const rules = this.dataExchangeService.rulesData();
     console.log('Rules data for table:', rules);
     return rules || [];
   });
+
+  recipientsRulesData = computed(() => {
+    const recipients = this.dataExchangeService.recipientsData();
+    console.info("Recipients data for table:", recipients);
+    return recipients || [];
+  })
 
   // Computed properties for template expressions
   activeRulesCount = computed(
@@ -127,11 +137,12 @@ export class DistributionRulesComponent implements OnInit {
   });
 
   totalRulesCount = computed(() => this.distributionRulesData().length);
+  totalRecipientsCount = computed(() => this.recipientsRulesData().length);
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private ms: MechanicsService,
+    public ms: MechanicsService,
     private dataExchangeService: DataExchangeConfigService,
     private http: HttpClient,
     private loadingService: LoadingService,
@@ -141,6 +152,7 @@ export class DistributionRulesComponent implements OnInit {
     this.officeCode = this.route.snapshot.params['officeCode'] || 'default';
     this.langCode = this.route.snapshot.params['langCode'] || 'en';
     this.isWipoAdmin = this.ms.isCurrentUserWipoAdmin();
+    console.info("IsWIPOAdmin: ", this.isWipoAdmin);
     this.layoutConfig = {
       appTitle: 'Distribution Rules',
       showHeader: true,
@@ -164,22 +176,41 @@ export class DistributionRulesComponent implements OnInit {
       ''
     );
     this.sidebarService.updateMenuItems(menuItems);
+    this.tabs = [
+      { title: 'Distribution Rules', value: 'distributionRules', content: this.distributionRulesData, show: true },
+      { title: 'Recipients', value: 'recipients', content: this.recipientsRulesData, show: this.isWipoAdmin }
+    ];
   }
 
   private loadData(): void {
-    this.loadingService.show('Loading distribution rules...');
+    this.loadingService.show('Loading...');
 
     // Load exclusion rules from service for the table
     this.dataExchangeService.getExclusionRules().subscribe({
       next: (rules) => {
-        console.log('API Response (ExclusionRule[]): ', rules);
-        this.rulesData.set(rules || []);
+        this.dataExchangeService.setRulesData(rules || []);
         this.loadingService.hide();
         console.log('Data loaded successfully, loading set to false');
       },
       error: (error) => {
         console.error('Error loading data from API:', error);
-        this.rulesData.set([]);
+        this.dataExchangeService.setRulesData([]);
+        this.loadingService.hide();
+      },
+    });
+    this.loadingService.show('Loading...');
+    // Load recipients from service for the table
+    this.dataExchangeService.getRecipients().subscribe({
+      next: (recipients) => {
+        console.log('API Response (Recipients[]): ', recipients);
+        this.dataExchangeService.setRecipientData(recipients || []);
+        console.log('recipientsData: ', this.dataExchangeService.recipientsData());
+        this.loadingService.hide();
+        console.log('Data loaded successfully, loading set to false');
+      },
+      error: (error) => {
+        console.error('Error loading data from API:', error);
+        this.dataExchangeService.setRecipientData([]);
         this.loadingService.hide();
       },
     });
@@ -193,6 +224,20 @@ export class DistributionRulesComponent implements OnInit {
     this.router
       .navigate([
         `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/add-rule`,
+      ])
+      .then(() => {
+        this.loadingService.hide();
+      });
+  }
+
+  addRecipient() {
+    console.log('Navigating to add recipient page...');
+    this.loadingService.show('Loading add recipient page...');
+
+    // Navigate to the add-recipient route
+    this.router
+      .navigate([
+        `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/add-recipient`,
       ])
       .then(() => {
         this.loadingService.hide();
@@ -223,7 +268,7 @@ export class DistributionRulesComponent implements OnInit {
     // Simulate API call delay (replace with actual API call)
     setTimeout(() => {
       // Update local data to remove the rule
-      this.rulesData.update((current) =>
+      this.dataExchangeService.updateRulesData((current) =>
         current.filter((r) => r.recipientClientId !== rule.recipientClientId)
       );
       this.loadingService.hide();
@@ -233,17 +278,13 @@ export class DistributionRulesComponent implements OnInit {
   getBreadcrumbItems() {
     return [
       {
-        label: 'Configuration',
-        routerLink: `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard`,
-      },
-      {
         label: 'Data Sharing',
         routerLink: `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard`,
       },
       {
-        label: 'Distribution Rules',
+        label: 'Configuration',
         routerLink: `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/distribution-rules`,
-      },
+      }
     ];
   }
 
@@ -285,7 +326,7 @@ export class DistributionRulesComponent implements OnInit {
     }
 
     const searchTerm = this.searchBar.toLowerCase().trim();
-    let filtered = [...this.rulesData()];
+    let filtered = [...this.dataExchangeService.rulesData()];
 
     filtered = filtered.filter(
       (item) =>
@@ -295,7 +336,7 @@ export class DistributionRulesComponent implements OnInit {
           item.originatingOfficeName?.toLowerCase().includes(searchTerm))
     );
 
-    this.rulesData.set(filtered);
+    this.dataExchangeService.setRulesData(filtered);
   }
 
   removeFilterChip(filterKey: string): void {
@@ -337,7 +378,7 @@ export class DistributionRulesComponent implements OnInit {
   }
 
   private applyFilters(): void {
-    let filtered = [...this.rulesData()];
+    let filtered = [...this.dataExchangeService.rulesData()];
 
     // Apply search filter
     if (this.searchBar && this.searchBar.trim()) {
@@ -387,7 +428,7 @@ export class DistributionRulesComponent implements OnInit {
     });
 
     // Update the computed data
-    this.rulesData.set(filtered);
+    this.dataExchangeService.setRulesData(filtered);
   }
 
   getFilterDisplayValue(filter: FilterValue): string {

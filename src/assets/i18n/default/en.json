@@ -134,6 +134,7 @@
         "search": "Search",
         "field": "Field",
         "strategy": "Search Strategy",
+        "ipType": "Ip Type",
         "value": "Value",
         "actions": "Actions",
         "fieldPlaceholder": "Select Field",
@@ -141,6 +142,7 @@
         "ipTypePlaceholder": "Select Ip Type",
         "valuePlaceholder": "Enter the value to search",
         "datePlaceholder": "Select date",
+        "moreItems": "and More ...",
         "toggle": {
           "or": "OR",
           "and": "AND",
@@ -324,7 +326,7 @@
         }
       },
       "dataServices": {
-        "title": "Data Exchange",
+        "title": "Data Sharing",
         "items": {
           "dataExchangeConfiguration": "Configuration",
           "dataSharing": "Dashboard"
@@ -2583,6 +2585,12 @@
         "compare": "ORIGINS",
         "_R": "RESIDENTS [DOMESTIC]",
         "_NR": "NON-RESIDENTS [FOREIGN]"
+      },
+      "applicants": {
+        "name": "TOP 10 APPLICANTS"
+      },
+      "representatives": {
+        "name": "TOP 10 REPRESENTATIVES"
       }
     }
   },
@@ -2651,7 +2659,6 @@
       "groupId": "Group ID",
       "statusSection": "STATUS",
       "view": "View",
-
       "filterSection": "SEARCH",
       "clearAll": "CLEAR ALL",
       "createGroup": "Create Group",
@@ -2691,7 +2698,6 @@
       "customGroups": "Custom Groups",
       "departmentGroups": "Department Groups",
       "selectDateRange": "Select date range",
-
       "groupTypeSection": "GROUP TYPE",
       "dateFiltersSection": "DATE FILTERS",
       "groupCategorySection": "GROUP CATEGORY"
@@ -3244,6 +3250,146 @@
       "saveCroppedImage": "Save Logo Image",
       "cropperReady": "Cropper ready",
       "loadImageFailed": "Failed to load image"
+    }
+  },
+  "onlinePublicationJournals": {
+    "title": "Online Publication Journals",
+    "subTitle": "Overview and extraction status of Online Journal publications",
+    "regularIncrementalExtraction": {
+      "title": "Regular Incremental Extraction",
+      "lastExecution": "Last Execution",
+      "totalApplications": "Total Applications",
+      "nextPublication": "Next Publication"
+    },
+    "fullExtraction": {
+      "title": "Full Extraction",
+      "lastFullExtraction": "Last Full Extraction",
+      "totalApplications": "Total Applications",
+      "nextPublication": "Next Publication",
+      "inProgress": "In Progress"
+    },
+    "progressAndActivityFeed": "Progress & Activity Feed",
+    "fullExtractionDialog": {
+      "warningMessage": "Full extraction will override scheduled jobs and extract all publications within the selected date range",
+      "selectIpType": "Select IP Types",
+      "dateRange": "Date Range",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "startFullExtractionLabel": "Start Full Extraction",
+      "cancelLabel": "Cancel",
+      "to": "to",
+      "of": "of"
+    }
+  },
+  "distributionRules": {
+    "title": "Configuration",
+    "addRuleButton": "Add Rule",
+    "addRecipientButton": "Add Recipient",
+    "distributionRulesTab": {
+      "title": "",
+      "distributionRulesTable": {
+        "originatingOffice": "Originating Office",
+        "recipientName": "Recipient Name",
+        "IPCategory": "IP Category",
+        "includedApplicationType": "Included Application Type",
+        "documentsIncluded": "Documents Included",
+        "eventCodes": "Event Codes",
+        "actions": "Actions",
+        "noDocumentsIncluded": "No documents included",
+        "noEvents": "No events"
+      }
+    },
+    "RecipientsTab": {
+      "title": "",
+      "RecipientsTable": {
+        "recipientName": "Recipient Name",
+        "recipientCode": "Recipient Code",
+        "clientId": "Client Id",
+        "createdOn": "Created On",
+        "noRecipientsFound": "No recipients found"
+      }
+    }
+  },
+  "recipients": {
+    "addRecipients": {
+      "title": "Create Recipient",
+      "office": "Office",
+      "recipientCode": "Recipient Code",
+      "recipientName": "Recipient Name",
+      "created": "Created New Recipient",
+      "cancel": "Cancel",
+      "save": "Create",
+      "copy": "Copy",
+      "ok": "OK",
+      "duplicateEntry": "Duplicate Entry",
+      "successRecipientCreationDialog": {
+        "recipientName": "Recipient Name",
+        "clientId": "Client Id",
+        "clientSecret": "Client Secret"
+      }
+    }
+  },
+  "addExclusionRules": {
+    "title": "Create Distribution Rule",
+    "formFields": {
+      "originatingOffice": "Originating Office",
+      "originatingOfficePlaceholder": "Select Office",
+      "originatingOfficeValidationMessage": "This is automatically set to your current office",
+      "recipientSystem": "Recipient System",
+      "recipientSystemPlaceholder": "Select System",
+      "IPTypeCategory": "IP Type Category",
+      "IPTypeCategoryPlaceholder": "Select IP Category",
+      "IPTypeCategoryValidationMessage1": "You have selected",
+      "IPTypeCategoryValidationMessage2": "This category will have its own specific exclusion rules",
+      "recipientClientID": "Recipient Client ID",
+      "recipientClientIDPlaceholder": "Enter recipient client ID",
+      "recipientClientIdValidationMessage1": "Enter the unique client identifier for the recipient system",
+      "recipientClientIdValidationMessage2": "Recipient Client ID is required",
+      "publishOrUnpublishCheckbox": "Include Unpublished Applications",
+      "publishOrUnpublishCheckboxMessaage": "Unpublished applications will be shared with the recipient system"
+    },
+    "categoryAndDistributionStep": {
+      "configureRules": "Configure Distribution Rules for",
+      "chooseRules": "Choose which event codes should be distributed for",
+      "documentInclusionChecbox": {
+        "label": "Enable Document Inclusion",
+        "message": "Document inclusion is enabled by default with all document types selected"
+      },
+      "documentInclusionMultiSelect": {
+        "label": "Select Document Types to Include",
+        "label2": "Select Document Types"
+      }
+    },
+    "reviewStep": {
+      "title": "Review Your Distribution Rule Configuration",
+      "basicConfiguration": "Basic Configuration",
+      "originatingOffice": "Originating Office",
+      "recipientSystem": "Recipient System",
+      "recipientClientID": "Recipient Client ID",
+      "IPCategoryTypes": "IP Category Types",
+      "includeUnpublishedApplications": "Include Unpublished Applications",
+      "distributions": "Distributions",
+      "statusExclusions": "Status Exclusions",
+      "yes": "Yes",
+      "no": "No",
+      "eventCodeInclusion": "Event Code Inclusion",
+      "documentInclusion": "Document Inclusion",
+      "documentInclusionMessage": "Document inclusion is disabled for this category",
+      "selected": "selected",
+      "noEventCodes": "No event codes distributed for this category",
+      "noDocuments": "No document types selected for exclusion",
+      "configurationSummary": "Configuration Summary",
+      "IPCategory": "IP Category",
+      "includeUnpublishedApps": "Include Unpublished Apps",
+      "eventsIncluded": "Events Included",
+      "documentsIncluded": "Documents Included"
+    },
+    "button": {
+      "cancel": "Cancel",
+      "back": "Back",
+      "ok": "OK",
+      "next": "Next",
+      "addRule": "Add Rule"
     }
   }
 }

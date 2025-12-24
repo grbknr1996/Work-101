@@ -290,6 +290,13 @@ const routes: Routes = [
       ).ViewIndexationDocumentModule,
     canActivate: [AuthGuard],
   },
+  {
+    path: ':officeCode/:langCode/trademark-similarity-search',
+    loadChildren: async () =>
+      (await import('./pages/trademark-similarity-search/similarity-search.module'))
+        .TrademarkSimilaritySearchModule,
+    canActivate: [AuthGuard],
+  },
   // Work in Progress - Undeveloped Widget Routes
   ...WORK_IN_PROGRESS_ROUTES,
   // Redirects for office/:langCode pattern

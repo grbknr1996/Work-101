@@ -54,6 +54,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { FileUploadModule } from 'primeng/fileupload';
 import { SliderModule } from 'primeng/slider';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { PanelModule } from 'primeng/panel';
 
 const PrimeNGModules: any[] = [
   //PrimeNG
@@ -108,7 +109,8 @@ const PrimeNGModules: any[] = [
   ToggleButtonModule,
   FileUploadModule,
   SliderModule,
-  AutoCompleteModule
+  AutoCompleteModule,
+  PanelModule
 ];
 
 @NgModule({

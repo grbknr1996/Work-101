@@ -84,13 +84,13 @@
                     i.pi.pi-times(pButtonIcon)
                 .grid.grid-cols-12.filter-group-header-text
                   .col-span-3 {{"common.components.advancedFilter.field"|translate}}
-                  .col-span-3 {{"common.components.advancedFilter.strategy"|translate}}
+                  .col-span-3 {{strategyHeader}}
                   .col-span-3 {{"common.components.advancedFilter.value"|translate}}
                   .col-span-3(*ngIf="addGroupAllowed") {{"common.components.advancedFilter.actions"|translate}}
                 div(*ngFor="let file of group.file_list; let i = index; let last = last")
                   .grid.grid-cols-12.filter-field-line
                     .col-span-3
-                      p-select.filter-field-select([options]="fieldOptions", [(ngModel)]="file.field", [placeholder]="'common.components.advancedFilter.fieldPlaceholder'|translate", [group]="true", optionLabel="name", (onChange)="onFieldChange($event.value,file)")
+                      p-select.filter-field-select([options]="fieldOptions", [(ngModel)]="file.field", [placeholder]="'common.components.advancedFilter.fieldPlaceholder'|translate", [group]="true", optionLabel="name", (onChange)="onFieldChange($event.value,file)", [disabled]="singleField != null")
                         ng-template(let-group #grp)
                           div.flex.items-center
                             span {{grp.name}}
@@ -98,6 +98,8 @@
                       p-select.filter-field-select(*ngIf="file.fieldType == null", [options]="queryOptions", [disabled]="true", [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate", optionLabel="name")
                       p-select.filter-field-select(*ngIf="file.fieldType == 'text'", [options]="queryOptions", [(ngModel)]="file.connecting", [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate", optionLabel="name")
                       p-select.filter-field-select(*ngIf="file.fieldType == 'date'", [options]="dateQueryOptions", [(ngModel)]="file.connecting", [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate", optionLabel="name")
+                      p-select.filter-field-select(*ngIf="file.fieldType == 'application'", [options]="applicationTypeOptions", [(ngModel)]="file.connecting", [placeholder]="'common.components.advancedFilter.ipTypePlaceholder'|translate", optionLabel="name")
+                      p-select.filter-field-select(*ngIf="file.fieldType == 'patents'", [options]="[{ code: 'patents', name: ('common.components.advancedFilter.display.applicationTypes.patents'|translate) }]", [(ngModel)]="file.connecting", optionLabel="name", [disabled]="true")
                     .col-span-3
                       input.filter-field-value(*ngIf="file.fieldType == null", [placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate", [disabled]="true")
                       input.filter-field-value(*ngIf="file.fieldType == 'text'", [placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate", [(ngModel)]="file.value")
@@ -112,6 +114,17 @@
                         [touchUI]="false",
                         [readonlyInput]="true"
                       )
+                      input.filter-field-value(*ngIf="(file.fieldType == 'application' || file.fieldType == 'patents') && file.connecting.code == ''", [placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate", [disabled]="true")
+                      p-autocomplete.filter-field-autocomplete(
+                        *ngIf="(file.fieldType == 'application' || file.fieldType == 'patents') && file.connecting.code != ''", 
+                        [(ngModel)]="file.value", 
+                        [suggestions]="filteredResults", 
+                        (completeMethod)="searchService($event,file.connecting.code)", 
+                        [minLength]="5"
+                      )
+                        ng-template(pTemplate="item" let-item)
+                          div((click)="handleAutoCompleteItemClick($event, item)")
+                            | {{ item }}
                     .col-span-3.flex.gap-1(*ngIf="addGroupAllowed")
                       button.filter-field-delete((click)="removeField(level.levelId, group.group, file.fieldId)")
                         i.pi.pi-trash(pButtonIcon)
@@ -161,7 +174,7 @@
                     div(*ngFor="let file of group.file_list; let i = index; let last = last")
                       .grid.grid-cols-12.filter-field-line
                         .col-span-3
-                          p-select.filter-field-select([options]="fieldOptions", [(ngModel)]="file.field", [placeholder]="'common.components.advancedFilter.fieldPlaceholder'|translate", [group]="true", optionLabel="name", (onChange)="onFieldChange($event.value,file)")
+                          p-select.filter-field-select([options]="fieldOptions", [(ngModel)]="file.field", [placeholder]="'common.components.advancedFilter.fieldPlaceholder'|translate", [group]="true", optionLabel="name", (onChange)="onFieldChange($event.value,file)", [disabled]="singleField != null")
                             ng-template(let-group #grp)
                               div.flex.items-center
                                 span {{grp.name}}
@@ -169,6 +182,8 @@
                           p-select.filter-field-select(*ngIf="file.fieldType == null", [options]="queryOptions", [disabled]="true", [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate", optionLabel="name")
                           p-select.filter-field-select(*ngIf="file.fieldType == 'text'", [options]="queryOptions", [(ngModel)]="file.connecting", [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate", optionLabel="name")
                           p-select.filter-field-select(*ngIf="file.fieldType == 'date'", [options]="dateQueryOptions", [(ngModel)]="file.connecting", [placeholder]="'common.components.advancedFilter.strategyPlaceholder'|translate", optionLabel="name")
+                          p-select.filter-field-select(*ngIf="file.fieldType == 'application'", [options]="applicationTypeOptions", [(ngModel)]="file.connecting", [placeholder]="'common.components.advancedFilter.ipTypePlaceholder'|translate", optionLabel="name")
+                          p-select.filter-field-select(*ngIf="file.fieldType == 'patents'", [options]="[{ code: 'patents', name: ('common.components.advancedFilter.display.applicationTypes.patents'|translate) }]", [(ngModel)]="file.connecting", optionLabel="name", [disabled]="true")
                         .col-span-3
                           input.filter-field-value(*ngIf="file.fieldType == null", [placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate", [disabled]="true")
                           input.filter-field-value(*ngIf="file.fieldType == 'text'", [placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate", [(ngModel)]="file.value")
@@ -183,6 +198,17 @@
                             [touchUI]="false",
                             [readonlyInput]="true"
                           )
+                          input.filter-field-value(*ngIf="(file.fieldType == 'application' || file.fieldType == 'patents') && file.connecting.code == ''", [placeholder]="'common.components.advancedFilter.valuePlaceholder'|translate", [disabled]="true")
+                          p-autocomplete.filter-field-autocomplete(
+                            *ngIf="(file.fieldType == 'application' || file.fieldType == 'patents') && file.connecting.code != ''", 
+                            [(ngModel)]="file.value", 
+                            [suggestions]="filteredResults", 
+                            (completeMethod)="searchService($event)", 
+                            [minLength]="5"
+                          )
+                            ng-template(pTemplate="item" let-item)
+                              div((click)="handleAutoCompleteItemClick($event, item)")
+                                | {{ item }}
                         .col-span-3.flex.gap-1(*ngIf="addGroupAllowed")
                           button.filter-field-delete((click)="removeField(level.levelId, group.group, file.fieldId)")
                             i.pi.pi-trash(pButtonIcon)

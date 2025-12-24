@@ -15,6 +15,7 @@ import {
   ConfigurableFilterComponent,
 } from '../../components/configurable-filter/configurable-filter.component';
 import { AdvancedFilterQuery } from '../advanced-filter-query/advanced-filter-query.component';
+import { MechanicsService } from 'src/app/_services/mechanics.service';
 
 export interface FilterConfig {
   key: string;
@@ -78,10 +79,13 @@ export class ConfigurableFilterBarComponent {
   @Input() visible: boolean = false;
   @Input() searchBar: string = '';
   @Input() searchBarDate;
+  @Input() searchBarAutoComplete : string = '';
+  @Input() autoCompleteSuggestions;
   @Input() showDownloadIcon: boolean = false;
   @Input() showInfoIcon: boolean = false;
   @Input() showSearchBar: boolean = false;
   @Input() showDateSearchBar: boolean = false;
+  @Input() showAutoComplete: boolean = false;
   @Input() searchLabel: string = 'Search';
   @Input() dateSearchLabel: string = 'Select date range';
   @Input() searchDateFormat: string = 'yy-mm-dd'
@@ -102,6 +106,8 @@ export class ConfigurableFilterBarComponent {
   @Output() visibleFiltersChange = new EventEmitter<FilterConfig[]>(); // Optional output
   @Output() filterSearch = new EventEmitter<string>();
   @Output() filterDateSearch = new EventEmitter<any>();
+  @Output() searchItemSelected = new EventEmitter<any>();
+  @Output() autoCompleteSearch = new EventEmitter<any>();
   @Output() downloadDetails = new EventEmitter<void>();
   @Output() infoDetails = new EventEmitter<void>();
   @Output() actionClick = new EventEmitter<string>();
@@ -126,7 +132,9 @@ export class ConfigurableFilterBarComponent {
   hasActiveFilters: boolean = false;
   //appliedFilters: FilterValue[] = [];
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(
+    public ms: MechanicsService,
+    private cdr: ChangeDetectorRef) {}
 
   updateData() {
   // ... modify data ...
@@ -181,6 +189,23 @@ export class ConfigurableFilterBarComponent {
     this.filterDateSearch.emit(this.searchBarDate);
   }
 
+  onSearchItemSelected(val: any): void {
+    this.searchItemSelected.emit(val);
+    this.cdr.detectChanges();
+  }
+
+  onAutoCompleteSearch(val: any): void {
+    this.autoCompleteSearch.emit(val);
+    this.cdr.detectChanges();
+  }
+
+  handleAutoCompleteItemClick(event: MouseEvent, item: any) {
+    if (item === this.ms.translate('common.components.advancedFilter.moreItems')) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
+  }
+
   onDownloadDetails(): void {
     this.downloadDetails.emit();
   }
@@ -208,24 +233,31 @@ export class ConfigurableFilterBarComponent {
   onAdvancedFilterSearch(query: AdvancedFilterQuery): void {
     this.selectedQuery = query;
     
-    if(queryAdded(query)) {
+    if(this.queryAdded(query)) {
       this.showQuery = true;
       return this.advancedFilterSearch.emit(query);
     } else {
       this.showQuery = false;
     }
   }
+
+  queryAdded(query: AdvancedFilterQuery) {
+    const levelList = query.levelList.flat();
+    const hasValue = levelList.some(level =>
+      level.group_list.flat().some(group =>
+        group.file_list.flat().some(file =>
+          file.value !== "" && file.field.code !== ""
+        )
+      )
+    );
+    return hasValue;
+  }
+
+  clearAdvancedQuery(): void{
+    this.showQuery = false;
+    this.selectedQuery = null;
+  }
   
 }
-function queryAdded(query: AdvancedFilterQuery) {
-  const levelList = query.levelList.flat();
-  const hasValue = levelList.some(level =>
-    level.group_list.flat().some(group =>
-      group.file_list.flat().some(file =>
-        file.value !== "" && file.field.code !== ""
-      )
-    )
-  );
-  return hasValue;
-}
+
 

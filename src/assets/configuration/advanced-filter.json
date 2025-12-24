@@ -161,18 +161,10 @@
         "key": "authorityfiles",
         "options": [
             {
-            "label": "Text Fields",
-            "code": "text",
+            "label": "Application Type",
+            "code": "patents",
             "items": [
-                { "name": "File Number", "code": "fileNumber", "fieldType": "text" },
-                { "name": "Publication Number", "code": "publicationNumber", "fieldType": "text" }
-            ]
-            },
-            {
-            "label": "Date Fields",
-            "code": "date",
-            "items": [
-                { "name": "Publication Date", "code": "publicationDate", "fieldType": "date" }
+                { "name": "Application Id", "code": "applicationId", "fieldType": "patents" }
             ]
             }
         ]

@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
+import { OnlinePublicationJournalService } from 'src/app/_services/online-publication-journal.service';
 import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
 
 @Component({
@@ -11,6 +12,14 @@ import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
 export class OnlinePublicationJournalsComponent implements OnInit {
 
   breadcrumbItems;
+  visible: boolean = false;
+
+  ipTypes = ["trademarks", "patents", "industrial designs"];
+  selectedIpTypes: any[] = [];
+  startDate;
+  endDate;
+
+  executions: any;
 
   constructor(
     private menuService: SidebarMenuService,
@@ -18,6 +27,7 @@ export class OnlinePublicationJournalsComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private router: Router,
     private route: ActivatedRoute,
+    private onlinePublicationService: OnlinePublicationJournalService
   ) { }
 
   ngOnInit(): void {
@@ -45,5 +55,14 @@ export class OnlinePublicationJournalsComponent implements OnInit {
       // Trigger change detection after updating breadcrumbs
       this.cdr.markForCheck();
     });
+
+    this.onlinePublicationService.getOnlinePublicationJournalData()
+      .subscribe((data: any) => {
+        this.executions = data;
+      })
+  }
+
+  showDialog() {
+    this.visible = true;
   }
 }

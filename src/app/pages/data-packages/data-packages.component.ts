@@ -16,6 +16,7 @@ import {
   ConfigurableFilterBarComponent,
 } from '../../components/configurable-filter-bar/configurable-filter-bar.component';
 import { AdvancedFilterQuery } from 'src/app/components/advanced-filter-query/advanced-filter-query.component';
+import { SharedPackageResponse } from 'src/app/interfaces';
 
 @Component({
   selector: 'app-data-packages',
@@ -44,6 +45,7 @@ export class DataPackagesComponent implements OnInit {
   tableColumns = [];
   packagesData: any;
   tableData: any;
+  tableDataByZips: SharedPackageResponse[];
 
   officeCode;
   officeCodeParam;
@@ -55,8 +57,6 @@ export class DataPackagesComponent implements OnInit {
   filterConfigs: FilterConfig[] = [];
 
   appliedFilters: FilterValue[] = [];
-
-  searchBar: string;
 
   dateFilterRemoved = false;
   partialFilterRemoved = false;
@@ -75,6 +75,12 @@ export class DataPackagesComponent implements OnInit {
   statusArray: string[] = [];
 
   statusTranslated;
+
+  emptyMessage = "common.components.table.noRecordsFound";
+
+  advancedFilterMode = false;
+
+  autoCompleteSuggestions: any[] = [];
 
   packageStats: {
     label: string; display: string; count: string; period: string; color: string; icon: string;
@@ -321,7 +327,7 @@ export class DataPackagesComponent implements OnInit {
     });
 
     this.permanentFilters();
-    
+
     let today = new Date();
     let startDate = new Date();
     startDate.setMonth(startDate.getMonth() - 1);
@@ -333,6 +339,7 @@ export class DataPackagesComponent implements OnInit {
 
   private loadSharedPackages(startDate: string, endDate: string): void {
     this.prepareStatusArray();
+    this.emptyMessage = "common.components.table.noRecordsFound";
 
     //console.log("status "+this.statusArray);
     this.dataService.getSharedPackages(this.countryCodeForService, startDate, endDate, this.statusArray).subscribe({
@@ -351,7 +358,7 @@ export class DataPackagesComponent implements OnInit {
     });
   }
 
-  private prepareStatusArray(){
+  private prepareStatusArray() {
     this.processedFlag = this.appliedFilters.some(item => item.key === 'SUCCESS' && item.value === true);
     this.failedFlag = this.appliedFilters.some(item => item.key === 'FAILED_RETRY' && item.value === true);
     this.failedNonFlag = this.appliedFilters.some(item => item.key === 'FAILED_NONRETRY' && item.value === true);
@@ -409,10 +416,53 @@ export class DataPackagesComponent implements OnInit {
     } else if (this.statSelected === 'TOTAL IN WEEK') {
       startDate.setDate(today.getDate() - 7);
     } else {
-      startDate = new Date(1999, 0, 1); 
+      startDate = new Date(1999, 0, 1);
     }
-    
+
     return [startDate, today];
+  }
+
+  autoCompleteSearch(val: any): void {
+    this.dataService.getSharedPackagesByZipName(this.countryCodeForService, val.query).subscribe({
+      next: (response) => {
+        this.tableDataByZips = response;
+        this.autoCompleteSuggestions = this.tableDataByZips.map(item => item.globalZipId);
+        if (this.tableDataByZips.length > 10) {
+          let moreOption = this.ms.translate('common.components.advancedFilter.moreItems');
+          this.autoCompleteSuggestions = [...this.autoCompleteSuggestions, moreOption];
+        }
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Failed to fetch shared packages:', err);
+      }
+    });
+  }
+
+  searchItemSelected(val: any): void {
+    console.log(val.value);
+    const pkg = this.tableDataByZips.find(
+      obj => obj.globalZipId === val.value
+    );
+
+    this.packagesData = pkg
+      ? [{
+        ...pkg,
+        status: this.statusTranslated[pkg.status] || pkg.status
+      }]
+      : [];
+
+    this.tableData = [...this.packagesData];
+
+    this.statSelected = 'TOTAL COUNT';
+    this.advancedFilterMode = true;
+    this.appliedFilters = [];
+
+    this.removeDefaultValues();
+
+    this.configurableFilter.clearAdvancedQuery();
+
+    this.cdr.detectChanges();
   }
 
   onActionClick(action: string, item: any) {
@@ -439,11 +489,15 @@ export class DataPackagesComponent implements OnInit {
 
   onStatSelect(statLabel: string) {
     // console.log('Stats Selected:', statLabel);
+    this.tableData = [];
+    this.emptyMessage = "common.components.table.noRecordsFound";
     this.statSelected = statLabel;
     this.dateFilterRemoved = false;
-    this.searchBar = '';
     this.cdr.detectChanges();
+    this.advancedFilterMode = false;
     this.filterByStats();
+    this.configurableFilter.clearAdvancedQuery();
+    this.configurableFilter.searchBarAutoComplete = '';
   }
 
   private filterByStats(): void {
@@ -493,12 +547,6 @@ export class DataPackagesComponent implements OnInit {
     this.loadSharedPackages(formattedStartDate, formattedToday);
   }
 
-  filterSearch(value: string) {
-    // console.log(value);
-    this.searchBar = value;
-    this.applyFilters();
-  }
-
   onFilterChange(filters: FilterValue[]): void {
     // console.log('Filter changed:', filters);
     // Don't apply filters or show red dot on change - only track changes
@@ -534,16 +582,16 @@ export class DataPackagesComponent implements OnInit {
 
     }
 
-//    console.log("filters "+filters);
-   if (filters.some(item => item.key === 'FAILED_NONRETRY' && item.value == false)) {
+    //    console.log("filters "+filters);
+    if (filters.some(item => item.key === 'FAILED_NONRETRY' && item.value == false)) {
       this.failedNonRetryFilterRemoved = true;
-   }
-   if (filters.some(item => item.key === 'FAILED_RETRY' && item.value == false)) {
+    }
+    if (filters.some(item => item.key === 'FAILED_RETRY' && item.value == false)) {
       this.failedFilterRemoved = true;
-   }
-   if (filters.some(item => item.key === 'PARTIAL' && item.value == false)) {
+    }
+    if (filters.some(item => item.key === 'PARTIAL' && item.value == false)) {
       this.partialFilterRemoved = true;
-   }
+    }
 
     this.permanentFilters(filters);
     this.appliedFilters = [...this.appliedFilters, ...filters];
@@ -564,8 +612,7 @@ export class DataPackagesComponent implements OnInit {
     // console.log('Filters cleared');
     this.appliedFilters = [];
     this.permanentFilters();
-    this.searchBar = '';
-    this.configurableFilter.searchBar = '';
+    this.configurableFilter.searchBarAutoComplete = '';
     this.filterByStats();
     this.cdr.detectChanges();
   }
@@ -573,8 +620,7 @@ export class DataPackagesComponent implements OnInit {
   clearAllFilters(): void {
     this.appliedFilters = [];
     this.permanentFilters();
-    this.searchBar = '';
-    this.configurableFilter.searchBar = '';
+    this.configurableFilter.searchBarAutoComplete = '';
     this.tableData = this.packagesData;
     this.configurableFilter.clearAllFilters();
     this.cdr.detectChanges();
@@ -595,6 +641,7 @@ export class DataPackagesComponent implements OnInit {
 
   private applyFilters(): void {
 
+    this.emptyMessage = "common.components.table.noRecordsFound";
     const today = new Date();
     let startDate: Date;
 
@@ -623,90 +670,95 @@ export class DataPackagesComponent implements OnInit {
 
     this.prepareStatusArray();
 
-    this.dataService.getSharedPackages(this.countryCodeForService, formattedStartDate, formattedToday, this.statusArray).subscribe({
-      next: (response) => {
-        this.packagesData = response;
-        this.packagesData = this.packagesData.map(pkg => ({
-          ...pkg,
-          status: this.statusTranslated[pkg.status] || pkg.status
-        }));
-        this.tableData = this.packagesData;
+    if (this.advancedFilterMode) {
+      this.tableData = [...this.packagesData];
+      this.filterTheTableData();
+      this.booleanFilters();
+    } else {
+      this.dataService.getSharedPackages(this.countryCodeForService, formattedStartDate, formattedToday, this.statusArray).subscribe({
+        next: (response) => {
+          this.packagesData = response;
+          this.packagesData = this.packagesData.map(pkg => ({
+            ...pkg,
+            status: this.statusTranslated[pkg.status] || pkg.status
+          }));
+          this.tableData = this.packagesData;
 
-        let filtered = [...this.tableData];
-
-        //console.log("searchBar " + this.searchBar)
-        //console.log("packagesData " + this.packagesData)
-        if (this.searchBar && this.searchBar.trim()) {
-          filtered = filtered.filter(
-            (item) =>
-              item.globalZipId?.toLowerCase().includes(this.searchBar)
-          );
+          this.filterTheTableData();
+          // console.log("tableData filtered" + this.tableData)
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error('Failed to fetch shared packages:', err);
         }
-        this.appliedFilters.forEach((filter) => {
-          switch (filter.key) {
-            case 'globalZipId':
-              if (filter.value != '') {
-                filtered = filtered.filter((item) =>
-                  item.globalZipId.includes(filter.value)
-                );
-              }
-              break;
-            case 'receivedDate':
-              if (
-                filter.value &&
-                Array.isArray(filter.value) &&
-                filter.value.length === 2
-              ) {
-                const [startDate, endDate] = filter.value;
-                // console.log(startDate+" -- "+endDate)
-                if (startDate && endDate) {
-                  filtered = filtered.filter((item) => {
-                    const itemDate = new Date(item.receivedDate);
-                    return itemDate >= startDate && itemDate <= endDate;
-                  });
-                }
-              }
-              break;
-          }
-        });
+      });
+    }
 
-        this.tableData = filtered;
-        // console.log("tableData filtered" + this.tableData)
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.error('Failed to fetch shared packages:', err);
+  }
+
+  filterTheTableData() {
+    let filtered = [...this.tableData];
+
+    //console.log("packagesData " + this.packagesData)
+    this.appliedFilters.forEach((filter) => {
+      switch (filter.key) {
+        case 'globalZipId':
+          if (filter.value != '') {
+            filtered = filtered.filter((item) =>
+              item.globalZipId.includes(filter.value)
+            );
+          }
+          break;
+        case 'receivedDate':
+          if (
+            filter.value &&
+            Array.isArray(filter.value) &&
+            filter.value.length === 2
+          ) {
+            const [startDate, endDate] = filter.value;
+            // console.log(startDate+" -- "+endDate)
+            if (startDate && endDate) {
+              filtered = filtered.filter((item) => {
+                const itemDate = new Date(item.receivedDate);
+                return itemDate >= startDate && itemDate <= endDate;
+              });
+            }
+          }
+          break;
       }
     });
+
+    this.tableData = filtered;
   }
+
+  booleanFilters() {
+    let filtered = [...this.tableData];
+
+    if (this.processedFlag || this.failedFlag || this.failedNonFlag || this.partialFlag || this.inProgressFlag) {
+      filtered = filtered.filter((item) =>
+        (this.processedFlag && item.status == this.statusTranslated['SUCCESS']) ||
+        (this.failedFlag && item.status == this.statusTranslated['FAILED_RETRY']) ||
+        (this.failedNonFlag && item.status == this.statusTranslated['FAILED_NONRETRY']) ||
+        (this.partialFlag && item.status == this.statusTranslated['PARTIAL']) ||
+        (this.inProgressFlag && item.status == this.statusTranslated['IN_PROGRESS'])
+      );
+    }
+
+    this.tableData = filtered;
+  }
+
 
   onAdvancedFilterSearch(advancedFilterQuery: AdvancedFilterQuery): void {
     // console.log(advancedFilterQuery);
 
     let applicationId;
+    let ipType;
     for (const level of advancedFilterQuery.levelList) {
       for (const group of level.group_list) {
         for (const file of group.file_list) {
           if (file.field?.code === "applicationId") {
-            const value = file.value;
-            const op = file.connecting?.code;
-            switch (op) {
-              case "equals":
-                applicationId =  value;
-                break;
-              case "like":
-                applicationId =  `%25${value}%25`;
-                break;
-              case "starts":
-                applicationId =  `${value}%25`;
-                break;
-              case "ends":
-                applicationId =  `%25${value}`;
-                break;
-              default:
-                applicationId =  value;
-                break;
-            }
+            applicationId = file.value;
+            ipType = file.connecting?.code;
           }
         }
       }
@@ -715,20 +767,54 @@ export class DataPackagesComponent implements OnInit {
     this.tableData = [];
     this.statSelected = 'TOTAL COUNT';
 
-    // console.log(applicationId);
-    //TODO need to apply this query to the output
-    this.dataService.getGlobalZipIdsByApplicationId(applicationId).subscribe({
-      next: (response) => {
-        this.tableData = response;
-        this.cdr.detectChanges();
+    this.dataService.getGlobalZipIdsByApplicationId(this.countryCodeForService, ipType, applicationId).subscribe({
+      next: (response: any) => {
+        if (Array.isArray(response)) {
+          this.dataService.getGlobalZipDetails(response).subscribe({
+            next: (res) => {
+              this.packagesData = res;
+              this.packagesData = this.packagesData.map(pkg => ({
+                ...pkg,
+                status: this.statusTranslated[pkg.status] || pkg.status
+              }));
+              this.tableData = this.packagesData;
+              this.cdr.detectChanges();
+            },
+            error: (err) => {
+              console.error('Failed to fetch shared packages for the application id:', err);
+            }
+          })
+        } else {
+          this.emptyMessage = response.message;
+          this.tableData = [];
+          this.cdr.detectChanges();
+        }
       },
       error: (err) => {
         console.error('Failed to fetch shared packages for the application id:', err);
       }
     });
 
+    this.advancedFilterMode = true;
     this.appliedFilters = [];
 
+    this.removeDefaultValues();
+
+    this.configurableFilter.searchBarAutoComplete = '';
+
+  }
+
+  removeDefaultValues() {
+    this.filterConfigs.forEach((config) => {
+      if ('defaultValue' in config) {
+        this.configurableFilter.changeFilterValue(config.key, null);
+      }
+    });
+
+    this.failedFilterRemoved = true;
+    this.failedNonRetryFilterRemoved = true;
+    this.partialFilterRemoved = true;
+    this.dateFilterRemoved = true;
   }
 
   getFilterDisplayValue(filter: FilterValue): string {

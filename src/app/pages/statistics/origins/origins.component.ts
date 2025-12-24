@@ -1,6 +1,5 @@
 //ANGULAR CORE
 import { Component, OnInit, inject, ViewChild, ElementRef } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 
 //TRANSLATE
@@ -12,6 +11,8 @@ import { UtilityService } from 'src/app/_services/utility.service';
 
 //CHART FILTER MODEL
 import { chartFilterConfig } from '../chart-filter/chart-filter.model';
+//CHART FILTER COMPONENT
+import { ChartFilterComponent } from '../chart-filter/chart-filter.component';
 
 //CUSTOM INTERFACES
 import { LayoutConfig } from 'src/app/components/app-layout/app-layout.component';
@@ -32,9 +33,9 @@ import { ChartService } from '../chart.service';
 export class OriginsComponent implements OnInit {
   //ELEMENTS
   @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
+  @ViewChild(ChartFilterComponent, { static: false }) chartFilterC!: ChartFilterComponent;
 
   //DI
-  private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
   private translate = inject(TranslateService);
   private ms = inject(MechanicsService);
@@ -55,7 +56,11 @@ export class OriginsComponent implements OnInit {
   activeData: any;
   activeDataMap = new Map();
   IPCategory = new Map();
+  //|//
+  currentOrigin: string = 'Residents/Non-Residents'; //TO DEVELOP
+  currentMode: boolean = true;
   currentIPCategory: string = '';
+  currentType: string = 'accounted';
 
   fontFamily = '';
   chartHeight: any = 600;
@@ -64,29 +69,53 @@ export class OriginsComponent implements OnInit {
   chartInstance: any;
   chartOption: any;
   chartLegendSelected: any;
-  currentLegend1: string = 'R_NR';
-  currentLegend2: string = 'accounted_application';
 
   //COMMONS
   filters: chartFilterConfig[] = [
-    { include: true, key: 'compare', label: 'charts.statistics.filters.compare1', type: 'checkbox', model: true }
+    { include: true, key: 'compare', label: 'charts.statistics.filters.compare1', type: 'checkbox', model: true },
+    { include: false, key: 'trends_theme', type: 'dropdown', model: '' },
+    { include: false, key: 'origin', type: 'dropdown', model: '' }
   ];
-  /*
-  filters: chartFilterConfig[] = [
-    { include: true, key: 'compare', type: 'checkbox', model: false },
-    { include: true, key: 'yearRange', type: 'yearrange', model: [new Date(), new Date()], minDate: new Date(), maxDate: new Date() },
-    { include: true, key: 'type', type: 'radio', model: 'M', options: [{ label: 'Male', value: 'M' }, { label: 'Female', value: 'F' }] },
-    { include: true, key: 'IPType', type: 'dropdown', model: 'D', options: [{ label: 'Breakfast', value: 'B' }, { label: 'Lunch', value: 'L' }, { label: 'Dinner', value: 'D' }] }
-  ];
-  */
   showFilter: boolean = true;
   //CHART-NAVBAR
   onFilter() { this.showFilter = !this.showFilter; }
   onReset() {
-    this.currentIPCategory = '';
-    this.currentLegend1 = 'R_NR';
-    this.currentLegend2 = 'accounted_application';
-    this.setSeriesData('accounted_application', 'R_NR'); //DEFAULT CHART DATA
+    this.currentOrigin = 'Residents/Non-Residents';
+    this.currentMode = true;
+    this.currentIPCategory = (window.innerWidth <= 768) ? this.IPCategory.keys().next().value : '';
+    this.currentType = 'accounted';
+    this.setSeriesData('accounted', 'R_NR'); //COMPARE-null-null-(ACCOUNTED/ACTIVE)
+    if (this.showFilter) {
+      this.updateFilterNGModel('compare', true);
+      (window.innerWidth <= 768) ? this.updateFilterNGModel('IPType', this.currentIPCategory) : this.updateFilterNGModel('IPType', 'all');
+      this.updateFilterNGModel('type', 'accounted');
+      /*
+      //TO DEVELOP
+      this.updateFilterNGModel('origin', '?');
+      */
+    }
+  }
+  //CHART-FILTER
+  anyFilterEvent(filter: any) {
+    if (filter.key === 'compare') {
+      this.currentMode = filter.model;
+      if (this.currentMode) this.setSeriesData(this.currentType, 'R_NR');
+      else console.log("RESIDENTS CHART"); //TO DEVELOP
+    }
+    if (filter.key === 'IPType') {
+      if (filter.model === 'all') this.onReset();
+      else {
+        this.currentIPCategory = filter.model;
+        this.setSeriesData(this.currentType, 'R_NR');
+      }
+    }
+    if (filter.key === 'type') {
+      this.currentType = filter.model;
+      this.setSeriesData(this.currentType, 'R_NR');
+    }
+  }
+  updateFilterNGModel(key: string, model: any, options?: any) {
+    this.chartFilterC.updateNGModel(key, model, options);
   }
 
   //CHART EVENTS
@@ -97,25 +126,17 @@ export class OriginsComponent implements OnInit {
     if (type === 'chartInit') this.chartInstance = event;
     if (type === 'chartClick') {
       //IP Categories - Axis Drilldown
-      if (event.componentType === 'xAxis') {
+      if (event.componentType === 'xAxis' && this.currentIPCategory.length === 0) {
         this.currentIPCategory = '';
         this.IPCategory.forEach((value, key) => { if (value === event.value) this.currentIPCategory = key; }); //To Use Later
-        this.setSeriesData(this.currentLegend2, this.currentLegend1); //ENTER ZOOM-IN VIEW
+        this.setSeriesData(this.currentType, this.currentIPCategory); //ENTER ZOOM-IN VIEW
+        if (this.showFilter) this.updateFilterNGModel('IPType', this.currentIPCategory);
       }
     }
     if (type === 'chartLegendSelectChanged') {
       let legendSelected = '';
       this.translationMap.forEach((value, key) => { if (value === event.name) legendSelected = key; });
-      this.currentLegend1 = legendSelected; //To Use Later
-      this.chartInstance.dispatchAction({
-        type: 'legendUnSelect',
-        name: (legendSelected === '_R') ? this.translationMap.get('_NR') : this.translationMap.get('_R')
-      })
-      this.chartInstance.dispatchAction({
-        type: 'legendSelect',
-        name: (legendSelected === '_R') ? this.translationMap.get('_R') : this.translationMap.get('_NR')
-      })
-      this.setSeriesData(this.currentLegend2, this.currentLegend1);
+      this.setSeriesData(this.currentType, legendSelected);
     }
   }
   chartSettings() {
@@ -125,32 +146,36 @@ export class OriginsComponent implements OnInit {
         fontWeight: 500
       },
       grid: {
-        top: '15%',
+        top: '90',
         left: '15%',
         right: '15%',
-        bottom: '10%',
+        bottom: '5',
         containLabel: true
       },
       xAxis: {
         type: 'category',
         triggerEvent: true,
+        offset: 0,
         axisLabel: {
           fontWeight: 'bold',
           fontFamily: this.fontFamily,
-          fontSize: 18,
+          fontSize: 13,
           formatter: (params: string) => {
             return params.split(' ').join('\n');
           }
+        },
+        splitLine: {
+          show: true
         }
       },
       yAxis: {
         name: 'Application Count',
-        nameLocation: 'end',
-        nameGap: 35,
+        nameLocation: 'middle',
+        nameGap: 10,
         nameTextStyle: {
           fontWeight: 'bold',
           fontFamily: this.fontFamily,
-          fontSize: 16
+          fontSize: 13
         },
         type: 'value',
         min: 0,
@@ -158,23 +183,26 @@ export class OriginsComponent implements OnInit {
         interval: 0,
         axisLabel: {
           fontFamily: this.fontFamily,
-          fontSize: 16
+          fontSize: 12
+        },
+        splitLine: {
+          show: false
         }
       },
       legend: {
         data: [],
         selected: [],
-        itemGap: 40,
+        itemGap: 10,
         textStyle: {
           fontWeight: 'bold',
-          fontSize: 15
+          fontSize: 12
         }
       },
       label: {
         show: true,
         position: 'top',
         fontFamily: this.fontFamily,
-        fontSize: 15,
+        fontSize: 13,
         color: '#000'
       },
       tooltip: {
@@ -208,7 +236,7 @@ export class OriginsComponent implements OnInit {
     requestAnimationFrame(() => { if (this.chartInstance) this.chartInstance.resize(); });
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.layout = {
       showHeader: true,
       headerItems: [],
@@ -239,8 +267,6 @@ export class OriginsComponent implements OnInit {
       'charts.statistics.application_count.D',
       'charts.statistics.application_count.P',
       'charts.statistics.application_count.T',
-      'charts.statistics.application_count.accounted_application',
-      'charts.statistics.application_count.active_application',
       'charts.statistics.origins.compare',
       'charts.statistics.origins._R',
       'charts.statistics.origins._NR'
@@ -248,8 +274,6 @@ export class OriginsComponent implements OnInit {
       this.translationMap.set("D", translations['charts.statistics.application_count.D']);
       this.translationMap.set("P", translations['charts.statistics.application_count.P']);
       this.translationMap.set("T", translations['charts.statistics.application_count.T']);
-      this.translationMap.set("accounted_application", translations['charts.statistics.application_count.accounted_application']);
-      this.translationMap.set("active_application", translations['charts.statistics.application_count.active_application']);
       this.translationMap.set("_R", translations['charts.statistics.origins._R']);
       this.translationMap.set("_NR", translations['charts.statistics.origins._NR']);
 
@@ -257,8 +281,8 @@ export class OriginsComponent implements OnInit {
       this.chartService.setChartID(2);
       this.chartService.setChartTheme(translations['charts.statistics.origins.compare']);
 
-      this.getAccountedApplications();
-      this.getActiveApplications();
+      this.fetchOriginGroup('total_filing_origins');
+      this.fetchOriginGroup('active_filing_origins');
     })
   }
   ngAfterViewInit() {
@@ -269,45 +293,76 @@ export class OriginsComponent implements OnInit {
       window.addEventListener('resize', () => this.resizeChartInDiv(chartDiv));
     }
   }
+  previous: boolean = true;
+  ngAfterViewChecked() {
+    if (this.showFilter && !this.previous) {
+      //HANDLE SHOW/HIDE SYNC
+      (window.innerWidth <= 768) ? this.updateFilterNGModel('IPType', this.currentIPCategory, [...this.IPCategory.keys()]) : (this.currentIPCategory.length === 0) ? this.updateFilterNGModel('IPType', 'all') : this.updateFilterNGModel('IPType', this.currentIPCategory);
+      this.updateFilterNGModel('type', this.currentType, ['accounted', 'active']);
+      /*
+      //TO DEVELOP
+      this.updateFilterNGModel('compare', true);
+      */
+    }
+    if (this.IPCategory.size !== 0) this.previous = !this.showFilter;
+  }
 
-  getAccountedApplications() {
-    this.http.get('assets/statistics-data/jo-app-origins.json').subscribe({
+  fetchOriginGroup(key: any) {
+    this.chartService.getOriginGroup(key).subscribe({
       next: (response) => {
-        console.log("Response - getAccountedApplications()", response);
-        this.accountedData = response;
-        this.transformApplications(this.accountedData, 'accounted_application');
+        console.log("Response - fetchOriginGroup()", response);
+        if (key === 'total_filing_origins') { this.accountedData = response; this.transformApplications(this.accountedData, 'accounted'); }
+        if (key === 'active_filing_origins') { this.activeData = response; this.transformApplications(this.activeData, 'active'); }
       },
-      error: (error) => { console.log("Error - getAccountedApplications()", error); }
+      error: (error) => { console.log("Error - fetchOriginGroup()", error); }
     });
   }
-  getActiveApplications() {
-    this.http.get('assets/statistics-data/jo-app-origins-active.json').subscribe({
+  fetchOrigin(key: string) {
+    this.chartService.getOrigin(key).subscribe({
       next: (response) => {
-        console.log("Response - getActiveApplications()", response);
-        this.activeData = response;
-        this.transformApplications(this.activeData, 'active_application');
+        console.log("Response - fetchOrigin()", response);
+        if (key === 'filing_origins_residents') { this.accountedData = response; } //TO DEVELOP
+        if (key === 'filing_origins_non_residents') { this.activeData = response; } //TO DEVELOP
       },
-      error: (error) => { console.log("Error - getActiveApplications()", error); }
+      error: (error) => { console.log("Error - fetchOrigin()", error); }
     });
   }
   transformApplications(inputData, type: string) {
-    for (let IP of inputData.applicationBag) {
-      this.IPCategory.set(IP.ipCategory, this.translationMap.get(IP.ipCategory));
-      if (type === 'accounted_application') this.accountedDataMap.set(IP.ipCategory, IP.totalQuantity);
-      if (type === 'active_application') this.activeDataMap.set(IP.ipCategory, IP.totalQuantity);
-      for (let applications of IP.dataBag) {
-        if (type === 'accounted_application') (applications.applicationOrigin === 'Residents') ? this.accountedDataMap.set(IP.ipCategory + '_R', applications.count) : this.accountedDataMap.set(IP.ipCategory + '_NR', applications.count);
-        if (type === 'active_application') (applications.applicationOrigin === 'Residents') ? this.activeDataMap.set(IP.ipCategory + '_R', applications.count) : this.activeDataMap.set(IP.ipCategory + '_NR', applications.count);
+    let recordIPCategory = new Map();
+    if (type === 'accounted') {
+      for (let IP of inputData.applicationBag) {
+        recordIPCategory.set(IP.ipCategory, this.translationMap.get(IP.ipCategory));
       }
+      //SORT - IPCategory
+      let order = ['T', 'P', 'D'], result1 = new Map(), result2 = new Map();
+      for (let item of order) {
+        if (recordIPCategory.has(item)) result1.set(item, recordIPCategory.get(item));
+        else result2.set(item, recordIPCategory.get(item));
+      }
+      this.IPCategory = new Map([...result1, ...result2]);
     }
-    if (type === 'accounted_application') this.setSeriesData(type, 'R_NR'); //DEFAULT CHART DATA
+    if (this.IPCategory.size !== 0) {
+      for (let IP of inputData.applicationBag) {
+        if (type === 'accounted') this.accountedDataMap.set(IP.ipCategory, IP.totalQuantity);
+        if (type === 'active') this.activeDataMap.set(IP.ipCategory, IP.totalQuantity);
+        for (let applications of IP.dataBag) {
+          if (type === 'accounted') (applications.applicationOrigin === 'Residents') ? this.accountedDataMap.set(IP.ipCategory + '_R', applications.quantity) : this.accountedDataMap.set(IP.ipCategory + '_NR', applications.quantity);
+          if (type === 'active') (applications.applicationOrigin === 'Residents') ? this.activeDataMap.set(IP.ipCategory + '_R', applications.quantity) : this.activeDataMap.set(IP.ipCategory + '_NR', applications.quantity);
+        }
+      }
+      //CHART1 - R vs NR Origins
+      if (this.currentMode) {
+        if (window.innerWidth <= 768) this.currentIPCategory = this.IPCategory.keys().next().value;
+      }
+      if (type === 'accounted' && this.accountedDataMap.size !== 0) this.setSeriesData('accounted', 'R_NR'); //COMPARE-null-null-(ACCOUNTED/ACTIVE)
+    }
   }
 
   //CHART SERIES DATA
   setSeriesData(seriesCode: string, originType: string) {
     //CHART SERIES
     let seriesData1 = [], seriesData2 = [];
-    let chartDataMap = (seriesCode === 'accounted_application') ? this.accountedDataMap : this.activeDataMap;
+    let chartDataMap = (seriesCode === 'accounted') ? this.accountedDataMap : this.activeDataMap;
     if (this.currentIPCategory.length === 0) {
       for (let IP of this.IPCategory.keys()) {
         seriesData1.push(chartDataMap.get(`${IP}_R`));
@@ -320,9 +375,22 @@ export class OriginsComponent implements OnInit {
     }
 
     //CHART LEGEND
-    this.chartLegendSelected = {
-      [this.translationMap.get('_R')]: (originType === 'R_NR' || originType === '_R') ? true : false,
-      [this.translationMap.get('_NR')]: (originType === 'R_NR' || originType === '_NR') ? true : false
+    let maxList = [];
+    if (originType === 'R_NR') {
+      this.chartLegendSelected = {
+        [this.translationMap.get('_R')]: true,
+        [this.translationMap.get('_NR')]: true
+      }
+    }
+    else {
+      if (this.chartLegendSelected == null) this.chartLegendSelected = { [this.translationMap.get('_R')]: true, [this.translationMap.get('_NR')]: true }; //INITIALIZE
+      this.chartLegendSelected[this.translationMap.get(originType)] = !this.chartLegendSelected[this.translationMap.get(originType)]; //TOGGLE
+      let pair = (originType === '_R') ? '_NR' : '_R';
+      if (this.chartLegendSelected[this.translationMap.get(originType)] && this.chartLegendSelected[this.translationMap.get(pair)]) originType = 'R_NR';
+      else {
+        if (originType === '_R') maxList = (this.chartLegendSelected[this.translationMap.get(originType)]) ? [...seriesData1] : [...seriesData2];
+        if (originType === '_NR') maxList = (this.chartLegendSelected[this.translationMap.get(originType)]) ? [...seriesData2] : [...seriesData1];
+      }
     }
 
     //DYNAMIC CHART HEIGHT
@@ -336,8 +404,8 @@ export class OriginsComponent implements OnInit {
           data: (this.currentIPCategory.length === 0) ? Array.from(this.IPCategory.values()) : [this.translationMap.get(this.currentIPCategory)]
         },
         yAxis: {
-          max: this.calculateSpacing(Math.max(...seriesData1, ...seriesData2)).max,
-          interval: this.calculateSpacing(Math.max(...seriesData1, ...seriesData2)).interval
+          max: (originType === 'R_NR') ? this.calculateSpacing([...seriesData1, ...seriesData2]).max : this.calculateSpacing(maxList).max,
+          interval: (originType === 'R_NR') ? this.calculateSpacing([...seriesData1, ...seriesData2]).interval : this.calculateSpacing(maxList).interval
         },
         legend:
         {
@@ -353,14 +421,19 @@ export class OriginsComponent implements OnInit {
     }, 100);
   }
 
-  calculateSpacing(maximumData: number) {
-    if (maximumData === 0) return { max: 1, interval: 1 };
+  calculateSpacing(input: number[]) {
+    if (!input || input.length === 0) return { max: 0, interval: 0 };
 
-    const magnitude = Math.pow(10, Math.floor(Math.log10(maximumData)));
-    const roundedMax = Math.ceil(maximumData / magnitude) * magnitude;
-    const interval = roundedMax / 5;
+    const max = Math.max(...input);
+    if (max === 0) return { max: 1, interval: 1 };
 
-    return { max: roundedMax, interval: interval };
+    if (max < 100) return { max: 100, interval: (100 / 5) };
+
+    let scale = Math.pow(10, (max.toString().length) - 2);
+    let givenHundred = max / scale;
+    let check = max % scale;
+    if (check !== 0) givenHundred = givenHundred + 1;
+    return { max: Math.round(givenHundred * scale), interval: Math.round(givenHundred * scale) };
   }
 
   ngOnDestroy() {

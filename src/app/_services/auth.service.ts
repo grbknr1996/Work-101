@@ -172,8 +172,17 @@ export class AuthService {
 
   private formatUserAttributes(attributes: any): User {
     const userId = attributes.sub || '';
-    const officeCode = this.extractOfficeCodeFromUserId(attributes.name);
-
+    let officeCode: string;
+    // Taking officeCode from custom:office attribute from the token instead of name.
+    if (
+      attributes["custom:office"] && 
+      typeof attributes["custom:office"] === "string" && 
+      attributes["custom:office"].length === 2
+    ) {
+      officeCode = attributes["custom:office"].toLowerCase();
+    } else {
+      officeCode = this.extractOfficeCodeFromUserId(attributes.name);
+    }
     return {
       id: userId,
       email: attributes.email || '',

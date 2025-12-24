@@ -1,17 +1,1 @@
-
-<div class="package-stats-container">
-  <p-accordion value="0">
-    <p-accordion-panel value="0">
-      <p-accordion-header class="stats-accordion-header">{{"common.components.stats.statistics"|translate}}</p-accordion-header>
-      <p-accordion-content class="stats-accordion-content">
-        <div class="stats-container">
-          <div class="package-stat-card" *ngFor="let stat of packageStats" [class.selected]="selectedStat === stat.label" (click)="selectStat(stat.label)">
-            <div class="stat-header"><span class="stat-label" [style.color]="stat.color">{{ stat.display }}</span><i [class]="stat.icon" [style.color]="stat.color"></i></div>
-            <div class="stat-content"><span class="stat-count" [style.color]="stat.color">{{ stat.count }}</span><span class="stat-change" [style]="stat.percentChange!=null ? '' : 'display:none;'"><i [class]="stat.percentChange!=null ? (stat.percentChange &gt;= 0 ? 'pi pi-arrow-up' : 'pi pi-arrow-down') : ''" [style.color]="stat.percentChange &gt;= 0 ? '#16a34a' : '#dc2626'"></i><span [style.color]="stat.percentChange &gt;= 0 ? '#16a34a' : '#dc2626'">{{ stat.percentChange }}%</span></span></div>
-            <div class="stat-period">{{ stat.period }}</div>
-          </div>
-        </div>
-      </p-accordion-content>
-    </p-accordion-panel>
-  </p-accordion>
-</div>
+<div class="package-stats-container"><p-accordion value="0"><p-accordion-panel value="0"><p-accordion-header class="stats-accordion-header">{{"common.components.stats.statistics"|translate}}</p-accordion-header><p-accordion-content class="stats-accordion-content"><div class="stats-container"><div class="package-stat-card" *ngFor="let stat of packageStats" [class.selected]="selectedStat === stat.label" (click)="selectStat(stat.label)"><div class="stat-header"><span class="stat-label" [style.color]="stat.color">{{ stat.display }}</span><i [class]="stat.icon" [style.color]="stat.color"></i></div><div class="stat-content"><span class="stat-count" [style.color]="stat.color">{{ stat.count }}</span><span class="stat-change" [style]="stat.percentChange!=null ? '' : 'display:none;'"><i [class]="stat.percentChange!=null ? (stat.percentChange &gt;= 0 ? 'pi pi-arrow-up' : 'pi pi-arrow-down') : ''" [style.color]="stat.percentChange &gt;= 0 ? '#16a34a' : '#dc2626'"></i><span [style.color]="stat.percentChange &gt;= 0 ? '#16a34a' : '#dc2626'">{{ stat.percentChange }}%</span></span></div><div class="stat-period">{{ stat.period }}</div></div></div></p-accordion-content></p-accordion-panel></p-accordion></div>

@@ -8,6 +8,7 @@
     [rowsPerPageOptions]="rowsPerPageOptions",
     [loading]="loading",
     [paginator]="paginator",
+    [showFirstLastIcon]="showFirstLastIcon"
     paginatorPosition="both",
     [globalFilterFields]="globalFilterFields",
     [showCurrentPageReport]="showCurrentPageReport",
@@ -224,7 +225,7 @@
                   [image]="isValidImageUrl(getValue(rowData, col.field)) ? getValue(rowData, col.field) : null",
                   [label]="!isValidImageUrl(getValue(rowData, col.field)) ? getValue(rowData, col.field) : null",
                   [alt]="getValue(rowData, col.nameField || 'username') || 'User Avatar'",
-                  size="normal",
+                  [size]="col.size",
                   shape="circle"
                 )
                 span(*ngIf="col.showName") {{ getValue(rowData, col.nameField || 'name') }}

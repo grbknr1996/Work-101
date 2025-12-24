@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { BehaviorSubject, Observable, throwError, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -7,8 +7,13 @@ import {
   AuthTokenResponse,
   DataExchangeResponse,
   ExclusionRule,
+  Recipient,
+  RecipientsResponse,
 } from '../interfaces';
 import { SKIP_AUTHORIZATION_TOKEN_HEADER } from '../_constants/common.constant';
+import { handleError } from '../utils';
+import { ToastService } from './toast.service';
+import { MechanicsService } from './mechanics.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +22,35 @@ export class DataExchangeConfigService {
   private accessTokenSubject = new BehaviorSubject<string | null>(null);
   public accessToken$ = this.accessTokenSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  // Create a data signal for the rules
+  private _rulesData = signal<ExclusionRule[]>([]);
+  readonly rulesData = this._rulesData.asReadonly();
+
+  setRulesData(data: ExclusionRule[]) {
+    this._rulesData.set(data);
+  }
+
+  updateRulesData(updater: (v: any) => any) {
+    this._rulesData.update(updater);
+  }
+
+  // Create a data signal for the recipients
+  private _recipientsData = signal<Recipient[]>([]);
+  readonly recipientsData = this._recipientsData.asReadonly();
+
+  setRecipientData(data: Recipient[]) {
+    this._recipientsData.set(data);
+  }
+
+  updateRecipientData(updater: (v: any) => any) {
+    this._recipientsData.update(updater);
+  }
+
+  constructor(
+    private http: HttpClient,
+    private toastService: ToastService,
+    private ms: MechanicsService
+  ) { }
 
   /**
    * Get authentication token using Basic Auth
@@ -66,47 +99,61 @@ export class DataExchangeConfigService {
    * Get exclusion rules
    */
   getExclusionRules(): Observable<ExclusionRule[]> {
-    return this.getAccessToken().pipe(
-      switchMap((token) => {
-        const headers = new HttpHeaders({
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-          [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true',
-        });
+    const dataServicesUrl = `${environment.distributionRulesPath}`;
 
-        const dataServicesUrl = `${environment.appUrl}/${environment.distributionRulesPath}`;
+    return this.http
+      .get<DataExchangeResponse>(`${dataServicesUrl}`)
+      .pipe(
+        map((response) => {
+          console.log('Data services API response received:', {
+            hasData: !!response.data,
+            dataLength: response.data?.length || 0,
+            message: response.message,
+          });
+          if (response.data && Array.isArray(response.data)) {
+            return response.data;
+          }
+          return [];
+        }),
+        catchError((error) =>
+          handleError(
+            error,
+            'Loading Recipients list',
+            this.toastService,
+            this.ms
+          )
+        )
+      );
+  }
 
-        return this.http
-          .get<DataExchangeResponse>(dataServicesUrl, {
-            headers,
-          })
-          .pipe(
-            map((response) => {
-              console.log('Data services API response received:', {
-                hasData: !!response.data,
-                dataLength: response.data?.length || 0,
-                message: response.message,
-              });
-              if (response.data && Array.isArray(response.data)) {
-                return response.data;
-              }
-              return [];
-            }),
-            catchError((error) => {
-              console.error('Failed to fetch exclusion rules:', error);
-              console.error('Error details:', {
-                status: error.status,
-                statusText: error.statusText,
-                message: error.message,
-                url: dataServicesUrl,
-              });
-              return throwError(
-                () => new Error('Failed to fetch exclusion rules')
-              );
-            })
-          );
-      })
-    );
+  /**
+   * Get Recipients
+   */
+  getRecipients(): Observable<Recipient[]> {
+    const dataServicesUrl = `${environment.recipientsPath}`;
+    return this.http
+      .get<RecipientsResponse>(`${dataServicesUrl}`)
+      .pipe(
+        map((response) => {
+          console.log('Data services recipients API response received:', {
+            hasData: !!response.data,
+            dataLength: response.data?.length || 0,
+            message: response.message,
+          });
+          if (response.data && Array.isArray(response.data)) {
+            return response.data;
+          }
+          return [];
+        }),
+        catchError((error) =>
+          handleError(
+            error,
+            'Loading Recipients list',
+            this.toastService,
+            this.ms
+          )
+        )
+      );
   }
 
   /**
@@ -142,7 +189,7 @@ export class DataExchangeConfigService {
         });
 
         // Use correct endpoint for distribution exclusion rules
-        const dataServicesUrl = `${environment.appUrl}/data-services/v1/distribution-exclusion`;
+        const dataServicesUrl = `${environment.distributionRulesPath}`;
 
         return this.http.post<any>(dataServicesUrl, newRule, { headers }).pipe(
           map((response) => {
@@ -160,8 +207,7 @@ export class DataExchangeConfigService {
             return throwError(
               () =>
                 new Error(
-                  `Failed to create exclusion rule: ${
-                    error.message || 'Unknown error'
+                  `Failed to create exclusion rule: ${error.message || 'Unknown error'
                   }`
                 )
             );
@@ -169,5 +215,24 @@ export class DataExchangeConfigService {
         );
       })
     );
+  }
+
+  /**
+ * Post new Recipient data
+ */
+  postRecipientData(newRecipient: any): Observable<any> {
+    const dataServicesUrl = `${environment.recipientsPath}`;
+    return this.http
+      .post(`${dataServicesUrl}`, newRecipient)
+      .pipe(
+        catchError((error) =>
+          handleError(
+            error,
+            'Loading Recipients list',
+            this.toastService,
+            this.ms
+          )
+        )
+      );
   }
 }

@@ -20,6 +20,18 @@
             (onSelect)="onCalenderSelect($event)",
             (onClearClick)="onClearEvent($event)"
           )
+      .col-span-4(*ngIf="showAutoComplete")
+        p-autocomplete.full-width-autocomplete(
+            [(ngModel)]="searchBarAutoComplete", 
+            [suggestions]="autoCompleteSuggestions", 
+            (completeMethod)="onAutoCompleteSearch($event)",
+            (onSelect)="onSearchItemSelected($event)", 
+            [minLength]="5"
+          )
+          ng-template(pTemplate="item" let-item)
+            div((click)="handleAutoCompleteItemClick($event, item)")
+              | {{ item }}
+
       .col-span-4.advanced-button
         div(*ngIf="showAdvancedSearch")
           app-configurable-advanced-filter(

@@ -6,6 +6,7 @@ import {
   OnInit,
   OnDestroy,
   ChangeDetectionStrategy,
+  ChangeDetectorRef
 } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { Subject } from 'rxjs';
@@ -13,13 +14,14 @@ import { AdvancedFilterQuery, FieldQueries, LevelQueries } from '../advanced-fil
 import { MechanicsService } from 'src/app/_services/mechanics.service';
 import { AdvancedFilterService } from 'src/app/_services/advanced-filter.service';
 import { queryTemplatesFromDb } from 'src/assets/data';
+import { DataExchangeService } from 'src/app/_services/data-sharing.service';
 
 export interface SearchCategory {
   code: string;
   name: string;
 }
 
-export interface QueryTemplate{
+export interface QueryTemplate {
   templateId: string;
   category: string;
   title: string;
@@ -41,9 +43,9 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
   // basic mode will use for simple add or queries
   // medium mode will have all advanced features except template and category option
   // advanced mode will have all features
-  @Input() advancedFilterMode: 'simple' | 'basic' | 'medium' |'advanced'  = "advanced";
+  @Input() advancedFilterMode: 'simple' | 'basic' | 'medium' | 'advanced' = "advanced";
   @Input() category: string = "all";
-  
+
   @Output() advancedFilterSearch = new EventEmitter<AdvancedFilterQuery>();
 
   visible: boolean = false;
@@ -64,8 +66,10 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
   categories: SearchCategory[] | undefined;
   selectedCategory: SearchCategory | undefined;
   fieldOptions;
+  singleField = null;
   queryOptions;
   dateQueryOptions;
+  applicationTypeOptions;
 
   levels: LevelQueries[];
 
@@ -73,10 +77,16 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
 
   groupNumber = 1;
   levelNumber = 1;
-  
+
+  filteredResults: any[];
+
+  strategyHeader;
+
   constructor(
     public ms: MechanicsService,
-    private advancedService: AdvancedFilterService) {
+    private advancedService: AdvancedFilterService,
+    private dataService: DataExchangeService,
+    private cdr: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
@@ -138,11 +148,19 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
       { code: 'dateRange', name: this.ms.translate('common.components.advancedFilter.display.queryOptions.dateRange') }
     ];
 
+    this.applicationTypeOptions = [
+      { code: 'patents', name: this.ms.translate('common.components.advancedFilter.display.applicationTypes.patents') },
+      { code: 'trademarks', name: this.ms.translate('common.components.advancedFilter.display.applicationTypes.trademarks') },
+      { code: 'designs', name: this.ms.translate('common.components.advancedFilter.display.applicationTypes.designs') }
+    ];
+
     this.queryTemplates = queryTemplatesFromDb;
 
-    this.selectedList = {"total": 0, "groups": 0, "levels": 0, groupList: [], levelList: []};
-    
-    this.selectedCategory = {code: 'all', name: this.ms.translate('common.components.advancedFilter.display.categoryoptions.all')};
+    this.strategyHeader = this.ms.translate('common.components.advancedFilter.strategy');
+
+    this.selectedList = { "total": 0, "groups": 0, "levels": 0, groupList: [], levelList: [] };
+
+    this.selectedCategory = { code: 'all', name: this.ms.translate('common.components.advancedFilter.display.categoryoptions.all') };
 
     let categoryEnKey = 'common.components.advancedFilter.display.categoryoptions.';
     this.advancedService.getConfig().subscribe(config => {
@@ -156,24 +174,24 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
         };
       });
 
-      if(this.category != "all"){
+      if (this.category != "all") {
         this.selectedCategory = this.categories.find(item => item.code === this.category);
         this.filterTemplates();
       } else {
         this.filterFieldOptions();
       }
 
-    });
+      this.clearSearch();
 
-    this.clearSearch();
+    });
   }
 
   filterTemplates(): void {
     if (this.selectedCategory.code != "all") {
       this.queryTemplates = queryTemplatesFromDb.filter(item => item.category === this.selectedCategory.code);
-    }else {
+    } else {
       this.queryTemplates = queryTemplatesFromDb;
-    } 
+    }
     this.filterFieldOptions();
   }
 
@@ -202,6 +220,12 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
         };
       });
     });
+
+    if (this.fieldOptions.length === 1 && this.fieldOptions[0].items.length === 1) {
+      this.singleField = this.fieldOptions[0].items[0];
+      //file.fieldType = selectedField.fieldType;
+    }
+    //this.selectedCategory.code based changes
   }
 
   clearSearch(): void {
@@ -209,14 +233,24 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
     const groupId = this.generateId();
     const levelId = this.generateId();
 
-    let fields = [{"fieldId":fieldId+"", "field":{code: "", name:""}, "connecting":{code: "", name:""}, "value":"", "operator":"","orOperator":false}];
+    let fieldValue = { code: "", name: "" };
+    let fieldType = null;
+    let connecting = { code: "", name: "" };
+    if (this.singleField !== null) {
+      fieldValue = this.singleField;
+      fieldType = this.singleField.fieldType;
+      if (fieldType === 'patents') {
+        connecting = { code: 'patents', name: this.ms.translate('common.components.advancedFilter.display.applicationTypes.patents') };
+      }
+    }
+    let fields = [{ "fieldId": fieldId + "", "field": fieldValue, "fieldType": fieldType, "connecting": connecting, "value": "", "operator": "", "orOperator": false }];
 
     this.groupNumber = 1;
-    let groups = [{"group":groupId+"", "group_name":this.ms.translate('common.components.advancedFilter.display.groupName')+" "+this.groupNumber, "file_list": fields, "group_operator":"","orOperator":false}];  
+    let groups = [{ "group": groupId + "", "group_name": this.ms.translate('common.components.advancedFilter.display.groupName') + " " + this.groupNumber, "file_list": fields, "group_operator": "", "orOperator": false }];
     this.groupNumber++;
 
     this.levelNumber = 1;
-    this.levels = [{"level":"1","levelId":levelId+"","level_name":"","group_list": groups,"level_operator":"AND","orOperator":false}];
+    this.levels = [{ "level": "1", "levelId": levelId + "", "level_name": "", "group_list": groups, "level_operator": "AND", "orOperator": false }];
   }
 
   private generateId(): number {
@@ -281,13 +315,13 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
     let nextNumber = this.generateId();
 
     let newTemplate = {
-      templateId: nextNumber+"",
+      templateId: nextNumber + "",
       category: this.selectedCategory.code,
       title: this.templateTitle,
       description: this.templateDescripton,
       created: formatDate(new Date(), 'yyyy-MM-dd', 'en-US'),
       lastUsed: "",
-      query: {"category":this.selectedCategory.code,"levelList":this.levels}
+      query: { "category": this.selectedCategory.code, "levelList": this.levels }
     }
 
     this.queryTemplates.push(newTemplate);
@@ -296,11 +330,39 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
     this.showSaveTemplate = false
   }
 
+  searchService(event, ipType) {
+    const query = event.query;
+
+    //TODO for authority search
+    this.ms.getCurrentOffice()
+    this.dataService.getApplicationsList("ph", ipType, query.toUpperCase()).subscribe({
+      next: (res) => {
+        this.filteredResults = [...res];
+         if (this.filteredResults.length > 10) {
+          let moreOption = this.ms.translate('common.components.advancedFilter.moreItems');
+          this.filteredResults = [...this.filteredResults, moreOption];
+        }
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.filteredResults = [...[]];
+        console.error('Failed to fetch shared packages for the application id:', err);
+      }
+    })
+  }
+
+  handleAutoCompleteItemClick(event: MouseEvent, item: any) {
+    if (item === this.ms.translate('common.components.advancedFilter.moreItems')) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
+  }
+
   onFieldChange(selectedField: any, file: FieldQueries) {
     file.fieldType = selectedField.fieldType;
   }
 
-  addField(levelId: string, groupId: string ): void {
+  addField(levelId: string, groupId: string): void {
 
     let selectedLevel = this.levels.find(item => item.levelId === levelId);
 
@@ -312,11 +374,21 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
     });
 
     let nextNumber = this.generateId();
-    const newItemDetail: FieldQueries = {"fieldId":nextNumber+"", "field":{code: "", name:""}, "connecting":{code: "", name:""}, "value":"", "operator":"","orOperator":firstFieldOperator}
+    let fieldValue = { code: "", name: "" };
+    let fieldType = null;
+    let connecting = { code: "", name: "" };
+    if (this.singleField !== null) {
+      fieldValue = this.singleField;
+      fieldType = this.singleField.fieldType;
+      if (fieldType === 'patents') {
+        connecting = { code: 'patents', name: this.ms.translate('common.components.advancedFilter.display.applicationTypes.patents') };
+      }
+    }
+    const newItemDetail: FieldQueries = { "fieldId": nextNumber + "", "field": fieldValue, "fieldType": fieldType, "connecting": connecting, "value": "", "operator": "", "orOperator": firstFieldOperator }
     targetGroup.file_list.push(newItemDetail);
   }
 
-  removeField(levelId: string, groupId: string, fileId: string ): void {
+  removeField(levelId: string, groupId: string, fileId: string): void {
 
     let selectedLevel = this.levels.find(item => item.levelId === levelId);
 
@@ -327,33 +399,43 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
       targetGroup.file_list.splice(indexToRemove, 1);
     }
 
-    if(targetGroup.file_list.length === 0){
+    if (targetGroup.file_list.length === 0) {
       this.removeGroup(levelId, groupId);
     }
   }
 
   addGroup(): void {
     let firstLevelOperator = false;
-    if(this.levels.length > 1){
+    if (this.levels.length > 1) {
       let selectedLevel = this.levels.at(this.levels.length - 2);
       firstLevelOperator = selectedLevel.orOperator;
       this.levels = this.levels.map(l => ({ ...l, orOperator: firstLevelOperator }));
     }
 
     let nextNumber = this.generateId();
-    let fields = [{"fieldId":nextNumber+"", "field":{code: "", name:""}, "connecting":{code: "", name:""}, "value":"", "operator":"","orOperator":false}];
-    
+    let fieldValue = { code: "", name: "" };
+    let fieldType = null;
+    let connecting = { code: "", name: "" };
+    if (this.singleField !== null) {
+      fieldValue = this.singleField;
+      fieldType = this.singleField.fieldType;
+      if (fieldType === 'patents') {
+        connecting = { code: 'patents', name: this.ms.translate('common.components.advancedFilter.display.applicationTypes.patents') };
+      }
+    }
+    let fields = [{ "fieldId": nextNumber + "", "field": fieldValue, "fieldType": fieldType, "connecting": connecting, "value": "", "operator": "", "orOperator": false }];
+
     let groupId = this.generateId();
-    let group = {"group":groupId+"", "group_name":this.ms.translate('common.components.advancedFilter.display.groupName')+" "+this.groupNumber, "file_list": fields, "group_operator":"","orOperator":firstLevelOperator};
+    let group = { "group": groupId + "", "group_name": this.ms.translate('common.components.advancedFilter.display.groupName') + " " + this.groupNumber, "file_list": fields, "group_operator": "", "orOperator": firstLevelOperator };
     this.groupNumber++;
 
     let levelId = this.generateId();
-    let level = {"level":"1","levelId":levelId+"","level_name":"","group_list": [group],"level_operator":"AND","orOperator":firstLevelOperator};
+    let level = { "level": "1", "levelId": levelId + "", "level_name": "", "group_list": [group], "level_operator": "AND", "orOperator": firstLevelOperator };
 
     this.levels.push(level);
   }
 
-  removeGroup(levelId: string, groupId: string ): void {
+  removeGroup(levelId: string, groupId: string): void {
 
     let selectedLevel = this.levels.find(item => item.levelId === levelId);
 
@@ -362,7 +444,7 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
       selectedLevel.group_list.splice(levelIndex, 1);
     }
 
-    if(selectedLevel.group_list.length === 0){
+    if (selectedLevel.group_list.length === 0) {
       const levelIndexToRemove = this.levels.findIndex(item => item.levelId === levelId);
       if (levelIndexToRemove !== -1) {
         this.levels.splice(levelIndexToRemove, 1);
@@ -372,7 +454,7 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
 
   onSearch(): void {
     this.visible = false;
-    let advancedFilterQuery = {"category":this.selectedCategory.code, "levelList":this.levels};
+    let advancedFilterQuery = { "category": this.selectedCategory.code, "levelList": this.levels };
     this.advancedFilterSearch.emit(advancedFilterQuery);
   }
 
@@ -384,17 +466,17 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
       const groupSelected = levelSelected.group_list.find(grp => grp.group === groupId);
       groupSelected.selected = isChecked;
       //console.log(groupSelected.group_name+" "+isChecked);
-      if(isChecked){
+      if (isChecked) {
         this.selectedList.groupList = [...this.selectedList.groupList, groupSelected];
-      }else{
+      } else {
         this.selectedList.groupList = this.selectedList.groupList.filter(g => g.group !== groupId);
       }
- 
+
     } else if (type === "level") {
       levelSelected.selected = isChecked;
-      if(isChecked){
-       this.selectedList.levelList = [...this.selectedList.levelList, levelSelected];
-      }else{
+      if (isChecked) {
+        this.selectedList.levelList = [...this.selectedList.levelList, levelSelected];
+      } else {
         this.selectedList.levelList = this.selectedList.levelList.filter(l => l.levelId !== levelId);
       }
     }
@@ -407,7 +489,7 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
   }
 
   clearSelection(): void {
-    this.selectedList = {"total": 0, "groups": 0, "levels": 0, groupList: [], levelList: []};
+    this.selectedList = { "total": 0, "groups": 0, "levels": 0, groupList: [], levelList: [] };
     this.levels = this.levels.map(level => ({
       ...level,
       selected: false,
@@ -425,7 +507,7 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
     const selectedGroups = [];
     let firstSelectedIndex = -1;
 
-    this.levels = this.levels.map((level,index) => {
+    this.levels = this.levels.map((level, index) => {
 
       // selectedGroups = level.group_list.filter(group => group.selected);
       // const remainingGroups = level.group_list.filter(group => !group.selected);
@@ -441,8 +523,8 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
         return true;
       });
 
-      if(firstSelectedIndex === -1 && selectedGroups.length > 0){
-          firstSelectedIndex = index;
+      if (firstSelectedIndex === -1 && selectedGroups.length > 0) {
+        firstSelectedIndex = index;
       }
 
       return { ...level, group_list: remainingGroups };
@@ -452,17 +534,17 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
     const newLevel = {
       level: "2",
       levelId: newLevelId + "",
-      level_name: this.ms.translate('common.components.advancedFilter.display.groupedLevel')+` ${this.levelNumber}`,
+      level_name: this.ms.translate('common.components.advancedFilter.display.groupedLevel') + ` ${this.levelNumber}`,
       group_list: selectedGroups,
       level_operator: "AND",
       orOperator: false
     };
-    this.levelNumber ++;
+    this.levelNumber++;
     this.levels.splice(firstSelectedIndex, 0, newLevel);
 
     this.levels = this.levels.filter(level => level.group_list.length > 0);
 
-    this.selectedList = {"total": 0, "groups": 0, "levels": 0, groupList: [], levelList: []};
+    this.selectedList = { "total": 0, "groups": 0, "levels": 0, groupList: [], levelList: [] };
     //console.log(this.levels);
   }
 
@@ -479,7 +561,7 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
       let newLevelId = this.generateId();
       const newLevel = {
         level: "1",
-        levelId: newLevelId+"",
+        levelId: newLevelId + "",
         level_name: "",
         group_list: [
           {
@@ -490,7 +572,7 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
         orOperator: false
       };
       this.levels.splice(indexToRemove, 0, newLevel);
-      indexToRemove ++;
+      indexToRemove++;
     });
     //console.log(this.levels);
   }
@@ -522,7 +604,7 @@ export class ConfigurableAdvancedFilterComponent implements OnInit, OnDestroy {
 
     this.levels = this.levels.filter(l => l.group_list.length > 0);
 
-    this.selectedList = {"total": 0, "groups": 0, "levels": 0, groupList: [], levelList: []};
+    this.selectedList = { "total": 0, "groups": 0, "levels": 0, groupList: [], levelList: [] };
   }
 
 }

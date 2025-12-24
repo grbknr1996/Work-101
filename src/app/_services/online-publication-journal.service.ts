@@ -2,6 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Fee } from '../schemas/fee-schema';
 import { JournalPublication } from '../schemas/journal-publication-schema';
+import { Observable, of } from 'rxjs';
 
 @Injectable()
 export class OnlinePublicationJournalService {
@@ -16,7 +17,7 @@ export class OnlinePublicationJournalService {
         this.selectedItems.set([]);
     }
 
-    getData(): JournalPublication[] {
+    getData(): any[] {
         return [
             {
                 journalCode: "PJ-2025-Q1-001",
@@ -82,6 +83,93 @@ export class OnlinePublicationJournalService {
                 files: 10
             },
         ];
+    }
+
+    getOnlinePublicationJournalData(): Observable<any> {
+        return of({
+            regularExtraction: [
+                {
+                    category: "trademarks",
+                    lastExecution: "2025-11-25 14:30",
+                    totalApplications: 1247,
+                    nextPublication: "2025-11-27 02:00",
+                    status: "completed",
+                    progressPercentage: 100
+                },
+                {
+                    category: "patents",
+                    lastExecution: "2025-11-26 03:15",
+                    totalApplications: 892,
+                    nextPublication: "2025-11-26 15:45",
+                    status: "processing",
+                    progressPercentage: 64
+                },
+                {
+                    category: "industrial designs",
+                    lastExecution: "2025-11-25 18:20",
+                    totalApplications: 534,
+                    nextPublication: "2025-11-27 04:00",
+                    status: "completed",
+                    progressPercentage: 100
+                },
+            ],
+            fullExtraction: [
+                {
+                    category: "trademarks",
+                    lastFullExecution: "2025-11-01 00:00",
+                    totalApplications: 45678,
+                    nextPublication: "2025-12-01 00:00",
+                    status: "completed",
+                    progressPercentage: 100
+                },
+                {
+                    category: "patents",
+                    lastFullExecution: "2025-10-28 22:30",
+                    totalApplications: 32145,
+                    nextPublication: "2025-11-26 14:20",
+                    status: "processing",
+                    progressPercentage: 64
+                },
+                {
+                    category: "industrial designs",
+                    lastFullExecution: "2025-11-15 12:00",
+                    totalApplications: 18923,
+                    nextPublication: "2025-12-15 12:00",
+                    status: "completed",
+                    progressPercentage: 100
+                },
+            ],
+            activityFeed: [
+                {
+                    category: "patents",
+                    status: "completed",
+                    message: "Incremental extraction completed successfully",
+                    updatedAt: "2025-11-26 15:45:32",
+                    progressPercentage: 100
+                },
+                {
+                    category: "patents",
+                    status: "processing",
+                    message: "Full extraction in progress - Processing year 2020",
+                    updatedAt: "2025-11-26 14:20:15",
+                    progressPercentage: 64
+                },
+                {
+                    category: "trademarks",
+                    status: "scheduled",
+                    message: "Next incremental extraction scheduled",
+                    updatedAt: "2025-11-26 14:20:15",
+                    progressPercentage: 0
+                },
+                {
+                    category: "industial Designs",
+                    status: "scheduled",
+                    message: "Data validation completed - 534 records processed",
+                    updatedAt: "2025-11-25 18:25:10",
+                    progressPercentage: 100
+                },
+            ]
+        })
     }
 
     constructor(private http: HttpClient) { }

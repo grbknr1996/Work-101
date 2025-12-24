@@ -1,9 +1,1 @@
-
-<app-layout [config]="layoutConfig">
-  <app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs>
-  <div class="user-accounts-header">
-    <h1>{{"dataService.selectOffice.title"|translate}}</h1>
-  </div>
-  <p-select [options]="offices" [(ngModel)]="selectedOffice" (onChange)="onOfficeChange($event)" [placeholder]="'dataService.selectOffice.placeHolder'|translate" optionLabel="name"></p-select><br>
-  <button class="create-user-btn" pButton type="button" (click)="onSelectOffice()">{{"dataService.selectOffice.button"|translate}}</button>
-</app-layout>
+<app-layout [config]="layoutConfig"><app-breadcrumbs [items]="breadcrumbItems"></app-breadcrumbs><div class="user-accounts-header"><h1>{{"dataService.selectOffice.title"|translate}}</h1></div><p-select [options]="offices" [(ngModel)]="selectedOffice" (onChange)="onOfficeChange($event)" [placeholder]="'dataService.selectOffice.placeHolder'|translate" optionLabel="name"></p-select><br><button class="create-user-btn" pButton type="button" (click)="onSelectOffice()">{{"dataService.selectOffice.button"|translate}}</button></app-layout>

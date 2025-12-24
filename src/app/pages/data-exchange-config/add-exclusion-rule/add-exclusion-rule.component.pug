@@ -1,6 +1,6 @@
 app-layout([config]="layoutConfig")
   app-breadcrumbs([items]="getBreadcrumbItems()")
-  h2.text-2xl.font-bold.text-blue-800.mb-6 Create Distribution Rule
+  h2.text-2xl.font-bold.text-blue-800.mb-6 {{ "addExclusionRules.title" |  translate }}
 
   app-configurable-stepper.mb-8(
     [steps]="steps",
@@ -12,50 +12,49 @@ app-layout([config]="layoutConfig")
     form([formGroup]="sourceCategoriesForm").w-full
       .w-full.grid.grid-cols-1.gap-6(class="md:grid-cols-2")
         .col-span-1
-          label.block.text-sm.font-medium.text-gray-700.mb-2 Originating Office
+          label.block.text-sm.font-medium.text-gray-700.mb-2 {{ "addExclusionRules.formFields.originatingOffice" |  translate }}
           p-dropdown.w-full(
             [options]="originatingOffices()",
             formControlName="office",
-            placeholder="Select Office",
-            [disabled]="true"
+            [placeholder]="ms.translate('addExclusionRules.formFields.originatingOfficePlaceholder')"
           )
-          small.text-sm.text-gray-500.mt-1.block This is automatically set to your current office
+          small.text-sm.text-gray-500.mt-1.block {{ "addExclusionRules.formFields.originatingOfficeValidationMessage" |  translate }}
         .col-span-1
-          label.block.text-sm.font-medium.text-gray-700.mb-2 Recipient System
+          label.block.text-sm.font-medium.text-gray-700.mb-2 {{ "addExclusionRules.formFields.recipientSystem" |  translate }}
           p-dropdown.w-full(
             [options]="recipientOffices()",
             formControlName="system",
-            placeholder="Select System",
+            [placeholder]="ms.translate('addExclusionRules.formFields.recipientSystemPlaceholder')",
             (onChange)="onRecipientSystemChange()"
           )
       .w-full.mt-6.grid.grid-cols-1.gap-6(class="md:grid-cols-2")
         .col-span-1
-          label.block.text-sm.font-medium.text-gray-700.mb-2 IP Category Types
+          label.block.text-sm.font-medium.text-gray-700.mb-2 {{ "addExclusionRules.formFields.IPTypeCategory" |  translate }}
           p-dropdown.w-full(
             [options]="ipCategories()",
             formControlName="categories",
-            placeholder="Select IP Category",
+            [placeholder]="ms.translate('addExclusionRules.formFields.IPTypeCategoryPlaceholder')",
             (onChange)="onIpCategoryChange()"
           )
           p-message(
             *ngIf="sourceCategoriesForm.value.categories",
             severity="success",
-            text="You have selected {{ getCategoryLabel(sourceCategoriesForm.value.categories) }}. This category will have its own specific exclusion rules."
+            [text]="ms.translate('addExclusionRules.formFields.IPTypeCategoryValidationMessage1') + ' ' + getCategoryLabel(sourceCategoriesForm.value.categories) + '. ' + ms.translate('addExclusionRules.formFields.IPTypeCategoryValidationMessage2') + '.'"
           )
         
         .col-span-1
-          label.block.text-sm.font-medium.text-gray-700.mb-2 Recipient Client ID
+          label.block.text-sm.font-medium.text-gray-700.mb-2 {{ "addExclusionRules.formFields.recipientClientID" |  translate }}
           input.w-full.px-3.py-2.border.border-gray-300.rounded-md.shadow-sm(
             type="text",
             formControlName="recipientClientId",
-            placeholder="Enter recipient client ID",
+            [placeholder]="ms.translate('addExclusionRules.formFields.recipientClientIDPlaceholder')",
             class="focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           )
-          small.text-sm.text-gray-500.mt-1.block Enter the unique client identifier for the recipient system
+          small.text-sm.text-gray-500.mt-1.block {{ "addExclusionRules.formFields.recipientClientIdValidationMessage1" |  translate }}
           small.p-error.text-red-600.text-sm.mt-1.block(
             *ngIf="sourceCategoriesForm.get('recipientClientId')?.invalid && sourceCategoriesForm.get('recipientClientId')?.touched"
           )
-            | Recipient Client ID is required
+            | {{ "addExclusionRules.formFields.recipientClientIdValidationMessage2" |  translate }}
       
       .w-full.mt-6
         .w-full.flex.items-start
@@ -66,23 +65,23 @@ app-layout([config]="layoutConfig")
             inputId="include-unpublished"
           )
           .ml-3.flex-1
-            label.text-sm.text-gray-700(for="include-unpublished") Include Unpublished Applications
+            label.text-sm.text-gray-700(for="include-unpublished") {{ "addExclusionRules.formFields.publishOrUnpublishCheckbox" |  translate }}
             .mt-1.text-sm.text-gray-500
-              | Unpublished applications will be shared with the recipient system.
+              | {{ "addExclusionRules.formFields.publishOrUnpublishCheckboxMessaage" |  translate }}.
       
       .w-full.mt-8.flex.justify-center.gap-4
         button.bg-gray-500.text-white.px-6.py-2.rounded-lg.transition-colors(
           class="hover:bg-gray-600",
           pButton,
           type="button",
-          label="Cancel",
+          [label]="ms.translate('addExclusionRules.button.cancel')",
           (click)="cancel()"
         )
         button.bg-blue-600.text-white.px-6.py-2.rounded-lg.transition-colors(
           class="hover:bg-blue-700",
           pButton,
           type="button",
-          label="Next",
+          [label]="ms.translate('addExclusionRules.button.next')",
           (click)="nextStep()",
           [disabled]="!sourceCategoriesForm.valid"
         )
@@ -95,11 +94,11 @@ app-layout([config]="layoutConfig")
       p-tabpanels
         p-tabpanel(*ngFor="let cat of selectedCategories")
           .mb-6
-            b.text-lg.font-semibold.text-gray-800 Configure Distribution Rules for {{ getCategoryLabel(cat) }}
+            b.text-lg.font-semibold.text-gray-800 {{ "addExclusionRules.categoryAndDistributionStep.configureRules" |  translate }} {{ getCategoryLabel(cat) }}
           p-accordion
             p-accordionTab(header="Event Code Inclusion")
               .mb-4.text-sm.text-gray-600
-                | Choose which event codes should be distributed for {{ getCategoryLabel(cat) }}.
+                | {{ "addExclusionRules.categoryAndDistributionStep.chooseRules" |  translate }} {{ getCategoryLabel(cat) }}.
               .grid.grid-cols-1.gap-4(class="md:grid-cols-2")
                 .col-span-1(
                   *ngFor="let event of getEventCodesForCategory(cat); let i = index"
@@ -121,15 +120,15 @@ app-layout([config]="layoutConfig")
                 binary="true",
                 inputId="enable-doc-{{ cat }}"
                 )
-                label.ml-3.text-sm.text-gray-700(for="enable-doc-{{ cat }}") Enable Document Inclusion
+                label.ml-3.text-sm.text-gray-700(for="enable-doc-{{ cat }}") {{ "addExclusionRules.categoryAndDistributionStep.documentInclusionChecbox.label" |  translate }}
               .ml-6.mt-2.text-sm.text-gray-500
-                | Document inclusion is enabled by default with all document types selected.
+                | {{ "addExclusionRules.categoryAndDistributionStep.documentInclusionChecbox.message" |  translate }}.
               .mt-4(*ngIf="enableDocumentExclusions[cat]")
-                label.block.text-sm.font-medium.text-gray-700.mb-2 Select Document Types to Include
+                label.block.text-sm.font-medium.text-gray-700.mb-2 {{ "addExclusionRules.categoryAndDistributionStep.documentInclusionMultiSelect.label" |  translate }}
                 p-multiSelect(
                   [options]="getDocumentTypesForCategory(cat)",
                   [(ngModel)]="documentExclusions[cat]",
-                  defaultLabel="Select Document Types",
+                  [defaultLabel]="ms.translate('addExclusionRules.documentInclusionMultiSelect.label2')",
                   display="chip"
                 )
 
@@ -138,118 +137,89 @@ app-layout([config]="layoutConfig")
         class="hover:bg-gray-600",
         pButton,
         type="button",
-        label="Back",
+        [label]="ms.translate('addExclusionRules.button.back')",
         (click)="prevStep()"
       )
       button.bg-blue-600.text-white.px-6.py-2.rounded-lg.transition-colors(
         class="hover:bg-blue-700",
         pButton,
         type="button",
-        label="Next",
+        [label]="ms.translate('addExclusionRules.button.next')",
         (click)="nextStep()"
       )
 
   div(*ngIf="step === 2")
-    h3.text-2xl.font-bold.text-gray-800.mb-6 Review Your Distribution Rule Configuration
+    h3.text-2xl.font-bold.text-gray-800.mb-6 {{ "addExclusionRules.reviewStep.title" |  translate }}
 
-    .grid.grid-cols-1.gap-6(class="lg:grid-cols-3")
+    .grid.grid-cols-1.gap-6(class="lg:grid-cols-2")
       .bg-white.rounded-lg.shadow-md.p-6
-        h4.text-lg.font-semibold.text-gray-700.mb-4 Basic Configuration
+        h4.text-lg.font-semibold.text-gray-700.mb-4 {{ "addExclusionRules.reviewStep.basicConfiguration" |  translate }}
         .grid.grid-cols-1.gap-6(class="md:grid-cols-[auto_auto_1fr]")
           .col-span-1
-            b.text-gray-700 Originating Office:
+            b.text-base.text-gray-700 {{ "addExclusionRules.reviewStep.originatingOffice" |  translate }}:
             br
-            | {{ getOfficeLabel(sourceCategoriesForm.value.office) }}
+            .text-lg {{ sourceCategoriesForm.get('office').value }}
           .col-span-1
-            b.text-gray-700 Recipient System:
+            b.text-base.text-gray-700 {{ "addExclusionRules.reviewStep.recipientSystem" |  translate }}:
             br
-            | {{ getSystemLabel(sourceCategoriesForm.value.system) }}
+            .text-lg {{ sourceCategoriesForm.get('system').value }}
           .col-span-1
-            b.text-gray-700 Recipient Client ID:
+            b.text-base.text-gray-700 {{ "addExclusionRules.reviewStep.recipientClientID" |  translate }}:
             br
-            | {{ sourceCategoriesForm.value.recipientClientId }}
+            .text-lg {{ sourceCategoriesForm.get('recipientClientId').value }}
           .mt-4(class="md:col-span-3 col-span-1")
-            b.text-gray-700 IP Category Types:
+            b.text-base.text-gray-700 {{ "addExclusionRules.reviewStep.IPCategoryTypes" |  translate }}:
+            br
             br
             span.inline-block.bg-blue-100.text-blue-800.text-sm.px-3.py-1.rounded-full.mr-2.mb-2(*ngFor="let cat of selectedCategories")
               | {{ getCategoryLabel(cat) }}
           .mt-4(class="md:col-span-3 col-span-1")
-            b.text-gray-700 Include Unpublished Applications:
+            b.text-base.text-gray-700 {{ "addExclusionRules.reviewStep.includeUnpublishedApplications" |  translate }}:
+            br
             br
             i.pi([ngClass]="includeUnpublishedApplications ? 'pi-check-circle text-green-600' : 'pi-times-circle text-red-600'")
-            span.ml-2.text-sm.text-gray-700 {{ includeUnpublishedApplications ? 'Yes' : 'No' }}
+            span.ml-2.text-sm.text-gray-700 {{ includeUnpublishedApplications ? ms.translate('addExclusionRules.reviewStep.yes') : ms.translate('addExclusionRules.reviewStep.no') }}
 
       .bg-white.rounded-lg.shadow-md.p-6(*ngIf="selectedCategories?.length")
         ng-container(*ngIf="selectedCategories?.length")
           ng-container(*ngIf="selectedCategories[0] as cat")
-            h4.text-lg.font-semibold.text-gray-700.mb-4 {{ getCategoryLabel(cat) }} Distributions
-            .mb-6
-              h5.text-md.font-medium.text-gray-600.mb-3 Status Exclusions
-              .grid.grid-cols-1.gap-6(class="md:grid-cols-2")
-                .col-span-1
-                  i.pi([ngClass]="includeUnpublishedApplications ? 'pi-check-circle text-green-600' : 'pi-times-circle text-red-600'")
-                  span.ml-2.text-sm.text-gray-700 Include Unpublished Applications: 
-                    b {{ includeUnpublishedApplications ? 'Yes' : 'No' }}
 
             .mb-6(*ngIf="eventExclusions[cat]?.length > 0")
-              h5.text-md.font-medium.text-gray-600.mb-3 Event Code Inclusion ({{ eventExclusions[cat]?.length }} selected)
-              .grid.grid-cols-1.gap-6(class="md:grid-cols-2")
+              h5.text-md.font-medium.text-gray-600.mb-3 {{ "addExclusionRules.reviewStep.eventCodeInclusion" |  translate }} ({{ eventExclusions[cat]?.length }} {{ "addExclusionRules.reviewStep.selected" |  translate }})
+              .grid.grid-cols-1.gap-6(class="md:grid-cols-3")
                 .col-span-1(*ngFor="let eventCode of eventExclusions[cat]")
                   i.pi.pi-check-circle.text-green-600
                   span.ml-2.text-sm.text-gray-700 {{ getEventCodeLabel(eventCode) }}
 
             .mb-6(*ngIf="!eventExclusions[cat]?.length")
-              h5.text-md.font-medium.text-gray-600.mb-3 Event Code Inclusion
-              p.text-sm.text-gray-500 No event codes distributed for this category.
+              h5.text-md.font-medium.text-gray-600.mb-3  {{ "addExclusionRules.reviewStep.eventCodeInclusion" |  translate }}
+              p.text-sm.text-gray-500  {{ "addExclusionRules.reviewStep.noEventCodes" |  translate }}.
 
             .mb-6(*ngIf="enableDocumentExclusions[cat]")
-              h5.text-md.font-medium.text-gray-600.mb-3 Document Inclusion ({{ documentExclusions[cat]?.length || 0 }} selected)
+              h5.text-md.font-medium.text-gray-600.mb-3 {{ "addExclusionRules.reviewStep.documentInclusion" |  translate }} ({{ documentExclusions[cat]?.length || 0 }} {{ "addExclusionRules.reviewStep.selected" |  translate }})
               .grid.grid-cols-1.gap-6(*ngIf="documentExclusions[cat]?.length > 0" class="md:grid-cols-2")
                 .col-span-1(*ngFor="let docCode of documentExclusions[cat]")
                   i.pi.pi-check-circle.text-green-600
                   span.ml-2.text-sm.text-gray-700 {{ getDocumentTypeLabel(docCode) }}
               p.text-sm.text-gray-500(*ngIf="!documentExclusions[cat]?.length")
-                | No document types selected for exclusion.
+                | {{ "addExclusionRules.reviewStep.noDocuments" |  translate }}.
 
             .mb-6(*ngIf="!enableDocumentExclusions[cat]")
-              h5.text-md.font-medium.text-gray-600.mb-3 Document Inclusion
-              p.text-sm.text-gray-500 Document inclusion is disabled for this category.
-
-      .bg-white.rounded-lg.shadow-md.p-6
-        h4.text-lg.font-semibold.text-gray-700.mb-4 Configuration Summary
-        .grid.grid-cols-1.gap-6(*ngFor="let cat of selectedCategories")
-          .col-span-1
-            b.text-gray-700 IP Category:
-            br
-            span.inline-block.bg-blue-100.text-blue-800.text-sm.px-3.py-1.rounded-full.mt-1 {{ getCategoryLabel(cat) }}
-          .col-span-1
-            b.text-gray-700 Include Unpublished Apps:
-            br
-            i.pi.mt-1([ngClass]="includeUnpublishedApplications ? 'pi-check-circle text-green-600' : 'pi-times-circle text-red-600'")
-            span.ml-2.text-sm.text-gray-700 {{ includeUnpublishedApplications ? 'Yes' : 'No' }}
-          .col-span-1
-            b.text-gray-700 Events Included:
-            br
-            span.inline-block.px-2.py-1.text-xs.font-medium.rounded-full.mt-1([ngClass]="eventExclusions[cat]?.length ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'")
-              | {{ eventExclusions[cat]?.length || 0 }}
-          .col-span-1
-            b.text-gray-700 Documents Included:
-            br
-            span.inline-block.px-2.py-1.text-xs.font-medium.rounded-full.mt-1([ngClass]="enableDocumentExclusions[cat] && documentExclusions[cat]?.length ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'")
-              | {{ enableDocumentExclusions[cat] ? documentExclusions[cat]?.length || 0 : 0 }}
+              h5.text-md.font-medium.text-gray-600.mb-3 {{ "addExclusionRules.reviewStep.documentInclusion" |  translate }}
+              p.text-sm.text-gray-500 {{ "addExclusionRules.reviewStep.documentInclusionMessage" |  translate }}.
 
     .mt-8.flex.justify-center.gap-4
       button.bg-gray-500.text-white.px-6.py-2.rounded-lg.transition-colors(
         class="hover:bg-gray-600",
         pButton,
         type="button",
-        label="Back",
+        [label]="ms.translate('addExclusionRules.button.back')",
         (click)="prevStep()"
       )
       button.bg-green-600.text-white.px-6.py-2.rounded-lg.transition-colors(
         class="hover:bg-green-700",
         pButton,
         type="button",
-        label="Add Rule",
+        [label]="ms.translate('addExclusionRules.button.addRule')",
         (click)="addRule()"
       )
