@@ -97,8 +97,17 @@ app-layout([config]="layoutConfig")
             b.text-lg.font-semibold.text-gray-800 {{ "addExclusionRules.categoryAndDistributionStep.configureRules" |  translate }} {{ getCategoryLabel(cat) }}
           p-accordion
             p-accordionTab(header="Event Code Inclusion")
-              .mb-4.text-sm.text-gray-600
-                | {{ "addExclusionRules.categoryAndDistributionStep.chooseRules" |  translate }} {{ getCategoryLabel(cat) }}.
+              .flex.flex-row.mb-4.text-sm.text-gray-600.gap-2
+                div {{ "addExclusionRules.categoryAndDistributionStep.chooseRules" |  translate }} {{ getCategoryLabel(cat) }}.
+                div
+                  p-checkbox(
+                      [ngModel]="isAllSelected(cat)",
+                      [binary]="true",
+                      (onChange)="toggleSelectAll($event, cat)",
+                      inputId="selectedAllEvents-{{ cat }}"
+                    )
+                    label.ml-3.text-sm.text-gray-700(for="selectedAllEvents-{{ cat }}")
+                      | {{ "addExclusionRules.categoryAndDistributionStep.selectAllRules" |  translate }}
               .grid.grid-cols-1.gap-4(class="md:grid-cols-2")
                 .col-span-1(
                   *ngFor="let event of getEventCodesForCategory(cat); let i = index"
@@ -162,7 +171,7 @@ app-layout([config]="layoutConfig")
           .col-span-1
             b.text-base.text-gray-700 {{ "addExclusionRules.reviewStep.recipientSystem" |  translate }}:
             br
-            .text-lg {{ sourceCategoriesForm.get('system').value }}
+            .text-lg {{ getSystemLabel(sourceCategoriesForm.get('system').value) }}
           .col-span-1
             b.text-base.text-gray-700 {{ "addExclusionRules.reviewStep.recipientClientID" |  translate }}:
             br

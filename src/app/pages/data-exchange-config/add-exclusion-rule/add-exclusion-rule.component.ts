@@ -19,6 +19,7 @@ import { HttpClient } from '@angular/common/http';
 import { LayoutConfig } from '../../../components/app-layout/app-layout.component';
 import { StepperStep } from '../../../components/configurable-stepper/configurable-stepper.component';
 import { SidebarMenuService } from 'src/app/_services/sidebar-menu.service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-add-exclusion-rule',
@@ -119,9 +120,7 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
       return null;
     }
 
-    return recipients.find(
-      (system: any) => system.recipientCode === selectedSystem
-    );
+    return recipients.find((system: any) => system.recipientCode === selectedSystem);
   });
 
   // IP Categories based on selected recipient system
@@ -130,12 +129,10 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
       return [];
     }
 
-    return this.ipTypeCategories().ipTypeCategoryBag.map(
-      (category: any) => ({
-        label: category.ipTypeLabel,
-        value: category.ipTypeCategory,
-      })
-    );
+    return this.ipTypeCategories().ipTypeCategoryBag.map((category: any) => ({
+      label: category.ipTypeLabel,
+      value: category.ipTypeCategory,
+    }));
   });
 
   // Document Types based on selected IP category
@@ -147,15 +144,13 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
 
     const documentsMap = new Map<string, string>();
 
-    this.ipTypeCategories().ipTypeCategoryBag.forEach(
-      (category: any) => {
-        if (category.ipTypeCategory === currentCategory) {
-          category.documentTypeBag.forEach((doc: any) => {
-            documentsMap.set(doc.documentCode, doc.documentName);
-          });
-        }
+    this.ipTypeCategories().ipTypeCategoryBag.forEach((category: any) => {
+      if (category.ipTypeCategory === currentCategory) {
+        category.documentTypeBag.forEach((doc: any) => {
+          documentsMap.set(doc.documentCode, doc.documentName);
+        });
       }
-    );
+    });
 
     return Array.from(documentsMap.entries()).map(([code, name]) => ({
       label: `${name}`,
@@ -172,13 +167,11 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
 
     const eventsMap = new Map<string, string>();
 
-    this.ipTypeCategories().eventTypeBag.forEach(
-      (events: any) => {
-        events.forEach((event: any) => {
-          eventsMap.set(event.eventCode, event.eventLabel);
-        });
-      }
-    );
+    this.ipTypeCategories().eventTypeBag.forEach((events: any) => {
+      events.forEach((event: any) => {
+        eventsMap.set(event.eventCode, event.eventLabel);
+      });
+    });
 
     return Array.from(eventsMap.entries()).map(([code, label]) => ({
       code: code,
@@ -308,12 +301,18 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
     this.loadConfigurationData();
 
     // Set the originating office to the current office
-    const currentOffice = this.authService.getCurrentOfficeCode();
-    if (currentOffice) {
-      this.sourceCategoriesForm.patchValue({
-        office: currentOffice,
-      });
-      this.sourceCategoriesForm.get("office")?.disable();
+    const officeCtrl = this.sourceCategoriesForm.get('office')!;
+    if (!this.ms.isCurrentUserWipoAdmin()) {
+      const currentOffice = this.authService.getCurrentOfficeCode();
+      officeCtrl?.enable({ emitEvent: false });
+      officeCtrl?.setValue(currentOffice, { emitEvent: false });
+      officeCtrl?.disable({ emitEvent: false });
+    } else {
+      const selectedPlatform = this.ms.getWipoPlatform();
+      console.info('selectedPlatform: ', selectedPlatform);
+      officeCtrl?.enable({ emitEvent: false });
+      officeCtrl?.setValue(selectedPlatform, { emitEvent: false });
+      officeCtrl?.disable({ emitEvent: false });
     }
 
     const currentSystem = this.sourceCategoriesForm?.get('system')?.value;
@@ -321,10 +320,9 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
       this.selectedSystemCode.set(currentSystem);
     }
 
-    this.sourceCategoriesForm.get("system")!.valueChanges.subscribe(system => {
-      const match = this.dataExchangeService.recipientsData()
-        .find(x => x.recipientCode === system);
-      const clientIdCtrl = this.sourceCategoriesForm.get("recipientClientId")!
+    this.sourceCategoriesForm.get('system')!.valueChanges.subscribe(system => {
+      const match = this.dataExchangeService.recipientsData().find(x => x.recipientCode === system);
+      const clientIdCtrl = this.sourceCategoriesForm.get('recipientClientId')!;
       if (match) {
         clientIdCtrl.enable({ emitEvent: false });
         clientIdCtrl.setValue(match.recipientClientId, { emitEvent: false });
@@ -338,10 +336,7 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
     });
 
     const currentPath = this.router.url;
-    const menuItems = this.sidebarService.generateConfigurationMenu(
-      currentPath,
-      ''
-    );
+    const menuItems = this.sidebarService.generateConfigurationMenu(currentPath, '');
     this.sidebarService.updateMenuItems(menuItems);
   }
 
@@ -349,7 +344,7 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
     // Load configuration data from JSON file ip-type-category
     console.log('Loading Ip Category Type data...');
     this.http.get<any>('/assets/configuration/ip-type-category.json').subscribe({
-      next: (data) => {
+      next: data => {
         console.log('JSON config loaded successfully:', data);
         if (data.ipTypeCategoryBag) {
           this.ipTypeCategories.set(data);
@@ -360,7 +355,7 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
           this.ipTypeCategories.set(null);
         }
       },
-      error: (error) => {
+      error: error => {
         console.error('Error loading JSON configuration:', error);
         this.ipTypeCategories.set(null);
       },
@@ -400,15 +395,11 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
     if (selectedCategory) {
       // Get all event codes for this category and check them all by default
       const eventCodes = this.getEventCodesForCategory(selectedCategory);
-      this.eventExclusions[selectedCategory] = eventCodes.map(
-        (event) => event.code
-      );
+      this.eventExclusions[selectedCategory] = eventCodes.map(event => event.code);
 
       // Get all document types for this category and check them all by default
       const documentTypes = this.getDocumentTypesForCategory(selectedCategory);
-      this.documentExclusions[selectedCategory] = documentTypes.map(
-        (doc) => doc.value
-      );
+      this.documentExclusions[selectedCategory] = documentTypes.map(doc => doc.value);
 
       // Enable document exclusions by default
       this.enableDocumentExclusions[selectedCategory] = true;
@@ -424,16 +415,11 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
       if (selectedCategory) {
         // Get all event codes for this category and check them all by default
         const eventCodes = this.getEventCodesForCategory(selectedCategory);
-        this.eventExclusions[selectedCategory] = eventCodes.map(
-          (event) => event.code
-        );
+        this.eventExclusions[selectedCategory] = eventCodes.map(event => event.code);
 
         // Get all document types for this category and check them all by default
-        const documentTypes =
-          this.getDocumentTypesForCategory(selectedCategory);
-        this.documentExclusions[selectedCategory] = documentTypes.map(
-          (doc) => doc.value
-        );
+        const documentTypes = this.getDocumentTypesForCategory(selectedCategory);
+        this.documentExclusions[selectedCategory] = documentTypes.map(doc => doc.value);
 
         // Enable document exclusions by default
         this.enableDocumentExclusions[selectedCategory] = true;
@@ -460,7 +446,7 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
 
   getCategoryLabel(cat: string): string {
     const categories = this.ipCategories();
-    const found = categories.find((c) => c.value === cat);
+    const found = categories.find(c => c.value === cat);
     return found ? found.label : cat;
   }
 
@@ -470,18 +456,18 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
   //   return found ? found.label : value;
   // }
 
-  // getSystemLabel(value: string): string {
-  //   const systems = this.recipientOffices();
-  //   const found = systems.find((s) => s.value === value);
-  //   return found ? found.label : value;
-  // }
+  getSystemLabel(value: string): string {
+    const recipients = this.recipientOffices();
+    const found = recipients.find(s => s.value === value);
+    return found ? found.label : value;
+  }
 
   // Helper method to get event code label
   getEventCodeLabel(eventCode: string): string {
     const eventTypeBag = this.ipTypeCategories().eventTypeBag;
     if (eventTypeBag && Array.isArray(eventTypeBag)) {
       const filteredEvent = eventTypeBag.find((event: any) => event.eventCode === eventCode);
-      return `${filteredEvent.eventCode}: ${filteredEvent.eventLabel}`
+      return `${filteredEvent.eventCode}: ${filteredEvent.eventLabel}`;
     } else {
       return eventCode;
     }
@@ -493,9 +479,7 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
     if (!ipTypes) return docCode;
 
     for (const data of ipTypes.ipTypeCategoryBag) {
-      const doc = data.documentTypeBag.find(
-        (d: any) => d.documentCode === docCode
-      );
+      const doc = data.documentTypeBag.find((d: any) => d.documentCode === docCode);
       if (doc) {
         return `${docCode}: ${doc.documentName}`;
       }
@@ -531,43 +515,39 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
 
     console.log('Submitting exclusion rule:', exclusionRulePayload);
 
-    this.dataExchangeService
-      .postDataExchangeData(exclusionRulePayload)
-      .subscribe({
-        next: (addedRule) => {
-          console.log('Distribution rule created successfully:', addedRule);
+    this.dataExchangeService.postDataExchangeData(exclusionRulePayload).subscribe({
+      next: addedRule => {
+        console.log('Distribution rule created successfully:', addedRule);
 
-          this.data.update((currentRules) => [...currentRules, addedRule]);
+        this.data.update(currentRules => [...currentRules, addedRule]);
 
-          // Reset loading state
-          this.isSubmitting.set(false);
+        // Reset loading state
+        this.isSubmitting.set(false);
 
-          // Show success toast message
-          this.toastService.showSuccess(
-            'Success',
-            'Distribution rule created successfully'
-          );
+        // Show success toast message
+        this.toastService.showSuccess('Success', 'Distribution rule created successfully');
 
-          // Navigate back to distribution rules page after a short delay to show the toast
-          setTimeout(() => {
-            this.router.navigate([
-              `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/distribution-rules`,
-            ]);
-          }, 2000);
-        },
-        error: (error) => {
-          console.error('Failed to create exclusion rule:', error);
-          // Reset loading state
-          this.isSubmitting.set(false);
-          // You can add error handling here (show toast, error message, etc.)
-        },
-      });
+        // Navigate back to distribution rules page after a short delay to show the toast
+        this.dataExchangeService.setTabPanel('distributionRules');
+        setTimeout(() => {
+          this.router.navigate([
+            `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/distribution-rules`,
+          ]);
+        }, 2000);
+      },
+      error: error => {
+        console.error('Failed to create exclusion rule:', error);
+        // Reset loading state
+        this.isSubmitting.set(false);
+        // You can add error handling here (show toast, error message, etc.)
+      },
+    });
   }
 
   // Validate form data before submission
   private validateFormData(): boolean {
     const formData = this.sourceCategoriesForm.getRawValue();
-    console.info("formData: ", formData);
+    console.info('formData: ', formData);
     if (
       !formData.recipientClientId ||
       !formData.system ||
@@ -588,8 +568,7 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
     for (const category of this.selectedCategories) {
       if (
         this.eventExclusions[category]?.length > 0 ||
-        (this.enableDocumentExclusions[category] &&
-          this.documentExclusions[category]?.length > 0)
+        (this.enableDocumentExclusions[category] && this.documentExclusions[category]?.length > 0)
       ) {
         hasExclusions = true;
         break;
@@ -609,10 +588,7 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
     const documentList: string[] = [];
 
     for (const category of this.selectedCategories) {
-      if (
-        this.enableDocumentExclusions[category] &&
-        this.documentExclusions[category]?.length
-      ) {
+      if (this.enableDocumentExclusions[category] && this.documentExclusions[category]?.length) {
         // Add document codes directly to the array
         documentList.push(...this.documentExclusions[category]);
       }
@@ -679,5 +655,30 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
         routerLink: `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/add-rule`,
       },
     ];
+  }
+
+  isAllSelected(cat: string): boolean {
+    const eventCodes = this.getEventCodesForCategory(cat);
+    const selectedEventCodes = this.eventExclusions[cat] || [];
+
+    // Check if all event codes are selected
+    return (
+      eventCodes.length > 0 && eventCodes.every(event => selectedEventCodes.includes(event.code))
+    );
+  }
+
+  toggleSelectAll(event: any, cat: string) {
+    const eventCodes = this.getEventCodesForCategory(cat);
+
+    // Handle different event structures from PrimeNG checkbox
+    const isChecked = event?.checked !== undefined ? event.checked : event;
+
+    if (isChecked) {
+      // Select all event codes for this category
+      this.eventExclusions[cat] = eventCodes.map(event => event.code);
+    } else {
+      // Deselect all event codes for this category
+      this.eventExclusions[cat] = [];
+    }
   }
 }
