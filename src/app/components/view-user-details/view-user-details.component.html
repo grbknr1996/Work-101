@@ -18,6 +18,10 @@
           <div class="detail-value">{{ userAccount.loginId || '-' }}</div>
         </div>
         <div class="detail-item">
+          <label class="detail-label"><i class="pi pi-id-card"></i>{{ ms.translate('userManagement.basicInfoForm.clientId') || 'Client ID' }}</label>
+          <div class="detail-value">{{ userAccount.clientAppId || '-' }}</div>
+        </div>
+        <div class="detail-item">
           <label class="detail-label"><i class="pi pi-info-circle"></i>{{ ms.translate('userManagement.userAccounts.status') || 'Status' }}</label>
           <div class="detail-value"><span [ngClass]="getStatusChipClass()">{{ getComputedStatus() }}</span></div>
         </div>

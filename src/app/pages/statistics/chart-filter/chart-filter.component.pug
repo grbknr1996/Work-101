@@ -23,20 +23,20 @@ div(*ngIf="show", class="tw-filter-container bg-gray-100 p-4 w-full flex flex-co
             )
 
             //-YEAR RANGE
-            p-datepicker(
-                *ngIf="filter.type === 'yearrange'",
-                [(ngModel)]="filter.model",
-                selectionMode="range",
-                view="year",
-                dateFormat="yy",
-                [yearNavigator]="true",
-                [minDate]="filter.minDate",
-                [maxDate]="filter.maxDate",
-                [showIcon]="true",
-                [readonlyInput]="true",
-                class="tw-filter-datepicker w-full !flex",
-                styleClass="w-full flex-1"
-            )
+                p-datepicker(
+                    *ngIf="filter.type === 'yearrange'",
+                    [(ngModel)]="filter.model",
+                    selectionMode="range",
+                    view="year",
+                    dateFormat="yy",
+                    [yearNavigator]="true",
+                    [minDate]="filter.minDate",
+                    [maxDate]="filter.maxDate",
+                    [showIcon]="true",
+                    [readonlyInput]="true",
+                    class="tw-filter-datepicker w-full !flex",
+                    styleClass="w-full flex-1"
+                )
 
             //-CHECKBOX
             div(*ngIf="filter.type === 'checkbox'", class="flex items-center space-x-2")

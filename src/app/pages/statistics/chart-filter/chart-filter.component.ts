@@ -96,10 +96,15 @@ export class ChartFilterComponent implements OnInit {
           include: true,
           key: 'yearRange',
           label: translations['charts.statistics.filters.yearRange'],
-          type: 'yearrange',
-          minDate: new Date(1990, 0, 1),
-          maxDate: new Date(),
-          model: [new Date(1990, 0, 1), new Date()]
+          type: 'dropdown',
+          model: 'all',
+          options: [
+            { label: translations['charts.statistics.filters.all'], value: 'all' },
+            { label: `${new Date().getFullYear() - 5} - ${new Date().getFullYear() - 1}`, value: '5' },
+            { label: `${new Date().getFullYear() - 10} - ${new Date().getFullYear() - 1}`, value: '10' },
+            { label: `${new Date().getFullYear() - 20} - ${new Date().getFullYear() - 1}`, value: '20' },
+            { label: `${new Date().getFullYear() - 30} - ${new Date().getFullYear() - 1}`, value: '30' }
+          ]
         },
         {
           include: true,

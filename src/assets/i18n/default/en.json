@@ -700,8 +700,14 @@
           "downloadPackageCsv": "Download package report in csv",
           "downloadPackageJson": "Download package report in json",
           "downloadFailureCsv": "Download failure report in csv",
+          "downloadQualityReport": "Download Quality Report",
           "downloadFailureJson": "Download failure report in json"
         }
+      },
+      "report": {
+        "header": "Data Quality Report",
+        "message": "The Date Range should not be more than a Year",
+        "button": "Ok"
       }
     },
     "authorityFiles": {
@@ -2537,7 +2543,7 @@
     "statistics": {
       "filters": {
         "title": "CHART FILTERS",
-        "type": "APPLICATION TYPE",
+        "type": "APPLICATION STATUS",
         "IPType": "IP TYPE",
         "yearRange": "YEAR RANGE",
         "origin": "ORIGIN",
@@ -3351,6 +3357,38 @@
     "categoryAndDistributionStep": {
       "configureRules": "Configure Distribution Rules for",
       "chooseRules": "Choose which event codes should be distributed for",
+      "selectAllRules": "Select All",
+      "eventCodes": {
+        "A10": "Application filed",
+        "B10": "Application discontinued",
+        "C10": "Application revived",
+        "D10": "Search and/or examination requested or commenced",
+        "E10": "Pre-registration review requested",
+        "F10": "Industrial design registered",
+        "H10": "IP right ceased",
+        "K10": "IP right revived",
+        "L10": "IP right review requested",
+        "M10": "IP right maintained",
+        "N10": "Application or IP right terminated",
+        "P10": "Document modified",
+        "Q10": "Document published",
+        "R10": "Party data change recorded",
+        "S10": "Licensing information recorded",
+        "T10": "Administrative procedure adjusted",
+        "U10": "Fee paid",
+        "V10": "Appeal requested",
+        "W10": "Other event occurred",
+        "Y10": "Event information corrected or deleted"
+      },
+      "documentCodes": {
+        "SER": "Search Report",
+        "EXR": "Examination Report",
+        "SPE": "Specification",
+        "CLM": "Claims",
+        "DESCR": "Description",
+        "AMN-CLM": "Amended Claims",
+        "AMN-DESCR": "Amended Description"
+      },
       "documentInclusionChecbox": {
         "label": "Enable Document Inclusion",
         "message": "Document inclusion is enabled by default with all document types selected"

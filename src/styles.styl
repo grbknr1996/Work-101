@@ -3956,6 +3956,86 @@ app-data-packages
         button.p-button-outlined
           background transparent
 
+  .quality-dialog-overlay
+    position fixed
+    inset 0
+    z-index 50
+    background-color rgba(0, 0, 0, 0.5)
+    pointer-events auto
+    transition opacity 200ms ease, transform 200ms ease
+
+    .quality-dialog-container
+      background-color white
+      position fixed
+      z-index 50
+      display grid
+      width 100%
+      gap 1rem
+      border-radius 0.5rem
+      border 1px solid #e5e7eb
+      padding 1.5rem
+      top 50%
+      left 50%
+      transform translate(-50%, -50%)
+
+      @media (min-width 640px)
+        max-width 32rem
+
+    .quality-dialog-header
+      display flex
+      flex-direction column
+      gap 0.5rem
+
+      @media (min-width 640px)
+        text-align left
+
+    .quality-dialog-title
+      font-size 1.125rem
+      font-weight 600
+      line-height 1.25
+
+    .quality-button-group
+      display flex
+      justify-content flex-end
+      gap 0.5rem
+
+    .quality-close-button
+      position absolute
+      top 1rem
+      right 1rem
+      opacity 0.7
+      border-radius 0.25rem
+      background-color transparent
+      &:hover
+        opacity 1
+
+.simple-paginator
+  .p-paginator
+    display flex
+    align-items center
+    justify-content center
+    gap 1rem
+
+  .p-paginator-pages,
+  .p-paginator-first,
+  .p-paginator-last
+    display none
+
+  .p-paginator-prev
+    order 1
+
+  .p-paginator-current
+    order 2
+    pointer-events none
+    font-weight 600
+
+  .p-paginator-next
+    order 3
+
+  .p-paginator-rpp-dropdown
+    order 4
+    margin-left .5rem
+
 app-authority-files
   .filter
     padding 0.4rem

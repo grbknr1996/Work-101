@@ -9,7 +9,6 @@ import { SidebarMenuService } from '../../_services/sidebar-menu.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
 import { DataExchangeService } from 'src/app/_services/data-sharing.service';
-
 import {
   FilterConfig,
   FilterValue,
@@ -17,6 +16,7 @@ import {
 } from '../../components/configurable-filter-bar/configurable-filter-bar.component';
 import { AdvancedFilterQuery } from 'src/app/components/advanced-filter-query/advanced-filter-query.component';
 import { SharedPackageResponse } from 'src/app/interfaces';
+import { TableComponent } from 'src/app/components/table/table.component';
 
 @Component({
   selector: 'app-data-packages',
@@ -29,42 +29,32 @@ export class DataPackagesComponent implements OnInit {
   @ViewChild(ConfigurableFilterBarComponent)
   configurableFilter!: ConfigurableFilterBarComponent;
 
-  layoutConfig;
-  breadcrumbItems = [];
+  @ViewChild(TableComponent)
+  tableComponent!: TableComponent;
 
-  // Static Package stats for demo
-  monthPackages: string;
-  weekPackages: string;
-  totalPackages: string;
-  yearPackages: string;
+  breadcrumbItems = [];
 
   statSelected;
 
-  globalFilterFields = ['ipTypeCategory', 'globalZipId', 'status'];
-
   tableColumns = [];
-  packagesData: any;
-  tableData: any;
-  tableDataByZips: SharedPackageResponse[];
 
-  officeCode;
-  officeCodeParam;
+  tableData: any = [];
+  advancedSearchTableData: any;
+  tableDataByZips: SharedPackageResponse[];
+  cachedPages: { page: number, data: any }[] = [];
+
   applicationOfficeCode = '';
 
   sortField: string = 'globalZipId';
   sortOrder: number = 1;
 
   filterConfigs: FilterConfig[] = [];
-
   appliedFilters: FilterValue[] = [];
 
   dateFilterRemoved = false;
   partialFilterRemoved = false;
   failedFilterRemoved = false;
   failedNonRetryFilterRemoved = false;
-
-  //Setting value temp as there is no data for other county codes
-  countryCodeForService = "ph";
 
   processedFlag = false;
   failedFlag = false;
@@ -82,6 +72,16 @@ export class DataPackagesComponent implements OnInit {
 
   autoCompleteSuggestions: any[] = [];
 
+  currentPage: number = 0;
+  pageSize: number = 50;
+  totalRecords: number = 0;
+
+  nextToken: string | null = null;
+
+  filterActions = [];
+
+  qualityReportMessage = false;
+
   packageStats: {
     label: string; display: string; count: string; period: string; color: string; icon: string;
   }[];
@@ -98,40 +98,23 @@ export class DataPackagesComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.layoutConfig = {
-      appTitle: this.ms.translate('common.components.app.title'),
-      showHeader: true,
-      showSidebar: true,
-      headerItems: [],
-      sidebarItems: [],
-      footerText: '© WIPO ' + new Date().getFullYear(),
-      fixedHeader: true,
-      fixedSidebar: true,
-      sidebarCollapsed: false,
-      theme: 'light',
-      logo: '',
-    };
-
     this.route.params.subscribe((params) => {
       const officeCode = params['officeCode'] || this.ms.getCurrentOffice() || 'default';
       const langCode = params['langCode'] || 'en';
 
-      this.officeCodeParam = this.route.snapshot.params['office'];
-      //console.log('officeCodeParam ', this.officeCodeParam);
-      this.officeCode = officeCode;
-      //console.log('officeCode ', this.officeCode);
+      let officeCodeParam = this.route.snapshot.params['office'];
 
       if (
         officeCode == 'default' &&
-        (this.officeCodeParam == null ||
-          this.officeCodeParam == undefined ||
-          this.officeCodeParam == '')
+        (officeCodeParam == null ||
+          officeCodeParam == undefined ||
+          officeCodeParam == '')
       ) {
         this.router.navigate(['select-office'], { relativeTo: this.route });
       }
 
       if (officeCode == 'default') {
-        this.applicationOfficeCode = this.officeCodeParam;
+        this.applicationOfficeCode = officeCodeParam;
         this.breadcrumbItems = [
           {
             label: this.ms.translate('dataService.dataSharing.breadCrum.offices'),
@@ -143,7 +126,7 @@ export class DataPackagesComponent implements OnInit {
           },
         ];
       } else {
-        this.applicationOfficeCode = this.officeCode;
+        this.applicationOfficeCode = officeCode;
         this.breadcrumbItems = [
           {
             label: this.ms.translate('dataService.dataSharing.breadCrum.dataSharing'),
@@ -162,9 +145,19 @@ export class DataPackagesComponent implements OnInit {
     );
     this.menuService.updateMenuItems(menuItems);
 
-    //this.countryCodeForService = this.applicationOfficeCode;
-
     this.statSelected = 'TOTAL IN MONTH';
+
+    //TODO Setting value temp as there is no data for other county codes
+    this.applicationOfficeCode = "ph";
+
+    this.filterActions = [
+      {
+        label: this.ms.translate('dataService.dataSharing.table.actions.downloadQualityReport'),
+        icon: 'pi pi-arrow-circle-down',
+        action: 'downloadQualityReport',
+        severity: 'info',
+      }
+    ];
 
     this.statusTranslated = {
       SUCCESS: this.ms.translate('dataService.dataSharing.filter.status.success'),
@@ -175,8 +168,8 @@ export class DataPackagesComponent implements OnInit {
     };
 
     this.tableColumns = [
-      { field: 'globalZipId', header: this.ms.translate('dataService.dataSharing.table.filename'), sortable: true, },
-      { field: 'ipTypeCategory', header: this.ms.translate('dataService.dataSharing.table.category'), sortable: true },
+      { field: 'globalZipId', header: this.ms.translate('dataService.dataSharing.table.filename') },
+      { field: 'ipTypeCategory', header: this.ms.translate('dataService.dataSharing.table.category') },
       { field: 'receivedDate', header: this.ms.translate('dataService.dataSharing.table.sharedDate') },
       { field: 'updateDate', header: this.ms.translate('dataService.dataSharing.table.processedDate') },
       {
@@ -203,29 +196,12 @@ export class DataPackagesComponent implements OnInit {
         field: 'actions',
         header: this.ms.translate('dataService.dataSharing.table.actions.header'),
         display: 'actions',
+        showAsDropdown: false,
         actions: [
           {
             label: this.ms.translate('dataService.dataSharing.table.actions.downloadPackageCsv'),
             icon: 'pi pi-download',
             action: 'downloadPackageCsv',
-            severity: 'info',
-          },
-          {
-            label: this.ms.translate('dataService.dataSharing.table.actions.downloadPackageJson'),
-            icon: 'pi pi-download',
-            action: 'downloadPackageJson',
-            severity: 'info',
-          },
-          {
-            label: this.ms.translate('dataService.dataSharing.table.actions.downloadFailureCsv'),
-            icon: 'pi pi-download',
-            action: 'downloadFailureCsv',
-            severity: 'info',
-          },
-          {
-            label: this.ms.translate('dataService.dataSharing.table.actions.downloadFailureJson'),
-            icon: 'pi pi-download',
-            action: 'downloadFailureJson',
             severity: 'info',
           },
         ],
@@ -277,17 +253,13 @@ export class DataPackagesComponent implements OnInit {
       },
     ];
 
-    this.dataService.getStatistics(this.countryCodeForService).subscribe({
+    this.dataService.getStatistics(this.applicationOfficeCode).subscribe({
       next: (response) => {
-        this.totalPackages = response.totalCount.toString();
-        this.monthPackages = response.lastMonthCount.toString();
-        this.weekPackages = response.lastWeekCount.toString();
-        this.yearPackages = response.lastYearCount.toString();
         this.packageStats = [
           {
             label: 'TOTAL COUNT',
             display: this.ms.translate('dataService.dataSharing.stats.total'),
-            count: this.totalPackages,
+            count: response.totalCount.toString(),
             period: 'Since 1999',
             color: '#3949AB', // Indigo color
             icon: 'pi pi-thumbtack',
@@ -295,7 +267,7 @@ export class DataPackagesComponent implements OnInit {
           {
             label: 'TOTAL IN YEAR',
             display: this.ms.translate('dataService.dataSharing.stats.year'),
-            count: this.yearPackages,
+            count: response.lastYearCount.toString(),
             period: 'Since 1 year',
             color: '#2E7D32', // Green color
             icon: 'pi pi-check-circle',
@@ -303,7 +275,7 @@ export class DataPackagesComponent implements OnInit {
           {
             label: 'TOTAL IN MONTH',
             display: this.ms.translate('dataService.dataSharing.stats.month'),
-            count: this.monthPackages,
+            count: response.lastMonthCount.toString(),
             period: 'Since 1 month',
             color: '#022382', // Dark blue color
             icon: 'pi pi-tag',
@@ -311,13 +283,12 @@ export class DataPackagesComponent implements OnInit {
           {
             label: 'TOTAL IN WEEK',
             display: this.ms.translate('dataService.dataSharing.stats.week'),
-            count: this.weekPackages,
+            count: response.lastWeekCount.toString(),
             period: 'Since 7 days',
             color: '#0288D1', // Blue color
             icon: 'pi pi-spinner',
           },
         ];
-        // console.log('response for statistics:', response);
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -328,34 +299,58 @@ export class DataPackagesComponent implements OnInit {
 
     this.permanentFilters();
 
-    let today = new Date();
     let startDate = new Date();
     startDate.setMonth(startDate.getMonth() - 1);
-
-    const formattedStartDate = this.formatDate(startDate);
-    const formattedToday = this.formatDate(today);
-    this.loadSharedPackages(formattedStartDate, formattedToday);
+    this.loadSharedPackages(this.formatDate(startDate), this.formatDate(new Date()), true, 0);
   }
 
-  private loadSharedPackages(startDate: string, endDate: string): void {
+  private loadSharedPackages(startDate: string, endDate: string, freshLoad: boolean, pageNumberToCache: number): void {
     this.prepareStatusArray();
+    this.qualityReportMessage = false;
     this.emptyMessage = "common.components.table.noRecordsFound";
 
-    //console.log("status "+this.statusArray);
-    this.dataService.getSharedPackages(this.countryCodeForService, startDate, endDate, this.statusArray).subscribe({
+    let nextTokenToPass = freshLoad ? null : this.nextToken;
+    if (freshLoad) {
+      this.resetForFreshLoad();
+    }
+
+    this.dataService.getSharedPackages(this.applicationOfficeCode, startDate, endDate, this.statusArray, this.pageSize, nextTokenToPass).subscribe({
       next: (response) => {
-        this.packagesData = response;
-        this.packagesData = this.packagesData.map(pkg => ({
-          ...pkg,
-          status: this.statusTranslated[pkg.status] || pkg.status
-        }));
-        this.tableData = this.packagesData;
+        let responseData = response.data;
+        responseData = this.translateTheStatus(responseData);
+
+        this.cachedPages.push({ "page": pageNumberToCache, "data": responseData });
+        this.tableData = responseData;
+
+        this.nextToken = response.nextToken ?? null;
+        this.totalRecords = ((this.cachedPages.length - 1) * this.pageSize) + this.tableData.length;
+        if (response.nextToken) {
+          this.totalRecords++;
+        }
+
         this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Failed to fetch shared packages:', err);
       }
     });
+  }
+
+  private resetForFreshLoad() {
+    this.tableData = [];
+    this.cachedPages = [];
+    this.currentPage = 0;
+    if (this.tableComponent && this.tableComponent.table) {
+      this.tableComponent.table.first = 0;
+    }
+  }
+
+  private translateTheStatus(responseData: any[]): any[] {
+    responseData = responseData.map(pkg => ({
+      ...pkg,
+      status: this.statusTranslated[pkg.status] || pkg.status
+    }));
+    return responseData;
   }
 
   private prepareStatusArray() {
@@ -375,39 +370,27 @@ export class DataPackagesComponent implements OnInit {
   }
 
   private permanentFilters(filters?: FilterValue[]): void {
-    let dateArray = this.dateRangeFilter();
-
     if (!this.dateFilterRemoved) {
-      let dateFilter = { key: 'receivedDate', value: dateArray, type: 'dateRange' };
+      let dateFilter = { key: 'receivedDate', value: this.dateRangeFilter(), type: 'dateRange' };
       this.appliedFilters = [...this.appliedFilters, dateFilter];
     }
 
-    if (!this.failedNonRetryFilterRemoved) {
-      let failedFilter = { key: 'FAILED_NONRETRY', value: true, type: 'checkbox' };
-      if (!filters?.some(f => f.key === failedFilter.key)) {
-        this.appliedFilters = [...this.appliedFilters, failedFilter];
-      }
-    }
+    this.addPermanentCheckbox('FAILED_NONRETRY', this.failedNonRetryFilterRemoved, filters);
+    this.addPermanentCheckbox('FAILED_RETRY', this.failedFilterRemoved, filters);
+    this.addPermanentCheckbox('PARTIAL', this.partialFilterRemoved, filters);
 
-    if (!this.failedFilterRemoved) {
-      let failedFilter = { key: 'FAILED_RETRY', value: true, type: 'checkbox' };
-      if (!filters?.some(f => f.key === failedFilter.key)) {
-        this.appliedFilters = [...this.appliedFilters, failedFilter];
-      }
-    }
+  }
 
-    if (!this.partialFilterRemoved) {
-      let partialFilter = { key: 'PARTIAL', value: true, type: 'checkbox' };
-      if (!filters?.some(f => f.key === partialFilter.key)) {
-        this.appliedFilters = [...this.appliedFilters, partialFilter];
-      }
-    }
+  private addPermanentCheckbox(key: string, removed: boolean, filters?: FilterValue[]): void {
+    if (removed) return;
+    if (filters?.some(f => f.key === key)) return;
 
+    this.appliedFilters.push({ key, value: true, type: 'checkbox' });
   }
 
   private dateRangeFilter(): any {
     let today = new Date();
-    let startDate = new Date(today); // clone 'today' to avoid modifying it directly
+    let startDate = new Date(today);
 
     if (this.statSelected === 'TOTAL IN YEAR') {
       startDate = new Date(today.getFullYear(), 0, 1);
@@ -423,7 +406,7 @@ export class DataPackagesComponent implements OnInit {
   }
 
   autoCompleteSearch(val: any): void {
-    this.dataService.getSharedPackagesByZipName(this.countryCodeForService, val.query).subscribe({
+    this.dataService.getSharedPackagesByZipName(this.applicationOfficeCode, val.query).subscribe({
       next: (response) => {
         this.tableDataByZips = response;
         this.autoCompleteSuggestions = this.tableDataByZips.map(item => item.globalZipId);
@@ -440,64 +423,110 @@ export class DataPackagesComponent implements OnInit {
   }
 
   searchItemSelected(val: any): void {
-    console.log(val.value);
+
     const pkg = this.tableDataByZips.find(
       obj => obj.globalZipId === val.value
     );
-
-    this.packagesData = pkg
-      ? [{
-        ...pkg,
-        status: this.statusTranslated[pkg.status] || pkg.status
-      }]
-      : [];
-
-    this.tableData = [...this.packagesData];
+    this.tableData = this.translateTheStatus(pkg ? [pkg] : []);
+    this.totalRecords = this.tableData.length;
 
     this.statSelected = 'TOTAL COUNT';
     this.advancedFilterMode = true;
+
     this.appliedFilters = [];
-
     this.removeDefaultValues();
-
     this.configurableFilter.clearAdvancedQuery();
 
     this.cdr.detectChanges();
   }
 
   onActionClick(action: string, item: any) {
-    // console.log('Action clicked:', action, item);
     switch (action) {
       case 'downloadPackageCsv':
-        this.downloadDetails(item);
-        break;
-      case 'downloadPackageJson':
-        this.downloadDetails(item);
-        break;
-      case 'downloadFailureCsv':
-        this.downloadDetails(item);
-        break;
-      case 'downloadFailureJson':
-        this.downloadDetails(item);
+        this.downloadPackageDetails(item);
         break;
     }
   }
 
-  downloadDetails(user: any) {
-    // console.log('Download details:', user);
+  onFilterActionClick(action: string) {
+    switch (action) {
+      case 'downloadQualityReport':
+        this.downloadQualityReport();
+        break;
+    }
+  }
+
+  downloadPackageDetails(item: any) {
+    this.dataService.getSharedPackagesReportByZipName(item.ipOfficeCode, item.ipTypeCategory, item.receivedDate, item.globalZipId)
+      .subscribe({
+        next: (blob) =>
+          this.downloadCsv(blob, `${item.globalZipId}-report.csv`),
+        error: (err) => console.error(err)
+      });
+  }
+
+  private downloadCsv(blob: Blob, fileName: string): void {
+    const csvBlob = new Blob([blob], {
+      type: 'text/csv;charset=utf-8;'
+    });
+
+    const url = window.URL.createObjectURL(csvBlob);
+    const a = document.createElement('a');
+
+    a.href = url;
+    a.download = fileName;
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  }
+
+
+  downloadQualityReport() {
+    const [start, end] = this.returnDateArray();
+    if (!this.isDateRangeWithinOneYear([start, end])) {
+      this.qualityReportMessage = true;
+      return;
+    }
+
+    this.qualityReportMessage = false;
+
+    // this.dataService.getDataQualityReport(this.applicationOfficeCode, start, end)
+    //   .subscribe({
+    //     next: (blob) =>
+    //       this.downloadCsv(blob, `Data-Quality-report.csv`),
+    //     error: (err) => console.error(err)
+    //   });
+  }
+
+  private isDateRangeWithinOneYear(range: [Date, Date]): boolean {
+    const start = new Date(range[0]);
+    const end = new Date(range[1]);
+
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      return false;
+    }
+
+    if (start > end) return false;
+
+    const oneYearLater = new Date(start);
+    oneYearLater.setFullYear(start.getFullYear() + 1);
+
+    return end <= oneYearLater;
+  }
+
+  closeQualtiyReportMessage() {
+    this.qualityReportMessage = false;
   }
 
   onStatSelect(statLabel: string) {
-    // console.log('Stats Selected:', statLabel);
-    this.tableData = [];
-    this.emptyMessage = "common.components.table.noRecordsFound";
     this.statSelected = statLabel;
+    this.emptyMessage = "common.components.table.noRecordsFound";
     this.dateFilterRemoved = false;
-    this.cdr.detectChanges();
     this.advancedFilterMode = false;
-    this.filterByStats();
     this.configurableFilter.clearAdvancedQuery();
     this.configurableFilter.searchBarAutoComplete = '';
+    this.qualityReportMessage = false;
+    this.filterByStats();
   }
 
   private filterByStats(): void {
@@ -528,9 +557,6 @@ export class DataPackagesComponent implements OnInit {
         break;
     }
 
-    const formattedStartDate = this.formatDate(startDate);
-    const formattedToday = this.formatDate(today);
-
     // Update the appliedFilters with date range for UI
     if (this.appliedFilters.some(f => f.key === 'receivedDate')) {
       this.appliedFilters = this.appliedFilters.map(f =>
@@ -544,45 +570,23 @@ export class DataPackagesComponent implements OnInit {
     this.configurableFilter.changeFilterValue('receivedDate', [startDate, today]);
 
     // Call service with formatted dates (server-side filtering)
-    this.loadSharedPackages(formattedStartDate, formattedToday);
+    this.loadSharedPackages(this.formatDate(startDate), this.formatDate(today), true, 0);
   }
 
   onFilterChange(filters: FilterValue[]): void {
-    // console.log('Filter changed:', filters);
     // Don't apply filters or show red dot on change - only track changes
   }
 
   onFilterApplied(filters: FilterValue[]): void {
-    // console.log('Filters applied:', filters);
     this.appliedFilters = [];
     if (filters.some(user => user.key === 'receivedDate')) {
       this.dateFilterRemoved = true;
 
       let dates = filters.filter(v => v.key === 'receivedDate').map(v => v.value);
       let sDate = dates[0][0];
-
-      let today = new Date();
-      let weekStartDate = new Date();
-      weekStartDate.setDate(today.getDate() - 7);
-      let monthStartDate = new Date();
-      monthStartDate.setDate(1);
-      let yearStartDate = new Date();
-      yearStartDate.setMonth(0);
-      yearStartDate.setDate(1);
-
-      if (sDate >= weekStartDate) {
-        this.statSelected = 'TOTAL IN WEEK';
-      } else if (sDate >= monthStartDate) {
-        this.statSelected = 'TOTAL IN MONTH';
-      } else if (sDate >= yearStartDate) {
-        this.statSelected = 'TOTAL IN YEAR';
-      } else {
-        this.statSelected = 'TOTAL COUNT';
-      }
-
+      this.statSelected = this.resolveStatFromDate(sDate);
     }
 
-    //    console.log("filters "+filters);
     if (filters.some(item => item.key === 'FAILED_NONRETRY' && item.value == false)) {
       this.failedNonRetryFilterRemoved = true;
     }
@@ -595,13 +599,53 @@ export class DataPackagesComponent implements OnInit {
 
     this.permanentFilters(filters);
     this.appliedFilters = [...this.appliedFilters, ...filters];
-
     this.applyFilters();
+
     this.cdr.detectChanges();
   }
 
+  private resolveStatFromDate(startDate: Date): string {
+    const today = new Date();
+
+    const weekStart = new Date(today);
+    weekStart.setDate(today.getDate() - 7);
+
+    const monthStart = new Date(today);
+    monthStart.setMonth(today.getMonth() - 1);
+
+    const yearStart = new Date(today);
+    yearStart.setFullYear(today.getFullYear() - 1);
+
+    const sameDay = (a: Date, b: Date) =>
+      a.getFullYear() === b.getFullYear() &&
+      a.getMonth() === b.getMonth() &&
+      a.getDate() === b.getDate();
+
+    if (sameDay(startDate, weekStart)) {
+      return 'TOTAL IN WEEK';
+    }
+
+    if (sameDay(startDate, monthStart)) {
+      return 'TOTAL IN MONTH';
+    }
+
+    if (sameDay(startDate, yearStart)) {
+      return 'TOTAL IN YEAR';
+    }
+
+    return 'TOTAL COUNT';
+  }
+
+  private updateRemovedDefaultFlags(filters: FilterValue[]): void {
+    const removed = (key: string) =>
+      filters.some(f => f.key === key && f.value === false);
+
+    this.failedNonRetryFilterRemoved = removed('FAILED_NONRETRY');
+    this.failedFilterRemoved = removed('FAILED_RETRY');
+    this.partialFilterRemoved = removed('PARTIAL');
+  }
+
   onAppliedFiltersChange(filters: FilterValue[]): void {
-    // console.log('onAppliedFiltersChange:', filters);
     this.appliedFilters = [];
     this.permanentFilters(filters);
     this.appliedFilters = [...this.appliedFilters, ...filters];
@@ -609,10 +653,10 @@ export class DataPackagesComponent implements OnInit {
   }
 
   onFilterCleared(): void {
-    // console.log('Filters cleared');
     this.appliedFilters = [];
     this.permanentFilters();
     this.configurableFilter.searchBarAutoComplete = '';
+    this.removeDefaultValues();
     this.filterByStats();
     this.cdr.detectChanges();
   }
@@ -621,7 +665,8 @@ export class DataPackagesComponent implements OnInit {
     this.appliedFilters = [];
     this.permanentFilters();
     this.configurableFilter.searchBarAutoComplete = '';
-    this.tableData = this.packagesData;
+    this.removeDefaultValues();
+    this.configurableFilter.onClearAll();
     this.configurableFilter.clearAllFilters();
     this.cdr.detectChanges();
   }
@@ -665,50 +710,70 @@ export class DataPackagesComponent implements OnInit {
         break;
     }
 
-    const formattedStartDate = this.formatDate(startDate);
-    const formattedToday = this.formatDate(today);
-
-    this.prepareStatusArray();
-
     if (this.advancedFilterMode) {
-      this.tableData = [...this.packagesData];
+      this.tableData = [...this.advancedSearchTableData];
       this.filterTheTableData();
+      this.prepareStatusArray();
       this.booleanFilters();
     } else {
-      this.dataService.getSharedPackages(this.countryCodeForService, formattedStartDate, formattedToday, this.statusArray).subscribe({
-        next: (response) => {
-          this.packagesData = response;
-          this.packagesData = this.packagesData.map(pkg => ({
-            ...pkg,
-            status: this.statusTranslated[pkg.status] || pkg.status
-          }));
-          this.tableData = this.packagesData;
-
-          this.filterTheTableData();
-          // console.log("tableData filtered" + this.tableData)
-          this.cdr.detectChanges();
-        },
-        error: (err) => {
-          console.error('Failed to fetch shared packages:', err);
+      this.currentPage = 0;
+      let startDateForFilter = this.formatDate(startDate);
+      let endDateForFilter = this.formatDate(today);
+      this.appliedFilters.forEach((filter) => {
+        switch (filter.key) {
+          case 'receivedDate':
+            if (
+              filter.value &&
+              Array.isArray(filter.value) &&
+              filter.value.length === 2
+            ) {
+              const [start, end] = filter.value;
+              if (start && end) {
+                startDateForFilter = this.formatDate(start);
+                endDateForFilter = this.formatDate(end);
+              }
+            }
+            break;
         }
       });
+      this.loadSharedPackages(startDateForFilter, endDateForFilter, true, 0);
     }
 
   }
 
-  filterTheTableData() {
-    let filtered = [...this.tableData];
+  onLazyLoad(event: any): void {
+    if (event.first !== undefined && event.rows !== undefined) {
+      const newPage = Math.floor(event.first / event.rows);
+      const newPageSize = event.rows;
 
-    //console.log("packagesData " + this.packagesData)
+      if (this.pageSize !== newPageSize) {
+        this.pageSize = newPageSize;
+        const [start, end] = this.returnDateArray();
+        this.loadSharedPackages(start, end, true, 0);
+        return;
+      }
+
+      const cached = this.cachedPages.find(p => p.page === newPage);
+      if (cached) {
+        this.tableData = cached.data;
+        this.currentPage = newPage;
+        this.cdr.detectChanges();
+        return;
+      }
+
+      const [start, end] = this.returnDateArray();
+      this.currentPage = newPage;
+      this.loadSharedPackages(start, end, false, newPage);
+
+    }
+  }
+
+  returnDateArray(): any {
+    let dateArray = this.dateRangeFilter();
+    let startDateForFilter = this.formatDate(dateArray[0]);
+    let endDateForFilter = this.formatDate(dateArray[1]);
     this.appliedFilters.forEach((filter) => {
       switch (filter.key) {
-        case 'globalZipId':
-          if (filter.value != '') {
-            filtered = filtered.filter((item) =>
-              item.globalZipId.includes(filter.value)
-            );
-          }
-          break;
         case 'receivedDate':
           if (
             filter.value &&
@@ -716,7 +781,29 @@ export class DataPackagesComponent implements OnInit {
             filter.value.length === 2
           ) {
             const [startDate, endDate] = filter.value;
-            // console.log(startDate+" -- "+endDate)
+            if (startDate && endDate) {
+              startDateForFilter = this.formatDate(startDate);
+              endDateForFilter = this.formatDate(endDate);
+            }
+          }
+          break;
+      }
+    });
+    return [startDateForFilter, endDateForFilter];
+  }
+
+  filterTheTableData() {
+    let filtered = [...this.tableData];
+
+    this.appliedFilters.forEach((filter) => {
+      switch (filter.key) {
+        case 'receivedDate':
+          if (
+            filter.value &&
+            Array.isArray(filter.value) &&
+            filter.value.length === 2
+          ) {
+            const [startDate, endDate] = filter.value;
             if (startDate && endDate) {
               filtered = filtered.filter((item) => {
                 const itemDate = new Date(item.receivedDate);
@@ -749,7 +836,6 @@ export class DataPackagesComponent implements OnInit {
 
 
   onAdvancedFilterSearch(advancedFilterQuery: AdvancedFilterQuery): void {
-    // console.log(advancedFilterQuery);
 
     let applicationId;
     let ipType;
@@ -767,17 +853,18 @@ export class DataPackagesComponent implements OnInit {
     this.tableData = [];
     this.statSelected = 'TOTAL COUNT';
 
-    this.dataService.getGlobalZipIdsByApplicationId(this.countryCodeForService, ipType, applicationId).subscribe({
+    this.dataService.getGlobalZipIdsByApplicationId(this.applicationOfficeCode, ipType, applicationId).subscribe({
       next: (response: any) => {
         if (Array.isArray(response)) {
           this.dataService.getGlobalZipDetails(response).subscribe({
             next: (res) => {
-              this.packagesData = res;
-              this.packagesData = this.packagesData.map(pkg => ({
+              this.advancedSearchTableData = res;
+              this.advancedSearchTableData = this.advancedSearchTableData.map(pkg => ({
                 ...pkg,
                 status: this.statusTranslated[pkg.status] || pkg.status
               }));
-              this.tableData = this.packagesData;
+              this.tableData = this.advancedSearchTableData;
+              this.totalRecords = this.tableData.length;
               this.cdr.detectChanges();
             },
             error: (err) => {
@@ -799,6 +886,8 @@ export class DataPackagesComponent implements OnInit {
     this.appliedFilters = [];
 
     this.removeDefaultValues();
+    this.configurableFilter.changeFilterValue('SUCCESS', null);
+    this.configurableFilter.changeFilterValue('IN_PROGRESS', null);
 
     this.configurableFilter.searchBarAutoComplete = '';
 
@@ -850,17 +939,12 @@ export class DataPackagesComponent implements OnInit {
   }
 
   removeFilterChip(filterKey: string): void {
-    // console.log('removeFilterChip ' + filterKey);
-
-    // Find the filter config to get the display value
     const filterConfig = this.filterConfigs.find((f) => f.key === filterKey);
     if (filterConfig) {
-      // Remove the filter from applied filters
       this.appliedFilters = this.appliedFilters.filter(
         (f) => f.key !== filterKey
       );
       this.configurableFilter.removeFilterChip(filterKey);
-      // Update the filtered groups
       this.applyFilters();
       this.cdr.detectChanges();
     }

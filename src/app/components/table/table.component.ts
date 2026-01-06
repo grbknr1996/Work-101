@@ -131,6 +131,8 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() clearButton: string = 'common.components.table.clear';
   @Input() onLazyLoadEvent: EventEmitter<any> = new EventEmitter();
 
+  @Input() simplePaginator = false;
+
   @Output() actionClick = new EventEmitter<{ action: string; item: any }>();
   @Output() onLazyLoad = new EventEmitter<any>();
   @Output() selectionChange = new EventEmitter<any>();

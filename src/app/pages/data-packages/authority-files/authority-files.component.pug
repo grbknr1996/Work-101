@@ -41,6 +41,9 @@ app-layout([config]="layoutConfig")
   app-table(
     [columns]="tableColumns",
     [data]="tableData",
-    [showClearButton]="false",
-    [showSearch]="false"
+    [showSearch]="false",
+    [rows]="pageSize", 
+    [totalRecords]="totalRecords", 
+    [lazy]="true", 
+    (onLazyLoad)="onLazyLoad($event)",
   )

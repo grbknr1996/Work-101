@@ -37,6 +37,7 @@ export class DistributionRulesComponent implements OnInit {
   langCode: string;
   isWipoAdmin = false;
   tabs: { title: string; value: string; content: any, show: boolean }[] = [];
+  selectedTabPanel = "distributionRules";
 
   // Create a data signal for the rules
   // public rulesData = signal<ExclusionRule[]>([]);
@@ -180,40 +181,18 @@ export class DistributionRulesComponent implements OnInit {
       { title: 'Distribution Rules', value: 'distributionRules', content: this.distributionRulesData, show: true },
       { title: 'Recipients', value: 'recipients', content: this.recipientsRulesData, show: this.isWipoAdmin }
     ];
+    this.selectedTabPanel = this.dataExchangeService.tabPanelSelection() ?
+      this.dataExchangeService.tabPanelSelection() :
+      this.tabs[0].value
   }
 
   private loadData(): void {
-    this.loadingService.show('Loading...');
-
-    // Load exclusion rules from service for the table
-    this.dataExchangeService.getExclusionRules().subscribe({
-      next: (rules) => {
-        this.dataExchangeService.setRulesData(rules || []);
-        this.loadingService.hide();
-        console.log('Data loaded successfully, loading set to false');
-      },
-      error: (error) => {
-        console.error('Error loading data from API:', error);
-        this.dataExchangeService.setRulesData([]);
-        this.loadingService.hide();
-      },
-    });
-    this.loadingService.show('Loading...');
-    // Load recipients from service for the table
-    this.dataExchangeService.getRecipients().subscribe({
-      next: (recipients) => {
-        console.log('API Response (Recipients[]): ', recipients);
-        this.dataExchangeService.setRecipientData(recipients || []);
-        console.log('recipientsData: ', this.dataExchangeService.recipientsData());
-        this.loadingService.hide();
-        console.log('Data loaded successfully, loading set to false');
-      },
-      error: (error) => {
-        console.error('Error loading data from API:', error);
-        this.dataExchangeService.setRecipientData([]);
-        this.loadingService.hide();
-      },
-    });
+    this.dataExchangeService.setRecipientData([]);
+    this.dataExchangeService.setRulesData([]);
+    if (!this.isWipoAdmin) {
+      this.dataExchangeService.getRecipients();
+    }
+    this.dataExchangeService.getExclusionRules();
   }
 
   addRule() {

@@ -5,7 +5,7 @@ import {
   ChangeDetectorRef,
   ViewChild,
 } from '@angular/core';
-import { authorityData } from '../../../../assets/data';
+//import { authorityData } from '../../../../assets/data';
 import { SidebarMenuService } from '../../../_services/sidebar-menu.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
@@ -16,6 +16,7 @@ import {
   ConfigurableFilterBarComponent,
 } from '../../../components/configurable-filter-bar/configurable-filter-bar.component';
 import { AdvancedFilterQuery } from 'src/app/components/advanced-filter-query/advanced-filter-query.component';
+import { AuthorityFilesService } from 'src/app/_services/authority-files.service';
 
 @Component({
   selector: 'app-authority-files',
@@ -38,7 +39,7 @@ export class AuthorityFilesComponent implements OnInit {
   globalFilterFields = ['publicationNumber'];
 
   tableColumns = [];
-  tableData = authorityData;
+  tableData = [];
 
   sortField: string = 'publicationNumber';
   sortOrder: number = 1;
@@ -53,138 +54,23 @@ export class AuthorityFilesComponent implements OnInit {
 
   searchBar: string;
 
+  currentPage: number = 0;
+  pageSize: number = 50;
+  totalRecords: number = 0;
+
+  fileType = '';
+
   constructor(
     private menuService: SidebarMenuService,
     private router: Router,
     private route: ActivatedRoute,
     public ms: MechanicsService,
     private cdr: ChangeDetectorRef,
-    private http: HttpClient
-  ) {}
+    private http: HttpClient,
+    private authorityService: AuthorityFilesService
+  ) { }
 
   ngOnInit(): void {
-
-    this.packageStats = [
-      {
-        label: 'All',
-        display: this.ms.translate('dataService.authorityFiles.stats.all'),
-        count: 3222929,
-        period: this.ms.translate('dataService.authorityFiles.stats.since')+' 2025',
-        color: '#3949AB', // Indigo color
-      },
-      {
-        label: 'Patents',
-        display: this.ms.translate('dataService.authorityFiles.stats.patents'),
-        count: 292929,
-        period: this.ms.translate('dataService.authorityFiles.stats.since')+' 2025',
-        color: '#2E7D32', // Green color
-      },
-      {
-        label: 'Utility Models',
-        display: this.ms.translate('dataService.authorityFiles.stats.utilityModels'),
-        count: 1288239,
-        period: this.ms.translate('dataService.authorityFiles.stats.since')+' 2025',
-        color: '#0288D1', // Blue color
-      },
-      {
-        label: 'Inconsistent Full-text Files',
-        display: this.ms.translate('dataService.authorityFiles.stats.inconsistentFiles'),
-        count: 127,
-        period: this.ms.translate('dataService.authorityFiles.stats.since')+' 2025',
-        color: '#D32F2F', // Red color
-      },
-    ];
-
-    this.tableColumns = [
-      { field: 'image', header: '', display: 'image'},
-      {
-        field: 'publicationNumber',
-        header: this.ms.translate('dataService.authorityFiles.table.publicationNumber'),
-        sortable: true,
-      },
-      { field: 'publicationDate', header: this.ms.translate('dataService.authorityFiles.table.publicationDate') },
-      { field: 'kindCode', header: this.ms.translate('dataService.authorityFiles.table.kindCode') },
-      { field: 'exceptionCode', header: this.ms.translate('dataService.authorityFiles.table.exceptionCode') },
-      { field: 'abstract', header: this.ms.translate('dataService.authorityFiles.table.abstract') },
-      { field: 'description', header: this.ms.translate('dataService.authorityFiles.table.description') },
-      { field: 'claims', header: this.ms.translate('dataService.authorityFiles.table.claims') },
-    ];
-
-    this.filterConfigs = [
-      {
-        key: 'publicationNumber',
-        label: this.ms.translate('dataService.authorityFiles.table.publicationNumber'),
-        type: 'text',
-        section: this.ms.translate('common.components.filter.section.file'),
-      },
-      {
-        key: 'publicationDate',
-        label: this.ms.translate('dataService.authorityFiles.table.publicationDate'),
-        type: 'dateRange',
-        placeholder: this.ms.translate('common.components.filter.date.placeHolder'),
-        dateFormat: 'yy-mm-dd',
-        section: this.ms.translate('common.components.filter.section.dateFilters'),
-      },
-      {
-        key: 'abstract',
-        label: this.ms.translate('dataService.authorityFiles.table.abstract'),
-        type: 'checkbox',
-        section: this.ms.translate('common.components.filter.section.status'),
-      },
-      {
-        key: 'description',
-        label: this.ms.translate('dataService.authorityFiles.table.description'),
-        type: 'checkbox',
-        section: this.ms.translate('common.components.filter.section.status'),
-      },
-      {
-        key: 'claims',
-        label: this.ms.translate('dataService.authorityFiles.table.claims'),
-        type: 'checkbox',
-        section: this.ms.translate('common.components.filter.section.status'),
-      },
-    ];
-
-    this.filterActions = [
-      {
-        label: this.ms.translate('dataService.authorityFiles.table.actions.downloadData'),
-        icon: 'pi pi-arrow-circle-down',
-        action: 'downloadTableData',
-        severity: 'info',
-      },
-      {
-        label: this.ms.translate('dataService.authorityFiles.table.actions.downloadDefinition'),
-        icon: 'pi pi-file-pdf',
-        action: 'downloadDefinitionFile',
-        severity: 'info',
-      },
-      {
-        label: this.ms.translate('dataService.authorityFiles.table.actions.downloadCsv'),
-        icon: 'pi pi-file-excel',
-        action: 'downloadAuthorityFile',
-        severity: 'info',
-      },
-      {
-        label: this.ms.translate('dataService.authorityFiles.table.actions.downloadException'),
-        icon: 'pi pi-download',
-        action: 'downloadExceptionList',
-        severity: 'info',
-      }
-    ];
-
-    this.layoutConfig = {
-      appTitle: this.ms.translate('common.components.app.title'),
-      showHeader: true,
-      showSidebar: true,
-      headerItems: [],
-      sidebarItems: [],
-      footerText: '© WIPO ' + new Date().getFullYear(),
-      fixedHeader: true,
-      fixedSidebar: true,
-      sidebarCollapsed: false,
-      theme: 'light',
-      logo: '',
-    };
 
     this.route.params.subscribe((params) => {
       const officeCode =
@@ -234,25 +120,198 @@ export class AuthorityFilesComponent implements OnInit {
     );
     this.menuService.updateMenuItems(menuItems);
 
+    this.applicationOfficeCode = "PH";
+
+    this.tableColumns = [
+      { field: 'statusImage', header: '', display: 'image' },
+      {
+        field: 'publicationNumber',
+        header: this.ms.translate('dataService.authorityFiles.table.publicationNumber'),
+        sortable: true,
+      },
+      { field: 'publicationDate', header: this.ms.translate('dataService.authorityFiles.table.publicationDate') },
+      { field: 'kindCode', header: this.ms.translate('dataService.authorityFiles.table.kindCode') },
+      { field: 'exceptionCode', header: this.ms.translate('dataService.authorityFiles.table.exceptionCode') },
+      { field: 'abstractLanguages', header: this.ms.translate('dataService.authorityFiles.table.abstract') },
+      { field: 'descriptionLanguages', header: this.ms.translate('dataService.authorityFiles.table.description') },
+      { field: 'claimsLanguages', header: this.ms.translate('dataService.authorityFiles.table.claims') },
+    ];
+
+    this.filterConfigs = [
+      {
+        key: 'publicationNumber',
+        label: this.ms.translate('dataService.authorityFiles.table.publicationNumber'),
+        type: 'text',
+        section: this.ms.translate('common.components.filter.section.file'),
+      },
+      {
+        key: 'abstractLanguages',
+        label: this.ms.translate('dataService.authorityFiles.table.abstract'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.status'),
+      },
+      {
+        key: 'descriptionLanguages',
+        label: this.ms.translate('dataService.authorityFiles.table.description'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.status'),
+      },
+      {
+        key: 'claimsLanguages',
+        label: this.ms.translate('dataService.authorityFiles.table.claims'),
+        type: 'checkbox',
+        section: this.ms.translate('common.components.filter.section.status'),
+      },
+    ];
+
+    this.filterActions = [
+      {
+        label: this.ms.translate('dataService.authorityFiles.table.actions.downloadData'),
+        icon: 'pi pi-arrow-circle-down',
+        action: 'downloadTableData',
+        severity: 'info',
+      },
+      {
+        label: this.ms.translate('dataService.authorityFiles.table.actions.downloadDefinition'),
+        icon: 'pi pi-file-pdf',
+        action: 'downloadDefinitionFile',
+        severity: 'info',
+      },
+      {
+        label: this.ms.translate('dataService.authorityFiles.table.actions.downloadCsv'),
+        icon: 'pi pi-file-excel',
+        action: 'downloadAuthorityFile',
+        severity: 'info',
+      },
+      {
+        label: this.ms.translate('dataService.authorityFiles.table.actions.downloadException'),
+        icon: 'pi pi-download',
+        action: 'downloadExceptionList',
+        severity: 'info',
+      }
+    ];
+
+    this.authorityService.getStatistics(this.applicationOfficeCode).subscribe({
+      next: (response) => {
+        this.packageStats = [
+          {
+            label: 'All',
+            display: this.ms.translate('dataService.authorityFiles.stats.all'),
+            count: response.publicationCount.toString(),
+            period: this.ms.translate('dataService.authorityFiles.stats.since') + ' 2025',
+            color: '#3949AB', // Indigo color
+          },
+          {
+            label: 'Patents',
+            display: this.ms.translate('dataService.authorityFiles.stats.patents'),
+            count: response.patentsCount.toString(),
+            period: this.ms.translate('dataService.authorityFiles.stats.since') + ' 2025',
+            color: '#2E7D32', // Green color
+          },
+          {
+            label: 'Utility Models',
+            display: this.ms.translate('dataService.authorityFiles.stats.utilityModels'),
+            count: response.utilityModelsCount.toString(),
+            period: this.ms.translate('dataService.authorityFiles.stats.since') + ' 2025',
+            color: '#0288D1', // Blue color
+          },
+          {
+            label: 'Inconsistent Full-text Files',
+            display: this.ms.translate('dataService.authorityFiles.stats.inconsistentFiles'),
+            count: response.inconsistentRecordsCount.toString(),
+            period: this.ms.translate('dataService.authorityFiles.stats.since') + ' 2025',
+            color: '#D32F2F', // Red color
+          },
+        ];
+
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Failed to fetch shared packages:', err);
+      }
+
+    });
+
     let today = new Date();
 
     let startDate = new Date();
     startDate.setMonth(today.getMonth() - 1);
-    //this.tableData = packagesData.filter(item => new Date(item.sharedDate) >= startDate);
+
+    this.loadData();
   }
 
-  onActionClick(action: string, item: any) {
-    console.log('Action clicked:', action, item);
-    switch (action) {
-      case 'showPdf':
-        //this.downloadDetails();
-        // this.downloadFileWithRedirect();
-        break;
+  private loadData(): void {
+    if (this.fileType === 'inconsistent') {
+      this.authorityService.getAuthorityFileErrorReports({
+        officeCode: this.applicationOfficeCode,
+        limit: this.pageSize,
+        offset: this.currentPage * this.pageSize,
+      }).subscribe({
+        next: (response) => {
+          let responseData = response.contents;
+          this.totalRecords = response.totalCount;
+          this.tableData = responseData.map(item => ({
+            ...item,
+            statusImage: this.getFullTextStatusIcon(item.fullTextStatus),
+            statusImage_tooltip: (item.fullTextStatus === 'false' || item.fullTextStatus === 'NO') ? 'Some Authority file details not available in full text data' : undefined
+          }));
+
+          this.cdr.detectChanges();
+        }
+      });
+
+    } else {
+      this.authorityService.getAuthorityFiles({
+        officeCode: this.applicationOfficeCode,
+        limit: this.pageSize,
+        offset: this.currentPage * this.pageSize,
+        type: this.fileType,
+      }).subscribe({
+        next: (response) => {
+          let responseData = response.contents;
+          this.totalRecords = response.totalCount;
+          this.tableData = responseData.map(item => ({
+            ...item,
+            statusImage: this.getFullTextStatusIcon(item.fullTextStatus)
+          }));
+
+          this.cdr.detectChanges();
+        }
+      });
+    }
+
+  }
+
+  onLazyLoad(event: any): void {
+    if (event.first !== undefined && event.rows !== undefined) {
+      const newPage = Math.floor(event.first / event.rows);
+      const newPageSize = event.rows;
+      if (this.pageSize !== newPageSize || this.currentPage !== newPage) {
+        this.pageSize = newPageSize;
+        this.currentPage = newPage;
+        this.loadData();
+      }
     }
   }
 
+  private getFullTextStatusIcon(status: any): string {
+
+    if (status === 'true' || status === 'YES') {
+      return '/assets/images/valid.png';
+    }
+
+    if (status === 'false' || status === 'NO') {
+      return '/assets/images/warning.png';
+    }
+
+    if (status === 'invalid') {
+      return '/assets/images/invalid.png';
+    }
+
+    return '/assets/images/waiting.png';
+  }
+
   onFilterActionClick(action: string) {
-    console.log('Action clicked:', action);
     switch (action) {
       case 'showPdf':
         //this.downloadDetails();
@@ -262,17 +321,14 @@ export class AuthorityFilesComponent implements OnInit {
   }
 
   downloadDetails(): void {
-    console.log('download');
   }
 
   onStatSelect(statLabel: string) {
-    console.log('Stats Selected:', statLabel);
     this.statSelected = statLabel;
     this.applyFilters();
   }
 
   onAdvancedFilterSearch(advancedFilterQuery: AdvancedFilterQuery): void {
-    console.log(advancedFilterQuery);
 
     const levelJoin = advancedFilterQuery.levelList.some(f => f.orOperator) ? " OR " : " AND ";
     let query = advancedFilterQuery.levelList
@@ -286,22 +342,22 @@ export class AuthorityFilesComponent implements OnInit {
             const val =
               file.fieldType === "text"
                 ? `'${file.value}'`
-                : ( op === "DATERANGE"
+                : (op === "DATERANGE"
                   ? file.value.map(v => `'${new Date(v).toLocaleDateString('en-CA', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit'
-                      })}'`).join(" AND ") 
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                  })}'`).join(" AND ")
                   : `'${new Date(file.value).toLocaleDateString('en-CA', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit'
-                      })}'` 
-                  );
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                  })}'`
+                );
 
             return `${field} ${op} ${val}`;
           });
-          
+
           return `(${fileQueries.join(fileJoin)})`;
         });
 
@@ -309,28 +365,23 @@ export class AuthorityFilesComponent implements OnInit {
       })
       .join(levelJoin);
 
-    console.log(query);
+    // console.log(query);
     //TODO need to apply this query to the output
 
   }
 
   onFilterChange(filters: FilterValue[]): void {
-    console.log('Filter changed:', filters);
-    // Don't apply filters or show red dot on change - only track changes
   }
 
   onFilterCleared(): void {
-    console.log('Filters cleared');
     this.appliedFilters = [];
     this.searchBar = '';
     this.configurableFilter.searchBar = '';
-    this.tableData = authorityData;
     this.filterByStats();
     this.cdr.detectChanges();
   }
 
   onFilterApplied(filters: FilterValue[]): void {
-    console.log('Filters applied:', filters);
     this.appliedFilters = filters;
     this.applyFilters();
     this.cdr.detectChanges();
@@ -343,29 +394,22 @@ export class AuthorityFilesComponent implements OnInit {
 
   private filterByStats(): void {
     if (this.statSelected == 'Patents') {
-      this.tableData = authorityData.filter(
-        (item) => item.kindCode == 'A1' || item.kindCode == 'B1'
-      );
+      this.fileType = 'patents';
     } else if (this.statSelected == 'Utility Models') {
-      this.tableData = authorityData.filter(
-        (item) => item.kindCode == 'U1' || item.kindCode == 'U3'
-      );
-    } else if (this.statSelected ==  'Inconsistent Full-text Files') {
-      this.tableData = authorityData.filter(
-        (item) => item.incomplete == 'true'
-      );
+      this.fileType = 'utilityModels';
+    } else if (this.statSelected == 'Inconsistent Full-text Files') {
+      this.fileType = 'inconsistent';
     } else {
-      this.tableData = authorityData;
+      this.fileType = '';
     }
   }
 
   filterSearch(search: string) {
-    console.log("filterSearch "+search);
     this.searchBar = search;
     this.applyFilters();
   }
 
-  searchByFilter(): void{
+  searchByFilter(): void {
     this.tableData = this.tableData.filter((item) =>
       item.publicationNumber?.toLowerCase().includes(this.searchBar)
     );
@@ -373,30 +417,11 @@ export class AuthorityFilesComponent implements OnInit {
 
   private applyFilters(): void {
     this.filterByStats();
-    //this.searchByFilter();
+    this.loadData();
     let filtered = [...this.tableData];
-
-    console.log("searchBar "+this.searchBar);
-    if (this.searchBar && this.searchBar.trim()) {
-      filtered = filtered.filter(
-        (item) =>
-          item.publicationNumber?.toLowerCase().includes(this.searchBar) ||
-          item.kindCode?.toLowerCase().includes(this.searchBar)
-      );
-    }
 
     this.appliedFilters.forEach((filter) => {
       switch (filter.key) {
-        case 'search':
-          if (filter.value && filter.value.trim()) {
-            const searchTerm = filter.value.toLowerCase().trim();
-            filtered = filtered.filter(
-              (item) =>
-                item.publicationNumber?.toLowerCase().includes(searchTerm) ||
-                item.kindCode?.toLowerCase().includes(searchTerm)
-            );
-          }
-          break;
         case 'publicationNumber':
           if (filter.value != '') {
             filtered = filtered.filter((item) =>
@@ -404,34 +429,19 @@ export class AuthorityFilesComponent implements OnInit {
             );
           }
           break;
-        case 'abstract':
+        case 'abstractLanguages':
           if (filter.value === true) {
-            filtered = filtered.filter((item) => item.abstract != '');
+            filtered = filtered.filter((item) => item.abstractLanguages != '');
           }
           break;
-        case 'description':
+        case 'descriptionLanguages':
           if (filter.value === true) {
-            filtered = filtered.filter((item) => item.description != '');
+            filtered = filtered.filter((item) => item.descriptionLanguages != '');
           }
           break;
-        case 'claims':
+        case 'claimsLanguages':
           if (filter.value === true) {
-            filtered = filtered.filter((item) => item.claims != '');
-          }
-          break;
-        case 'publicationDate':
-          if (
-            filter.value &&
-            Array.isArray(filter.value) &&
-            filter.value.length === 2
-          ) {
-            const [startDate, endDate] = filter.value;
-            if (startDate && endDate) {
-              filtered = filtered.filter((item) => {
-                const itemDate = new Date(item.publicationDate);
-                return itemDate >= startDate && itemDate <= endDate;
-              });
-            }
+            filtered = filtered.filter((item) => item.claimsLanguages != '');
           }
           break;
       }
@@ -449,16 +459,16 @@ export class AuthorityFilesComponent implements OnInit {
     this.appliedFilters = [];
     this.searchBar = '';
     this.configurableFilter.searchBar = '';
-    this.tableData = authorityData;
+    //TODO
+    //this.tableData = authorityData;
     this.configurableFilter.clearAllFilters();
     this.cdr.detectChanges();
   }
 
   getFilterDisplayValue(filter: FilterValue): string {
-    console.log("getFilterDisplayValue"+filter.key+" "+filter.type+" "+filter.value);
     const filterConfig = this.filterConfigs.find((f) => f.key === filter.key);
 
-    if(filter.key == 'search'){
+    if (filter.key == 'search') {
       return `${filter.key}: ${filter.value}`
     }
 
@@ -470,9 +480,8 @@ export class AuthorityFilesComponent implements OnInit {
       case 'dateRange':
         if (Array.isArray(filter.value) && filter.value.length === 2) {
           const [startDate, endDate] = filter.value;
-          return `${
-            filterConfig.label
-          }: ${startDate?.toLocaleDateString('en-CA', {
+          return `${filterConfig.label
+            }: ${startDate?.toLocaleDateString('en-CA', {
               year: 'numeric',
               month: '2-digit',
               day: '2-digit'
@@ -489,17 +498,13 @@ export class AuthorityFilesComponent implements OnInit {
   }
 
   removeFilterChip(filterKey: string): void {
-    console.log('removeFilterChip ' + filterKey);
-
     // Find the filter config to get the display value
     const filterConfig = this.filterConfigs.find((f) => f.key === filterKey);
     if (filterConfig || filterKey == 'search') {
       // Remove the filter from applied filters
-      console.log('this.appliedFilters ' + this.appliedFilters);
       this.appliedFilters = this.appliedFilters.filter(
         (f) => f.key !== filterKey
       );
-      console.log('this.appliedFilters ' + this.appliedFilters);
       // Also remove the filter from the configurable filter component to sync state
       this.configurableFilter.removeFilterChip(filterKey);
 

@@ -1,5 +1,4 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-
 import { StepperStep } from '../../../components/configurable-stepper/configurable-stepper.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,6 +14,7 @@ import { MechanicsService } from '../../../_services/mechanics.service';
 import { ToastService } from '../../../_services/toast.service';
 import { catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { logger } from 'src/app/logger';
 
 @Component({
   selector: 'app-create-user-account',
@@ -41,7 +41,7 @@ export class CreateUserAccountComponent implements OnInit {
   currentGroupsPage = 1;
   groupsPageSize = 10;
   groupsSearchTerm = '';
-  groupsFilterType = 'all'; // 'all', 'user', 'business'
+  groupsFilterType = 'all';
   groupsSortBy = 'groupName';
   groupsSortOrder = 'asc';
 
@@ -59,8 +59,6 @@ export class CreateUserAccountComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log('CreateUserAccountComponent ngOnInit called');
-
     // Initialize sidebar menu items
     const currentPath = this.router.url;
     const menuItems = this.menuService.generateUserManagementMenu(currentPath);
@@ -70,17 +68,6 @@ export class CreateUserAccountComponent implements OnInit {
     const langCode = this.route.snapshot.params['langCode'];
     this.userId = this.route.snapshot.params['userId'];
     this.isEditMode = !!this.userId;
-
-    console.log('Route params:', {
-      officeCode,
-      langCode,
-      userId: this.userId,
-      isEditMode: this.isEditMode,
-    });
-
-    // Log the full route snapshot for debugging
-    console.log('Full route snapshot:', this.route.snapshot);
-    console.log('Full URL:', this.router.url);
 
     this.breadcrumbItems = [
       {
@@ -96,9 +83,6 @@ export class CreateUserAccountComponent implements OnInit {
     ];
 
     this.initForm();
-    console.log(
-      'Form initialized, groups will be loaded when navigating to Groups step'
-    );
 
     if (this.isEditMode) {
       this.loadUserData();
@@ -106,12 +90,6 @@ export class CreateUserAccountComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    console.log('CreateUserAccountComponent ngAfterViewInit called');
-    console.log('Current active step:', this.activeStep);
-    console.log('Available groups count:', this.availableGroups.length);
-    console.log('Total groups count:', this.totalGroupsCount);
-    console.log('Is on groups step:', this.isOnGroupsStep);
-
     // Force change detection
     this.cdr.detectChanges();
   }
@@ -141,13 +119,6 @@ export class CreateUserAccountComponent implements OnInit {
         enableTwoFactor: [false],
       }),
     });
-
-    console.log('Form initialized:', this.userForm);
-
-    // Subscribe to form changes for debugging
-    this.userForm.get('assignedGroups').valueChanges.subscribe((value) => {
-      console.log('Assigned groups form value changed:', value);
-    });
   }
 
   private loadAvailableGroups(
@@ -168,14 +139,13 @@ export class CreateUserAccountComponent implements OnInit {
     const platformCode = this.mechanicsService.getCurrentOffice() || 'default';
 
     if (!platformCode) {
-      console.error('No platform code available');
+      logger.error('No platform code available');
       this.groupsLoadError = true;
       this.isLoadingGroups = false;
       return;
     }
 
     const offset = (page - 1) * this.groupsPageSize;
-    console.log('Calculated offset:', offset, 'pageSize:', this.groupsPageSize);
 
     // Build query parameters
     const queryParams: any = {
@@ -198,13 +168,11 @@ export class CreateUserAccountComponent implements OnInit {
       queryParams.groupType = filterType;
     }
 
-    console.log('API query parameters:', queryParams);
-
     this.userService
       .getUserGroups(queryParams)
       .pipe(
         catchError((error) => {
-          console.error('Error loading groups:', error);
+          logger.error('Error loading groups:', error);
           this.groupsLoadError = true;
           // Fallback to empty array if API fails
           return of({
@@ -217,11 +185,10 @@ export class CreateUserAccountComponent implements OnInit {
         })
       )
       .subscribe((response) => {
-        console.log('API response received:', response);
         if (response && response.result && response.result.userGroups) {
           // Transform UserGroup to GroupItem for the component
           this.availableGroups = response.result.userGroups.map((group) => ({
-            id: group.groupId,
+            id: group.groupId.toString(),
             name: group.groupName,
             type: group.groupType,
             iimsGroupId: group.iimsGroupId,
@@ -234,10 +201,6 @@ export class CreateUserAccountComponent implements OnInit {
           ) {
             this.totalGroupsCount = response.query.totalUserGroupQuantity;
           }
-
-          console.log('Transformed availableGroups:', this.availableGroups);
-          console.log('Total groups count:', this.totalGroupsCount);
-          console.log('Total pages:', this.totalGroupsPages);
 
           // If we're in edit mode and this is the first time loading groups,
           // make sure the assigned groups are still visible
@@ -269,7 +232,6 @@ export class CreateUserAccountComponent implements OnInit {
   }
 
   onGroupsPageChange(page: number) {
-    console.log('onGroupsPageChange called with page:', page);
     this.loadAvailableGroups(
       page,
       this.groupsSearchTerm,
@@ -319,28 +281,16 @@ export class CreateUserAccountComponent implements OnInit {
 
     // Filter out assigned groups from the current page of available groups
     const filtered = this.availableGroups.filter(
-      (group) => !assignedGroupIds.includes(group.id)
+      (group) => !assignedGroupIds.includes(String(group.id))
     );
-
-    console.log('Filtered available groups:', {
-      total: this.availableGroups.length,
-      assigned: assignedGroupIds.length,
-      filtered: filtered.length,
-      currentPage: this.currentGroupsPage,
-      assignedGroups: assignedGroups,
-      availableGroups: this.availableGroups,
-    });
 
     return filtered;
   }
 
   private loadUserData() {
     if (!this.userId) {
-      console.error('No userId provided for edit mode');
       return;
     }
-
-    console.log('Loading user data for userId:', this.userId);
 
     // Load user account data
     this.userService.getUserAccount(this.userId).subscribe({
@@ -352,7 +302,7 @@ export class CreateUserAccountComponent implements OnInit {
             username: userAccount.userName || '',
             email: userAccount.email || '',
             telephone: '', // Not available in DetailedUserAccount interface
-            clientId: '', // Not available in DetailedUserAccount interface
+            clientId: userAccount.clientAppId || '',
             loginAlias: userAccount.loginId || '',
             profilePicture: null, // Not available in DetailedUserAccount interface
             signaturePicture: userAccount.signaturePicture,
@@ -377,7 +327,7 @@ export class CreateUserAccountComponent implements OnInit {
         this.userForm.patchValue(userData);
       },
       error: (error) => {
-        console.error('Error loading user account:', error);
+        logger.error('Error loading user account:', error);
       },
     });
   }
@@ -386,14 +336,6 @@ export class CreateUserAccountComponent implements OnInit {
     this.userForm.get('assignedGroups').setValue(groups);
     // Trigger change detection to update filteredAvailableGroups
     this.cdr.detectChanges();
-
-    // Log the change for debugging
-    console.log('Assigned groups changed:', {
-      previous: this.userForm.get('assignedGroups').value,
-      current: groups,
-      availableGroupsCount: this.availableGroups.length,
-      filteredAvailableGroupsCount: this.filteredAvailableGroups.length,
-    });
   }
 
   onStepChange(stepValue: number) {
@@ -402,10 +344,6 @@ export class CreateUserAccountComponent implements OnInit {
 
       // If we're moving to the Groups step (step 1), ensure groups are loaded
       if (this.activeStep === 1) {
-        console.log(
-          'Moving to Groups step, checking if groups need to be loaded...'
-        );
-
         // In edit mode, user groups are already loaded from userGroupsBag
         if (this.isEditMode) {
           console.log(
@@ -430,34 +368,26 @@ export class CreateUserAccountComponent implements OnInit {
   }
 
   canProceed(): boolean {
-    console.log('canProceed called for step:', this.activeStep);
     switch (this.activeStep) {
       case 0:
         const basicInfoValid = this.userForm.get('basicInfo').valid;
-        console.log('Basic info valid:', basicInfoValid);
 
         // In edit mode, check if we have the required data loaded
         if (this.isEditMode && basicInfoValid) {
           const basicInfo = this.userForm.get('basicInfo').value;
           const hasRequiredData = basicInfo.username && basicInfo.email;
-          console.log('Edit mode - has required data:', hasRequiredData);
+
           return hasRequiredData;
         }
 
         return basicInfoValid;
       case 1:
-        // Groups step can always proceed (groups are optional)
-        // But show a warning if groups failed to load
-        console.log('Groups step - can always proceed');
         return true;
       case 2:
-        console.log('Unit step - can always proceed');
         return true;
       case 3:
-        console.log('Security step - can always proceed');
         return true;
       default:
-        console.log('Default case - can always proceed');
         return true;
     }
   }
@@ -465,14 +395,9 @@ export class CreateUserAccountComponent implements OnInit {
   nextStep() {
     if (this.activeStep < this.steps.length - 1 && this.canProceed()) {
       this.activeStep++;
-      console.log('Moved to next step:', this.activeStep);
 
       // If we're moving to the Groups step (step 1), ensure groups are loaded
       if (this.activeStep === 1) {
-        console.log(
-          'Moving to Groups step via nextStep, checking if groups need to be loaded...'
-        );
-
         // In edit mode, user groups are already loaded from userGroupsBag
         if (this.isEditMode) {
           console.log(
@@ -536,6 +461,7 @@ export class CreateUserAccountComponent implements OnInit {
           signaturePicture: formData.basicInfo.signaturePicture || '',
           userEmail: formData.basicInfo.email,
           signatureType: formData.basicInfo.signatureType ?? '',
+          clientAppId: formData.basicInfo.clientId || null,
           isActive: formData.basicInfo.isActive, // Use isActive from form for status field
           isLocked: false,
           isMfaAuthRequired: formData.security.enableTwoFactor || false,
@@ -595,15 +521,13 @@ export class CreateUserAccountComponent implements OnInit {
           signatureType: formData.basicInfo.signatureType ?? null,
           isExternal: formData.basicInfo.userType,
           isActive: formData.basicInfo.isActive, // Use isActive from form for status field
-          userGroupsBag: formData.assignedGroups.map((group: GroupItem) => ({
+          userGroupBag: formData.assignedGroups.map((group: GroupItem) => ({
             groupId: parseInt(group.id),
             groupName: group.name,
             groupType: group.type,
             iimsGroupId: group.iimsGroupId || group.id,
           })),
         };
-
-        console.log('Creating user with payload:', userCreationPayload);
 
         this.userService.createUserAccount(userCreationPayload).subscribe({
           next: (createdUser) => {
@@ -622,7 +546,6 @@ export class CreateUserAccountComponent implements OnInit {
             ]);
           },
           error: (error) => {
-            console.error('Error creating user:', error);
             this.toastService.showError(
               'Error',
               this.mechanicsService.translate(

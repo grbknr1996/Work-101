@@ -9,6 +9,11 @@ import { TrendsHistoryComponent } from './trends/trends-history/trends-history.c
 import { OriginsComponent } from './origins/origins.component';
 import { TopTenComponent } from './top-ten/top-ten.component';
 
+//?
+//REMOVE_LATER
+import { WorkInProgressComponent } from '../work-in-progress/work-in-progress.component';
+//?
+
 const routes: Routes = [
   { path: '', redirectTo: 'application-count', pathMatch: 'full' },
   { path: 'application-count', component: StatisticsComponent },
@@ -17,6 +22,12 @@ const routes: Routes = [
   { path: 'origins', component: OriginsComponent },
   { path: 'applicants', component: TopTenComponent },
   { path: 'representatives', component: TopTenComponent },
+
+  //?
+  { path: 'fees', component: WorkInProgressComponent }, //REMOVE_LATER
+  { path: 'productivity', component: WorkInProgressComponent }, //REMOVE_LATER
+  //?
+
   { path: '*', redirectTo: 'application-count' }
 ];
 

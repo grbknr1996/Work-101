@@ -30,10 +30,10 @@ app-layout([config]="layoutConfig")
                         class="w-full", 
                         [outlined]="true", 
                         styleClass="w-full",
-                        (click)="distributionRulePageRoute()"
+                        (click)="configurationPageRoute()"
                     )
                     p-button(
-                        type="submit", 
+                        type="submit", ~
                         [disabled]="!recipientForm.valid",
                         [label]="ms.translate('recipients.addRecipients.save')", 
                         class="w-full", 

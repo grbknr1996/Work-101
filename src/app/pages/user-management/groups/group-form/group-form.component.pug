@@ -31,8 +31,17 @@ app-layout
             .field.mb-4
               label.font-semibold.mb-1.block(for="groupType") {{ 'userManagement.groupForm.groupType' | translate }}
               p-dropdown#groupType(
+                *ngIf="isEditMode",
                 [options]="groupTypes",
                 [(ngModel)]="formData.groupType",
+                class="w-full"
+              )
+              input#groupType(
+                *ngIf="!isEditMode",
+                type="text",
+                pInputText,
+                [value]="'User'",
+                [disabled]="true",
                 class="w-full"
               )
           div
@@ -67,36 +76,36 @@ app-layout
       // Members Step
       div(*ngIf="activeIndex === 1" class="mt-6")
         .mb-4
-          h3.font-semibold.text-lg.text-gray-800 {{ 'userManagement.groupForm.manageGroupMembers' | translate }}
-          p.text-sm.text-gray-600 {{ 'userManagement.groupForm.selectUsersDescription' | translate }}
+          h3.font-semibold.text-lg.text-gray-800(class="md:text-lg text-base") {{ 'userManagement.groupForm.manageGroupMembers' | translate }}
+          p.text-sm.text-gray-600(class="md:text-sm text-xs") {{ 'userManagement.groupForm.selectUsersDescription' | translate }}
         
-        .grid.grid-cols-2.gap-4
+        .grid.gap-4(class="grid-cols-1 md:grid-cols-2")
           // Available Users
           div
-            h4.font-semibold.mb-2 {{ 'userManagement.groupForm.availableUsers' | translate }}
+            h4.font-semibold.mb-2(class="md:text-base text-sm") {{ 'userManagement.groupForm.availableUsers' | translate }}
             .mb-3
-              .flex.gap-2
+              .flex.gap-2(class="flex-col sm:flex-row")
                 input(
                   pInputText,
                   type="text",
                   [(ngModel)]="availableUsersSearchTerm",
                   (ngModelChange)="onAvailableUsersSearchChange()",
                   [placeholder]="'userManagement.groupForm.searchUsers' | translate",
-                  class="flex-1"
+                  class="flex-1 w-full text-base md:text-sm"
                 )
                 button(
                   *ngIf="availableUsersSearchTerm",
                   pButton,
                   icon="pi pi-times",
-                  class="p-button-text p-button-sm",
+                  class="p-button-text p-button-sm md:p-button-sm p-button-lg w-full sm:w-auto min-h-[44px] md:min-h-0",
                   (click)="clearSearch()",
                   [pTooltip]="'userManagement.groupForm.clearSearch' | translate"
                 )
             .space-y-2
-              .flex.justify-between.items-center.p-2.bg-gray-50.rounded-t
-                .flex.gap-4
-                  button.text-sm.font-medium.flex.items-center.gap-1(
-                    class="hover:text-primary",
+              .flex.justify-between.items-center.p-2.bg-gray-50.rounded-t(class="flex-wrap gap-2")
+                .flex.gap-2(class="md:gap-4 flex-wrap")
+                  button.text-xs.font-medium.flex.items-center.gap-1(
+                    class="hover:text-primary md:text-sm min-h-[44px] md:min-h-0 px-2 md:px-0",
                     (click)="sortAvailableUsers('username')"
                   )
                     | {{ 'userManagement.groupForm.username' | translate }}
@@ -106,8 +115,8 @@ app-layout
                         '"pi-sort-amount-down": availableUsersSortField === "username" && availableUsersSortOrder === -1' +
                       '}'
                     )
-                  button.text-sm.font-medium.flex.items-center.gap-1(
-                    class="hover:text-primary",
+                  button.text-xs.font-medium.flex.items-center.gap-1(
+                    class="hover:text-primary md:text-sm min-h-[44px] md:min-h-0 px-2 md:px-0",
                     (click)="sortAvailableUsers('email')"
                   )
                     | {{ 'userManagement.groupForm.email' | translate }}
@@ -117,51 +126,54 @@ app-layout
                         '"pi-sort-amount-down": availableUsersSortField === "email" && availableUsersSortOrder === -1' +
                       '}'
                     )
-              .p-2.bg-blue-50.rounded.flex.justify-between.items-center
-                .flex.items-center.gap-2
+              .p-2.bg-blue-50.rounded.flex.flex-col.gap-2(class="md:flex-row md:justify-between md:items-center")
+                .flex.items-center.gap-2.flex-wrap
                   button(
                     pButton,
                     [label]="areAllAvailableUsersSelected() ? ('userManagement.groupForm.deselectAll' | translate) : ('userManagement.groupForm.selectAll' | translate)",
                     [icon]="areAllAvailableUsersSelected() ? 'pi pi-times' : 'pi pi-check'",
-                    class="p-button-text p-button-sm",
+                    class="p-button-text p-button-sm min-h-[44px] md:min-h-0 text-xs",
                     (click)="areAllAvailableUsersSelected() ? deselectAllAvailableUsers() : selectAllAvailableUsers()"
                   )
-                  span.text-sm.text-blue-700(*ngIf="selectedUsers.length > 0") {{ selectedUsers.length }} {{ 'userManagement.groupForm.selected' | translate }}
+                  span(*ngIf="selectedUsers.length > 0" class="text-xs text-blue-700 md:text-sm") {{ selectedUsers.length }} {{ 'userManagement.groupForm.selected' | translate }}
                 button(
                   pButton,
                   [label]="'userManagement.groupForm.addSelected' | translate",
                   icon="pi pi-plus",
-                  class="p-button-success p-button-sm",
+                    class="p-button-success p-button-sm w-full md:w-auto min-h-[44px] md:min-h-0 text-xs",
                   [disabled]="selectedUsers.length === 0",
                   (click)="addSelectedMembers()"
                 )
             // Users list
             .space-y-2
-              .p-3.bg-white.rounded-lg.shadow-sm.flex.justify-between.items-center(*ngFor="let user of filterAvailableUsers()")
-                .flex.items-center.gap-3
+              .p-2.bg-white.rounded-lg.shadow-sm.flex.flex-col.gap-2(*ngFor="let user of filterAvailableUsers()" class="md:flex-row md:justify-between md:items-center md:p-3")
+                .flex.items-center.gap-2(class="md:gap-3 flex-1 min-w-0")
                   p-checkbox(
                     [value]="user",
                     [(ngModel)]="selectedUsers",
-                    [multiple]="true"
+                    [multiple]="true",
+                    class="flex-shrink-0"
                   )
-                  div
-                    .font-medium {{ user.userName }}
-                    .flex.items-center.gap-2.text-sm.text-gray-600
-                      i.pi.pi-envelope.text-gray-400
-                      span {{ user.email }}
+                  div.flex-1.min-w-0
+                    .font-medium.text-sm(class="md:text-base truncate") {{ user.userName }}
+                    .flex.items-center.gap-2.text-xs.text-gray-600(class="md:text-sm")
+                      i.pi.pi-envelope.text-gray-400.flex-shrink-0
+                      span.truncate {{ user.email }}
                 button(
                   pButton,
                   icon="pi pi-plus",
-                  class="p-button-rounded p-button-success p-button-text",
+                  class="p-button-rounded p-button-success p-button-text flex-shrink-0 min-h-[44px] md:min-h-0 w-full md:w-auto justify-center",
                   (click)="addMember(user)",
                   [pTooltip]="'userManagement.groupForm.addMember' | translate"
                 )
               
               // Empty state
+              .text-center.p-3.text-gray-500(*ngIf="filterAvailableUsers().length === 0 && availableUsers.length > 0")
+                | {{ 'userManagement.groupForm.noUsersFound' | translate }}
               .text-center.p-3.text-gray-500(*ngIf="availableUsers.length === 0")
                 | {{ 'userManagement.groupForm.noUsersFound' | translate }}
             
-            // Pagination
+            // Client-side Pagination
             .mt-4(*ngIf="totalUsers > rowsPerPage")
               p-paginator(
                 [rows]="rowsPerPage",
@@ -174,20 +186,21 @@ app-layout
 
           // Current Members
           div
-            h4.font-semibold.mb-2 {{ 'userManagement.groupForm.currentMembers' | translate }}
+            h4.font-semibold.mb-2(class="md:text-base text-sm") {{ 'userManagement.groupForm.currentMembers' | translate }}
             .mb-3
               input(
                 pInputText,
                 type="text",
                 [(ngModel)]="membersSearchTerm",
+                (ngModelChange)="onMembersSearchChange()",
                 [placeholder]="'userManagement.groupForm.searchMembers' | translate",
-                class="w-full"
+                class="w-full text-base md:text-sm"
               )
             .space-y-2
-              .flex.justify-between.items-center.p-2.bg-gray-50.rounded-t
-                .flex.gap-4
-                  button.text-sm.font-medium.flex.items-center.gap-1(
-                    class="hover:text-primary",
+              .flex.justify-between.items-center.p-2.bg-gray-50.rounded-t(class="flex-wrap gap-2")
+                .flex.gap-2(class="md:gap-4 flex-wrap")
+                  button.text-xs.font-medium.flex.items-center.gap-1(
+                    class="hover:text-primary md:text-sm min-h-[44px] md:min-h-0 px-2 md:px-0",
                     (click)="sortMembers('username')"
                   )
                     | {{ 'userManagement.groupForm.username' | translate }}
@@ -197,8 +210,8 @@ app-layout
                         '"pi-sort-amount-down": membersSortField === "username" && membersSortOrder === -1' +
                       '}'
                     )
-                  button.text-sm.font-medium.flex.items-center.gap-1(
-                    class="hover:text-primary",
+                  button.text-xs.font-medium.flex.items-center.gap-1(
+                    class="hover:text-primary md:text-sm min-h-[44px] md:min-h-0 px-2 md:px-0",
                     (click)="sortMembers('email')"
                   )
                     | {{ 'userManagement.groupForm.email' | translate }}
@@ -208,45 +221,46 @@ app-layout
                         '"pi-sort-amount-down": membersSortField === "email" && membersSortOrder === -1' +
                       '}'
                     )
-              .p-2.bg-blue-50.rounded.flex.justify-between.items-center
-                .flex.items-center.gap-2
+              .p-2.bg-blue-50.rounded.flex.flex-col.gap-2(class="md:flex-row md:justify-between md:items-center")
+                .flex.items-center.gap-2.flex-wrap
                   button(
                     pButton,
                     [label]="areAllCurrentMembersSelected() ? ('userManagement.groupForm.deselectAll' | translate) : ('userManagement.groupForm.selectAll' | translate)",
                     [icon]="areAllCurrentMembersSelected() ? 'pi pi-times' : 'pi pi-check'",
-                    class="p-button-text p-button-sm",
+                    class="p-button-text p-button-sm min-h-[44px] md:min-h-0 text-xs",
                     (click)="areAllCurrentMembersSelected() ? deselectAllCurrentMembers() : selectAllCurrentMembers()"
                   )
-                  span.text-sm.text-blue-700(*ngIf="selectedMembers.length > 0") {{ selectedMembers.length }} {{ 'userManagement.groupForm.selected' | translate }}
+                  span(*ngIf="selectedMembers.length > 0" class="text-xs text-blue-700 md:text-sm") {{ selectedMembers.length }} {{ 'userManagement.groupForm.selected' | translate }}
                 button(
                   pButton,
                   [label]="'userManagement.groupForm.removeSelected' | translate",
                   icon="pi pi-times",
-                  class="p-button-danger p-button-sm",
+                    class="p-button-danger p-button-sm w-full md:w-auto min-h-[44px] md:min-h-0 text-xs",
                   [disabled]="selectedMembers.length === 0",
                   (click)="removeSelectedMembers()"
                 )
-              .p-3.bg-white.rounded-lg.shadow-sm.flex.justify-between.items-center(*ngFor="let member of filterMembers()")
-                .flex.items-center.gap-3
+              .p-2.bg-white.rounded-lg.shadow-sm.flex.flex-col.gap-2(*ngFor="let member of filterMembers()" class="md:flex-row md:justify-between md:items-center md:p-3")
+                .flex.items-center.gap-2(class="md:gap-3 flex-1 min-w-0")
                   p-checkbox(
                     [value]="member",
                     [(ngModel)]="selectedMembers",
-                    [multiple]="true"
+                    [multiple]="true",
+                    class="flex-shrink-0"
                   )
-                  div
-                    .font-medium {{ member.userName }}
-                    .flex.items-center.gap-2.text-sm.text-gray-600
-                      i.pi.pi-envelope.text-gray-400
-                      span {{ member.email }}
+                  div.flex-1.min-w-0
+                    .font-medium.text-sm(class="md:text-base truncate") {{ member.userName }}
+                    .flex.items-center.gap-2.text-xs.text-gray-600(class="md:text-sm")
+                      i.pi.pi-envelope.text-gray-400.flex-shrink-0
+                      span.truncate {{ member.email }}
                 button(
                   pButton,
                   icon="pi pi-times",
-                  class="p-button-rounded p-button-danger p-button-text",
+                  class="p-button-rounded p-button-danger p-button-text flex-shrink-0 min-h-[44px] md:min-h-0 w-full md:w-auto justify-center",
                   (click)="removeMember(member)",
                   [pTooltip]="'userManagement.groupForm.removeMember' | translate"
                 )
             
-            // Pagination for Current Members
+            // Client-side Pagination for Current Members
             .mt-4(*ngIf="totalMembers > membersRowsPerPage")
               p-paginator(
                 [rows]="membersRowsPerPage",
@@ -280,19 +294,21 @@ app-layout
                 .font-medium([class]="formData.status === 'active' ? 'text-green-600' : 'text-red-600'") {{ formData.status === 'active' ? ('userManagement.groupForm.active' | translate) : ('userManagement.groupForm.inactive' | translate) }}
           
           // Members Review
-          .mb-6
-            h4.font-semibold.text-lg.mb-3.text-blue-600 {{ 'userManagement.groupForm.members' | translate }}
-            .bg-white.p-4.rounded-lg
-              .mt-3(*ngIf="groupMembers.length > 0")
-                .text-sm.text-gray-600.mb-2 {{ 'userManagement.groupForm.addedMembers' | translate }}
-                .space-y-1
-                  .p-2.bg-gray-50.rounded(*ngFor="let member of groupMembers")
-                    .flex.items-center.gap-2.mb-1
-                      i.pi.pi-user.text-gray-400
-                      span.font-medium {{ member.userName }}
-                    .text-sm.text-gray-500.ml-6 {{ member.email }}
-              .mt-3(*ngIf="groupMembers.length === 0")
-                .text-sm.text-gray-500 {{ 'userManagement.groupForm.noMembersAdded' | translate }}
+          .mb-4
+            h4.font-semibold.text-base.mb-2.text-blue-600 {{ 'userManagement.groupForm.members' | translate }}
+            .bg-white.p-3.rounded-lg
+              .mt-2(*ngIf="groupMembers.length > 0")
+                .text-xs.text-gray-600.mb-2.font-medium {{ 'userManagement.groupForm.addedMembers' | translate }} ({{ groupMembers.length }})
+                .max-h-64.overflow-y-auto
+                  .grid.grid-cols-1.gap-1(class="md:grid-cols-2 lg:grid-cols-3")
+                    .p-2.bg-gray-50.rounded.text-xs(*ngFor="let member of groupMembers")
+                      .flex.flex-col.gap-1
+                        .flex.items-center.gap-1
+                          i.pi.pi-user.text-gray-400.text-xs.flex-shrink-0
+                          span.font-medium.truncate {{ member.userName }}
+                        .text-gray-500.truncate.text-xs.ml-4 {{ member.email }}
+              .mt-2(*ngIf="groupMembers.length === 0")
+                .text-xs.text-gray-500 {{ 'userManagement.groupForm.noMembersAdded' | translate }}
 
     // Action Buttons
     .mt-6.flex.justify-between.items-center

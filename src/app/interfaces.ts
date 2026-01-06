@@ -147,6 +147,36 @@ export interface ExclusionRuleFilters {
   ipCategory?: string;
   originatingOfficeCode?: string;
 }
+
+export interface AuthorityStatisticsResponse {
+  publicationCount: number;
+  patentsCount: number;
+  utilityModelsCount: number;
+  inconsistentRecordsCount: number;
+}
+
+export interface AuthorityFileResponse {
+  ipOfficeCode: string;
+  offset: number;
+  limit: number;
+  totalCount: number;
+  contents: AuthorityFileData[];
+}
+
+export interface AuthorityFileData {
+  ipOfficeCode: string;
+  publicationNumber: string;
+  kindCode: string;
+  publicationDate: string;
+  exceptionCode: string | null;
+  abstractLanguages: string[];
+  descriptionLanguages: string[];
+  claimsLanguages: string[];
+  fullTextStatus: string | null;
+  statusImage?: string;
+  statusImage_tooltip?: string;
+}
+
 export interface GlobalZipItem {
   officeCode: string;
   receivedOn: string;
@@ -160,6 +190,11 @@ export interface StatisticsResponse {
   lastWeekCount: number;
   lastMonthCount: number;
 }
+export interface SharedPackageApiResponse {
+  data: SharedPackageResponse[];
+  nextToken: string | null;
+}
+
 export interface SharedPackageResponse {
   globalZipId: string;
   ipTypeCategory: string;
@@ -170,6 +205,7 @@ export interface SharedPackageResponse {
   statusMessage: StatusMessage;
   errorMessage: string;
 }
+
 export interface StatusMessage {
   totalChildRecords: number;
   failedRetryCount: number;

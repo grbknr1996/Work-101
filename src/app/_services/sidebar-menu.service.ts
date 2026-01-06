@@ -128,7 +128,7 @@ export class SidebarMenuService {
         label: 'Data Exchange Configuration',
         icon: 'pi pi-file-import',
         routerLink: this.getRouterLink(
-          `/configuration/data-exchange/dashboard`
+          `/configuration/data-exchange/dashboard/distribution-rules`
         ),
       },
     ];

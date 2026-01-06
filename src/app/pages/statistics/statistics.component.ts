@@ -63,6 +63,11 @@ export class StatisticsComponent implements OnInit {
   IPCategoryCount = new Map();
   currentIPCategory: string = '';
   IPAppMap = new Map();
+  //|//
+  accountedDataMapH = [];
+  activeDataMapH = [];
+  inActiveDataMapH = [];
+  currentYearRange = -1;
 
   fontFamily = '';
   chartHeight: any = 600;
@@ -84,6 +89,7 @@ export class StatisticsComponent implements OnInit {
   //CHART-NAVBAR
   onFilter() { this.showFilter = !this.showFilter; }
   onReset() {
+    this.chartSettings();
     if (this.accountedDataMap.size > 5) {
       this.currentIPCategory = this.IPCategory.keys().next().value;
       if (this.showFilter) this.updateFilterNGModel('IPType', this.currentIPCategory); //INITIAL
@@ -92,6 +98,8 @@ export class StatisticsComponent implements OnInit {
       this.currentIPCategory = '';
       if (this.showFilter) this.updateFilterNGModel('IPType', 'all'); //INITIAL
     }
+    if (this.showFilter) this.updateFilterNGModel('yearRange', 'all');
+    this.currentYearRange = -1;
     this.currentLegend = 'accounted_active_application';
     this.setSeriesData(); //DEFAULT CHART DATA
   }
@@ -103,6 +111,19 @@ export class StatisticsComponent implements OnInit {
         this.currentIPCategory = filter.model;
         this.currentLegend = 'accounted_active_application';
         this.setSeriesData();
+      }
+    }
+    if (filter.key === 'yearRange') {
+      if (filter.model === 'all') this.onReset();
+      else {
+        this.currentYearRange = filter.model;
+        //INITIALIZE
+        this.chartLegendSelected = {
+          [this.translationMap.get('D')]: true,
+          [this.translationMap.get('P')]: true,
+          [this.translationMap.get('T')]: true
+        };
+        this.setSeriesData('history');
       }
     }
   }
@@ -124,7 +145,7 @@ export class StatisticsComponent implements OnInit {
         this.setSeriesData();
         if (this.showFilter) this.updateFilterNGModel('IPType', this.currentIPCategory);
       }
-      //Application Categories - Bar Drilldown
+      //Application Statuses - Bar Drilldown
       if (event.componentType === 'series') {
         this.router.navigate(['/vc/en/statistics/trends']);
       }
@@ -133,7 +154,8 @@ export class StatisticsComponent implements OnInit {
       let legendSelected = '';
       this.translationMap.forEach((value, key) => { if (value === event.name) legendSelected = key; });
       this.currentLegend = legendSelected; //To Use Later
-      this.setSeriesData();
+      if (this.currentYearRange === -1) this.setSeriesData();
+      if (this.currentYearRange !== -1) this.setSeriesData('history');
     }
   }
   chartSettings() {
@@ -194,6 +216,9 @@ export class StatisticsComponent implements OnInit {
         textStyle: {
           fontWeight: 'bold',
           fontSize: 12
+        },
+        itemStyle: {
+          borderWidth: 0
         }
       },
       label: {
@@ -221,22 +246,142 @@ export class StatisticsComponent implements OnInit {
           name: this.translationMap.get('accounted_application'),
           type: 'bar',
           barWidth: 20,
-          barCategoryGap: '15%'
+          barCategoryGap: '15%',
+          itemStyle: {
+            borderWidth: 0.5,
+            borderColor: '#333'
+          },
+          emphasis: {
+            disabled: true
+          }
         },
         {
           name: this.translationMap.get('active_application'),
           type: 'bar',
           barWidth: 20,
-          barCategoryGap: '15%'
+          barCategoryGap: '15%',
+          itemStyle: {
+            borderWidth: 0.5,
+            borderColor: '#333'
+          },
+          emphasis: {
+            disabled: true
+          }
         },
         {
           name: this.translationMap.get('inactive_application'),
           type: 'bar',
           barWidth: 20,
-          barCategoryGap: '15%'
+          barCategoryGap: '15%',
+          itemStyle: {
+            borderWidth: 0.5,
+            borderColor: '#333'
+          },
+          emphasis: {
+            disabled: true
+          }
         }
       ],
-      color: ['#7eb0d5', '#b2e061', '#fd7f6f']
+      color: ['#0EA5E9', '#B9E2F4', '#EAF8FF']
+    };
+  }
+  chartSettingsH() {
+    this.chartOption = {
+      textStyle: {
+        fontFamily: this.fontFamily,
+        fontWeight: 500
+      },
+      grid: {
+        top: '30',
+        left: '30',
+        right: '20%',
+        bottom: '50',
+        containLabel: true
+      },
+      xAxis: {
+        name: 'Filing Year',
+        nameLocation: 'middle',
+        nameGap: 40,
+        nameTextStyle: {
+          fontWeight: 'bold',
+          fontFamily: this.fontFamily,
+          fontSize: 12
+        },
+        type: 'category',
+        triggerEvent: false,
+        boundaryGap: false,
+        axisLabel: {
+          fontFamily: this.fontFamily,
+          fontSize: 12
+        }
+      },
+      yAxis: {
+        name: 'Application Count',
+        nameLocation: 'middle',
+        nameGap: 45,
+        nameRotate: 90,
+        nameTextStyle: {
+          fontWeight: 'bold',
+          fontFamily: this.fontFamily,
+          fontSize: 12
+        },
+        type: 'value',
+        triggerEvent: false,
+        min: 0,
+        axisLabel: {
+          fontFamily: this.fontFamily,
+          fontSize: 12,
+          formatter: '{value}'
+        },
+        axisLine: {
+          show: true
+        }
+      },
+      legend: {
+        data: [],
+        selected: [],
+        itemGap: 10,
+        textStyle: {
+          fontSize: 14
+        },
+        itemStyle: {
+          borderWidth: 0
+        }
+      },
+      label: {
+        show: false
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'line'
+        },
+        textStyle: {
+          fontFamily: this.fontFamily,
+          fontSize: 12
+        }
+      },
+      series: [
+        {
+          name: this.translationMap.get('D'),
+          type: 'line',
+          smooth: false,
+          symbol: 'none'
+        },
+        {
+          name: this.translationMap.get('P'),
+          type: 'line',
+          smooth: false,
+          symbol: 'none'
+        },
+        {
+          name: this.translationMap.get('T'),
+          type: 'line',
+          smooth: false,
+          symbol: 'none'
+        }
+      ],
+      color: ['#7eb0d5', '#ffb55a', '#bd7ebe']
     };
   }
   chartHeightFunc() { return this.chartHeight; }
@@ -291,6 +436,7 @@ export class StatisticsComponent implements OnInit {
       this.chartService.setChartTheme(translations['charts.statistics.application_count.name']);
 
       this.fetchApplicationCount('accounted_applications');
+      this.fetchApplicationCountHistory('accounted_applications_by_filing_year');
     })
   }
   ngAfterViewInit() {
@@ -332,8 +478,6 @@ export class StatisticsComponent implements OnInit {
         this.IPCategoryCount.set(IP.ipCategory, IP.dataBag.length); //L1
         let codes = [];
         for (let applications of IP.dataBag) codes.push(applications.applicationCategory); //L2
-        //SORT - L2
-        codes = codes.sort(([a], [b]) => (a.localeCompare(b)));
         this.IPAppMap.set(IP.ipCategory, codes);
       }
       //SORT - IPCategory
@@ -365,118 +509,188 @@ export class StatisticsComponent implements OnInit {
     }
   }
 
+  fetchApplicationCountHistory(key: string) {
+    this.chartService.getApplicationCountHistory(key).subscribe({
+      next: (response) => {
+        console.log("Response - fetchApplicationCountHistory()", response);
+        let data: any = response;
+        (data.sectionBag[0].section).forEach((item: any) => {
+          if (item.dataCategory === 'total') { this.transformApplicationsHistory(item.data[0].annualDataBag, 'accounted_application'); }
+          if (item.dataCategory === 'active') { this.transformApplicationsHistory(item.data[0].annualDataBag, 'active_application'); }
+          if (item.dataCategory === 'inactive') { this.transformApplicationsHistory(item.data[0].annualDataBag, 'inactive_application'); }
+        })
+      },
+      error: (error) => { console.log("Error - fetchApplicationCountHistory()", error); }
+    });
+  }
+  transformApplicationsHistory(inputData, type: string) {
+    inputData.forEach((item: any) => {
+      let data = {};
+      data['year'] = item.filingYear;
+      if (item.totalQuantity !== 0) item.applicationBag.forEach((IPs: any) => { data[IPs.ipCategory] = IPs.totalQuantity; });
+      else data['empty'] = true;
+      if (type === 'accounted_application') this.accountedDataMapH.push(data);
+      if (type === 'active_application') this.activeDataMapH.push(data);
+      if (type === 'inactive_application') this.inActiveDataMapH.push(data);
+    })
+  }
+
   //CHART SERIES DATA
-  setSeriesData() {
-    //CHART SERIES
-    let seriesData1 = [], seriesData2 = [], seriesData3 = [];
+  setSeriesData(flag?: string) {
+    if (flag == null) {
+      //CHART SERIES
+      let data1 = [], data2 = [], data3 = [], seriesData1 = [], seriesData2 = [], seriesData3 = [];
 
-    if (seriesData1.length === 0) {
-      if (this.currentIPCategory.length === 0) {
-        for (let [key, value] of this.accountedDataMap) {
-          seriesData1.push([key, value]);
-        }
-      }
-      else {
-        this.accountedData?.applicationBag.forEach((item: any) => {
-          if (item.ipCategory === this.currentIPCategory) {
-            for (let items of item.dataBag) {
-              seriesData1.push([items.applicationCategory, this.accountedDataMap.get(items.applicationCategory)]);
-            }
+      if (seriesData1.length === 0) {
+        if (this.currentIPCategory.length === 0) {
+          for (let key of this.IPAppMap.keys()) {
+            let codes = this.IPAppMap.get(key);
+            codes.forEach((item: any, index: number) => {
+              if (index === 0) data1.push([`${this.IPCategory.get(key)}\n\n${item}`, this.accountedDataMap.get(item)]); //SECONDARY Y-AXIS DATA
+              else data1.push([item, this.accountedDataMap.get(item)]);
+            });
           }
-        });
-      }
-      //SECONDARY Y-AXIS DATA
-      if (seriesData1.length !== 0 && this.currentIPCategory.length === 0) {
-        for (let set of this.IPAppMap) {
-          seriesData1.forEach((item: any) => { if (item[0] === set[1][set[1].length - 1]) item[0] = `${this.IPCategory.get(set[0])}\n\n${item[0]}`; });
+        }
+        else {
+          let codes = this.IPAppMap.get(this.currentIPCategory);
+          codes.forEach((item: any) => data1.push([item, this.accountedDataMap.get(item)]));
         }
       }
-    }
-    if (seriesData2.length === 0) {
-      if (this.currentIPCategory.length === 0) {
-        for (let [key, value] of this.activeDataMap) {
-          seriesData2.push([key, value]);
-        }
-      }
-      else {
-        this.activeData?.applicationBag.forEach((item: any) => {
-          if (item.ipCategory === this.currentIPCategory) {
-            for (let items of item.dataBag) {
-              seriesData2.push([items.applicationCategory, this.activeDataMap.get(items.applicationCategory)]);
-            }
+      if (seriesData2.length === 0) {
+        if (this.currentIPCategory.length === 0) {
+          for (let key of this.IPAppMap.keys()) {
+            let codes = this.IPAppMap.get(key);
+            codes.forEach((item: any) => data2.push([item, this.activeDataMap.get(item)]));
           }
-        });
-      }
-    }
-    if (seriesData3.length === 0) {
-      if (this.currentIPCategory.length === 0) {
-        for (let [key, value] of this.inActiveDataMap) {
-          seriesData3.push([key, value]);
+        }
+        else {
+          let codes = this.IPAppMap.get(this.currentIPCategory);
+          codes.forEach((item: any) => data2.push([item, this.activeDataMap.get(item)]));
         }
       }
-      else {
-        this.inActiveData?.applicationBag.forEach((item: any) => {
-          if (item.ipCategory === this.currentIPCategory) {
-            for (let items of item.dataBag) {
-              seriesData3.push([items.applicationCategory, this.inActiveDataMap.get(items.applicationCategory)]);
-            }
+      if (seriesData3.length === 0) {
+        if (this.currentIPCategory.length === 0) {
+          for (let key of this.IPAppMap.keys()) {
+            let codes = this.IPAppMap.get(key);
+            codes.forEach((item: any) => data3.push([item, this.inActiveDataMap.get(item)]));
           }
-        });
+        }
+        else {
+          let codes = this.IPAppMap.get(this.currentIPCategory);
+          codes.forEach((item: any) => data3.push([item, this.inActiveDataMap.get(item)]));
+        }
       }
-    }
+      //REVERSE
+      if (data1.length !== 0) seriesData1 = [...data1].reverse();
+      if (data2.length !== 0) seriesData2 = [...data2].reverse();
+      if (data3.length !== 0) seriesData3 = [...data3].reverse();
 
-    //CHART LEGEND
-    if (this.currentLegend === 'accounted_active_application') {
-      this.chartLegendSelected = {
-        [this.translationMap.get('accounted_application')]: true,
-        [this.translationMap.get('active_application')]: true,
-        [this.translationMap.get('inactive_application')]: true
+      //CHART LEGEND
+      if (this.currentLegend === 'accounted_active_application') {
+        this.chartLegendSelected = {
+          [this.translationMap.get('accounted_application')]: true,
+          [this.translationMap.get('active_application')]: true,
+          [this.translationMap.get('inactive_application')]: true
+        }
       }
+      else {
+        if (this.chartLegendSelected == null) this.chartLegendSelected = { [this.translationMap.get('accounted_application')]: true, [this.translationMap.get('active_application')]: true, [this.translationMap.get('inactive_application')]: true }; //INITIALIZE
+        this.chartLegendSelected[this.translationMap.get(this.currentLegend)] = !this.chartLegendSelected[this.translationMap.get(this.currentLegend)];
+      }
+
+      //DYNAMIC CHART HEIGHT
+      this.chartHeightFunc();
+      this.chartWidthFunc();
+
+      setTimeout(() => {
+        //2DBAR
+        this.chartInstance.setOption({
+          xAxis: {
+            name: (this.currentIPCategory.length === 0) ? this.chartOption.xAxis.name : `${this.translationMap.get(this.currentIPCategory)}\n\n${this.chartOption.xAxis.name}`,
+            max: (this.currentIPCategory.length === 0) ? this.calculateSpacing([Math.max(...seriesData1.map(d => d[1]), ...seriesData2.map(d => d[1]), ...seriesData3.map(d => d[1]))]).max : this.calculateSpacing((seriesData1.map(d => d[1]))).max,
+            interval: (this.currentIPCategory.length === 0) ? this.calculateSpacing([Math.max(...seriesData1.map(d => d[1]), ...seriesData2.map(d => d[1]), ...seriesData3.map(d => d[1]))]).interval : this.calculateSpacing((seriesData1.map(d => d[1]))).interval
+          },
+          yAxis: [
+            {
+              data: seriesData1.map(d => d[0])
+            }
+          ],
+          legend: {
+            data: [this.translationMap.get('accounted_application'), this.translationMap.get('active_application'), this.translationMap.get('inactive_application')],
+            selected: this.chartLegendSelected
+          },
+          series: [
+            {
+              name: this.translationMap.get('accounted_application'),
+              data: seriesData1.map(d => d[1])
+            },
+            {
+              name: this.translationMap.get('active_application'),
+              data: seriesData2.map(d => d[1])
+            },
+            {
+              name: this.translationMap.get('inactive_application'),
+              data: seriesData3.map(d => d[1])
+            },
+          ],
+          notMerge: false
+        }, { devicePixelRatio: this.utility.findPixelRatio() }),
+          this.adjustChartHeight();
+      }, 100);
     }
-    else {
-      if (this.chartLegendSelected == null) this.chartLegendSelected = { [this.translationMap.get('accounted_application')]: true, [this.translationMap.get('active_application')]: true, [this.translationMap.get('inactive_application')]: true }; //INITIALIZE
+    if (flag === 'history') {
+      //CHART OPTION
+      this.chartSettingsH();
+
+      //CHART SERIES
+      let seriesData1 = [], seriesData2 = [], seriesData3 = [];
+      if (this.currentYearRange !== -1) {
+        seriesData1 = this.accountedDataMapH.slice(-this.currentYearRange);
+        seriesData2 = this.activeDataMapH.slice(-this.currentYearRange);
+        seriesData3 = this.inActiveDataMapH.slice(-this.currentYearRange);
+      }
+      else {
+        seriesData1 = this.accountedDataMapH;
+        seriesData2 = this.activeDataMapH;
+        seriesData3 = this.inActiveDataMapH;
+      }
+
+      //CHART LEGEND
       this.chartLegendSelected[this.translationMap.get(this.currentLegend)] = !this.chartLegendSelected[this.translationMap.get(this.currentLegend)];
+
+      //DYNAMIC CHART HEIGHT
+      this.chartHeightFunc();
+      this.chartWidthFunc();
+
+      setTimeout(() => {
+        //LINE
+        this.chartInstance.setOption({
+          xAxis: {
+            data: seriesData1.map(d => d.year)
+          },
+          legend: {
+            data: [this.translationMap.get('D'), this.translationMap.get('P'), this.translationMap.get('T')],
+            selected: this.chartLegendSelected
+          },
+          series: [
+            {
+              name: this.translationMap.get('D'),
+              data: seriesData1.map(d => { if (d.empty) return 0; else if (d['D'] == null) return 0; else return d['D'] })
+            },
+            {
+              name: this.translationMap.get('P'),
+              data: seriesData1.map(d => { if (d.empty) return 0; else if (d['P'] == null) return 0; else return d['P'] })
+            },
+            {
+              name: this.translationMap.get('T'),
+              data: seriesData1.map(d => { if (d.empty) return 0; else if (d['T'] == null) return 0; else return d['T'] })
+            }
+          ],
+          notMerge: false
+        }, { devicePixelRatio: this.utility.findPixelRatio() }),
+          this.adjustChartHeightH();
+      }, 100);
     }
-
-    //DYNAMIC CHART HEIGHT
-    this.chartHeightFunc();
-    this.chartWidthFunc();
-
-    setTimeout(() => {
-      //2DBAR
-      this.chartInstance.setOption({
-        xAxis: {
-          name: (this.currentIPCategory.length === 0) ? this.chartOption.xAxis.name : `${this.translationMap.get(this.currentIPCategory)}\n\n${this.chartOption.xAxis.name}`,
-          max: (this.currentIPCategory.length === 0) ? this.calculateSpacing([Math.max(...seriesData1.map(d => d[1]), ...seriesData2.map(d => d[1]), ...seriesData3.map(d => d[1]))]).max : this.calculateSpacing((seriesData1.map(d => d[1]))).max,
-          interval: (this.currentIPCategory.length === 0) ? this.calculateSpacing([Math.max(...seriesData1.map(d => d[1]), ...seriesData2.map(d => d[1]), ...seriesData3.map(d => d[1]))]).interval : this.calculateSpacing((seriesData1.map(d => d[1]))).interval
-        },
-        yAxis: [
-          {
-            data: seriesData1.map(d => d[0])
-          }
-        ],
-        legend: {
-          data: [this.translationMap.get('accounted_application'), this.translationMap.get('active_application'), this.translationMap.get('inactive_application')],
-          selected: this.chartLegendSelected
-        },
-        series: [
-          {
-            name: this.translationMap.get('accounted_application'),
-            data: seriesData1.map(d => d[1])
-          },
-          {
-            name: this.translationMap.get('active_application'),
-            data: seriesData2.map(d => d[1])
-          },
-          {
-            name: this.translationMap.get('inactive_application'),
-            data: seriesData3.map(d => d[1])
-          },
-        ],
-        notMerge: false
-      }, { devicePixelRatio: this.utility.findPixelRatio() }),
-        this.adjustChartHeight();
-    }, 100);
   }
 
   adjustChartHeight() {
@@ -485,6 +699,11 @@ export class StatisticsComponent implements OnInit {
     const adjustedHeight = (data * 3) * barWidth + 170;
     const chartDiv = this.chartContainer.nativeElement;
     chartDiv.style.height = adjustedHeight + 'px';
+    if (this.chartInstance) this.chartInstance.resize();
+  }
+  adjustChartHeightH() {
+    const chartDiv = this.chartContainer.nativeElement;
+    chartDiv.style.height = 500 + 'px';
     if (this.chartInstance) this.chartInstance.resize();
   }
   calculateSpacing(input: number[]) {

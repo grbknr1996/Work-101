@@ -33,6 +33,9 @@ export class ChartService {
   getApplicationCount(key: string) {
     return this.http.get(`${this.statisticsAPIPrefix}/applications/counts?widgetCode=${key}`);
   }
+  getApplicationCountHistory(key: string) {
+    return this.http.get(`${this.statisticsAPIPrefix}/applications/counts?widgetCode=${key}`);
+  }
   getOriginGroup(key: string) {
     return this.http.get(`${this.statisticsAPIPrefix}/applications/counts?widgetCode=${key}`);
   }

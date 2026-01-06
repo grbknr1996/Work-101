@@ -28,6 +28,7 @@ export const environment = {
   configUrl: '/services/offices',
   backendUrl: '/services/users',
   dataServicesApi: '/data-services/v1/packages',
+  authorityServicesApi: '/data-services/v1/authority-files',
   feesConditionsUrl: '/services/v1/fees',
   documentOriginsUrl: '/services/offices/configurations/document-origins',
   authApi: 'https://auth.iims.ipobs.dev.web1.wipo.int/oauth2/token',

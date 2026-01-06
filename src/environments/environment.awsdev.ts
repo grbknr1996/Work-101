@@ -27,6 +27,7 @@ export const environment = {
   recipientsPath: 'data-sharing/v1/appClient',
   dataServicesApi:
     'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/data-services/v1/packages',
+  authorityServicesApi: 'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/data-services/v1/authority-files',
   feesConditionsUrl:
     'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/services/v1/fees',
   documentOriginsUrl:

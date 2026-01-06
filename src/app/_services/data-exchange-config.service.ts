@@ -14,6 +14,7 @@ import { SKIP_AUTHORIZATION_TOKEN_HEADER } from '../_constants/common.constant';
 import { handleError } from '../utils';
 import { ToastService } from './toast.service';
 import { MechanicsService } from './mechanics.service';
+import { LoadingService } from './loading.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +22,13 @@ import { MechanicsService } from './mechanics.service';
 export class DataExchangeConfigService {
   private accessTokenSubject = new BehaviorSubject<string | null>(null);
   public accessToken$ = this.accessTokenSubject.asObservable();
+
+  // Tab selection in configuration page
+  tabPanelSelection = signal<"recipients" | "distributionRules" | null>(null);
+
+  setTabPanel(panelValue: "recipients" | "distributionRules" | null) {
+    this.tabPanelSelection.set(panelValue);
+  }
 
   // Create a data signal for the rules
   private _rulesData = signal<ExclusionRule[]>([]);
@@ -49,7 +57,8 @@ export class DataExchangeConfigService {
   constructor(
     private http: HttpClient,
     private toastService: ToastService,
-    private ms: MechanicsService
+    private ms: MechanicsService,
+    private loadingService: LoadingService
   ) { }
 
   /**
@@ -98,62 +107,77 @@ export class DataExchangeConfigService {
   /**
    * Get exclusion rules
    */
-  getExclusionRules(): Observable<ExclusionRule[]> {
+  getExclusionRules(): void {
     const dataServicesUrl = `${environment.distributionRulesPath}`;
 
-    return this.http
+    if (this._rulesData.length) return;
+
+    this.loadingService.show('Loading...');
+
+    this.http
       .get<DataExchangeResponse>(`${dataServicesUrl}`)
-      .pipe(
-        map((response) => {
+      .subscribe({
+        next: response => {
           console.log('Data services API response received:', {
             hasData: !!response.data,
             dataLength: response.data?.length || 0,
             message: response.message,
           });
           if (response.data && Array.isArray(response.data)) {
-            return response.data;
+            this.setRulesData(response.data);
+          } else {
+            this.setRulesData([]);
           }
-          return [];
-        }),
-        catchError((error) =>
+          this.loadingService.hide();
+        },
+        error: error => {
+          this.loadingService.hide();
           handleError(
             error,
             'Loading Recipients list',
             this.toastService,
             this.ms
           )
-        )
-      );
+        }
+      })
   }
 
   /**
    * Get Recipients
    */
-  getRecipients(): Observable<Recipient[]> {
+  getRecipients(): void {
     const dataServicesUrl = `${environment.recipientsPath}`;
-    return this.http
+
+    if (this._recipientsData.length) return;
+
+    this.loadingService.show('Loading...');
+
+    this.http
       .get<RecipientsResponse>(`${dataServicesUrl}`)
-      .pipe(
-        map((response) => {
+      .subscribe({
+        next: response => {
           console.log('Data services recipients API response received:', {
             hasData: !!response.data,
             dataLength: response.data?.length || 0,
             message: response.message,
           });
           if (response.data && Array.isArray(response.data)) {
-            return response.data;
+            this.setRecipientData(response.data);
+          } else {
+            this.setRecipientData([]);
           }
-          return [];
-        }),
-        catchError((error) =>
+          this.loadingService.hide();
+        },
+        error: error => {
+          this.loadingService.hide();
           handleError(
             error,
             'Loading Recipients list',
             this.toastService,
             this.ms
           )
-        )
-      );
+        }
+      })
   }
 
   /**

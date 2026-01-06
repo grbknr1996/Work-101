@@ -15,7 +15,7 @@
     </div>
   </div>
   <app-filter-chips [appliedFilters]="appliedFilters" [showClearAll]="true" [clearAllLabel]="'Clear All'" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="onFilterChipRemoved($event)" (clearAll)="onFilterChipsClearAll()"></app-filter-chips>
-  <p-tabs value="distributionRules">
+  <p-tabs [value]="selectedTabPanel">
     <p-tablist>@for (tab of tabs; track tab.value) {
       <p-tab *ngIf="tab.show" [value]="tab.value">{{ tab.title }}</p-tab>}
     </p-tablist>

@@ -8,6 +8,7 @@ import {
   StatisticsResponse, // Interface for Statistics API response
   SharedPackageResponse,
   GlobalZipItem,
+  SharedPackageApiResponse,
 } from '../interfaces';
 import { SKIP_AUTHORIZATION_TOKEN_HEADER } from '../_constants/common.constant';
 
@@ -177,8 +178,10 @@ export class DataExchangeService {
     platformCode: string,
     sharedDateStart: string,
     sharedDateEnd: string,
-    status: string[]
-  ): Observable<SharedPackageResponse[]> {
+    status: string[],
+    limit: number,
+    nextToken: string
+  ): Observable<SharedPackageApiResponse> {
     return this.getAccessToken().pipe(
       switchMap((token) => {
         const idToken = this.idTokenSubject.value;
@@ -196,14 +199,22 @@ export class DataExchangeService {
         const headers = new HttpHeaders(headersConfig);
 
         const statusParams = status.map((s) => `status=${s}`).join('&');
-        const dataServicesUrl = `${environment.dataServicesApi}?platformCode=${platformCode}&sharedDateStart=${sharedDateStart}&sharedDateEnd=${sharedDateEnd}&${statusParams}&ipType=patents`;
+        let dataServicesUrl = `${environment.dataServicesApi}?platformCode=${platformCode}&sharedDateStart=${sharedDateStart}&sharedDateEnd=${sharedDateEnd}&${statusParams}`;
+
+        if (limit) {
+          dataServicesUrl = dataServicesUrl + `&limit=${limit}`;
+        }
+
+        if (nextToken) {
+          dataServicesUrl = dataServicesUrl + `&nextToken=${nextToken}`;
+        }
 
         return this.http
-          .get<SharedPackageResponse[]>(dataServicesUrl, { headers })
+          .get<SharedPackageApiResponse>(dataServicesUrl, { headers })
           .pipe(
             map((response) => {
               console.log('Shared packages API response received:', response);
-              if (response && Array.isArray(response)) {
+              if (response) {
                 return response;
               }
               throw new Error('No shared packages found');
@@ -266,6 +277,77 @@ export class DataExchangeService {
       })
     );
   }
+
+  /**
+   * Get shared packages based on platform code and zip name
+   * @param platformCode Platform code like 'ph'
+   * @param zipName zip name starts with
+   */
+  getSharedPackagesReportByZipName(
+    officeCode: string,
+    ipType: string,
+    receivedOn: string,
+    zipName: string
+  ): Observable<Blob> {
+    return this.getAccessToken().pipe(
+      switchMap((token) => {
+        const idToken = this.idTokenSubject.value;
+
+        const headersConfig: Record<string, string> = {
+          Authorization: `Bearer ${token}`,
+          [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true'
+        };
+
+        if (idToken) {
+          headersConfig['Wipo-Id-Token'] = idToken;
+        }
+
+        const headers = new HttpHeaders(headersConfig);
+
+        const dataServicesUrl = `${environment.dataServicesApi}/reports?officeCode=${officeCode}&ipType=${ipType}&receivedOn=${receivedOn}&packageName=${zipName}`;
+
+        return this.http.get(dataServicesUrl, {
+          headers,
+          responseType: 'blob'
+        });
+      }),
+      catchError((error) => {
+        console.error('Failed to download CSV report:', error);
+        return throwError(() => new Error('Failed to download CSV report'));
+      })
+    );
+  }
+
+  getDataQualityReport(platformCode: string, sharedDateStart: any, sharedDateEnd: any) : Observable<Blob> {
+    return this.getAccessToken().pipe(
+      switchMap((token) => {
+        const idToken = this.idTokenSubject.value;
+
+        const headersConfig: Record<string, string> = {
+          Authorization: `Bearer ${token}`,
+          [SKIP_AUTHORIZATION_TOKEN_HEADER]: 'true'
+        };
+
+        if (idToken) {
+          headersConfig['Wipo-Id-Token'] = idToken;
+        }
+
+        const headers = new HttpHeaders(headersConfig);
+
+        const dataServicesUrl = `${environment.dataServicesApi}/reports?platformCode=${platformCode}&sharedDateStart=${sharedDateStart}&sharedDateEnd=${sharedDateEnd}`;
+
+        return this.http.get(dataServicesUrl, {
+          headers,
+          responseType: 'blob'
+        });
+      }),
+      catchError((error) => {
+        console.error('Failed to download CSV report:', error);
+        return throwError(() => new Error('Failed to download CSV report'));
+      })
+    );
+  }
+
 
   /**
    * Get statistics for a specific platform code

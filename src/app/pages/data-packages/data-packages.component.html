@@ -5,6 +5,22 @@
     <h1>{{"dataService.dataSharing.title"|translate}}</h1>
   </div>
   <app-package-stats [packageStats]="packageStats" (statSelected)="onStatSelect($event)" [selectedStat]="statSelected"></app-package-stats>
-  <app-configurable-filter-bar [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'dataService.dataSharing.filter.placeHolder'|translate" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)" [showAutoComplete]="true" [autoCompleteSuggestions]="autoCompleteSuggestions" (searchItemSelected)="searchItemSelected($event)" (autoCompleteSearch)="autoCompleteSearch($event)" [searchLabel]="'dataService.dataSharing.filter.search'|translate" [showDownloadIcon]="false" [filterClearAll]="false" [appliedFilters]="appliedFilters" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()" (removeDefaultFilter)="removeDefaultFilter($event)" [showAdvancedSearch]="true" [showAdvancedSearchQuery]="true" [category]="'datapackages'" [advancedFilterMode]="'simple'" (advancedFilterSearch)="onAdvancedFilterSearch($event)"></app-configurable-filter-bar>
-  <app-table [columns]="tableColumns" [data]="tableData" (actionClick)="onActionClick($event.action, $event.item)" [showClearButton]="false" [showSearch]="false" [emptyMessage]="emptyMessage"> </app-table>
+  <app-configurable-filter-bar [filters]="filterConfigs" [showClearAll]="true" [showApplyButton]="true" [showFilterSelector]="true" [filterSelectorPlaceholder]="'dataService.dataSharing.filter.placeHolder'|translate" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)" [showAutoComplete]="true" [autoCompleteSuggestions]="autoCompleteSuggestions" (searchItemSelected)="searchItemSelected($event)" (autoCompleteSearch)="autoCompleteSearch($event)" [actions]="filterActions" (actionClick)="onFilterActionClick($event)" [searchLabel]="'dataService.dataSharing.filter.search'|translate" [showDownloadIcon]="false" [filterClearAll]="false" [appliedFilters]="appliedFilters" [getDisplayValue]="getFilterDisplayValue.bind(this)" (chipRemove)="removeFilterChip($event)" (clearAll)="clearAllFilters()" (removeDefaultFilter)="removeDefaultFilter($event)" [showAdvancedSearch]="true" [showAdvancedSearchQuery]="true" [category]="'datapackages'" [advancedFilterMode]="'simple'" (advancedFilterSearch)="onAdvancedFilterSearch($event)"></app-configurable-filter-bar>
+  <app-table [columns]="tableColumns" [data]="tableData" (actionClick)="onActionClick($event.action, $event.item)" [showSearch]="false" [emptyMessage]="emptyMessage" [showCurrentPageReport]="true" currentPageReportTemplate="{currentPage}" [rows]="pageSize" [totalRecords]="totalRecords" [lazy]="true" (onLazyLoad)="onLazyLoad($event)" [simplePaginator]="true"></app-table>
+  <div class="quality-dialog-overlay" *ngIf="qualityReportMessage">
+    <div class="quality-dialog-container">
+      <div class="quality-dialog-header">
+        <h2 class="quality-dialog-title">{{"dataService.dataSharing.report.header"|translate}}</h2>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label>{{"dataService.dataSharing.report.message"|translate}}</label>
+        </div>
+        <div class="quality-button-group">
+          <button class="p-button-secondary" pButton type="button" (click)="closeQualtiyReportMessage()">{{"dataService.dataSharing.report.button"|translate}}</button>
+        </div>
+      </div>
+      <button class="quality-close-button" type="button" (click)="closeQualtiyReportMessage()"><i class="pi pi-times" pButtonIcon></i></button>
+    </div>
+  </div>
 </app-layout>

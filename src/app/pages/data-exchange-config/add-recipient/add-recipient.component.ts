@@ -44,7 +44,7 @@ export class AddRecipientComponent implements OnInit {
     private loadingService: LoadingService,
     private http: HttpClient,
     public ms: MechanicsService,
-    private dataExchaneService: DataExchangeConfigService,
+    private dataExchangeService: DataExchangeConfigService,
     private toastService: ToastService,
     private messageService: MessageService,
     private sidebarService: SidebarMenuService
@@ -98,7 +98,8 @@ export class AddRecipientComponent implements OnInit {
     ];
   }
 
-  distributionRulePageRoute() {
+  configurationPageRoute() {
+    this.dataExchangeService.setTabPanel("recipients");
     this.router.navigate([
       `/${this.officeCode}/${this.langCode}/configuration/data-exchange/dashboard/distribution-rules`,
     ]);
@@ -123,7 +124,7 @@ export class AddRecipientComponent implements OnInit {
 
     console.log('Submitting recipient:', recipientPayload);
     this.loadingService.show('Creating new recipient...');
-    this.dataExchaneService
+    this.dataExchangeService
       .postRecipientData(recipientPayload)
       .subscribe({
         next: (addedRecipient) => {
@@ -180,7 +181,7 @@ export class AddRecipientComponent implements OnInit {
 
   closeDialog() {
     this.visibleDialog = false;
-    this.distributionRulePageRoute();
+    this.configurationPageRoute();
   }
 
   copyDivContent(element: HTMLElement): void {

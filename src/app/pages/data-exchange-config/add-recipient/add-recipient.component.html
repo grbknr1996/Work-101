@@ -14,8 +14,8 @@
           <input id="recipientName" type="text" pInputText="" pSize="large" formControlName="recipientName">
         </div>
         <div class="flex gap-4 mt-2">
-          <p-button class="w-full" [label]="ms.translate('recipients.addRecipients.cancel')" severity="secondary" [outlined]="true" styleClass="w-full" (click)="distributionRulePageRoute()"></p-button>
-          <p-button class="w-full" type="submit" [disabled]="!recipientForm.valid" [label]="ms.translate('recipients.addRecipients.save')" styleClass="w-full" (click)="addRecipient()"></p-button>
+          <p-button class="w-full" [label]="ms.translate('recipients.addRecipients.cancel')" severity="secondary" [outlined]="true" styleClass="w-full" (click)="configurationPageRoute()"></p-button>
+          <p-button class="w-full" type="submit" ~ [disabled]="!recipientForm.valid" [label]="ms.translate('recipients.addRecipients.save')" styleClass="w-full" (click)="addRecipient()"></p-button>
         </div>
       </form>
     </p-card>

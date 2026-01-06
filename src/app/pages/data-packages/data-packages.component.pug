@@ -19,6 +19,8 @@ app-layout
           [autoCompleteSuggestions]="autoCompleteSuggestions",
           (searchItemSelected)="searchItemSelected($event)",
           (autoCompleteSearch)="autoCompleteSearch($event)",
+          [actions]="filterActions",
+          (actionClick)="onFilterActionClick($event)",
           [searchLabel]="'dataService.dataSharing.filter.search'|translate",
           [showDownloadIcon]="false",
           [filterClearAll]="false",
@@ -33,4 +35,29 @@ app-layout
           [advancedFilterMode]="'simple'",
           (advancedFilterSearch)="onAdvancedFilterSearch($event)"
         )
-  app-table([columns]="tableColumns", [data]="tableData", (actionClick)="onActionClick($event.action, $event.item)", [showClearButton]="false", [showSearch]="false", [emptyMessage]="emptyMessage") 
+  app-table(
+      [columns]="tableColumns", 
+      [data]="tableData", 
+      (actionClick)="onActionClick($event.action, $event.item)", 
+      [showSearch]="false", 
+      [emptyMessage]="emptyMessage", 
+      [showCurrentPageReport]="true", 
+      currentPageReportTemplate="{currentPage}", 
+      [rows]="pageSize", 
+      [totalRecords]="totalRecords", 
+      [lazy]="true", 
+      (onLazyLoad)="onLazyLoad($event)",
+      [simplePaginator]="true",
+    )
+
+  .quality-dialog-overlay(*ngIf="qualityReportMessage")
+      .quality-dialog-container
+        .quality-dialog-header
+          h2.quality-dialog-title {{"dataService.dataSharing.report.header"|translate}}
+        .space-y-4
+          div
+            label {{"dataService.dataSharing.report.message"|translate}}
+          .quality-button-group
+            button.p-button-secondary(pButton, type='button', (click)="closeQualtiyReportMessage()") {{"dataService.dataSharing.report.button"|translate}}
+        button.quality-close-button(type='button', (click)="closeQualtiyReportMessage()")
+          i.pi.pi-times(pButtonIcon)

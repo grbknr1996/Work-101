@@ -50,6 +50,7 @@ export interface DetailedUserAccount {
   loginId: string;
   email: string;
   creationUserId: number;
+  clientAppId?: string;
   creationDate: string;
   isMfaAuthRequired: boolean;
   mfaStatus: null | 'Gauth';
@@ -70,6 +71,7 @@ export interface UserUpdatePayload {
   userName: string;
   loginId: string;
   signaturePicture?: string | ArrayBuffer | null;
+  clientAppId?: string | null;
   userEmail: string;
   signatureType?: string;
   isMfaAuthRequired: boolean;
@@ -100,7 +102,7 @@ export interface UserCreationPayload {
   signatureType?: string;
   isExternal: boolean;
   isActive?: boolean; // Add status field for active/inactive
-  userGroupsBag: UserGroupBag[];
+  userGroupBag: UserGroupBag[];
 }
 
 export interface UserQueryResponse {
@@ -674,11 +676,11 @@ export class UserService {
 
   /**
    * Get user statistics
-   * Based on the API endpoint: {{baseUrl}}/stats
+   * Based on the API endpoint: {{baseUrl}}/statistics
    */
   getUserStats(): Observable<UserStats> {
     return this.http
-      .get<UserStats>(`${environment.backendUrl}/stats`)
+      .get<UserStats>(`${environment.backendUrl}/statistics`)
       .pipe(
         catchError((error) =>
           this.handleError(error, 'Loading user statistics')

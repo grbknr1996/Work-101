@@ -25,12 +25,7 @@ import {
 } from 'src/app/_services/user.service';
 import { MechanicsService } from 'src/app/_services/mechanics.service';
 import { ToastService } from 'src/app/_services/toast.service';
-import {
-  finalize,
-  takeUntil,
-  debounceTime,
-  distinctUntilChanged,
-} from 'rxjs/operators';
+import { finalize, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 interface FormData {
@@ -71,10 +66,7 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
     users: [],
   };
 
-  groupTypes = [
-    { label: 'User', value: 'USER' },
-    { label: 'Business', value: 'BUSINESS' },
-  ];
+  groupTypes = [{ label: 'User', value: 'USER' }];
 
   // Members data
   groupMembers: GroupMember[] = [];
@@ -89,21 +81,19 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
   availableUsersSortOrder: number = 1;
   private usersLoaded: boolean = false;
 
-  // Pagination properties for available users
+  // Client-side pagination properties for available users
   totalUsers: number = 0;
   currentPage: number = 0;
   rowsPerPage: number = 10;
   rowsPerPageOptions: number[] = [5, 10, 20, 50];
-  hasMoreUsers: boolean = true;
 
-  // Pagination properties for current members
+  // Client-side pagination properties for current members
   totalMembers: number = 0;
   currentMembersPage: number = 0;
   membersRowsPerPage: number = 10;
   membersRowsPerPageOptions: number[] = [5, 10, 20, 50];
 
   private destroy$ = new Subject<void>();
-  private searchSubject$ = new Subject<string>();
 
   constructor(
     public route: ActivatedRoute,
@@ -120,7 +110,6 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     this.setupRouting();
-    this.setupSearch();
 
     // If component starts on Members step, load users immediately
     if (this.activeIndex === 1 && !this.usersLoaded) {
@@ -132,15 +121,6 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-    this.searchSubject$.complete();
-  }
-
-  private setupSearch() {
-    this.searchSubject$
-      .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
-      .subscribe((searchTerm) => {
-        this.searchUsers(searchTerm);
-      });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -265,10 +245,9 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
 
   loadAvailableUsers() {
     console.log('loadAvailableUsers called');
-    const params: UserQueryParams = {
+    const params: any = {
       isActive: true,
-      limit: this.rowsPerPage,
-      offset: this.currentPage * this.rowsPerPage,
+      limit: 'all',
       sort: 'userName',
       order: 'asc',
       exactMatchIndicator: false,
@@ -297,11 +276,8 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
                 !this.groupMembers.some((member) => member.login === user.login)
             );
 
-            // Update pagination info
-            this.totalUsers =
-              response.query?.totalUserAccountQuantity ||
-              response.userAccounts.length;
-            this.hasMoreUsers = this.availableUsers.length === params.limit;
+            // Update total users count (all users are now loaded)
+            this.totalUsers = this.availableUsers.length;
             this.usersLoaded = true;
             console.log(
               'Users loaded successfully:',
@@ -314,7 +290,6 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
           console.error('Error loading available users:', error);
           // Fallback to empty array
           this.availableUsers = [];
-          this.hasMoreUsers = false;
           this.totalUsers = 0;
         },
       });
@@ -474,18 +449,17 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
   clearSearch() {
     this.availableUsersSearchTerm = '';
     this.currentPage = 0;
-    this.loadAvailableUsers();
   }
 
-  // Handle pagination changes
+  // Handle client-side pagination changes for available users
   onPageChange(event: any) {
     console.log('Page change event:', event);
     this.currentPage = event.page;
     this.rowsPerPage = event.rows;
-    this.loadAvailableUsers();
+    // No need to reload from server, just update pagination
   }
 
-  // Handle members pagination changes
+  // Handle client-side pagination changes for current members
   onMembersPageChange(event: any) {
     console.log('Members page change event:', event);
     this.currentMembersPage = event.page;
@@ -495,14 +469,15 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
 
   // Members management methods
   filterMembers() {
-    let filteredMembers = this.groupMembers;
+    let filteredMembers = [...this.groupMembers]; // Create a copy to avoid mutating original
 
-    if (this.membersSearchTerm) {
-      const searchTerm = this.membersSearchTerm.toLowerCase();
-      filteredMembers = this.groupMembers.filter(
+    if (this.membersSearchTerm && this.membersSearchTerm.trim()) {
+      const searchTerm = this.membersSearchTerm.toLowerCase().trim();
+      filteredMembers = filteredMembers.filter(
         (member) =>
-          member.userName.toLowerCase().includes(searchTerm) ||
-          member.email.toLowerCase().includes(searchTerm)
+          (member.userName &&
+            member.userName.toLowerCase().includes(searchTerm)) ||
+          (member.email && member.email.toLowerCase().includes(searchTerm))
       );
     }
 
@@ -510,11 +485,15 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
     this.totalMembers = filteredMembers.length;
 
     // Reset to first page when searching
-    if (this.membersSearchTerm && this.currentMembersPage > 0) {
+    if (
+      this.membersSearchTerm &&
+      this.membersSearchTerm.trim() &&
+      this.currentMembersPage > 0
+    ) {
       this.currentMembersPage = 0;
     }
 
-    // Apply pagination
+    // Apply client-side pagination
     const startIndex = this.currentMembersPage * this.membersRowsPerPage;
     const endIndex = startIndex + this.membersRowsPerPage;
 
@@ -522,78 +501,36 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   filterAvailableUsers() {
-    if (!this.availableUsersSearchTerm) {
-      return this.availableUsers;
+    let filteredUsers = [...this.availableUsers]; // Create a copy to avoid mutating original
+
+    // Apply search filter if search term exists
+    if (this.availableUsersSearchTerm && this.availableUsersSearchTerm.trim()) {
+      const searchTerm = this.availableUsersSearchTerm.toLowerCase().trim();
+      filteredUsers = filteredUsers.filter(
+        (user) =>
+          (user.userName && user.userName.toLowerCase().includes(searchTerm)) ||
+          (user.email && user.email.toLowerCase().includes(searchTerm))
+      );
     }
 
-    // Filter the current page results
-    const searchTerm = this.availableUsersSearchTerm.toLowerCase();
-    return this.availableUsers.filter(
-      (user) =>
-        user.userName.toLowerCase().includes(searchTerm) ||
-        user.email.toLowerCase().includes(searchTerm)
-    );
+    // Update total count for pagination
+    this.totalUsers = filteredUsers.length;
+
+    // Apply client-side pagination
+    const startIndex = this.currentPage * this.rowsPerPage;
+    const endIndex = startIndex + this.rowsPerPage;
+
+    return filteredUsers.slice(startIndex, endIndex);
   }
 
   onAvailableUsersSearchChange() {
-    // Trigger debounced search
-    this.searchSubject$.next(this.availableUsersSearchTerm);
+    // Reset to first page when searching (client-side filtering)
+    this.currentPage = 0;
   }
 
-  searchUsers(searchTerm: string) {
-    // Reset pagination when searching
-    this.currentPage = 0;
-
-    const params: UserQueryParams = {
-      isActive: true,
-      limit: this.rowsPerPage,
-      offset: 0,
-      sort: 'userName',
-      order: 'asc',
-      exactMatchIndicator: false,
-    };
-
-    // Add search parameters if provided
-    if (searchTerm && searchTerm.trim()) {
-      if (searchTerm.includes('@')) {
-        params.email = searchTerm;
-      } else {
-        params.loginId = searchTerm;
-      }
-    }
-
-    this.userService
-      .getUserAccounts(params)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (response) => {
-          if (response && response.userAccounts) {
-            // Map UserAccount interface to GroupMember format
-            this.availableUsers = response.userAccounts.map((user, index) => ({
-              userId: user.userId, // Use loginId as unique identifier
-              userName: user.userName,
-              email: user.email,
-              login: user.loginId,
-            }));
-
-            // Filter out users who are already group members
-            this.availableUsers = this.availableUsers.filter(
-              (user) =>
-                !this.groupMembers.some((member) => member.login === user.login)
-            );
-
-            // Update pagination info
-            this.totalUsers =
-              response.query?.totalUserAccountQuantity ||
-              response.userAccounts.length;
-            this.hasMoreUsers = response.userAccounts.length === params.limit;
-            this.usersLoaded = true;
-          }
-        },
-        error: (error) => {
-          console.error('Error searching users:', error);
-        },
-      });
+  onMembersSearchChange() {
+    // Reset to first page when searching members
+    this.currentMembersPage = 0;
   }
 
   sortMembers(field: string) {
@@ -690,6 +627,7 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
     this.groupMembers = this.groupMembers.filter(
       (m) => m.login !== member.login
     );
+    // Add the member back to available users (no need to reload from server)
     this.availableUsers.push(member);
     this.selectedMembers = this.selectedMembers.filter(
       (m) => m.login !== member.login
@@ -697,15 +635,13 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
 
     // Update total members count
     this.totalMembers = this.groupMembers.length;
-
-    // Reload available users to ensure the list is up to date
-    if (this.usersLoaded) {
-      this.loadAvailableUsers();
-    }
+    // Update total available users count
+    this.totalUsers = this.availableUsers.length;
   }
 
   addMember(member: GroupMember) {
     this.groupMembers.push(member);
+    // Remove the member from available users (no need to reload from server)
     this.availableUsers = this.availableUsers.filter(
       (m) => m.login !== member.login
     );
@@ -715,11 +651,8 @@ export class GroupFormComponent implements OnInit, OnChanges, OnDestroy {
 
     // Update total members count
     this.totalMembers = this.groupMembers.length;
-
-    // Reload available users to ensure the list is up to date
-    if (this.usersLoaded) {
-      this.loadAvailableUsers();
-    }
+    // Update total available users count
+    this.totalUsers = this.availableUsers.length;
   }
   getDescriptionLength(): number {
     return this.formData.description ? this.formData.description.length : 0;
