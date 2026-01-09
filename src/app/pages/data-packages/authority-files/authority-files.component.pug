@@ -7,7 +7,7 @@ app-layout([config]="layoutConfig")
   app-package-stats(
     [packageStats]="packageStats",
     (statSelected)="onStatSelect($event)",
-    [selectedStat]="'All'"
+    [selectedStat]="statSelected"
   )
   
   app-configurable-filter-bar(
@@ -30,7 +30,7 @@ app-layout([config]="layoutConfig")
           (chipRemove)="removeFilterChip($event)",
           (clearAll)="clearAllFilters()",
           [actions]="filterActions",
-          (actionClick)="onFilterActionClick($event.action)",
+          (actionClick)="onActionClick($event)",
           [showAdvancedSearch]="true",
           [showAdvancedSearchQuery]="true",
           [category]="'authorityfiles'",

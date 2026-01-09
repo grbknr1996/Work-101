@@ -51,8 +51,9 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
 
   // Computed properties for configuration data
   recipientOffices = computed(() => {
-    const recipientsData = this.dataExchangeService.recipientsData();
-    console.log('recipientOffices:', recipientsData);
+    const recipientsData = this.dataExchangeService.recipientsData().sort((a, b) =>
+      a.recipientName.localeCompare(b.recipientName)
+    );
     if (!recipientsData) {
       console.log('No recipient systems found in config');
       return [];
@@ -307,7 +308,7 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
 
     this.recipientsData = this.dataExchangeService.recipientsData
 
-    if (!this.recipientsData.length) {
+    if (!this.recipientsData().length) {
       this.dataExchangeService.getRecipients();
     }
 
@@ -552,7 +553,9 @@ export class AddExclusionRuleComponent implements OnChanges, OnInit {
           );
 
           // Navigate back to distribution rules page after a short delay to show the toast
-          this.configurationPageRoute();
+          setTimeout(() => {
+            this.configurationPageRoute();
+          }, 2000);
         },
         error: (error) => {
           console.error('Failed to create exclusion rule:', error);

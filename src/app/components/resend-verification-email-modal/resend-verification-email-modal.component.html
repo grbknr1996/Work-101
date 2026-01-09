@@ -1,0 +1,19 @@
+
+<p-dialog [(visible)]="visible" [header]="'userManagement.userAccounts.resendVerificationEmail' | translate" [modal]="true" [style]="{ width: '32rem' }" [closable]="true" [draggable]="false" [resizable]="false" (onHide)="onClose()">
+  <div class="resend-verification-dialog">
+    <div class="form-field-row">
+      <label for="verificationEmail">{{ 'userManagement.userAccounts.email' | translate }}</label>
+      <div class="email-input-wrapper">
+        <input pInputText id="verificationEmail" [(ngModel)]="verificationEmail" (ngModelChange)="onEmailChange()" [readonly]="!isEditingEmail" [class.readonly-input]="!isEditingEmail" [disabled]="isSendingVerification || isUpdatingEmail" [ngClass]="{ 'ng-invalid': !isEmailValid &amp;&amp; verificationEmail, 'ng-valid': isEmailValid }">
+        <div class="icon-container">
+          <button class="p-button-text p-button-plain p-button-icon-only" *ngIf="isEditingEmail &amp;&amp; isEmailValid &amp;&amp; verificationEmail !== originalEmail &amp;&amp; !isEmailUpdated &amp;&amp; !isUpdatingEmail" pButton type="button" icon="pi pi-check" (click)="onUpdateEmail()" [disabled]="isSendingVerification || isUpdatingEmail" [pTooltip]="'common.components.modal.update' | translate"></button><i class="pi pi-spin pi-spinner" *ngIf="isUpdatingEmail"></i><i class="pi pi-check-circle" *ngIf="isEmailUpdated &amp;&amp; verificationEmail !== originalEmail &amp;&amp; !isEditingEmail"></i>
+          <button class="p-button-text p-button-plain p-button-icon-only" *ngIf="!isUpdatingEmail &amp;&amp; !(isEmailUpdated &amp;&amp; verificationEmail !== originalEmail &amp;&amp; !isEditingEmail)" pButton type="button" [icon]="isEditingEmail ? 'pi pi-times' : 'pi pi-pencil'" (click)="toggleEmailEdit()" [disabled]="isSendingVerification" [pTooltip]="isEditingEmail ? ('common.components.modal.cancel' | translate) : ('userManagement.groups.edit' | translate)"></button>
+        </div>
+      </div><small class="email-error-message" *ngIf="emailError">{{ emailError }}</small><small class="email-error-message" *ngIf="!isEmailValid &amp;&amp; verificationEmail &amp;&amp; !emailError">{{'profile.emailVerification.invalidEmail'|translate}}</small>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <button class="p-button-secondary" pButton type="button" [label]="'common.components.modal.cancel' | translate" icon="pi pi-times" (click)="onClose()" [disabled]="isSendingVerification"></button>
+    <button class="p-button-primary" pButton type="button" [label]="'profile.emailVerification.send' | translate" icon="pi pi-send" (click)="onSendVerificationEmail()" [disabled]="isSendingVerification || !verificationEmail || !isEmailValid || (!isEmailUpdated &amp;&amp; verificationEmail !== originalEmail)" [loading]="isSendingVerification"></button>
+  </ng-template>
+</p-dialog>

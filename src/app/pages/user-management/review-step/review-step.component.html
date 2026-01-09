@@ -19,8 +19,8 @@
         <div class="review-item">
           <label>{{ 'userManagement.reviewStep.clientId' | translate }}</label><span>{{ basicInfo?.clientId }}</span>
         </div>
-        <div class="review-item">
-          <label>{{ 'userManagement.reviewStep.loginAlias' | translate }}</label><span>{{ basicInfo?.loginAlias }}</span>
+        <div class="review-item" *ngIf="isEditMode">
+          <label>{{ 'userManagement.reviewStep.loginId' | translate }}</label><span>{{ basicInfo?.loginId }}</span>
         </div>
       </div>
     </div>

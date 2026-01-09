@@ -28,14 +28,21 @@ export class ChartFilterComponent implements OnInit {
   //PROPERTIES
   defaultFilters: chartFilterConfig[];
   finalFilters: chartFilterConfig[];
+  prevFinalFilters: chartFilterConfig[]; //COPY DEFAULTS
+  flag: number = -1;
 
   constructor() { }
 
-  updateNGModel(key: string, model: any, options?: any) {
+  updateNGModel(key: string, model: any, options?: any, include?: any) {
+    if (this.flag === 1) { this.flag = -1; this.finalFilters = this.prevFinalFilters; /* USE DEFAULTS */ }
     let target = this.finalFilters.find((item: any) => item.key === key);
     target.model = model;
     if (options) {
       target.options = (target.options).filter((item: any) => options.indexOf(item.value) !== -1);
+    }
+    if (include != null && include === false) {
+      this.finalFilters = this.finalFilters.filter((finals) => finals.key !== key);
+      this.flag = 1;
     }
   }
   ngOnInit() {
@@ -100,10 +107,10 @@ export class ChartFilterComponent implements OnInit {
           model: 'all',
           options: [
             { label: translations['charts.statistics.filters.all'], value: 'all' },
-            { label: `${new Date().getFullYear() - 5} - ${new Date().getFullYear() - 1}`, value: '5' },
-            { label: `${new Date().getFullYear() - 10} - ${new Date().getFullYear() - 1}`, value: '10' },
-            { label: `${new Date().getFullYear() - 20} - ${new Date().getFullYear() - 1}`, value: '20' },
-            { label: `${new Date().getFullYear() - 30} - ${new Date().getFullYear() - 1}`, value: '30' }
+            { label: `${new Date().getFullYear() - 5} - ${new Date().getFullYear()}`, value: '5' },
+            { label: `${new Date().getFullYear() - 10} - ${new Date().getFullYear()}`, value: '10' },
+            { label: `${new Date().getFullYear() - 20} - ${new Date().getFullYear()}`, value: '20' },
+            { label: `${new Date().getFullYear() - 30} - ${new Date().getFullYear()}`, value: '30' }
           ]
         },
         {
@@ -139,6 +146,7 @@ export class ChartFilterComponent implements OnInit {
       //COMPARE MODE - CHECKBOX - SET CUSTOM LABELS
       this.finalFilters.map((finals) => { if (finals.key === 'compare' && finals.type === 'checkbox') finals.label = translations[finals.label] });
       this.finalFilters = this.finalFilters.filter((finals) => finals.include === true);
+      this.prevFinalFilters = this.finalFilters; //COPY DEFAULTS
     })
   }
 }

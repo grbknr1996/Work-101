@@ -1,0 +1,77 @@
+p-dialog(
+  [(visible)]="visible",
+  [header]="'userManagement.userAccounts.resendVerificationEmail' | translate",
+  [modal]="true",
+  [style]="{ width: '32rem' }",
+  [closable]="true",
+  [draggable]="false",
+  [resizable]="false",
+  (onHide)="onClose()"
+)
+  .resend-verification-dialog
+    .form-field-row
+      label(for="verificationEmail") {{ 'userManagement.userAccounts.email' | translate }}
+      .email-input-wrapper
+        input(
+          pInputText,
+          id="verificationEmail",
+          [(ngModel)]="verificationEmail",
+          (ngModelChange)="onEmailChange()",
+          [readonly]="!isEditingEmail",
+          [class.readonly-input]="!isEditingEmail",
+          [disabled]="isSendingVerification || isUpdatingEmail",
+          [ngClass]="{ 'ng-invalid': !isEmailValid && verificationEmail, 'ng-valid': isEmailValid }"
+        )
+        .icon-container
+          //- Check icon to update email (shown when email is valid and different from original)
+          button.p-button-text.p-button-plain.p-button-icon-only(
+            *ngIf="isEditingEmail && isEmailValid && verificationEmail !== originalEmail && !isEmailUpdated && !isUpdatingEmail",
+            pButton,
+            type="button",
+            icon="pi pi-check",
+            (click)="onUpdateEmail()",
+            [disabled]="isSendingVerification || isUpdatingEmail",
+            [pTooltip]="'common.components.modal.update' | translate"
+          )
+          //- Loading spinner when updating
+          i.pi.pi-spin.pi-spinner(
+            *ngIf="isUpdatingEmail"
+          )
+          //- Success icon (shown when email is updated)
+          i.pi.pi-check-circle(
+            *ngIf="isEmailUpdated && verificationEmail !== originalEmail && !isEditingEmail"
+          )
+          //- Edit/Cancel icon (shown when not updating and not showing success icon)
+          button.p-button-text.p-button-plain.p-button-icon-only(
+            *ngIf="!isUpdatingEmail && !(isEmailUpdated && verificationEmail !== originalEmail && !isEditingEmail)",
+            pButton,
+            type="button",
+            [icon]="isEditingEmail ? 'pi pi-times' : 'pi pi-pencil'",
+            (click)="toggleEmailEdit()",
+            [disabled]="isSendingVerification",
+            [pTooltip]="isEditingEmail ? ('common.components.modal.cancel' | translate) : ('userManagement.groups.edit' | translate)"
+          )
+      //- Error message
+      small.email-error-message(*ngIf="emailError") {{ emailError }}
+      //- Validation message
+      small.email-error-message(*ngIf="!isEmailValid && verificationEmail && !emailError") {{'profile.emailVerification.invalidEmail'|translate}}
+  
+  ng-template(pTemplate="footer")
+    button.p-button-secondary(
+      pButton,
+      type="button",
+      [label]="'common.components.modal.cancel' | translate",
+      icon="pi pi-times",
+      (click)="onClose()",
+      [disabled]="isSendingVerification"
+    )
+    button.p-button-primary(
+      pButton,
+      type="button",
+      [label]="'profile.emailVerification.send' | translate",
+      icon="pi pi-send",
+      (click)="onSendVerificationEmail()",
+      [disabled]="isSendingVerification || !verificationEmail || !isEmailValid || (!isEmailUpdated && verificationEmail !== originalEmail)",
+      [loading]="isSendingVerification"
+    )
+

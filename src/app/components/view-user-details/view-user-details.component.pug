@@ -116,8 +116,8 @@ p-dialog(
               span.font-bold.whitespace-nowrap {{ ms.translate('profile.groups.title') || 'Groups' }}
               p-badge([value]="getGroupsCount().toString()", class="ml-auto mr-2")
           p-accordion-content
-            .groups-container(*ngIf="userAccount.userGroupBag && userAccount.userGroupBag.length > 0; else noGroups")
-              .group-item(*ngFor="let group of userAccount.userGroupBag")
+            .groups-container(*ngIf="getFilteredGroups().length > 0; else noGroups")
+              .group-item(*ngFor="let group of getFilteredGroups()")
                 .group-info
                   .group-name {{ group.groupName }}
                   .group-type
@@ -141,7 +141,7 @@ p-dialog(
               .unit-item(*ngFor="let unit of userAccount.userUnitBag")
                 .unit-info
                   .unit-name {{ unit.unitName }}
-                  .unit-details
+                  .unit-details(*ngIf="unit.unitCategory || unit.platformCode")
                     .unit-detail-row(*ngIf="unit.unitCategory")
                       span.unit-detail-label {{ ms.translate('profile.units.category') || 'Category' }}:
                       span.unit-detail-value {{ unit.unitCategory }}

@@ -8,17 +8,17 @@
       <div class="w-full grid grid-cols-1 gap-6 md:grid-cols-2">
         <div class="col-span-1">
           <label class="block text-sm font-medium text-gray-700 mb-2">{{ "addExclusionRules.formFields.originatingOffice" |  translate }}</label>
-          <p-dropdown class="w-full" [options]="originatingOffices()" formControlName="office" [placeholder]="ms.translate('addExclusionRules.formFields.originatingOfficePlaceholder')"></p-dropdown><small class="text-sm text-gray-500 mt-1 block">{{ "addExclusionRules.formFields.originatingOfficeValidationMessage" |  translate }}</small>
+          <p-select class="w-full" [options]="originatingOffices()" formControlName="office" [placeholder]="ms.translate('addExclusionRules.formFields.originatingOfficePlaceholder')"></p-select><small class="text-sm text-gray-500 mt-1 block">{{ "addExclusionRules.formFields.originatingOfficeValidationMessage" |  translate }}</small>
         </div>
         <div class="col-span-1">
           <label class="block text-sm font-medium text-gray-700 mb-2">{{ "addExclusionRules.formFields.recipientSystem" |  translate }}</label>
-          <p-dropdown class="w-full" [options]="recipientOffices()" formControlName="system" [placeholder]="ms.translate('addExclusionRules.formFields.recipientSystemPlaceholder')" (onChange)="onRecipientSystemChange()"></p-dropdown>
+          <p-select class="w-full" [options]="recipientOffices()" formControlName="system" [placeholder]="ms.translate('addExclusionRules.formFields.recipientSystemPlaceholder')" (onChange)="onRecipientSystemChange()"></p-select>
         </div>
       </div>
       <div class="w-full mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
         <div class="col-span-1">
           <label class="block text-sm font-medium text-gray-700 mb-2">{{ "addExclusionRules.formFields.IPTypeCategory" |  translate }}</label>
-          <p-dropdown class="w-full" [options]="ipCategories()" formControlName="categories" [placeholder]="ms.translate('addExclusionRules.formFields.IPTypeCategoryPlaceholder')" (onChange)="onIpCategoryChange()"></p-dropdown>
+          <p-select class="w-full" [options]="ipCategories()" formControlName="categories" [placeholder]="ms.translate('addExclusionRules.formFields.IPTypeCategoryPlaceholder')" (onChange)="onIpCategoryChange()"></p-select>
           <p-message *ngIf="sourceCategoriesForm.value.categories" severity="success" [text]="ms.translate('addExclusionRules.formFields.IPTypeCategoryValidationMessage1') + ' ' + getCategoryLabel(sourceCategoriesForm.value.categories) + '. ' + ms.translate('addExclusionRules.formFields.IPTypeCategoryValidationMessage2') + '.'"></p-message>
         </div>
         <div class="col-span-1">

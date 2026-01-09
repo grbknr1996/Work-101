@@ -151,8 +151,18 @@ export class ViewUserDetailsComponent implements OnInit, OnDestroy, OnChanges {
     return '';
   }
 
+  getFilteredGroups(): any[] {
+    if (!this.userAccount?.userGroupBag) {
+      return [];
+    }
+    // Filter out groups with type 'UNIT'
+    return this.userAccount.userGroupBag.filter(
+      (group: any) => group.groupType !== 'UNIT'
+    );
+  }
+
   getGroupsCount(): number {
-    return this.userAccount?.userGroupBag?.length || 0;
+    return this.getFilteredGroups().length;
   }
 
   getUnitsCount(): number {

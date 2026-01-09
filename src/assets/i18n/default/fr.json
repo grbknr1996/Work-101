@@ -857,7 +857,7 @@
       "email": "Email",
       "telephone": "Téléphone",
       "clientId": "Identifiant client",
-      "loginAlias": "Alias de connexion",
+      "loginId": "Alias de connexion",
       "userType": "Type d'utilisateur",
       "status": "Statut",
       "externalUser": "Utilisateur externe",

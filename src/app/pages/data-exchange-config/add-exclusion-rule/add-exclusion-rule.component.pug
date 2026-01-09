@@ -13,7 +13,7 @@ app-layout([config]="layoutConfig")
       .w-full.grid.grid-cols-1.gap-6(class="md:grid-cols-2")
         .col-span-1
           label.block.text-sm.font-medium.text-gray-700.mb-2 {{ "addExclusionRules.formFields.originatingOffice" |  translate }}
-          p-dropdown.w-full(
+          p-select.w-full(
             [options]="originatingOffices()",
             formControlName="office",
             [placeholder]="ms.translate('addExclusionRules.formFields.originatingOfficePlaceholder')"
@@ -21,7 +21,7 @@ app-layout([config]="layoutConfig")
           small.text-sm.text-gray-500.mt-1.block {{ "addExclusionRules.formFields.originatingOfficeValidationMessage" |  translate }}
         .col-span-1
           label.block.text-sm.font-medium.text-gray-700.mb-2 {{ "addExclusionRules.formFields.recipientSystem" |  translate }}
-          p-dropdown.w-full(
+          p-select.w-full(
             [options]="recipientOffices()",
             formControlName="system",
             [placeholder]="ms.translate('addExclusionRules.formFields.recipientSystemPlaceholder')",
@@ -30,7 +30,7 @@ app-layout([config]="layoutConfig")
       .w-full.mt-6.grid.grid-cols-1.gap-6(class="md:grid-cols-2")
         .col-span-1
           label.block.text-sm.font-medium.text-gray-700.mb-2 {{ "addExclusionRules.formFields.IPTypeCategory" |  translate }}
-          p-dropdown.w-full(
+          p-select.w-full(
             [options]="ipCategories()",
             formControlName="categories",
             [placeholder]="ms.translate('addExclusionRules.formFields.IPTypeCategoryPlaceholder')",

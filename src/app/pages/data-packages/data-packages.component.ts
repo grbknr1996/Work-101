@@ -80,7 +80,8 @@ export class DataPackagesComponent implements OnInit {
 
   filterActions = [];
 
-  qualityReportMessage = false;
+  qualityReportMessageDisplay = false;
+  qualityReportMessage = '';
 
   packageStats: {
     label: string; display: string; count: string; period: string; color: string; icon: string;
@@ -150,8 +151,10 @@ export class DataPackagesComponent implements OnInit {
     //TODO Setting value temp as there is no data for other county codes
     this.applicationOfficeCode = "ph";
 
+    this.qualityReportMessage = this.ms.translate('dataService.dataSharing.report.message');
+
     this.filterActions = [
-      {
+      { 
         label: this.ms.translate('dataService.dataSharing.table.actions.downloadQualityReport'),
         icon: 'pi pi-arrow-circle-down',
         action: 'downloadQualityReport',
@@ -306,7 +309,7 @@ export class DataPackagesComponent implements OnInit {
 
   private loadSharedPackages(startDate: string, endDate: string, freshLoad: boolean, pageNumberToCache: number): void {
     this.prepareStatusArray();
-    this.qualityReportMessage = false;
+    this.qualityReportMessageDisplay = false;
     this.emptyMessage = "common.components.table.noRecordsFound";
 
     let nextTokenToPass = freshLoad ? null : this.nextToken;
@@ -480,22 +483,52 @@ export class DataPackagesComponent implements OnInit {
     window.URL.revokeObjectURL(url);
   }
 
+    downloadCsvFile(csvData: string, fileName: string): void {
+    const blob = new Blob([csvData], {
+      type: 'text/csv;charset=utf-8;'
+    });
+
+    const url = window.URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    link.style.display = 'none';
+
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  }
+
+
 
   downloadQualityReport() {
     const [start, end] = this.returnDateArray();
     if (!this.isDateRangeWithinOneYear([start, end])) {
-      this.qualityReportMessage = true;
+      this.qualityReportMessageDisplay = true;
+      this.qualityReportMessage = this.ms.translate('dataService.dataSharing.report.message');
       return;
     }
 
-    this.qualityReportMessage = false;
+    this.qualityReportMessageDisplay = false;
 
-    // this.dataService.getDataQualityReport(this.applicationOfficeCode, start, end)
-    //   .subscribe({
-    //     next: (blob) =>
-    //       this.downloadCsv(blob, `Data-Quality-report.csv`),
-    //     error: (err) => console.error(err)
-    //   });
+    this.dataService.getDataQualityReport(this.applicationOfficeCode, start, end)
+      .subscribe({
+        next: (csvData) => {
+          if (!csvData) {
+            this.qualityReportMessageDisplay = true;
+            this.qualityReportMessage = this.ms.translate('dataService.dataSharing.report.noDataMessage');
+            this.cdr.detectChanges();
+            return;
+          }
+
+          this.qualityReportMessageDisplay = false;
+          this.downloadCsvFile(csvData, 'Data-Quality-report.csv');
+        },
+        error: (err) => console.error(err)
+      });
   }
 
   private isDateRangeWithinOneYear(range: [Date, Date]): boolean {
@@ -515,7 +548,7 @@ export class DataPackagesComponent implements OnInit {
   }
 
   closeQualtiyReportMessage() {
-    this.qualityReportMessage = false;
+    this.qualityReportMessageDisplay = false;
   }
 
   onStatSelect(statLabel: string) {
@@ -525,7 +558,7 @@ export class DataPackagesComponent implements OnInit {
     this.advancedFilterMode = false;
     this.configurableFilter.clearAdvancedQuery();
     this.configurableFilter.searchBarAutoComplete = '';
-    this.qualityReportMessage = false;
+    this.qualityReportMessageDisplay = false;
     this.filterByStats();
   }
 

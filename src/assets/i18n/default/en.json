@@ -707,6 +707,7 @@
       "report": {
         "header": "Data Quality Report",
         "message": "The Date Range should not be more than a Year",
+        "noDataMessage": "No Data available for the selected date range",
         "button": "Ok"
       }
     },
@@ -786,6 +787,7 @@
     "emailVerification": {
       "title": "Enter the Email to send the verification",
       "message": "Please enter the email address to send the verification email.",
+      "invalidEmail": "Invalid email format",
       "email": "Verification e-mail",
       "reEnterEmail": "Re enter Verification e-mail",
       "reEnterEmailPlaceholder": "Re-enter the email address",
@@ -2660,6 +2662,9 @@
       "title": "User Groups",
       "manageGroups": "Manage and view all user groups in the system",
       "typeSection": "TYPE",
+      "totalGroups": "Total Groups",
+      "userGroups": "User Groups",
+      "businessGroups": "Business Groups",
       "all": "All",
       "viewGroup": "View Group",
       "groupId": "Group ID",
@@ -2761,7 +2766,7 @@
       "email": "Email",
       "telephone": "Telephone",
       "clientId": "Client ID",
-      "loginAlias": "Login Alias",
+      "loginId": "Login ID",
       "userType": "User Type",
       "status": "Status",
       "externalUser": "External User",

@@ -2699,11 +2699,11 @@ app-basic-info-form
     margin-left 0.1em
 
   input[pInputText]
-    height 2.25rem
-    padding 0.4rem 0.75rem
+    height 1.875rem
+    padding 0.3rem 0.6rem
     border-radius 6px
     border 1px solid #ddd
-    font-size 0.85rem
+    font-size 0.8rem
     background #f7fafd
     transition border-color 0.2s, box-shadow 0.2s
     outline none
@@ -2715,7 +2715,7 @@ app-basic-info-form
     box-shadow 0 2px 8px rgba(25, 118, 210, 0.1)
 
   .empty-row
-    height 2.25rem
+    height 1.875rem
 
   .signature-section
     display flex
@@ -8292,15 +8292,22 @@ app-view-user-details
 
   .groups-container
   .units-container
-    display flex
-    flex-direction column
-    gap 0.75rem
+    display grid
+    grid-template-columns repeat(auto-fill, minmax(200px, 1fr))
+    gap 0.5rem
+    max-width 100%
+
+    @media (min-width 768px)
+      grid-template-columns repeat(3, 1fr)
+
+    @media (max-width 767px)
+      grid-template-columns repeat(2, 1fr)
 
   .group-item
   .unit-item
     background white
-    border-radius 6px
-    padding 1rem
+    border-radius 4px
+    padding 0.625rem 0.75rem
     border 1px solid #dee2e6
     transition box-shadow 0.2s
 
@@ -8311,37 +8318,42 @@ app-view-user-details
   .unit-info
     display flex
     flex-direction column
-    gap 0.5rem
+    gap 0.375rem
 
   .group-name
   .unit-name
     font-weight 600
     color #212529
-    font-size 1rem
+    font-size 0.875rem
+    line-height 1.3
+    word-break break-word
 
   .group-type
     display flex
-    gap 0.5rem
+    gap 0.375rem
+    margin-top 0.125rem
 
   .group-type-badge
     display inline-block
-    padding 0.25rem 0.75rem
+    padding 0.2rem 0.5rem
     background #e7f3ff
     color #0067c0
-    border-radius 12px
-    font-size 0.75rem
+    border-radius 10px
+    font-size 0.7rem
     font-weight 500
+    white-space nowrap
 
   .unit-details
     display flex
     flex-direction column
-    gap 0.25rem
-    margin-top 0.5rem
+    gap 0.2rem
+    margin-top 0.375rem
 
   .unit-detail-row
     display flex
-    gap 0.5rem
-    font-size 0.875rem
+    gap 0.375rem
+    font-size 0.8rem
+    line-height 1.3
 
   .unit-detail-label
     font-weight 500
@@ -8349,6 +8361,7 @@ app-view-user-details
 
   .unit-detail-value
     color #212529
+    word-break break-word
 
   .no-groups-message
   .no-units-message
@@ -8648,6 +8661,18 @@ app-trademark-similarity-search
   .search-action-icon:hover
     color: #1d4ed8;
 
+  .cited-indicator
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #dc2626; /* red-600 */
+    margin-top: 0.25rem;
+
+  .cited-indicator i
+    font-size: 0.875rem;
+
 
 // ============================================
 // View Group Details Component Styles
@@ -8854,5 +8879,75 @@ app-view-group
 
     .members-container
       grid-template-columns repeat(auto-fill, minmax(140px, 1fr))
+// ============================================
+// Resend Verification Modal  Component Styles
+// ============================================
+.resend-verification-dialog
+  padding 1rem 0
+
+  .form-field-row
+    margin-bottom 1rem
+
+    label
+      font-size 0.75rem
+      font-weight 500
+      color #333
+      margin-bottom 0.5rem
+      display block
+
+    .email-input-wrapper
+      position relative
+      display flex
+      align-items center
+      width 100%
+
+      input[pInputText]
+        flex 1
+        min-width 0
+        padding-right 2.5rem
+        font-size 0.75rem
+
+      .icon-container
+        position absolute
+        right 0.5rem
+        display flex
+        align-items center
+        gap 0.5rem
+        width auto
+        min-width 2rem
+        justify-content flex-end
+
+        button.p-button-icon-only
+          width 2rem
+          height 2rem
+          flex-shrink 0
+          color #6c757d
+
+          &.p-button-plain
+            background transparent
+            border none
+
+          &[icon="pi pi-check"]
+            color #28a745
+
+        i.pi-spinner,
+        i.pi-check-circle
+          color #007bff
+          font-size 1.2rem
+          width 2rem
+          height 2rem
+          display flex
+          align-items center
+          justify-content center
+          flex-shrink 0
+
+        i.pi-check-circle
+          color #28a745
+
+    .email-error-message
+      color #dc3545
+      font-size 0.7rem
+      margin-top 0.25rem
+      display block
 
 

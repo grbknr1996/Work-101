@@ -17,6 +17,7 @@ import {
 } from '../../../components/configurable-filter-bar/configurable-filter-bar.component';
 import { AdvancedFilterQuery } from 'src/app/components/advanced-filter-query/advanced-filter-query.component';
 import { AuthorityFilesService } from 'src/app/_services/authority-files.service';
+import { LoadingService } from 'src/app/_services/loading.service';
 
 @Component({
   selector: 'app-authority-files',
@@ -34,7 +35,7 @@ export class AuthorityFilesComponent implements OnInit {
 
   // Static Package stats for demo
   packageStats = [];
-  statSelected;
+  statSelected = 'All';
 
   globalFilterFields = ['publicationNumber'];
 
@@ -65,6 +66,7 @@ export class AuthorityFilesComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     public ms: MechanicsService,
+    private loadingService: LoadingService,
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
     private authorityService: AuthorityFilesService
@@ -240,6 +242,60 @@ export class AuthorityFilesComponent implements OnInit {
     this.loadData();
   }
 
+  onActionClick(action: string) {
+    this.route.params.subscribe((params) => {
+      let officeCode =
+        params['officeCode'] || this.ms.getCurrentOffice() || 'default';
+      officeCode = this.applicationOfficeCode;
+      const langCode = params['langCode'] || 'en';
+      console.log('Action clicked:', action);
+      switch (action) {
+        case 'downloadTableData':
+          this.authorityService.downloadTableDataAsCsv({
+            officeCode: officeCode,
+            limit: Number(this.packageStats.find(stat => stat.label === this.statSelected).count) || 10
+          });
+          break;
+        case 'downloadDefinitionFile':
+          this.loadingService.show();
+          this.authorityService.downloadTxtFile({
+            ipOfficeCode: officeCode,
+            portal: 'true'
+          }, 'definition-files').subscribe({
+            next: () => {
+              this.loadingService.hide();
+            },
+            error: (err) => {
+              console.error('downloadDefinitionFile: ', err);
+              this.loadingService.hide();
+            }
+          });
+          break;
+        case 'downloadAuthorityFile':
+          this.loadingService.show();
+          this.authorityService.downloadTxtFile({
+            ipOfficeCode: officeCode,
+            portal: 'true'
+          }).subscribe({
+            next: () => {
+              this.loadingService.hide();
+            },
+            error: (err) => {
+              console.error('downloadAuthorityFile: ', err);
+              this.loadingService.hide();
+            }
+          });
+          break;
+        case 'downloadExceptionList':
+          this.authorityService.downloadCsvDirect({
+            ipOfficeCode: officeCode,
+            scope: 'exceptionCodes'
+          });
+          break;
+      }
+    });
+  }
+
   private loadData(): void {
     if (this.fileType === 'inconsistent') {
       this.authorityService.getAuthorityFileErrorReports({
@@ -312,12 +368,7 @@ export class AuthorityFilesComponent implements OnInit {
   }
 
   onFilterActionClick(action: string) {
-    switch (action) {
-      case 'showPdf':
-        //this.downloadDetails();
-        // this.downloadFileWithRedirect();
-        break;
-    }
+    console.log('Action clicked:', action);
   }
 
   downloadDetails(): void {

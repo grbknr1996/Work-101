@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { env } from 'process';
 import { catchError, map, Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -37,7 +38,7 @@ export class TrademarkSimilaritySearchService {
         }
 
         //const url = `${this.baseUrl}/search/registry`;
-        const url = `${environment.similaritySearchApi}`;
+        const url = `${environment.similaritySearch}/search/registry`;
         
         const body = {
             query: query.trim(),
@@ -49,8 +50,8 @@ export class TrademarkSimilaritySearchService {
         return this.http.post<any[]>(url, body, { headers }).pipe(
             map((items: any[]) => {
                 if (!Array.isArray(items)) return [];
-                return items.map(item => ({
-                    docId: item.docId ?? (item.id ?? 'NA'),
+                return items.map((item, index) => ({ //using index as fallback id, will be removed when backend is fixed
+                    docId: item.docId ?? (item.id ?? `IDX-${index + 1}`),
                     markName: item.company_name ?? item.company_name ?? 'NA',
                     regNumber: item.regNumber ?? item.registrationNumber ?? 'TM-2025-104582',
                     classes: Array.isArray(item.classes) ? item.classes : (item.classes ? [String(item.classes)] : ['29', '30']),
@@ -60,7 +61,6 @@ export class TrademarkSimilaritySearchService {
                     filiningNumber: item.filiningNumber ?? item.filingNumber ?? 'ID20230512911',
                     logoUrl: item.logoUrl ?? item.imageUrl ?? 'https://asean-ipregister.wipo.net/wopublish-search/service/images/0aLPP2osudojqiPv847dDQdmRZXEBvfWYW-dfzRPQNCTMZZoFCmN98PjasDK0jTrXyTBEQv1gvLrt5zpyig6WHPWvvb9pWm_R4XGcngbc0E?noLogo=true&disclaimer=Machine',
                     goodsAndServices: item.goodsAndServices ?? 'NA',
-                    // preserve original payload
                     _raw: item
                 }));
             }),
@@ -80,7 +80,7 @@ export class TrademarkSimilaritySearchService {
         }
 
         //const url = `${this.baseUrl}/search/image`;
-        const url = `${environment.similaritySearchImage}`;
+        const url = `${environment.similaritySearch}/search/image`;
         
         const formData = new FormData();
         formData.append('file', imageFile, imageFile.name);
@@ -89,14 +89,11 @@ export class TrademarkSimilaritySearchService {
         map((results: any[]) => {
             if (!Array.isArray(results)) return [];
 
-            return results.map(item => {
-                const rawPath = item.image_path ?? item.imagePath ?? 'NA';
-                // convert relative ../data/... to absolute using baseUrl
-                const cleaned = rawPath === 'NA' ? 'NA' : rawPath.replace(/^(\.\.\/)+/, '');
-                const logoUrl = cleaned === 'NA' ? 'NA' : `${this.baseUrl.replace(/\/$/, '')}/${cleaned}`;
+            return results.map((item, index) => {
+                const rawPath = item.image_url ?? item.imagePath ?? 'NA';
                 return {
                     filename: item.filename ?? 'NA',
-                    docId: 'NA',
+                    docId: `IDX-${index + 1}`,
                     markName: item.filename ? item.filename.split('.')[0] : 'Maison Gourmet',
                     regNumber: 'TM-2025-104582',
                     classes: '29, 30',
@@ -117,7 +114,7 @@ export class TrademarkSimilaritySearchService {
 
     searchByDescription(description: string): Observable<any[]> {
         if (!description || !description.trim()) return of([]);
-        const url = environment.similarityTextToImage ?? `${this.baseUrl}/search/text-to-image`;
+        const url = `${environment.similaritySearch}/search/text-to-image`;
         const body = { description: description.trim() };
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
@@ -129,11 +126,11 @@ export class TrademarkSimilaritySearchService {
 
     private mapImageResults(results: any[]): any[] {
         if (!Array.isArray(results)) return [];
-        return results.map(item => {
-            const rawPath = item.image_path ?? item.imagePath ?? 'NA';
+        return results.map((item, index) => {
+            const rawPath = item.image_url ?? item.imagePath ?? 'NA';
             return {
                 filename: item.filename ?? 'NA',
-                docId: 'NA',
+                docId: `IDX-${index + 1}`,
                 markName: item.filename ? item.filename.split('.')[0] : 'Maison Gourmet',
                 regNumber: 'TM-2025-104582',
                 classes: '29, 30',
@@ -153,13 +150,14 @@ export class TrademarkSimilaritySearchService {
         if (!payload || !payload.query_content) {
             return of('');
         }
+        console.log('Analyze payload:', payload);
 
-        const url = environment.analyzeApi ?? `${this.baseUrl}/analyze`;
+
+        const url = `${environment.similaritySearch}/analyze`;
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
         return this.http.post<any>(url, payload, { headers }).pipe(
             map(res => {
-                // backend may return 'analys' (per prompt) or 'analysis' or other key
                 if (!res) return '';
                 if (typeof res === 'string') return res;
                 return res.analys ?? res.analysis ?? res.result ?? '';

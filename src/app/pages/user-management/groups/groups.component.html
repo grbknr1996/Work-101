@@ -10,6 +10,10 @@
       </div>
       <button class="p-button-primary" pButton [label]="'userManagement.groups.createGroup' | translate" icon="pi pi-plus" (click)="openCreateGroupDialog()"></button>
     </div>
+    <!-- Group Statistics Section-->
+    <div class="mb-4">
+      <app-user-stats [config]="userStatsConfig" (statSelected)="onStatSelected($event)"></app-user-stats>
+    </div>
     <!-- Filter Section with Button-->
     <div class="mb-4 flex justify-end items-center gap-3 p-3 rounded" style="background: #e5f3f7">
       <app-configurable-filter #configurableFilter [filters]="filterConfigs" [showFilterSelector]="true" [filterSelectorPlaceholder]="'notifications.acknowledge.filter.placeHolder'|translate" (filterChange)="onFilterChange($event)" (filterCleared)="onFilterCleared()" (filterApplied)="onFilterApplied($event)" (appliedFiltersChange)="onAppliedFiltersChange($event)"></app-configurable-filter>

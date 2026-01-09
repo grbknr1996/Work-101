@@ -19,7 +19,6 @@
         <!-- View Mode Buttons-->
         <ng-container *ngIf="!isEditMode">
           <button class="p-button-outlined p-button-sm header-action-btn" pButton icon="pi pi-pencil" (click)="editUnit()" [title]="'userManagement.units.editUnit' | translate"></button>
-          <button class="p-button-outlined p-button-sm header-action-btn" *ngIf="unitCategory !== 'Section'" pButton icon="pi pi-plus" [title]="'userManagement.units.addSubUnit' | translate" (click)="createSubUnit()"></button>
         </ng-container>
         <!-- Edit Mode Buttons-->
         <ng-container *ngIf="isEditMode">

@@ -36,5 +36,7 @@
   </div>
 </app-layout>
 <!-- Resend Verification Email Modal-->
-<app-modal [(visible)]="showResendVerificationModal" [config]="resendVerificationModalConfig" (visibleChange)="onResendVerificationModalClose()"></app-modal>
+<app-resend-verification-email-modal [(visible)]="showResendVerificationModal" [user]="selectedUserForVerification" (visibleChange)="onResendVerificationModalClose()" (emailSent)="onResendVerificationEmailSent($event)"></app-resend-verification-email-modal>
+<!-- Resend Verification Result Modal-->
+<app-modal [(visible)]="showResendVerificationResultModal" [config]="resendVerificationModalConfig" (visibleChange)="onResendVerificationResultModalClose()"></app-modal>
 <app-view-user-details [(visible)]="showViewUserDialog" [loginId]="selectedUserLoginId"></app-view-user-details>

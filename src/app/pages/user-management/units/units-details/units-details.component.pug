@@ -38,14 +38,6 @@
             [title]="'userManagement.units.editUnit' | translate",
             class="header-action-btn"
           )
-          button.p-button-outlined.p-button-sm(
-            *ngIf="unitCategory !== 'Section'",
-            pButton,
-            icon="pi pi-plus",
-            [title]="'userManagement.units.addSubUnit' | translate",
-            class="header-action-btn",
-            (click)="createSubUnit()"
-          )
         
         // Edit Mode Buttons
         ng-container(*ngIf="isEditMode")

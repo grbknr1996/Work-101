@@ -8,7 +8,7 @@
       <div class="step-content">
         <ng-container [ngSwitch]="activeStep">
           <app-basic-info-form *ngSwitchCase="0" [formGroup]="userForm.get('basicInfo')" [isEditMode]="isEditMode"></app-basic-info-form>
-          <app-group-assignment *ngSwitchCase="1" [availableGroups]="filteredAvailableGroups" [assignedGroups]="userForm.get('assignedGroups').value" [currentAvailablePage]="currentGroupsPage" [totalAvailablePages]="totalGroupsPages" [totalAvailableGroups]="totalGroupsCount" [currentSearchTerm]="groupsSearchTerm" [currentFilterType]="groupsFilterType" [currentSortBy]="groupsSortBy" [currentSortOrder]="groupsSortOrder" (assignedGroupsChange)="onAssignedGroupsChange($event)" (availablePageChange)="onGroupsPageChange($event)" (searchChange)="onGroupsSearch($event)" (filterTypeChange)="onGroupsFilter($event)" (sortChange)="onGroupsSort($event.sortBy, $event.sortOrder)">
+          <app-group-assignment *ngSwitchCase="1" [availableGroups]="filteredAvailableGroups" [assignedGroups]="userForm.get('assignedGroups').value" [disableAssignment]="isAssignmentDisabled" [isExternalUser]="userForm.get('basicInfo.userType')?.value || false" [externalUserGroups]="externalUserGroupsList" [maxExternalGroups]="1" (assignedGroupsChange)="onAssignedGroupsChange($event)" (assignmentError)="onAssignmentError($event)">
             <div class="loading-groups" *ngIf="isLoadingGroups">
               <p>{{ 'userManagement.createUserAccount.loadingGroups' | translate }}</p>
             </div>

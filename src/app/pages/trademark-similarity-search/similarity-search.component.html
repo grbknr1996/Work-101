@@ -95,9 +95,14 @@
                     <div class="text-sm text-gray-800">{{ data.filingDate }}</div>
                   </div>
                   <!-- Status-->
-                  <div class="col-span-3">
+                  <div class="col-span-2">
                     <div class="text-xs text-gray-500">Status</div>
                     <p-tag [value]="data.status" [severity]="getTagColorValue(data.status)?.severity"></p-tag>
+                  </div>
+                  <div class="col-span-1">
+                    <div class="cited-indicator" *ngIf="isCited(data)"><i class="pi pi-bookmark-fill"></i>
+                      <div class="text-lg font-semibold">CITED</div>
+                    </div>
                   </div>
                   <!-- Name-->
                   <div class="col-span-3">
@@ -127,13 +132,14 @@
           <ng-container *ngFor="let data of pagedCardData" (click)="openDrawer(data)">
             <div class="col-span-4">
               <p-card>
-                <div class="flex justify-start gap-2">
+                <div class="flex justify-start gap-2"><i class="pi pi-info-circle text-blue-600 cursor-pointer mt-4" *ngIf="isLogoSearch" (click)="$event.stopPropagation(); openDescription(data)" pTooltip="View similarity description" tooltipPosition="top"></i>
                   <p-avatar [image]="data.logoUrl" styleClass="big-avatar"></p-avatar>
                   <div class="w-full">
                     <div class="flex justify-between">
                       <div class="text-lg font-bold">{{ data.regNumber }}</div>
-                      <div class="text-lg">
+                      <div class="text-lg flex flex-col items-end">
                         <p-tag [value]="getTagColorValue(data.status)?.value" [severity]="data.status ? getTagColorValue(data.status)?.severity : 'secondary'"></p-tag>
+                        <div class="cited-indicator mt-1" *ngIf="isCited(data)"><i class="pi pi-bookmark-fill"></i><span class="text-lg font-semibold ml-1">CITED</span></div>
                       </div>
                     </div>
                     <div class="mt-2 mb-1 font-semibold text-base">{{ data.markName }}</div>
@@ -159,6 +165,7 @@
                 <ng-template #footer="">
                   <div class="flex gap-4 mt-1">
                     <p-button class="w-full" label="Details" icon="pi pi-download" severity="secondary" [outlined]="true" styleClass="w-full" (click)="showTrademarkDetails(data)"></p-button>
+                    <p-button class="w-full" [label]="isCited(data) ? 'Remove from cited' : 'Select as cited mark'" icon="pi pi-exclamation-triangle" severity="secondary" (click)="selectAsCitedMark(data)"></p-button>
                   </div>
                 </ng-template>
               </p-card>
@@ -174,7 +181,9 @@
   <!-- Drawer Header-->
   <div class="flex items-center justify-between border-b">
     <div class="flex items-center gap-3">
-      <button class="p-button p-button-text p-0" (click)="drawerVisible = false"><i class="pi pi-chevron-left text-xl"></i><i class="pi pi-chevron-right text-xl"></i></button>
+      <button class="p-button p-button-text p-0" (click)="drawerVisible = false"></button>
+      <button class="p-button p-button-text p-0" (click)="prevDrawer()"><i class="pi pi-chevron-left text-xl"></i></button>
+      <button class="p-button p-button-text p-0" (click)="nextDrawer()"><i class="pi pi-chevron-right text-xl"></i></button>
     </div>
     <div class="text-center flex-1">
       <h2 class="text-xl font-semibold">Trademark Details</h2>
@@ -195,13 +204,13 @@
     <!-- ============= Application & Registration Details ============-->
     <h3 class="text-lg font-semibold mb-2">Application & Registration Details</h3>
     <div class="flex items-start gap-3 mb-3"><i class="pi pi-calendar text-xl text-gray-600"></i>
-      <div class="flex flex-col"><span class="font-medium">Application Date</span><span class="text-gray-700">{{ selectedRecord?.applicationDate }}</span></div>
+      <div class="flex flex-col"><span class="font-medium">Application Date</span><span class="text-gray-700">June 10, 2022</span></div>
     </div>
     <div class="flex items-start gap-3 mb-3"><i class="pi pi-book text-xl text-gray-600"></i>
-      <div class="flex flex-col"><span class="font-medium">Registration Date</span><span class="text-gray-700">{{ selectedRecord?.registrationDate }}</span></div>
+      <div class="flex flex-col"><span class="font-medium">Registration Date</span><span class="text-gray-700">December 15, 2023</span></div>
     </div>
     <div class="flex items-start gap-3 mb-3"><i class="pi pi-refresh text-xl text-gray-600"></i>
-      <div class="flex flex-col"><span class="font-medium">Renewal Date</span><span class="text-gray-700">{{ selectedRecord?.renewalDate }}</span></div>
+      <div class="flex flex-col"><span class="font-medium">Renewal Date</span><span class="text-gray-700">December 15, 2033</span></div>
     </div>
     <hr class="my-4">
     <!-- ==================== Owner Info ====================-->
@@ -213,7 +222,7 @@
     <!-- ==================== Goods & Services ====================-->
     <h3 class="text-lg font-semibold mb-2">Goods & Services</h3>
     <p class="text-gray-700 leading-relaxed">
-       {{ selectedRecord?.goodsAndServices }}</p>
+       Class 35: includes mainly services rendered by persons or organizations principally with the object of help in the working or management of a commercial undertaking, or help in the management of the business affairs or commercial functions of an industrial or commercial enterprise, as well as services rendered by advertising establishments primarily undertaking communications to the public, declarations or announcements by all means of diffusion and concerning all kinds of goods or services.</p>
   </div>
   <!-- Bottom Sticky CTA Button-->
   <div class="drawer-footer fixed bottom-0 left-0 right-0 bg-white p-4 border-t text-center">

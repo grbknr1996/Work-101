@@ -15,6 +15,10 @@ import { ToastService } from '../../../_services/toast.service';
 import { catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { logger } from 'src/app/logger';
+import {
+  EXTERNAL_USER_GROUPS,
+  OFFICE_USER_EXCLUDED_GROUPS,
+} from '../../../_constants/common.constant';
 
 @Component({
   selector: 'app-create-user-account',
@@ -37,13 +41,7 @@ export class CreateUserAccountComponent implements OnInit {
   availableGroups: GroupItem[] = [];
   isLoadingGroups = false;
   groupsLoadError = false;
-  totalGroupsCount = 0;
-  currentGroupsPage = 1;
-  groupsPageSize = 10;
-  groupsSearchTerm = '';
-  groupsFilterType = 'all';
-  groupsSortBy = 'groupName';
-  groupsSortOrder = 'asc';
+  externalUserGroupsList = EXTERNAL_USER_GROUPS as readonly string[];
 
   breadcrumbItems = [];
 
@@ -84,6 +82,20 @@ export class CreateUserAccountComponent implements OnInit {
 
     this.initForm();
 
+    // Watch for userType changes to validate assigned groups
+    this.userForm
+      .get('basicInfo.userType')
+      ?.valueChanges.subscribe((newUserType) => {
+        this.validateAssignedGroupsForUserType(newUserType);
+      });
+
+    // Watch for clientId changes to handle email and userType
+    this.userForm
+      .get('basicInfo.clientId')
+      ?.valueChanges.subscribe((clientId) => {
+        this.handleClientIdChange(clientId);
+      });
+
     if (this.isEditMode) {
       this.loadUserData();
     }
@@ -107,7 +119,7 @@ export class CreateUserAccountComponent implements OnInit {
         email: ['', [Validators.required, Validators.email]],
         telephone: ['', [Validators.pattern('^[0-9-+() ]*$')]],
         clientId: [''],
-        loginAlias: ['', [Validators.minLength(3)]],
+        loginId: [''],
         signatureType: [null],
         profilePicture: [null],
         signaturePicture: [null],
@@ -121,20 +133,9 @@ export class CreateUserAccountComponent implements OnInit {
     });
   }
 
-  private loadAvailableGroups(
-    page: number = 1,
-    searchTerm: string = '',
-    filterType: string = 'all',
-    sortBy: string = 'groupName',
-    sortOrder: string = 'asc'
-  ) {
+  private loadAvailableGroups() {
     this.isLoadingGroups = true;
     this.groupsLoadError = false;
-    this.currentGroupsPage = page;
-    this.groupsSearchTerm = searchTerm;
-    this.groupsFilterType = filterType;
-    this.groupsSortBy = sortBy;
-    this.groupsSortOrder = sortOrder;
 
     const platformCode = this.mechanicsService.getCurrentOffice() || 'default';
 
@@ -145,28 +146,12 @@ export class CreateUserAccountComponent implements OnInit {
       return;
     }
 
-    const offset = (page - 1) * this.groupsPageSize;
-
-    // Build query parameters
+    // Build query parameters - fetch all groups at once
     const queryParams: any = {
       isActive: true,
-      limit: this.groupsPageSize,
-      offset: offset,
-      sort: sortBy,
-      order: sortOrder,
+      limit: 'all', // Fetch all groups
       wipoPlatformCode: platformCode,
     };
-
-    // Add search term if provided
-    if (searchTerm && searchTerm.trim()) {
-      queryParams.groupName = searchTerm.trim();
-      queryParams.exactMatchIndicator = false; // Allow partial matches
-    }
-
-    // Add filter by group type if specified
-    if (filterType && filterType !== 'all') {
-      queryParams.groupType = filterType;
-    }
 
     this.userService
       .getUserGroups(queryParams)
@@ -194,14 +179,6 @@ export class CreateUserAccountComponent implements OnInit {
             iimsGroupId: group.iimsGroupId,
           }));
 
-          // Update total count from API response
-          if (
-            response.query &&
-            response.query.totalUserGroupQuantity !== undefined
-          ) {
-            this.totalGroupsCount = response.query.totalUserGroupQuantity;
-          }
-
           // If we're in edit mode and this is the first time loading groups,
           // make sure the assigned groups are still visible
           if (
@@ -216,56 +193,12 @@ export class CreateUserAccountComponent implements OnInit {
         } else {
           console.warn('No groups data in response:', response);
           this.availableGroups = [];
-          this.totalGroupsCount = 0;
         }
       });
   }
 
   retryLoadGroups() {
-    this.loadAvailableGroups(
-      this.currentGroupsPage,
-      this.groupsSearchTerm,
-      this.groupsFilterType,
-      this.groupsSortBy,
-      this.groupsSortOrder
-    );
-  }
-
-  onGroupsPageChange(page: number) {
-    this.loadAvailableGroups(
-      page,
-      this.groupsSearchTerm,
-      this.groupsFilterType,
-      this.groupsSortBy,
-      this.groupsSortOrder
-    );
-  }
-
-  onGroupsSearch(searchTerm: string) {
-    // Reset to first page when searching
-    this.loadAvailableGroups(
-      1,
-      searchTerm,
-      this.groupsFilterType,
-      this.groupsSortBy,
-      this.groupsSortOrder
-    );
-  }
-
-  onGroupsFilter(filterType: string) {
-    this.loadAvailableGroups(
-      1,
-      this.groupsSearchTerm,
-      filterType,
-      this.groupsSortBy,
-      this.groupsSortOrder
-    );
-  }
-
-  get totalGroupsPages(): number {
-    const pages = Math.ceil(this.totalGroupsCount / this.groupsPageSize);
-
-    return pages;
+    this.loadAvailableGroups();
   }
 
   get isOnGroupsStep(): boolean {
@@ -278,13 +211,59 @@ export class CreateUserAccountComponent implements OnInit {
   get filteredAvailableGroups(): GroupItem[] {
     const assignedGroups = this.userForm.get('assignedGroups').value || [];
     const assignedGroupIds = assignedGroups.map((group: GroupItem) => group.id);
+    const isExternal = this.userForm.get('basicInfo.userType')?.value || false;
 
-    // Filter out assigned groups from the current page of available groups
-    const filtered = this.availableGroups.filter(
+    // Start with all available groups
+    let filtered = this.availableGroups;
+
+    // If external user, filter to only show business groups with names LEGAL_REPRESENTATIVE and AGENT
+    if (isExternal) {
+      filtered = filtered.filter(
+        (group) =>
+          group.type === 'BUSINESS' &&
+          EXTERNAL_USER_GROUPS.includes(
+            group.name as (typeof EXTERNAL_USER_GROUPS)[number]
+          )
+      );
+    } else {
+      // If office user, exclude PUBLIC, LEGAL_REPRESENTATIVE, and AGENT business groups
+      filtered = filtered.filter(
+        (group) =>
+          !(
+            group.type === 'BUSINESS' &&
+            OFFICE_USER_EXCLUDED_GROUPS.includes(
+              group.name as (typeof OFFICE_USER_EXCLUDED_GROUPS)[number]
+            )
+          )
+      );
+    }
+
+    // Filter out assigned groups
+    filtered = filtered.filter(
       (group) => !assignedGroupIds.includes(String(group.id))
     );
 
     return filtered;
+  }
+
+  // Check if assignment button should be disabled for external users
+  get isAssignmentDisabled(): boolean {
+    const isExternal = this.userForm.get('basicInfo.userType')?.value || false;
+    const assignedGroups = this.userForm.get('assignedGroups').value || [];
+
+    if (isExternal) {
+      // For external users, check if they already have an external group assigned
+      const hasExternalGroup = assignedGroups.some(
+        (group: GroupItem) =>
+          group.type === 'BUSINESS' &&
+          EXTERNAL_USER_GROUPS.includes(
+            group.name as (typeof EXTERNAL_USER_GROUPS)[number]
+          )
+      );
+      return hasExternalGroup;
+    }
+
+    return false;
   }
 
   private loadUserData() {
@@ -303,7 +282,7 @@ export class CreateUserAccountComponent implements OnInit {
             email: userAccount.email || '',
             telephone: '', // Not available in DetailedUserAccount interface
             clientId: userAccount.clientAppId || '',
-            loginAlias: userAccount.loginId || '',
+            loginId: userAccount.loginId || '',
             profilePicture: null, // Not available in DetailedUserAccount interface
             signaturePicture: userAccount.signaturePicture,
             signatureType: userAccount.signatureType || '',
@@ -325,6 +304,15 @@ export class CreateUserAccountComponent implements OnInit {
         };
 
         this.userForm.patchValue(userData);
+        this.userForm.get('basicInfo.loginId')?.disable();
+        // Handle clientId if present (for edit mode)
+        const clientId = userData.basicInfo.clientId;
+        if (clientId && clientId.trim().length > 0) {
+          // Use setTimeout to ensure form is fully patched before handling clientId
+          setTimeout(() => {
+            this.handleClientIdChange(clientId);
+          }, 0);
+        }
       },
       error: (error) => {
         logger.error('Error loading user account:', error);
@@ -332,7 +320,119 @@ export class CreateUserAccountComponent implements OnInit {
     });
   }
 
+  private validateAssignedGroupsForUserType(isExternal: boolean) {
+    const assignedGroups = this.userForm.get('assignedGroups')?.value || [];
+
+    if (isExternal) {
+      // If switching to external, clear all office groups and keep only external groups
+      const externalGroups = assignedGroups.filter(
+        (group: GroupItem) =>
+          group.type === 'BUSINESS' &&
+          EXTERNAL_USER_GROUPS.includes(
+            group.name as (typeof EXTERNAL_USER_GROUPS)[number]
+          )
+      );
+
+      // Clear all office groups (non-external groups)
+      if (externalGroups.length > 1) {
+        // Keep only the first external group if multiple exist
+        this.userForm.get('assignedGroups')?.setValue([externalGroups[0]]);
+        this.toastService.showError(
+          'Error',
+          this.mechanicsService.translate(
+            'userManagement.userAccounts.externalUserSingleGroupError'
+          ) ||
+            'External users can only be assigned one group: either LEGAL_REPRESENTATIVE or AGENT'
+        );
+      } else {
+        // Keep only external groups, clear all office groups
+        this.userForm.get('assignedGroups')?.setValue(externalGroups);
+      }
+    } else {
+      // If switching to office user, clear all external groups and keep only office groups
+      const officeGroups = assignedGroups.filter(
+        (group: GroupItem) =>
+          !(
+            group.type === 'BUSINESS' &&
+            EXTERNAL_USER_GROUPS.includes(
+              group.name as (typeof EXTERNAL_USER_GROUPS)[number]
+            )
+          )
+      );
+
+      // Clear all external groups, keep only office groups
+      this.userForm.get('assignedGroups')?.setValue(officeGroups);
+    }
+  }
+
+  private handleClientIdChange(clientId: string | null) {
+    const emailControl = this.userForm.get('basicInfo.email');
+    const userTypeControl = this.userForm.get('basicInfo.userType');
+    const hasClientId = clientId && clientId.trim().length > 0;
+
+    if (hasClientId) {
+      // When clientId is provided: disable email, clear it, remove validators, set userType to office and disable toggle
+      emailControl?.disable();
+      emailControl?.setValue('');
+      emailControl?.clearValidators();
+      emailControl?.updateValueAndValidity();
+
+      // Set userType to office (false) and disable it
+      userTypeControl?.setValue(false, { emitEvent: false }); // emitEvent: false to prevent triggering validateAssignedGroupsForUserType
+      userTypeControl?.disable();
+
+      // Trigger validation for assigned groups after setting userType
+      this.validateAssignedGroupsForUserType(false);
+    } else {
+      // When clientId is cleared: enable email, add validators, enable userType toggle
+      emailControl?.enable();
+      emailControl?.setValidators([Validators.required, Validators.email]);
+      emailControl?.updateValueAndValidity();
+
+      // Enable userType toggle (allow toggling, but don't change the current value)
+      userTypeControl?.enable();
+
+      // Trigger change detection to update the template
+      this.cdr.detectChanges();
+    }
+  }
+
+  onAssignmentError(errorMessage: string) {
+    this.toastService.showError(
+      'Error',
+      this.mechanicsService.translate(
+        'userManagement.userAccounts.externalUserSingleGroupError'
+      ) || errorMessage
+    );
+  }
+
   onAssignedGroupsChange(groups: GroupItem[]) {
+    const isExternal = this.userForm.get('basicInfo.userType')?.value || false;
+
+    // If external user, validate that only one of LEGAL_REPRESENTATIVE or AGENT can be assigned
+    if (isExternal) {
+      const externalGroups = groups.filter(
+        (group) =>
+          group.type === 'BUSINESS' &&
+          EXTERNAL_USER_GROUPS.includes(
+            group.name as (typeof EXTERNAL_USER_GROUPS)[number]
+          )
+      );
+
+      if (externalGroups.length > 1) {
+        // Show error toast and prevent assignment
+        this.toastService.showError(
+          'Error',
+          this.mechanicsService.translate(
+            'userManagement.userAccounts.externalUserSingleGroupError'
+          ) ||
+            'External users can only be assigned one group: either LEGAL_REPRESENTATIVE or AGENT'
+        );
+        // Don't update the groups - keep the previous valid state
+        return;
+      }
+    }
+
     this.userForm.get('assignedGroups').setValue(groups);
     // Trigger change detection to update filteredAvailableGroups
     this.cdr.detectChanges();
@@ -369,18 +469,31 @@ export class CreateUserAccountComponent implements OnInit {
 
   canProceed(): boolean {
     switch (this.activeStep) {
-      case 0:
-        const basicInfoValid = this.userForm.get('basicInfo').valid;
+      case 0: {
+        const basicInfo = this.userForm.get('basicInfo');
+        const basicInfoValue = basicInfo?.value;
+        const clientId = basicInfoValue?.clientId;
+        const hasClientId = clientId && clientId.trim().length > 0;
+
+        // If clientId is provided, email is not required
+        if (hasClientId) {
+          // Check if username is valid (email is disabled and not required)
+          const usernameValid = basicInfo?.get('username')?.valid;
+          return usernameValid || false;
+        }
+
+        // Otherwise, check if basicInfo form is valid (includes email requirement)
+        const basicInfoValid = basicInfo?.valid;
 
         // In edit mode, check if we have the required data loaded
         if (this.isEditMode && basicInfoValid) {
-          const basicInfo = this.userForm.get('basicInfo').value;
-          const hasRequiredData = basicInfo.username && basicInfo.email;
-
+          const hasRequiredData =
+            basicInfoValue.username && basicInfoValue.email;
           return hasRequiredData;
         }
 
-        return basicInfoValid;
+        return basicInfoValid || false;
+      }
       case 1:
         return true;
       case 2:
@@ -427,7 +540,11 @@ export class CreateUserAccountComponent implements OnInit {
 
   saveUser() {
     if (this.userForm.valid) {
-      const formData = this.userForm.value;
+      // Use getRawValue() to include disabled form controls (like email when clientId is present)
+      const formData = this.userForm.getRawValue();
+      const hasClientId =
+        formData.basicInfo.clientId &&
+        formData.basicInfo.clientId.trim().length > 0;
       console.log('Form data:', formData);
 
       if (this.isEditMode) {
@@ -442,8 +559,11 @@ export class CreateUserAccountComponent implements OnInit {
           return;
         }
 
-        // Validate required fields for update
-        if (!formData.basicInfo.username || !formData.basicInfo.email) {
+        // Validate required fields for update (email not required if clientId is provided)
+        if (
+          !formData.basicInfo.username ||
+          (!hasClientId && !formData.basicInfo.email)
+        ) {
           this.toastService.showError(
             'Error',
             this.mechanicsService.translate(
@@ -459,7 +579,7 @@ export class CreateUserAccountComponent implements OnInit {
           userName: formData.basicInfo.username,
           loginId: formData.basicInfo.loginAlias || '',
           signaturePicture: formData.basicInfo.signaturePicture || '',
-          userEmail: formData.basicInfo.email,
+          userEmail: hasClientId ? '' : formData.basicInfo.email || '',
           signatureType: formData.basicInfo.signatureType ?? '',
           clientAppId: formData.basicInfo.clientId || null,
           isActive: formData.basicInfo.isActive, // Use isActive from form for status field
@@ -501,8 +621,11 @@ export class CreateUserAccountComponent implements OnInit {
             },
           });
       } else {
-        // Validate required fields
-        if (!formData.basicInfo.username || !formData.basicInfo.email) {
+        // Validate required fields (email not required if clientId is provided)
+        if (
+          !formData.basicInfo.username ||
+          (!hasClientId && !formData.basicInfo.email)
+        ) {
           this.toastService.showError(
             'Error',
             this.mechanicsService.translate(
@@ -515,7 +638,7 @@ export class CreateUserAccountComponent implements OnInit {
         // Create user with proper payload structure
         const userCreationPayload: UserCreationPayload = {
           userName: formData.basicInfo.username,
-          email: formData.basicInfo.email,
+          email: hasClientId ? '' : formData.basicInfo.email || '',
           clientAppId: formData.basicInfo.clientId || null,
           signaturePicture: formData.basicInfo.signaturePicture || null,
           signatureType: formData.basicInfo.signatureType ?? null,
@@ -558,15 +681,5 @@ export class CreateUserAccountComponent implements OnInit {
     } else {
       this.userForm.markAllAsTouched();
     }
-  }
-
-  onGroupsSort(sortBy: string, sortOrder: string) {
-    this.loadAvailableGroups(
-      1,
-      this.groupsSearchTerm,
-      this.groupsFilterType,
-      sortBy,
-      sortOrder
-    );
   }
 }

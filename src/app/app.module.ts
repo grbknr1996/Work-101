@@ -156,6 +156,7 @@ import { ViewUserDetailsComponent } from './components/view-user-details/view-us
 import { CognitoSyncComponent } from './pages/cognito-sync/cognito-sync.component';
 import { ImageCropperComponent } from 'ngx-image-cropper';
 import { CropDialogComponent } from './components/crop-dialog/crop-dialog.component';
+import { ResendVerificationEmailModalComponent } from './components/resend-verification-email-modal/resend-verification-email-modal.component';
 import { ViewGroupComponent } from './pages/user-management/groups/view-group/view-group.component';
 import { RetryInterceptor } from './_interceptors/retry.interceptor';
 import { AuthInterceptor } from './_interceptors/auth.interceptor';
@@ -265,11 +266,12 @@ import { AddRecipientComponent } from './pages/data-exchange-config/add-recipien
     ProfileComponent,
     ViewUserDetailsComponent,
     CropDialogComponent,
+    ResendVerificationEmailModalComponent,
     ApprovalReviewComponent,
     ApprovalRecorderComponent,
     ViewGroupComponent,
     TrademarkSimilaritySearchComponent,
-    AddRecipientComponent
+    AddRecipientComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -339,4 +341,4 @@ import { AddRecipientComponent } from './pages/data-exchange-config/add-recipien
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

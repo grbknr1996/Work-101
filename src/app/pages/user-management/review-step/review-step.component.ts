@@ -9,4 +9,5 @@ export class ReviewStepComponent {
   @Input() basicInfo: any;
   @Input() assignedGroups: any[] = [];
   @Input() security: any;
+  @Input() isEditMode: boolean = false;
 }

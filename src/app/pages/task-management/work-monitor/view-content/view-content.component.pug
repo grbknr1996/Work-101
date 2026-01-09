@@ -14,6 +14,7 @@ app-layout
             img(src='assets/icons/twoPanels.svg', alt="Two Panel", style="width: 24px; height: 24px;")
         p-button(icon="pi pi-check-circle",pTooltip="Approve",tooltipPosition="bottom", severity="secondary",text (click)="changeLayout('approveAction')")
         p-button(icon="pi pi-arrow-right-arrow-left", pTooltip="Switch Sides",tooltipPosition="bottom", severity="secondary", text (click)="switchSides()")
+        p-button(icon="pi pi-search", pTooltip="Tradevmark Similarity Search",tooltipPosition="bottom", severity="secondary", text (click)="openTrademarkSimilaritySearch($event)")
 
   ng-container(*ngIf="expandedPanelIndex === null; else expandedPanelView")
     ng-container([ngSwitch]="layoutMode")

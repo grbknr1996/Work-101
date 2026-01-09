@@ -15,8 +15,8 @@ import { WorkInProgressComponent } from '../work-in-progress/work-in-progress.co
 //?
 
 const routes: Routes = [
-  { path: '', redirectTo: 'application-count', pathMatch: 'full' },
-  { path: 'application-count', component: StatisticsComponent },
+  { path: '', redirectTo: 'applications', pathMatch: 'full' },
+  { path: 'applications', component: StatisticsComponent },
   { path: 'trends', component: TrendsComponent },
   { path: 'trends/tech-timeline', component: TrendsHistoryComponent },
   { path: 'origins', component: OriginsComponent },
@@ -28,7 +28,7 @@ const routes: Routes = [
   { path: 'productivity', component: WorkInProgressComponent }, //REMOVE_LATER
   //?
 
-  { path: '*', redirectTo: 'application-count' }
+  { path: '*', redirectTo: 'applications' }
 ];
 
 @NgModule({

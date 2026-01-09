@@ -11,7 +11,12 @@ import {
   UserService,
   UserGroup,
   UserGroupQueryParams,
+  GroupStatistics,
 } from 'src/app/_services/user.service';
+import {
+  UserStatsComponent,
+  UserStatsConfig,
+} from 'src/app/components/user-stats/user-stats.component';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ColumnDefinition } from '../../../components/table/table.component';
@@ -25,13 +30,31 @@ export class GroupsComponent implements OnInit, OnDestroy {
   @ViewChild(ConfigurableFilterComponent)
   configurableFilter!: ConfigurableFilterComponent;
 
+  @ViewChild(UserStatsComponent)
+  userStatsComponent!: UserStatsComponent;
+
   private destroy$ = new Subject<void>();
   private isInitialized = false;
   private lastRequestParams: string = '';
+  private isClearingFiltersFromStat = false;
 
   groups: UserGroup[] = [];
   loading: boolean = false;
   totalRecords: number = 0;
+
+  // Group statistics
+  totalGroups = 0;
+  businessGroups = 0;
+  userDefinedGroups = 0;
+  defaultSelectedStat = 'TOTAL_GROUPS';
+
+  // User stats configuration
+  userStatsConfig: UserStatsConfig = {
+    stats: [],
+    defaultSelectedStat: 'TOTAL_GROUPS',
+    showIcons: true,
+    showCounts: true,
+  };
 
   // Pagination properties
   currentPage: number = 0;
@@ -234,8 +257,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
       ];
     });
 
-    // Load groups from API only once on init
+    // Load group statistics and groups from API
     this.isInitialized = true;
+    this.loadGroupStatistics();
     this.loadGroups();
   }
 
@@ -495,13 +519,26 @@ export class GroupsComponent implements OnInit, OnDestroy {
   }
 
   onFilterCleared(): void {
+    // Don't reload if we're clearing filters from stat selection
+    if (this.isClearingFiltersFromStat) {
+      return;
+    }
     this.appliedFilters = [];
+
+    // Reset stat selection to TOTAL_GROUPS
+    if (this.userStatsComponent) {
+      this.userStatsComponent.updateSelectedStat('TOTAL_GROUPS');
+    }
+
     this.resetPagination();
   }
 
   onFilterApplied(filters: FilterValue[]): void {
     this.appliedFilters = filters;
     this.resetPagination();
+
+    // Update stat selection based on applied filters
+    this.updateStatSelectionFromFilters(filters);
   }
 
   onAppliedFiltersChange(filters: FilterValue[]): void {
@@ -539,7 +576,158 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.appliedFilters = [];
     // Clear the red dot by calling the configurable filter's clear method
     this.configurableFilter.clearAllFilters();
+
+    // Reset stat selection to TOTAL_GROUPS
+    if (this.userStatsComponent) {
+      this.userStatsComponent.updateSelectedStat('TOTAL_GROUPS');
+    }
+
     this.resetPagination();
+  }
+
+  /**
+   * Load group statistics from API
+   */
+  loadGroupStatistics(): void {
+    this.userService
+      .getGroupStatistics()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (stats: GroupStatistics) => {
+          this.totalGroups = stats.totalGroupQuantity;
+          this.businessGroups = stats.businessGroupQuantity;
+          this.userDefinedGroups = stats.userDefinedGroupQuantity;
+
+          // Update the user stats configuration
+          this.updateGroupStatsConfig();
+        },
+        error: (error) => {
+          console.error('Error loading group statistics:', error);
+          // Fallback to default values if API fails
+          this.totalGroups = 0;
+          this.businessGroups = 0;
+          this.userDefinedGroups = 0;
+          this.updateGroupStatsConfig();
+        },
+      });
+  }
+
+  /**
+   * Update group statistics configuration
+   */
+  private updateGroupStatsConfig(): void {
+    this.userStatsConfig = {
+      stats: [
+        {
+          key: 'TOTAL_GROUPS',
+          label:
+            this.ms.translate('userManagement.groups.totalGroups') ||
+            'Total Groups',
+          count: this.totalGroups,
+          color: '#3949AB',
+          icon: 'pi pi-users',
+        },
+        {
+          key: 'USER_GROUPS',
+          label:
+            this.ms.translate('userManagement.groups.userGroups') ||
+            'User Groups',
+          count: this.userDefinedGroups,
+          color: '#2E7D32',
+          icon: 'pi pi-user-edit',
+        },
+        {
+          key: 'BUSINESS_GROUPS',
+          label:
+            this.ms.translate('userManagement.groups.businessGroups') ||
+            'Business Groups',
+          count: this.businessGroups,
+          color: '#0288D1',
+          icon: 'pi pi-briefcase',
+        },
+      ],
+      defaultSelectedStat: this.defaultSelectedStat,
+      showIcons: true,
+      showCounts: true,
+    };
+  }
+
+  /**
+   * Handle stat selection from user-stats component
+   */
+  onStatSelected(stat: string): void {
+    console.log('🎯 Group stat selected:', stat);
+
+    // Set flag to prevent API call from onFilterCleared
+    this.isClearingFiltersFromStat = true;
+
+    // Clear existing filters first (without triggering API call)
+    this.configurableFilter.clearAllFilters();
+    this.appliedFilters = [];
+
+    // Reset flag
+    this.isClearingFiltersFromStat = false;
+
+    // Reset to first page when applying stat filter
+    this.currentPage = 0;
+
+    // Apply filters based on selected stat
+    switch (stat) {
+      case 'TOTAL_GROUPS':
+        // No filters applied - show all groups
+        this.appliedFilters = [];
+        this.loadGroups();
+        break;
+
+      case 'USER_GROUPS':
+        // Filter for user-defined groups
+        this.appliedFilters = [
+          { key: 'groupType', value: 'user', type: 'radio' },
+        ];
+        this.loadGroups();
+        break;
+
+      case 'BUSINESS_GROUPS':
+        // Filter for business groups
+        this.appliedFilters = [
+          { key: 'groupType', value: 'business', type: 'radio' },
+        ];
+        this.loadGroups();
+        break;
+    }
+  }
+
+  /**
+   * Update stat selection based on applied filters (without triggering API call)
+   */
+  updateStatSelectionFromFilters(filters: FilterValue[]): void {
+    console.log('🔄 Updating stat selection from filters:', filters);
+
+    // Check if there's a groupType filter
+    const groupTypeFilter = filters.find((f) => f.key === 'groupType');
+
+    let selectedStat = 'TOTAL_GROUPS';
+
+    // If only groupType filter is selected and it's the only filter, update the stat
+    if (groupTypeFilter && filters.length === 1) {
+      if (groupTypeFilter.value === 'user') {
+        console.log('📊 Setting stat to USER_GROUPS based on filter');
+        selectedStat = 'USER_GROUPS';
+      } else if (groupTypeFilter.value === 'business') {
+        console.log('📊 Setting stat to BUSINESS_GROUPS based on filter');
+        selectedStat = 'BUSINESS_GROUPS';
+      }
+    } else {
+      console.log(
+        '📊 Setting stat to TOTAL_GROUPS (multiple filters or no groupType filter)'
+      );
+      selectedStat = 'TOTAL_GROUPS';
+    }
+
+    // Update the stat component visually without triggering API call
+    if (this.userStatsComponent) {
+      this.userStatsComponent.updateSelectedStat(selectedStat);
+    }
   }
 
   // Get filter display value

@@ -68,6 +68,8 @@ export class StatisticsComponent implements OnInit {
   activeDataMapH = [];
   inActiveDataMapH = [];
   currentYearRange = -1;
+  //|//
+  currentApplicationStatus = 'accounted';
 
   fontFamily = '';
   chartHeight: any = 600;
@@ -82,8 +84,7 @@ export class StatisticsComponent implements OnInit {
   filters: chartFilterConfig[] = [
     { include: false, key: 'compare', type: 'checkbox', model: '' },
     { include: false, key: 'trends_theme', type: 'dropdown', model: '' },
-    { include: false, key: 'origin', type: 'dropdown', model: '' },
-    { include: false, key: 'type', type: 'dropdown', model: '' }
+    { include: false, key: 'origin', type: 'dropdown', model: '' }
   ];
   showFilter: boolean = false;
   //CHART-NAVBAR
@@ -98,8 +99,8 @@ export class StatisticsComponent implements OnInit {
       this.currentIPCategory = '';
       if (this.showFilter) this.updateFilterNGModel('IPType', 'all'); //INITIAL
     }
-    if (this.showFilter) this.updateFilterNGModel('yearRange', 'all');
     this.currentYearRange = -1;
+    if (this.showFilter) { this.updateFilterNGModel('yearRange', 'all'); this.updateFilterNGModel('type', null, null, false); }
     this.currentLegend = 'accounted_active_application';
     this.setSeriesData(); //DEFAULT CHART DATA
   }
@@ -117,6 +118,11 @@ export class StatisticsComponent implements OnInit {
       if (filter.model === 'all') this.onReset();
       else {
         this.currentYearRange = filter.model;
+        //-- MODIFY FILTER OPTIONS
+        this.updateFilterNGModel('yearRange', this.currentYearRange);
+        this.updateFilterNGModel('type', this.currentApplicationStatus);
+        this.updateFilterNGModel('IPType', null, null, false);
+        //--
         //INITIALIZE
         this.chartLegendSelected = {
           [this.translationMap.get('D')]: true,
@@ -126,9 +132,13 @@ export class StatisticsComponent implements OnInit {
         this.setSeriesData('history');
       }
     }
+    if (filter.key === 'type') {
+      this.currentApplicationStatus = filter.model;
+      this.setSeriesData('history');
+    }
   }
-  updateFilterNGModel(key: string, model: any, options?: any) {
-    this.chartFilterC.updateNGModel(key, model, options);
+  updateFilterNGModel(key: string, model: any, options?: any, include?: any) {
+    this.chartFilterC.updateNGModel(key, model, options, include);
   }
 
   //CHART EVENTS
@@ -365,19 +375,19 @@ export class StatisticsComponent implements OnInit {
         {
           name: this.translationMap.get('D'),
           type: 'line',
-          smooth: false,
+          smooth: true,
           symbol: 'none'
         },
         {
           name: this.translationMap.get('P'),
           type: 'line',
-          smooth: false,
+          smooth: true,
           symbol: 'none'
         },
         {
           name: this.translationMap.get('T'),
           type: 'line',
-          smooth: false,
+          smooth: true,
           symbol: 'none'
         }
       ],
@@ -451,7 +461,15 @@ export class StatisticsComponent implements OnInit {
   ngAfterViewChecked() {
     if (this.showFilter && !this.previous) {
       //HANDLE SHOW/HIDE SYNC
-      (this.accountedDataMap.size > 5) ? this.updateFilterNGModel('IPType', this.currentIPCategory, [...this.IPCategory.keys()]) : (this.currentIPCategory.length === 0) ? this.updateFilterNGModel('IPType', 'all') : this.updateFilterNGModel('IPType', this.currentIPCategory);
+      if (this.currentYearRange === -1) {
+        (this.accountedDataMap.size > 5) ? this.updateFilterNGModel('IPType', this.currentIPCategory, [...this.IPCategory.keys()]) : (this.currentIPCategory.length === 0) ? this.updateFilterNGModel('IPType', 'all') : this.updateFilterNGModel('IPType', this.currentIPCategory);
+        this.updateFilterNGModel('type', null, null, false);
+      }
+      if (this.currentYearRange !== -1) {
+        this.updateFilterNGModel('yearRange', this.currentYearRange);
+        this.updateFilterNGModel('type', this.currentApplicationStatus);
+        this.updateFilterNGModel('IPType', null, null, false);
+      }
     }
     this.previous = this.showFilter;
   }
@@ -645,9 +663,10 @@ export class StatisticsComponent implements OnInit {
       //CHART SERIES
       let seriesData1 = [], seriesData2 = [], seriesData3 = [];
       if (this.currentYearRange !== -1) {
-        seriesData1 = this.accountedDataMapH.slice(-this.currentYearRange);
-        seriesData2 = this.activeDataMapH.slice(-this.currentYearRange);
-        seriesData3 = this.inActiveDataMapH.slice(-this.currentYearRange);
+        // -1 Indicates PAST 6 YRS
+        seriesData1 = this.accountedDataMapH.slice(-this.currentYearRange - 1);
+        seriesData2 = this.activeDataMapH.slice(-this.currentYearRange - 1);
+        seriesData3 = this.inActiveDataMapH.slice(-this.currentYearRange - 1);
       }
       else {
         seriesData1 = this.accountedDataMapH;
@@ -662,11 +681,17 @@ export class StatisticsComponent implements OnInit {
       this.chartHeightFunc();
       this.chartWidthFunc();
 
+      //SELECT APPLICATION STATUS
+      let finalSeries = [];
+      if (this.currentApplicationStatus === 'accounted') finalSeries = seriesData1;
+      if (this.currentApplicationStatus === 'active') finalSeries = seriesData2;
+      if (this.currentApplicationStatus === 'inactive') finalSeries = seriesData3;
+
       setTimeout(() => {
         //LINE
         this.chartInstance.setOption({
           xAxis: {
-            data: seriesData1.map(d => d.year)
+            data: finalSeries.map(d => d.year)
           },
           legend: {
             data: [this.translationMap.get('D'), this.translationMap.get('P'), this.translationMap.get('T')],
@@ -675,15 +700,15 @@ export class StatisticsComponent implements OnInit {
           series: [
             {
               name: this.translationMap.get('D'),
-              data: seriesData1.map(d => { if (d.empty) return 0; else if (d['D'] == null) return 0; else return d['D'] })
+              data: finalSeries.map(d => { if (d.empty) return 0; else if (d['D'] == null) return 0; else return d['D'] })
             },
             {
               name: this.translationMap.get('P'),
-              data: seriesData1.map(d => { if (d.empty) return 0; else if (d['P'] == null) return 0; else return d['P'] })
+              data: finalSeries.map(d => { if (d.empty) return 0; else if (d['P'] == null) return 0; else return d['P'] })
             },
             {
               name: this.translationMap.get('T'),
-              data: seriesData1.map(d => { if (d.empty) return 0; else if (d['T'] == null) return 0; else return d['T'] })
+              data: finalSeries.map(d => { if (d.empty) return 0; else if (d['T'] == null) return 0; else return d['T'] })
             }
           ],
           notMerge: false

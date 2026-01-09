@@ -106,12 +106,14 @@ export class UserAccountsComponent implements OnInit {
 
   // Modal properties for resend verification email
   showResendVerificationModal = false;
+  showResendVerificationResultModal = false;
   resendVerificationModalConfig: ModalConfig = {
     header: 'Information',
     content: '',
     showIcon: true,
     showCloseButton: true,
   };
+  selectedUserForVerification: UserAccount | null = null;
 
   // View user details modal properties
   showViewUserDialog = false;
@@ -739,17 +741,35 @@ export class UserAccountsComponent implements OnInit {
   }
 
   resendVerificationEmail(user: UserAccount) {
-    this.userService
-      .resendVerificationEmailWithModal(user.loginId, user.email)
-      .subscribe((result) => {
-        this.resendVerificationModalConfig = result.modalConfig;
-        this.showResendVerificationModal = true;
-        this.cdr.markForCheck();
-      });
+    this.selectedUserForVerification = user;
+    this.showResendVerificationModal = true;
+    this.cdr.markForCheck();
   }
 
   onResendVerificationModalClose() {
     this.showResendVerificationModal = false;
+    this.selectedUserForVerification = null;
+    this.cdr.markForCheck();
+  }
+
+  onResendVerificationEmailSent(event: {
+    success: boolean;
+    modalConfig: ModalConfig;
+  }) {
+    // Show result modal
+    this.resendVerificationModalConfig = event.modalConfig;
+    this.showResendVerificationResultModal = true;
+    this.cdr.markForCheck();
+  }
+
+  onResendVerificationResultModalClose() {
+    this.showResendVerificationResultModal = false;
+    this.resendVerificationModalConfig = {
+      header: 'Information',
+      content: '',
+      showIcon: true,
+      showCloseButton: true,
+    };
     this.cdr.markForCheck();
   }
 

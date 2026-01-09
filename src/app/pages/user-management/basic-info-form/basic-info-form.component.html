@@ -22,8 +22,8 @@
             <app-validation-errors [control]="formGroup.get('username')"></app-validation-errors>
           </div>
           <div class="form-field-row">
-            <label for="email"><i class="pi pi-envelope input-label-icon"></i>{{ 'userManagement.basicInfoForm.email' | translate }}<span class="required">*</span></label>
-            <input pInputText id="email" formControlName="email" [ngClass]="{ 'ng-invalid': formGroup.get('email')?.invalid &amp;&amp; formGroup.get('email')?.touched }">
+            <label for="email"><i class="pi pi-envelope input-label-icon"></i>{{ 'userManagement.basicInfoForm.email' | translate }}<span class="required" *ngIf="!formGroup.get('clientId')?.value || !formGroup.get('clientId')?.value.trim()">*</span></label>
+            <input pInputText id="email" formControlName="email" [disabled]="formGroup.get('clientId')?.value &amp;&amp; formGroup.get('clientId')?.value.trim()" [ngClass]="{ 'ng-invalid': formGroup.get('email')?.invalid &amp;&amp; formGroup.get('email')?.touched }">
             <app-validation-errors [control]="formGroup.get('email')"></app-validation-errors>
           </div>
           <div class="form-field-row">
@@ -38,16 +38,16 @@
             <input pInputText id="clientId" formControlName="clientId" [ngClass]="{ 'ng-invalid': formGroup.get('clientId')?.invalid &amp;&amp; formGroup.get('clientId')?.touched }">
             <app-validation-errors [control]="formGroup.get('clientId')"></app-validation-errors>
           </div>
-          <div class="form-field-row">
-            <label for="loginAlias"><i class="pi pi-user-edit input-label-icon"></i>{{ 'userManagement.basicInfoForm.loginAlias' | translate }}</label>
-            <input pInputText id="loginAlias" formControlName="loginAlias" [ngClass]="{ 'ng-invalid': formGroup.get('loginAlias')?.invalid &amp;&amp; formGroup.get('loginAlias')?.touched }">
-            <app-validation-errors [control]="formGroup.get('loginAlias')"></app-validation-errors>
+          <div class="form-field-row" *ngIf="isEditMode">
+            <label for="loginId"><i class="pi pi-user-edit input-label-icon"></i>{{ 'userManagement.basicInfoForm.loginId' | translate }}</label>
+            <input pInputText id="loginId" formControlName="loginId" [disabled]="true" [ngClass]="{ 'ng-invalid': formGroup.get('loginId')?.invalid &amp;&amp; formGroup.get('loginId')?.touched }">
+            <app-validation-errors [control]="formGroup.get('loginId')"></app-validation-errors>
           </div>
           <div class="toggle-row">
             <div class="toggle-field">
               <label for="userType"><i class="pi pi-user-edit input-label-icon"></i>{{ 'userManagement.basicInfoForm.userType' | translate }}</label>
               <div class="flex items-center gap-3">
-                <p-toggleSwitch formControlName="userType" [trueValue]="true" [falseValue]="false" [disabled]="isEditMode" [style.pointer-events]="isEditMode ? 'none' : 'auto'" styleClass="user-type-toggle"></p-toggleSwitch><span class="text-sm font-medium text-gray-700">{{ formGroup.get('userType')?.value ? ('userManagement.basicInfoForm.externalUser' | translate) : ('userManagement.basicInfoForm.officeUser' | translate) }}</span>
+                <p-toggleSwitch formControlName="userType" [trueValue]="true" [falseValue]="false" [disabled]="isEditMode || formGroup.get('userType')?.disabled" [style.pointer-events]="(isEditMode || formGroup.get('userType')?.disabled) ? 'none' : 'auto'" styleClass="user-type-toggle"></p-toggleSwitch><span class="text-sm font-medium text-gray-700">{{ formGroup.get('userType')?.value ? ('userManagement.basicInfoForm.externalUser' | translate) : ('userManagement.basicInfoForm.officeUser' | translate) }}</span>
               </div>
               <app-validation-errors [control]="formGroup.get('userType')"></app-validation-errors>
             </div>

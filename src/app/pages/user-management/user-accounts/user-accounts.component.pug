@@ -93,10 +93,18 @@ app-layout([config]="layoutConfig")
       )
 
 // Resend Verification Email Modal
-app-modal(
+app-resend-verification-email-modal(
   [(visible)]="showResendVerificationModal",
+  [user]="selectedUserForVerification",
+  (visibleChange)="onResendVerificationModalClose()",
+  (emailSent)="onResendVerificationEmailSent($event)"
+)
+
+// Resend Verification Result Modal
+app-modal(
+  [(visible)]="showResendVerificationResultModal",
   [config]="resendVerificationModalConfig",
-  (visibleChange)="onResendVerificationModalClose()"
+  (visibleChange)="onResendVerificationResultModalClose()"
 )
 app-view-user-details(
   [(visible)]="showViewUserDialog",

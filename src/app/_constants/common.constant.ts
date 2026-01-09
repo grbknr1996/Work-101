@@ -49,3 +49,12 @@ export const AUTH_SKIP_ENDPOINTS: string[] = [
   'data-services',
   'distribution-rules',
 ];
+// External user groups - only these groups can be assigned to external users
+export const EXTERNAL_USER_GROUPS = ['LEGAL_REPRESENTATIVE', 'AGENT'] as const;
+
+// Business groups that should be hidden for office users
+export const OFFICE_USER_EXCLUDED_GROUPS = [
+  'PUBLIC_USER',
+  'LEGAL_REPRESENTATIVE',
+  'AGENT',
+] as const;

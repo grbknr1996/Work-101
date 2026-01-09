@@ -76,8 +76,8 @@
               <p-badge class="ml-auto mr-2" [value]="getGroupsCount().toString()"></p-badge></span>
           </p-accordion-header>
           <p-accordion-content>
-            <div class="groups-container" *ngIf="userAccount.userGroupBag &amp;&amp; userAccount.userGroupBag.length &gt; 0; else noGroups">
-              <div class="group-item" *ngFor="let group of userAccount.userGroupBag">
+            <div class="groups-container" *ngIf="getFilteredGroups().length &gt; 0; else noGroups">
+              <div class="group-item" *ngFor="let group of getFilteredGroups()">
                 <div class="group-info">
                   <div class="group-name">{{ group.groupName }}</div>
                   <div class="group-type"><span class="group-type-badge">{{ group.groupType }}</span></div>
@@ -102,7 +102,7 @@
               <div class="unit-item" *ngFor="let unit of userAccount.userUnitBag">
                 <div class="unit-info">
                   <div class="unit-name">{{ unit.unitName }}</div>
-                  <div class="unit-details">
+                  <div class="unit-details" *ngIf="unit.unitCategory || unit.platformCode">
                     <div class="unit-detail-row" *ngIf="unit.unitCategory"><span class="unit-detail-label">{{ ms.translate('profile.units.category') || 'Category' }}:</span><span class="unit-detail-value">{{ unit.unitCategory }}</span></div>
                     <div class="unit-detail-row" *ngIf="unit.platformCode"><span class="unit-detail-label">{{ ms.translate('profile.units.platformCode') || 'Platform Code' }}:</span><span class="unit-detail-value">{{ unit.platformCode }}</span></div>
                   </div>

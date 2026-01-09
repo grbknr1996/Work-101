@@ -125,6 +125,30 @@ searchOptions=[
       header: 'Application Date',
       sortable: true,
     },
+    {
+      field: 'actions',
+      header: 'Actions',
+      display: 'actions',
+      actions: [
+          {
+            label: 'Similarity Info',
+            icon: 'pi pi-info-circle',
+            action: 'viewSimilarityInfo',
+            severity: 'info',
+          },
+          {
+            label: 'View Details',
+            icon: '',
+            action: 'viewTrademarkDetails',
+            severity: 'info',
+          },
+          {
+            label: 'Select as Cited Mark',
+            icon: '',
+            action: 'selectAsCited',
+          }
+        ]
+    }
   ];
 
 
@@ -178,12 +202,12 @@ searchOptions=[
   }
 
   ngOnInit(): void {
-
+    this.landingPage();
     this.userStats = [
       {
         label: 'Similar Marks',
         markName: 'ABC Trademarks',
-        logoUrl: 'https://asean-ipregister.wipo.net/wopublish-search/service/images/0aLPP2osudojqiPv847dDQdmRZXEBvfWYW-dfzRPQNCTMZZoFCmN98PjasDK0jTrXyTBEQv1gvLrt5zpyig6WHPWvvb9pWm_R4XGcngbc0E?noLogo=true&disclaimer=Machine',
+        logoUrl: '/assets/images/mock-trademark.jpg',
         applicationNumber: '1234567',
         filingDate: '12 Aug 2024'
       },
@@ -267,7 +291,15 @@ searchOptions=[
 
   onActionClick(action: string, item: any) {
     switch (action) {
-
+      case 'viewTrademarkDetails':
+        this.showTrademarkDetails(item);
+        break;
+      case 'selectAsCited':
+        this.selectAsCitedMark(item);
+        break;
+      case 'viewSimilarityInfo':
+        this.openDescription(item);
+        break;
     }
   }
 
@@ -348,6 +380,7 @@ searchOptions=[
     this.allFilters = this.allFilters.map(f => ({ ...f, value: false }));
     this.syncAppliedFilters();
     this.configurableFilter.clearAllFilters();
+    this.removeImageSearchChip();
   }
 
   onFilterChange(event:any){
@@ -386,6 +419,10 @@ searchOptions=[
     console.log("filterKey value",filterKey, filterConfig)
     if (filterKey === 'imageSearch') {
       this.removeImageSearchChip();
+      return;
+    }
+    if (filterKey === 'cited') {
+      this.removeCitedTrademarksChip();
       return;
     }
 
@@ -429,6 +466,7 @@ searchOptions=[
   }
 
   showTrademarkDetails(data: any) {
+    this.selectedRecord = data;
     this.drawerVisible = true;
   }
   onSearchChange(value: string) {
@@ -438,14 +476,11 @@ searchOptions=[
   }
 
   onMatchTypeChange(event: any){
-    // update selectedMatchTypes if using multiselect, otherwise use matchType
     const modes = (this.selectedMatchTypes && this.selectedMatchTypes.length) ? this.selectedMatchTypes : (this.matchType ? [this.matchType] : ['Exact']);
-    //console.log("the selceted seacrh modes are", modes);
     this.searchSubject.next({ query: this.searchBar || '', modes });
   }
 
   private performSearch(query: string, modes: string[] = ['Exact']) {
-        console.log("the selceted seacrh modes are", modes);
 
       if (!query || !query.trim()) {
         // clear results if empty
@@ -594,12 +629,27 @@ searchOptions=[
       this.uploadedLogoUrl = '';
       this.uploadedImageFile = undefined;
       this.appliedFilters = this.appliedFilters.filter(f => f.key !== 'imageSearch');
-      this.tableData = [...this.baseData];
-      this.totalRecords = this.tableData.length;
-      this.updateListPagination();
-      this.updateCardPagination();
 
-      this.cdr.detectChanges();
+      // Restore view according to current filters / search state instead of always showing baseData
+      if (this.appliedFilters && this.appliedFilters.length > 0) {
+        this.applyFilters(this.appliedFilters);
+      } else if (this.searchBar && this.searchBar.trim()) {
+        const term = this.searchBar.trim();
+        if (this.searchMode === 'name') {
+          if (term.length > 2) {
+            const modes = (this.selectedMatchTypes && this.selectedMatchTypes.length) ? this.selectedMatchTypes : (this.matchType ? [this.matchType] : ['Exact']);
+            this.performSearch(term, modes);
+          } else {
+            this.resetToOriginalData();
+          }
+        } else if (this.searchMode === 'description') {
+          this.onDescriptionSearch();
+        } else {
+          this.resetToOriginalData();
+        }
+      } else {
+        this.resetToOriginalData();
+      }
     }
 
   onSearchModeChange(mode: 'name' | 'description') {
@@ -677,7 +727,6 @@ searchOptions=[
     }
 
 openDescription(data: any): void {
-      // set matched info immediately so UI can show thumbnails
       console.log('Opening description dialog for data:', data, this.searchMode);
       this.uploadedLogoUrl = this.uploadedLogoUrl || (this.uploadedImageFile ? URL.createObjectURL(this.uploadedImageFile) : '');
       this.matchedLogoUrl = data.logoUrl;
@@ -689,7 +738,6 @@ openDescription(data: any): void {
         this.searchedDescription = this.searchBar || '';
       }
 
-      // start analysis call
       this.isAnalyzing = true;
       this.similaritySummary = 'Analyzing similarity...';
       this.showDescriptionDialog = true;
@@ -761,28 +809,14 @@ openDescription(data: any): void {
 
      const alreadyCited = this.citedIds.has(id);
 
-     if (alreadyCited) {
-       this.citedTrademarks = this.citedTrademarks.filter(r => this.getRecordId(r) !== id);
-       this.citedIds.delete(id);
+       if (alreadyCited) {
+        this.citedTrademarks = this.citedTrademarks.filter(r => this.getRecordId(r) !== id);
+        this.citedIds.delete(id);
+      } else {
+        this.citedTrademarks = [record, ...this.citedTrademarks];
+        this.citedIds.add(id);
+      }
 
-       if (!this.baseData.some(r => this.getRecordId(r) === id)) {
-         this.baseData = [record, ...this.baseData];
-       }
-       if (this.isShowingCited) {
-         this.tableData = this.tableData.filter(r => this.getRecordId(r) !== id);
-       } else {
-         if (!this.tableData.some(r => this.getRecordId(r) === id)) {
-           this.tableData = [record, ...this.tableData];
-         }
-       }
-     } else {
-       this.citedTrademarks = [record, ...this.citedTrademarks];
-       this.citedIds.add(id);
-
-       this.baseData = this.baseData.filter(r => this.getRecordId(r) !== id);
-       this.OriginalData = this.OriginalData.filter(r => this.getRecordId(r) !== id);
-       this.tableData = this.tableData.filter(r => this.getRecordId(r) !== id);
-     }
 
      // update totals and paginations
      this.updateCitedCount();
@@ -797,29 +831,31 @@ openDescription(data: any): void {
     this.citedCount = this.citedTrademarks.length;
   }
 
-    getSitedTrademarks(): void {
-      if (!this.isShowingCited) {
-        if (!this.citedTrademarks || this.citedTrademarks.length === 0) {
-          this.cdr.markForCheck();
-          return;
-        }
-        this.isShowingCited = true;
-        this.tableData = [...this.citedTrademarks];
-      } else {
-        this.isShowingCited = false;
-        this.tableData = [...this.baseData];
+  getSitedTrademarks(): void {
+    if (!this.isShowingCited) {
+      if (!this.citedTrademarks || this.citedTrademarks.length === 0) {
+        this.cdr.markForCheck();
+        return;
       }
-
-     this.totalRecords = this.tableData.length;
-      this.currentPage = 0;
-      this.currentListPage = 0;
-      this.currentCardPage = 0;
-      this.pagedTableData = this.tableData.slice(0, this.pageSize);
+      this.isShowingCited = true;
+      this.tableData = [...this.citedTrademarks];
       this.addCitedTrademarksChip();
-      this.updateListPagination();
-      this.updateCardPagination();
-      this.cdr.markForCheck();
+    } else {
+      this.isShowingCited = false;
+      this.tableData = [...this.baseData];
+      this.removeCitedTrademarksChip();
     }
+
+    this.totalRecords = this.tableData.length;
+    this.currentPage = 0;
+    this.currentListPage = 0;
+    this.currentCardPage = 0;
+    this.pagedTableData = this.tableData.slice(0, this.pageSize);
+    //this.addCitedTrademarksChip();
+    this.updateListPagination();
+    this.updateCardPagination();
+    this.cdr.markForCheck();
+  }
   isCited(record: any): boolean {
      const id = this.getRecordId(record);
      return !!id && this.citedIds.has(id);
@@ -838,4 +874,100 @@ openDescription(data: any): void {
             console.log('Added cited trademarks chip:', this.appliedFilters);
         }
     }
+  private removeCitedTrademarksChip(): void {
+    this.isShowingCited = false;
+    this.appliedFilters = this.appliedFilters.filter(f => f.key !== 'cited');
+
+    // Restore any active filters / search rather than always resetting to baseData
+    if (this.appliedFilters && this.appliedFilters.length > 0) {
+      this.applyFilters(this.appliedFilters);
+    } else if (this.searchBar && this.searchBar.trim()) {
+      const term = this.searchBar.trim();
+      if (this.searchMode === 'name') {
+        if (term.length > 2) {
+          const modes = (this.selectedMatchTypes && this.selectedMatchTypes.length) ? this.selectedMatchTypes : (this.matchType ? [this.matchType] : ['Exact']);
+          this.performSearch(term, modes);
+        } else {
+          this.resetToOriginalData();
+        }
+      } else if (this.searchMode === 'description') {
+        this.onDescriptionSearch();
+      } else {
+        this.resetToOriginalData();
+      }
+    } else {
+      this.resetToOriginalData();
+    }
+
+    this.cdr.detectChanges();
+  }
+  landingPage(): void {
+    console.log('Performing landing page image search with default logo');
+    this.searchMode = 'logo';
+    const imgPath = '/assets/images/mock-trademark.jpg';
+    this.isLoadingImageSearch = true;
+    fetch(imgPath)
+      .then(res => {
+        if (!res.ok) throw new Error(`Failed to fetch ${imgPath}: ${res.status}`);
+        return res.blob();
+      })
+      .then(blob => {
+        const ext = (blob.type && blob.type.split('/')[1]) || 'png';
+        const file = new File([blob], `bn-logo.${ext}`, { type: blob.type || 'image/png' });
+        this.performImageSearch(file);
+      })
+      .catch(err => {
+        console.error('Landing page image search failed', err);
+        this.isLoadingImageSearch = false;
+        this.cdr.markForCheck();
+      });
+  }
+  getVisibleList(): any[] | null {
+    if (this.switchTabTable) {
+      return this.pagedTableData || [];
+    } else if (this.switchListView) {
+      return this.pagedListData || [];
+    } else {
+      return this.pagedCardData || [];
+    }
+  }
+
+  prevDrawer(): void {
+    if (!this.selectedRecord) return;
+    const fullList = this.isShowingCited ? this.citedTrademarks : this.tableData;
+    if (!fullList || fullList.length === 0) return;
+    const currentIdx = fullList.findIndex(r => 
+      this.getRecordId(r) === this.getRecordId(this.selectedRecord)
+    );
+
+    if (currentIdx === -1) {
+      this.selectedRecord = fullList[fullList.length - 1];
+    } else {
+      const newIdx = (currentIdx - 1 + fullList.length) % fullList.length;
+      this.selectedRecord = fullList[newIdx];
+    }
+
+    this.drawerVisible = true;
+    this.cdr.markForCheck();
+  }
+
+  nextDrawer(): void {
+    if (!this.selectedRecord) return;
+    const fullList = this.isShowingCited ? this.citedTrademarks : this.tableData;
+    
+    if (!fullList || fullList.length === 0) return;
+    const currentIdx = fullList.findIndex(r => 
+      this.getRecordId(r) === this.getRecordId(this.selectedRecord)
+    );
+
+    if (currentIdx === -1) {
+      this.selectedRecord = fullList[0];
+    } else {
+      const newIdx = (currentIdx + 1) % fullList.length;
+      this.selectedRecord = fullList[newIdx];
+    }
+
+    this.drawerVisible = true;
+    this.cdr.markForCheck();
+  }
 }

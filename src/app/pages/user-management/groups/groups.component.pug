@@ -15,6 +15,13 @@ app-layout
         (click)="openCreateGroupDialog()"
       )
 
+    // Group Statistics Section
+    .mb-4
+      app-user-stats(
+        [config]="userStatsConfig",
+        (statSelected)="onStatSelected($event)"
+      )
+
     // Filter Section with Button
     .mb-4.flex.justify-end.items-center.gap-3.p-3.rounded(style="background: #e5f3f7")
       app-configurable-filter(

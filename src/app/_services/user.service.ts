@@ -216,7 +216,12 @@ export interface UserStats {
   totalUserQuantity: number;
   unverifiedUserQuantity: number;
 }
-
+export interface GroupStatistics {
+  wipoPlatformCode: string;
+  totalGroupQuantity: number;
+  businessGroupQuantity: number;
+  userDefinedGroupQuantity: number;
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -380,7 +385,7 @@ export class UserService {
         catchError((error) => this.handleError(error, 'Creating user account'))
       )
       .pipe(
-        switchMap((user) => {
+        switchMap((user: any) => {
           this.toastService.showSuccess(
             'Success',
             `User account ${user.userName || user.loginId} created successfully`
@@ -902,5 +907,14 @@ export class UserService {
         return throwError(() => error);
       })
     );
+  }
+  /**
+   * Get group statistics
+   * Based on the API endpoint: {{baseUrl}}/groups/statistics
+   */
+  getGroupStatistics(): Observable<GroupStatistics> {
+    return this.http
+      .get<GroupStatistics>(`${environment.backendUrl}/groups/statistics`)
+      .pipe(catchError((error) => this.handleError(error, '')));
   }
 }

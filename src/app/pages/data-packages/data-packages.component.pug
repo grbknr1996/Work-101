@@ -50,13 +50,13 @@ app-layout
       [simplePaginator]="true",
     )
 
-  .quality-dialog-overlay(*ngIf="qualityReportMessage")
+  .quality-dialog-overlay(*ngIf="qualityReportMessageDisplay")
       .quality-dialog-container
         .quality-dialog-header
           h2.quality-dialog-title {{"dataService.dataSharing.report.header"|translate}}
         .space-y-4
           div
-            label {{"dataService.dataSharing.report.message"|translate}}
+            label {{qualityReportMessage}}
           .quality-button-group
             button.p-button-secondary(pButton, type='button', (click)="closeQualtiyReportMessage()") {{"dataService.dataSharing.report.button"|translate}}
         button.quality-close-button(type='button', (click)="closeQualtiyReportMessage()")

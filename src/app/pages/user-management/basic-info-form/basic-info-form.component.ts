@@ -5,7 +5,7 @@ export interface BasicInfo {
   email: string;
   telephone: string;
   clientId: string;
-  loginAlias: string;
+  loginId: string;
   profilePicture: string | ArrayBuffer | null;
   signaturePicture: string | ArrayBuffer | null;
   signatureType: string;

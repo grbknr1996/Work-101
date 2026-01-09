@@ -12,11 +12,10 @@
         <div class="filter-sort-controls mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
           <div class="flex flex-wrap gap-3 items-center">
             <!-- Search Control-->
-            <div class="flex-1">
-              <input class="w-full" [placeholder]="'common.components.groupAssignment.searchGroups' | translate" [(ngModel)]="searchTerm" (keyup.enter)="onSearchChange(searchTerm)" pInputText>
+            <div class="flex-1 flex items-center gap-2">
+              <input class="w-full" [placeholder]="'common.components.groupAssignment.searchGroups' | translate" [(ngModel)]="searchTerm" (input)="onSearchChange(searchTerm)" pInputText>
+              <p-button *ngIf="searchTerm" (onClick)="clearSearch()" icon="pi pi-times" [label]="'common.components.groupAssignment.clear' | translate" styleClass="p-button-secondary p-button-sm"></p-button>
             </div>
-            <p-button (onClick)="onSearchChange(searchTerm)" icon="pi pi-search" [label]="'common.components.groupAssignment.search' | translate" styleClass="p-button-primary p-button-sm"></p-button>
-            <p-button *ngIf="searchTerm" (onClick)="clearSearch()" icon="pi pi-times" [label]="'common.components.groupAssignment.clear' | translate" styleClass="p-button-secondary p-button-sm"></p-button>
           </div>
           <div class="flex flex-wrap gap-3 items-center mt-2">
             <!-- Filter by Type-->
@@ -45,16 +44,16 @@
                 <div class="group-type"><span class="inline-flex items-center rounded-full text-xs font-medium bg-blue-100 text-blue-800 px-2.5 py-0.5">{{ group.type }}</span></div>
               </div>
             </div>
-            <input class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" type="checkbox" [checked]="availableSelected.has(group.id)" (change)="availableSelected.has(group.id) ? availableSelected.delete(group.id) : availableSelected.add(group.id)">
+            <input class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" type="checkbox" [checked]="availableSelected.has(group.id)" [disabled]="isExternalGroupDisabled(group)" (change)="toggleAvailableSelection(group)">
           </div>
         </div>
         <div class="mt-4">
-          <p-paginator [rows]="pageSize" [alwaysShow]="true" [totalRecords]="totalAvailableGroups" [first]="(currentAvailablePage - 1) * pageSize" (onPageChange)="onAvailablePageChange($event)" [showFirstLastIcon]="true" [showPageLinks]="true" [showCurrentPageReport]="true" styleClass="[10, 25, 50]"></p-paginator>
+          <p-paginator [rows]="pageSize" [totalRecords]="totalFilteredAvailableGroups" [first]="availableFirst" (onPageChange)="onAvailablePageChange($event)" [showFirstLastIcon]="true" [showPageLinks]="true" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]"></p-paginator>
         </div>
       </div>
       <!-- Action Buttons-->
       <div class="group-list-controls center-controls flex flex-col justify-center">
-        <button class="move-btn w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg transition-colors hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed" (click)="moveToAssigned()" [disabled]="availableSelected.size === 0"><i class="pi pi-angle-right text-lg"></i></button>
+        <button class="move-btn w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg transition-colors hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed" (click)="moveToAssigned()" [disabled]="availableSelected.size === 0 || disableAssignment"><i class="pi pi-angle-right text-lg"></i></button>
         <button class="move-btn w-12 h-12 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg transition-colors hover:bg-red-600 disabled:bg-gray-300 disabled:cursor-not-allowed" (click)="moveToAvailable()" [disabled]="assignedSelected.size === 0"><i class="pi pi-angle-left text-lg"></i></button>
       </div>
       <!-- Assigned Groups Panel-->
@@ -64,11 +63,10 @@
         <div class="filter-sort-controls mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
           <div class="flex flex-wrap gap-3 items-center">
             <!-- Search Control-->
-            <div class="flex-1 min-w-[200px]">
-              <input class="w-full" [placeholder]="'common.components.groupAssignment.searchAssignedGroups' | translate" [(ngModel)]="assignedSearchTerm" (keyup.enter)="onAssignedSearchChange(assignedSearchTerm)" pInputText>
+            <div class="flex-1 flex items-center gap-2 min-w-[200px]">
+              <input class="w-full" [placeholder]="'common.components.groupAssignment.searchAssignedGroups' | translate" [(ngModel)]="assignedSearchTerm" (input)="onAssignedSearchChange(assignedSearchTerm)" pInputText>
+              <p-button *ngIf="assignedSearchTerm" (onClick)="clearAssignedSearch()" icon="pi pi-times" [label]="'common.components.groupAssignment.clear' | translate" styleClass="p-button-secondary p-button-sm"></p-button>
             </div>
-            <p-button (onClick)="onAssignedSearchChange(assignedSearchTerm)" icon="pi pi-search" [label]="'common.components.groupAssignment.search' | translate" styleClass="p-button-primary p-button-sm"></p-button>
-            <p-button *ngIf="assignedSearchTerm" (onClick)="clearAssignedSearch()" icon="pi pi-times" [label]="'common.components.groupAssignment.clear' | translate" styleClass="p-button-secondary p-button-sm"></p-button>
           </div>
           <div class="flex flex-wrap gap-3 items-center mt-2">
             <!-- Filter by Type-->

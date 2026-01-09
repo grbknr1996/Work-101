@@ -5,6 +5,7 @@ import {
   EventEmitter,
   OnChanges,
   SimpleChanges,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { MechanicsService } from '../../_services/mechanics.service';
 
@@ -24,22 +25,12 @@ export class GroupAssignmentComponent implements OnChanges {
   @Input() availableGroups: GroupItem[] = [];
   @Input() assignedGroups: GroupItem[] = [];
   @Input() pageSize: number = 10;
-  @Input() currentAvailablePage: number = 1;
-  @Input() totalAvailablePages: number = 1;
-  @Input() totalAvailableGroups: number = 0;
-  @Input() currentSearchTerm: string = '';
-  @Input() currentFilterType: string = 'all';
-  @Input() currentSortBy: string = 'groupName';
-  @Input() currentSortOrder: string = 'asc';
-
+  @Input() disableAssignment: boolean = false;
+  @Input() isExternalUser: boolean = false;
+  @Input() externalUserGroups: string[] = [];
+  @Input() maxExternalGroups: number = 1;
   @Output() assignedGroupsChange = new EventEmitter<GroupItem[]>();
-  @Output() availablePageChange = new EventEmitter<number>();
-  @Output() searchChange = new EventEmitter<string>();
-  @Output() filterTypeChange = new EventEmitter<string>();
-  @Output() sortChange = new EventEmitter<{
-    sortBy: string;
-    sortOrder: string;
-  }>();
+  @Output() assignmentError = new EventEmitter<string>();
   @Output() assignedSearchChange = new EventEmitter<string>();
   @Output() assignedFilterTypeChange = new EventEmitter<string>();
   @Output() assignedSortChange = new EventEmitter<{
@@ -51,11 +42,15 @@ export class GroupAssignmentComponent implements OnChanges {
   availableSelected: Set<string> = new Set();
   assignedSelected: Set<string> = new Set();
 
+  // Pagination for available groups (client-side)
+  availablePage: number = 1;
+  availableFirst: number = 0;
+
   // Pagination for assigned groups (client-side)
   assignedPage: number = 1;
   assignedFirst: number = 0;
 
-  // Filter and sort state for available groups
+  // Filter and sort state for available groups (client-side)
   searchTerm: string = '';
   filterType: string = 'all'; // 'all', 'user', 'business'
   sortBy: string = 'groupName'; // 'groupName', 'groupType'
@@ -73,23 +68,34 @@ export class GroupAssignmentComponent implements OnChanges {
   assignedFilterTypeOptions: any[] = [];
   assignedSortByOptions: any[] = [];
 
-  constructor(private ms: MechanicsService) {
+  constructor(private ms: MechanicsService, private cdr: ChangeDetectorRef) {
     this.initializeTranslationOptions();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // Sync input values with internal state when they change
-    if (changes['currentSearchTerm']) {
-      this.searchTerm = this.currentSearchTerm;
-    }
-    if (changes['currentFilterType']) {
-      this.filterType = this.currentFilterType;
-    }
-    if (changes['currentSortBy']) {
-      this.sortBy = this.currentSortBy;
-    }
-    if (changes['currentSortOrder']) {
-      this.sortOrder = this.currentSortOrder;
+    // Only reset pagination when available groups actually change (not just reference)
+    if (changes['availableGroups'] && !changes['availableGroups'].firstChange) {
+      const previousGroups = changes['availableGroups'].previousValue || [];
+      const currentGroups = changes['availableGroups'].currentValue || [];
+
+      // Check if groups actually changed by comparing IDs
+      const previousIds = previousGroups
+        .map((g: GroupItem) => g.id)
+        .sort()
+        .join(',');
+      const currentIds = currentGroups
+        .map((g: GroupItem) => g.id)
+        .sort()
+        .join(',');
+      const groupsActuallyChanged =
+        previousIds !== currentIds ||
+        previousGroups.length !== currentGroups.length;
+
+      // Only reset pagination if groups actually changed (not just reference)
+      if (groupsActuallyChanged) {
+        this.availableFirst = 0;
+        this.availablePage = 1;
+      }
     }
   }
 
@@ -158,14 +164,73 @@ export class GroupAssignmentComponent implements OnChanges {
     ];
   }
 
-  // For available groups, use the input directly since it's server-side paginated
+  // Get filtered and sorted available groups
+  get filteredAvailableGroups(): GroupItem[] {
+    // Create a copy to avoid mutating the original array
+    let filtered = [...this.availableGroups];
+
+    // Apply search filter
+    if (this.searchTerm && this.searchTerm.trim()) {
+      const searchLower = this.searchTerm.toLowerCase();
+      filtered = filtered.filter((group) =>
+        group.name.toLowerCase().includes(searchLower)
+      );
+    }
+
+    // Apply type filter - case-insensitive comparison
+    if (this.filterType && this.filterType !== 'all') {
+      const filterTypeLower = this.filterType.toLowerCase();
+      filtered = filtered.filter((group) => {
+        const groupTypeLower = (group.type || '').toLowerCase();
+        return groupTypeLower === filterTypeLower;
+      });
+    }
+
+    // Apply sorting
+    filtered.sort((a, b) => {
+      let aValue: string;
+      let bValue: string;
+
+      if (this.sortBy === 'groupName') {
+        aValue = (a.name || '').toLowerCase();
+        bValue = (b.name || '').toLowerCase();
+      } else {
+        aValue = (a.type || '').toLowerCase();
+        bValue = (b.type || '').toLowerCase();
+      }
+
+      if (this.sortOrder === 'asc') {
+        return aValue.localeCompare(bValue);
+      } else {
+        return bValue.localeCompare(aValue);
+      }
+    });
+
+    return filtered;
+  }
+
+  // Get paged available groups from filtered results
   get pagedAvailableGroups() {
-    return this.availableGroups; // No slicing needed - API already provides the page
+    const start = this.availableFirst;
+    const filtered = this.filteredAvailableGroups;
+    return filtered.slice(start, start + this.pageSize);
+  }
+
+  // Get total count of filtered available groups
+  get totalFilteredAvailableGroups(): number {
+    return this.filteredAvailableGroups.length;
   }
 
   // Get filtered and sorted assigned groups
   get filteredAssignedGroups(): GroupItem[] {
-    let filtered = this.assignedGroups;
+    // Create a copy to avoid mutating the original array
+    let filtered = [...this.assignedGroups];
+
+    // Exclude groups with type "UNIT"
+    filtered = filtered.filter((group) => {
+      const groupType = (group.type || '').toUpperCase();
+      return groupType !== 'UNIT';
+    });
 
     // Apply search filter
     if (this.assignedSearchTerm && this.assignedSearchTerm.trim()) {
@@ -175,11 +240,13 @@ export class GroupAssignmentComponent implements OnChanges {
       );
     }
 
-    // Apply type filter
+    // Apply type filter - case-insensitive comparison
     if (this.assignedFilterType && this.assignedFilterType !== 'all') {
-      filtered = filtered.filter(
-        (group) => group.type === this.assignedFilterType
-      );
+      const filterTypeLower = this.assignedFilterType.toLowerCase();
+      filtered = filtered.filter((group) => {
+        const groupTypeLower = (group.type || '').toLowerCase();
+        return groupTypeLower === filterTypeLower;
+      });
     }
 
     // Apply sorting
@@ -188,11 +255,11 @@ export class GroupAssignmentComponent implements OnChanges {
       let bValue: string;
 
       if (this.assignedSortBy === 'groupName') {
-        aValue = a.name.toLowerCase();
-        bValue = b.name.toLowerCase();
+        aValue = (a.name || '').toLowerCase();
+        bValue = (b.name || '').toLowerCase();
       } else {
-        aValue = a.type.toLowerCase();
-        bValue = b.type.toLowerCase();
+        aValue = (a.type || '').toLowerCase();
+        bValue = (b.type || '').toLowerCase();
       }
 
       if (this.assignedSortOrder === 'asc') {
@@ -219,14 +286,93 @@ export class GroupAssignmentComponent implements OnChanges {
 
   toggleSelectAllAvailable(checked: boolean) {
     if (checked) {
-      this.pagedAvailableGroups.forEach((g) =>
-        this.availableSelected.add(g.id)
-      );
+      // Only select groups that are not disabled
+      this.pagedAvailableGroups.forEach((g) => {
+        if (!this.isExternalGroupDisabled(g)) {
+          this.availableSelected.add(g.id);
+        }
+      });
     } else {
       this.pagedAvailableGroups.forEach((g) =>
         this.availableSelected.delete(g.id)
       );
     }
+  }
+
+  toggleAvailableSelection(group: GroupItem) {
+    if (this.availableSelected.has(group.id)) {
+      this.availableSelected.delete(group.id);
+    } else {
+      // Before adding, check if this would violate external user constraints
+      if (this.isExternalUser && this.externalUserGroups.length > 0) {
+        // Check if this is an external group
+        const isExternalGroup =
+          group.type === 'BUSINESS' &&
+          this.externalUserGroups.includes(group.name);
+
+        if (isExternalGroup) {
+          // Check if there's already an external group assigned
+          const existingExternalGroups = this.assignedGroups.filter(
+            (g) =>
+              g.type === 'BUSINESS' && this.externalUserGroups.includes(g.name)
+          );
+
+          // Check if any selected groups are external groups
+          const selectedExternalGroups = Array.from(this.availableSelected)
+            .map((id) => this.pagedAvailableGroups.find((g) => g.id === id))
+            .filter(
+              (g) =>
+                g &&
+                g.type === 'BUSINESS' &&
+                this.externalUserGroups.includes(g.name)
+            );
+
+          if (
+            existingExternalGroups.length >= this.maxExternalGroups ||
+            selectedExternalGroups.length > 0
+          ) {
+            this.assignmentError.emit(
+              'External users can only be assigned one group: either LEGAL_REPRESENTATIVE or AGENT'
+            );
+            return;
+          }
+        }
+      }
+      this.availableSelected.add(group.id);
+    }
+  }
+
+  isExternalGroupDisabled(group: GroupItem): boolean {
+    if (!this.isExternalUser || this.externalUserGroups.length === 0) {
+      return false;
+    }
+
+    // Check if this is an external group
+    const isExternalGroup =
+      group.type === 'BUSINESS' && this.externalUserGroups.includes(group.name);
+
+    if (!isExternalGroup) {
+      return false;
+    }
+
+    // Check if there's already an external group assigned
+    const existingExternalGroups = this.assignedGroups.filter(
+      (g) => g.type === 'BUSINESS' && this.externalUserGroups.includes(g.name)
+    );
+
+    // Check if any currently selected groups are external groups
+    const selectedExternalGroups = Array.from(this.availableSelected)
+      .map((id) => this.pagedAvailableGroups.find((g) => g.id === id))
+      .filter(
+        (g) =>
+          g && g.type === 'BUSINESS' && this.externalUserGroups.includes(g.name)
+      );
+
+    // Disable if there's already an external group assigned or one is already selected
+    return (
+      existingExternalGroups.length >= this.maxExternalGroups ||
+      selectedExternalGroups.length > 0
+    );
   }
 
   toggleSelectAllAssigned(checked: boolean) {
@@ -254,24 +400,65 @@ export class GroupAssignmentComponent implements OnChanges {
   }
 
   moveToAssigned() {
-    const toAssign = this.availableGroups.filter((g) =>
+    // Get selected groups from the filtered/paged available groups
+    const toAssign = this.pagedAvailableGroups.filter((g) =>
       this.availableSelected.has(g.id)
     );
-    this.assignedGroups = [
-      ...this.assignedGroups,
-      ...toAssign.filter(
-        (g) => !this.assignedGroups.some((ag) => ag.id === g.id)
-      ),
-    ];
-    // Don't remove from available groups since they're managed by server pagination
+
+    // If external user, validate before adding groups
+    if (this.isExternalUser && this.externalUserGroups.length > 0) {
+      // Check which groups being assigned are external groups
+      const externalGroupsToAssign = toAssign.filter(
+        (group) =>
+          group.type === 'BUSINESS' &&
+          this.externalUserGroups.includes(group.name)
+      );
+
+      // Check how many external groups are already assigned
+      const existingExternalGroups = this.assignedGroups.filter(
+        (group) =>
+          group.type === 'BUSINESS' &&
+          this.externalUserGroups.includes(group.name)
+      );
+
+      // If adding external groups would exceed the limit
+      if (externalGroupsToAssign.length > 0) {
+        const totalExternalGroups =
+          existingExternalGroups.length + externalGroupsToAssign.length;
+
+        if (totalExternalGroups > this.maxExternalGroups) {
+          // Prevent assignment and emit error
+          this.assignmentError.emit(
+            'External users can only be assigned one group: either LEGAL_REPRESENTATIVE or AGENT'
+          );
+          this.availableSelected.clear();
+          return;
+        }
+
+        // If there's already an external group and trying to add another, prevent it
+        if (
+          existingExternalGroups.length >= this.maxExternalGroups &&
+          externalGroupsToAssign.length > 0
+        ) {
+          this.assignmentError.emit(
+            'External users can only be assigned one group: either LEGAL_REPRESENTATIVE or AGENT'
+          );
+          this.availableSelected.clear();
+          return;
+        }
+      }
+    }
+
+    // Add groups that aren't already assigned
+    const newGroups = toAssign.filter(
+      (g) => !this.assignedGroups.some((ag) => ag.id === g.id)
+    );
+    this.assignedGroups = [...this.assignedGroups, ...newGroups];
     this.availableSelected.clear();
     this.assignedGroupsChange.emit(this.assignedGroups);
   }
 
   moveToAvailable() {
-    const toRemove = this.assignedGroups.filter((g) =>
-      this.assignedSelected.has(g.id)
-    );
     this.assignedGroups = this.assignedGroups.filter(
       (g) => !this.assignedSelected.has(g.id)
     );
@@ -279,11 +466,16 @@ export class GroupAssignmentComponent implements OnChanges {
     this.assignedGroupsChange.emit(this.assignedGroups);
   }
 
-  // Pagination controls for available groups (server-side)
+  // Pagination controls for available groups (client-side)
   onAvailablePageChange(event: any) {
-    const page = Math.floor(event.first / event.rows) + 1;
-    if (page !== this.currentAvailablePage) {
-      this.availablePageChange.emit(page);
+    // PrimeNG paginator event structure: { first: number, rows: number, page: number, pageCount: number }
+    if (event && typeof event.first === 'number') {
+      this.availableFirst = event.first;
+      this.availablePage =
+        event.page !== undefined
+          ? event.page + 1
+          : Math.floor(event.first / event.rows) + 1;
+      this.cdr.detectChanges();
     }
   }
 
@@ -293,51 +485,39 @@ export class GroupAssignmentComponent implements OnChanges {
     this.assignedPage = Math.floor(event.first / event.rows) + 1;
   }
 
-  // Legacy pagination methods for backward compatibility
-  setAvailablePage(page: number) {
-    if (
-      page >= 1 &&
-      page <= this.totalAvailablePages &&
-      page !== this.currentAvailablePage
-    ) {
-      this.availablePageChange.emit(page);
-    }
-  }
-
   setAssignedPage(page: number) {
     this.assignedPage = page;
     this.assignedFirst = (page - 1) * this.pageSize;
   }
 
-  // Helper methods for pagination UI
-  canGoToPreviousAvailablePage(): boolean {
-    return this.currentAvailablePage > 1;
-  }
-
-  canGoToNextAvailablePage(): boolean {
-    return this.currentAvailablePage < this.totalAvailablePages;
-  }
-
-  // Search and filter methods for available groups
+  // Search and filter methods for available groups (client-side)
   onSearchChange(searchTerm: string) {
     this.searchTerm = searchTerm;
-    this.searchChange.emit(searchTerm);
+    // Reset to first page when searching
+    this.availableFirst = 0;
+    this.availablePage = 1;
   }
 
   onFilterTypeChange(filterType: string) {
     this.filterType = filterType;
-    this.filterTypeChange.emit(filterType);
+    // Reset to first page when filtering
+    this.availableFirst = 0;
+    this.availablePage = 1;
   }
 
   onSortChange(sortBy: string, sortOrder: string) {
     this.sortBy = sortBy;
     this.sortOrder = sortOrder;
-    this.sortChange.emit({ sortBy, sortOrder });
+    // Reset to first page when sorting
+    this.availableFirst = 0;
+    this.availablePage = 1;
   }
 
   clearSearch() {
     this.searchTerm = '';
-    this.searchChange.emit('');
+    // Reset to first page when clearing search
+    this.availableFirst = 0;
+    this.availablePage = 1;
   }
 
   // Search and filter methods for assigned groups

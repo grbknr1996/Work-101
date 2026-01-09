@@ -11,18 +11,12 @@ app-layout
             *ngSwitchCase="1",
             [availableGroups]="filteredAvailableGroups",
             [assignedGroups]="userForm.get('assignedGroups').value",
-            [currentAvailablePage]="currentGroupsPage",
-            [totalAvailablePages]="totalGroupsPages",
-            [totalAvailableGroups]="totalGroupsCount",
-            [currentSearchTerm]="groupsSearchTerm",
-            [currentFilterType]="groupsFilterType",
-            [currentSortBy]="groupsSortBy",
-            [currentSortOrder]="groupsSortOrder",
+            [disableAssignment]="isAssignmentDisabled",
+            [isExternalUser]="userForm.get('basicInfo.userType')?.value || false",
+            [externalUserGroups]="externalUserGroupsList",
+            [maxExternalGroups]="1",
             (assignedGroupsChange)="onAssignedGroupsChange($event)",
-            (availablePageChange)="onGroupsPageChange($event)",
-            (searchChange)="onGroupsSearch($event)",
-            (filterTypeChange)="onGroupsFilter($event)",
-            (sortChange)="onGroupsSort($event.sortBy, $event.sortOrder)"
+            (assignmentError)="onAssignmentError($event)"
           )
             .loading-groups(*ngIf="isLoadingGroups")
               p {{ 'userManagement.createUserAccount.loadingGroups' | translate }}

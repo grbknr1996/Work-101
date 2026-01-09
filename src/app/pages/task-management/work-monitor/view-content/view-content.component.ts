@@ -145,5 +145,15 @@ export class ViewContentComponent implements OnInit {
             this.expandedPanelIndex = index;
         }
     }
+    openTrademarkSimilaritySearch(event: Event) {
+        console.log('Trademark Similarity Search clicked', event);
+
+        const officeCode = this.ms.getCurrentOffice() || 'vc';
+        const langCode = 'en';
+
+        const url = `/${officeCode}/${langCode}/trademark-similarity-search`;
+        window.open(url, '_blank');
+    }
+
 
 }

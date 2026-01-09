@@ -39,13 +39,8 @@ export const environment = {
     'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/services/offices',
   backendUrl:
     'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/services/users',
-  similaritySearchApi:
-    'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/search/registry',
-  similaritySearchImage:
-    'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/search/image',
-  similarityTextToImage:
-    'https://ipas-ipoffice-dev.ipobs.dev.web1.wipo.int/search/text-to-image',
-  analyzeApi: '/analyze',
+  similaritySearch: 
+    'https://trademark-api-trademark-search.apps.ocp4.innershift.sodigital.io',
   cognito: {
     region: 'eu-central-1',
     userPoolId: 'eu-central-1_aIn5Yy5c5',

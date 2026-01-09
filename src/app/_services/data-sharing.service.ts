@@ -318,7 +318,7 @@ export class DataExchangeService {
     );
   }
 
-  getDataQualityReport(platformCode: string, sharedDateStart: any, sharedDateEnd: any) : Observable<Blob> {
+  getDataQualityReport(platformCode: string, sharedDateStart: string, sharedDateEnd: string): Observable<string | null> {
     return this.getAccessToken().pipe(
       switchMap((token) => {
         const idToken = this.idTokenSubject.value;
@@ -334,12 +334,29 @@ export class DataExchangeService {
 
         const headers = new HttpHeaders(headersConfig);
 
-        const dataServicesUrl = `${environment.dataServicesApi}/reports?platformCode=${platformCode}&sharedDateStart=${sharedDateStart}&sharedDateEnd=${sharedDateEnd}`;
+        const dataServicesUrl = `${environment.dataServicesApi}/reports?officeCode=${platformCode}&sharedDateStart=${sharedDateStart}&sharedDateEnd=${sharedDateEnd}`;
 
         return this.http.get(dataServicesUrl, {
           headers,
-          responseType: 'blob'
-        });
+          responseType: 'text',
+          observe: 'response'
+        }).pipe(
+          map(response => {
+            // 204 – No Content
+            if (response.status === 204) {
+              console.log('Package reports API returned no content');
+              return null;
+            }
+
+            // CSV content returned
+            if (response.body) {
+              console.log('Package reports CSV received');
+              return response.body;
+            }
+
+            return null;
+          })
+        );
       }),
       catchError((error) => {
         console.error('Failed to download CSV report:', error);

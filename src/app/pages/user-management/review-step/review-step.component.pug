@@ -17,9 +17,9 @@
         .review-item
           label {{ 'userManagement.reviewStep.clientId' | translate }}
           span {{ basicInfo?.clientId }}
-        .review-item
-          label {{ 'userManagement.reviewStep.loginAlias' | translate }}
-          span {{ basicInfo?.loginAlias }}
+        .review-item(*ngIf="isEditMode")
+          label {{ 'userManagement.reviewStep.loginId' | translate }}
+          span {{ basicInfo?.loginId }}
 
     .review-section
       h3 {{ 'userManagement.reviewStep.assignedGroups' | translate }}

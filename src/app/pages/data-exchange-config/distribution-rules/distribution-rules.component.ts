@@ -189,7 +189,7 @@ export class DistributionRulesComponent implements OnInit {
   private loadData(): void {
     this.dataExchangeService.setRecipientData([]);
     this.dataExchangeService.setRulesData([]);
-    if (!this.isWipoAdmin) {
+    if (this.isWipoAdmin) {
       this.dataExchangeService.getRecipients();
     }
     this.dataExchangeService.getExclusionRules();
